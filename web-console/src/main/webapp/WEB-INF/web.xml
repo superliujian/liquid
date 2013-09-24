@@ -20,9 +20,11 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
+            liquid.console.web.config.BpmConfig,
             liquid.console.web.config.LdapConfig,
-            liquid.console.web.config.SecurityConfig,
-            liquid.console.web.config.BpmConfig
+            liquid.console.web.config.JpaConfig,
+            liquid.console.web.config.RootConfig,
+            liquid.console.web.config.SecurityConfig
         </param-value>
     </context-param>
 
@@ -55,7 +57,9 @@
              and fully-qualified @Configuration classes -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>liquid.console.web.config.WebConfig</param-value>
+            <param-value>
+                liquid.console.web.config.WebConfig
+            </param-value>
         </init-param>
     </servlet>
 

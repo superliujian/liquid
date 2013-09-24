@@ -1,6 +1,5 @@
 package liquid.console.web.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.LdapTemplate;
@@ -15,9 +14,6 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 public class LdapConfig {
 
-    @Autowired
-    private LdapContextSource contextSource;
-
     @Bean
     public LdapContextSource contextSource() {
         LdapContextSource contextSource = new LdapContextSource();
@@ -26,8 +22,6 @@ public class LdapConfig {
             contextSource.setBase("dc=suncapital-logistics,dc=com");
             contextSource.setUserDn("cn=admin,dc=suncapital-logistics,dc=com");
             contextSource.setPassword("liquid");
-            contextSource.afterPropertiesSet();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,7 +30,7 @@ public class LdapConfig {
 
     @Bean
     public LdapTemplate ldapTemplate() {
-        return new LdapTemplate(contextSource);
+        return new LdapTemplate(contextSource());
     }
 
 }

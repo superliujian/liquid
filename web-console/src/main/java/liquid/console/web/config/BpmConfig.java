@@ -1,11 +1,9 @@
 package liquid.console.web.config;
 
-import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -25,17 +23,8 @@ import java.util.List;
 @Configuration
 public class BpmConfig {
 
-    @Autowired
-    private SimpleDriverDataSource dataSource;
-    @Autowired
-    private DataSourceTransactionManager transactionManager;
-    @Autowired
-    private SpringProcessEngineConfiguration processEngineConfiguration;
-    @Autowired
-    private ProcessEngine processEngine;
-
     @Bean
-    public SimpleDriverDataSource ldapTemplate() {
+    public SimpleDriverDataSource bpmDataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
         dataSource.setUrl("jdbc:mysql://localhost:3306/activiti?autoReconnect=true");
@@ -45,9 +34,9 @@ public class BpmConfig {
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager() {
+    public DataSourceTransactionManager bpmTransactionManager() {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(dataSource);
+        transactionManager.setDataSource(bpmDataSource());
         return transactionManager;
     }
 
@@ -55,8 +44,8 @@ public class BpmConfig {
     public SpringProcessEngineConfiguration processEngineConfiguration() {
         SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
         processEngineConfiguration.setDatabaseType("mysql");
-        processEngineConfiguration.setDataSource(dataSource);
-        processEngineConfiguration.setTransactionManager(transactionManager);
+        processEngineConfiguration.setDataSource(bpmDataSource());
+        processEngineConfiguration.setTransactionManager(bpmTransactionManager());
         processEngineConfiguration.setDatabaseSchemaUpdate("true");
 
         Resource[] resources = new Resource[1];
@@ -93,9 +82,9 @@ public class BpmConfig {
     }
 
     @Bean
-    public ProcessEngineFactoryBean processEngine() {
-        ProcessEngineFactoryBean processEngine = new ProcessEngineFactoryBean();
-        processEngine.setProcessEngineConfiguration(processEngineConfiguration);
-        return processEngine;
+    public ProcessEngineFactoryBean processEngine() throws Exception {
+        ProcessEngineFactoryBean processEngineFactory = new ProcessEngineFactoryBean();
+        processEngineFactory.setProcessEngineConfiguration(processEngineConfiguration());
+        return processEngineFactory;
     }
 }

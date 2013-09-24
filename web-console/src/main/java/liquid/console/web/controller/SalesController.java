@@ -1,6 +1,7 @@
 package liquid.console.web.controller;
 
 import liquid.console.web.bpm.ActivitiEngineService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +19,11 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/sales")
 public class SalesController {
+    @Autowired
+    private ActivitiEngineService bpmEngineService;
 
     @RequestMapping(method = RequestMethod.POST)
     public void placeOrder(Model model, Principal principal) {
-        ActivitiEngineService bpmService = new ActivitiEngineService();
-        bpmService.startProcess(principal.getName(), new HashMap<String, Object>());
+        bpmEngineService.startProcess(principal.getName(), new HashMap<String, Object>());
     }
 }

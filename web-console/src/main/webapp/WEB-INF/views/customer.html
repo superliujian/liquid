@@ -4,22 +4,25 @@
     <title></title>
 </head>
 <body>
-Welcome Marketing!
-<table th:unless="${#lists.isEmpty(tasks)}">
+Welcome Customer!
+<table th:unless="${#lists.isEmpty(customers)}">
     <thead>
     <tr>
         <th>id</th>
         <th>name</th>
-        <th>description</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="task : ${tasks}">
+    <tr th:each="task : ${customers}">
         <td th:text="${task.id}">id</td>
         <td th:text="${task.name}">name</td>
-        <td th:text="${task.description}">description</td>
     </tr>
     </tbody>
 </table>
+
+<form action="/web-console/customer" method="POST">
+    <input id="name" name="name" type="text"/>
+    <input type="submit" value="Add customer"/>
+</form>
 </body>
 </html>

@@ -8,6 +8,8 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLinkType;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -18,9 +20,12 @@ import java.util.Map;
  * Date: 9/22/13
  * Time: 9:35 PM
  */
+@Service
 public class ActivitiEngineService {
     @Autowired
     private ProcessEngine processEngine;
+    @Autowired
+    private SimpleDriverDataSource dataSource;
 
     public void startProcess(String uid, Map<String, Object> variableMap) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -29,11 +34,12 @@ public class ActivitiEngineService {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc");
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
         runtimeService.setVariable(processInstance.getId(), "employeeName", uid);
+        System.out.println(dataSource);
     }
 
-    public Task[] listTask(String candidateGid) {
+    public List<Task> listTask(String candidateGid) {
         TaskService taskService = processEngine.getTaskService();
         List<Task> taskList = taskService.createTaskQuery().taskCandidateGroup(candidateGid).list();
-        return taskList.toArray(new Task[0]);
+        return taskList;
     }
 }
