@@ -35,8 +35,9 @@ public class CustomerController {
     public void list(Model model, Principal principal) {}
 
     @RequestMapping(method = RequestMethod.POST)
-    public void create(@ModelAttribute("customer") Customer customer, Principal principal) {
+    public String create(@ModelAttribute("customer") Customer customer, Principal principal) {
         logger.debug("Customer: {}", customer);
         customerRepository.save(customer);
+        return "/customer";
     }
 }

@@ -22,8 +22,11 @@
         <activiti-version>5.13</activiti-version>
         <mysql-version>5.1.26</mysql-version>
 
+        <native2ascii-version>1.0-beta-1</native2ascii-version>
         <servlet-version>3.0.1</servlet-version>
         <tomcat7-version>2.1</tomcat7-version>
+
+        <tomcat-port>8090</tomcat-port>
     </properties>
 
     <repositories>
@@ -174,11 +177,29 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>${native2ascii-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>native2ascii</goal>
+                        </goals>
+                        <configuration>
+                            <workDir>target/classes/messages</workDir>
+                            <encoding>UTF8</encoding>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>${tomcat7-version}</version>
                 <configuration>
-                    <port>8090</port>
+                    <port>${tomcat-port}</port>
+                    <path>/</path>
                 </configuration>
             </plugin>
         </plugins>
