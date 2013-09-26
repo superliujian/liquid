@@ -23,7 +23,7 @@
             </extensionElements>
             <potentialOwner>
                 <resourceAssignmentExpression>
-                    <formalExpression>marketing</formalExpression>
+                    <formalExpression>ROLE_MARKETING</formalExpression>
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>

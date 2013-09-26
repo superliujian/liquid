@@ -35,4 +35,7 @@ public class AuthController {
 
         return "welcome";
     }
+
+    @RequestMapping("/signin")
+    public void signin(Model model, Principal principal) {}
 }

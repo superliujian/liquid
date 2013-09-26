@@ -23,6 +23,7 @@ import java.security.Principal;
 @RequestMapping("/customer")
 public class CustomerController {
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -38,6 +39,6 @@ public class CustomerController {
     public String create(@ModelAttribute("customer") Customer customer, Principal principal) {
         logger.debug("Customer: {}", customer);
         customerRepository.save(customer);
-        return "/customer";
+        return "redirect:/customer";
     }
 }
