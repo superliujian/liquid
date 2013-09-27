@@ -1,7 +1,8 @@
-package liquid.console.web.config;
+package liquid.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * TODO: Comments.
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * Time: 11:24 PM
  */
 @Configuration
-@ComponentScan("liquid.console.web.bpm")
-public class RootConfig {
-
-}
+@ComponentScan({"liquid.aop", "liquid.service.bpm"})
+@EnableAspectJAutoProxy
+public class RootConfig {}

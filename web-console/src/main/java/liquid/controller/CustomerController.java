@@ -1,7 +1,7 @@
-package liquid.console.web.controller;
+package liquid.controller;
 
-import liquid.console.web.persistence.domain.Customer;
-import liquid.console.web.persistence.repository.CustomerRepository;
+import liquid.persistence.domain.Customer;
+import liquid.persistence.repository.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

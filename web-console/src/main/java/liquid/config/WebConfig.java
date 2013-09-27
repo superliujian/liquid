@@ -1,4 +1,4 @@
-package liquid.console.web.config;
+package liquid.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ import java.util.Locale;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"liquid.console.web.controller"})
+@ComponentScan(basePackages = {"liquid.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

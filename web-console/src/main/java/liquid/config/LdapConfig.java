@@ -1,4 +1,4 @@
-package liquid.console.web.config;
+package liquid.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

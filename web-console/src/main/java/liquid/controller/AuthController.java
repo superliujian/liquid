@@ -1,5 +1,7 @@
-package liquid.console.web.controller;
+package liquid.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -17,14 +19,16 @@ import java.util.Collection;
  */
 @Controller
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @RequestMapping("/")
     public String auth(Model model, Principal principal) {
-        System.out.println("AuthController, principal: " + principal);
+        logger.debug("Principal: {}", principal);
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
 
         Collection<? extends GrantedAuthority> authorities = token.getAuthorities();
         for (GrantedAuthority authority : authorities) {
-            System.out.println("AuthController, authority:" + authority);
+            logger.debug("GrantedAuthority: {}", authority);
             if ("ROLE_SALES".equals(authority.getAuthority())) {
                 return "sales";
             }

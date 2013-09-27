@@ -1,4 +1,4 @@
-package liquid.console.web.bpm;
+package liquid.service.bpm;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;

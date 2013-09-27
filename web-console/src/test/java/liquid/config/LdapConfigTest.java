@@ -1,4 +1,4 @@
-package liquid.console.web.config;
+package liquid.config;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

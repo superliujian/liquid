@@ -1,6 +1,6 @@
-package liquid.console.web.config;
+package liquid.config;
 
-import liquid.console.web.persistence.repository.CustomerRepository;
+import liquid.persistence.repository.CustomerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ import java.sql.SQLException;
  * Time: 9:06 PM
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "liquid.console.web.persistence.repository",
+@EnableJpaRepositories(basePackages = "liquid.persistence.repository",
         includeFilters = @ComponentScan.Filter(value = {CustomerRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JpaConfig {
@@ -48,7 +48,7 @@ public class JpaConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("liquid.console.web.persistence.domain");
+        factory.setPackagesToScan("liquid.persistence.domain");
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();
 

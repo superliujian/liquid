@@ -1,4 +1,4 @@
-package liquid.console.web.config;
+package liquid.config;
 
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;

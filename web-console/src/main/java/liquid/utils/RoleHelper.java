@@ -1,4 +1,4 @@
-package liquid.console.web.utils;
+package liquid.utils;
 
 import liquid.SystemError;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

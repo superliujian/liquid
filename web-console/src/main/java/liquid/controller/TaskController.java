@@ -1,7 +1,7 @@
-package liquid.console.web.controller;
+package liquid.controller;
 
-import liquid.console.web.bpm.ActivitiEngineService;
-import liquid.console.web.utils.RoleHelper;
+import liquid.service.bpm.ActivitiEngineService;
+import liquid.utils.RoleHelper;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

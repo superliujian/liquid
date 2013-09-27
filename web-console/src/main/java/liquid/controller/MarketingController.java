@@ -1,6 +1,6 @@
-package liquid.console.web.controller;
+package liquid.controller;
 
-import liquid.console.web.bpm.ActivitiEngineService;
+import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

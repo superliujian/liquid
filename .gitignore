@@ -10,3 +10,4 @@
 # Dir #
 .idea
 **/target
+**/log

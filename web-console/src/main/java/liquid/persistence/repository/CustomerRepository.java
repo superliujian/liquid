@@ -1,6 +1,6 @@
-package liquid.console.web.persistence.repository;
+package liquid.persistence.repository;
 
-import liquid.console.web.persistence.domain.Customer;
+import liquid.persistence.domain.Customer;
 import org.springframework.data.repository.CrudRepository;
 
 /**
