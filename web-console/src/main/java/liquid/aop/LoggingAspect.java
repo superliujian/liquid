@@ -22,11 +22,11 @@ public class LoggingAspect {
 
     @Before("execution(* liquid.service..*.*(..))")
     public void logBefore(JoinPoint joinPoint) {
-        logger.debug("Before {}", joinPoint.toShortString());
+        logger.debug("Before {}", joinPoint.getSignature());
     }
 
     @After("execution(* liquid.service..*.*(..))")
     public void logAfter(JoinPoint joinPoint) {
-        logger.debug("After {}", joinPoint.toShortString());
+        logger.debug("After {}", joinPoint.getSignature());
     }
 }
