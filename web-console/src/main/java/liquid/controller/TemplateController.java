@@ -14,8 +14,10 @@ import java.security.Principal;
  * Time: 10:45 PM
  */
 @Controller
-@RequestMapping("/template")
 public class TemplateController {
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/template", method = RequestMethod.GET)
     public void template(Model model, Principal principal) {}
+
+    @RequestMapping(value = "/template1", method = RequestMethod.GET)
+    public void template1(Model model, Principal principal) {}
 }

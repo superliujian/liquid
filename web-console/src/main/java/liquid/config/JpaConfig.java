@@ -1,5 +1,6 @@
 package liquid.config;
 
+import liquid.persistence.repository.CargoRepository;
 import liquid.persistence.repository.CustomerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,8 +27,13 @@ import java.sql.SQLException;
  * Time: 9:06 PM
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "liquid.persistence.repository",
-        includeFilters = @ComponentScan.Filter(value = {CustomerRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
+@EnableJpaRepositories(
+        basePackages = "liquid.persistence.repository",
+        includeFilters = @ComponentScan.Filter(
+                value = {
+                        CustomerRepository.class,
+                        CargoRepository.class},
+                type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JpaConfig {
     @Bean

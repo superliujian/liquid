@@ -4,7 +4,22 @@
         <file>log/spring.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>log/spring.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="HIBERNATE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/hibernate.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>log/hibernate.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -19,7 +34,7 @@
         <file>log/liquid.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>log/liquid.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -38,6 +53,10 @@
 
     <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="SPRING"/>
+    </logger>
+
+    <logger name="org.hibernate" level="INFO" additivity="false">
+        <appender-ref ref="HIBERNATE"/>
     </logger>
 
     <logger name="liquid" level="DEBUG" additivity="false">

@@ -30,10 +30,10 @@ public class AuthController {
         for (GrantedAuthority authority : authorities) {
             logger.debug("GrantedAuthority: {}", authority);
             if ("ROLE_SALES".equals(authority.getAuthority())) {
-                return "sales";
+                return "redirect:/order";
             }
             if ("ROLE_MARKETING".equals(authority.getAuthority())) {
-                return "marketing";
+                return "redirect:/marketing";
             }
         }
 

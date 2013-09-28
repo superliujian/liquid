@@ -16,20 +16,24 @@
 
 <div class="container">
 
-    <form name='f' action="/login" method='POST' class="form">
-        <h2 class="form-heading" th:text="#{login}">Login</h2>
+    <div class="starter-template">
+        <h1 th:text="#{welcome}">Welcome Liquid</h1>
 
-        <div class="form-group">
-            <label th:text="#{username}">Username</label>
-            <input type="text" name="username" class="form-control"/>
-        </div>
+        <p class="lead">Liquid is container logistics system.</p>
+    </div>
 
-        <div class="form-group">
-            <label th:text="#{password}">Password</label>
-            <input type="password" name="password" class="form-control"/>
-        </div>
+</div>
 
-        <input type="submit" value='Login' class="btn btn-lg btn-primary btn-block" th:attr="value=#{login}"/>
+<div class="container">
+
+    <form class="form">
+        <h2 class="form-heading">Please sign in</h2>
+        <input type="text" class="form-control" placeholder="Email address"/>
+        <input type="password" class="form-control" placeholder="Password"/>
+        <label class="checkbox">
+            <input type="checkbox" value="remember-me"/> Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
 
 </div>
