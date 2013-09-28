@@ -1,6 +1,9 @@
 package liquid.persistence.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO: Comments.
@@ -15,15 +18,27 @@ public class Customer {
     @Column(name = "ID")
     private int id;
     @Column(name = "NAME")
+    @NotNull
+    @NotEmpty
     private String name;
-    @Column(name = "RATING")
-    private int rating;
+    @NotNull
+    @NotEmpty
     @Column(name = "ADDRESS")
     private String address;
+    @NotNull
+    @NotEmpty
+    @Column(name = "POSTCODE")
+    private String postcode;
+    @NotNull
+    @NotEmpty
     @Column(name = "CONTACT")
     private String contact;
+    @NotNull
+    @NotEmpty
     @Column(name = "PHONE")
     private String phone;
+    @NotNull
+    @NotEmpty
     @Column(name = "CELL")
     private String cell;
 
@@ -43,20 +58,20 @@ public class Customer {
         this.name = name;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
     }
 
     public String getContact() {
@@ -88,8 +103,8 @@ public class Customer {
         final StringBuilder sb = new StringBuilder("Customer{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
-        sb.append(", rating=").append(rating);
         sb.append(", address='").append(address).append('\'');
+        sb.append(", postcode='").append(postcode).append('\'');
         sb.append(", contact='").append(contact).append('\'');
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", cell='").append(cell).append('\'');

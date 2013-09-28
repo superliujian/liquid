@@ -22,6 +22,8 @@
         <aspectj-version>1.7.3</aspectj-version>
         <activiti-version>5.13</activiti-version>
         <mysql-version>5.1.26</mysql-version>
+        <hibernate-version>4.2.5.Final</hibernate-version>
+        <hibernate-validator-version>5.0.1.Final</hibernate-validator-version>
 
         <native2ascii-version>1.0-beta-1</native2ascii-version>
         <servlet-version>3.0.1</servlet-version>
@@ -170,8 +172,13 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.2.5.Final</version>
+            <version>${hibernate-version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator-version}</version>
         </dependency>
 
         <dependency>
