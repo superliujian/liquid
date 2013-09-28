@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    <form action="/order" method="POST" th:object="${order}">
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{customer}">Customer</label>
+                    <select th:field="*{customerId}" class="form-control">
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.id}"
+                                th:text="${customer.name}">Customer Name
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{origin}">Origin</label>
+                    <input type="text" th:field="*{origin}" class="form-control"/>
+
+                    <span th:errors="*{origin}">error</span>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{destination}">Destination</label>
+                    <input type="text" th:field="*{destination}" class="form-control"/>
+
+                    <span th:errors="*{destination}">error</span>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{consignee}">Consignee</label>
+                    <input type="text" th:field="*{consignee}" class="form-control"/>
+
+                    <span th:errors="*{consignee}">error</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{cargo}">Cargo</label>
+                    <select th:field="*{cargoId}" class="form-control">
+                        <option th:each="cargo : ${cargos}"
+                                th:value="${cargo.id}"
+                                th:text="${cargo.name}">Cargo Name
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{cargo.weight}">Cargo Weight</label>
+                    <input type="text" th:field="*{cargoWeight}" class="form-control"/>
+
+                    <span th:errors="*{cargoWeight}">error</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{trade.type}">Trade Type</label>
+                    <ul class="list-inline">
+                        <li th:each="trade : ${trades}">
+                            <input type="radio" th:field="*{tradeType}" th:value="${trade.type}"/>
+                            <label th:for="${#ids.prev('tradeType')}"
+                                   th:text="#{${trade.i18nKey}}">Trade Type</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{loading.type}">Loading Type</label>
+                    <ul class="list-inline">
+                        <li th:each="loading : ${loadings}">
+                            <input type="radio" th:field="*{loadingType}" th:value="${loading.type}"/>
+                            <label th:for="${#ids.prev('loadingType')}"
+                                   th:text="#{${loading.i18nKey}}">Loading Type</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{has.delivery}">hasDelivery</label>
+                    <input type="checkbox" th:field="*{hasDelivery}" class="form-control"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{price}">Price</label>
+                    <input type="text" th:field="*{price}" class="form-control"/>
+
+                    <span th:errors="*{price}">error</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-2">
+                <input type="submit" value="Save Order" class="btn btn-lg btn-primary btn-block"
+                       th:attr="value=#{order.save}"/>
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Submit Order" class="btn btn-lg btn-primary btn-block"
+                       th:attr="value=#{order.submit}"/>
+            </div>
+        </div>
+
+    </form>
+</div>
+<!-- /.container -->
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>

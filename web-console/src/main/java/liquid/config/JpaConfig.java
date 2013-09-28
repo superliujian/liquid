@@ -2,6 +2,7 @@ package liquid.config;
 
 import liquid.persistence.repository.CargoRepository;
 import liquid.persistence.repository.CustomerRepository;
+import liquid.persistence.repository.OrderRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +33,8 @@ import java.sql.SQLException;
         includeFilters = @ComponentScan.Filter(
                 value = {
                         CustomerRepository.class,
-                        CargoRepository.class},
+                        CargoRepository.class,
+                        OrderRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JpaConfig {
