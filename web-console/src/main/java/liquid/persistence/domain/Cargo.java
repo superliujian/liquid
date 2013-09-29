@@ -14,14 +14,15 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "CARGO")
 public class Cargo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID") private int id;
+    @Column(name = "ID") private long id;
+
     @Column(name = "Name", nullable = true) @NotNull @NotEmpty private String name;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

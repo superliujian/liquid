@@ -34,21 +34,27 @@
             <th th:text="#{loading.type}">Loading Type</th>
             <th th:text="#{has.delivery}">Has Delivery</th>
             <th th:text="#{price}">Price</th>
+            <th th:text="#{status}">Status</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="order : ${orders}">
             <td th:text="${order.id}">ID</td>
-            <td th:text="${order.customerName}">Customer Name</td>
+            <td th:text="${order.customer.name}">Customer Name</td>
             <td th:text="${order.origin}">Origin</td>
             <td th:text="${order.destination}">Destination</td>
             <td th:text="${order.consignee}">Consignee</td>
-            <td th:text="${order.cargoName}">Cargo Name</td>
-            <td th:text="${order.weight}">Cargo Weight</td>
-            <td th:text="${order.tradeTypeName}">Trade Type</td>
-            <td th:text="${order.loadingTypeName}">Loading Type</td>
-            <td th:text="${order.hasDelivery}">Loading Type</td>
+            <td th:text="${order.cargo.name}"></td>
+            <td th:text="${order.cargoWeight}">Cargo Weight</td>
+            <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
+            <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
+            <td th:text="#{${order.hasDelivery}}">Loading Type</td>
             <td th:text="${order.price}">Price</td>
+            <th th:text="#{${status[__${order.status}__].i18nKey}}">Status</th>
+            <th><a href="/order/id" th:href="'/order/' + ${order.id + '?action=edit'}"><span
+                    class="glyphicon glyphicon-edit"></span></a>
+            </th>
         </tr>
         </tbody>
     </table>

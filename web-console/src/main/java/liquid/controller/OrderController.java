@@ -4,18 +4,18 @@ import liquid.persistence.domain.*;
 import liquid.persistence.repository.CargoRepository;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.OrderRepository;
+import liquid.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
 
 /**
  * TODO: Comments.
@@ -27,12 +27,18 @@ import java.security.Principal;
 @RequestMapping("/order")
 public class OrderController {
     private static final Logger logger = LoggerFactory.getLogger(Order.class);
+
     @Autowired
     private OrderRepository orderRepository;
+
     @Autowired
     private CustomerRepository customerRepository;
+
     @Autowired
     private CargoRepository cargoRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     @ModelAttribute("orders")
     public Iterable<Order> populateOrders() {
@@ -49,25 +55,67 @@ public class OrderController {
         return cargoRepository.findAll();
     }
 
+    @ModelAttribute("tradeTypes")
+    public TradeType[] populateTradeTypes() {
+        return TradeType.values();
+    }
+
+    @ModelAttribute("loadingTypes")
+    public LoadingType[] populateLoadings() {
+        return LoadingType.values();
+    }
+
+    @ModelAttribute("status")
+    public OrderStatus[] populateStatus() {
+        return OrderStatus.values();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public void list(Model model, Principal principal) {}
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public void form(Model model, Principal principal) {
         model.addAttribute("order", new Order());
-        model.addAttribute("trades", Trade.defaultTrades());
-        model.addAttribute("loadings", Loading.defaultLoadings());
     }
 
-    @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Order order, BindingResult bindingResult, Principal principal) {
-        logger.debug("Order: {}", order);
+    @RequestMapping(method = RequestMethod.POST, params = "save")
+    public String save(@Valid @ModelAttribute Order order,
+                       BindingResult bindingResult, Principal principal) {
+        logger.debug("order: {}", order);
+        order.setStatus(OrderStatus.SAVED.getValue());
 
         if (bindingResult.hasErrors()) {
-            return "order";
+            return "order/form";
         } else {
-            orderRepository.save(order);
+            orderService.create(order);
             return "redirect:/order";
         }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "submit")
+    public String submit(@Valid @ModelAttribute Order order,
+                         BindingResult bindingResult, Principal principal) {
+        logger.debug("order: {}", order);
+        order.setStatus(OrderStatus.SUBMITTED.getValue());
+        if (bindingResult.hasErrors()) {
+            return "order/form";
+        } else {
+            orderService.create(order);
+            return "redirect:/order";
+        }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String getOrder(@PathVariable long id, @RequestParam String action,
+                           Model model, Principal principal) {
+        logger.debug("id: {}", id);
+        logger.debug("action: {}", action);
+        Order order = orderRepository.findOne(id);
+        // TODO: looking for the better way to do that
+        order.setCustomerId(order.getCustomer().getId());
+        order.setCargoId(order.getCargo().getId());
+        logger.debug("order: {}", order);
+        model.addAttribute("order", order);
+        return "order/form";
     }
 }

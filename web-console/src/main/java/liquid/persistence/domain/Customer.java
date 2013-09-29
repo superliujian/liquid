@@ -12,43 +12,36 @@ import javax.validation.constraints.NotNull;
  * Time: 10:10 PM
  */
 @Entity(name = "CUSTOMER")
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private int id;
+public class Customer extends BaseEntity {
     @Column(name = "NAME")
     @NotNull
     @NotEmpty
     private String name;
+
     @NotNull
     @NotEmpty
     @Column(name = "ADDRESS")
     private String address;
+
     @NotNull
     @NotEmpty
     @Column(name = "POSTCODE")
     private String postcode;
+
     @NotNull
     @NotEmpty
     @Column(name = "CONTACT")
     private String contact;
+
     @NotNull
     @NotEmpty
     @Column(name = "PHONE")
     private String phone;
+
     @NotNull
     @NotEmpty
     @Column(name = "CELL")
     private String cell;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -100,9 +93,9 @@ public class Customer {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Customer{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        final StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("Customer{");
+        sb.append("name='").append(name).append('\'');
         sb.append(", address='").append(address).append('\'');
         sb.append(", postcode='").append(postcode).append('\'');
         sb.append(", contact='").append(contact).append('\'');

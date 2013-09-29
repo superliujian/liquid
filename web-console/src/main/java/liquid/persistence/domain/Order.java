@@ -12,37 +12,58 @@ import javax.validation.constraints.NotNull;
  * Time: 2:59 PM
  */
 @Entity(name = "ORDER_BASE")
-public class Order {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID") private int id;
-    @OneToOne @JoinColumn(name = "CUSTOMER_ID", nullable = true) private Customer customer;
-    @Transient private int customerId;
-    @Transient private String customerName;
-    @Column(name = "ORIGIN") @NotNull @NotEmpty private String origin;
-    @Column(name = "DESTINATION") @NotNull @NotEmpty private String destination;
-    @Column(name = "CONSIGNEE") @NotNull @NotEmpty private String consignee;
-    @OneToOne @JoinColumn(name = "CARGO_ID") private Cargo cargo;
-    @Transient private int cargoId;
-    @Transient private String cargoName;
+public class Order extends BaseEntity {
+    @Transient
+    private long customerId;
+
+    @OneToOne
+    @JoinColumn(name = "CUSTOMER_ID")
+    private Customer customer;
+
+    @Column(name = "ORIGIN")
+    @NotNull
+    @NotEmpty
+    private String origin;
+
+    @Column(name = "DESTINATION")
+    @NotNull
+    @NotEmpty
+    private String destination;
+
+    @Column(name = "CONSIGNEE")
+    @NotNull
+    @NotEmpty
+    private String consignee;
+
+    @Transient
+    private long cargoId;
+
+    @OneToOne
+    @JoinColumn(name = "CARGO_ID")
+    private Cargo cargo;
+
     // unit kilogram
-    @Column(name = "WEIGHT") @NotNull @NotEmpty private int cargoWeight;
+    @Column(name = "WEIGHT")
+    private int cargoWeight;
+
     // 0: domestic; 1: foreign
-    @Column(name = "TRADE_TYPE") private int tradeType;
-    @Transient private String tradeTypeName;
+    @Column(name = "TRADE_TYPE")
+    private int tradeType;
+
     // 0: yard; 1: truck
-    @Column(name = "LOADING_TYPE") private int loadingType;
-    @Transient private String loadingTypeName;
-    @Column(name = "HAS_DELIVERY") private boolean hasDelivery;
+    @Column(name = "LOADING_TYPE")
+    private int loadingType;
+
+    @Column(name = "HAS_DELIVERY")
+    private boolean hasDelivery;
+
     // unit yuan
-    @Column(name = "PRICE") @NotNull @NotEmpty private long price;
+    @Column(name = "PRICE")
+    private long price;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    // 1 saved; 2: submitted
+    @Column(name = "STATUS")
+    private int status;
 
     public Customer getCustomer() {
         return customer;
@@ -124,70 +145,49 @@ public class Order {
         this.price = price;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     // Transient
 
-    public int getCustomerId() {
+    public long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getCargoName() {
-        return cargoName;
-    }
-
-    public void setCargoName(String cargoName) {
-        this.cargoName = cargoName;
-    }
-
-    public String getTradeTypeName() {
-        return tradeTypeName;
-    }
-
-    public void setTradeTypeName(String tradeTypeName) {
-        this.tradeTypeName = tradeTypeName;
-    }
-
-    public String getLoadingTypeName() {
-        return loadingTypeName;
-    }
-
-    public void setLoadingTypeName(String loadingTypeName) {
-        this.loadingTypeName = loadingTypeName;
-    }
-
-    public int getCargoId() {
+    public long getCargoId() {
         return cargoId;
     }
 
-    public void setCargoId(int cargoId) {
+    public void setCargoId(long cargoId) {
         this.cargoId = cargoId;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("id=").append(id);
+        final StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("Order{");
+        sb.append("customerId=").append(customerId);
         sb.append(", customer=").append(customer);
         sb.append(", origin='").append(origin).append('\'');
         sb.append(", destination='").append(destination).append('\'');
         sb.append(", consignee='").append(consignee).append('\'');
+        sb.append(", cargoId=").append(cargoId);
         sb.append(", cargo=").append(cargo);
         sb.append(", cargoWeight=").append(cargoWeight);
         sb.append(", tradeType=").append(tradeType);
         sb.append(", loadingType=").append(loadingType);
         sb.append(", hasDelivery=").append(hasDelivery);
         sb.append(", price=").append(price);
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

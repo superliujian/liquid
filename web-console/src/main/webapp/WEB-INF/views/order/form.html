@@ -15,7 +15,16 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <form action="/order" method="POST" th:object="${order}">
+    <form action="/order" method="POST" th:object="${order}" th:method="${order['new']} ? 'post' : 'put'">
+        <div class="row" th:if="${order.id}">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{order.id}">Order ID</label>
+                    <input type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-xs-6 col-md-4">
                 <div class="form-group">
@@ -33,7 +42,7 @@
         <div class="row">
             <div class="col-xs-6 col-md-4">
                 <div class="form-group">
-                    <label th:text="#{origin}">Origin</label>
+                    <label th:text="#{origin} + ' *'">Origin</label>
                     <input type="text" th:field="*{origin}" class="form-control"/>
 
                     <span th:errors="*{origin}">error</span>
@@ -42,7 +51,7 @@
 
             <div class="col-xs-6 col-md-4">
                 <div class="form-group">
-                    <label th:text="#{destination}">Destination</label>
+                    <label th:text="#{destination} + ' *'">Destination</label>
                     <input type="text" th:field="*{destination}" class="form-control"/>
 
                     <span th:errors="*{destination}">error</span>
@@ -51,7 +60,7 @@
 
             <div class="col-xs-6 col-md-4">
                 <div class="form-group">
-                    <label th:text="#{consignee}">Consignee</label>
+                    <label th:text="#{consignee} + ' *'">Consignee</label>
                     <input type="text" th:field="*{consignee}" class="form-control"/>
 
                     <span th:errors="*{consignee}">error</span>
@@ -87,7 +96,7 @@
                 <div class="form-group">
                     <label th:text="#{trade.type}">Trade Type</label>
                     <ul class="list-inline">
-                        <li th:each="trade : ${trades}">
+                        <li th:each="trade : ${tradeTypes}">
                             <input type="radio" th:field="*{tradeType}" th:value="${trade.type}"/>
                             <label th:for="${#ids.prev('tradeType')}"
                                    th:text="#{${trade.i18nKey}}">Trade Type</label>
@@ -102,7 +111,7 @@
                 <div class="form-group">
                     <label th:text="#{loading.type}">Loading Type</label>
                     <ul class="list-inline">
-                        <li th:each="loading : ${loadings}">
+                        <li th:each="loading : ${loadingTypes}">
                             <input type="radio" th:field="*{loadingType}" th:value="${loading.type}"/>
                             <label th:for="${#ids.prev('loadingType')}"
                                    th:text="#{${loading.i18nKey}}">Loading Type</label>
@@ -135,11 +144,11 @@
         <div class="row">
             <div class="col-md-8"></div>
             <div class="col-md-2">
-                <input type="submit" value="Save Order" class="btn btn-lg btn-primary btn-block"
+                <input type="submit" name="save" value="Save Order" class="btn btn-lg btn-primary btn-block"
                        th:attr="value=#{order.save}"/>
             </div>
             <div class="col-md-2">
-                <input type="submit" value="Submit Order" class="btn btn-lg btn-primary btn-block"
+                <input type="submit" name="submit" value="Submit Order" class="btn btn-lg btn-primary btn-block"
                        th:attr="value=#{order.submit}"/>
             </div>
         </div>

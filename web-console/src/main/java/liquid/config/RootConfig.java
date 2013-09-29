@@ -11,6 +11,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * Time: 11:24 PM
  */
 @Configuration
-@ComponentScan({"liquid.aop", "liquid.service.bpm"})
+@ComponentScan({"liquid.aop", "liquid.service"})
 @EnableAspectJAutoProxy
 public class RootConfig {}
