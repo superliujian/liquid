@@ -8,10 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import java.util.List;
 @RequestMapping("/task")
 public class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
     @Autowired
     private ActivitiEngineService bpmEngineService;
 
@@ -35,6 +35,28 @@ public class TaskController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public void tasks(Model model, Principal principal) {
+    public void tasks(Model model, Principal principal) {}
+
+    @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
+    public String task(@PathVariable String taskId,
+                       Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        Task task = bpmEngineService.getTask(taskId);
+        logger.debug("taskDefinitionKey: {}", task.getTaskDefinitionKey());
+        switch (task.getTaskDefinitionKey()) {
+            case "planRoute":
+                model.addAttribute("task", task);
+                return "task/planning";
+            default:
+                break;
+        }
+        return "task";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "claim")
+    public String claim(@RequestParam String taskId,
+                        Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        return "redirect:/task/" + taskId;
     }
 }

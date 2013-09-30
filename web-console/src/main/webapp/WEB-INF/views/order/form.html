@@ -142,6 +142,25 @@
         </div>
 
         <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{extra.expense}">Extra Expense</label>
+                    <input type="text" th:field="*{extExp}" class="form-control"/>
+
+                    <span th:errors="*{extExp}">error</span>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-4">
+                <div class="form-group">
+                    <label th:text="#{extra.expense.comment}">Ext Exp Comments</label>
+                    <input type="text" th:field="*{extExpComment}" class="form-control"/>
+
+                    <span th:errors="*{extExpComment}">error</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-8"></div>
             <div class="col-md-2">
                 <input type="submit" name="save" value="Save Order" class="btn btn-lg btn-primary btn-block"
@@ -155,7 +174,6 @@
 
     </form>
 </div>
-<!-- /.container -->
 <!-- /.container -->
 
 <!-- {!begin layout} -->

@@ -1,8 +1,12 @@
 package liquid.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import liquid.context.BusinessContext;
+import org.springframework.beans.factory.config.CustomScopeConfigurer;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.SimpleThreadScope;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -13,4 +17,26 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @Configuration
 @ComponentScan({"liquid.aop", "liquid.service"})
 @EnableAspectJAutoProxy
-public class RootConfig {}
+public class RootConfig {
+    @Bean
+    public SimpleThreadScope threadScope() {
+        SimpleThreadScope threadScope = new SimpleThreadScope();
+        return threadScope;
+    }
+
+    @Bean
+    public CustomScopeConfigurer scopeConfigurer() {
+        CustomScopeConfigurer scopeConfigurer = new CustomScopeConfigurer();
+        Map<String, Object> scopes = new HashMap<String, Object>();
+        scopes.put("thread", threadScope());
+        scopeConfigurer.setScopes(scopes);
+        return scopeConfigurer;
+    }
+
+    @Bean
+    @Scope(value = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public BusinessContext businessContext() {
+        BusinessContext businessContext = new BusinessContext();
+        return businessContext;
+    }
+}

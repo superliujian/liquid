@@ -1,5 +1,6 @@
 package liquid.controller;
 
+import liquid.context.BusinessContext;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.CargoRepository;
 import liquid.persistence.repository.CustomerRepository;
@@ -39,6 +40,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private BusinessContext businessContext;
 
     @ModelAttribute("orders")
     public Iterable<Order> populateOrders() {
@@ -87,7 +91,7 @@ public class OrderController {
         if (bindingResult.hasErrors()) {
             return "order/form";
         } else {
-            orderService.create(order);
+            orderService.save(order);
             return "redirect:/order";
         }
     }
@@ -95,12 +99,15 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Principal principal) {
+        // TODO: add to interceptor.
+        businessContext.setUsername(principal.getName());
+
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SUBMITTED.getValue());
         if (bindingResult.hasErrors()) {
             return "order/form";
         } else {
-            orderService.create(order);
+            orderService.submit(order);
             return "redirect:/order";
         }
     }

@@ -27,9 +27,9 @@ public class BpmConfig {
     public SimpleDriverDataSource bpmDataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
-        dataSource.setUrl("jdbc:mysql://localhost:3306/activiti?autoReconnect=true");
-        dataSource.setUsername("activiti");
-        dataSource.setPassword("activiti");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/liquid_bpm?autoReconnect=true");
+        dataSource.setUsername("liquid");
+        dataSource.setPassword("liquid");
         return dataSource;
     }
 

@@ -14,9 +14,9 @@
         </startEvent>
         <sequenceFlow id="flow1" sourceRef="placeOrder" targetRef="planRoute"/>
 
-        <userTask id="planRoute" name="Plan Route">
+        <userTask id="planRoute" name="路线规划">
             <documentation>
-                ${employeeName} place an order.
+                ${employeeName}下订单。
             </documentation>
             <extensionElements>
                 <activiti:formProperty id="route" name="Route" type="string" required="true"/>
@@ -27,7 +27,22 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow2" sourceRef="planRoute" targetRef="theEnd1"/>
+        <sequenceFlow id="flow2" sourceRef="planRoute" targetRef="planLoading"/>
+
+        <userTask id="planLoading" name="Plan Loading">
+            <documentation>
+                ${employeeName} plan route.
+            </documentation>
+            <extensionElements>
+                <activiti:formProperty id="route" name="Route" type="string" required="true"/>
+            </extensionElements>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow3" sourceRef="planLoading" targetRef="theEnd1"/>
 
         <endEvent id="theEnd1"/>
 

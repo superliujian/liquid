@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    <div class="bs-docs-section">
+        <h3 th:text="${task.name}">Task Name</h3>
+
+        <p th:text="${task.description}">Task Description</p>
+    </div>
+
+    <div>
+        <form action="/task" method="POST">
+            <input type="hidden" id="taskId" name="taskId" value="taskId" th:value="${task.id}"/>
+            <input type="submit" name="claim" value="Claim Task" class="btn btn-lg btn-primary btn-block"
+                   th:value="#{task.claim}"/>
+        </form>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<br/>
+
+<div class="container">
+
+
+
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>

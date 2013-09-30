@@ -1,8 +1,11 @@
 package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -13,6 +16,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "ORDER_BASE")
 public class Order extends BaseEntity {
+    private static final Logger logger = LoggerFactory.getLogger(Order.class);
+
     @Transient
     private long customerId;
 
@@ -60,6 +65,12 @@ public class Order extends BaseEntity {
     // unit yuan
     @Column(name = "PRICE")
     private long price;
+
+    @Column(name = "EXT_EXP")
+    private long extExp = 0L;
+
+    @Column(name = "EXT_EXP_COMMENT")
+    private String extExpComment;
 
     // 1 saved; 2: submitted
     @Column(name = "STATUS")
@@ -145,6 +156,22 @@ public class Order extends BaseEntity {
         this.price = price;
     }
 
+    public long getExtExp() {
+        return extExp;
+    }
+
+    public void setExtExp(long extExp) {
+        this.extExp = extExp;
+    }
+
+    public String getExtExpComment() {
+        return extExpComment;
+    }
+
+    public void setExtExpComment(String extExpComment) {
+        this.extExpComment = extExpComment;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -187,6 +214,8 @@ public class Order extends BaseEntity {
         sb.append(", loadingType=").append(loadingType);
         sb.append(", hasDelivery=").append(hasDelivery);
         sb.append(", price=").append(price);
+        sb.append(", extExp=").append(extExp);
+        sb.append(", extExpComment='").append(extExpComment).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

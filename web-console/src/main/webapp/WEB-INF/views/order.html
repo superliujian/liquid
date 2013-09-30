@@ -34,6 +34,8 @@
             <th th:text="#{loading.type}">Loading Type</th>
             <th th:text="#{has.delivery}">Has Delivery</th>
             <th th:text="#{price}">Price</th>
+            <th th:text="#{extra.expense}">Extra Expense</th>
+            <th th:text="#{extra.expense.comment}">Ext Exp Comment</th>
             <th th:text="#{status}">Status</th>
             <th></th>
         </tr>
@@ -51,8 +53,10 @@
             <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
             <td th:text="#{${order.hasDelivery}}">Loading Type</td>
             <td th:text="${order.price}">Price</td>
+            <th th:text="${order.extExp}">Extra Expense</th>
+            <th th:text="${order.extExpComment}">Ext Exp Comment</th>
             <th th:text="#{${status[__${order.status}__].i18nKey}}">Status</th>
-            <th>
+            <th th:if="${order.status} != 2">
                 <a href="/order/id" th:href="'/order/' + ${order.id + '?action=edit'}">
                     <i class="glyphicon glyphicon-edit"/>
                 </a>

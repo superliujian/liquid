@@ -32,8 +32,8 @@ public class AuthController {
             if ("ROLE_SALES".equals(authority.getAuthority())) {
                 return "redirect:/order";
             }
-            if ("ROLE_MARKETING".equals(authority.getAuthority())) {
-                return "redirect:/marketing";
+            if ("ROLE_MARKETING".equals(authority.getAuthority().trim())) {
+                return "redirect:/task";
             }
         }
 
