@@ -18,12 +18,13 @@ import java.util.HashMap;
  */
 @Controller
 @RequestMapping("/sales")
+@Deprecated
 public class SalesController {
     @Autowired
     private ActivitiEngineService bpmEngineService;
 
     @RequestMapping(method = RequestMethod.POST)
     public void placeOrder(Model model, Principal principal) {
-        bpmEngineService.startProcess(principal.getName(), new HashMap<String, Object>());
+        bpmEngineService.startProcess(principal.getName(), 0L, new HashMap<String, Object>());
     }
 }

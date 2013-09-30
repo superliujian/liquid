@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Arrays;
 
 /**
  * TODO: Comments.
@@ -67,6 +66,16 @@ public class OrderController {
     @ModelAttribute("loadingTypes")
     public LoadingType[] populateLoadings() {
         return LoadingType.values();
+    }
+
+    @ModelAttribute("containerTypes")
+    public ContainerType[] populateContainerTypes() {
+        return ContainerType.values();
+    }
+
+    @ModelAttribute("containerCaps")
+    public ContainerCap[] populateContainerCaps() {
+        return ContainerCap.values();
     }
 
     @ModelAttribute("status")

@@ -27,7 +27,7 @@ public class MarketingController {
     @ModelAttribute("tasks")
     public List<Task> populateTasks() {
         // TODO: Use ROLE_MARKETING to replace the hardcode from principal
-        return bpmEngineService.listTask("marketing");
+        return bpmEngineService.listTasks("marketing");
     }
 
     @RequestMapping(method = RequestMethod.GET)

@@ -62,6 +62,15 @@ public class Order extends BaseEntity {
     @Column(name = "HAS_DELIVERY")
     private boolean hasDelivery;
 
+    @Column(name = "CONTAINER_TYPE")
+    private int containerType;
+
+    @Column(name = "CONTAINER_CAP")
+    private int containerCap;
+
+    @Column(name = "CONTAINER_QTY")
+    private int containerQty;
+
     // unit yuan
     @Column(name = "PRICE")
     private long price;
@@ -148,6 +157,30 @@ public class Order extends BaseEntity {
         this.hasDelivery = hasDelivery;
     }
 
+    public int getContainerType() {
+        return containerType;
+    }
+
+    public void setContainerType(int containerType) {
+        this.containerType = containerType;
+    }
+
+    public int getContainerCap() {
+        return containerCap;
+    }
+
+    public void setContainerCap(int containerCap) {
+        this.containerCap = containerCap;
+    }
+
+    public int getContainerQty() {
+        return containerQty;
+    }
+
+    public void setContainerQty(int containerQty) {
+        this.containerQty = containerQty;
+    }
+
     public long getPrice() {
         return price;
     }
@@ -213,6 +246,9 @@ public class Order extends BaseEntity {
         sb.append(", tradeType=").append(tradeType);
         sb.append(", loadingType=").append(loadingType);
         sb.append(", hasDelivery=").append(hasDelivery);
+        sb.append(", containerType=").append(containerType);
+        sb.append(", containerCap=").append(containerCap);
+        sb.append(", containerQty=").append(containerQty);
         sb.append(", price=").append(price);
         sb.append(", extExp=").append(extExp);
         sb.append(", extExpComment='").append(extExpComment).append('\'');

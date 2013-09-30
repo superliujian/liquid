@@ -35,12 +35,12 @@
                             <i class="glyphicon glyphicon-user"></i>&nbsp;
                             <span sec:authentication="name">Logged User Name</span>
                             [
-                            <span sec:authorize="hasRole('ROLE_SALES')" th:text="#{sales}"></span>
-                            <span sec:authorize="hasRole('ROLE_MARKETING')" th:text="#{marketing}"></span>
-                            <span sec:authorize="hasRole('ROLE_OPERATING')" th:text="#{operating}"></span>
-                            <span sec:authorize="hasRole('ROLE_CONTAINER')" th:text="#{container}"></span>
-                            <span sec:authorize="hasRole('ROLE_FIELD')" th:text="#{field}"></span>
-                            <span sec:authorize="hasRole('ROLE_COMMERCE')" th:text="#{commerce}"></span>
+                            <span sec:authorize="hasRole('ROLE_SALES')" th:text="#{role.sales}"></span>
+                            <span sec:authorize="hasRole('ROLE_MARKETING')" th:text="#{role.marketing}"></span>
+                            <span sec:authorize="hasRole('ROLE_OPERATING')" th:text="#{role.operating}"></span>
+                            <span sec:authorize="hasRole('ROLE_CONTAINER')" th:text="#{role.container}"></span>
+                            <span sec:authorize="hasRole('ROLE_FIELD')" th:text="#{role.field}"></span>
+                            <span sec:authorize="hasRole('ROLE_COMMERCE')" th:text="#{role.commerce}"></span>
                             ]
                         </a>
                     </li>
@@ -53,8 +53,17 @@
 </div>
 <!--/header -->
 
+<div th:fragment="left-side">
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="list-group">
+            <a href="/task" class="list-group-item" th:classappend="${queueActive}" th:text="#{task.queue}">Task
+                Queue</a>
+            <a href="/task/my" class="list-group-item" th:classappend="${myActive}" th:text="#{task.my}">My Task</a>
+        </div>
+    </div>
+</div>
 
-<div th:fragment="footer">
+<div th:fragment=" footer">
     <hr/>
     <div class="container">
         <footer>

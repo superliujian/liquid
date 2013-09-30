@@ -32,20 +32,32 @@ public class ActivitiEngineService {
     @Autowired
     private SimpleDriverDataSource dataSource;
 
-    public void startProcess(String uid, Map<String, Object> variableMap) {
+    public void startProcess(String uid, long orderId, Map<String, Object> variableMap) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         repositoryService.createDeployment().addClasspathResource("processes/liquid.poc.bpmn20.xml").deploy();
 
         variableMap.put("employeeName", uid);
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", variableMap);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", String.valueOf(orderId), variableMap);
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
         System.out.println(dataSource);
     }
 
-    public List<Task> listTask(String candidateGid) {
+    public List<Task> listTasks(String candidateGid) {
         TaskService taskService = processEngine.getTaskService();
         List<Task> taskList = taskService.createTaskQuery().taskCandidateGroup(candidateGid).list();
+        if (logger.isDebugEnabled()) {
+            for (Task task : taskList) {
+                logger.debug("task: {}; owner: {}", task, task.getOwner());
+            }
+        }
+
+        return taskList;
+    }
+
+    public List<Task> listMyTasks(String uid) {
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> taskList = taskService.createTaskQuery().taskAssignee(uid).list();
         if (logger.isDebugEnabled()) {
             for (Task task : taskList) {
                 logger.debug("task: {}; owner: {}", task, task.getOwner());

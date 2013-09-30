@@ -52,6 +52,6 @@ public class OrderService {
     public void submit(Order order) {
         save(order);
         logger.debug("username: {}", businessContext.getUsername());
-        bpmEngineService.startProcess(businessContext.getUsername(), new HashMap<String, Object>());
+        bpmEngineService.startProcess(businessContext.getUsername(), order.getId(), new HashMap<String, Object>());
     }
 }
