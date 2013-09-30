@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.ldapAuthentication().contextSource(contextSource)
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
-                .groupSearchFilter("(member={0})");
+                .groupSearchFilter("(uniqueMember={0})");
     }
 
     @Override

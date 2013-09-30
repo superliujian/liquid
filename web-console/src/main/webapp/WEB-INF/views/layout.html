@@ -30,6 +30,20 @@
                     <li><a href="/cargo" th:text="#{cargo}">Cargo</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-user"></i>&nbsp;
+                            <span sec:authentication="name">Logged User Name</span>
+                            [
+                            <span sec:authorize="hasRole('ROLE_SALES')" th:text="#{sales}"></span>
+                            <span sec:authorize="hasRole('ROLE_MARKETING')" th:text="#{marketing}"></span>
+                            <span sec:authorize="hasRole('ROLE_OPERATING')" th:text="#{operating}"></span>
+                            <span sec:authorize="hasRole('ROLE_CONTAINER')" th:text="#{container}"></span>
+                            <span sec:authorize="hasRole('ROLE_FIELD')" th:text="#{field}"></span>
+                            <span sec:authorize="hasRole('ROLE_COMMERCE')" th:text="#{commerce}"></span>
+                            ]
+                        </a>
+                    </li>
                     <li><a href="logout" th:text="#{logout}">Logout</a></li>
                 </ul>
             </div>
@@ -53,8 +67,8 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="//code.jquery.com/jquery.js"></script>
-            <!-- Include all compiled plugins (below), or include individual files as needed -->
-            <script src="/resources/js/bootstrap-3.0.0.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
 </body>
 
 </html>
