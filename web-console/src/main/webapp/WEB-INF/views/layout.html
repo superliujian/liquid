@@ -20,7 +20,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Liquid</a>
+                <a class="navbar-brand" href="#" th:text="#{branding}">Branding</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -44,7 +44,7 @@
     <hr/>
     <div class="container">
         <footer>
-            <p>&copy; Liquid 2013</p>
+            <p th:text="#{footer}">Copyright</p>
         </footer>
     </div>
     <!-- /.container -->
@@ -53,8 +53,8 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="//code.jquery.com/jquery.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/resources/js/bootstrap-3.0.0.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="/resources/js/bootstrap-3.0.0.js"></script>
 </body>
 
 </html>
