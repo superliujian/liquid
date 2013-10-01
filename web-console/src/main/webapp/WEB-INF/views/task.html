@@ -37,11 +37,13 @@
                 <tbody>
                 <tr th:each="task : ${tasks}">
                     <td th:text="${task.id}">Task ID</td>
-                    <td th:text="${task.name}">Task Name</td>
-                    <td th:text="${task.description}">Task Description</td>
-                    <td th:text="${task.owner}">Task Owner</td>
                     <td>
-                        <a href="/task?action=claim" th:if="!${task.owner}" th:href="'/task/' + ${task.id}">
+                        <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.name}">Task Name</a>
+                    </td>
+                    <td th:text="${task.description}">Task Description</td>
+                    <td th:text="${task.assignee}">Task Owner</td>
+                    <td>
+                        <a href="/task?action=claim" th:if="!${task.assignee}" th:href="'/task/' + ${task.id}">
                             <i class="glyphicon glyphicon-check"/>
                         </a>
                     </td>

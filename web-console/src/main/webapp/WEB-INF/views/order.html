@@ -25,7 +25,7 @@
         <tr>
             <th th:text="#{order.id}">ID</th>
             <th th:text="#{customer.name}">Customer Name</th>
-            <th th:text="#{origin}">Origin</th>
+            <th th:text="#{origination}">Origin</th>
             <th th:text="#{destination}">Destination</th>
             <th th:text="#{cargo.name}">Cargo Name</th>
             <th th:text="#{cargo.weight}">Cargo Weight</th>
@@ -44,7 +44,7 @@
         <tr th:each="order : ${orders}">
             <td th:text="${order.id}">ID</td>
             <td th:text="${order.customer.name}">Customer Name</td>
-            <td th:text="${order.origin}">Origin</td>
+            <td th:text="${order.origination}">Origin</td>
             <td th:text="${order.destination}">Destination</td>
             <td th:text="${order.cargo.name}"></td>
             <td th:text="${order.cargoWeight}">Cargo Weight</td>

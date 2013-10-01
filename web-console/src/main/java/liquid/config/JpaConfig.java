@@ -1,8 +1,6 @@
 package liquid.config;
 
-import liquid.persistence.repository.CargoRepository;
-import liquid.persistence.repository.CustomerRepository;
-import liquid.persistence.repository.OrderRepository;
+import liquid.persistence.repository.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +32,9 @@ import java.sql.SQLException;
                 value = {
                         CustomerRepository.class,
                         CargoRepository.class,
-                        OrderRepository.class},
+                        OrderRepository.class,
+                        PlanningRepository.class,
+                        TransRailwayRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JpaConfig {

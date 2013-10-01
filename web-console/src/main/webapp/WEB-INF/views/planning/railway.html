@@ -14,62 +14,52 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div class="container">
-    <div>
-        <h3 th:text="${task.name}">Task Name</h3>
+<!-- Task Header -->
+<div th:include="layout :: task-header"></div>
 
-        <p th:text="${task.description}">Task Description</p>
-    </div>
-
-    <br/>
-
-    <div th:if="!${task.assignee}">
-        <form action="/task" method="POST">
-            <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
-            <input type="hidden" name="action" value="claim"/>
-            <input type="submit" name="Claim Task" value="Claim Task" class="btn btn-lg btn-primary btn-block"
-                   th:value="#{task.claim}"/>
-        </form>
-    </div>
-
-    <div th:if="${task.assignee}">
-        <form action="/task" method="POST" class="form-inline">
-            <div class="form-group">
-                <label class="sr-only" th:text="#{transportation.mode}">Mode of Transportation</label>
-                <select name="transMode" class="form-control">
-                    <option th:each="mode : ${transModes}"
-                            th:value="${mode.type}"
-                            th:text="#{${mode.i18nKey}}">Mode of Transportation
-                    </option>
-                </select>
-            </div>
-            <label class="checkbox">
-                <input type="checkbox" name="sameRoute"/>
-                <span th:text="#{transportation.same.route}">Same Route</span>
-            </label>
-            <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
-            <input type="hidden" name="action" value="addTransportation"/>
-            <input type="submit" name="Add Transportation" value="Add Transportation" class="btn btn-primary"
-                   th:value="#{transportation.add.route}"/>
-        </form>
-    </div>
-</div>
-<!-- /.container -->
-
+<!-- Transportation Operation -->
 <div class="container">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#">Overview</a></li>
-        <li><a href="/task/{taskId}/${''}planning/railway"
-               th:href="'/task/' + ${taskId} + '/planning/railway'">Railway</a></li>
+        <li><a href="#">Overview</a></li>
+        <li class="active"><a href="/task/{taskId}/planning/railway"
+                              th:href="'/task/' + ${taskId} + '/planning/railway'">Railway</a></li>
         <li><a href="#">Barge</a></li>
         <li><a href="#">Vessel</a></li>
     </ul>
+
+    <br/>
+
+    <!-- TODO: ugly -->
+    <div class="container">
+        <div th:if="${task.assignee}">
+            <form action="/task" method="POST" class="form-inline" th:object="${planning}"
+                  th:action="'/task/' + ${taskId} + '/planning'">
+                <label class="checkbox">
+                    <input type="checkbox" name="sameRoute" th:field="*{sameRoute}"/>
+                    <span th:text="#{transportation.same.route}">Same Route</span>
+                </label>
+
+                <input type="hidden" th:field="*{transMode}" value="0"/>
+
+
+                <input type="submit" name="create" value="Add Transportation" class="btn btn-primary"
+                       th:value="#{transportation.add.route}" th:unless="*{status}"/>
+
+                <input type="hidden" th:field="*{id}" value="0" th:if="*{status}"/>
+
+                <input type="submit" name="update" value="Update Transportation"
+                       class="btn btn-primary"
+                       th:value="#{transportation.update.route}" th:if="*{status}"/>
+                <input type="submit" name="delete" value="Delete Transportation"
+                       class="btn btn-primary"
+                       th:value="#{transportation.delete.route}" th:if="*{status}"/>
+            </form>
+        </div>
+    </div>
 </div>
 <!-- /.container -->
 
-<br/>
-
-<div class="container">
+<div class=" container">
     <div th:unless="${#lists.isEmpty(railways)}">
         <h3 th:text="#{transportation.railway}">Railway</h3>
 

@@ -63,6 +63,28 @@
     </div>
 </div>
 
+<!-- Task Operation -->
+<div th:fragment="task-header">
+    <div class="container">
+        <div>
+            <h3 th:text="${task.name}">Task Name</h3>
+
+            <p th:text="${task.description}">Task Description</p>
+        </div>
+
+        <br/>
+
+        <div th:if="!${task.assignee}">
+            <form action="/task" method="POST">
+                <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
+                <input type="hidden" name="action" value="claim"/>
+                <input type="submit" name="Claim Task" value="Claim Task" class="btn btn-lg btn-primary btn-block"
+                       th:value="#{task.claim}"/>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div th:fragment=" footer">
     <hr/>
     <div class="container">

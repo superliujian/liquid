@@ -20,6 +20,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/marketing")
+@Deprecated
 public class MarketingController {
     @Autowired
     private ActivitiEngineService bpmEngineService;

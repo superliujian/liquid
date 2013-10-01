@@ -3,19 +3,18 @@ package liquid.persistence.domain;
 /**
  * TODO: Comments.
  * User: tao
- * Date: 9/29/13
- * Time: 10:16 PM
+ * Date: 10/1/13
+ * Time: 9:40 PM
  */
-public enum OrderStatus {
+public enum PlanningStatus {
     NULL(0, ""),
-    SAVED(1, "order.status.saved"),
-    SUBMITTED(2, "order.status.submitted");
+    ADDED(1, "order.status.saved");
 
     private final int value;
 
     private final String i18nKey;
 
-    private OrderStatus(int value, String i18nKey) {
+    private PlanningStatus(int value, String i18nKey) {
         this.value = value;
         this.i18nKey = i18nKey;
     }

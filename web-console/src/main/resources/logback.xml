@@ -15,6 +15,21 @@
         </encoder>
     </appender>
 
+    <appender name="THYMELEAF" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/thymeleaf.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>log/thymeleaf.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="HIBERNATE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>log/hibernate.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -53,6 +68,10 @@
 
     <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="SPRING"/>
+    </logger>
+
+    <logger name="org.thymeleaf" level="INFO" additivity="false">
+        <appender-ref ref="THYMELEAF"/>
     </logger>
 
     <logger name="org.hibernate" level="INFO" additivity="false">

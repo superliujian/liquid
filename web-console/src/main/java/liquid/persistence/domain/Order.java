@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -25,10 +24,10 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
-    @Column(name = "ORIGIN")
+    @Column(name = "ORIGINATION")
     @NotNull
     @NotEmpty
-    private String origin;
+    private String origination;
 
     @Column(name = "DESTINATION")
     @NotNull
@@ -93,12 +92,12 @@ public class Order extends BaseEntity {
         this.customer = customer;
     }
 
-    public String getOrigin() {
-        return origin;
+    public String getOrigination() {
+        return origination;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public void setOrigination(String origination) {
+        this.origination = origination;
     }
 
     public String getDestination() {
@@ -237,7 +236,7 @@ public class Order extends BaseEntity {
         sb.append("Order{");
         sb.append("customerId=").append(customerId);
         sb.append(", customer=").append(customer);
-        sb.append(", origin='").append(origin).append('\'');
+        sb.append(", origination='").append(origination).append('\'');
         sb.append(", destination='").append(destination).append('\'');
         sb.append(", consignee='").append(consignee).append('\'');
         sb.append(", cargoId=").append(cargoId);

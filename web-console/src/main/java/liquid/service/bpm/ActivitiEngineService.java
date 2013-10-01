@@ -4,6 +4,8 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLinkType;
 import org.activiti.engine.task.Task;
@@ -75,5 +77,17 @@ public class ActivitiEngineService {
     public void claimTask(String taskId, String uid) {
         TaskService taskService = processEngine.getTaskService();
         taskService.claim(taskId, uid);
+    }
+
+    public long getOrderIdByTaskId(String taskId) {
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+        Execution execution = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+        if (execution instanceof ExecutionEntity) {
+            ExecutionEntity entity = (ExecutionEntity) execution;
+            return Integer.valueOf(entity.getBusinessKey());
+        }
+        throw new RuntimeException("execution is not an instance of ExecutionEntity");
     }
 }
