@@ -29,6 +29,7 @@
                     <li><a href="/customer" th:text="#{customer}">Customer</a></li>
                     <li><a href="/sp" th:text="#{sp}">SP</a></li>
                     <li><a href="/cargo" th:text="#{cargo}">Cargo</a></li>
+                    <li><a href="/ct" th:text="#{charge.type}">Charge Type</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -104,6 +105,10 @@
         <li class="active" th:class="${planning.transModeKey} == 'vessel' ? 'active'">
             <a href="/task/{taskId}/planning/vessel"
                th:href="'/task/' + ${taskId} + '/planning/vessel'" th:text="#{transportation.vessel}">Vessel</a>
+        </li>
+        <li class="active" th:class="${planning.transModeKey} == 'charge' ? 'active'">
+            <a href="/task/{taskId}/planning/charge"
+               th:href="'/task/' + ${taskId} + '/planning/charge'" th:text="#{charge}">Charge</a>
         </li>
     </ul>
 

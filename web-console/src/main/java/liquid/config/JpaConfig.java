@@ -35,7 +35,9 @@ import java.sql.SQLException;
                         CargoRepository.class,
                         OrderRepository.class,
                         PlanningRepository.class,
-                        TransRailwayRepository.class},
+                        TransRailwayRepository.class,
+                        ChargeTypeRepository.class,
+                        ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JpaConfig {

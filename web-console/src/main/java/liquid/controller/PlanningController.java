@@ -1,9 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.OrderRepository;
-import liquid.persistence.repository.PlanningRepository;
-import liquid.persistence.repository.TransRailwayRepository;
+import liquid.persistence.repository.*;
 import liquid.service.PlanningService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
@@ -44,9 +42,30 @@ public class PlanningController {
     @Autowired
     private TransRailwayRepository transRailwayRepository;
 
+    @Autowired
+    private ChargeTypeRepository ctRepository;
+
+    @Autowired
+    private ChargeRepository chargeRepository;
+
     @ModelAttribute("transModes")
     public TransMode[] populateTransMedes() {
         return TransMode.values();
+    }
+
+    @ModelAttribute("chargeWays")
+    public ChargeWay[] populateChargeWays() {
+        return ChargeWay.values();
+    }
+
+    @ModelAttribute("cts")
+    public Iterable<ChargeType> populateChargeTypes() {
+        return ctRepository.findAll();
+    }
+
+    @ModelAttribute("charges")
+    public Iterable<Charge> populateCharges() {
+        return chargeRepository.findAll();
     }
 
     @ModelAttribute("railways")
@@ -92,7 +111,7 @@ public class PlanningController {
         Order order = orderRepository.findOne(bpmService.getOrderIdByTaskId(taskId));
 
         Planning planning = new Planning();
-        if ("overview".equals(transModeKey)) {
+        if ("overview".equals(transModeKey) || "charge".equals(transModeKey)) {
 
         } else {
             planning = planningRepository.findOne(order.getId() + "-" + TransMode.valueOf(transModeKey.toUpperCase()).getType());
@@ -110,6 +129,11 @@ public class PlanningController {
 
         model.addAttribute("task", task);
         model.addAttribute("planning", planning);
+        model.addAttribute("charge", new Charge());
+
+        if ("charge".endsWith(transModeKey)) {
+            return "charge";
+        }
         return "planning/" + transModeKey;
     }
 
