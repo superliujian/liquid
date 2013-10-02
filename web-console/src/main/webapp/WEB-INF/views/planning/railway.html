@@ -19,15 +19,7 @@
 
 <!-- Transportation Operation -->
 <div class="container">
-    <ul class="nav nav-tabs">
-        <li><a href="#">Overview</a></li>
-        <li class="active"><a href="/task/{taskId}/planning/railway"
-                              th:href="'/task/' + ${taskId} + '/planning/railway'">Railway</a></li>
-        <li><a href="#">Barge</a></li>
-        <li><a href="#">Vessel</a></li>
-    </ul>
-
-    <br/>
+    <div th:include="layout :: planning-tab"></div>
 
     <!-- TODO: ugly -->
     <div class="container">
@@ -41,18 +33,21 @@
 
                 <input type="hidden" th:field="*{transMode}" value="0"/>
 
-
-                <input type="submit" name="create" value="Add Transportation" class="btn btn-primary"
-                       th:value="#{transportation.add.route}" th:unless="*{status}"/>
+                <!-- No any routes here. -->
+                <input type="submit" name="apply" value="Apply Planning Settings" class="btn btn-primary"
+                       th:value="#{apply}"/>
 
                 <input type="hidden" th:field="*{id}" value="0" th:if="*{status}"/>
 
-                <input type="submit" name="update" value="Update Transportation"
-                       class="btn btn-primary"
-                       th:value="#{transportation.update.route}" th:if="*{status}"/>
+                <!-- When railway route has been created. -->
                 <input type="submit" name="delete" value="Delete Transportation"
                        class="btn btn-primary"
                        th:value="#{transportation.delete.route}" th:if="*{status}"/>
+
+                <a href="/task/{taskId}/planning/railway" class="btn btn-primary"
+                   th:href="'/task/' + ${taskId} + '/planning/railway/new'" th:unless="*{status} == 2">
+                    <span th:text="#{transportation.add.route}"/>
+                </a>
             </form>
         </div>
     </div>
@@ -80,8 +75,9 @@
                 <td th:text="${railway.origination}">Railway Origination</td>
                 <td th:text="${railway.destination}">Railway Destination</td>
                 <td>
-                    <a href="/railway/{id}" th:href="'/railway/' + ${railway.id} + '/delete'">
-                        <i class="glyphicon glyphicon-remove-sign"/>
+                    <a href="/task/{taskId}/planning/railway/{id}"
+                       th:href="'/task/' + ${railway.taskId} + '/planning/railway/' + ${railway.id} + '/edit'">
+                        <i class="glyphicon glyphicon-edit"/>
                     </a>
                 </td>
             </tr>

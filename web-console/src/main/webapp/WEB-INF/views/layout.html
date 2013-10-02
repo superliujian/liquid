@@ -85,6 +85,29 @@
     </div>
 </div>
 
+<div th:fragment="planning-tab">
+    <ul class="nav nav-tabs">
+        <li class="active" th:class="${planning.transModeKey} == 'overview' ? 'active'">
+            <a href="/task/{taskId}/planning/overview"
+               th:href="'/task/' + ${taskId} + '/planning/overview'" th:text="#{transportation.overview}">Overview</a>
+        </li>
+        <li class="active" th:class="${planning.transModeKey} == 'railway' ? 'active'">
+            <a href="/task/{taskId}/planning/railway"
+               th:href="'/task/' + ${taskId} + '/planning/railway'" th:text="#{transportation.railway}">Railway</a>
+        </li>
+        <li class="active" th:class="${planning.transModeKey} == 'barge' ? 'active'">
+            <a href="/task/{taskId}/planning/barge"
+               th:href="'/task/' + ${taskId} + '/planning/barge'" th:text="#{transportation.barge}">Barge</a>
+        </li>
+        <li class="active" th:class="${planning.transModeKey} == 'vessel' ? 'active'">
+            <a href="/task/{taskId}/planning/vessel"
+               th:href="'/task/' + ${taskId} + '/planning/vessel'" th:text="#{transportation.vessel}">Vessel</a>
+        </li>
+    </ul>
+
+    <br/>
+</div>
+
 <div th:fragment=" footer">
     <hr/>
     <div class="container">

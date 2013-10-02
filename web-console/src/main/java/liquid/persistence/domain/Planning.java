@@ -28,9 +28,12 @@ public class Planning {
     @Column(name = "SAME_ROUTE")
     private boolean sameRoute;
 
-    // 0, NULL; 1, ADDED;
+    // 0, NULL; 1, ADDED; 2, FULL;
     @Column(name = "STATUS")
     private int status;
+
+    @Transient
+    private String transModeKey = "overview";
 
     public Planning() {}
 
@@ -78,6 +81,16 @@ public class Planning {
         this.id = order.getId() + "-" + transMode;
     }
 
+    // Transient
+
+    public String getTransModeKey() {
+        return transModeKey;
+    }
+
+    public void setTransModeKey(String transModeKey) {
+        this.transModeKey = transModeKey;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
@@ -87,6 +100,7 @@ public class Planning {
         sb.append(", transMode=").append(transMode);
         sb.append(", sameRoute=").append(sameRoute);
         sb.append(", status=").append(status);
+        sb.append(", transModeKey='").append(transModeKey).append('\'');
         sb.append('}');
         return sb.toString();
     }

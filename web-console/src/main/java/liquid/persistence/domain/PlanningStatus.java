@@ -8,7 +8,8 @@ package liquid.persistence.domain;
  */
 public enum PlanningStatus {
     NULL(0, ""),
-    ADDED(1, "order.status.saved");
+    ADDED(1, "order.status.saved"),
+    FULL(2, "order.status.full");
 
     private final int value;
 

@@ -7,6 +7,10 @@ footer {
   text-align: center;
 }
 
+.container {
+  max-width: 1560px;
+}
+
 .center {
   float: none;
   margin-left: auto;

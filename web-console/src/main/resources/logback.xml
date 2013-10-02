@@ -70,7 +70,7 @@
         <appender-ref ref="SPRING"/>
     </logger>
 
-    <logger name="org.thymeleaf" level="INFO" additivity="false">
+    <logger name="org.thymeleaf" level="DEBUG" additivity="false">
         <appender-ref ref="THYMELEAF"/>
     </logger>
 

@@ -74,7 +74,7 @@ public class TaskController {
         switch (task.getTaskDefinitionKey()) {
             case "planRoute":
                 model.addAttribute("task", task);
-                return "task/planning";
+                return "redirect:/task/" + taskId + "/planning/overview";
             default:
                 break;
         }

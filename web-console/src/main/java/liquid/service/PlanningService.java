@@ -30,28 +30,16 @@ public class PlanningService {
     @Autowired
     private TransRailwayRepository transRailwayRepository;
 
-    public void create(String taskId, String uid, Planning planning) {
+    public void apply(String taskId, String uid, Planning planning) {
         long orderId = bpmService.getOrderIdByTaskId(taskId);
         Order order = orderRepository.findOne(orderId);
         TransMode mode = TransMode.valueOf(planning.getTransMode());
-
         planning.setOrder(order);
-        planning.setStatus(PlanningStatus.ADDED.getValue());
         planning.generateId();
-        planningRepository.save(planning);
 
-        switch (mode) {
-            case RAILWAY:
-                for (int i = 0; i < order.getContainerQty(); i++) {
-                    TransRailway transRailway = new TransRailway();
-                    transRailway.setOrder(order);
-                    transRailway.setTaskId(taskId);
-                    transRailwayRepository.save(transRailway);
-                }
-                break;
-            default:
-                break;
-        }
+        Planning oldOne = planningRepository.findOne(planning.getId());
+        oldOne.setSameRoute(planning.isSameRoute());
+        planningRepository.save(oldOne);
     }
 
     public Planning delete(String planningId) {
@@ -63,5 +51,70 @@ public class PlanningService {
         }
         planningRepository.delete(planning);
         return planning;
+    }
+
+    public void create(String taskId, TransRailway railway) {
+        long orderId = bpmService.getOrderIdByTaskId(taskId);
+        Order order = orderRepository.findOne(orderId);
+
+        Planning planning = planningRepository.findByOrder(order);
+        if (planning.isSameRoute()) {
+            for (int i = 0; i < order.getContainerQty(); i++) {
+                TransRailway transRailway = new TransRailway();
+                transRailway.setOrder(order);
+                transRailway.setTaskId(taskId);
+                transRailway.setPlanning(planning);
+                transRailway.setOrigination(railway.getOrigination());
+                transRailway.setDestination(railway.getDestination());
+                transRailwayRepository.save(transRailway);
+            }
+        } else {
+            TransRailway transRailway = new TransRailway();
+            transRailway.setOrder(order);
+            transRailway.setTaskId(taskId);
+            transRailway.setPlanning(planning);
+            transRailway.setOrigination(railway.getOrigination());
+            transRailway.setDestination(railway.getDestination());
+            transRailwayRepository.save(transRailway);
+        }
+
+        List<TransRailway> railways = transRailwayRepository.findByPlanning(planning);
+        if (order.getContainerQty() == railways.size()) {
+            planning.setStatus(PlanningStatus.FULL.getValue());
+            planningRepository.save(planning);
+        }
+    }
+
+    public TransRailway edit(TransRailway railway) {
+        TransRailway oldOne = transRailwayRepository.findOne(railway.getId());
+
+        long orderId = bpmService.getOrderIdByTaskId(oldOne.getTaskId());
+        Order order = orderRepository.findOne(orderId);
+
+        if (oldOne.getPlanning().isSameRoute()) {
+            List<TransRailway> railways = transRailwayRepository.findByPlanning(oldOne.getPlanning());
+            for (TransRailway transRailway : railways) {
+                transRailway.setOrigination(railway.getOrigination());
+                transRailway.setDestination(railway.getDestination());
+            }
+            if (order.getContainerQty() > railways.size()) {
+                for (int i = 0; i < (order.getContainerQty() - railways.size()); i++) {
+                    TransRailway transRailway = new TransRailway();
+                    transRailway.setOrder(order);
+                    transRailway.setTaskId(oldOne.getTaskId());
+                    transRailway.setPlanning(oldOne.getPlanning());
+                    transRailway.setOrigination(railway.getOrigination());
+                    transRailway.setDestination(railway.getDestination());
+                    railways.add(transRailway);
+                }
+            }
+            transRailwayRepository.save(railways);
+        } else {
+            oldOne.setOrigination(railway.getOrigination());
+            oldOne.setDestination(railway.getDestination());
+            transRailwayRepository.save(oldOne);
+        }
+
+        return oldOne;
     }
 }

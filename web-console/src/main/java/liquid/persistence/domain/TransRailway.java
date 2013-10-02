@@ -1,9 +1,12 @@
 package liquid.persistence.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO: Comments.
@@ -33,9 +36,11 @@ public class TransRailway extends BaseEntity {
     @Column(name = "TASK_ID")
     private String taskId;
 
+    @NotNull @NotEmpty
     @Column(name = "ORIGINATION")
     private String origination;
 
+    @NotNull @NotEmpty
     @Column(name = "DESTINATION")
     private String destination;
 
