@@ -87,6 +87,7 @@ public class PlanningController {
                                Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("transModeKey: {}", transModeKey);
+
         Task task = bpmService.getTask(taskId);
         Order order = orderRepository.findOne(bpmService.getOrderIdByTaskId(taskId));
 

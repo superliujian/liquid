@@ -31,6 +31,7 @@ import java.sql.SQLException;
         includeFilters = @ComponentScan.Filter(
                 value = {
                         CustomerRepository.class,
+                        SpRepository.class,
                         CargoRepository.class,
                         OrderRepository.class,
                         PlanningRepository.class,

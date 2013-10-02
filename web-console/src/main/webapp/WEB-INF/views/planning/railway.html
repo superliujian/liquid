@@ -21,36 +21,7 @@
 <div class="container">
     <div th:include="layout :: planning-tab"></div>
 
-    <!-- TODO: ugly -->
-    <div class="container">
-        <div th:if="${task.assignee}">
-            <form action="/task" method="POST" class="form-inline" th:object="${planning}"
-                  th:action="'/task/' + ${taskId} + '/planning'">
-                <label class="checkbox">
-                    <input type="checkbox" name="sameRoute" th:field="*{sameRoute}"/>
-                    <span th:text="#{transportation.same.route}">Same Route</span>
-                </label>
-
-                <input type="hidden" th:field="*{transMode}" value="0"/>
-
-                <!-- No any routes here. -->
-                <input type="submit" name="apply" value="Apply Planning Settings" class="btn btn-primary"
-                       th:value="#{apply}"/>
-
-                <input type="hidden" th:field="*{id}" value="0" th:if="*{status}"/>
-
-                <!-- When railway route has been created. -->
-                <input type="submit" name="delete" value="Delete Transportation"
-                       class="btn btn-primary"
-                       th:value="#{transportation.delete.route}" th:if="*{status}"/>
-
-                <a href="/task/{taskId}/planning/railway" class="btn btn-primary"
-                   th:href="'/task/' + ${taskId} + '/planning/railway/new'" th:unless="*{status} == 2">
-                    <span th:text="#{transportation.add.route}"/>
-                </a>
-            </form>
-        </div>
-    </div>
+    <div th:include="layout :: planning-route"></div>
 </div>
 <!-- /.container -->
 
