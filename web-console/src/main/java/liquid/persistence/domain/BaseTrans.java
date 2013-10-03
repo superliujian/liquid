@@ -2,10 +2,7 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -26,7 +23,10 @@ public class BaseTrans extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "CONTAINER_ID")
-    private Container contanier;
+    private Container container;
+
+    @Transient
+    private long containerId;
 
     /**
      * TODO: It is used to return to planning page. This is not good way.
@@ -59,12 +59,12 @@ public class BaseTrans extends BaseEntity {
         this.planning = planning;
     }
 
-    public Container getContanier() {
-        return contanier;
+    public Container getContainer() {
+        return container;
     }
 
-    public void setContanier(Container contanier) {
-        this.contanier = contanier;
+    public void setContainer(Container container) {
+        this.container = container;
     }
 
     public String getTaskId() {
@@ -91,12 +91,24 @@ public class BaseTrans extends BaseEntity {
         this.destination = destination;
     }
 
+    // Transient
+
+    public long getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(long containerId) {
+        this.containerId = containerId;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("TransRailway{");
+        sb.append("BaseTrans{");
         sb.append("order=").append(order);
-        sb.append(", contanier=").append(contanier);
+        sb.append(", planning=").append(planning);
+        sb.append(", container=").append(container);
+        sb.append(", containerId=").append(containerId);
         sb.append(", taskId='").append(taskId).append('\'');
         sb.append(", origination='").append(origination).append('\'');
         sb.append(", destination='").append(destination).append('\'');

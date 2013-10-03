@@ -56,8 +56,9 @@
             <td th:text="${order.containerQty}">Container Quantity</td>
             <td th:text="${order.price}">Price</td>
             <th th:text="${order.extExp}">Extra Expense</th>
-            <th th:if="${order.status} != 2">
-                <a href="/order/id" th:href="'/order/' + ${order.id + '?action=edit'}">
+            <th>
+                <a href="/order/id?action=edit"
+                   th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
                     <i class="glyphicon glyphicon-edit"/>
                 </a>
             </th>

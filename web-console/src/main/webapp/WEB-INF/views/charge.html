@@ -14,8 +14,9 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<!-- Task Header -->
-<div th:include="layout :: task-header"></div>
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
 
 <!-- Transportation Operation -->
 <div class="container">
@@ -98,8 +99,12 @@
 
         <input type="hidden" name="taskId" th:value="${task.id}" value="0"/>
 
-        <input type="submit" value="Record" class="btn btn-lg btn-primary"
-               th:attr="value=#{charge.record}"/>
+        <div class="form-group">
+            <div class="col-lg-offset-4 col-lg-8">
+                <input type="submit" value="Record" class="btn btn-default"
+                       th:attr="value=#{charge.record}"/>
+            </div>
+        </div>
     </form>
 </div>
 <!-- /.container -->

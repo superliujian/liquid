@@ -4,6 +4,7 @@ import liquid.persistence.domain.TransMode;
 import liquid.persistence.repository.TransRailwayRepository;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
+import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -66,19 +67,21 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
-    public String task(@PathVariable String taskId,
-                       Model model, Principal principal) {
+    public String toRealTask(@PathVariable String taskId,
+                             Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         Task task = bpmEngineService.getTask(taskId);
-        logger.debug("taskDefinitionKey: {}", task.getTaskDefinitionKey());
+        logger.debug("task: {}", TaskHelper.stringOf(task));
+        model.addAttribute("task", task);
         switch (task.getTaskDefinitionKey()) {
             case "planRoute":
-                model.addAttribute("task", task);
                 return "redirect:/task/" + taskId + "/planning/overview";
+            case "allocateContainers":
+                return "redirect:/task/" + taskId + "/allocation/railway";
+            case "planLoading":
             default:
-                break;
+                return "task/common";
         }
-        return "task";
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")

@@ -14,4 +14,8 @@ import java.util.List;
  */
 public interface TransRailwayRepository extends CrudRepository<TransRailway, Long> {
     List<TransRailway> findByPlanning(Planning planing);
+
+    List<TransRailway> findByTaskId(String taskId);
+
+    List<TransRailway> findByOrderId(long orderId);
 }

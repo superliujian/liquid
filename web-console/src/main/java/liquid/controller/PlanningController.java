@@ -64,13 +64,13 @@ public class PlanningController {
     }
 
     @ModelAttribute("charges")
-    public Iterable<Charge> populateCharges() {
-        return chargeRepository.findAll();
+    public Iterable<Charge> populateCharges(@PathVariable String taskId) {
+        return chargeRepository.findByTaskId(taskId);
     }
 
     @ModelAttribute("railways")
-    public Iterable<TransRailway> populateRailways() {
-        return transRailwayRepository.findAll();
+    public Iterable<TransRailway> populateRailways(@PathVariable String taskId) {
+        return transRailwayRepository.findByTaskId(taskId);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "apply")

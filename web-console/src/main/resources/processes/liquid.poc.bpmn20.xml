@@ -31,7 +31,7 @@
 
         <userTask id="planLoading" name="制定装载方案">
             <documentation>
-                ${employeeName}已经制定运输路线方案。
+                ${employeeName}已经制定运输路线方案。您需要制定装载方案。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -43,7 +43,7 @@
 
         <userTask id="allocateContainers" name="分配集装箱">
             <documentation>
-                ${employeeName}已经制定运输路线方案。
+                ${employeeName}已经制定制定装载方案。您需要分配集装箱。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>

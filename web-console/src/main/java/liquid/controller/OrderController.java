@@ -91,7 +91,7 @@ public class OrderController {
         model.addAttribute("order", new Order());
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "save")
+    @RequestMapping(method = RequestMethod.PUT, params = "save")
     public String save(@Valid @ModelAttribute Order order,
                        BindingResult bindingResult, Principal principal) {
         logger.debug("order: {}", order);
@@ -105,7 +105,7 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "submit")
+    @RequestMapping(method = RequestMethod.PUT, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Principal principal) {
         // TODO: add to interceptor.

@@ -26,6 +26,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/order" th:text="#{order}">Order</a></li>
                     <li><a href="/task" th:text="#{task}">Task</a></li>
+                    <li><a href="/container" th:text="#{container}">Container</a></li>
                     <li><a href="/customer" th:text="#{customer}">Customer</a></li>
                     <li><a href="/sp" th:text="#{sp}">SP</a></li>
                     <li><a href="/cargo" th:text="#{cargo}">Cargo</a></li>
@@ -66,6 +67,7 @@
 </div>
 
 <!-- Task Operation -->
+<!-- Deprecated -->
 <div th:fragment="task-header">
     <div class="container">
         <div>
@@ -80,39 +82,68 @@
             <form action="/task" method="POST">
                 <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
                 <input type="hidden" name="action" value="claim"/>
-                <input type="submit" name="Claim Task" value="Claim Task" class="btn btn-lg btn-primary btn-block"
+                <input type="submit" name="claim" value="Claim Task" class="btn btn-primary"
                        th:value="#{task.claim}"/>
             </form>
         </div>
     </div>
 </div>
 
+<!-- Task Bar -->
+<div th:fragment="task-bar">
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row">
+                <h3 th:text="${task.name}">Task Name</h3>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <blockquote>
+                        <p th:text="${task.description}"></p>
+                    </blockquote>
+                </div>
+                <div class="col-lg-3">
+                    <form action="/task" method="POST">
+                        <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
+
+                        <input type="submit" name="claim" value="Claim" class="btn btn-default"
+                               th:unless="${task.assignee}" th:value="#{task.claim}"/>
+                        <input type="submit" name="complete" value="Complete" class="btn btn-default"
+                               th:if="${task.assignee}" th:value="#{task.complete}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.jumbotron -->
+</div>
+
 <!-- planning -->
 <div th:fragment="planning-tab">
     <ul class="nav nav-tabs">
-        <li class="active" th:class="${planning.transModeKey} == 'overview' ? 'active'">
-            <a href="/task/{taskId}/planning/overview"
-               th:href="'/task/' + ${taskId} + '/planning/overview'" th:text="#{transportation.overview}">Overview</a>
-        </li>
         <li class="active" th:class="${planning.transModeKey} == 'railway' ? 'active'">
             <a href="/task/{taskId}/planning/railway"
-               th:href="'/task/' + ${taskId} + '/planning/railway'" th:text="#{transportation.railway}">Railway</a>
+               th:href="'/task/' + ${taskId} + '/planning/railway'" th:text="#{railway}">Railway</a>
         </li>
         <li class="active" th:class="${planning.transModeKey} == 'barge' ? 'active'">
             <a href="/task/{taskId}/planning/barge"
-               th:href="'/task/' + ${taskId} + '/planning/barge'" th:text="#{transportation.barge}">Barge</a>
+               th:href="'/task/' + ${taskId} + '/planning/barge'" th:text="#{barge}">Barge</a>
         </li>
         <li class="active" th:class="${planning.transModeKey} == 'vessel' ? 'active'">
             <a href="/task/{taskId}/planning/vessel"
-               th:href="'/task/' + ${taskId} + '/planning/vessel'" th:text="#{transportation.vessel}">Vessel</a>
+               th:href="'/task/' + ${taskId} + '/planning/vessel'" th:text="#{vessel}">Vessel</a>
         </li>
         <li class="active" th:class="${planning.transModeKey} == 'charge' ? 'active'">
             <a href="/task/{taskId}/planning/charge"
                th:href="'/task/' + ${taskId} + '/planning/charge'" th:text="#{charge}">Charge</a>
         </li>
+        <li class="active" th:class="${planning.transModeKey} == 'overview' ? 'active'">
+            <a href="/task/{taskId}/planning/overview"
+               th:href="'/task/' + ${taskId} + '/planning/overview'"
+               th:text="#{summary}">Overview</a>
+        </li>
     </ul>
-
-    <br/>
 </div>
 
 <div th:fragment="planning-route">
@@ -122,7 +153,7 @@
               th:action="'/task/' + ${taskId} + '/planning'">
             <label class="checkbox">
                 <input type="checkbox" name="sameRoute" th:field="*{sameRoute}"/>
-                <span th:text="#{transportation.same.route}">Same Route</span>
+                <span th:text="#{trans.same.route}">Same Route</span>
             </label>
 
             <input type="hidden" th:field="*{transMode}" value="0"/>
@@ -136,11 +167,11 @@
             <!-- When railway route has been created. -->
             <input type="submit" name="delete" value="Delete Transportation"
                    class="btn btn-primary"
-                   th:value="#{transportation.delete.route}" th:if="*{status}"/>
+                   th:value="#{trans.delete.route}" th:if="*{status}"/>
 
             <a href="/task/{taskId}/planning/{transModeKey}" class="btn btn-primary"
                th:href="'/task/' + ${taskId} + '/planning/' + *{transModeKey} +'/new'" th:unless="*{status} == 2">
-                <span th:text="#{transportation.add.route}"/>
+                <span th:text="#{trans.add.route}"/>
             </a>
         </form>
     </div>

@@ -37,7 +37,7 @@ public class AuthController {
             }
         }
 
-        return "welcome";
+        return "redirect:/task";
     }
 
     @RequestMapping("/signin")

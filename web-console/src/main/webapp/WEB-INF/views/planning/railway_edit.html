@@ -15,7 +15,7 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <form action="/task/{taskId}/planning/{transModeKey}/{routeId}/edit" method="POST" class="form-horizontal"
+    <form action="/task/{taskId}/planning/{transModeKey}/{routeId}/edit" method="POST" class="form-horizontal center"
           th:object="${transRailway}" th:method="${transRailway['new']} ? 'post' : 'put'"
           th:action="@{${#httpServletRequest.servletPath}}">
 
@@ -38,7 +38,7 @@
 
         </div>
         <input type="hidden" th:field="*{id}"/>
-        <input type="hidden" th:field="*{taskId}" value="0"/>
+        <input type="hidden" th:field="*{taskId}"/>
 
         <div class="form-group">
             <div class="col-lg-offset-2 col-lg-10">
