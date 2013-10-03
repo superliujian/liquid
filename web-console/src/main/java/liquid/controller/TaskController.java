@@ -78,6 +78,9 @@ public class TaskController {
                 return "redirect:/task/" + taskId + "/planning/overview";
             case "allocateContainers":
                 return "redirect:/task/" + taskId + "/allocation/railway";
+            case "loadOnYard":
+            case "loadByTruck":
+                return "redirect:/task/" + taskId + "/loading";
             case "planLoading":
             default:
                 return "task/common";
@@ -97,8 +100,7 @@ public class TaskController {
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         Map<String, Object> variableMap = new HashMap<String, Object>();
-        variableMap.put("employeeName", principal.getName());
-        bpmEngineService.complete(taskId, variableMap);
+        bpmEngineService.complete(taskId, principal.getName(), variableMap);
         return "redirect:/task";
     }
 

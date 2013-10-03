@@ -57,7 +57,7 @@ public class PlanningService {
         long orderId = bpmService.getOrderIdByTaskId(taskId);
         Order order = orderRepository.findOne(orderId);
 
-        Planning planning = planningRepository.findByOrder(order);
+        Planning planning = planningRepository.findOne(orderId + "-" + TransMode.RAILWAY.getType());
         if (planning.isSameRoute()) {
             for (int i = 0; i < order.getContainerQty(); i++) {
                 TransRailway transRailway = new TransRailway();

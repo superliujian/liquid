@@ -19,8 +19,8 @@
 <!-- {!end task bar} -->
 
 <div class=" container">
-    <form action="/task/{taskId}/allocation/{tab}/{transId}/edit" method="POST" class="form-horizontal center"
-          th:object="${trans}" th:action="'/task/' + ${taskId} + '/allocation/' + ${tab} + '/' + ${trans.id} + '/edit'">
+    <form action="/task/{taskId}/loading/{transId}/edit" method="POST" class="form-horizontal center"
+          th:object="${trans}" th:action="'/task/' + ${taskId} + '/loading/' + ${trans.id} + '/edit'">
 
         <div class="form-group">
             <label class="col-lg-3 control-label" th:text="#{trans.id}">Trans ID</label>
@@ -31,22 +31,39 @@
         </div>
 
         <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{container}">Container</label>
+            <label class="col-lg-offset-3 col-lg-9" th:text="#{date.pattern}"/>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{loading.toc}">Container</label>
 
             <div class="col-lg-9">
-                <select th:field="*{containerId}" class="form-control">
-                    <option th:each="container : ${containers}"
-                            th:value="${container.id}"
-                            th:text="${container.bicCode}">BIC Code
-                    </option>
-                </select>
+                <input type="text" th:field="*{loadingTocStr}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{station.toa}">Container</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{stationToaStr}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" th:field="*{batch}"/> <span th:text="#{batch}">Batch</span>
+                    </label>
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-lg-offset-9 col-lg-3">
-                <input type="submit" name="allocate" value="Allocate Container" class="btn btn-default"
-                       th:value="#{container.allocate}"/>
+                <input type="submit" name="save" value="Save Time" class="btn btn-default"
+                       th:value="#{save}"/>
             </div>
         </div>
     </form>

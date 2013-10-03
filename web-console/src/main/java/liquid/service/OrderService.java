@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -52,6 +53,9 @@ public class OrderService {
     public void submit(Order order) {
         save(order);
         logger.debug("username: {}", businessContext.getUsername());
-        bpmEngineService.startProcess(businessContext.getUsername(), order.getId(), new HashMap<String, Object>());
+
+        Map<String, Object> variableMap = new HashMap<>();
+        variableMap.put("loadingType", order.getLoadingType());
+        bpmEngineService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
     }
 }

@@ -79,7 +79,8 @@ public class ActivitiEngineService {
         taskService.claim(taskId, uid);
     }
 
-    public void complete(String taskId, Map<String, Object> variableMap) {
+    public void complete(String taskId, String uid, Map<String, Object> variableMap) {
+        variableMap.put("employeeName", uid);
         TaskService taskService = processEngine.getTaskService();
         taskService.complete(taskId, variableMap);
 

@@ -3,6 +3,7 @@
 <definitions id="definitions"
              targetNamespace="http://activiti.org/bpmn20"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:activiti="http://activiti.org/bpmn">
 
     <process id="liquidPoc" name="Liquid POC">
@@ -12,11 +13,11 @@
                 <activiti:formProperty id="customer" name="Customer" type="string" required="true"/>
             </extensionElements>
         </startEvent>
-        <sequenceFlow id="flow1" sourceRef="placeOrder" targetRef="planRoute"/>
+        <sequenceFlow id="flow0" sourceRef="placeOrder" targetRef="planRoute"/>
 
         <userTask id="planRoute" name="路线规划">
             <documentation>
-                ${employeeName}已经下订单。
+                ${employeeName}已经下订单。您需要制定运输路线方案。
             </documentation>
             <extensionElements>
                 <activiti:formProperty id="route" name="Route" type="string" required="true"/>
@@ -27,7 +28,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow2" sourceRef="planRoute" targetRef="planLoading"/>
+        <sequenceFlow id="flow10" sourceRef="planRoute" targetRef="planLoading"/>
 
         <userTask id="planLoading" name="制定装载方案">
             <documentation>
@@ -39,7 +40,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow3" sourceRef="planLoading" targetRef="allocateContainers"/>
+        <sequenceFlow id="flow20" sourceRef="planLoading" targetRef="allocateContainers"/>
 
         <userTask id="allocateContainers" name="分配集装箱">
             <documentation>
@@ -51,7 +52,63 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow4" sourceRef="allocateContainers" targetRef="theEnd1"/>
+        <sequenceFlow id="flow30" sourceRef="allocateContainers" targetRef="loadingDecision"/>
+
+        <exclusiveGateway id="loadingDecision" name="装货决策"/>
+        <sequenceFlow id="flow40" sourceRef="loadingDecision" targetRef="sendLoadingOnYard">
+            <conditionExpression xsi:type="tFormalExpression">${loadingType == 0}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow50" sourceRef="loadingDecision" targetRef="sendLoadingByTruck">
+            <conditionExpression xsi:type="tFormalExpression">${loadingType == 1}</conditionExpression>
+        </sequenceFlow>
+
+        <userTask id="sendLoadingOnYard" name="发布场装指令">
+            <documentation>
+                ${employeeName}已经分配集装箱。您需要发布场装指令。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow60" sourceRef="sendLoadingOnYard" targetRef="loadOnYard"/>
+
+        <userTask id="sendLoadingByTruck" name="发布外拖指令">
+            <documentation>
+                ${employeeName}已经分配集装箱。您需要发布场装指令。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow70" sourceRef="sendLoadingByTruck" targetRef="theEnd1"/>
+
+        <userTask id="loadOnYard" name="场装作业">
+            <documentation>
+                ${employeeName}已经发布场装指令。您需要进行场装作业。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_FIELD</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow80" sourceRef="loadOnYard" targetRef="theEnd1"/>
+
+        <userTask id="loadByTruck" name="外拖作业">
+            <documentation>
+                ${employeeName}已经发布外拖指令。您需要进行外拖作业。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_FIELD</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow90" sourceRef="loadByTruck" targetRef="theEnd1"/>
 
         <endEvent id="theEnd1"/>
 
