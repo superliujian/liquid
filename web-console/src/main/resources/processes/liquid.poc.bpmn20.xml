@@ -72,7 +72,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow60" sourceRef="sendLoadingOnYard" targetRef="loadOnYard"/>
+        <sequenceFlow id="flow60" sourceRef="sendLoadingOnYard" targetRef="loadOnYardAndRailwayPlanFork"/>
 
         <userTask id="sendLoadingByTruck" name="发布外拖指令">
             <documentation>
@@ -84,7 +84,15 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow70" sourceRef="sendLoadingByTruck" targetRef="theEnd1"/>
+        <sequenceFlow id="flow70" sourceRef="sendLoadingByTruck" targetRef="loadByTruckAndRailwayPlanFork"/>
+
+        <parallelGateway id="loadOnYardAndRailwayPlanFork" name="场装同时申报铁路计划"/>
+        <sequenceFlow id="flow80" sourceRef="loadOnYardAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
+        <sequenceFlow id="flow90" sourceRef="loadOnYardAndRailwayPlanFork" targetRef="loadOnYard"/>
+
+        <parallelGateway id="loadByTruckAndRailwayPlanFork" name="外拖同时申报铁路计划"/>
+        <sequenceFlow id="flow100" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
+        <sequenceFlow id="flow110" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="loadByTruck"/>
 
         <userTask id="loadOnYard" name="场装作业">
             <documentation>
@@ -96,7 +104,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow80" sourceRef="loadOnYard" targetRef="theEnd1"/>
+        <sequenceFlow id="flow120" sourceRef="loadOnYard" targetRef="recordTod"/>
 
         <userTask id="loadByTruck" name="外拖作业">
             <documentation>
@@ -108,7 +116,35 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow90" sourceRef="loadByTruck" targetRef="theEnd1"/>
+        <sequenceFlow id="flow130" sourceRef="loadByTruck" targetRef="recordTod"/>
+
+        <userTask id="applyRailwayPlan" name="申报铁路计划">
+            <documentation>
+                ${employeeName}已经发布外拖指令。您需要进行外拖作业。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow140" sourceRef="loadByTruck" targetRef="loadAndRailwayPlanJoin"/>
+
+        <!-- record time of dispatch -->
+        <userTask id="recordTod" name="记录装车发运时间">
+            <documentation>
+                ${employeeName}已经发布外拖指令。您需要进行外拖作业。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_FIELD</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow150" sourceRef="loadByTruck" targetRef="loadAndRailwayPlanJoin"/>
+
+        <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
+        <sequenceFlow id="flow160" sourceRef="loadAndRailwayPlanJoin" targetRef="theEnd1"/>
 
         <endEvent id="theEnd1"/>
 

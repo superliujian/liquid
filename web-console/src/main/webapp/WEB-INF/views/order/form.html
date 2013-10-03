@@ -15,7 +15,7 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <form action="/order" method="POST" th:object="${order}" th:method="${order['new']} ? 'post' : 'put'">
+    <form action="/order" method="POST" th:object="${order}">
         <div class="row" th:if="${order.id}">
             <div class="col-xs-6 col-md-4">
                 <div class="form-group">
