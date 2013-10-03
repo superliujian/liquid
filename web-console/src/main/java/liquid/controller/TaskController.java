@@ -1,8 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.Planning;
 import liquid.persistence.domain.TransMode;
-import liquid.persistence.domain.TransRailway;
 import liquid.persistence.repository.TransRailwayRepository;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
@@ -16,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -87,6 +87,16 @@ public class TaskController {
         logger.debug("taskId: {}", taskId);
         bpmEngineService.claimTask(taskId, principal.getName());
         return "redirect:/task/" + taskId;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "complete")
+    public String complete(@RequestParam String taskId,
+                           Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        Map<String, Object> variableMap = new HashMap<String, Object>();
+        variableMap.put("employeeName", principal.getName());
+        bpmEngineService.complete(taskId, variableMap);
+        return "redirect:/task";
     }
 
     @RequestMapping(method = RequestMethod.POST)

@@ -79,6 +79,12 @@ public class ActivitiEngineService {
         taskService.claim(taskId, uid);
     }
 
+    public void complete(String taskId, Map<String, Object> variableMap) {
+        TaskService taskService = processEngine.getTaskService();
+        taskService.complete(taskId, variableMap);
+
+    }
+
     public long getOrderIdByTaskId(String taskId) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();

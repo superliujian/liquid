@@ -16,7 +16,7 @@
 
         <userTask id="planRoute" name="路线规划">
             <documentation>
-                ${employeeName}下订单。
+                ${employeeName}已经下订单。
             </documentation>
             <extensionElements>
                 <activiti:formProperty id="route" name="Route" type="string" required="true"/>
@@ -29,20 +29,29 @@
         </userTask>
         <sequenceFlow id="flow2" sourceRef="planRoute" targetRef="planLoading"/>
 
-        <userTask id="planLoading" name="Plan Loading">
+        <userTask id="planLoading" name="制定装载方案">
             <documentation>
-                ${employeeName} plan route.
+                ${employeeName}已经制定运输路线方案。
             </documentation>
-            <extensionElements>
-                <activiti:formProperty id="route" name="Route" type="string" required="true"/>
-            </extensionElements>
             <potentialOwner>
                 <resourceAssignmentExpression>
                     <formalExpression>ROLE_OPERATING</formalExpression>
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow3" sourceRef="planLoading" targetRef="theEnd1"/>
+        <sequenceFlow id="flow3" sourceRef="planLoading" targetRef="allocateContainers"/>
+
+        <userTask id="allocateContainers" name="分配集装箱">
+            <documentation>
+                ${employeeName}已经制定运输路线方案。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_CONTAINER</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow4" sourceRef="allocateContainers" targetRef="theEnd1"/>
 
         <endEvent id="theEnd1"/>
 
