@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -46,6 +48,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "CARGO_ID")
     private Cargo cargo;
 
+    @Min(1)
     // unit kilogram
     @Column(name = "WEIGHT")
     private int cargoWeight;
@@ -67,9 +70,11 @@ public class Order extends BaseEntity {
     @Column(name = "CONTAINER_CAP")
     private int containerCap;
 
+    @Min(1)
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
+    @Min(1)
     // unit yuan
     @Column(name = "PRICE")
     private long price;
@@ -83,6 +88,10 @@ public class Order extends BaseEntity {
     // 1 saved; 2: submitted
     @Column(name = "STATUS")
     private int status;
+
+    public static Logger getLogger() {
+        return logger;
+    }
 
     public Customer getCustomer() {
         return customer;
@@ -208,11 +217,11 @@ public class Order extends BaseEntity {
         return status;
     }
 
+    // Transient
+
     public void setStatus(int status) {
         this.status = status;
     }
-
-    // Transient
 
     public long getCustomerId() {
         return customerId;

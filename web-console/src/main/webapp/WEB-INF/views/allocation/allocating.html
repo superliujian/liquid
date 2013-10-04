@@ -18,7 +18,7 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<div class=" container">
+<div class="container">
     <form action="/task/{taskId}/allocation/{tab}/{transId}/edit" method="POST" class="form-horizontal center"
           th:object="${trans}" th:action="'/task/' + ${taskId} + '/allocation/' + ${tab} + '/' + ${trans.id} + '/edit'">
 

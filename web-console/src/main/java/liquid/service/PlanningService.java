@@ -5,10 +5,16 @@ import liquid.persistence.repository.OrderRepository;
 import liquid.persistence.repository.PlanningRepository;
 import liquid.persistence.repository.TransRailwayRepository;
 import liquid.service.bpm.ActivitiEngineService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -18,6 +24,8 @@ import java.util.List;
  */
 @Service
 public class PlanningService {
+    private static final Logger logger = LoggerFactory.getLogger(PlanningService.class);
+
     @Autowired
     private ActivitiEngineService bpmService;
 
@@ -30,20 +38,20 @@ public class PlanningService {
     @Autowired
     private TransRailwayRepository transRailwayRepository;
 
-    public void apply(String taskId, String uid, Planning planning) {
+    public void editPlanning(String taskId, Planning planning) {
         long orderId = bpmService.getOrderIdByTaskId(taskId);
         Order order = orderRepository.findOne(orderId);
-        TransMode mode = TransMode.valueOf(planning.getTransMode());
-        planning.setOrder(order);
-        planning.generateId();
-
-        Planning oldOne = planningRepository.findOne(planning.getId());
+        Planning oldOne = planningRepository.findByOrderAndTransMode(order, planning.getTransMode());
         oldOne.setSameRoute(planning.isSameRoute());
         planningRepository.save(oldOne);
     }
 
-    public Planning delete(String planningId) {
-        Planning planning = planningRepository.findOne(planningId);
+    public Planning deletePlanning(String taskId, String transMode) {
+        long orderId = bpmService.getOrderIdByTaskId(taskId);
+        Order order = orderRepository.findOne(orderId);
+
+        Planning planning = planningRepository.findByOrderAndTransMode(order,
+                TransMode.valueOf(transMode.toUpperCase()).getType());
 
         List<TransRailway> transRailways = transRailwayRepository.findByPlanning(planning);
         for (TransRailway transRailway : transRailways) {
@@ -57,7 +65,7 @@ public class PlanningService {
         long orderId = bpmService.getOrderIdByTaskId(taskId);
         Order order = orderRepository.findOne(orderId);
 
-        Planning planning = planningRepository.findOne(orderId + "-" + TransMode.RAILWAY.getType());
+        Planning planning = planningRepository.findByOrderAndTransMode(order, TransMode.RAILWAY.getType());
         if (planning.isSameRoute()) {
             for (int i = 0; i < order.getContainerQty(); i++) {
                 TransRailway transRailway = new TransRailway();
@@ -79,7 +87,7 @@ public class PlanningService {
         }
 
         List<TransRailway> railways = transRailwayRepository.findByPlanning(planning);
-        if (order.getContainerQty() == railways.size()) {
+        if (order.getContainerQty() <= railways.size()) {
             planning.setStatus(PlanningStatus.FULL.getValue());
             planningRepository.save(planning);
         }
@@ -116,5 +124,37 @@ public class PlanningService {
         }
 
         return oldOne;
+    }
+
+    @Transactional("transactionManager")
+    public Map<String, Object> getTransTypes(String taskId) {
+        Map<String, Object> transTypes = new HashMap<String, Object>();
+        transTypes.put("hasRailway", false);
+        transTypes.put("hasBarge", false);
+        transTypes.put("hasVessel", false);
+
+        long orderId = bpmService.getOrderIdByTaskId(taskId);
+        Order order = orderRepository.findOne(orderId);
+        Collection<Planning> plannings = planningRepository.findByOrder(order);
+        logger.debug("planning size: {}", plannings.size());
+        for (Planning planning : plannings) {
+            TransMode mode = TransMode.valueOf(planning.getTransMode());
+            switch (mode) {
+                case RAILWAY:
+                    transTypes.put("hasRailway", true);
+                    break;
+                case BARGE:
+                    transTypes.put("hasBarge", true);
+                    break;
+                case VESSEL:
+                    transTypes.put("hasVessel", true);
+                    break;
+                default:
+                    logger.warn("{} transportation mode is illegal.");
+                    break;
+            }
+        }
+        logger.debug("The order has the transportation {}.", transTypes);
+        return transTypes;
     }
 }

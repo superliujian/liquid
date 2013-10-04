@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.persistence.domain.TransMode;
 import liquid.persistence.repository.TransRailwayRepository;
-import liquid.service.TaskService;
+import liquid.service.PlanningService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
@@ -31,13 +31,13 @@ public class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @Autowired
-    private ActivitiEngineService bpmEngineService;
+    private ActivitiEngineService bpmService;
+
+    @Autowired
+    private PlanningService planningService;
 
     @Autowired
     private TransRailwayRepository transRailwayRepository;
-
-    @Autowired
-    private TaskService taskService;
 
     @ModelAttribute("transModes")
     public TransMode[] populateTransMedes() {
@@ -47,7 +47,7 @@ public class TaskController {
     @RequestMapping(method = RequestMethod.GET)
     public void tasks(Model model, Principal principal) {
         logger.debug("Role: {}", RoleHelper.getRole(principal));
-        List<Task> tasks = bpmEngineService.listTasks(RoleHelper.getRole(principal));
+        List<Task> tasks = bpmService.listTasks(RoleHelper.getRole(principal));
         model.addAttribute("tasks", tasks);
         model.addAttribute("title", "task.queue");
         //TODO: Using js to implement the function
@@ -57,7 +57,7 @@ public class TaskController {
 
     @RequestMapping(value = "/my", method = RequestMethod.GET)
     public String myTasks(Model model, Principal principal) {
-        List<Task> tasks = bpmEngineService.listMyTasks(principal.getName());
+        List<Task> tasks = bpmService.listMyTasks(principal.getName());
         model.addAttribute("tasks", tasks);
         model.addAttribute("title", "task.my");
         //TODO: Using js to implement the function
@@ -70,12 +70,12 @@ public class TaskController {
     public String toRealTask(@PathVariable String taskId,
                              Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Task task = bpmEngineService.getTask(taskId);
+        Task task = bpmService.getTask(taskId);
         logger.debug("task: {}", TaskHelper.stringOf(task));
         model.addAttribute("task", task);
         switch (task.getTaskDefinitionKey()) {
             case "planRoute":
-                return "redirect:/task/" + taskId + "/planning/overview";
+                return "redirect:/task/" + taskId + "/planning/railway";
             case "allocateContainers":
                 return "redirect:/task/" + taskId + "/allocation/railway";
             case "loadOnYard":
@@ -91,7 +91,7 @@ public class TaskController {
     public String claim(@RequestParam String taskId,
                         Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        bpmEngineService.claimTask(taskId, principal.getName());
+        bpmService.claimTask(taskId, principal.getName());
         return "redirect:/task/" + taskId;
     }
 
@@ -100,28 +100,18 @@ public class TaskController {
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         Map<String, Object> variableMap = new HashMap<String, Object>();
-        bpmEngineService.complete(taskId, principal.getName(), variableMap);
-        return "redirect:/task";
-    }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String doAction(@RequestParam String taskId,
-                           @RequestParam String action,
-                           @RequestParam int transMode,
-                           @RequestParam boolean sameRoute,
-                           Model model, Principal principal) {
-        logger.debug("taskId: {}", taskId);
-        logger.debug("action: {}", action);
-        logger.debug("transMode: {}", transMode);
-
-        switch (action) {
-            case "addTransportation":
-                taskService.addTransportation(taskId, principal.getName(), transMode, sameRoute);
+        Task task = bpmService.getTask(taskId);
+        switch (task.getTaskDefinitionKey()) {
+            case "planRoute":
+                Map<String, Object> transTypes = planningService.getTransTypes(taskId);
+                variableMap.putAll(transTypes);
                 break;
             default:
                 break;
         }
 
-        return "redirect:/task/" + taskId;
+        bpmService.complete(taskId, principal.getName(), variableMap);
+        return "redirect:/task";
     }
 }

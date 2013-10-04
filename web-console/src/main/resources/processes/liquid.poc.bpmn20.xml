@@ -144,7 +144,276 @@
         <sequenceFlow id="flow150" sourceRef="loadByTruck" targetRef="loadAndRailwayPlanJoin"/>
 
         <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
-        <sequenceFlow id="flow160" sourceRef="loadAndRailwayPlanJoin" targetRef="theEnd1"/>
+        <sequenceFlow id="flow160" sourceRef="loadAndRailwayPlanJoin" targetRef="bargeOpsDecision"/>
+
+        <exclusiveGateway id="bargeOpsDecision" name="驳船操作决策"/>
+        <sequenceFlow id="flow170" sourceRef="bargeOpsDecision" targetRef="doBargeOps">
+            <conditionExpression xsi:type="tFormalExpression">${hasBarge == true}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow180" sourceRef="bargeOpsDecision" targetRef="vesselOpsDecision">
+            <conditionExpression xsi:type="tFormalExpression">${hasBarge == false}</conditionExpression>
+        </sequenceFlow>
+
+        <userTask id="doBargeOps" name="驳船操作">
+            <documentation>
+                铁路已经发车。您需要驳船操作。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow190" sourceRef="doBargeOps" targetRef="vesselOpsDecision"/>
+
+        <exclusiveGateway id="vesselOpsDecision" name="大船操作决策"/>
+        <sequenceFlow id="flow200" sourceRef="vesselOpsDecision" targetRef="doVesselOps">
+            <conditionExpression xsi:type="tFormalExpression">${hasVessel == true}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow210" sourceRef="vesselOpsDecision" targetRef="deliveryDecision">
+            <conditionExpression xsi:type="tFormalExpression">${hasVessel == false}</conditionExpression>
+        </sequenceFlow>
+
+        <userTask id="doVesselOps" name="大船操作">
+            <documentation>
+                您需要大船操作。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow220" sourceRef="doVesselOps" targetRef="deliveryDecision"/>
+
+        <exclusiveGateway id="deliveryDecision" name="配送决策"/>
+        <sequenceFlow id="flow230" sourceRef="deliveryDecision" targetRef="deliver">
+            <conditionExpression xsi:type="tFormalExpression">${hasDelivery == true}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow240" sourceRef="deliveryDecision" targetRef="reclaimReceipt">
+            <conditionExpression xsi:type="tFormalExpression">${hasDelivery == false}</conditionExpression>
+        </sequenceFlow>
+
+        <userTask id="deliver" name="配送">
+            <documentation>
+                货物已经到达，您需要大船操作。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow250" sourceRef="deliver" targetRef="reclaimReceipt"/>
+
+        <userTask id="reclaimReceipt" name="回收签收单">
+            <documentation>
+                货物已经到达，您需要回收签收单。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow260" sourceRef="reclaimReceipt" targetRef="adjustPrice"/>
+
+        <userTask id="adjustPrice" name="修正订单价格">
+            <documentation>
+                ${employeeName}回收签收单已经完成，您需要修正订单价格。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_SALES</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow270" sourceRef="adjustPrice" targetRef="sendInvoicingAndPsFork"/>
+
+        <!-- ps means purchasing settlement -->
+        <parallelGateway id="sendInvoicingAndPsFork" name=""/>
+        <sequenceFlow id="flow280" sourceRef="sendInvoicingAndPsFork" targetRef="sendInvoicing"/>
+        <sequenceFlow id="flow290" sourceRef="sendInvoicingAndPsFork" targetRef="sendSettling"/>
+
+        <userTask id="sendInvoicing" name="发送开发票指令">
+            <documentation>
+                您需要发送开发票指令。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow300" sourceRef="sendInvoicing" targetRef="confirmInvoiceAmount"/>
+
+        <userTask id="confirmInvoiceAmount" name="确认发票金额">
+            <documentation>
+                您需要确认发票金额。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_SALES</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow310" sourceRef="confirmInvoiceAmount" targetRef="invoice"/>
+
+        <userTask id="invoice" name="开发票">
+            <documentation>
+                您需要开发票。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow320" sourceRef="invoice" targetRef="return"/>
+
+        <userTask id="return" name="催收款">
+            <documentation>
+                您需要催收款。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_SALES</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow330" sourceRef="return" targetRef="confirmIncomeSettlement"/>
+
+        <userTask id="confirmIncomeSettlement" name="确认收入结算">
+            <documentation>
+                您确认收入结算。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow340" sourceRef="confirmIncomeSettlement" targetRef="settlementJoin"/>
+
+        <userTask id="sendSettling" name="发送采购结算指令">
+            <documentation>
+                您需要发送采购结算指令。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow350" sourceRef="sendSettling" targetRef="checkCostFork"/>
+
+        <parallelGateway id="checkCostFork" name="市场操作同时核对金额"/>
+        <sequenceFlow id="flow360" sourceRef="checkCostFork" targetRef="checkCostByMarketing"/>
+        <sequenceFlow id="flow370" sourceRef="checkCostFork" targetRef="checkCostByOperating"/>
+
+        <userTask id="checkCostByMarketing" name="核对金额">
+            <documentation>
+                您需要核对金额。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_MARKETING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow380" sourceRef="checkCostByMarketing" targetRef="confirmProviderInvoicingByMarketing"/>
+
+        <userTask id="confirmProviderInvoicingByMarketing" name="确认供应商开具发票">
+            <documentation>
+                您需要确认供应商开具发票。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_MARKETING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow390" sourceRef="confirmProviderInvoicingByMarketing"
+                      targetRef="checkFromMarketing"/>
+
+        <userTask id="checkFromMarketing" name="核对市场采购金额">
+            <documentation>
+                您需要核对市场采购金额。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow400" sourceRef="checkFromMarketing" targetRef="settlementJoin"/>
+
+        <userTask id="checkCostByOperating" name="核对金额">
+            <documentation>
+                您需要核对金额。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow410" sourceRef="checkCostByOperating" targetRef="confirmProviderInvoicingByOperating"/>
+
+        <userTask id="confirmProviderInvoicingByOperating" name="确认供应商开具发票">
+            <documentation>
+                您需要确认供应商开具发票。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow420" sourceRef="confirmProviderInvoicingByOperating"
+                      targetRef="checkFromOperating"/>
+
+        <userTask id="checkFromOperating" name="核对操作采购金额">
+            <documentation>
+                您需要核对操作采购金额。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow430" sourceRef="checkFromMarketing" targetRef="checkJoin"/>
+
+        <parallelGateway id="checkJoin" name="核对采购金额合并"/>
+        <sequenceFlow id="flow440" sourceRef="checkJoin" targetRef="confirmPurchaingSettlement"/>
+
+        <userTask id="confirmPurchaingSettlement" name="确认采购结算">
+            <documentation>
+                您需要确认采购结算。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow450" sourceRef="confirmPurchaingSettlement" targetRef="settlementJoin"/>
+
+        <parallelGateway id="settlementJoin" name="结算合并"/>
+        <sequenceFlow id="flow460" sourceRef="settlementJoin" targetRef="comfirmData"/>
+
+        <userTask id="comfirmData" name="确认修正数据">
+            <documentation>
+                您需要确认修正数据。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_COMMERCE</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow470" sourceRef="comfirmData" targetRef="theEnd1"/>
 
         <endEvent id="theEnd1"/>
 

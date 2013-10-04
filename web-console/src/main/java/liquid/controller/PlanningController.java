@@ -3,15 +3,16 @@ package liquid.controller;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.service.PlanningService;
-import liquid.service.bpm.ActivitiEngineService;
-import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -24,11 +25,8 @@ import java.security.Principal;
  */
 @Controller
 @RequestMapping("/task/{taskId}/planning")
-public class PlanningController {
+public class PlanningController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(PlanningController.class);
-
-    @Autowired
-    private ActivitiEngineService bpmService;
 
     @Autowired
     private PlanningService planningService;
@@ -47,11 +45,6 @@ public class PlanningController {
 
     @Autowired
     private ChargeRepository chargeRepository;
-
-    @ModelAttribute("transModes")
-    public TransMode[] populateTransMedes() {
-        return TransMode.values();
-    }
 
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
@@ -73,96 +66,141 @@ public class PlanningController {
         return transRailwayRepository.findByTaskId(taskId);
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "apply")
-    public String create(@PathVariable String taskId,
-                         @ModelAttribute Planning planning,
-                         Model model, Principal principal) {
+    /**
+     * {taskId}, {tab} are required by tab part of template.
+     *
+     * @param taskId
+     * @param tab
+     * @param model
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/{tab}", method = RequestMethod.GET)
+    public String init(@PathVariable String taskId,
+                       @PathVariable String tab,
+                       Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("planning: {}", planning);
+        logger.debug("tab: {}", tab);
+        model.addAttribute("tab", tab);
 
-        planningService.apply(taskId, principal.getName(), planning);
-
-        String redirect = "redirect:/task/" + taskId + "/planning/" + TransMode.valueOf(planning.getTransMode()).toString().toLowerCase();
-        logger.debug("redirect: {}", redirect);
-        return redirect;
-    }
-
-    @RequestMapping(method = RequestMethod.POST, params = "delete")
-    public String delete(@PathVariable String taskId,
-                         @RequestParam String id,
-                         Model model, Principal principal) {
-        logger.debug("taskId: {}", taskId);
-        logger.debug("id: {}", id);
-        Planning planning = planningService.delete(id);
-
-        String redirect = "redirect:/task/" + taskId + "/planning/" + TransMode.valueOf(planning.getTransMode()).toString().toLowerCase();
-        logger.debug("redirect: {}", redirect);
-        return redirect;
-    }
-
-    @RequestMapping(value = "/{transModeKey}", method = RequestMethod.GET)
-    public String transModeTab(@PathVariable String taskId,
-                               @PathVariable String transModeKey,
-                               Model model, Principal principal) {
-        logger.debug("taskId: {}", taskId);
-        logger.debug("transModeKey: {}", transModeKey);
-
-        Task task = bpmService.getTask(taskId);
         Order order = orderRepository.findOne(bpmService.getOrderIdByTaskId(taskId));
 
-        Planning planning = new Planning();
-        if ("overview".equals(transModeKey) || "charge".equals(transModeKey)) {
-
-        } else {
-            planning = planningRepository.findOne(order.getId() + "-" + TransMode.valueOf(transModeKey.toUpperCase()).getType());
-            if (planning == null) {
-                planning = new Planning();
-                planning.setOrder(order);
-                planning.setSameRoute(true);
-                planning.setTransMode(TransMode.valueOf(transModeKey.toUpperCase()).getType());
-                planning.setStatus(PlanningStatus.ADDED.getValue());
-                planning.generateId();
-                planningRepository.save(planning);
-            }
+        switch (tab) {
+            case "railway":
+            case "barge":
+            case "vessel":
+                String transMode = tab;
+                Planning planning = planningRepository.findByOrderAndTransMode(order,
+                        TransMode.valueOf(transMode.toUpperCase()).getType());
+                if (null == planning) planning = new Planning();
+                model.addAttribute("planning", planning);
+                return "planning/" + tab;
+            case "charge":
+                model.addAttribute("charge", new Charge());
+                return "charge";
+            case "summary":
+            default:
+                return "planning/" + tab;
         }
-        planning.setTransModeKey(transModeKey);
-
-        model.addAttribute("task", task);
-        model.addAttribute("planning", planning);
-        model.addAttribute("charge", new Charge());
-
-        if ("charge".endsWith(transModeKey)) {
-            return "charge";
-        }
-        return "planning/" + transModeKey;
     }
 
-    @RequestMapping(value = "/{transModeKey}/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/{tab}", method = RequestMethod.POST, params = "addPlanning")
+    public String addPlanning(@PathVariable String taskId,
+                              @PathVariable String tab,
+                              @ModelAttribute("planning") Planning planning,
+                              Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("tab: {}", tab);
+        model.addAttribute("tab", tab);
+
+        String transMode = tab;
+
+        Order order = orderRepository.findOne(bpmService.getOrderIdByTaskId(taskId));
+        planning.setOrder(order);
+        planning.setTransMode(TransMode.valueOf(transMode.toUpperCase()).getType());
+        planning.setStatus(PlanningStatus.ADDED.getValue());
+        Planning newOne = planningRepository.save(planning);
+
+        model.addAttribute("planning", newOne);
+        return "redirect:/task/" + taskId + "/planning/" + transMode;
+    }
+
+    @RequestMapping(value = "/{tab}", method = RequestMethod.POST, params = "applyMulti")
+    public String applyMulti(@PathVariable String taskId,
+                             @PathVariable String tab,
+                             @ModelAttribute Planning planning,
+                             Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("planning: {}", planning);
+        model.addAttribute("tab", tab);
+
+        String transMode = tab;
+        planning.setTransMode(TransMode.valueOf(transMode.toUpperCase()).getType());
+        planning.setSameRoute(false);
+        planningService.editPlanning(taskId, planning);
+
+        String redirect = "redirect:/task/" + taskId + "/planning/" + TransMode.valueOf(planning.getTransMode()).toString().toLowerCase();
+        logger.debug("redirect: {}", redirect);
+        return redirect;
+    }
+
+    @RequestMapping(value = "/{tab}", method = RequestMethod.POST, params = "applySame")
+    public String applySame(@PathVariable String taskId,
+                            @PathVariable String tab,
+                            @ModelAttribute Planning planning,
+                            Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("planning: {}", planning);
+        model.addAttribute("tab", tab);
+
+        String transMode = tab;
+        planning.setTransMode(TransMode.valueOf(transMode.toUpperCase()).getType());
+        planning.setSameRoute(true);
+        planningService.editPlanning(taskId, planning);
+
+        String redirect = "redirect:/task/" + taskId + "/planning/" + TransMode.valueOf(planning.getTransMode()).toString().toLowerCase();
+        logger.debug("redirect: {}", redirect);
+        return redirect;
+    }
+
+    @RequestMapping(value = "/{tab}", method = RequestMethod.POST, params = "deletePlanning")
+    public String deletePlanning(@PathVariable String taskId,
+                                 @PathVariable String tab,
+                                 Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        model.addAttribute("tab", tab);
+
+        String transMode = tab;
+        Planning planning = planningService.deletePlanning(taskId, transMode);
+
+        String redirect = "redirect:/task/" + taskId + "/planning/" + transMode;
+        logger.debug("redirect: {}", redirect);
+        return redirect;
+    }
+
+    @RequestMapping(value = "/{transMode}/new", method = RequestMethod.GET)
     public String initCreationRoute(@PathVariable String taskId,
-                                    @PathVariable String transModeKey,
+                                    @PathVariable String transMode,
                                     Model model, Principal principal) {
-        logger.debug("transModeKey: {}", transModeKey);
-
+        logger.debug("transMode: {}", transMode);
         TransRailway railway = new TransRailway();
-
-        // NOTE: the attribute key have to align to class name.
         model.addAttribute("transRailway", railway);
-        return "planning/" + transModeKey + "_edit";
+        return "planning/" + transMode + "_edit";
     }
 
-    @RequestMapping(value = "/{transModeKey}/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/{transMode}/new", method = RequestMethod.POST)
     public String processCreationRoute(@PathVariable String taskId,
-                                       @PathVariable String transModeKey,
+                                       @PathVariable String transMode,
                                        @Valid @ModelAttribute TransRailway railway,
                                        BindingResult result, Model model, Principal principal) {
-        logger.debug("transModeKey: {}", transModeKey);
+        logger.debug("transMode: {}", transMode);
         logger.debug("railway: {}", railway);
 
         if (result.hasErrors()) {
-            return "planning/" + transModeKey + "_edit";
+            return "planning/" + transMode + "_edit";
         } else {
             planningService.create(taskId, railway);
-            String redirect = "redirect:/task/" + taskId + "/planning/" + transModeKey;
+            String redirect = "redirect:/task/" + taskId + "/planning/" + transMode;
             return redirect;
         }
     }

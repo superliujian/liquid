@@ -1,6 +1,8 @@
 package liquid.persistence.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -9,20 +11,12 @@ import javax.persistence.*;
  * Time: 11:53 AM
  */
 @Entity(name = "PLANNING")
-public class Planning {
-    /**
-     * {orderId} + - + {transMode}
-     */
-    @Id
-    @Column(name = "ID")
-    private String id;
-
+public class Planning extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
     private Order order;
 
     @Column(name = "TRANS_MODE")
-    @Deprecated
     private int transMode;
 
     @Column(name = "SAME_ROUTE")
@@ -33,17 +27,9 @@ public class Planning {
     private int status;
 
     @Transient
-    private String transModeKey = "overview";
+    private List<TransRailway> railways = new ArrayList<TransRailway>();
 
     public Planning() {}
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Order getOrder() {
         return order;
@@ -77,30 +63,24 @@ public class Planning {
         this.status = status;
     }
 
-    public void generateId() {
-        this.id = order.getId() + "-" + transMode;
-    }
-
     // Transient
 
-    public String getTransModeKey() {
-        return transModeKey;
+    public List<TransRailway> getRailways() {
+        return railways;
     }
 
-    public void setTransModeKey(String transModeKey) {
-        this.transModeKey = transModeKey;
+    public void setRailways(List<TransRailway> railways) {
+        this.railways = railways;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Planning{");
-        sb.append("id='").append(id).append('\'');
-        sb.append(", order=").append(order);
+        sb.append("order=").append(order);
         sb.append(", transMode=").append(transMode);
         sb.append(", sameRoute=").append(sameRoute);
         sb.append(", status=").append(status);
-        sb.append(", transModeKey='").append(transModeKey).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -7,6 +7,12 @@
     <!-- Bootstrap -->
     <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <style>
+        div#order.container {
+        max-width: 480px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,18 +26,18 @@
           th:action="@{${#httpServletRequest.servletPath}}">
 
         <div class="form-group">
-            <label class="col-lg-2 control-label" th:text="#{origination} + ' *'">Origin</label>
+            <label class="col-lg-4 control-label" th:text="#{origination} + ' *'">Origin</label>
 
-            <div class="col-lg-4">
+            <div class="col-lg-8">
                 <input type="text" th:field="*{origination}" class="form-control"/>
             </div>
             <span class="help-inline" th:errors="*{origination}">error</span>
         </div>
 
         <div class="form-group">
-            <label class="col-lg-2 control-label" th:text="#{destination} + ' *'">Destination</label>
+            <label class="col-lg-4 control-label" th:text="#{destination} + ' *'">Destination</label>
 
-            <div class="col-lg-4">
+            <div class="col-lg-8">
                 <input type="text" th:field="*{destination}" class="form-control"/>
                 <span class="help-inline" th:errors="*{destination}">error</span>
             </div>
@@ -41,8 +47,8 @@
         <input type="hidden" th:field="*{taskId}"/>
 
         <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <input type="submit" name="save" value="Save Route" class="btn btn-primary"
+            <div class="col-lg-offset-4 col-lg-8">
+                <input type="submit" name="save" value="Save Route" class="btn btn-default"
                        th:attr="value=#{save}"/>
             </div>
         </div>

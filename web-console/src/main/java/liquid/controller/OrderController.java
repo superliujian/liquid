@@ -4,11 +4,13 @@ import liquid.context.BusinessContext;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.CargoRepository;
 import liquid.persistence.repository.CustomerRepository;
+import liquid.persistence.repository.OrderJpaRepository;
 import liquid.persistence.repository.OrderRepository;
 import liquid.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,9 @@ public class OrderController {
     private OrderRepository orderRepository;
 
     @Autowired
+    private OrderJpaRepository orderJpaRepository;
+
+    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
@@ -45,7 +50,7 @@ public class OrderController {
 
     @ModelAttribute("orders")
     public Iterable<Order> populateOrders() {
-        return orderRepository.findAll();
+        return orderJpaRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
     @ModelAttribute("customers")
@@ -84,11 +89,26 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public void list(Model model, Principal principal) {}
+    public String initFind(Model model, Principal principal) {
+        return "order/find";
+    }
 
-    @RequestMapping(value = "/form", method = RequestMethod.GET)
-    public void form(Model model, Principal principal) {
+    @RequestMapping(method = RequestMethod.GET, params = "findById")
+    public String findById(@RequestParam String param, Model model, Principal principal) {
+        logger.debug("param: {}", param);
+        return "order/find";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
+    public String findByCustomerName(@RequestParam String param, Model model, Principal principal) {
+        logger.debug("param: {}", param);
+        return "order/find";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "add")
+    public String initCreationForm(Model model, Principal principal) {
         model.addAttribute("order", new Order());
+        return "order/form";
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "save")

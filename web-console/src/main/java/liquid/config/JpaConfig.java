@@ -34,6 +34,7 @@ import java.sql.SQLException;
                         SpRepository.class,
                         CargoRepository.class,
                         OrderRepository.class,
+                        OrderJpaRepository.class,
                         ContainerRepository.class,
                         PlanningRepository.class,
                         TransRailwayRepository.class,

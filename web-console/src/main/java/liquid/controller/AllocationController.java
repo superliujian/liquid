@@ -28,11 +28,8 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/task/{taskId}/allocation")
-public class AllocationController {
+public class AllocationController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(AllocationController.class);
-
-    @Autowired
-    private ActivitiEngineService bpmService;
 
     // TODO: will be RailwayService instead of.
     @Autowired
@@ -44,16 +41,6 @@ public class AllocationController {
     @ModelAttribute("tab")
     public String populateTab(@PathVariable String tab) {
         return tab;
-    }
-
-    @ModelAttribute("taskId")
-    public String populateTaskId(@PathVariable String taskId) {
-        return taskId;
-    }
-
-    @ModelAttribute("task")
-    public Task populateTask(@PathVariable String taskId) {
-        return bpmService.getTask(taskId);
     }
 
     @RequestMapping(value = "/{tab}", method = RequestMethod.GET)

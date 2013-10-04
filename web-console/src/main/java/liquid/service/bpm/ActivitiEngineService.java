@@ -83,7 +83,6 @@ public class ActivitiEngineService {
         variableMap.put("employeeName", uid);
         TaskService taskService = processEngine.getTaskService();
         taskService.complete(taskId, variableMap);
-
     }
 
     public long getOrderIdByTaskId(String taskId) {
