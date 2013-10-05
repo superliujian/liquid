@@ -40,6 +40,8 @@ import java.sql.SQLException;
                         OrderJpaRepository.class,
                         PlanningRepository.class,
                         TransRailwayRepository.class,
+                        TransBargeRepository.class,
+                        TransVesselRepository.class,
                         ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement

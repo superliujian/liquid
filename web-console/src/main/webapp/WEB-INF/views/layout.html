@@ -27,6 +27,7 @@
                     <li><a href="/task" th:text="#{task}">Task</a></li>
                     <li><a href="/order" th:text="#{order}">Order</a></li>
                     <li><a href="/container" th:text="#{container}">Container</a></li>
+                    <li><a href="/charge" th:text="#{charge}">Charge</a></li>
                     <li><a href="/customer" th:text="#{customer}">Customer</a></li>
                     <li><a href="/sp" th:text="#{sp}">SP</a></li>
                     <li><a href="/cargo" th:text="#{cargo}">Cargo</a></li>
@@ -58,13 +59,14 @@
 <!--/header -->
 
 <div th:fragment="left-side">
-    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-        <div class="list-group">
-            <a href="/task" class="list-group-item" th:classappend="${queueActive}" th:text="#{task.queue}">Task
-                Queue</a>
-            <a href="/task/my" class="list-group-item" th:classappend="${myActive}" th:text="#{task.my}">My Task</a>
-        </div>
-    </div>
+    <ul class="col-lg-2 nav nav-pills nav-stacked">
+        <li th:classappend="${queueActive}">
+            <a href="/task" class="list-group-item" th:text="#{task.queue}">Task Queue</a>
+        </li>
+        <li th:classappend="${myActive}">
+            <a href="/task/my" class="list-group-item" th:text="#{task.my}">My Task</a>
+        </li>
+    </ul>
 </div>
 
 <!-- Task Operation -->

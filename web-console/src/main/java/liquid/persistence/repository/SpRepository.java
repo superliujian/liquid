@@ -9,4 +9,6 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 10/2/13
  * Time: 5:03 PM
  */
-public interface SpRepository extends CrudRepository<ServiceProvider, Long> {}
+public interface SpRepository extends CrudRepository<ServiceProvider, Long> {
+    Iterable<ServiceProvider> findByType(int type);
+}

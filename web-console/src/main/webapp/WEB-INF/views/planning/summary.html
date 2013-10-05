@@ -18,20 +18,10 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<!-- Transportation Operation -->
-<div class="container" th:if="${task.assignee}">
-    <div th:include="layout :: planning-tab"></div>
-
-    <div class="container">
-        <form action="/task" method="POST" class="form-horizontal center">
-            <input type="hidden" name="taskId" th:value="${taskId}" value="{taskId}"/>
-            <input type="submit" name="complete" value="Complete Task" class="btn btn-primary"
-                   th:attr="value=#{task.complete}"/>
-        </form>
-    </div>
-    <!-- /.container -->
-</div>
-<!-- /.container -->
+<!-- {!begin tab} -->
+<!-- {taskId} and {tab} are required in there -->
+<div th:include="layout :: planning-tab"/>
+<!-- {!end tab} -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>

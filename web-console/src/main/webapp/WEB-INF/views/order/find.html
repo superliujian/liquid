@@ -61,7 +61,9 @@
         </thead>
         <tbody>
         <tr th:each="order : ${orders}">
-            <td th:text="${order.id}">ID</td>
+            <td>
+                <a href="/order/id?action=edit" th:href="'/order/' + ${order.id}" th:text="${order.id}"/>
+            </td>
             <td th:text="${order.customer.name}">Customer Name</td>
             <td th:text="${order.origination}">Origin</td>
             <td th:text="${order.destination}">Destination</td>
@@ -74,13 +76,13 @@
             <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
             <td th:text="${order.containerQty}">Container Quantity</td>
             <td th:text="${order.price}">Price</td>
-            <th th:text="${order.extExp}">Extra Expense</th>
-            <th>
-                <a href="/order/id?action=edit"
+            <td th:text="${order.extExp}">Extra Expense</td>
+            <td>
+                <a href="/order/id?action=edit" class="btn btn-default btn-xs"
                    th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
                     <i class="glyphicon glyphicon-edit"/>
                 </a>
-            </th>
+            </td>
         </tr>
         </tbody>
     </table>

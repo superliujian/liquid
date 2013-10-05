@@ -35,13 +35,22 @@ public class BaseTrans extends BaseEntity {
     @Column(name = "TASK_ID")
     private String taskId;
 
-    @NotNull @NotEmpty
-    @Column(name = "ORIGINATION")
+    @ManyToOne
+    @JoinColumn(name = "SRC_LOC_ID")
+    private Location srcLoc;
+
+    @ManyToOne
+    @JoinColumn(name = "DST_LOC_ID")
+    private Location dstLoc;
+
+    @Transient
     private String origination;
 
-    @NotNull @NotEmpty
-    @Column(name = "DESTINATION")
+    @Transient
     private String destination;
+
+    @Transient
+    private boolean batch;
 
     public Order getOrder() {
         return order;
@@ -75,6 +84,24 @@ public class BaseTrans extends BaseEntity {
         this.taskId = taskId;
     }
 
+    public Location getSrcLoc() {
+        return srcLoc;
+    }
+
+    public void setSrcLoc(Location srcLoc) {
+        this.srcLoc = srcLoc;
+    }
+
+    public Location getDstLoc() {
+        return dstLoc;
+    }
+
+    public void setDstLoc(Location dstLoc) {
+        this.dstLoc = dstLoc;
+    }
+
+    // Transient
+
     public String getOrigination() {
         return origination;
     }
@@ -91,14 +118,20 @@ public class BaseTrans extends BaseEntity {
         this.destination = destination;
     }
 
-    // Transient
-
     public long getContainerId() {
         return containerId;
     }
 
     public void setContainerId(long containerId) {
         this.containerId = containerId;
+    }
+
+    public boolean isBatch() {
+        return batch;
+    }
+
+    public void setBatch(boolean batch) {
+        this.batch = batch;
     }
 
     @Override
@@ -110,8 +143,11 @@ public class BaseTrans extends BaseEntity {
         sb.append(", container=").append(container);
         sb.append(", containerId=").append(containerId);
         sb.append(", taskId='").append(taskId).append('\'');
+        sb.append(", srcLoc=").append(srcLoc);
+        sb.append(", dstLoc=").append(dstLoc);
         sb.append(", origination='").append(origination).append('\'');
         sb.append(", destination='").append(destination).append('\'');
+        sb.append(", batch=").append(batch);
         sb.append('}');
         return sb.toString();
     }

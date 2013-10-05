@@ -50,8 +50,8 @@
                 <tbody>
                 <tr th:each="railway : ${railways}">
                     <td th:text="${railway.id}">Railway ID</td>
-                    <td th:text="${railway.origination}">Railway Origination</td>
-                    <td th:text="${railway.destination}">Railway Destination</td>
+                    <td th:text="${railway.srcLoc.name}">Railway Origination</td>
+                    <td th:text="${railway.dstLoc.name}">Railway Destination</td>
                     <td>
                         <a href="/task/{taskId}/planning/railway/{id}" class="btn btn-default btn-xs"
                            th:href="'/task/' + ${railway.taskId} + '/planning/railway/' + ${railway.id} + '/edit'">

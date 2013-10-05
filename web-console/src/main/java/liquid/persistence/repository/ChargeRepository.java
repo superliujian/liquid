@@ -14,4 +14,6 @@ import java.util.List;
  */
 public interface ChargeRepository extends CrudRepository<Charge, Long> {
     List<Charge> findByTaskId(String taskId);
+
+    Iterable<Charge> findByOrderId(long orderId);
 }

@@ -16,9 +16,11 @@
 
 <br/>
 
+
 <div class="container">
     <div class="row row-offcanvas row-offcanvas-right">
-        <div th:include="layout :: left-side"></div>
+
+        <div th:include="layout :: left-side"/>
 
         <div class="col-xs-12 col-sm-9">
             <p th:text="#{${title}}">Task Title</p>
@@ -39,11 +41,12 @@
                     <td th:text="${task.id}">Task ID</td>
                     <td>
                         <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.name}">Task Name</a>
-                    </td>
+                    </td>class="btn btn-default btn-xs"
                     <td th:text="${task.description}">Task Description</td>
                     <td th:text="${task.assignee}">Task Owner</td>
                     <td>
-                        <a href="/task?action=claim" th:if="!${task.assignee}" th:href="'/task/' + ${task.id}">
+                        <a href="/task?action=claim" class="btn btn-default btn-xs"
+                           th:if="!${task.assignee}" th:href="'/task/' + ${task.id}">
                             <i class="glyphicon glyphicon-check"/>
                         </a>
                     </td>

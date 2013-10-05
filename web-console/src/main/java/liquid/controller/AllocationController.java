@@ -1,10 +1,10 @@
 package liquid.controller;
 
-import liquid.persistence.domain.BaseTrans;
-import liquid.persistence.domain.Container;
-import liquid.persistence.domain.TransRailway;
+import liquid.persistence.domain.*;
 import liquid.persistence.repository.ContainerRepository;
+import liquid.persistence.repository.TransBargeRepository;
 import liquid.persistence.repository.TransRailwayRepository;
+import liquid.persistence.repository.TransVesselRepository;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -36,7 +36,15 @@ public class AllocationController extends BaseTaskController {
     private TransRailwayRepository railwayRepository;
 
     @Autowired
+    private TransBargeRepository bargeRepository;
+
+    @Autowired
+    private TransVesselRepository vesselRepository;
+
+    @Autowired
     private ContainerRepository containerRepository;
+
+    public AllocationController() {}
 
     @ModelAttribute("tab")
     public String populateTab(@PathVariable String tab) {
@@ -49,13 +57,20 @@ public class AllocationController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("tab: {}", tab);
-
+        long orderId = bpmService.getOrderIdByTaskId(taskId);
         switch (tab) {
             case "railway":
-                long orderId = bpmService.getOrderIdByTaskId(taskId);
                 List<TransRailway> railways = railwayRepository.findByOrderId(orderId);
                 model.addAttribute("railways", railways);
                 return "allocation/railway";
+            case "barge":
+                List<TransBarge> barges = bargeRepository.findByOrderId(orderId);
+                model.addAttribute("barges", barges);
+                return "allocation/barge";
+            case "vessel":
+                List<TransVessel> vessels = vesselRepository.findByOrderId(orderId);
+                model.addAttribute("vessels", vessels);
+                return "allocation/vessel";
             default:
                 return "allocation/railway";
         }
@@ -82,14 +97,24 @@ public class AllocationController extends BaseTaskController {
 
         switch (transType) {
             case "railway":
-                BaseTrans trans = railwayRepository.findOne(transId);
-                model.addAttribute("trans", trans);
+                TransRailway railway = railwayRepository.findOne(transId);
+                model.addAttribute("trans", railway);
                 // TODO: Here is performance issue.
                 model.addAttribute("containers", containerRepository.findAll());
-                return "allocation/allocating";
+            case "barge":
+                TransBarge barge = bargeRepository.findOne(transId);
+                model.addAttribute("trans", barge);
+                // TODO: Here is performance issue.
+                model.addAttribute("containers", containerRepository.findAll());
+            case "vessel":
+                TransVessel vessel = vesselRepository.findOne(transId);
+                model.addAttribute("trans", vessel);
+                // TODO: Here is performance issue.
+                model.addAttribute("containers", containerRepository.findAll());
             default:
-                return "allocation/allocating";
+                break;
         }
+        return "allocation/allocating";
     }
 
     @RequestMapping(value = "/{tab}/{transId}/edit", method = RequestMethod.POST)

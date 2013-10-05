@@ -96,4 +96,9 @@ public class ActivitiEngineService {
         }
         throw new RuntimeException("execution is not an instance of ExecutionEntity");
     }
+
+    public List<Task> listTasksByOrderId(long orderId) {
+        TaskService taskService = processEngine.getTaskService();
+        return taskService.createTaskQuery().processInstanceBusinessKey(String.valueOf(orderId)).list();
+    }
 }

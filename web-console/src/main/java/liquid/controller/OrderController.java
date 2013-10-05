@@ -2,11 +2,11 @@ package liquid.controller;
 
 import liquid.context.BusinessContext;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.CargoRepository;
-import liquid.persistence.repository.CustomerRepository;
-import liquid.persistence.repository.OrderJpaRepository;
-import liquid.persistence.repository.OrderRepository;
+import liquid.persistence.repository.*;
+import liquid.service.ChargeService;
 import liquid.service.OrderService;
+import liquid.service.bpm.ActivitiEngineService;
+import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -47,6 +48,15 @@ public class OrderController {
 
     @Autowired
     private BusinessContext businessContext;
+
+    @Autowired
+    private ActivitiEngineService bpmService;
+
+    @Autowired
+    private ChargeService chargeService;
+
+    @Autowired
+    private ChargeTypeRepository ctRepository;
 
     @ModelAttribute("orders")
     public Iterable<Order> populateOrders() {
@@ -142,6 +152,48 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String detail(@PathVariable long id,
+                         Model model, Principal principal) {
+        logger.debug("id: {}", id);
+
+        Order order = orderRepository.findOne(id);
+        model.addAttribute("order", order);
+        model.addAttribute("tab", "detail");
+        return "order/detail";
+    }
+
+    @RequestMapping(value = "/{id}/{tab}", method = RequestMethod.GET)
+    public String charge(@PathVariable long id,
+                         @PathVariable String tab,
+                         Model model, Principal principal) {
+        logger.debug("id: {}", id);
+        logger.debug("tab: {}", tab);
+
+        Order order = orderRepository.findOne(id);
+
+        switch (tab) {
+            case "task":
+                List<Task> tasks = bpmService.listTasksByOrderId(id);
+                model.addAttribute("tasks", tasks);
+                break;
+            case "charge":
+                Iterable<Charge> charges = chargeService.findByOrderId(id);
+
+                model.addAttribute("cts", ctRepository.findAll());
+                model.addAttribute("chargeWays", ChargeWay.values());
+                model.addAttribute("charges", charges);
+                break;
+            default:
+                tab = "detail";
+                break;
+        }
+
+        model.addAttribute("order", order);
+        model.addAttribute("tab", tab);
+        return "order/" + tab;
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")
     public String getOrder(@PathVariable long id, @RequestParam String action,
                            Model model, Principal principal) {
         logger.debug("id: {}", id);

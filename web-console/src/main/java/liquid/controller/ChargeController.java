@@ -1,9 +1,11 @@
 package liquid.controller;
 
 import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.ChargeType;
 import liquid.persistence.domain.ChargeWay;
 import liquid.persistence.domain.Order;
 import liquid.persistence.repository.ChargeRepository;
+import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.persistence.repository.OrderRepository;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -37,7 +40,25 @@ public class ChargeController {
     private OrderRepository orderRepository;
 
     @Autowired
+    private ChargeTypeRepository ctRepository;
+
+    @Autowired
     private ChargeRepository chargeRepository;
+
+    @ModelAttribute("chargeWays")
+    public ChargeWay[] populateChargeWays() {
+        return ChargeWay.values();
+    }
+
+    @ModelAttribute("cts")
+    public Iterable<ChargeType> populateChargeTypes() {
+        return ctRepository.findAll();
+    }
+
+    @ModelAttribute("charges")
+    public Iterable<Charge> populateCharges() {
+        return chargeRepository.findAll();
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public void init() {

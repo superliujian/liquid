@@ -41,4 +41,8 @@ public enum TransMode {
     public String getI18nKey() {
         return i18nKey;
     }
+
+    public String toPath() {
+        return toString().toLowerCase();
+    }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -41,10 +42,22 @@ public class PlanningController extends BaseTaskController {
     private TransRailwayRepository transRailwayRepository;
 
     @Autowired
+    private TransBargeRepository transBargeRepository;
+
+    @Autowired
+    private TransVesselRepository transVesselRepository;
+
+    @Autowired
     private ChargeTypeRepository ctRepository;
 
     @Autowired
     private ChargeRepository chargeRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
+
+    @Autowired
+    private SpRepository spRepository;
 
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
@@ -52,8 +65,13 @@ public class PlanningController extends BaseTaskController {
     }
 
     @ModelAttribute("cts")
-    public Iterable<ChargeType> populateChargeTypes() {
-        return ctRepository.findAll();
+    public Map<Long, String> populateChargeTypes() {
+        Map<Long, String> cts = new TreeMap<Long, String>();
+        Iterable<ChargeType> iterable = ctRepository.findAll();
+        for (ChargeType chargeType : iterable) {
+            cts.put(chargeType.getId(), chargeType.getName());
+        }
+        return cts;
     }
 
     @ModelAttribute("charges")
@@ -64,6 +82,16 @@ public class PlanningController extends BaseTaskController {
     @ModelAttribute("railways")
     public Iterable<TransRailway> populateRailways(@PathVariable String taskId) {
         return transRailwayRepository.findByTaskId(taskId);
+    }
+
+    @ModelAttribute("barges")
+    public Iterable<TransBarge> populateBarges(@PathVariable String taskId) {
+        return transBargeRepository.findByTaskId(taskId);
+    }
+
+    @ModelAttribute("vessels")
+    public Iterable<TransVessel> populateVessels(@PathVariable String taskId) {
+        return transVesselRepository.findByTaskId(taskId);
     }
 
     /**
@@ -94,14 +122,13 @@ public class PlanningController extends BaseTaskController {
                         TransMode.valueOf(transMode.toUpperCase()).getType());
                 if (null == planning) planning = new Planning();
                 model.addAttribute("planning", planning);
-                return "planning/" + tab;
             case "charge":
                 model.addAttribute("charge", new Charge());
-                return "charge";
             case "summary":
             default:
-                return "planning/" + tab;
+                break;
         }
+        return "planning/" + tab;
     }
 
     @RequestMapping(value = "/{tab}", method = RequestMethod.POST, params = "addPlanning")
@@ -183,24 +210,97 @@ public class PlanningController extends BaseTaskController {
                                     @PathVariable String transMode,
                                     Model model, Principal principal) {
         logger.debug("transMode: {}", transMode);
-        TransRailway railway = new TransRailway();
-        model.addAttribute("transRailway", railway);
+
+        TransMode mode = TransMode.valueOf(transMode.toUpperCase());
+
+        List<Location> portLocations = locationRepository.findByType(LocationType.PORT.getType());
+        long id = getDefaultLocationId(portLocations);
+
+        switch (mode) {
+            case RAILWAY:
+                TransRailway railway = new TransRailway();
+                List<Location> stationLocs = locationRepository.findByType(LocationType.STATION.getType());
+                id = getDefaultLocationId(stationLocs);
+
+                railway.setDestination(String.valueOf(id));
+                model.addAttribute("transRailway", railway);
+                model.addAttribute("locations", stationLocs);
+                break;
+            case BARGE:
+                TransBarge barge = new TransBarge();
+
+                barge.setDestination(String.valueOf(id));
+                model.addAttribute("transBarge", barge);
+                model.addAttribute("locations", portLocations);
+                model.addAttribute("sps", spRepository.findByType(SpType.BARGE.getType()));
+                break;
+            case VESSEL:
+                TransVessel vessel = new TransVessel();
+
+                vessel.setDestination(String.valueOf(id));
+                model.addAttribute("transVessel", vessel);
+                model.addAttribute("locations", locationRepository.findByType(LocationType.PORT.getType()));
+                model.addAttribute("sps", spRepository.findByType(SpType.VESSEL.getType()));
+                break;
+            default:
+                break;
+        }
+
         return "planning/" + transMode + "_edit";
     }
 
-    @RequestMapping(value = "/{transMode}/new", method = RequestMethod.POST)
-    public String processCreationRoute(@PathVariable String taskId,
-                                       @PathVariable String transMode,
-                                       @Valid @ModelAttribute TransRailway railway,
-                                       BindingResult result, Model model, Principal principal) {
-        logger.debug("transMode: {}", transMode);
+    private long getDefaultLocationId(List<Location> locations) {
+        int size = locations.size();
+        long id = 0;
+        if (size < 2) {
+            id = locations.get(0).getId();
+        } else {
+            id = locations.get(1).getId();
+        }
+        return id;
+    }
+
+    @RequestMapping(value = "/railway/new", method = RequestMethod.POST)
+    public String processCreationRailway(@PathVariable String taskId,
+                                         @Valid @ModelAttribute TransRailway railway,
+                                         BindingResult result, Model model, Principal principal) {
         logger.debug("railway: {}", railway);
 
         if (result.hasErrors()) {
-            return "planning/" + transMode + "_edit";
+            return "planning/railway_edit";
         } else {
-            planningService.create(taskId, railway);
-            String redirect = "redirect:/task/" + taskId + "/planning/" + transMode;
+            planningService.createRailway(taskId, railway);
+            String redirect = "redirect:/task/" + taskId + "/planning/railway";
+            return redirect;
+        }
+    }
+
+    @RequestMapping(value = "/barge/new", method = RequestMethod.POST)
+    public String processCreationBarge(@PathVariable String taskId,
+                                       @Valid @ModelAttribute TransBarge barge,
+                                       BindingResult result, Model model, Principal principal) {
+        logger.debug("barge: {}", barge);
+
+        if (result.hasErrors()) {
+            return "planning/barge_edit";
+        } else {
+            planningService.createBarge(taskId, barge);
+            String redirect = "redirect:/task/" + taskId + "/planning/barge";
+            return redirect;
+        }
+    }
+
+    @RequestMapping(value = "/vessel/new", method = RequestMethod.POST)
+    public String processCreationVessel(@PathVariable String taskId,
+                                        @Valid @ModelAttribute TransVessel vessel,
+                                        BindingResult result, Model model, Principal principal) {
+        logger.debug("vessel: {}", vessel);
+
+        if (result.hasErrors()) {
+            return "planning/vessel_edit";
+        } else {
+            planningService.createVessel(taskId, vessel);
+            String redirect = "redirect:/task/" + taskId + "/planning/vessel";
             return redirect;
         }
     }
@@ -211,26 +311,89 @@ public class PlanningController extends BaseTaskController {
                                 Model model, Principal principal) {
         logger.debug("transModeKey: {}", transModeKey);
         logger.debug("routeId: {}", routeId);
-        TransRailway railway = transRailwayRepository.findOne(routeId);
-        // NOTE: the attribute key have to align to class name.
-        model.addAttribute("transRailway", railway);
+
+        TransMode mode = TransMode.valueOf(transModeKey.toUpperCase());
+        switch (mode) {
+            case RAILWAY:
+                TransRailway railway = transRailwayRepository.findOne(routeId);
+
+                railway.setOrigination(String.valueOf(railway.getSrcLoc().getId()));
+                railway.setDestination(String.valueOf(railway.getDstLoc().getId()));
+                // NOTE: the attribute key have to align to class name.
+                model.addAttribute("transRailway", railway);
+                model.addAttribute("locations", locationRepository.findByType(LocationType.STATION.getType()));
+                break;
+            case BARGE:
+                TransBarge barge = transBargeRepository.findOne(routeId);
+                barge.setOrigination(String.valueOf(barge.getSrcLoc().getId()));
+                barge.setDestination(String.valueOf(barge.getDstLoc().getId()));
+                barge.setSpId(String.valueOf(barge.getSp().getId()));
+                // NOTE: the attribute key have to align to class name.
+                model.addAttribute("transBarge", barge);
+                model.addAttribute("locations", locationRepository.findByType(LocationType.PORT.getType()));
+                model.addAttribute("sps", spRepository.findByType(SpType.BARGE.getType()));
+                break;
+            case VESSEL:
+                TransVessel vessel = transVesselRepository.findOne(routeId);
+                vessel.setOrigination(String.valueOf(vessel.getSrcLoc().getId()));
+                vessel.setDestination(String.valueOf(vessel.getDstLoc().getId()));
+                vessel.setSpId(String.valueOf(vessel.getSp().getId()));
+                // NOTE: the attribute key have to align to class name.
+                model.addAttribute("transVessel", vessel);
+                model.addAttribute("locations", locationRepository.findByType(LocationType.PORT.getType()));
+                model.addAttribute("sps", spRepository.findByType(SpType.VESSEL.getType()));
+                break;
+            default:
+                break;
+        }
+
         return "planning/" + transModeKey + "_edit";
     }
 
-    @RequestMapping(value = "/{transModeKey}/{routeId}/edit", method = RequestMethod.PUT)
-    public String processEditRoute(@PathVariable String transModeKey,
-                                   @PathVariable long routeId,
-                                   @Valid @ModelAttribute TransRailway railway,
-                                   BindingResult result, Model model, Principal principal) {
-        logger.debug("transModeKey: {}", transModeKey);
+    @RequestMapping(value = "/railway/{routeId}/edit", method = RequestMethod.PUT)
+    public String processEditRailway(@PathVariable long routeId,
+                                     @Valid @ModelAttribute TransRailway railway,
+                                     BindingResult result, Model model, Principal principal) {
         logger.debug("routeId: {}", routeId);
         logger.debug("railway: {}", railway);
 
         if (result.hasErrors()) {
-            return "planning/" + transModeKey + "_edit";
+            return "planning/railway_edit";
         } else {
-            TransRailway oldOne = planningService.edit(railway);
-            String redirect = "redirect:/task/" + oldOne.getTaskId() + "/planning/" + transModeKey;
+            TransRailway oldOne = planningService.editRailway(railway);
+            String redirect = "redirect:/task/" + oldOne.getTaskId() + "/planning/railway";
+            return redirect;
+        }
+    }
+
+    @RequestMapping(value = "/barge/{routeId}/edit", method = RequestMethod.PUT)
+    public String processEditBarge(@PathVariable long routeId,
+                                   @Valid @ModelAttribute TransBarge barge,
+                                   BindingResult result, Model model, Principal principal) {
+        logger.debug("routeId: {}", routeId);
+        logger.debug("barge: {}", barge);
+
+        if (result.hasErrors()) {
+            return "planning/barge_edit";
+        } else {
+            TransBarge oldOne = planningService.editBarge(barge);
+            String redirect = "redirect:/task/" + oldOne.getTaskId() + "/planning/barge";
+            return redirect;
+        }
+    }
+
+    @RequestMapping(value = "/vessel/{routeId}/edit", method = RequestMethod.PUT)
+    public String processEditVessel(@PathVariable long routeId,
+                                    @Valid @ModelAttribute TransVessel vessel,
+                                    BindingResult result, Model model, Principal principal) {
+        logger.debug("routeId: {}", routeId);
+        logger.debug("vessel: {}", vessel);
+
+        if (result.hasErrors()) {
+            return "planning/vessel_edit";
+        } else {
+            TransVessel oldOne = planningService.editVessel(vessel);
+            String redirect = "redirect:/task/" + oldOne.getTaskId() + "/planning/vessel";
             return redirect;
         }
     }

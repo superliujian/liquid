@@ -11,10 +11,6 @@ import java.util.Date;
  */
 @Entity(name = "TRANS_RAILWAY")
 public class TransRailway extends BaseTrans {
-
-    @Transient
-    private boolean batch;
-
     @Transient
     private String loadingTocStr;
 
@@ -53,14 +49,6 @@ public class TransRailway extends BaseTrans {
 
     //Transient
 
-    public boolean isBatch() {
-        return batch;
-    }
-
-    public void setBatch(boolean batch) {
-        this.batch = batch;
-    }
-
     public String getLoadingTocStr() {
         return loadingTocStr;
     }
@@ -81,8 +69,7 @@ public class TransRailway extends BaseTrans {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("TransRailway{");
-        sb.append("batch=").append(batch);
-        sb.append(", loadingTocStr='").append(loadingTocStr).append('\'');
+        sb.append("loadingTocStr='").append(loadingTocStr).append('\'');
         sb.append(", loadingToc=").append(loadingToc);
         sb.append(", stationToaStr='").append(stationToaStr).append('\'');
         sb.append(", stationToa=").append(stationToa);
