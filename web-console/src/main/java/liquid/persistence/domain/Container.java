@@ -1,7 +1,10 @@
 package liquid.persistence.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO: Comments.
@@ -12,9 +15,11 @@ import javax.persistence.Entity;
 @Entity(name = "CONTAINER")
 public class Container extends BaseEntity {
 
+    @NotNull @NotEmpty
     @Column(name = "BIC_CODE")
     private String bicCode;
 
+    @NotNull @NotEmpty
     @Column(name = "OWNER")
     private String owner;
 

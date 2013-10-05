@@ -43,7 +43,7 @@ public class ChargeTypeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute ChargeType ct,
+    public String create(@Valid @ModelAttribute("ct") ChargeType ct,
                          BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("ct: {}", ct);
 

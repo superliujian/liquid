@@ -32,13 +32,14 @@ import java.sql.SQLException;
                 value = {
                         CustomerRepository.class,
                         SpRepository.class,
+                        LocationRepository.class,
                         CargoRepository.class,
+                        ChargeTypeRepository.class,
+                        ContainerRepository.class,
                         OrderRepository.class,
                         OrderJpaRepository.class,
-                        ContainerRepository.class,
                         PlanningRepository.class,
                         TransRailwayRepository.class,
-                        ChargeTypeRepository.class,
                         ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement

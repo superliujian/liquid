@@ -47,7 +47,7 @@ public class SpController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute ServiceProvider sp,
+    public String create(@Valid @ModelAttribute("sp") ServiceProvider sp,
                          BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("sp: {}", sp);
 

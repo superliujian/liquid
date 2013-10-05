@@ -15,35 +15,29 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "SERVICE_PROVIDER")
 public class ServiceProvider extends BaseEntity {
     @Column(name = "NAME")
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     private String name;
 
     @Column(name = "TYPE")
     private int type;
 
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     @Column(name = "ADDRESS")
     private String address;
 
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     @Column(name = "POSTCODE")
     private String postcode;
 
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     @Column(name = "CONTACT")
     private String contact;
 
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     @Column(name = "PHONE")
     private String phone;
 
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     @Column(name = "CELL")
     private String cell;
 

@@ -16,7 +16,9 @@ public class Cargo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID") private long id;
 
-    @Column(name = "Name", nullable = true) @NotNull @NotEmpty private String name;
+    @NotNull @NotEmpty
+    @Column(name = "Name", nullable = true)
+    private String name;
 
     public long getId() {
         return id;

@@ -35,15 +35,25 @@
 <!-- /.container -->
 
 <div class="container">
-    <form action="/cargo" method="POST" th:object="${cargo}" class="form">
-        <div class="form-group">
-            <label th:text="#{cargo.name}">Name</label>
-            <input type="text" th:field="*{name}" class="form-control"/>
-            <span th:errors="*{name}">error</span>
+    <form action="/cargo" method="POST" th:object="${cargo}" class="form-horizontal center">
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{cargo.name}">Name</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{name}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{name}">error</span>
+            </div>
         </div>
 
-        <input type="submit" value="Add Cargo" class="btn btn-lg btn-primary btn-block"
-               th:attr="value=#{cargo.add}"/>
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <input type="submit" value="Add Cargo" class="btn btn-default"
+                       th:attr="value=#{cargo.add}"/>
+            </div>
+        </div>
     </form>
 </div>
 <!-- /.container -->

@@ -25,6 +25,7 @@ import java.security.Principal;
 @RequestMapping("/cargo")
 public class CargoController {
     private static final Logger logger = LoggerFactory.getLogger(Cargo.class);
+
     @Autowired
     private CargoRepository cargoRepository;
 
@@ -39,7 +40,8 @@ public class CargoController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Cargo cargo, BindingResult bindingResult, Principal principal) {
+    public String create(@Valid @ModelAttribute Cargo cargo,
+                         BindingResult bindingResult, Principal principal) {
         logger.debug("Cargo: {}", cargo);
 
         if (bindingResult.hasErrors()) {

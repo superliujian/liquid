@@ -76,7 +76,7 @@
 
         <userTask id="sendLoadingByTruck" name="发布外拖指令">
             <documentation>
-                ${employeeName}已经分配集装箱。您需要发布场装指令。
+                ${employeeName}已经分配集装箱。您需要发布外拖指令。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -120,7 +120,7 @@
 
         <userTask id="applyRailwayPlan" name="申报铁路计划">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要进行外拖作业。
+                ${employeeName}已经发布外拖指令。您需要申报铁路计划。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -133,7 +133,7 @@
         <!-- record time of dispatch -->
         <userTask id="recordTod" name="记录装车发运时间">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要进行外拖作业。
+                ${employeeName}已经发布外拖指令。您需要记录装车发运时间。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -196,7 +196,7 @@
 
         <userTask id="deliver" name="配送">
             <documentation>
-                货物已经到达，您需要大船操作。
+                货物已经到达，您需要配送。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
