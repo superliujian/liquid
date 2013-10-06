@@ -28,6 +28,7 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         logger.debug("Post {}", handler);
+        logger.debug("model: {}", modelAndView.getModel());
     }
 
     @Override

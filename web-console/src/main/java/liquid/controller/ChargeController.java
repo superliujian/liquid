@@ -7,6 +7,7 @@ import liquid.persistence.domain.Order;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.persistence.repository.OrderRepository;
+import liquid.service.ChargeService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -45,14 +44,17 @@ public class ChargeController {
     @Autowired
     private ChargeRepository chargeRepository;
 
+    @Autowired
+    private ChargeService chargeService;
+
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
         return ChargeWay.values();
     }
 
     @ModelAttribute("cts")
-    public Iterable<ChargeType> populateChargeTypes() {
-        return ctRepository.findAll();
+    public Map<Long, String> populateChargeTypes() {
+        return chargeService.getChargeTypes();
     }
 
     @ModelAttribute("charges")
@@ -67,8 +69,10 @@ public class ChargeController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String record(@Valid @ModelAttribute Charge charge,
+                         @RequestHeader(value = "referer") String referer,
                          BindingResult bindingResult, Principal principal) {
         logger.debug("charge: {}", charge);
+        logger.debug("referer: {}", referer);
 
         long orderId = bpmService.getOrderIdByTaskId(charge.getTaskId());
         Order order = orderRepository.findOne(orderId);
@@ -85,7 +89,7 @@ public class ChargeController {
 
         chargeRepository.save(charge);
 
-        String redirect = "redirect:/task/" + charge.getTaskId() + "/planning/charge";
+        String redirect = "redirect:" + referer;
         return redirect;
     }
 }

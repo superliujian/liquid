@@ -177,7 +177,7 @@ public class OrderController {
                 model.addAttribute("tasks", tasks);
                 break;
             case "charge":
-                Iterable<Charge> charges = chargeService.findByOrderId(id);
+                Iterable<Charge> charges = chargeService.getChargesByOrderId(id);
 
                 model.addAttribute("cts", ctRepository.findAll());
                 model.addAttribute("chargeWays", ChargeWay.values());
