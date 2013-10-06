@@ -22,18 +22,22 @@ public class Order extends BaseEntity {
     @Transient
     private long customerId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
-    @Column(name = "ORIGINATION")
-    @NotNull
-    @NotEmpty
+    @ManyToOne
+    @JoinColumn(name = "SRC_LOC_ID")
+    private Location srcLoc;
+
+    @Transient
     private String origination;
 
-    @Column(name = "DESTINATION")
-    @NotNull
-    @NotEmpty
+    @ManyToOne
+    @JoinColumn(name = "DST_LOC_ID")
+    private Location dstLoc;
+
+    @Transient
     private String destination;
 
     @Column(name = "CONSIGNEE")
@@ -101,20 +105,20 @@ public class Order extends BaseEntity {
         this.customer = customer;
     }
 
-    public String getOrigination() {
-        return origination;
+    public Location getSrcLoc() {
+        return srcLoc;
     }
 
-    public void setOrigination(String origination) {
-        this.origination = origination;
+    public void setSrcLoc(Location srcLoc) {
+        this.srcLoc = srcLoc;
     }
 
-    public String getDestination() {
-        return destination;
+    public Location getDstLoc() {
+        return dstLoc;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setDstLoc(Location dstLoc) {
+        this.dstLoc = dstLoc;
     }
 
     public String getConsignee() {
@@ -239,13 +243,31 @@ public class Order extends BaseEntity {
         this.cargoId = cargoId;
     }
 
+    public String getOrigination() {
+        return origination;
+    }
+
+    public void setOrigination(String origination) {
+        this.origination = origination;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Order{");
         sb.append("customerId=").append(customerId);
         sb.append(", customer=").append(customer);
+        sb.append(", srcLoc=").append(srcLoc);
         sb.append(", origination='").append(origination).append('\'');
+        sb.append(", dstLoc=").append(dstLoc);
         sb.append(", destination='").append(destination).append('\'');
         sb.append(", consignee='").append(consignee).append('\'');
         sb.append(", cargoId=").append(cargoId);
