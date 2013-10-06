@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeUrls()
                 .antMatchers("/register", "/about").permitAll() // #4
                 .antMatchers("/admin/**").hasRole("ADMIN") // #6
+                .antMatchers("/favicon.ico").hasRole("ANONYMOUS")
                 .anyRequest().authenticated() // 7
                 .and()
                 .formLogin()  // #8
