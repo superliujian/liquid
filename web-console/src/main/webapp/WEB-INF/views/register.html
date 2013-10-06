@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    <form action="/register" method="POST" class="form-horizontal center"
+          th:object="${account}">
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{account.uid}">Account UID</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{uid}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{uid}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{password}">Account Password</label>
+
+            <div class="col-lg-9">
+                <input type="password" th:field="*{password}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{password2}">Account Password 2</label>
+
+            <div class="col-lg-9">
+                <input type="password" th:field="*{password2}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{surname}">Surnmae</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{surname}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{given.name}">Given Name</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{givenName}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{email}">Email</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{email}" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{group}">Group</label>
+
+            <div class="col-lg-9">
+                <select th:field="*{group}" class="form-control">
+                    <option th:each="groupType : ${groupTypes}"
+                            th:value="${groupType.type}"
+                            th:text="#{${groupType.i18nKey}}">Department Name
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <input type="submit" name="register" value="Allocate Container" class="btn btn-default"
+                       th:value="#{account.register}"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>
