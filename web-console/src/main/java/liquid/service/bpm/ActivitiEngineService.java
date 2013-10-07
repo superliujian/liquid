@@ -90,8 +90,10 @@ public class ActivitiEngineService {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         RuntimeService runtimeService = processEngine.getRuntimeService();
         Execution execution = runtimeService.createExecutionQuery().executionId(task.getProcessInstanceId()).singleResult();
+        logger.debug("process instance id: {}", task.getExecutionId());
         if (execution instanceof ExecutionEntity) {
             ExecutionEntity entity = (ExecutionEntity) execution;
+            logger.debug("business key: {}", entity.getBusinessKey());
             return Long.valueOf(entity.getBusinessKey());
         }
         throw new RuntimeException("execution is not an instance of ExecutionEntity");
