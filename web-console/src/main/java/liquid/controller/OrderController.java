@@ -182,6 +182,26 @@ public class OrderController extends BaseChargeController {
         return "order/detail";
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")
+    public String getOrder(@PathVariable long id, @RequestParam String action,
+                           Model model, Principal principal) {
+        logger.debug("id: {}", id);
+        logger.debug("action: {}", action);
+        Order order = orderRepository.findOne(id);
+        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
+        order.setDestination(String.valueOf(order.getDstLoc().getId()));
+        // TODO: looking for the better way to do that
+        order.setCustomerId(order.getCustomer().getId());
+        order.setCargoId(order.getCargo().getId());
+        logger.debug("order: {}", order);
+
+        List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
+
+        model.addAttribute("locations", locations);
+        model.addAttribute("order", order);
+        return "order/form";
+    }
+
     @RequestMapping(value = "/{id}/{tab}", method = RequestMethod.GET)
     public String charge(@PathVariable long id,
                          @PathVariable String tab,
@@ -213,20 +233,6 @@ public class OrderController extends BaseChargeController {
         model.addAttribute("order", order);
         model.addAttribute("tab", tab);
         return "order/" + tab;
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")
-    public String getOrder(@PathVariable long id, @RequestParam String action,
-                           Model model, Principal principal) {
-        logger.debug("id: {}", id);
-        logger.debug("action: {}", action);
-        Order order = orderRepository.findOne(id);
-        // TODO: looking for the better way to do that
-        order.setCustomerId(order.getCustomer().getId());
-        order.setCargoId(order.getCargo().getId());
-        logger.debug("order: {}", order);
-        model.addAttribute("order", order);
-        return "order/form";
     }
 
     private long getDefaultLocationId(List<Location> locations) {
