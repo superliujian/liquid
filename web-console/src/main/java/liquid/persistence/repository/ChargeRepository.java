@@ -1,6 +1,7 @@
 package liquid.persistence.repository;
 
 import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.Order;
 import liquid.persistence.domain.TransRailway;
 import org.springframework.data.repository.CrudRepository;
 
@@ -16,4 +17,6 @@ public interface ChargeRepository extends CrudRepository<Charge, Long> {
     List<Charge> findByTaskId(String taskId);
 
     Iterable<Charge> findByOrderId(long orderId);
+
+    Iterable<Order> findBySpNameLike(String cumtomerName);
 }

@@ -28,20 +28,20 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController extends BaseChargeController {
     private static final Logger logger = LoggerFactory.getLogger(Order.class);
 
     @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
-    private OrderJpaRepository orderJpaRepository;
-
-    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
     private CargoRepository cargoRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
 
     @Autowired
     private OrderService orderService;
@@ -55,12 +55,9 @@ public class OrderController {
     @Autowired
     private ChargeService chargeService;
 
-    @Autowired
-    private ChargeTypeRepository ctRepository;
-
     @ModelAttribute("orders")
     public Iterable<Order> populateOrders() {
-        return orderJpaRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+        return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
     @ModelAttribute("customers")
@@ -106,18 +103,37 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.GET, params = "findById")
     public String findById(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
+        if (null == param || param.trim().length() == 0) {
+
+        } else {
+            try {
+                model.addAttribute("orders", orderRepository.findOne(Long.parseLong(param)));
+            } catch (Exception e) {
+                logger.warn("An exception was thrown when calling findById", e);
+            }
+        }
         return "order/find";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
     public String findByCustomerName(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
+
+        model.addAttribute("orders", orderRepository.findByCustomerNameLike("%" + param + "%"));
         return "order/find";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model, Principal principal) {
-        model.addAttribute("order", new Order());
+        Order order = new Order();
+
+        List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
+
+        long locationId = getDefaultLocationId(locations);
+        order.setDestination(String.valueOf(locationId));
+
+        model.addAttribute("locations", locations);
+        model.addAttribute("order", order);
         return "order/form";
     }
 
@@ -157,6 +173,10 @@ public class OrderController {
         logger.debug("id: {}", id);
 
         Order order = orderRepository.findOne(id);
+        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
+        order.setDestination(String.valueOf(order.getDstLoc().getId()));
+        List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
+        model.addAttribute("locations", locations);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
         return "order/detail";
@@ -170,6 +190,8 @@ public class OrderController {
         logger.debug("tab: {}", tab);
 
         Order order = orderRepository.findOne(id);
+        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
+        order.setDestination(String.valueOf(order.getDstLoc().getId()));
 
         switch (tab) {
             case "task":
@@ -179,7 +201,7 @@ public class OrderController {
             case "charge":
                 Iterable<Charge> charges = chargeService.getChargesByOrderId(id);
 
-                model.addAttribute("cts", ctRepository.findAll());
+                model.addAttribute("cts", chargeTypesToMap());
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
                 break;
@@ -205,5 +227,16 @@ public class OrderController {
         logger.debug("order: {}", order);
         model.addAttribute("order", order);
         return "order/form";
+    }
+
+    private long getDefaultLocationId(List<Location> locations) {
+        int size = locations.size();
+        long id = 0;
+        if (size < 2) {
+            id = locations.get(0).getId();
+        } else {
+            id = locations.get(1).getId();
+        }
+        return id;
     }
 }

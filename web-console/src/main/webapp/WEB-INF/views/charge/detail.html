@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <style>
+        div#detail.container {
+        margin-top:20px;
+        max-width: 480px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="detail" class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{charge.pay}">Pay</div>
+
+        <div class="panel-body">
+            <dl class="dl-horizontal" th:object="${charge}">
+                <dt th:text="#{order.id}">Order ID</dt>
+                <dd th:text="*{order.id}">Order ID</dd>
+
+                <dt th:text="#{charge.type}">Charge Type</dt>
+                <dd th:text="${cts[charge.type]}">Charge Type</dd>
+
+                <dt th:text="#{sp.name}">SP Name</dt>
+                <dd th:text="*{sp} ? *{sp.name}">SP Name</dd>
+
+                <dt th:text="#{charge.way}">Charge Way</dt>
+                <dd th:text="#{${chargeWays[__*{way}__].i18nKey}}">Charge Way</dd>
+
+                <dt th:text="#{charge.unit.price}">Unit Price</dt>
+                <dd th:text="*{unitPrice}">Unit Price</dd>
+
+                <dt th:text="#{charge.total.price}">Total Price</dt>
+                <dd th:text="*{totalPrice}">Total Price</dd>
+            </dl>
+
+            <form action="/charge" method="POST"
+                  th:action="'/charge/' + ${charge.id}">
+                <div class="form-group">
+                    <input type="submit" name="pay" value="Pay" class="btn btn-default pull-right"
+                           th:value="#{charge.pay}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>

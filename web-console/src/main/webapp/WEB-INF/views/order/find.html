@@ -65,8 +65,8 @@
                 <a href="/order/id?action=edit" th:href="'/order/' + ${order.id}" th:text="${order.id}"/>
             </td>
             <td th:text="${order.customer.name}">Customer Name</td>
-            <td th:text="${order.origination}">Origin</td>
-            <td th:text="${order.destination}">Destination</td>
+            <td th:text="${order.srcLoc.name}">Origin</td>
+            <td th:text="${order.dstLoc.name}">Destination</td>
             <td th:text="${order.cargo.name}"></td>
             <td th:text="${order.cargoWeight}">Cargo Weight</td>
             <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>

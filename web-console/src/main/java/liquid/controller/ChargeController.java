@@ -1,9 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.ChargeType;
-import liquid.persistence.domain.ChargeWay;
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.*;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.persistence.repository.OrderRepository;
@@ -67,6 +64,29 @@ public class ChargeController {
         logger.debug("init");
     }
 
+    @RequestMapping(method = RequestMethod.GET, params = "findByOrderId")
+    public String findByOrderId(@RequestParam String param, Model model, Principal principal) {
+        logger.debug("param: {}", param);
+        if (null == param || param.trim().length() == 0) {
+
+        } else {
+            try {
+                model.addAttribute("charges", chargeRepository.findByOrderId(Long.parseLong(param)));
+            } catch (Exception e) {
+                logger.warn("An exception was thrown when calling findById", e);
+            }
+        }
+        return "charge";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "findBySpName")
+    public String findBySpName(@RequestParam String param, Model model, Principal principal) {
+        logger.debug("param: {}", param);
+
+        model.addAttribute("charges", chargeRepository.findBySpNameLike("%" + param + "%"));
+        return "charge";
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public String record(@Valid @ModelAttribute Charge charge,
                          @RequestHeader(value = "referer") String referer,
@@ -91,5 +111,24 @@ public class ChargeController {
 
         String redirect = "redirect:" + referer;
         return redirect;
+    }
+
+    @RequestMapping(value = "/{chargeId}", method = RequestMethod.GET)
+    public String initDetail(@PathVariable long chargeId,
+                             Model model, Principal principal) {
+        logger.debug("chargeId: {}", chargeId);
+        Charge charge = chargeRepository.findOne(chargeId);
+        model.addAttribute("charge", charge);
+        return "charge/detail";
+    }
+
+    @RequestMapping(value = "/{chargeId}", method = RequestMethod.POST)
+    public String pay(@PathVariable long chargeId,
+                      Model model, Principal principal) {
+        logger.debug("chargeId: {}", chargeId);
+        Charge charge = chargeRepository.findOne(chargeId);
+        charge.setStatus(ChargeStatus.PAID.getValue());
+        chargeRepository.save(charge);
+        return "redirect:/charge";
     }
 }

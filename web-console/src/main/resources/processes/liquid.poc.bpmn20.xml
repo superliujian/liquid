@@ -128,7 +128,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow140" sourceRef="loadByTruck" targetRef="loadAndRailwayPlanJoin"/>
+        <sequenceFlow id="flow140" sourceRef="applyRailwayPlan" targetRef="loadAndRailwayPlanJoin"/>
 
         <!-- record time of dispatch -->
         <userTask id="recordTod" name="记录装车发运时间">
@@ -141,7 +141,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow150" sourceRef="loadByTruck" targetRef="loadAndRailwayPlanJoin"/>
+        <sequenceFlow id="flow150" sourceRef="recordTod" targetRef="loadAndRailwayPlanJoin"/>
 
         <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
         <sequenceFlow id="flow160" sourceRef="loadAndRailwayPlanJoin" targetRef="bargeOpsDecision"/>
@@ -346,7 +346,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow400" sourceRef="checkFromMarketing" targetRef="settlementJoin"/>
+        <sequenceFlow id="flow400" sourceRef="checkFromMarketing" targetRef="checkJoin"/>
 
         <userTask id="checkCostByOperating" name="核对金额">
             <documentation>
@@ -383,7 +383,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow430" sourceRef="checkFromMarketing" targetRef="checkJoin"/>
+        <sequenceFlow id="flow430" sourceRef="checkFromOperating" targetRef="checkJoin"/>
 
         <parallelGateway id="checkJoin" name="核对采购金额合并"/>
         <sequenceFlow id="flow440" sourceRef="checkJoin" targetRef="confirmPurchaingSettlement"/>

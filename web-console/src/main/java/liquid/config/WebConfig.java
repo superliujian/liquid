@@ -42,8 +42,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //        registry.addInterceptor(new ThreadScopeInterceptor());
     }
 
-
-
     @Bean
     public ServletContextTemplateResolver templateResolver() {
         ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();

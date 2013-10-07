@@ -21,6 +21,13 @@ public class Charge extends BaseEntity {
     @Column(name = "TYPE")
     private long type;
 
+    @Transient
+    private String spId;
+
+    @ManyToOne
+    @JoinColumn(name = "SP_ID")
+    private ServiceProvider sp;
+
     @Column(name = "WAY")
     private int way;
 
@@ -29,6 +36,9 @@ public class Charge extends BaseEntity {
 
     @Column(name = "TOTAL_PRICE")
     private long totalPrice;
+
+    @Column(name = "STATUS")
+    private int status;
 
     public Order getOrder() {
         return order;
@@ -52,6 +62,22 @@ public class Charge extends BaseEntity {
 
     public void setType(long type) {
         this.type = type;
+    }
+
+    public String getSpId() {
+        return spId;
+    }
+
+    public void setSpId(String spId) {
+        this.spId = spId;
+    }
+
+    public ServiceProvider getSp() {
+        return sp;
+    }
+
+    public void setSp(ServiceProvider sp) {
+        this.sp = sp;
     }
 
     public int getWay() {
@@ -78,6 +104,14 @@ public class Charge extends BaseEntity {
         this.totalPrice = totalPrice;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
@@ -85,9 +119,12 @@ public class Charge extends BaseEntity {
         sb.append("order=").append(order);
         sb.append(", taskId='").append(taskId).append('\'');
         sb.append(", type=").append(type);
+        sb.append(", spId='").append(spId).append('\'');
+        sb.append(", sp=").append(sp);
         sb.append(", way=").append(way);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

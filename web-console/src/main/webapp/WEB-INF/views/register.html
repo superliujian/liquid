@@ -30,43 +30,63 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{password}">Account Password</label>
 
             <div class="col-lg-9">
                 <input type="password" th:field="*{password}" class="form-control"/>
             </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{password}">error</span>
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('password2')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{password2}">Account Password 2</label>
 
             <div class="col-lg-9">
                 <input type="password" th:field="*{password2}" class="form-control"/>
             </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{password2}">error</span>
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('surname')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{surname}">Surnmae</label>
 
             <div class="col-lg-9">
                 <input type="text" th:field="*{surname}" class="form-control"/>
             </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{surname}">error</span>
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('givenName')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{given.name}">Given Name</label>
 
             <div class="col-lg-9">
                 <input type="text" th:field="*{givenName}" class="form-control"/>
             </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{givenName}">error</span>
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{email}">Email</label>
 
             <div class="col-lg-9">
                 <input type="text" th:field="*{email}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{email}">error</span>
             </div>
         </div>
 

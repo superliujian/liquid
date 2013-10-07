@@ -37,7 +37,6 @@ import java.sql.SQLException;
                         ChargeTypeRepository.class,
                         ContainerRepository.class,
                         OrderRepository.class,
-                        OrderJpaRepository.class,
                         PlanningRepository.class,
                         TransRailwayRepository.class,
                         TransBargeRepository.class,
