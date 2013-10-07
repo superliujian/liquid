@@ -42,9 +42,11 @@
             <th th:text="#{charge.id}">ID</th>
             <th th:text="#{order.id}">Order ID</th>
             <th th:text="#{charge.type}">Type</th>
+            <th th:text="#{sp.name}">SP Name</th>
             <th th:text="#{charge.way}">Way</th>
             <th th:text="#{charge.unit.price}">Unit Price</th>
             <th th:text="#{charge.total.price}">Total Price</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -52,9 +54,19 @@
             <td th:text="${charge.id}">ID</td>
             <td th:text="${charge.order.id}">Order ID</td>
             <td th:text="${cts[charge.type]}">Type</td>
+            <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
             <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
             <td th:text="${charge.unitPrice}">Unit Price</td>
             <td th:text="${charge.totalPrice}">Total Price</td>
+            <td>
+                <a href="/charge/id" class="btn btn-default btn-xs"
+                   th:href="'/charge/' + ${charge.id}" th:if="${charge.status} == 0">
+                    <i class="glyphicon glyphicon-credit-card"/>
+                </a>
+                <button class="btn btn-default btn-xs" th:if="${charge.status} == 1">
+                    <i class="glyphicon glyphicon-check"/>
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
