@@ -32,6 +32,18 @@ footer {
   margin-right: auto;
 }
 
+/*
+.input-group {
+  margin-left: 5px;
+  width: 150px;
+}
+
+.input-group .form-control {
+  width: 100%;
+  margin-bottom: 0;
+}
+*/
+
 .nav-tabs {
   margin-bottom: 10px;
 }

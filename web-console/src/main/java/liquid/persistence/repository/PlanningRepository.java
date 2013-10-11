@@ -13,7 +13,7 @@ import java.util.Collection;
  * Time: 12:07 PM
  */
 public interface PlanningRepository extends CrudRepository<Planning, Long> {
-    Collection<Planning> findByOrder(Order order);
+    Planning findByOrder(Order order);
 
     Planning findByOrderAndTransMode(Order order, int transMode);
 }

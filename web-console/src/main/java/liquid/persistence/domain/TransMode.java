@@ -1,5 +1,8 @@
 package liquid.persistence.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO: Comments.
  * User: tao
@@ -7,9 +10,9 @@ package liquid.persistence.domain;
  * Time: 11:59 AM
  */
 public enum TransMode {
-    RAILWAY(0, "transportation.railway"),
-    BARGE(1, "transportation.barge"),
-    VESSEL(2, "transportation.vessel");
+    RAIL(0, "rail"),
+    BARGE(1, "barge"),
+    VESSEL(2, "vessel");
 
     private final int type;
 
@@ -23,7 +26,7 @@ public enum TransMode {
     public static TransMode valueOf(int type) {
         switch (type) {
             case 0:
-                return RAILWAY;
+                return RAIL;
             case 1:
                 return BARGE;
             case 2:
@@ -32,6 +35,15 @@ public enum TransMode {
                 break;
         }
         throw new RuntimeException("input transMode is illegal.");
+    }
+
+    public static Map<Integer, String> toMap() {
+        Map<Integer, String> types = new HashMap<Integer, String>();
+        TransMode[] modeArray = values();
+        for (TransMode mode : modeArray) {
+            types.put(mode.type, mode.i18nKey);
+        }
+        return types;
     }
 
     public int getType() {

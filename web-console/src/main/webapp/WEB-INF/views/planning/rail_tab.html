@@ -7,12 +7,6 @@
     <!-- Bootstrap -->
     <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
-
-    <style>
-        div#railway.container {
-        max-width: 480px;
-        }
-    </style>
 </head>
 
 <body>
@@ -20,16 +14,30 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div id="railway" class="container">
-    <form action="/task/{taskId}/planning/{transModeKey}/{routeId}/edit" method="POST" class="form-horizontal center"
-          th:object="${transRailway}" th:method="${transRailway['new']} ? 'post' : 'put'"
-          th:action="@{${#httpServletRequest.servletPath}}">
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active" th:class="${tab} == 'rail' ? 'active'">
+            <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/rail'"
+               th:text="#{rail}">Rail</a></li>
+        <li class="active" th:class="${tab} == 'barge' ? 'active'">
+            <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/barge'"
+               th:text="#{barge}">Barge</a></li>
+        <li class="active" th:class="${tab} == 'vessel' ? 'active'">
+            <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/vessel'"
+               th:text="#{vessel}">Vessel</a></li>
+    </ul>
+</div>
+<!-- /.container -->
+
+<div class="container">
+    <form action="/task/{taskId}/planning/{tab}" method="POST" class="form-horizontal center"
+          th:object="${leg}" th:action="@{${#httpServletRequest.servletPath}}">
 
         <div class="form-group">
             <label class="col-lg-3 control-label" th:text="#{origination} + ' *'">Origination</label>
 
             <div class="col-lg-9">
-                <select th:field="*{origination}" class="form-control">
+                <select th:field="*{srcLocId}" class="form-control">
                     <option th:each="location : ${locations}"
                             th:value="${location.id}"
                             th:text="${location.name}">Location Name
@@ -42,7 +50,7 @@
             <label class="col-lg-3 control-label" th:text="#{destination} + ' *'">Destination</label>
 
             <div class="col-lg-9">
-                <select th:field="*{destination}" class="form-control">
+                <select th:field="*{dstLocId}" class="form-control">
                     <option th:each="location : ${locations}"
                             th:value="${location.id}"
                             th:text="${location.name}">Location Name
@@ -50,13 +58,23 @@
                 </select>
             </div>
         </div>
-        <input type="hidden" th:field="*{id}"/>
-        <input type="hidden" th:field="*{taskId}"/>
+
+        <!--
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"/> <span th:text="#{leg.is.head}">Is Head</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        -->
 
         <div class="form-group">
             <div class="col-lg-offset-3 col-lg-9">
-                <input type="submit" name="save" value="Save Route" class="btn btn-default"
-                       th:attr="value=#{save}"/>
+                <input type="submit" name="addLeg" value="Add Leg" class="btn btn-default"
+                       th:value="#{leg.add}"/>
             </div>
         </div>
 

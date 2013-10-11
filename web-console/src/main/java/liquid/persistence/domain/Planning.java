@@ -2,6 +2,7 @@ package liquid.persistence.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ public class Planning extends BaseEntity {
     @JoinColumn(name = "ORDER_ID")
     private Order order;
 
+    @Deprecated
     @Column(name = "TRANS_MODE")
     private int transMode;
 
@@ -25,6 +27,9 @@ public class Planning extends BaseEntity {
     // 0, NULL; 1, ADDED; 2, FULL;
     @Column(name = "STATUS")
     private int status;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "planning")
+    private Collection<Route> routes;
 
     @Transient
     private List<TransRailway> railways = new ArrayList<TransRailway>();
@@ -71,6 +76,14 @@ public class Planning extends BaseEntity {
 
     public void setRailways(List<TransRailway> railways) {
         this.railways = railways;
+    }
+
+    public Collection<Route> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(Collection<Route> routes) {
+        this.routes = routes;
     }
 
     @Override

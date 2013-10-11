@@ -44,7 +44,7 @@ public class OrderService {
     private LocationRepository locationRepository;
 
     @Autowired
-    private ActivitiEngineService bpmEngineService;
+    private ActivitiEngineService bpmService;
 
     public void save(Order order) {
         Customer customer = customerRepository.findOne(order.getCustomerId());
@@ -66,6 +66,11 @@ public class OrderService {
         Map<String, Object> variableMap = new HashMap<>();
         variableMap.put("loadingType", order.getLoadingType());
         variableMap.put("hasDelivery", order.isHasDelivery());
-        bpmEngineService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
+        bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
+    }
+
+    public Order findByTaskId(String taskId) {
+        long orderId = bpmService.getOrderIdByTaskId(taskId);
+        return orderRepository.findOne(orderId);
     }
 }

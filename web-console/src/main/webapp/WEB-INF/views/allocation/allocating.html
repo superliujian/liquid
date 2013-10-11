@@ -19,16 +19,9 @@
 <!-- {!end task bar} -->
 
 <div class="container">
-    <form action="/task/{taskId}/allocation/{tab}/{transId}/edit" method="POST" class="form-horizontal center"
-          th:object="${trans}" th:action="'/task/' + ${taskId} + '/allocation/' + ${tab} + '/' + ${trans.id} + '/edit'">
-
-        <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{trans.id}">Trans ID</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
-            </div>
-        </div>
+    <form action="/task/{taskId}/allocation/{routeId}/sc" method="POST" class="form-horizontal center"
+          th:object="${sc}"
+          th:action="'/task/' + ${taskId} + '/allocation/route/' + ${routeId} + '/sc'">
 
         <div class="form-group">
             <label class="col-lg-3 control-label" th:text="#{container}">Container</label>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active" th:class="${tab} == 'rail' ? 'active'">
+            <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/rail'"
+               th:text="#{rail}">Rail</a></li>
+        <li class="active" th:class="${tab} == 'barge' ? 'active'">
+            <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/barge'"
+               th:text="#{barge}">Barge</a></li>
+        <li class="active" th:class="${tab} == 'vessel' ? 'active'">
+            <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/vessel'"
+               th:text="#{vessel}">Vessel</a></li>
+    </ul>
+</div>
+<!-- /.container -->
+
+<div class="container">
+    <form action="/task/{taskId}/planning/{tab}" method="POST" class="form-horizontal center"
+          th:object="${leg}" th:action="@{${#httpServletRequest.servletPath}}">
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{sp} + ' *'">SP</label>
+
+            <div class="col-lg-9">
+                <select th:field="*{spId}" class="form-control">
+                    <option th:each="sp : ${sps}"
+                            th:value="${sp.id}"
+                            th:text="${sp.name}">SP Name
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{origination} + ' *'">Origination</label>
+
+            <div class="col-lg-9">
+                <select th:field="*{srcLocId}" class="form-control">
+                    <option th:each="location : ${locations}"
+                            th:value="${location.id}"
+                            th:text="${location.name}">Location Name
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{destination} + ' *'">Destination</label>
+
+            <div class="col-lg-9">
+                <select th:field="*{dstLocId}" class="form-control">
+                    <option th:each="location : ${locations}"
+                            th:value="${location.id}"
+                            th:text="${location.name}">Location Name
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <!--
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"/> <span th:text="#{leg.is.head}">Is Head</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <input type="submit" name="addLeg" value="Add Leg" class="btn btn-default"
+                       th:value="#{leg.add}"/>
+            </div>
+        </div>
+
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>

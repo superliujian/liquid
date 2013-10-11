@@ -75,9 +75,9 @@ public class TaskController {
         model.addAttribute("task", task);
         switch (task.getTaskDefinitionKey()) {
             case "planRoute":
-                return "redirect:/task/" + taskId + "/planning/railway";
+                return "redirect:/task/" + taskId + "/planning";
             case "allocateContainers":
-                return "redirect:/task/" + taskId + "/allocation/railway";
+                return "redirect:/task/" + taskId + "/allocation";
             case "loadOnYard":
             case "loadByTruck":
                 return "redirect:/task/" + taskId + "/loading";
