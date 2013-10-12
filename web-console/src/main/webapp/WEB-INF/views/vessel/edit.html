@@ -19,8 +19,8 @@
 <!-- {!end task bar} -->
 
 <div class="container">
-    <form action="/task/{taskId}/barge/{containerId}" method="POST" class="form-horizontal center"
-          th:object="${container}" th:action="'/task/' + ${taskId} + '/barge/' + ${container.id}">
+    <form action="/task/{taskId}/vessel/{containerId}" method="POST" class="form-horizontal center"
+          th:object="${container}" th:action="'/task/' + ${taskId} + '/vessel/' + ${container.id}">
 
         <div class="form-group">
             <label class="col-lg-3 control-label" th:text="#{container.no}">BIC Code</label>

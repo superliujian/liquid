@@ -81,6 +81,8 @@ public class TaskController {
                 return "redirect:/task/" + taskId + "/rail";
             case "doBargeOps":
                 return "redirect:/task/" + taskId + "/barge";
+            case "doVesselOps":
+                return "redirect:/task/" + taskId + "/vessel";
             case "planLoading":
             default:
                 return "task/common";

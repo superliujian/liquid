@@ -37,6 +37,9 @@ public class ShippingContainerService {
     private BargeContainerRepository bcRepository;
 
     @Autowired
+    private VesselContainerRepository vcRepository;
+
+    @Autowired
     private RouteRepository routeRepository;
 
     @Autowired
@@ -279,4 +282,86 @@ public class ShippingContainerService {
         }
     }
 
+    public Iterable<VesselContainer> initVesselContainers(String taskId) {
+        Order order = orderService.findByTaskId(taskId);
+        Collection<VesselContainer> vcList = vcRepository.findByOrder(order);
+        if (vcList.size() > 0) {
+            for (VesselContainer container : vcList) {
+                if (container.getEts() != null) {
+                    container.setEtsStr(DateUtils.dayStrOf(container.getEts()));
+                }
+            }
+            return vcList;
+        }
+
+        vcList = new ArrayList<VesselContainer>();
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        for (Route route : routes) {
+            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+            List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
+            if (legList.size() > 0) {
+                for (ShippingContainer sc : scList) {
+                    VesselContainer bc = new VesselContainer();
+                    bc.setOrder(route.getPlanning().getOrder());
+                    bc.setLeg(legList.get(0));
+                    bc.setSc(sc);
+                    vcList.add(bc);
+                }
+            }
+        }
+
+        return bcRepository.save(vcList);
+    }
+
+    public VesselContainer findVesselContainer(long containerId) {
+        VesselContainer vesselContainer = vcRepository.findOne(containerId);
+
+        String defaultDayStr = DateUtils.dayStrOf(new Date());
+        if (null == vesselContainer.getEts())
+            vesselContainer.setEtsStr(defaultDayStr);
+        else
+            vesselContainer.setEtsStr(DateUtils.dayStrOf(vesselContainer.getEts()));
+
+        return vesselContainer;
+    }
+
+    public void saveVesselContainer(long containerId, VesselContainer formBean) {
+        VesselContainer container = vcRepository.findOne(containerId);
+
+        if (formBean.isBatch()) {
+            Collection<VesselContainer> containers = vcRepository.findByOrder(container.getOrder());
+
+            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
+                for (VesselContainer rc : containers) {
+                    rc.setEts(DateUtils.dayOf(formBean.getEtsStr()));
+                }
+            }
+
+            if (formBean.getBolNo() != null && formBean.getBolNo().trim().length() > 0) {
+                for (VesselContainer rc : containers) {
+                    rc.setBolNo(formBean.getBolNo());
+                }
+            }
+
+            if (formBean.getSlot() != null && formBean.getSlot().trim().length() > 0) {
+                for (VesselContainer rc : containers) {
+                    rc.setSlot(formBean.getSlot());
+                }
+            }
+
+            vcRepository.save(containers);
+        } else {
+            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
+                container.setEts(DateUtils.dayOf(formBean.getEtsStr()));
+            }
+            if (formBean.getBolNo() != null && formBean.getBolNo().trim().length() > 0) {
+                container.setBolNo(formBean.getBolNo());
+            }
+
+            if (formBean.getSlot() != null && formBean.getSlot().trim().length() > 0) {
+                container.setSlot(formBean.getSlot());
+            }
+            vcRepository.save(container);
+        }
+    }
 }

@@ -27,28 +27,28 @@
                 <table class="table table-striped table-hover table-condensed table-16">
                     <thead>
                     <tr>
-                        <th th:text="#{shipping.origination}">Barge Origination</th>
-                        <th th:text="#{shipping.destination}">Barge Destination</th>
+                        <th th:text="#{shipping.origination}">Vessel Origination</th>
+                        <th th:text="#{shipping.destination}">Vessel Destination</th>
                         <th th:text="#{sp.name}">SP Name</th>
                         <th th:text="#{container.no}">Container No.</th>
                         <th th:text="#{bol.no}">BOL No.</th>
-                        <th th:text="#{slot}">Barge SLOT</th>
-                        <th th:text="#{shipping.ets}">Barge ETS</th>
+                        <th th:text="#{slot}">Vessel SLOT</th>
+                        <th th:text="#{shipping.ets}">Vessel ETS</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="container : ${containers}">
-                        <td th:text="${container.leg.srcLoc.name}">Barge Origination</td>
-                        <td th:text="${container.leg.dstLoc.name}">Barge Destination</td>
+                        <td th:text="${container.leg.srcLoc.name}">Vessel Origination</td>
+                        <td th:text="${container.leg.dstLoc.name}">Vessel Destination</td>
                         <td th:text="${container.leg.sp.name}">SP Name</td>
                         <td th:text="${container.sc.container.bicCode}">Container No.</td>
                         <td th:text="${container.bolNo}">BOL No.</td>
                         <td th:text="${container.slot}">Slot</td>
-                        <td th:text="${container.etsStr}">Barge ETS</td>
+                        <td th:text="${container.etsStr}">Vessel ETS</td>
                         <td>
-                            <a href="/task/{taskId}/barge/{containerId}" class="btn btn-default btn-xs"
-                               th:href="'/task/' + ${task.id} + '/barge/' + ${container.id}">
+                            <a href="/task/{taskId}/vessel/{containerId}" class="btn btn-default btn-xs"
+                               th:href="'/task/' + ${task.id} + '/vessel/' + ${container.id}">
                                 <i class="glyphicon glyphicon-edit"/>
                             </a>
                         </td>
