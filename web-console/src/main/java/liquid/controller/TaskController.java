@@ -1,7 +1,6 @@
 package liquid.controller;
 
 import liquid.persistence.domain.TransMode;
-import liquid.persistence.repository.TransRailwayRepository;
 import liquid.service.PlanningService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;
@@ -35,9 +34,6 @@ public class TaskController {
 
     @Autowired
     private PlanningService planningService;
-
-    @Autowired
-    private TransRailwayRepository transRailwayRepository;
 
     @ModelAttribute("transModes")
     public TransMode[] populateTransMedes() {

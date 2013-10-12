@@ -2,7 +2,6 @@ package liquid.persistence.repository;
 
 import liquid.persistence.domain.Charge;
 import liquid.persistence.domain.Order;
-import liquid.persistence.domain.TransRailway;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

@@ -31,9 +31,6 @@ public class Planning extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "planning")
     private Collection<Route> routes;
 
-    @Transient
-    private List<TransRailway> railways = new ArrayList<TransRailway>();
-
     public Planning() {}
 
     public Order getOrder() {
@@ -69,14 +66,6 @@ public class Planning extends BaseEntity {
     }
 
     // Transient
-
-    public List<TransRailway> getRailways() {
-        return railways;
-    }
-
-    public void setRailways(List<TransRailway> railways) {
-        this.railways = railways;
-    }
 
     public Collection<Route> getRoutes() {
         return routes;

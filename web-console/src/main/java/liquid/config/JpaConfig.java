@@ -41,9 +41,7 @@ import java.sql.SQLException;
                         RouteRepository.class,
                         LegRepository.class,
                         ShippingContainerRepository.class,
-                        TransRailwayRepository.class,
-                        TransBargeRepository.class,
-                        TransVesselRepository.class,
+                        RailContainerRepository.class,
                         ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
