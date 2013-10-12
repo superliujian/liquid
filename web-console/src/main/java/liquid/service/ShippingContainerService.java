@@ -34,6 +34,9 @@ public class ShippingContainerService {
     private RailContainerRepository rcRepository;
 
     @Autowired
+    private BargeContainerRepository bcRepository;
+
+    @Autowired
     private RouteRepository routeRepository;
 
     @Autowired
@@ -192,4 +195,88 @@ public class ShippingContainerService {
             rcRepository.save(container);
         }
     }
+
+    public Iterable<BargeContainer> initBargeContainers(String taskId) {
+        Order order = orderService.findByTaskId(taskId);
+        Collection<BargeContainer> bcList = bcRepository.findByOrder(order);
+        if (bcList.size() > 0) {
+            for (BargeContainer container : bcList) {
+                if (container.getEts() != null) {
+                    container.setEtsStr(DateUtils.dayStrOf(container.getEts()));
+                }
+            }
+            return bcList;
+        }
+
+        bcList = new ArrayList<BargeContainer>();
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        for (Route route : routes) {
+            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+            List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
+            if (legList.size() > 0) {
+                for (ShippingContainer sc : scList) {
+                    BargeContainer bc = new BargeContainer();
+                    bc.setOrder(route.getPlanning().getOrder());
+                    bc.setLeg(legList.get(0));
+                    bc.setSc(sc);
+                    bcList.add(bc);
+                }
+            }
+        }
+
+        return bcRepository.save(bcList);
+    }
+
+    public BargeContainer findBargeContainer(long containerId) {
+        BargeContainer bargeContainer = bcRepository.findOne(containerId);
+
+        String defaultDayStr = DateUtils.dayStrOf(new Date());
+        if (null == bargeContainer.getEts())
+            bargeContainer.setEtsStr(defaultDayStr);
+        else
+            bargeContainer.setEtsStr(DateUtils.dayStrOf(bargeContainer.getEts()));
+
+        return bargeContainer;
+    }
+
+    public void saveBargeContainer(long containerId, BargeContainer formBean) {
+        BargeContainer container = bcRepository.findOne(containerId);
+
+        if (formBean.isBatch()) {
+            Collection<BargeContainer> containers = bcRepository.findByOrder(container.getOrder());
+
+            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
+                for (BargeContainer rc : containers) {
+                    rc.setEts(DateUtils.dayOf(formBean.getEtsStr()));
+                }
+            }
+
+            if (formBean.getBolNo() != null && formBean.getBolNo().trim().length() > 0) {
+                for (BargeContainer rc : containers) {
+                    rc.setBolNo(formBean.getBolNo());
+                }
+            }
+
+            if (formBean.getSlot() != null && formBean.getSlot().trim().length() > 0) {
+                for (BargeContainer rc : containers) {
+                    rc.setSlot(formBean.getSlot());
+                }
+            }
+
+            bcRepository.save(containers);
+        } else {
+            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
+                container.setEts(DateUtils.dayOf(formBean.getEtsStr()));
+            }
+            if (formBean.getBolNo() != null && formBean.getBolNo().trim().length() > 0) {
+                container.setBolNo(formBean.getBolNo());
+            }
+
+            if (formBean.getSlot() != null && formBean.getSlot().trim().length() > 0) {
+                container.setSlot(formBean.getSlot());
+            }
+            bcRepository.save(container);
+        }
+    }
+
 }

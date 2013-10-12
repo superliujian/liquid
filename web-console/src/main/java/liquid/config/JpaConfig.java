@@ -42,6 +42,7 @@ import java.sql.SQLException;
                         LegRepository.class,
                         ShippingContainerRepository.class,
                         RailContainerRepository.class,
+                        BargeContainerRepository.class,
                         ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement

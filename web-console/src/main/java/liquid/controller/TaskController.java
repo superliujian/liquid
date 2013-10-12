@@ -79,6 +79,8 @@ public class TaskController {
             case "applyRailwayPlan":
             case "recordTod":
                 return "redirect:/task/" + taskId + "/rail";
+            case "doBargeOps":
+                return "redirect:/task/" + taskId + "/barge";
             case "planLoading":
             default:
                 return "task/common";
