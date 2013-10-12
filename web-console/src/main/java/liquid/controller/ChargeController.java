@@ -5,6 +5,7 @@ import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.persistence.repository.OrderRepository;
 import liquid.service.ChargeService;
+import liquid.service.OrderService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class ChargeController {
     private ActivitiEngineService bpmService;
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
 
     @Autowired
     private ChargeTypeRepository ctRepository;
@@ -95,7 +96,7 @@ public class ChargeController {
         logger.debug("referer: {}", referer);
 
         long orderId = bpmService.getOrderIdByTaskId(charge.getTaskId());
-        Order order = orderRepository.findOne(orderId);
+        Order order = orderService.find(orderId);
 
         charge.setOrder(order);
 

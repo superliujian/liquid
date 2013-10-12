@@ -107,7 +107,7 @@ public class OrderController extends BaseChargeController {
 
         } else {
             try {
-                model.addAttribute("orders", orderRepository.findOne(Long.parseLong(param)));
+                model.addAttribute("orders", orderService.find(Long.parseLong(param)));
             } catch (Exception e) {
                 logger.warn("An exception was thrown when calling findById", e);
             }
@@ -172,9 +172,7 @@ public class OrderController extends BaseChargeController {
                          Model model, Principal principal) {
         logger.debug("id: {}", id);
 
-        Order order = orderRepository.findOne(id);
-        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
-        order.setDestination(String.valueOf(order.getDstLoc().getId()));
+        Order order = orderService.find(id);
         List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);
@@ -187,12 +185,8 @@ public class OrderController extends BaseChargeController {
                            Model model, Principal principal) {
         logger.debug("id: {}", id);
         logger.debug("action: {}", action);
-        Order order = orderRepository.findOne(id);
-        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
-        order.setDestination(String.valueOf(order.getDstLoc().getId()));
-        // TODO: looking for the better way to do that
-        order.setCustomerId(order.getCustomer().getId());
-        order.setCargoId(order.getCargo().getId());
+
+        Order order = orderService.find(id);
         logger.debug("order: {}", order);
 
         List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
@@ -209,9 +203,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
         logger.debug("tab: {}", tab);
 
-        Order order = orderRepository.findOne(id);
-        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
-        order.setDestination(String.valueOf(order.getDstLoc().getId()));
+        Order order = orderService.find(id);
 
         switch (tab) {
             case "task":

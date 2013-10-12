@@ -2,6 +2,7 @@ package liquid.controller;
 
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
+import liquid.service.OrderService;
 import liquid.service.PlanningService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class PlanningController extends BaseTaskController {
     private PlanningRepository planningRepository;
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
 
     @Autowired
     private ChargeTypeRepository ctRepository;
@@ -53,13 +54,15 @@ public class PlanningController extends BaseTaskController {
     @Autowired
     private LegRepository legRepository;
 
+    public PlanningController() {}
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Order order = orderRepository.findOne(bpmService.getOrderIdByTaskId(taskId));
-        Planning planning = planningRepository.findByOrder(order);
+        Planning planning = planningService.findByTaskId(taskId);
+
         if (null == planning) {
             planning = new Planning();
             model.addAttribute("planning", planning);
@@ -95,7 +98,7 @@ public class PlanningController extends BaseTaskController {
                                  Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Order order = orderRepository.findOne(bpmService.getOrderIdByTaskId(taskId));
+        Order order = orderService.find(bpmService.getOrderIdByTaskId(taskId));
         planning.setOrder(order);
         planning.setStatus(PlanningStatus.ADDED.getValue());
         Planning newOne = planningRepository.save(planning);

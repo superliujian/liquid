@@ -71,6 +71,17 @@ public class OrderService {
 
     public Order findByTaskId(String taskId) {
         long orderId = bpmService.getOrderIdByTaskId(taskId);
-        return orderRepository.findOne(orderId);
+        return find(orderId);
+    }
+
+    public Order find(long id) {
+        Order order = orderRepository.findOne(id);
+
+        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
+        order.setDestination(String.valueOf(order.getDstLoc().getId()));
+        order.setCustomerId(order.getCustomer().getId());
+        order.setCargoId(order.getCargo().getId());
+
+        return order;
     }
 }
