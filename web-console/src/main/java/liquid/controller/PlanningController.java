@@ -100,7 +100,6 @@ public class PlanningController extends BaseTaskController {
 
         Order order = orderService.find(bpmService.getOrderIdByTaskId(taskId));
         planning.setOrder(order);
-        planning.setStatus(PlanningStatus.ADDED.getValue());
         Planning newOne = planningRepository.save(planning);
         model.addAttribute("planning", newOne);
         return "redirect:/task/" + taskId + "/planning/" + newOne.getId();

@@ -24,10 +24,6 @@ public class Planning extends BaseEntity {
     @Column(name = "SAME_ROUTE")
     private boolean sameRoute;
 
-    // 0, NULL; 1, ADDED; 2, FULL;
-    @Column(name = "STATUS")
-    private int status;
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "planning")
     private Collection<Route> routes;
 
@@ -57,14 +53,6 @@ public class Planning extends BaseEntity {
         this.sameRoute = sameRoute;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     // Transient
 
     public Collection<Route> getRoutes() {
@@ -82,7 +70,7 @@ public class Planning extends BaseEntity {
         sb.append("order=").append(order);
         sb.append(", transMode=").append(transMode);
         sb.append(", sameRoute=").append(sameRoute);
-        sb.append(", status=").append(status);
+        sb.append(", routes=").append(routes);
         sb.append('}');
         return sb.toString();
     }
