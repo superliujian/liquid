@@ -125,12 +125,9 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model, Principal principal) {
-        Order order = new Order();
+        List<Location> locations = locationRepository.findByType(LocationType.CITY.getType());
 
-        List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
-
-        long locationId = getDefaultLocationId(locations);
-        order.setDestination(String.valueOf(locationId));
+        Order order = orderService.newOrder(locations);
 
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);
@@ -225,16 +222,5 @@ public class OrderController extends BaseChargeController {
         model.addAttribute("order", order);
         model.addAttribute("tab", tab);
         return "order/" + tab;
-    }
-
-    private long getDefaultLocationId(List<Location> locations) {
-        int size = locations.size();
-        long id = 0;
-        if (size < 2) {
-            id = locations.get(0).getId();
-        } else {
-            id = locations.get(1).getId();
-        }
-        return id;
     }
 }

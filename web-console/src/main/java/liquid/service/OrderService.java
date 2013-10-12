@@ -10,12 +10,17 @@ import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.OrderRepository;
 import liquid.service.bpm.ActivitiEngineService;
+import liquid.utils.CollectionUtils;
+import liquid.utils.DateUtils;
+import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,15 +51,25 @@ public class OrderService {
     @Autowired
     private ActivitiEngineService bpmService;
 
+    public Order newOrder(List<Location> locations) {
+        Order order = new Order();
+        Location second = CollectionUtils.tryToGet2ndElement(locations);
+        order.setDestination(second.getId());
+        order.setLoadingEtStr(DateUtils.stringOf(new Date()));
+        return order;
+    }
+
     public void save(Order order) {
         Customer customer = customerRepository.findOne(order.getCustomerId());
         Cargo cargo = cargoRepository.findOne(order.getCargoId());
-        Location srcLoc = locationRepository.findOne(Long.valueOf(order.getOrigination()));
-        Location dstLoc = locationRepository.findOne(Long.valueOf(order.getDestination()));
+        Location srcLoc = locationRepository.findOne(order.getOrigination());
+        Location dstLoc = locationRepository.findOne(order.getDestination());
         order.setCustomer(customer);
         order.setCargo(cargo);
         order.setSrcLoc(srcLoc);
         order.setDstLoc(dstLoc);
+        if (StringUtils.valuable(order.getLoadingEtStr()))
+            order.setLoadingEt(DateUtils.dateOf(order.getLoadingEtStr()));
         logger.debug("Order: {}", order);
         orderRepository.save(order);
     }
@@ -77,10 +92,13 @@ public class OrderService {
     public Order find(long id) {
         Order order = orderRepository.findOne(id);
 
-        order.setOrigination(String.valueOf(order.getSrcLoc().getId()));
-        order.setDestination(String.valueOf(order.getDstLoc().getId()));
+        order.setOrigination(order.getSrcLoc().getId());
+        order.setDestination(order.getDstLoc().getId());
         order.setCustomerId(order.getCustomer().getId());
         order.setCargoId(order.getCargo().getId());
+        order.setLoadingEtStr(order.getLoadingEt() == null
+                ? DateUtils.stringOf(new Date())
+                : DateUtils.stringOf(order.getLoadingEt()));
 
         return order;
     }

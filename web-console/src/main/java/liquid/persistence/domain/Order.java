@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * TODO: Comments.
@@ -31,14 +32,14 @@ public class Order extends BaseEntity {
     private Location srcLoc;
 
     @Transient
-    private String origination;
+    private long origination;
 
     @ManyToOne
     @JoinColumn(name = "DST_LOC_ID")
     private Location dstLoc;
 
     @Transient
-    private String destination;
+    private long destination;
 
     @Column(name = "CONSIGNEE")
     @NotNull
@@ -64,6 +65,25 @@ public class Order extends BaseEntity {
     // 0: yard; 1: truck
     @Column(name = "LOADING_TYPE")
     private int loadingType;
+
+    // For loading by truck
+    @Column(name = "LOADING_ADDR")
+    private String loadingAddress;
+
+    @Column(name = "LOADING_CONTACT")
+    private String loadingContact;
+
+    @Column(name = "LOADING_PHONE")
+    private String loadingPhone;
+
+    /**
+     * Estimated Time of Loading
+     */
+    @Column(name = "LOADING_ET")
+    private Date loadingEt;
+
+    @Transient
+    private String loadingEtStr;
 
     @Column(name = "HAS_DELIVERY")
     private boolean hasDelivery;
@@ -161,6 +181,46 @@ public class Order extends BaseEntity {
         this.loadingType = loadingType;
     }
 
+    public String getLoadingAddress() {
+        return loadingAddress;
+    }
+
+    public void setLoadingAddress(String loadingAddress) {
+        this.loadingAddress = loadingAddress;
+    }
+
+    public String getLoadingContact() {
+        return loadingContact;
+    }
+
+    public void setLoadingContact(String loadingContact) {
+        this.loadingContact = loadingContact;
+    }
+
+    public String getLoadingPhone() {
+        return loadingPhone;
+    }
+
+    public void setLoadingPhone(String loadingPhone) {
+        this.loadingPhone = loadingPhone;
+    }
+
+    public Date getLoadingEt() {
+        return loadingEt;
+    }
+
+    public void setLoadingEt(Date loadingEt) {
+        this.loadingEt = loadingEt;
+    }
+
+    public String getLoadingEtStr() {
+        return loadingEtStr;
+    }
+
+    public void setLoadingEtStr(String loadingEtStr) {
+        this.loadingEtStr = loadingEtStr;
+    }
+
     public boolean isHasDelivery() {
         return hasDelivery;
     }
@@ -243,19 +303,19 @@ public class Order extends BaseEntity {
         this.cargoId = cargoId;
     }
 
-    public String getOrigination() {
+    public long getOrigination() {
         return origination;
     }
 
-    public void setOrigination(String origination) {
+    public void setOrigination(long origination) {
         this.origination = origination;
     }
 
-    public String getDestination() {
+    public long getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(long destination) {
         this.destination = destination;
     }
 
@@ -275,6 +335,11 @@ public class Order extends BaseEntity {
         sb.append(", cargoWeight=").append(cargoWeight);
         sb.append(", tradeType=").append(tradeType);
         sb.append(", loadingType=").append(loadingType);
+        sb.append(", loadingAddress='").append(loadingAddress).append('\'');
+        sb.append(", loadingContact='").append(loadingContact).append('\'');
+        sb.append(", loadingPhone='").append(loadingPhone).append('\'');
+        sb.append(", loadingEt=").append(loadingEt);
+        sb.append(", loadingEtStr='").append(loadingEtStr).append('\'');
         sb.append(", hasDelivery=").append(hasDelivery);
         sb.append(", containerType=").append(containerType);
         sb.append(", containerCap=").append(containerCap);
