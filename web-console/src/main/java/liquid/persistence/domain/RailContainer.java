@@ -40,6 +40,19 @@ public class RailContainer extends BaseEntity {
     @Transient
     private boolean batch;
 
+    @Column(name = "TRANS_PLAN_NO")
+    private String transPlanNo;
+
+    /**
+     * Estimated time of shipping
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ETS")
+    private Date ets;
+
+    @Transient
+    private String etsStr;
+
     /**
      * Time of Arrival at station.
      */
@@ -111,6 +124,30 @@ public class RailContainer extends BaseEntity {
         this.batch = batch;
     }
 
+    public String getTransPlanNo() {
+        return transPlanNo;
+    }
+
+    public void setTransPlanNo(String transPlanNo) {
+        this.transPlanNo = transPlanNo;
+    }
+
+    public Date getEts() {
+        return ets;
+    }
+
+    public void setEts(Date ets) {
+        this.ets = ets;
+    }
+
+    public String getEtsStr() {
+        return etsStr;
+    }
+
+    public void setEtsStr(String etsStr) {
+        this.etsStr = etsStr;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
@@ -122,6 +159,9 @@ public class RailContainer extends BaseEntity {
         sb.append(", loadingToc=").append(loadingToc);
         sb.append(", stationToaStr='").append(stationToaStr).append('\'');
         sb.append(", batch=").append(batch);
+        sb.append(", transPlanNo='").append(transPlanNo).append('\'');
+        sb.append(", ets=").append(ets);
+        sb.append(", etsStr='").append(etsStr).append('\'');
         sb.append(", stationToa=").append(stationToa);
         sb.append('}');
         return sb.toString();

@@ -65,6 +65,9 @@ public class ShippingContainerService {
                 if (container.getStationToa() != null) {
                     container.setStationToaStr(DateUtils.stringOf(container.getStationToa()));
                 }
+                if (container.getEts() != null) {
+                    container.setEtsStr(DateUtils.dayStrOf(container.getEts()));
+                }
             }
             return rcList;
         }
@@ -100,6 +103,12 @@ public class ShippingContainerService {
             railContainer.setStationToaStr(defaultDateStr);
         else
             railContainer.setStationToaStr(DateUtils.stringOf(railContainer.getStationToa()));
+
+        String defaultDayStr = DateUtils.dayStrOf(new Date());
+        if (null == railContainer.getEts())
+            railContainer.setEtsStr(defaultDayStr);
+        else
+            railContainer.setEtsStr(DateUtils.dayStrOf(railContainer.getStationToa()));
         return railContainer;
     }
 
@@ -108,14 +117,43 @@ public class ShippingContainerService {
 
         if (formBean.isBatch()) {
             Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
-            for (RailContainer rc : containers) {
-                rc.setLoadingToc(DateUtils.dateOf(formBean.getLoadingTocStr()));
-                rc.setStationToa(DateUtils.dateOf(formBean.getStationToaStr()));
+            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
+                for (RailContainer rc : containers) {
+                    rc.setLoadingToc(DateUtils.dateOf(formBean.getLoadingTocStr()));
+                }
+            }
+
+            if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
+                for (RailContainer rc : containers) {
+                    rc.setStationToa(DateUtils.dateOf(formBean.getStationToaStr()));
+                }
+            }
+
+            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
+                for (RailContainer rc : containers) {
+                    rc.setEts(DateUtils.dayOf(formBean.getEtsStr()));
+                }
+            }
+
+            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
+                for (RailContainer rc : containers) {
+                    rc.setTransPlanNo(formBean.getTransPlanNo());
+                }
             }
             rcRepository.save(containers);
         } else {
-            container.setLoadingToc(DateUtils.dateOf(formBean.getLoadingTocStr()));
-            container.setStationToa(DateUtils.dateOf(formBean.getStationToaStr()));
+            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
+                container.setLoadingToc(DateUtils.dateOf(formBean.getLoadingTocStr()));
+            }
+            if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
+                container.setStationToa(DateUtils.dateOf(formBean.getStationToaStr()));
+            }
+            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
+                container.setEts(DateUtils.dayOf(formBean.getEtsStr()));
+            }
+            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
+                container.setTransPlanNo(formBean.getTransPlanNo());
+            }
             rcRepository.save(container);
         }
     }

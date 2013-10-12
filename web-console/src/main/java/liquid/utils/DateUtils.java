@@ -27,6 +27,20 @@ public class DateUtils {
         }
     }
 
+    public static String dayStrOf(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    public static Date dayOf(String dateStr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            throw new RuntimeException(dateStr + " format is illegal.");
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(DateUtils.stringOf(new Date()));
         System.out.println(DateUtils.dateOf("2013-10-03 22:50"));

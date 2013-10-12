@@ -76,7 +76,8 @@ public class TaskController {
                 return "redirect:/task/" + taskId + "/allocation";
             case "loadOnYard":
             case "loadByTruck":
-                return "redirect:/task/" + taskId + "/loading";
+            case "applyRailwayPlan":
+                return "redirect:/task/" + taskId + "/rail";
             case "planLoading":
             default:
                 return "task/common";
