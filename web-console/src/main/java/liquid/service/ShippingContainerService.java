@@ -68,6 +68,12 @@ public class ShippingContainerService {
                 if (container.getEts() != null) {
                     container.setEtsStr(DateUtils.dayStrOf(container.getEts()));
                 }
+                if (container.getAts() != null) {
+                    container.setAtsStr(DateUtils.stringOf(container.getAts()));
+                }
+                if (container.getAta() != null) {
+                    container.setAtaStr(DateUtils.stringOf(container.getAta()));
+                }
             }
             return rcList;
         }
@@ -108,7 +114,17 @@ public class ShippingContainerService {
         if (null == railContainer.getEts())
             railContainer.setEtsStr(defaultDayStr);
         else
-            railContainer.setEtsStr(DateUtils.dayStrOf(railContainer.getStationToa()));
+            railContainer.setEtsStr(DateUtils.dayStrOf(railContainer.getEts()));
+
+        if (null == railContainer.getAts())
+            railContainer.setAtsStr(defaultDateStr);
+        else
+            railContainer.setAtsStr(DateUtils.stringOf(railContainer.getAts()));
+
+        if (null == railContainer.getAta())
+            railContainer.setAtaStr(defaultDateStr);
+        else
+            railContainer.setAtaStr(DateUtils.stringOf(railContainer.getAta()));
         return railContainer;
     }
 
@@ -129,17 +145,30 @@ public class ShippingContainerService {
                 }
             }
 
+            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
+                for (RailContainer rc : containers) {
+                    rc.setTransPlanNo(formBean.getTransPlanNo());
+                }
+            }
+
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (RailContainer rc : containers) {
                     rc.setEts(DateUtils.dayOf(formBean.getEtsStr()));
                 }
             }
 
-            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
+            if (formBean.getAtsStr() != null && formBean.getAtsStr().trim().length() > 0) {
                 for (RailContainer rc : containers) {
-                    rc.setTransPlanNo(formBean.getTransPlanNo());
+                    rc.setAts(DateUtils.dateOf(formBean.getAtsStr()));
                 }
             }
+
+            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
+                for (RailContainer rc : containers) {
+                    rc.setAta(DateUtils.dateOf(formBean.getAtaStr()));
+                }
+            }
+
             rcRepository.save(containers);
         } else {
             if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
@@ -148,11 +177,17 @@ public class ShippingContainerService {
             if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
                 container.setStationToa(DateUtils.dateOf(formBean.getStationToaStr()));
             }
+            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
+                container.setTransPlanNo(formBean.getTransPlanNo());
+            }
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 container.setEts(DateUtils.dayOf(formBean.getEtsStr()));
             }
-            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
-                container.setTransPlanNo(formBean.getTransPlanNo());
+            if (formBean.getAtsStr() != null && formBean.getAtsStr().trim().length() > 0) {
+                container.setAts(DateUtils.dateOf(formBean.getAtsStr()));
+            }
+            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
+                container.setAta(DateUtils.dateOf(formBean.getAtaStr()));
             }
             rcRepository.save(container);
         }

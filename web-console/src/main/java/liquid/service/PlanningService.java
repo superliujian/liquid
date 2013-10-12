@@ -31,6 +31,9 @@ public class PlanningService {
     private OrderService orderService;
 
     @Autowired
+    private RouteService routeService;
+
+    @Autowired
     private PlanningRepository planningRepository;
 
     public void editPlanning(String taskId, long planningId, boolean sameRoute) {
@@ -46,26 +49,28 @@ public class PlanningService {
         transTypes.put("hasBarge", false);
         transTypes.put("hasVessel", false);
 
-        Planning planning = findByTaskId(taskId);
-        //TODO:
-//        logger.debug("planning size: {}", plannings.size());
-//        for (Planning planning : plannings) {
-//            TransMode mode = TransMode.valueOf(planning.getTransMode());
-//            switch (mode) {
-//                case RAIL:
-//                    transTypes.put("hasRailway", true);
-//                    break;
-//                case BARGE:
-//                    transTypes.put("hasBarge", true);
-//                    break;
-//                case VESSEL:
-//                    transTypes.put("hasVessel", true);
-//                    break;
-//                default:
-//                    logger.warn("{} transportation mode is illegal.");
-//                    break;
-//            }
-//        }
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        for (Route route : routes) {
+            Collection<Leg> legs = route.getLegs();
+            for (Leg leg : legs) {
+                TransMode mode = TransMode.valueOf(leg.getTransMode());
+                switch (mode) {
+                    case RAIL:
+                        transTypes.put("hasRailway", true);
+                        break;
+                    case BARGE:
+                        transTypes.put("hasBarge", true);
+                        break;
+                    case VESSEL:
+                        transTypes.put("hasVessel", true);
+                        break;
+                    default:
+                        logger.warn("{} transportation mode is illegal.");
+                        break;
+                }
+            }
+        }
+
         logger.debug("The order has the transportation {}.", transTypes);
         return transTypes;
     }

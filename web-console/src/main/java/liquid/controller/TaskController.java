@@ -77,6 +77,7 @@ public class TaskController {
             case "loadOnYard":
             case "loadByTruck":
             case "applyRailwayPlan":
+            case "recordTod":
                 return "redirect:/task/" + taskId + "/rail";
             case "planLoading":
             default:

@@ -37,6 +37,13 @@ public class RailContainer extends BaseEntity {
     @Transient
     private String stationToaStr;
 
+    /**
+     * Time of Arrival at station.
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "STATION_TOA")
+    private Date stationToa;
+
     @Transient
     private boolean batch;
 
@@ -54,11 +61,24 @@ public class RailContainer extends BaseEntity {
     private String etsStr;
 
     /**
-     * Time of Arrival at station.
+     * Actual time of shipping
      */
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "STATION_TOA")
-    private Date stationToa;
+    @Column(name = "ATS")
+    private Date ats;
+
+    @Transient
+    private String atsStr;
+
+    /**
+     * Actual time of arrival
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "ATA")
+    private Date ata;
+
+    @Transient
+    private String ataStr;
 
     public Order getOrder() {
         return order;
@@ -148,6 +168,39 @@ public class RailContainer extends BaseEntity {
         this.etsStr = etsStr;
     }
 
+    public Date getAts() {
+
+        return ats;
+    }
+
+    public void setAts(Date ats) {
+        this.ats = ats;
+    }
+
+    public String getAtsStr() {
+        return atsStr;
+    }
+
+    public void setAtsStr(String atsStr) {
+        this.atsStr = atsStr;
+    }
+
+    public Date getAta() {
+        return ata;
+    }
+
+    public void setAta(Date ata) {
+        this.ata = ata;
+    }
+
+    public String getAtaStr() {
+        return ataStr;
+    }
+
+    public void setAtaStr(String ataStr) {
+        this.ataStr = ataStr;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
@@ -158,11 +211,15 @@ public class RailContainer extends BaseEntity {
         sb.append(", loadingTocStr='").append(loadingTocStr).append('\'');
         sb.append(", loadingToc=").append(loadingToc);
         sb.append(", stationToaStr='").append(stationToaStr).append('\'');
+        sb.append(", stationToa=").append(stationToa);
         sb.append(", batch=").append(batch);
         sb.append(", transPlanNo='").append(transPlanNo).append('\'');
         sb.append(", ets=").append(ets);
         sb.append(", etsStr='").append(etsStr).append('\'');
-        sb.append(", stationToa=").append(stationToa);
+        sb.append(", ats=").append(ats);
+        sb.append(", atsStr='").append(atsStr).append('\'');
+        sb.append(", ata=").append(ata);
+        sb.append(", ataStr='").append(ataStr).append('\'');
         sb.append('}');
         return sb.toString();
     }
