@@ -4,6 +4,7 @@ import liquid.context.BusinessContext;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.service.ChargeService;
+import liquid.service.LocationService;
 import liquid.service.OrderService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
@@ -41,10 +42,10 @@ public class OrderController extends BaseChargeController {
     private CargoRepository cargoRepository;
 
     @Autowired
-    private LocationRepository locationRepository;
+    private OrderService orderService;
 
     @Autowired
-    private OrderService orderService;
+    private LocationService locationService;
 
     @Autowired
     private BusinessContext businessContext;
@@ -125,7 +126,7 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model, Principal principal) {
-        List<Location> locations = locationRepository.findByType(LocationType.CITY.getType());
+        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
 
         Order order = orderService.newOrder(locations);
 
@@ -170,7 +171,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
 
         Order order = orderService.find(id);
-        List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
+        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
@@ -186,7 +187,7 @@ public class OrderController extends BaseChargeController {
         Order order = orderService.find(id);
         logger.debug("order: {}", order);
 
-        List<Location> locations = locationRepository.findByType(LocationType.STATION.getType());
+        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
 
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);

@@ -18,8 +18,6 @@ import java.util.Date;
  */
 @Entity(name = "ORDER_BASE")
 public class Order extends BaseEntity {
-    private static final Logger logger = LoggerFactory.getLogger(Order.class);
-
     @Transient
     private long customerId;
 
@@ -112,10 +110,6 @@ public class Order extends BaseEntity {
     // 1 saved; 2: submitted
     @Column(name = "STATUS")
     private int status;
-
-    public static Logger getLogger() {
-        return logger;
-    }
 
     public Customer getCustomer() {
         return customer;
