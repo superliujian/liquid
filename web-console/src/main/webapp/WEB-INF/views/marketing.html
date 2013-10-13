@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    Welcome Marketing!
+    <table th:unless="${#lists.isEmpty(tasks)}">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.id}">id</td>
+            <td th:text="${task.name}">name</td>
+            <td th:text="${task.description}">description</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+</body>
+</html>

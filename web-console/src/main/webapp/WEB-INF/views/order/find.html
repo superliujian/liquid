@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- order bar -->
+<div class="jumbotron">
+    <div class="container">
+        <form action="/order" method="GET" class="form-inline">
+            <div class="form-group">
+                <label class="sr-only" for="param" th:text="#{order.id}"/>
+                <input type="text" class="form-control" id="param" name="param" placeholder="ID or Customer Name"/>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" name="findById" value="Find Orders By ID" class="btn btn-default"
+                       th:value="#{order.find.by.id}"/>
+                <input type="submit" name="findByCustomerName" value="Find Orders By Customer Name"
+                       class="btn btn-default"
+                       th:value="#{order.find.by.customer.name}"/>
+                <input type="submit" name="add" value="Create Order" class="btn btn-default"
+                       th:value="#{order.create}"/>
+            </div>
+        </form>
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /.jumbotron -->
+
+<div class="container">
+    <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(orders)}">
+        <thead>
+        <tr>
+            <th th:text="#{order.id}">ID</th>
+            <th th:text="#{customer.name}">Customer Name</th>
+            <th th:text="#{origination}">Origin</th>
+            <th th:text="#{destination}">Destination</th>
+            <th th:text="#{cargo.name}">Cargo Name</th>
+            <th th:text="#{cargo.weight}">Cargo Weight</th>
+            <th th:text="#{trade.type}">Trade Type</th>
+            <th th:text="#{loading.type}">Loading Type</th>
+            <th th:text="#{has.delivery}">Has Delivery</th>
+            <th th:text="#{container.type}">Container Type</th>
+            <th th:text="#{container.capacity}">Container Capacity</th>
+            <th th:text="#{container.quantity}">Container Quantity</th>
+            <th th:text="#{price}">Price</th>
+            <th th:text="#{extra.expense}">Extra Expense</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td>
+                <a href="/order/id?action=edit" th:href="'/order/' + ${order.id}" th:text="${order.id}"/>
+            </td>
+            <td th:text="${order.customer.name}">Customer Name</td>
+            <td th:text="${order.srcLoc.name}">Origin</td>
+            <td th:text="${order.dstLoc.name}">Destination</td>
+            <td th:text="${order.cargo.name}"></td>
+            <td th:text="${order.cargoWeight}">Cargo Weight</td>
+            <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
+            <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
+            <td th:text="#{${order.hasDelivery}}">Has Delivery</td>
+            <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
+            <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
+            <td th:text="${order.containerQty}">Container Quantity</td>
+            <td th:text="${order.price}">Price</td>
+            <td th:text="${order.extExp}">Extra Expense</td>
+            <td>
+                <a href="/order/id?action=edit" class="btn btn-default btn-xs"
+                   th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
+                    <i class="glyphicon glyphicon-edit"/>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<div class="container" th:if="${task.assignee}">
+    <div class="btn-toolbar">
+        <form action="/task/${taskId}/planning" method="POST" class="form-inline"
+              th:object="${planning}" th:action="@{${#httpServletRequest.servletPath}}">
+
+            <input type="submit" name="createPlanning" value="Create Planning" class="btn btn-default"
+                   th:value="#{trans.add.planning}" th:if="${planning['new']}"/>
+
+            <div class="btn-group" th:unless="${planning['new']}">
+                <button type="submit" name="applyMulti" value="Apply Multiple Routes" class="btn btn-default"
+                        th:text="#{trans.same.route}" th:if="${planning['sameRoute']}"/>
+
+                <button type="submit" name="applySame" value="Apply Same Route" class="btn btn-default"
+                        th:text="#{trans.multi.routes}" th:unless="${planning['sameRoute']}"/>
+
+                <button type="submit" name="deletePlanning" value="Delete Planning Settings" class="btn btn-default"
+                        th:text="#{trans.delete.planning}"/>
+            </div>
+        </form>
+
+        <form action="/task/${taskId}/planning/{planningId}/route" method="POST"
+              th:object="${route}" th:action="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route'">
+            <div th:unless="${planning['new']}">
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"
+                              th:text="#{container.quantity} + '(' + ${planning.order.containerQty} + ')'">Container QTY</span>
+                        <input class="form-control" type="text" th:field="*{containerQty}"
+                               th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" name="addRoute" value="Add Route"
+                                    th:text="#{route.add}">Add Route
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /.container -->
+
+<br/>
+
+<div class="container" th:unless="${#lists.isEmpty(planning.routes)}">
+    <div class="panel panel-default" th:each="route : ${planning.routes}">
+        <div class="panel-heading">
+            <span th:text="#{route} + ${route.id}">Route ID</span>
+            <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            <a href="/task/{taskId}/planning/{planningId}/route/{routeId}" class="btn btn-default btn-xs"
+               th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${route.id} + '/rail'">
+                <i class="glyphicon glyphicon-plus"/>
+            </a>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-striped table-hover table-condensed table-16"
+                   th:unless="${#lists.isEmpty(route.legs)}">
+                <thead>
+                <tr>
+                    <th th:text="#{leg.id}">Leg ID</th>
+                    <th th:text="#{trans.mode}">Trans Mode</th>
+                    <th th:text="#{sp.name}">SP Name</th>
+                    <th th:text="#{origination}">Origination</th>
+                    <th th:text="#{destination}">Destination</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="leg : ${route.legs}">
+                    <td th:text="${leg.id}">Leg ID</td>
+                    <td th:text="#{${transModes[leg.transMode]}}">Trans Mode</td>
+                    <td th:text="${leg.sp} ? ${leg.sp.name} : ''">SP Name</td>
+                    <td th:text="${leg.srcLoc.name}">Origination</td>
+                    <td th:text="${leg.dstLoc.name}">Destination</td>
+                    <td>
+                        <a href="/task/{taskId}/planning/{planningId}/route/{routeId}/leg/{legId}"
+                           class="btn btn-default btn-xs"
+                           th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${route.id} + '/leg/' + ${leg.id}">
+                            <i class="glyphicon glyphicon-minus"/>
+                        </a>
+                        <a href="/task/{taskId}/leg/{legId}/charge" class="btn btn-default btn-xs"
+                           th:href="'/task/' + ${taskId} + '/leg/' + ${leg.id} + '/charge'">
+                            <i class="glyphicon glyphicon-credit-card"/>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{charge}"></div>
+
+        <div class="panel-body">
+            <table class="table table-striped table-hover table-condensed table-16"
+                   th:unless="${#lists.isEmpty(charges)}">
+                <thead>
+                <tr>
+                    <th th:text="#{route}">Route ID</th>
+                    <th th:text="#{leg}">Leg ID</th>
+                    <th th:text="#{trans.mode}">Trans Mode</th>
+                    <th th:text="#{charge.type}">Type</th>
+                    <th th:text="#{sp.name}">SP Name</th>
+                    <th th:text="#{charge.way}">Way</th>
+                    <th th:text="#{charge.unit.price}">Unit Price</th>
+                    <th th:text="#{charge.total.price}">Total Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="charge : ${charges}">
+                    <!-- NOTE: Very important expression -->
+                    <td th:text="${charge.leg.route.id}">Route ID</td>
+                    <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Route ID</td>
+                    <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>
+                    <td th:text="${cts[charge.type]}">Type</td>
+                    <td th:text="${charge.sp.name}">SP Name</td>
+                    <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
+                    <td th:text="${charge.unitPrice}">Unit Price</td>
+                    <td th:text="${charge.totalPrice}">Total Price</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap-3.0.0.js"></script>
+</body>
+
+</html>
