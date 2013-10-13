@@ -17,4 +17,6 @@ public interface LegRepository extends CrudRepository<Leg, Long> {
     Collection<Leg> findByRoute(Route route);
 
     List<Leg> findByRouteAndTransMode(Route route, int transMode);
+
+
 }

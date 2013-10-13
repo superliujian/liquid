@@ -2,6 +2,7 @@ package liquid.controller;
 
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
+import liquid.service.ChargeService;
 import liquid.service.OrderService;
 import liquid.service.PlanningService;
 import org.slf4j.Logger;
@@ -54,6 +55,9 @@ public class PlanningController extends BaseTaskController {
     @Autowired
     private LegRepository legRepository;
 
+    @Autowired
+    private ChargeService chargeService;
+
     public PlanningController() {}
 
     @RequestMapping(method = RequestMethod.GET)
@@ -89,6 +93,10 @@ public class PlanningController extends BaseTaskController {
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("planning", planning);
         model.addAttribute("route", new Route());
+
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("charges", chargeService.findByTaskId(taskId));
         return "planning/main";
     }
 

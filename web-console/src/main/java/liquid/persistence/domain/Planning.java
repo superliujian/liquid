@@ -70,7 +70,6 @@ public class Planning extends BaseEntity {
         sb.append("order=").append(order);
         sb.append(", transMode=").append(transMode);
         sb.append(", sameRoute=").append(sameRoute);
-        sb.append(", routes=").append(routes);
         sb.append('}');
         return sb.toString();
     }

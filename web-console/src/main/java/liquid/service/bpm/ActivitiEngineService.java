@@ -103,4 +103,30 @@ public class ActivitiEngineService {
         TaskService taskService = processEngine.getTaskService();
         return taskService.createTaskQuery().processInstanceBusinessKey(String.valueOf(orderId)).list();
     }
+
+    public String computeTaskMainPath(String taskId) {
+        Task task = getTask(taskId);
+        return computeTaskMainPath(task);
+    }
+
+    public String computeTaskMainPath(Task task) {
+        switch (task.getTaskDefinitionKey()) {
+            case "planRoute":
+                return "/task/" + task.getId() + "/planning";
+            case "allocateContainers":
+                return "/task/" + task.getId() + "/allocation";
+            case "loadOnYard":
+            case "loadByTruck":
+            case "applyRailwayPlan":
+            case "recordTod":
+                return "/task/" + task.getId() + "/rail";
+            case "doBargeOps":
+                return "/task/" + task.getId() + "/barge";
+            case "doVesselOps":
+                return "/task/" + task.getId() + "/vessel";
+            case "planLoading":
+            default:
+                return "/task/" + task.getId() + "/common";
+        }
+    }
 }

@@ -62,6 +62,16 @@ public class TaskController {
         return "task";
     }
 
+    @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
+    public String toCommon(@PathVariable String taskId,
+                           Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        Task task = bpmService.getTask(taskId);
+        logger.debug("task: {}", TaskHelper.stringOf(task));
+        model.addAttribute("task", task);
+        return "task/common";
+    }
+
     @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
     public String toRealTask(@PathVariable String taskId,
                              Model model, Principal principal) {
@@ -69,24 +79,8 @@ public class TaskController {
         Task task = bpmService.getTask(taskId);
         logger.debug("task: {}", TaskHelper.stringOf(task));
         model.addAttribute("task", task);
-        switch (task.getTaskDefinitionKey()) {
-            case "planRoute":
-                return "redirect:/task/" + taskId + "/planning";
-            case "allocateContainers":
-                return "redirect:/task/" + taskId + "/allocation";
-            case "loadOnYard":
-            case "loadByTruck":
-            case "applyRailwayPlan":
-            case "recordTod":
-                return "redirect:/task/" + taskId + "/rail";
-            case "doBargeOps":
-                return "redirect:/task/" + taskId + "/barge";
-            case "doVesselOps":
-                return "redirect:/task/" + taskId + "/vessel";
-            case "planLoading":
-            default:
-                return "task/common";
-        }
+
+        return "redirect:" + bpmService.computeTaskMainPath(taskId);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")

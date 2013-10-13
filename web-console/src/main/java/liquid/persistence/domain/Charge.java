@@ -18,11 +18,18 @@ public class Charge extends BaseEntity {
     @Column(name = "TASK_ID")
     private String taskId;
 
+    @ManyToOne
+    @JoinColumn(name = "LEG_ID")
+    private Leg leg;
+
+    @Transient
+    private long formLegId;
+
     @Column(name = "TYPE")
     private long type;
 
     @Transient
-    private String spId;
+    private long spId;
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
@@ -56,6 +63,22 @@ public class Charge extends BaseEntity {
         this.taskId = taskId;
     }
 
+    public Leg getLeg() {
+        return leg;
+    }
+
+    public void setLeg(Leg leg) {
+        this.leg = leg;
+    }
+
+    public long getFormLegId() {
+        return formLegId;
+    }
+
+    public void setFormLegId(long formLegId) {
+        this.formLegId = formLegId;
+    }
+
     public long getType() {
         return type;
     }
@@ -64,11 +87,11 @@ public class Charge extends BaseEntity {
         this.type = type;
     }
 
-    public String getSpId() {
+    public long getSpId() {
         return spId;
     }
 
-    public void setSpId(String spId) {
+    public void setSpId(long spId) {
         this.spId = spId;
     }
 
@@ -118,8 +141,10 @@ public class Charge extends BaseEntity {
         sb.append("Charge{");
         sb.append("order=").append(order);
         sb.append(", taskId='").append(taskId).append('\'');
+        sb.append(", leg=").append(leg);
+        sb.append(", formLegId=").append(formLegId);
         sb.append(", type=").append(type);
-        sb.append(", spId='").append(spId).append('\'');
+        sb.append(", spId=").append(spId);
         sb.append(", sp=").append(sp);
         sb.append(", way=").append(way);
         sb.append(", unitPrice=").append(unitPrice);

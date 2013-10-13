@@ -36,6 +36,9 @@ public class PlanningService {
     @Autowired
     private PlanningRepository planningRepository;
 
+    @Autowired
+    private LegRepository legRepository;
+
     public void editPlanning(String taskId, long planningId, boolean sameRoute) {
         Planning oldOne = planningRepository.findOne(planningId);
         oldOne.setSameRoute(sameRoute);
@@ -78,5 +81,9 @@ public class PlanningService {
     public Planning findByTaskId(String taskId) {
         Order order = orderService.findByTaskId(taskId);
         return planningRepository.findByOrder(order);
+    }
+
+    public Leg findLeg(long legId) {
+        return legRepository.findOne(legId);
     }
 }
