@@ -49,12 +49,24 @@
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group" th:classappend="${#fields.hasErrors('consignee')} ? 'has-error'">
                         <label th:text="#{consignee} + ' *'">Consignee</label>
                         <input type="text" th:field="*{consignee}" class="form-control"/>
 
                         <span th:errors="*{consignee}">error</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group" th:classappend="${#fields.hasErrors('consigneePhone')} ? 'has-error'">
+                        <label th:text="#{consignee.phone} + ' *'">Consignee</label>
+                        <input type="text" th:field="*{consigneePhone}" class="form-control"/>
+
+                        <span th:errors="*{consigneePhone}">error</span>
                     </div>
                 </div>
             </div>
@@ -163,7 +175,8 @@
                         <label th:text="#{container.type}">Container Type</label>
                         <ul class="list-inline">
                             <li th:each="containerType : ${containerTypes}">
-                                <input type="radio" th:field="*{containerType}"
+                                <input type="radio"
+                                       th:field="*{containerType}"
                                        th:value="${containerType.type}"/>
                                 <label th:for="${#ids.prev('containerType')}"
                                        th:text="#{${containerType.i18nKey}}">Container Type</label>
@@ -179,7 +192,8 @@
                         <label th:text="#{container.capacity}">Container Capacity</label>
                         <ul class="list-inline">
                             <li th:each="capacity : ${containerCaps}">
-                                <input type="radio" th:field="*{containerCap}" th:value="${capacity.type}"/>
+                                <input type="radio"
+                                       th:field="*{containerCap}" th:value="${capacity.type}"/>
                                 <label th:for="${#ids.prev('containerCap')}"
                                        th:text="${capacity.name}">Container Capacity</label>
                             </li>
@@ -192,7 +206,7 @@
                 <div class="col-lg-12">
                     <div class="form-group" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'">
                         <label th:text="#{container.quantity} + ' *'">Container Quantity</label>
-                        <input type="text" th:field="*{containerQty}" class="form-control"/>
+                        <input type="text" th:field="*{containerQty}" class="form-control" disabled="disabled"/>
 
                         <span th:errors="*{containerQty}">error</span>
                     </div>
@@ -257,11 +271,9 @@
 <div th:include="layout :: footer"></div>
 <!-- {!end layout} -->
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/resources/js/jquery-1.10.2.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/resources/js/bootstrap-3.0.0.js"></script>
-
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
 </body>
 
 </html>

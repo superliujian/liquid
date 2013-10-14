@@ -68,7 +68,30 @@ public class ReceivingOrderController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String initFind(Model model) {
-        model.addAttribute("orders", recvOrderService.findAll());
+        model.addAttribute("orders", recvOrderService.findAllOrderByDesc());
+        return "recv_order/find";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "findById")
+    public String findById(@RequestParam String param, Model model, Principal principal) {
+        logger.debug("param: {}", param);
+        if (null == param || param.trim().length() == 0) {} else {
+            try {
+                model.addAttribute("orders", recvOrderService.find(Long.parseLong(param)));
+                return "recv_order/find";
+            } catch (Exception e) {
+                logger.warn("An exception was thrown when calling findById", e);
+            }
+        }
+        model.addAttribute("orders", recvOrderService.findAllOrderByDesc());
+        return "recv_order/find";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
+    public String findByCustomerName(@RequestParam String param, Model model, Principal principal) {
+        logger.debug("param: {}", param);
+
+        model.addAttribute("orders", recvOrderService.findByCustomerName(param));
         return "recv_order/find";
     }
 
@@ -118,6 +141,19 @@ public class ReceivingOrderController {
             recvOrderService.save(order);
             return "redirect:/recv_order";
         }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String detail(@PathVariable long id,
+                         Model model, Principal principal) {
+        logger.debug("id: {}", id);
+
+        ReceivingOrder order = recvOrderService.find(id);
+        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
+        model.addAttribute("locations", locations);
+        model.addAttribute("order", order);
+        model.addAttribute("tab", "detail");
+        return "recv_order/detail";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")

@@ -4,16 +4,14 @@ import liquid.persistence.domain.*;
 import liquid.persistence.repository.ReceivingContainerRepository;
 import liquid.persistence.repository.ReceivingOrderRepository;
 import liquid.utils.CollectionUtils;
-import liquid.utils.DateUtils;
-import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,6 +81,10 @@ public class ReceivingOrderService {
         return recvOrderRepository.findAll();
     }
 
+    public List<ReceivingOrder> findAllOrderByDesc() {
+        return recvOrderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+    }
+
     public ReceivingOrder find(long id) {
         ReceivingOrder order = recvOrderRepository.findOne(id);
 
@@ -97,5 +99,9 @@ public class ReceivingOrderService {
         }
 
         return order;
+    }
+
+    public Iterable<ReceivingOrder> findByCustomerName(String customerName) {
+        return recvOrderRepository.findByCustomerNameLike("%" + customerName + "%");
     }
 }

@@ -16,6 +16,7 @@ import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -89,6 +90,10 @@ public class OrderService {
         return find(orderId);
     }
 
+    public List<Order> findAllOrderByDesc() {
+        return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+    }
+
     public Order find(long id) {
         Order order = orderRepository.findOne(id);
 
@@ -101,5 +106,9 @@ public class OrderService {
                 : DateUtils.stringOf(order.getLoadingEt()));
 
         return order;
+    }
+
+    public Iterable<Order> findByCustomerName(String customerName) {
+        return orderRepository.findByCustomerNameLike("%" + customerName + "%");
     }
 }

@@ -10,20 +10,7 @@ import java.util.Date;
  * Time: 10:22 AM
  */
 @Entity(name = "RAIL_CONTAINER")
-public class RailContainer extends BaseEntity {
-
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
-
-    @ManyToOne
-    @JoinColumn(name = "LEG_ID")
-    private Leg leg;
-
-    @OneToOne
-    @JoinColumn(name = "SC_ID")
-    private ShippingContainer sc;
-
+public class RailContainer extends BaseLegContainer {
     @Transient
     private String loadingTocStr;
 
@@ -79,30 +66,6 @@ public class RailContainer extends BaseEntity {
 
     @Transient
     private String ataStr;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Leg getLeg() {
-        return leg;
-    }
-
-    public void setLeg(Leg leg) {
-        this.leg = leg;
-    }
-
-    public ShippingContainer getSc() {
-        return sc;
-    }
-
-    public void setSc(ShippingContainer sc) {
-        this.sc = sc;
-    }
 
     public String getLoadingTocStr() {
         return loadingTocStr;
@@ -205,10 +168,7 @@ public class RailContainer extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("RailContainer{");
-        sb.append("order=").append(order);
-        sb.append(", leg=").append(leg);
-        sb.append(", sc=").append(sc);
-        sb.append(", loadingTocStr='").append(loadingTocStr).append('\'');
+        sb.append("loadingTocStr='").append(loadingTocStr).append('\'');
         sb.append(", loadingToc=").append(loadingToc);
         sb.append(", stationToaStr='").append(stationToaStr).append('\'');
         sb.append(", stationToa=").append(stationToa);
