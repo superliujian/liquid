@@ -1,11 +1,9 @@
 package liquid.persistence.domain;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * TODO: Comments.
@@ -23,6 +21,16 @@ public class Route extends BaseEntity {
     @Min(1)
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
+
+    @Column(name = "DELIVERY_ADDR")
+    private String deliveryAddress;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DELIVERY_DATE")
+    private Date deliveryDate;
+
+    @Transient
+    private String deliveryDateStr;
 
     @Transient
     private Collection<Leg> legs;
@@ -44,6 +52,30 @@ public class Route extends BaseEntity {
 
     public void setContainerQty(int containerQty) {
         this.containerQty = containerQty;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public String getDeliveryDateStr() {
+        return deliveryDateStr;
+    }
+
+    public void setDeliveryDateStr(String deliveryDateStr) {
+        this.deliveryDateStr = deliveryDateStr;
     }
 
     public Collection<Leg> getLegs() {
@@ -68,6 +100,11 @@ public class Route extends BaseEntity {
         sb.append("Route{");
         sb.append("planning=").append(planning);
         sb.append(", containerQty=").append(containerQty);
+        sb.append(", deliveryAddress='").append(deliveryAddress).append('\'');
+        sb.append(", deliveryDate=").append(deliveryDate);
+        sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
+        sb.append(", legs=").append(legs);
+        sb.append(", containers=").append(containers);
         sb.append('}');
         return sb.toString();
     }

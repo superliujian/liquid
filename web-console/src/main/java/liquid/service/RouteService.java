@@ -9,6 +9,7 @@ import liquid.persistence.repository.RouteRepository;
 import liquid.persistence.repository.ShippingContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -43,5 +44,13 @@ public class RouteService {
             route.setContainers(containers);
         }
         return routes;
+    }
+
+    @Transactional("transactionManager")
+    public Route save(Route formBean, Planning planning) {
+        formBean.setPlanning(planning);
+        formBean.setDeliveryAddress(planning.getOrder().getLoadingAddress());
+        Route route = routeRepository.save(formBean);
+        return route;
     }
 }
