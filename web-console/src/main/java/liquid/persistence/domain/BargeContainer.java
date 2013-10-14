@@ -10,20 +10,7 @@ import java.util.Date;
  * Time: 2:42 PM
  */
 @Entity(name = "BARGE_CONTAINER")
-public class BargeContainer extends BaseEntity {
-
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
-
-    @ManyToOne
-    @JoinColumn(name = "LEG_ID")
-    private Leg leg;
-
-    @OneToOne
-    @JoinColumn(name = "SC_ID")
-    private ShippingContainer sc;
-
+public class BargeContainer extends BaseLegContainer {
     /**
      * Bill of Lading No.
      */
@@ -45,30 +32,6 @@ public class BargeContainer extends BaseEntity {
 
     @Transient
     private boolean batch;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public Leg getLeg() {
-        return leg;
-    }
-
-    public void setLeg(Leg leg) {
-        this.leg = leg;
-    }
-
-    public ShippingContainer getSc() {
-        return sc;
-    }
-
-    public void setSc(ShippingContainer sc) {
-        this.sc = sc;
-    }
 
     public String getBolNo() {
         return bolNo;
@@ -114,10 +77,7 @@ public class BargeContainer extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("BargeContainer{");
-        sb.append("order=").append(order);
-        sb.append(", leg=").append(leg);
-        sb.append(", sc=").append(sc);
-        sb.append(", bolNo='").append(bolNo).append('\'');
+        sb.append("bolNo='").append(bolNo).append('\'');
         sb.append(", slot='").append(slot).append('\'');
         sb.append(", ets=").append(ets);
         sb.append(", etsStr='").append(etsStr).append('\'');

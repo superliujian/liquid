@@ -2,16 +2,14 @@ package liquid.controller;
 
 import liquid.context.BusinessContext;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
-import liquid.service.ChargeService;
-import liquid.service.LocationService;
-import liquid.service.OrderService;
+import liquid.persistence.repository.CargoRepository;
+import liquid.persistence.repository.CustomerRepository;
+import liquid.service.*;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,19 +31,16 @@ public class OrderController extends BaseChargeController {
     private static final Logger logger = LoggerFactory.getLogger(Order.class);
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private CargoRepository cargoRepository;
-
-    @Autowired
     private OrderService orderService;
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private CargoTypeService cargoTypeService;
 
     @Autowired
     private BusinessContext businessContext;
@@ -56,19 +51,14 @@ public class OrderController extends BaseChargeController {
     @Autowired
     private ChargeService chargeService;
 
-    @ModelAttribute("orders")
-    public Iterable<Order> populateOrders() {
-        return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
-    }
-
     @ModelAttribute("customers")
     public Iterable<Customer> populateCustomers() {
-        return customerRepository.findAll();
+        return customerService.findAll();
     }
 
     @ModelAttribute("cargos")
     public Iterable<Cargo> populateCargos() {
-        return cargoRepository.findAll();
+        return cargoTypeService.findAll();
     }
 
     @ModelAttribute("tradeTypes")
@@ -98,21 +88,22 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String initFind(Model model, Principal principal) {
+        model.addAttribute("orders", orderService.findAllOrderByDesc());
         return "order/find";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findById")
     public String findById(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
-        if (null == param || param.trim().length() == 0) {
-
-        } else {
+        if (null == param || param.trim().length() == 0) {} else {
             try {
                 model.addAttribute("orders", orderService.find(Long.parseLong(param)));
+                return "order/find";
             } catch (Exception e) {
                 logger.warn("An exception was thrown when calling findById", e);
             }
         }
+        model.addAttribute("orders", orderService.findAllOrderByDesc());
         return "order/find";
     }
 
@@ -120,7 +111,7 @@ public class OrderController extends BaseChargeController {
     public String findByCustomerName(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
 
-        model.addAttribute("orders", orderRepository.findByCustomerNameLike("%" + param + "%"));
+        model.addAttribute("orders", orderService.findByCustomerName(param));
         return "order/find";
     }
 
@@ -137,11 +128,13 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.POST, params = "save")
     public String save(@Valid @ModelAttribute Order order,
-                       BindingResult bindingResult, Principal principal) {
+                       BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SAVED.getValue());
 
         if (bindingResult.hasErrors()) {
+            List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+            model.addAttribute("locations", locations);
             return "order/form";
         } else {
             orderService.save(order);
@@ -151,13 +144,15 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
-                         BindingResult bindingResult, Principal principal) {
+                         BindingResult bindingResult, Model model, Principal principal) {
         // TODO: add to interceptor.
         businessContext.setUsername(principal.getName());
 
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SUBMITTED.getValue());
         if (bindingResult.hasErrors()) {
+            List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+            model.addAttribute("locations", locations);
             return "order/form";
         } else {
             orderService.submit(order);

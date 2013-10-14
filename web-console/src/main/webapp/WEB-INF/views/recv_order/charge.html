@@ -20,11 +20,11 @@
     <br/>
     <ul class="nav nav-tabs">
         <li class="active" th:class="${tab} == 'detail' ? 'active'">
-            <a th:href="'/order/' + ${order.id} + '/detail'" th:text="#{order.detail}">Order Detail</a></li>
+            <a th:href="'/recv_order/' + ${order.id} + '/detail'" th:text="#{order.detail}">Order Detail</a></li>
         <li class="active" th:class="${tab} == 'task' ? 'active'">
-            <a th:href="'/order/' + ${order.id} + '/task'" th:text="#{task}">Task</a></li>
+            <a th:href="'/recv_order/' + ${order.id} + '/task'" th:text="#{task}">Task</a></li>
         <li class="active" th:class="${tab} == 'charge' ? 'active'">
-            <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
+            <a th:href="'/recv_order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
     </ul>
 </div>
 <!-- /.container -->
@@ -57,10 +57,9 @@
 <div th:include="layout :: footer"></div>
 <!-- {!end layout} -->
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="//code.jquery.com/jquery.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/resources/js/bootstrap-3.0.0.js"></script>
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
 </body>
 
 </html>

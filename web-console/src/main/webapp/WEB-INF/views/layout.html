@@ -30,7 +30,9 @@
                             <span th:text="#{order}">Order</span><b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/order" th:text="#{order.shipping}">Shipping Order<b class="caret"></b></a></li>
+                            <li>
+                                <a href="/order" th:text="#{order.shipping}">Shipping Order<b class="caret"></b></a>
+                            </li>
                             <li><a href="/recv_order" th:text="#{order.receiving}">Receiving Order</a></li>
                         </ul>
                     </li>
@@ -196,10 +198,12 @@
 </div>
 <!--/footer -->
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="//code.jquery.com/jquery.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/resources/js/bootstrap-3.0.0.js"></script>
+<div th:fragment="js">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/resources/js/jquery-1.10.2.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/resources/js/bootstrap-3.0.0.js"></script>
+</div>
 </body>
 
 </html>

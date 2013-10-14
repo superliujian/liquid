@@ -20,10 +20,13 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div id="order" class="container">
 <br/>
 
+<div id="order" class="container">
+
 <form id="orderForm" action="/order" method="POST" th:object="${order}" class="center">
+<div class="panel panel-default">
+<div class="panel-body">
 <div class="row" th:if="${order.id}">
     <div class="col-lg-4">
         <div class="form-group">
@@ -71,13 +74,35 @@
             </select>
         </div>
     </div>
+</div>
 
+<div class="row">
     <div class="col-lg-4">
         <div class="form-group" th:classappend="${#fields.hasErrors('consignee')} ? 'has-error'">
             <label th:text="#{consignee} + ' *'">Consignee</label>
             <input type="text" th:field="*{consignee}" class="form-control"/>
 
             <span th:errors="*{consignee}">error</span>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="form-group" th:classappend="${#fields.hasErrors('consigneePhone')} ? 'has-error'">
+            <label th:text="#{consignee.phone} + ' *'">Consignee</label>
+            <input type="text" th:field="*{consigneePhone}" class="form-control"/>
+
+            <span th:errors="*{consigneePhone}">error</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="form-group" th:classappend="${#fields.hasErrors('consigneeAddress')} ? 'has-error'">
+            <label th:text="#{consignee.address} + ' *'">Consignee Address</label>
+            <input type="text" th:field="*{consigneeAddress}" class="form-control"/>
+
+            <span th:errors="*{consigneeAddress}">error</span>
         </div>
     </div>
 </div>
@@ -248,6 +273,8 @@
         </div>
     </div>
 </div>
+</div>
+</div>
 
 <div class="row">
     <div class="col-md-9"></div>
@@ -267,10 +294,9 @@
 <div th:include="layout :: footer"></div>
 <!-- {!end layout} -->
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/resources/js/jquery-1.10.2.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/resources/js/bootstrap-3.0.0.js"></script>
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
 
 <script>
     $(document).ready(function(){
