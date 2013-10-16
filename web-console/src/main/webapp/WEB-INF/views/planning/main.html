@@ -19,6 +19,7 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
+
     <div class="btn-toolbar">
         <form action="/task/${taskId}/planning" method="POST" class="form-inline"
               th:object="${planning}" th:action="@{${#httpServletRequest.servletPath}}">
@@ -52,8 +53,10 @@
                                     th:text="#{route.add}">Add Route
                             </button>
                         </span>
+                        <input type="hidden" name="containerQtyMax" th:value="${planning.order.containerQty}"/>
                     </div>
                 </div>
+                <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>
             </div>
         </form>
     </div>

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Time: 5:42 PM
  */
 @Component
-public abstract class BaseTaskController {
+public abstract class BaseTaskController extends BaseController {
     @Autowired
     protected ActivitiEngineService bpmService;
 

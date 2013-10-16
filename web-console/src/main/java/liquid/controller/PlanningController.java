@@ -5,6 +5,7 @@ import liquid.persistence.repository.*;
 import liquid.service.ChargeService;
 import liquid.service.OrderService;
 import liquid.service.PlanningService;
+import liquid.service.RouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class PlanningController extends BaseTaskController {
 
     @Autowired
     private PlanningService planningService;
+
+    @Autowired
+    private RouteService routeService;
 
     @Autowired
     private PlanningRepository planningRepository;
@@ -161,12 +165,14 @@ public class PlanningController extends BaseTaskController {
 
         Planning planning = planningRepository.findOne(Long.valueOf(planningId));
         if (result.hasErrors()) {
-
+            model.addAttribute("planning", planning);
+            return "planning/main";
+        } else if (route.getContainerQty() > planning.getOrder().getContainerQty()) {
+            setFieldError(result, "route", "containerQty", route.getContainerQty(), planning.getOrder().getContainerQty());
             model.addAttribute("planning", planning);
             return "planning/main";
         } else {
-            route.setPlanning(planning);
-            routeRepository.save(route);
+            routeService.save(route, planning);
             String redirect = "redirect:/task/" + taskId + "/planning/" + planningId;
             return redirect;
         }

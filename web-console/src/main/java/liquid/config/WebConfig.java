@@ -80,9 +80,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public Locale locale() {
+        return Locale.CHINA;
+    }
+
+    @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.CHINA);
+        localeResolver.setDefaultLocale(locale());
         return localeResolver;
     }
 }
