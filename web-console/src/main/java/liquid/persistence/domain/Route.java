@@ -43,6 +43,9 @@ public class Route extends BaseEntity {
     @Transient
     private Collection<ShippingContainer> containers;
 
+    @Transient
+    private boolean batch;
+
     public Planning getPlanning() {
         return planning;
     }
@@ -107,6 +110,14 @@ public class Route extends BaseEntity {
         this.containers = containers;
     }
 
+    public boolean isBatch() {
+        return batch;
+    }
+
+    public void setBatch(boolean batch) {
+        this.batch = batch;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
@@ -119,6 +130,7 @@ public class Route extends BaseEntity {
         sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
         sb.append(", legs=").append(legs);
         sb.append(", containers=").append(containers);
+        sb.append(", batch=").append(batch);
         sb.append('}');
         return sb.toString();
     }

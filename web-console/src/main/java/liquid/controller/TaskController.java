@@ -35,11 +35,6 @@ public class TaskController {
     @Autowired
     private PlanningService planningService;
 
-    @ModelAttribute("transModes")
-    public TransMode[] populateTransMedes() {
-        return TransMode.values();
-    }
-
     @RequestMapping(method = RequestMethod.GET)
     public void tasks(Model model, Principal principal) {
         logger.debug("Role: {}", RoleHelper.getRole(principal));

@@ -124,6 +124,8 @@ public class ActivitiEngineService {
                 return "/task/" + task.getId() + "/barge";
             case "doVesselOps":
                 return "/task/" + task.getId() + "/vessel";
+            case "deliver":
+                return "/task/" + task.getId() + "/delivery";
             case "planLoading":
             default:
                 return "/task/" + task.getId() + "/common";
