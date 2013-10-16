@@ -14,10 +14,6 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<!-- {!begin task bar} -->
-<div th:include="layout :: task-bar"/>
-<!-- {!end task bar} -->
-
 <div class="container">
     <form action="/task/{taskId}/delivery/{routeId}" method="POST" class="form-horizontal center"
           th:object="${route}" th:action="'/task/' + ${taskId} + '/delivery/' + ${route.id}">
