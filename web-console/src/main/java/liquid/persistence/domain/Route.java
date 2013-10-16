@@ -1,5 +1,7 @@
 package liquid.persistence.domain;
 
+import liquid.validation.constraints.ContainerQtyMax;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.Collection;
@@ -17,6 +19,9 @@ public class Route extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "PLANNING_ID")
     private Planning planning;
+
+    @Transient
+    private int containerQtyMax;
 
     @Min(1)
     @Column(name = "CONTAINER_QTY")
@@ -44,6 +49,14 @@ public class Route extends BaseEntity {
 
     public void setPlanning(Planning planning) {
         this.planning = planning;
+    }
+
+    public int getContainerQtyMax() {
+        return containerQtyMax;
+    }
+
+    public void setContainerQtyMax(int containerQtyMax) {
+        this.containerQtyMax = containerQtyMax;
     }
 
     public int getContainerQty() {
@@ -99,6 +112,7 @@ public class Route extends BaseEntity {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Route{");
         sb.append("planning=").append(planning);
+        sb.append(", containerQtyMax=").append(containerQtyMax);
         sb.append(", containerQty=").append(containerQty);
         sb.append(", deliveryAddress='").append(deliveryAddress).append('\'');
         sb.append(", deliveryDate=").append(deliveryDate);

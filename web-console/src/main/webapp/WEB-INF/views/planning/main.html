@@ -53,6 +53,7 @@
                                     th:text="#{route.add}">Add Route
                             </button>
                         </span>
+                        <input type="hidden" name="containerQtyMax" th:value="${planning.order.containerQty}"/>
                     </div>
                 </div>
                 <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>

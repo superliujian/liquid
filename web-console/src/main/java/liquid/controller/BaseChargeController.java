@@ -15,7 +15,7 @@ import java.util.Map;
  * Time: 10:55 PM
  */
 @Component
-public abstract class BaseChargeController {
+public abstract class BaseChargeController extends BaseController {
 
     @Autowired
     protected ChargeTypeRepository ctRepository;
