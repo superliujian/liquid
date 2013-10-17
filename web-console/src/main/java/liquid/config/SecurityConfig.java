@@ -1,13 +1,21 @@
 package liquid.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * TODO: Comments.
@@ -37,12 +45,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resources/**"); // #3
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandler() {
+            @Override
+            public void handle(HttpServletRequest request, HttpServletResponse response,
+                               AccessDeniedException e) throws IOException, ServletException {
+                response.sendRedirect("error/403");
+                request.getSession().setAttribute("message",
+                        "You do not have permission to access this page!");
+            }
+        };
+        return accessDeniedHandler;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeUrls()
                 .antMatchers("/register", "/about").permitAll() // #4
                 .antMatchers("/admin/**").hasRole("ADMIN") // #6
+                .antMatchers("/container/**").hasRole("CONTAINER")
+                .antMatchers("/task/*/planning/**").hasRole("MARKETING")
                 .antMatchers("/favicon.ico").hasRole("ANONYMOUS")
                 .anyRequest().authenticated() // 7
                 .and()
@@ -51,7 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll() // #5
                 .and()
                 .logout()
-                .logoutSuccessUrl("/signin");
+                .logoutSuccessUrl("/signin")
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+        ;
     }
 
 }
