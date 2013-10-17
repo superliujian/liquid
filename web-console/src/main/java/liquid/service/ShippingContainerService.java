@@ -1,11 +1,13 @@
 package liquid.service;
 
+import liquid.metadata.ContainerStatus;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,13 +22,14 @@ import java.util.List;
  */
 @Service
 public class ShippingContainerService {
-
-
     @Autowired
     private OrderService orderService;
 
     @Autowired
     private RouteService routeService;
+
+    @Autowired
+    private ContainerService containerService;
 
     @Autowired
     private ShippingContainerRepository scRepository;
@@ -41,24 +44,28 @@ public class ShippingContainerService {
     private VesselContainerRepository vcRepository;
 
     @Autowired
-    private RouteRepository routeRepository;
-
-    @Autowired
     private LegRepository legRepository;
 
-    @Autowired
-    private ContainerRepository containerRepository;
+    @Transactional("transactionManager")
+    public void add(long routeId, ShippingContainer formBean) {
+        Route route = routeService.find(routeId);
+        formBean.setRoute(route);
+        Container container = containerService.find(formBean.getContainerId());
+        formBean.setContainer(container);
+        scRepository.save(formBean);
 
-    public void add(long routeId, ShippingContainer sc) {
-        Route route = routeRepository.findOne(routeId);
-        sc.setRoute(route);
-        Container container = containerRepository.findOne(sc.getContainerId());
-        sc.setContainer(container);
-        scRepository.save(sc);
+        container.setStatus(ContainerStatus.ALLOCATED.getValue());
+        containerService.save(container);
     }
 
+    @Transactional("transactionManager")
     public void remove(long scId) {
+        ShippingContainer sc = scRepository.findOne(scId);
+        Container container = sc.getContainer();
         scRepository.delete(scId);
+
+        container.setStatus(ContainerStatus.IN_STOCK.getValue());
+        containerService.save(container);
     }
 
     public Iterable<RailContainer> initialize(String taskId) {

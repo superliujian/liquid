@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.metadata.ContainerStatus;
 import liquid.persistence.domain.Container;
 import liquid.persistence.repository.ContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,17 @@ public class ContainerService {
 
     public Iterable<Container> findAll() {
         return containerRepository.findAll();
+    }
+
+    public Iterable<Container> findAllInStock() {
+        return containerRepository.findByStatus(ContainerStatus.IN_STOCK.getValue());
+    }
+
+    public Container find(long id) {
+        return containerRepository.findOne(id);
+    }
+
+    public void save(Container container) {
+        containerRepository.save(container);
     }
 }
