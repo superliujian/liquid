@@ -1,6 +1,5 @@
 package liquid.controller;
 
-import liquid.persistence.domain.TransMode;
 import liquid.service.PlanningService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;

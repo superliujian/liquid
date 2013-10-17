@@ -1,10 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.ChargeType;
-import liquid.persistence.domain.ServiceProvider;
-import liquid.persistence.domain.SpType;
 import liquid.persistence.repository.ChargeTypeRepository;
-import liquid.persistence.repository.SpRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

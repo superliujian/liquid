@@ -1,20 +1,21 @@
-package liquid.persistence.domain;
+package liquid.metadata;
 
 /**
  * TODO: Comments.
  * User: tao
- * Date: 9/29/13
- * Time: 10:24 PM
+ * Date: 9/30/13
+ * Time: 10:26 PM
  */
-public enum TradeType {
-    DOMESTIC(0, "trade.domestic"),
-    FOREIGN(1, "trade.foreign");
+public enum ContainerType {
+    RAIL(0, "container.rail"),
+    MARINE(1, "container.marine"),
+    OWNED(2, "container.owned");
 
     private final int type;
 
     private final String i18nKey;
 
-    private TradeType(int type, String i18nKey) {
+    private ContainerType(int type, String i18nKey) {
         this.type = type;
         this.i18nKey = i18nKey;
     }
@@ -30,7 +31,7 @@ public enum TradeType {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("TradeType{");
+        sb.append("ContainerType{");
         sb.append("type=").append(type);
         sb.append(", i18nKey='").append(i18nKey).append('\'');
         sb.append('}');

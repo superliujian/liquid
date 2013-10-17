@@ -1,5 +1,9 @@
 package liquid.controller;
 
+import liquid.metadata.ChargeWay;
+import liquid.metadata.LocationType;
+import liquid.metadata.SpType;
+import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.service.ChargeService;
@@ -13,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;

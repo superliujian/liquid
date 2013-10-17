@@ -1,9 +1,8 @@
 package liquid.controller;
 
 import liquid.context.BusinessContext;
+import liquid.metadata.*;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.CargoRepository;
-import liquid.persistence.repository.CustomerRepository;
 import liquid.service.*;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
