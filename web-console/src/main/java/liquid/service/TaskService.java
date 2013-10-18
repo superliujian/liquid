@@ -2,6 +2,9 @@ package liquid.service;
 
 import liquid.dto.TaskDto;
 import liquid.service.bpm.ActivitiEngineService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,15 @@ public class TaskService {
     @Autowired
     private ActivitiEngineService bpmService;
 
+    public TaskDto getTask(String taskId) {
+        Task task = bpmService.getTask(taskId);
+        TaskDto taskDto = toTaskDto(task);
+
+        long orderId = getOrderIdByTaskId(task.getId());
+        taskDto.setOrderId(orderId);
+        return taskDto;
+    }
+
     public TaskDto[] listTasks(String candidateGid) {
         List<Task> list = bpmService.listTasks(candidateGid);
         return toTaskDtoArray(list);
@@ -30,12 +42,46 @@ public class TaskService {
         return toTaskDtoArray(list);
     }
 
+    public long getOrderIdByTaskId(String taskId) {
+        String businessKey = bpmService.getBusinessKeyByTaskId(taskId);
+        return Long.valueOf(businessKey);
+    }
+
+    public String computeTaskMainPath(String taskId) {
+        Task task = bpmService.getTask(taskId);
+        return computeTaskMainPath(task);
+    }
+
+    private String computeTaskMainPath(Task task) {
+        switch (task.getTaskDefinitionKey()) {
+            case "planRoute":
+                return "/task/" + task.getId() + "/planning";
+            case "allocateContainers":
+                return "/task/" + task.getId() + "/allocation";
+            case "loadByTruck":
+                return "/task/" + task.getId() + "/truck";
+            case "loadOnYard":
+            case "applyRailwayPlan":
+            case "recordTod":
+                return "/task/" + task.getId() + "/rail";
+            case "doBargeOps":
+                return "/task/" + task.getId() + "/barge";
+            case "doVesselOps":
+                return "/task/" + task.getId() + "/vessel";
+            case "deliver":
+                return "/task/" + task.getId() + "/delivery";
+            case "planLoading":
+            default:
+                return "/task/" + task.getId() + "/common";
+        }
+    }
+
     private TaskDto[] toTaskDtoArray(List<Task> list) {
         TaskDto[] tasks = new TaskDto[list.size()];
         for (int i = 0; i < tasks.length; i++) {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
-            long orderId = bpmService.getOrderIdByTaskId(task.getId());
+            long orderId = getOrderIdByTaskId(task.getId());
             tasks[i].setOrderId(orderId);
         }
         return tasks;

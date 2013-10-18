@@ -14,6 +14,13 @@ import java.util.Date;
  */
 @Entity(name = "RAIL_CONTAINER")
 public class RailContainer extends BaseLegContainer {
+
+    @Column(name = "TRUCKER")
+    private String trucker;
+
+    @Column(name = "PLATE_NO")
+    private String plateNo;
+
     @DateFormat(DatePattern.UNTIL_MINUTE)
     @Transient
     private String loadingTocStr;
@@ -35,9 +42,6 @@ public class RailContainer extends BaseLegContainer {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "STATION_TOA")
     private Date stationToa;
-
-    @Transient
-    private boolean batch;
 
     @Column(name = "TRANS_PLAN_NO")
     private String transPlanNo;
@@ -75,6 +79,25 @@ public class RailContainer extends BaseLegContainer {
     @Transient
     private String ataStr;
 
+    @Transient
+    private boolean batch;
+
+    public String getTrucker() {
+        return trucker;
+    }
+
+    public void setTrucker(String trucker) {
+        this.trucker = trucker;
+    }
+
+    public String getPlateNo() {
+        return plateNo;
+    }
+
+    public void setPlateNo(String plateNo) {
+        this.plateNo = plateNo;
+    }
+
     public String getLoadingTocStr() {
         return loadingTocStr;
     }
@@ -105,14 +128,6 @@ public class RailContainer extends BaseLegContainer {
 
     public void setStationToa(Date stationToa) {
         this.stationToa = stationToa;
-    }
-
-    public boolean isBatch() {
-        return batch;
-    }
-
-    public void setBatch(boolean batch) {
-        this.batch = batch;
     }
 
     public String getTransPlanNo() {
@@ -172,15 +187,24 @@ public class RailContainer extends BaseLegContainer {
         this.ataStr = ataStr;
     }
 
+    public boolean isBatch() {
+        return batch;
+    }
+
+    public void setBatch(boolean batch) {
+        this.batch = batch;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("RailContainer{");
-        sb.append("loadingTocStr='").append(loadingTocStr).append('\'');
+        sb.append("trucker='").append(trucker).append('\'');
+        sb.append(", plateNo='").append(plateNo).append('\'');
+        sb.append(", loadingTocStr='").append(loadingTocStr).append('\'');
         sb.append(", loadingToc=").append(loadingToc);
         sb.append(", stationToaStr='").append(stationToaStr).append('\'');
         sb.append(", stationToa=").append(stationToa);
-        sb.append(", batch=").append(batch);
         sb.append(", transPlanNo='").append(transPlanNo).append('\'');
         sb.append(", ets=").append(ets);
         sb.append(", etsStr='").append(etsStr).append('\'');
@@ -188,6 +212,7 @@ public class RailContainer extends BaseLegContainer {
         sb.append(", atsStr='").append(atsStr).append('\'');
         sb.append(", ata=").append(ata);
         sb.append(", ataStr='").append(ataStr).append('\'');
+        sb.append(", batch=").append(batch);
         sb.append('}');
         return sb.toString();
     }

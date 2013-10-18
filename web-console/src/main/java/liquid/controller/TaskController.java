@@ -81,7 +81,7 @@ public class TaskController {
         logger.debug("task: {}", TaskHelper.stringOf(task));
         model.addAttribute("task", task);
 
-        return "redirect:" + bpmService.computeTaskMainPath(taskId);
+        return "redirect:" + taskService.computeTaskMainPath(taskId);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")

@@ -50,6 +50,9 @@ public class OrderService {
     private LocationRepository locationRepository;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     private ActivitiEngineService bpmService;
 
     public Order newOrder(List<Location> locations) {
@@ -86,7 +89,7 @@ public class OrderService {
     }
 
     public Order findByTaskId(String taskId) {
-        long orderId = bpmService.getOrderIdByTaskId(taskId);
+        long orderId = taskService.getOrderIdByTaskId(taskId);
         return find(orderId);
     }
 

@@ -65,7 +65,7 @@ public class PurchaseController extends BaseTaskController {
         model.addAttribute("leg", planningService.findLeg(legId));
         model.addAttribute("charges", chargeService.findByLegId(legId));
         model.addAttribute("transModes", TransMode.toMap());
-        model.addAttribute("backToTask", bpmService.computeTaskMainPath(taskId));
+        model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));
         return "charge/dashboard";
     }
 

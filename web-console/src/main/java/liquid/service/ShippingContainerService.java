@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.dto.TruckDto;
 import liquid.metadata.ContainerStatus;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
@@ -109,6 +110,38 @@ public class ShippingContainerService {
         }
 
         return rcRepository.save(rcList);
+    }
+
+    public TruckDto findTruckDto(long railContainerId) {
+        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        return toTruckDto(railContainer);
+    }
+
+    private TruckDto toTruckDto(RailContainer railContainer) {
+        TruckDto truck = new TruckDto();
+        truck.setRailContainerId(railContainer.getId());
+        truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        truck.setPlateNo(railContainer.getPlateNo());
+        truck.setTrucker(railContainer.getTrucker());
+        return truck;
+    }
+
+    public void saveTruck(TruckDto truck) {
+        RailContainer container = rcRepository.findOne(truck.getRailContainerId());
+
+        if (truck.isBatch()) {
+            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            for (RailContainer railContainer : containers) {
+                railContainer.setPlateNo(truck.getPlateNo());
+                railContainer.setTrucker(truck.getTrucker());
+            }
+
+            rcRepository.save(containers);
+        } else {
+            container.setPlateNo(truck.getPlateNo());
+            container.setTrucker(truck.getTrucker());
+            rcRepository.save(container);
+        }
     }
 
     public RailContainer findRailContainer(long containerId) {
