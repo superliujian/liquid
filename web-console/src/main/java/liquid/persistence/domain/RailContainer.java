@@ -1,5 +1,8 @@
 package liquid.persistence.domain;
 
+import liquid.metadata.DatePattern;
+import liquid.validation.constraints.DateFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,6 +14,7 @@ import java.util.Date;
  */
 @Entity(name = "RAIL_CONTAINER")
 public class RailContainer extends BaseLegContainer {
+    @DateFormat(DatePattern.UNTIL_MINUTE)
     @Transient
     private String loadingTocStr;
 
@@ -21,6 +25,7 @@ public class RailContainer extends BaseLegContainer {
     @Column(name = "LOADING_TOC")
     private Date loadingToc;
 
+    @DateFormat(DatePattern.UNTIL_MINUTE)
     @Transient
     private String stationToaStr;
 
@@ -44,6 +49,7 @@ public class RailContainer extends BaseLegContainer {
     @Column(name = "ETS")
     private Date ets;
 
+    @DateFormat(DatePattern.UNTIL_DAY)
     @Transient
     private String etsStr;
 
@@ -54,6 +60,7 @@ public class RailContainer extends BaseLegContainer {
     @Column(name = "ATS")
     private Date ats;
 
+    @DateFormat(DatePattern.UNTIL_MINUTE)
     @Transient
     private String atsStr;
 
@@ -64,6 +71,7 @@ public class RailContainer extends BaseLegContainer {
     @Column(name = "ATA")
     private Date ata;
 
+    @DateFormat(DatePattern.UNTIL_MINUTE)
     @Transient
     private String ataStr;
 
