@@ -28,27 +28,18 @@
                    sth:unless="${#lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
-                    <th th:text="#{task.id}">Task ID</th>
                     <th th:text="#{task.name}">Task Name</th>
+                    <th th:text="#{order.id}">Order ID</th>
                     <th th:text="#{task.description}">Task Description</th>
-                    <th th:text="#{task.owner}">Task Owner</th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}">
-                    <td th:text="${task.id}">Task ID</td>
                     <td>
                         <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.name}">Task Name</a>
                     </td>
+                    <td th:text="${task.orderId}">Order ID</td>
                     <td th:text="${task.description}">Task Description</td>
-                    <td th:text="${task.assignee}">Task Owner</td>
-                    <td>
-                        <a href="/task?action=claim" class="btn btn-default btn-xs"
-                           th:if="!${task.assignee}" th:href="'/task/' + ${task.id}">
-                            <i class="glyphicon glyphicon-check"/>
-                        </a>
-                    </td>
                 </tr>
                 </tbody>
             </table>

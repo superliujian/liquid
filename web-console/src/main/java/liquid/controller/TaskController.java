@@ -1,6 +1,8 @@
 package liquid.controller;
 
+import liquid.dto.TaskDto;
 import liquid.service.PlanningService;
+import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
@@ -28,32 +30,37 @@ import java.util.Map;
 public class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
+    @Deprecated
     @Autowired
     private ActivitiEngineService bpmService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Autowired
     private PlanningService planningService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public void tasks(Model model, Principal principal) {
+    public String tasks(Model model, Principal principal) {
         logger.debug("Role: {}", RoleHelper.getRole(principal));
-        List<Task> tasks = bpmService.listTasks(RoleHelper.getRole(principal));
+        TaskDto[] tasks = taskService.listTasks(RoleHelper.getRole(principal));
         model.addAttribute("tasks", tasks);
         model.addAttribute("title", "task.queue");
         //TODO: Using js to implement the function
         model.addAttribute("queueActive", "active");
         model.addAttribute("myActive", "");
+        return "task/list";
     }
 
     @RequestMapping(value = "/my", method = RequestMethod.GET)
     public String myTasks(Model model, Principal principal) {
-        List<Task> tasks = bpmService.listMyTasks(principal.getName());
+        TaskDto[] tasks = taskService.listMyTasks(principal.getName());
         model.addAttribute("tasks", tasks);
         model.addAttribute("title", "task.my");
         //TODO: Using js to implement the function
         model.addAttribute("queueActive", "");
         model.addAttribute("myActive", "active");
-        return "task";
+        return "task/list";
     }
 
     @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
