@@ -44,7 +44,7 @@ public class TaskService {
 
     public long getOrderIdByTaskId(String taskId) {
         String businessKey = bpmService.getBusinessKeyByTaskId(taskId);
-        return Long.valueOf(businessKey);
+        return null == businessKey ? 0L : Long.valueOf(businessKey);
     }
 
     public String computeTaskMainPath(String taskId) {
@@ -58,12 +58,18 @@ public class TaskService {
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
                 return "/task/" + task.getId() + "/allocation";
-            case "loadByTruck":
-                return "/task/" + task.getId() + "/truck";
             case "loadOnYard":
-            case "applyRailwayPlan":
-            case "recordTod":
                 return "/task/" + task.getId() + "/rail";
+            case "applyRailwayPlan":
+                return "/task/" + task.getId() + "/rail_plan";
+            case "loadByTruck":
+                return "/task/" + task.getId() + "/rail_truck";
+            case "recordTory":
+                return "/task/" + task.getId() + "/rail_yard";
+            case "recordTod":
+                return "/task/" + task.getId() + "/rail_shipping";
+            case "recordToa":
+                return "/task/" + task.getId() + "/rail_arrival";
             case "doBargeOps":
                 return "/task/" + task.getId() + "/barge";
             case "doVesselOps":

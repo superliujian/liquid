@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<div class="container">
+    <form action="/task/{taskId}/truck/{railContainerId}" method="POST" class="form-horizontal center"
+          th:object="${container}" th:action="'/task/' + ${task.id} + '/rail_yard/' + *{railContainerId}">
+
+        <input type="hidden" th:field="*{railContainerId}"/>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{container.no}">BIC Code</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{bicCode}" class="form-control" readonly="readonly"/>
+            </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('railYardToa')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{station.toa}">Station TOA</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{railYardToa}" class="form-control"/>
+                <span th:errors="*{railYardToa}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" th:field="*{batch}"/> <span th:text="#{batch}">Batch</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <input type="submit" name="save" value="Save Time" class="btn btn-default"
+                       th:value="#{save}"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include=" layout :: footer"/>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

@@ -63,12 +63,19 @@ public class TaskController {
         return "task/list";
     }
 
+    /**
+     * TODO: Move to another controller.
+     *
+     * @param taskId
+     * @param model
+     * @param principal
+     * @return
+     */
     @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
     public String toCommon(@PathVariable String taskId,
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Task task = bpmService.getTask(taskId);
-        logger.debug("task: {}", TaskHelper.stringOf(task));
+        TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
         return "task/common";
     }

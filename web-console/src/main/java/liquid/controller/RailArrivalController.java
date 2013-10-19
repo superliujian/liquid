@@ -1,7 +1,7 @@
 package liquid.controller;
 
+import liquid.dto.RailArrivalDto;
 import liquid.dto.RailShippingDto;
-import liquid.persistence.domain.RailContainer;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,59 +15,60 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 /**
  * TODO: Comments.
  * User: tao
- * Date: 10/3/13
- * Time: 9:42 PM
+ * Date: 10/19/13
+ * Time: 3:38 PM
  */
 @Controller
-@RequestMapping("/task/{taskId}/rail")
-public class RailController extends BaseTaskController {
-    private static final Logger logger = LoggerFactory.getLogger(RailController.class);
+@RequestMapping("/task/{taskId}/rail_arrival")
+public class RailArrivalController extends BaseTaskController {
+    private static final Logger logger = LoggerFactory.getLogger(RailShippingController.class);
+
+    private static final String TASK_PATH = "rail_arrival";
 
     @Autowired
     private ShippingContainerService scService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String init(@PathVariable String taskId,
-                       Model model, Principal principal) {
+    public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("rail_task", TASK_PATH);
         return "rail/main";
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)
     public String initRecord(@PathVariable String taskId,
                              @PathVariable long containerId,
-                             Model model, Principal principal) {
+                             Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailShippingDto railShippingDto = scService.findRailShippingDto(containerId);
-        logger.debug("railShippingDto: {}", railShippingDto);
-        model.addAttribute("container", railShippingDto);
-        return "rail/edit";
+        RailArrivalDto railArrival = scService.findRailArrivalDto(containerId);
+        logger.debug("railArrival: {}", railArrival);
+        model.addAttribute("container", railArrival);
+        return TASK_PATH + "/edit";
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailShippingDto railShippingDto,
-                         BindingResult bindingResult, Principal principal) {
+                         @Valid @ModelAttribute("container") RailArrivalDto railArrival,
+                         BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
-        logger.debug("railShippingDto: {}", railShippingDto);
+        logger.debug("railArrival: {}", railArrival);
 
         if (bindingResult.hasErrors()) {
-            return "rail/edit";
+            return TASK_PATH + "/edit";
         } else {
-            scService.saveRailShipping(railShippingDto);
+            scService.saveRailArrival(railArrival);
         }
 
-        return "redirect:/task/" + taskId + "/rail";
+        return "redirect:/task/" + taskId + "/" + TASK_PATH;
     }
 }

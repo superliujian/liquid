@@ -37,7 +37,7 @@ public class RailContainer extends BaseLegContainer {
     private String stationToaStr;
 
     /**
-     * Time of Arrival at station.
+     * Time of Arrival at rail yard.
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "STATION_TOA")

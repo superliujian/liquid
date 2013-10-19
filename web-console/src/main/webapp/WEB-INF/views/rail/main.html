@@ -30,10 +30,12 @@
                         <th th:text="#{rail.origination}">Railway Origination</th>
                         <th th:text="#{rail.destination}">Railway Destination</th>
                         <th th:text="#{container.no}">Container No.</th>
+                        <th th:text="#{plate.no}">Plate No.</th>
+                        <th th:text="#{trucker}">Trucker</th>
                         <th th:text="#{loading.toc}">Loading TOC</th>
-                        <th th:text="#{station.toa}">Station TOA</th>
                         <th th:text="#{rail.plan.no}">Trans Plan No.</th>
                         <th th:text="#{rail.ets}">Rail ETS</th>
+                        <th th:text="#{station.toa}">Station TOA</th>
                         <th th:text="#{rail.ats}">Rail ATS</th>
                         <th th:text="#{rail.ata}">Rail ATA</th>
                         <th></th>
@@ -44,15 +46,17 @@
                         <td th:text="${container.leg.srcLoc.name}">Railway Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Railway Destination</td>
                         <td th:text="${container.sc.container.bicCode}">Container No.</td>
+                        <td th:text="${container.plateNo}">Container No.</td>
+                        <td th:text="${container.trucker}">Trucker</td>
                         <td th:text="${container.loadingTocStr}">Loading TOC</td>
-                        <td th:text="${container.stationToaStr}">Station TOA</td>
                         <td th:text="${container.transPlanNo}">Trans Plan No.</td>
                         <td th:text="${container.etsStr}">Rail TOA</td>
+                        <td th:text="${container.stationToaStr}">Station TOA</td>
                         <td th:text="${container.atsStr}">Rail ATS</td>
                         <td th:text="${container.ataStr}">Rail ATA</td>
                         <td>
                             <a href="/task/{taskId}/loading/edit" class="btn btn-default btn-xs"
-                               th:href="'/task/' + ${task.id} + '/rail/' + ${container.id}">
+                               th:href="'/task/' + ${task.id} + '/'+ ${rail_task} +'/' + ${container.id}">
                                 <i class="glyphicon glyphicon-edit"/>
                             </a>
                         </td>

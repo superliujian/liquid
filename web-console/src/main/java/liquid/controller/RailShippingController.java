@@ -1,6 +1,7 @@
 package liquid.controller;
 
-import liquid.dto.TruckDto;
+import liquid.dto.RailPlanDto;
+import liquid.dto.RailShippingDto;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +20,14 @@ import javax.validation.Valid;
  * TODO: Comments.
  * User: tao
  * Date: 10/19/13
- * Time: 12:08 AM
+ * Time: 3:38 PM
  */
 @Controller
-@RequestMapping("/task/{taskId}/truck")
-public class TruckController extends BaseTaskController {
-    private static final Logger logger = LoggerFactory.getLogger(TruckController.class);
+@RequestMapping("/task/{taskId}/rail_shipping")
+public class RailShippingController extends BaseTaskController {
+    private static final Logger logger = LoggerFactory.getLogger(RailShippingController.class);
 
-    private static final String TASK_PATH = "truck";
+    private static final String TASK_PATH = "rail_shipping";
 
     @Autowired
     private ShippingContainerService scService;
@@ -36,7 +37,8 @@ public class TruckController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("containers", scService.initialize(taskId));
-        return TASK_PATH + "/main";
+        model.addAttribute("rail_task", TASK_PATH);
+        return "rail/main";
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)
@@ -46,25 +48,25 @@ public class TruckController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        TruckDto truck = scService.findTruckDto(containerId);
-        logger.debug("truck: {}", truck);
-        model.addAttribute("truck", truck);
+        RailShippingDto railShipping = scService.findRailShippingDto(containerId);
+        logger.debug("railPlan: {}", railShipping);
+        model.addAttribute("container", railShipping);
         return TASK_PATH + "/edit";
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("truck") TruckDto truck,
+                         @Valid @ModelAttribute("container") RailShippingDto railShipping,
                          BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
-        logger.debug("truck: {}", truck);
+        logger.debug("railShipping: {}", railShipping);
 
         if (bindingResult.hasErrors()) {
             return TASK_PATH + "/edit";
         } else {
-            scService.saveTruck(truck);
+            scService.saveRailShipping(railShipping);
         }
 
         return "redirect:/task/" + taskId + "/" + TASK_PATH;

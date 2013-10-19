@@ -1,7 +1,10 @@
 package liquid.dto;
 
+import liquid.metadata.DatePattern;
+import liquid.validation.constraints.DateFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,6 +24,9 @@ public class TruckDto {
 
     @NotNull @NotEmpty
     private String plateNo;
+
+    @DateFormat(DatePattern.UNTIL_MINUTE)
+    private String loadingToc;
 
     private boolean batch;
 
@@ -56,6 +62,14 @@ public class TruckDto {
         this.plateNo = plateNo;
     }
 
+    public String getLoadingToc() {
+        return loadingToc;
+    }
+
+    public void setLoadingToc(String loadingToc) {
+        this.loadingToc = loadingToc;
+    }
+
     public boolean isBatch() {
         return batch;
     }
@@ -72,6 +86,7 @@ public class TruckDto {
         sb.append(", bicCode='").append(bicCode).append('\'');
         sb.append(", trucker='").append(trucker).append('\'');
         sb.append(", plateNo='").append(plateNo).append('\'');
+        sb.append(", loadingToc='").append(loadingToc).append('\'');
         sb.append(", batch=").append(batch);
         sb.append('}');
         return sb.toString();
