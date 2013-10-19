@@ -37,6 +37,7 @@ public class RailController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("rail_task", "rail");
         return "rail/main";
     }
 
@@ -47,25 +48,25 @@ public class RailController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailShippingDto railShippingDto = scService.findRailShippingDto(containerId);
-        logger.debug("railShippingDto: {}", railShippingDto);
-        model.addAttribute("container", railShippingDto);
+        RailContainer railContainer = scService.findRailContainer(containerId);
+        logger.debug("railContainer: {}", railContainer);
+        model.addAttribute("container", railContainer);
         return "rail/edit";
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailShippingDto railShippingDto,
+                         @Valid @ModelAttribute("container") RailContainer railContainer,
                          BindingResult bindingResult, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
-        logger.debug("railShippingDto: {}", railShippingDto);
+        logger.debug("railContainer: {}", railContainer);
 
         if (bindingResult.hasErrors()) {
             return "rail/edit";
         } else {
-            scService.saveRailShipping(railShippingDto);
+            scService.saveRailContainer(containerId, railContainer);
         }
 
         return "redirect:/task/" + taskId + "/rail";

@@ -58,10 +58,9 @@ public class TaskService {
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
                 return "/task/" + task.getId() + "/allocation";
-            case "loadOnYard":
-                return "/task/" + task.getId() + "/rail";
             case "applyRailwayPlan":
                 return "/task/" + task.getId() + "/rail_plan";
+            case "loadOnYard":
             case "loadByTruck":
                 return "/task/" + task.getId() + "/rail_truck";
             case "recordTory":
