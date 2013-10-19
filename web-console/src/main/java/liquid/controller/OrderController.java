@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -40,6 +41,12 @@ public class OrderController extends BaseChargeController {
 
     @Autowired
     private CargoTypeService cargoTypeService;
+
+    @Autowired
+    private PlanningService planningService;
+
+    @Autowired
+    private RouteService routeService;
 
     @Autowired
     private BusinessContext businessContext;
@@ -165,10 +172,17 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
 
         Order order = orderService.find(id);
-        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
+        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
+
+        Planning planning = planningService.findByOrder(order);
+        routeService.findByPlanning(planning);
+
+        model.addAttribute("transModes", TransMode.toMap());
+        model.addAttribute("planning", planning);
+
         return "order/detail";
     }
 

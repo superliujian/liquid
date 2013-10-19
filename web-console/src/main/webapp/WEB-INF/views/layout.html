@@ -107,7 +107,9 @@
     <div class="jumbotron">
         <div class="container">
             <div class="row">
-                <h3 th:text="${task.name} + ' [' + #{order.id} + ':' + ${task.orderId} + ']'">Task Name</h3>
+                <span th:text="${task.name}">Task Name</span>
+                [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
+                    th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
             </div>
             <div class="row">
                 <div class="col-lg-5">

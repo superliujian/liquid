@@ -86,4 +86,8 @@ public class PlanningService {
     public Leg findLeg(long legId) {
         return legRepository.findOne(legId);
     }
+
+    public Planning findByOrder(Order order) {
+        return planningRepository.findByOrder(order);
+    }
 }

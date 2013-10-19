@@ -52,6 +52,19 @@ public class RouteService {
         return routes;
     }
 
+    public Collection<Route> findByPlanning(Planning planning) {
+        Collection<Route> routes = planning.getRoutes();
+        for (Route route : routes) {
+            Collection<Leg> legs = legRepository.findByRoute(route);
+            route.setLegs(legs);
+            Collection<ShippingContainer> containers = scRepository.findByRoute(route);
+            route.setContainers(containers);
+            if (null != route.getDeliveryDate())
+                route.setDeliveryDateStr(DateUtils.dayStrOf(route.getDeliveryDate()));
+        }
+        return routes;
+    }
+
     public Route find(long id) {
         Route route = routeRepository.findOne(id);
 
