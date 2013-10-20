@@ -24,7 +24,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface DateFormat {
-    String message() default "{liquid.validation.constraints.DateFormat}";
+    String message() default "{liquid.validation.constraints.DateFormat.message}";
 
     Class<?>[] groups() default {};
 
