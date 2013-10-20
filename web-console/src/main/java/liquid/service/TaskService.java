@@ -1,6 +1,10 @@
 package liquid.service;
 
 import liquid.dto.TaskDto;
+import liquid.persistence.domain.Order;
+import liquid.persistence.domain.Planning;
+import liquid.persistence.domain.Route;
+import liquid.persistence.domain.ShippingContainer;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
@@ -9,7 +13,10 @@ import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -22,6 +29,18 @@ public class TaskService {
 
     @Autowired
     private ActivitiEngineService bpmService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private PlanningService planningService;
+
+    @Autowired
+    private RouteService routeService;
+
+    @Autowired
+    private ShippingContainerService scService;
 
     public TaskDto getTask(String taskId) {
         Task task = bpmService.getTask(taskId);
@@ -45,6 +64,36 @@ public class TaskService {
     public long getOrderIdByTaskId(String taskId) {
         String businessKey = bpmService.getBusinessKeyByTaskId(taskId);
         return null == businessKey ? 0L : Long.valueOf(businessKey);
+    }
+
+    public void complete(String taskId, String uid) throws NotCompletedException {
+        Map<String, Object> variableMap = new HashMap<String, Object>();
+        Task task = bpmService.getTask(taskId);
+
+        switch (task.getTaskDefinitionKey()) {
+            case "planRoute":
+                Map<String, Object> transTypes = planningService.getTransTypes(taskId);
+                variableMap.putAll(transTypes);
+                break;
+            case "allocateContainers":
+                long orderId = getOrderIdByTaskId(taskId);
+                Order order = orderService.find(orderId);
+                Planning planning = planningService.findByOrder(order);
+                Collection<Route> routes = routeService.findByPlanning(planning);
+                int allocatedContainerQty = 0;
+                for (Route route : routes) {
+                    Collection<ShippingContainer> scs = scService.findByRoute(route);
+                    allocatedContainerQty += scs.size();
+                }
+                if (allocatedContainerQty != order.getContainerQty()) {
+                    throw new NotCompletedException("container.allocation.is.not.completed");
+                }
+                break;
+            default:
+                break;
+        }
+
+//        bpmService.complete(taskId, uid, variableMap);
     }
 
     public String computeTaskMainPath(String taskId) {

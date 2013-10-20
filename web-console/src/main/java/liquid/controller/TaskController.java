@@ -1,6 +1,7 @@
 package liquid.controller;
 
 import liquid.dto.TaskDto;
+import liquid.service.NotCompletedException;
 import liquid.service.PlanningService;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/task")
-public class TaskController {
+public class TaskController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @Deprecated
@@ -36,9 +38,6 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
-
-    @Autowired
-    private PlanningService planningService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String tasks(Model model, Principal principal) {
@@ -101,21 +100,17 @@ public class TaskController {
 
     @RequestMapping(method = RequestMethod.POST, params = "complete")
     public String complete(@RequestParam String taskId,
+                           @RequestHeader(value = "referer") String referer,
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Map<String, Object> variableMap = new HashMap<String, Object>();
 
-        Task task = bpmService.getTask(taskId);
-        switch (task.getTaskDefinitionKey()) {
-            case "planRoute":
-                Map<String, Object> transTypes = planningService.getTransTypes(taskId);
-                variableMap.putAll(transTypes);
-                break;
-            default:
-                break;
+        try {
+            taskService.complete(taskId, principal.getName());
+        } catch (NotCompletedException e) {
+            model.addAttribute("task_error", getMessage(e.getCode()));
+            return "redirect:" + referer;
         }
 
-        bpmService.complete(taskId, principal.getName(), variableMap);
         return "redirect:/task";
     }
 }

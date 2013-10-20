@@ -128,8 +128,8 @@
                     </form>
                 </div>
             </div>
-            <div class="alert alert-danger" th:if="${task_error}">
-                <span th:text="${task_error}">Task Error</span>
+            <div class="alert alert-danger">
+                <span th:text="${task_error}"></span>
             </div>
         </div>
         <!-- /.container -->

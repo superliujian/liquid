@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * TODO: Comments.
@@ -23,5 +24,10 @@ public abstract class BaseTaskController extends BaseController {
     @ModelAttribute("task")
     public TaskDto populateTask(@PathVariable String taskId) {
         return taskService.getTask(taskId);
+    }
+
+    @ModelAttribute("task_error")
+    public String populateTaskError(@RequestParam(value = "task_error", required = false) String taskError) {
+        return taskError;
     }
 }

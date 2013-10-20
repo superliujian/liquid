@@ -69,6 +69,10 @@ public class ShippingContainerService {
         containerService.save(container);
     }
 
+    public Collection<ShippingContainer> findByRoute(Route route) {
+        return scRepository.findByRoute(route);
+    }
+
     public Iterable<RailContainer> initialize(String taskId) {
         Order order = orderService.findByTaskId(taskId);
         Collection<RailContainer> rcList = rcRepository.findByOrder(order);
