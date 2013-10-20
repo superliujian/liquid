@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * TODO: Comments.
@@ -66,10 +67,14 @@ public class JpaConfig {
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
 
+        Properties jpaProperties = new Properties();
+        jpaProperties.setProperty("javax.persistence.validation.mode", "none");
+
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("liquid.persistence.domain");
         factory.setDataSource(dataSource());
+        factory.setJpaProperties(jpaProperties);
         factory.afterPropertiesSet();
 
         return factory.getObject();

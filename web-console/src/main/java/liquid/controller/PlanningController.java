@@ -1,21 +1,19 @@
 package liquid.controller;
 
+import liquid.metadata.ChargeWay;
+import liquid.metadata.LocationType;
+import liquid.metadata.SpType;
+import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
-import liquid.service.ChargeService;
-import liquid.service.OrderService;
-import liquid.service.PlanningService;
-import liquid.service.RouteService;
+import liquid.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -39,10 +37,10 @@ public class PlanningController extends BaseTaskController {
     private RouteService routeService;
 
     @Autowired
-    private PlanningRepository planningRepository;
+    private OrderService orderService;
 
     @Autowired
-    private OrderService orderService;
+    private PlanningRepository planningRepository;
 
     @Autowired
     private ChargeTypeRepository ctRepository;
@@ -110,7 +108,7 @@ public class PlanningController extends BaseTaskController {
                                  Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Order order = orderService.find(bpmService.getOrderIdByTaskId(taskId));
+        Order order = orderService.find(taskService.getOrderIdByTaskId(taskId));
         planning.setOrder(order);
         Planning newOne = planningRepository.save(planning);
         model.addAttribute("planning", newOne);

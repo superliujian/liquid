@@ -1,5 +1,9 @@
 package liquid.controller;
 
+import liquid.metadata.ContainerCap;
+import liquid.metadata.ContainerType;
+import liquid.metadata.LocationType;
+import liquid.metadata.OrderStatus;
 import liquid.persistence.domain.*;
 import liquid.service.CargoTypeService;
 import liquid.service.CustomerService;

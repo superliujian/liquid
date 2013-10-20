@@ -1,7 +1,9 @@
 package liquid.controller;
 
-import liquid.persistence.domain.TransMode;
+import liquid.dto.TaskDto;
+import liquid.service.NotCompletedException;
 import liquid.service.PlanningService;
+import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -26,43 +29,52 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/task")
-public class TaskController {
+public class TaskController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
+    @Deprecated
     @Autowired
     private ActivitiEngineService bpmService;
 
     @Autowired
-    private PlanningService planningService;
+    private TaskService taskService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public void tasks(Model model, Principal principal) {
+    public String tasks(Model model, Principal principal) {
         logger.debug("Role: {}", RoleHelper.getRole(principal));
-        List<Task> tasks = bpmService.listTasks(RoleHelper.getRole(principal));
+        TaskDto[] tasks = taskService.listTasks(RoleHelper.getRole(principal));
         model.addAttribute("tasks", tasks);
         model.addAttribute("title", "task.queue");
         //TODO: Using js to implement the function
         model.addAttribute("queueActive", "active");
         model.addAttribute("myActive", "");
+        return "task/list";
     }
 
     @RequestMapping(value = "/my", method = RequestMethod.GET)
     public String myTasks(Model model, Principal principal) {
-        List<Task> tasks = bpmService.listMyTasks(principal.getName());
+        TaskDto[] tasks = taskService.listMyTasks(principal.getName());
         model.addAttribute("tasks", tasks);
         model.addAttribute("title", "task.my");
         //TODO: Using js to implement the function
         model.addAttribute("queueActive", "");
         model.addAttribute("myActive", "active");
-        return "task";
+        return "task/list";
     }
 
+    /**
+     * TODO: Move to another controller.
+     *
+     * @param taskId
+     * @param model
+     * @param principal
+     * @return
+     */
     @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
     public String toCommon(@PathVariable String taskId,
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Task task = bpmService.getTask(taskId);
-        logger.debug("task: {}", TaskHelper.stringOf(task));
+        TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
         return "task/common";
     }
@@ -75,7 +87,7 @@ public class TaskController {
         logger.debug("task: {}", TaskHelper.stringOf(task));
         model.addAttribute("task", task);
 
-        return "redirect:" + bpmService.computeTaskMainPath(taskId);
+        return "redirect:" + taskService.computeTaskMainPath(taskId);
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")
@@ -88,21 +100,17 @@ public class TaskController {
 
     @RequestMapping(method = RequestMethod.POST, params = "complete")
     public String complete(@RequestParam String taskId,
+                           @RequestHeader(value = "referer") String referer,
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Map<String, Object> variableMap = new HashMap<String, Object>();
 
-        Task task = bpmService.getTask(taskId);
-        switch (task.getTaskDefinitionKey()) {
-            case "planRoute":
-                Map<String, Object> transTypes = planningService.getTransTypes(taskId);
-                variableMap.putAll(transTypes);
-                break;
-            default:
-                break;
+        try {
+            taskService.complete(taskId, principal.getName());
+        } catch (NotCompletedException e) {
+            model.addAttribute("task_error", getMessage(e.getCode()));
+            return "redirect:" + referer;
         }
 
-        bpmService.complete(taskId, principal.getName(), variableMap);
         return "redirect:/task";
     }
 }

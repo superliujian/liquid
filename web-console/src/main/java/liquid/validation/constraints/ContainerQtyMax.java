@@ -23,7 +23,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface ContainerQtyMax {
-    String message() default "{liquid.validation.constraints.ContainerQtyMax}";
+    String message() default "{liquid.validation.constraints.ContainerQtyMax.message}";
 
     Class<?>[] groups() default {};
 

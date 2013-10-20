@@ -1,11 +1,13 @@
 package liquid.controller;
 
+import liquid.metadata.ChargeStatus;
+import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
-import liquid.persistence.repository.OrderRepository;
 import liquid.service.ChargeService;
 import liquid.service.OrderService;
+import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,7 @@ public class ChargeController {
     private static final Logger logger = LoggerFactory.getLogger(ChargeController.class);
 
     @Autowired
-    private ActivitiEngineService bpmService;
+    private TaskService taskService;
 
     @Autowired
     private OrderService orderService;
@@ -95,7 +97,7 @@ public class ChargeController {
         logger.debug("charge: {}", charge);
         logger.debug("referer: {}", referer);
 
-        long orderId = bpmService.getOrderIdByTaskId(charge.getTaskId());
+        long orderId = taskService.getOrderIdByTaskId(charge.getTaskId());
         Order order = orderService.find(orderId);
 
         charge.setOrder(order);

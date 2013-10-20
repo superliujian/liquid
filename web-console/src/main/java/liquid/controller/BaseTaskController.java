@@ -1,11 +1,14 @@
 package liquid.controller;
 
+import liquid.dto.TaskDto;
+import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * TODO: Comments.
@@ -16,15 +19,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Component
 public abstract class BaseTaskController extends BaseController {
     @Autowired
-    protected ActivitiEngineService bpmService;
-
-    @ModelAttribute("taskId")
-    public String populateTaskId(@PathVariable String taskId) {
-        return taskId;
-    }
+    protected TaskService taskService;
 
     @ModelAttribute("task")
-    public Task populateTask(@PathVariable String taskId) {
-        return bpmService.getTask(taskId);
+    public TaskDto populateTask(@PathVariable String taskId) {
+        return taskService.getTask(taskId);
+    }
+
+    @ModelAttribute("task_error")
+    public String populateTaskError(@RequestParam(value = "task_error", required = false) String taskError) {
+        return taskError;
     }
 }

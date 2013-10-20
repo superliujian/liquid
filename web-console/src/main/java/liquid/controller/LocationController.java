@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.Location;
-import liquid.persistence.domain.LocationType;
+import liquid.metadata.LocationType;
 import liquid.persistence.repository.LocationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,20 +1,21 @@
-package liquid.persistence.domain;
+package liquid.metadata;
 
 /**
  * TODO: Comments.
  * User: tao
- * Date: 10/3/13
- * Time: 4:26 PM
+ * Date: 9/29/13
+ * Time: 10:16 PM
  */
-public enum ContainerStatus {
-    IN_STOCK(0, "container.in.stock"),
-    ALLOCATED(1, "container.allocated");
+public enum OrderStatus {
+    NULL(0, ""),
+    SAVED(1, "order.status.saved"),
+    SUBMITTED(2, "order.status.submitted");
 
     private final int value;
 
     private final String i18nKey;
 
-    private ContainerStatus(int value, String i18nKey) {
+    private OrderStatus(int value, String i18nKey) {
         this.value = value;
         this.i18nKey = i18nKey;
     }

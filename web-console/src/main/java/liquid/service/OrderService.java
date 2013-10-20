@@ -16,6 +16,8 @@ import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,9 @@ public class OrderService {
     private LocationRepository locationRepository;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     private ActivitiEngineService bpmService;
 
     public Order newOrder(List<Location> locations) {
@@ -82,16 +87,22 @@ public class OrderService {
         Map<String, Object> variableMap = new HashMap<>();
         variableMap.put("loadingType", order.getLoadingType());
         variableMap.put("hasDelivery", order.isHasDelivery());
+        variableMap.put("salesperson", businessContext.getUsername());
+
         bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
     }
 
     public Order findByTaskId(String taskId) {
-        long orderId = bpmService.getOrderIdByTaskId(taskId);
+        long orderId = taskService.getOrderIdByTaskId(taskId);
         return find(orderId);
     }
 
     public List<Order> findAllOrderByDesc() {
         return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+    }
+
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public Order find(long id) {

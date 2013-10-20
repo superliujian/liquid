@@ -208,7 +208,7 @@
                             <goal>native2ascii</goal>
                         </goals>
                         <configuration>
-                            <workDir>target/classes/messages</workDir>
+                            <workDir>target/classes</workDir>
                             <encoding>UTF8</encoding>
                         </configuration>
                     </execution>

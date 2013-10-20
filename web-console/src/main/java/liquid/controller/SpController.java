@@ -1,8 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.ServiceProvider;
-import liquid.persistence.domain.SpType;
-import liquid.persistence.domain.TradeType;
+import liquid.metadata.SpType;
 import liquid.persistence.repository.SpRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
