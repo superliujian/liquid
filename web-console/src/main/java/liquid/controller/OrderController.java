@@ -9,6 +9,10 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -96,6 +100,16 @@ public class OrderController extends BaseChargeController {
     public String initFind(Model model, Principal principal) {
         model.addAttribute("orders", orderService.findAllOrderByDesc());
         return "order/find";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "number")
+    public String initFindPaging(@RequestParam int number,
+                                 Model model, Principal principal) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<Order> page = orderService.findAll(pageRequest);
+        model.addAttribute("page", page);
+        return "order/page";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findById")

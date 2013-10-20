@@ -33,7 +33,9 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="/order" th:text="#{order.shipping}">Shipping Order<b class="caret"></b></a>
+                                <a href="/order?number=0" th:text="#{order.shipping}">
+                                    Shipping Order<b class="caret"></b>
+                                </a>
                             </li>
                             <li><a href="/recv_order" th:text="#{order.receiving}">Receiving Order</a></li>
                         </ul>
