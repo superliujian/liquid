@@ -1,10 +1,14 @@
 package liquid.service;
 
+import liquid.dto.*;
+import liquid.metadata.ContainerStatus;
+import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,13 +23,14 @@ import java.util.List;
  */
 @Service
 public class ShippingContainerService {
-
-
     @Autowired
     private OrderService orderService;
 
     @Autowired
     private RouteService routeService;
+
+    @Autowired
+    private ContainerService containerService;
 
     @Autowired
     private ShippingContainerRepository scRepository;
@@ -40,24 +45,32 @@ public class ShippingContainerService {
     private VesselContainerRepository vcRepository;
 
     @Autowired
-    private RouteRepository routeRepository;
-
-    @Autowired
     private LegRepository legRepository;
 
-    @Autowired
-    private ContainerRepository containerRepository;
+    @Transactional("transactionManager")
+    public void add(long routeId, ShippingContainer formBean) {
+        Route route = routeService.find(routeId);
+        formBean.setRoute(route);
+        Container container = containerService.find(formBean.getContainerId());
+        formBean.setContainer(container);
+        scRepository.save(formBean);
 
-    public void add(long routeId, ShippingContainer sc) {
-        Route route = routeRepository.findOne(routeId);
-        sc.setRoute(route);
-        Container container = containerRepository.findOne(sc.getContainerId());
-        sc.setContainer(container);
-        scRepository.save(sc);
+        container.setStatus(ContainerStatus.ALLOCATED.getValue());
+        containerService.save(container);
     }
 
+    @Transactional("transactionManager")
     public void remove(long scId) {
+        ShippingContainer sc = scRepository.findOne(scId);
+        Container container = sc.getContainer();
         scRepository.delete(scId);
+
+        container.setStatus(ContainerStatus.IN_STOCK.getValue());
+        containerService.save(container);
+    }
+
+    public Collection<ShippingContainer> findByRoute(Route route) {
+        return scRepository.findByRoute(route);
     }
 
     public Iterable<RailContainer> initialize(String taskId) {
@@ -101,6 +114,180 @@ public class ShippingContainerService {
         }
 
         return rcRepository.save(rcList);
+    }
+
+    public TruckDto findTruckDto(long railContainerId) {
+        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        return toTruckDto(railContainer);
+    }
+
+    public RailYardDto findRailYardDto(long railContainerId) {
+        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        return toRailYardDto(railContainer);
+    }
+
+    public RailPlanDto findRailPlanDto(long railContainerId) {
+        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        return toRailPlanDto(railContainer);
+    }
+
+    public RailShippingDto findRailShippingDto(long railContainerId) {
+        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        return toRailShippingDto(railContainer);
+    }
+
+    public RailArrivalDto findRailArrivalDto(long railContainerId) {
+        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        return toRailArrivalDto(railContainer);
+    }
+
+    private TruckDto toTruckDto(RailContainer railContainer) {
+        TruckDto truck = new TruckDto();
+        truck.setRailContainerId(railContainer.getId());
+        truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        truck.setPlateNo(railContainer.getPlateNo());
+        truck.setTrucker(railContainer.getTrucker());
+        if (null == railContainer.getLoadingToc()) {
+            truck.setLoadingToc(DateUtils.stringOf(new Date()));
+        } else {
+            truck.setLoadingToc(DateUtils.stringOf(railContainer.getLoadingToc()));
+        }
+        return truck;
+    }
+
+    private RailYardDto toRailYardDto(RailContainer railContainer) {
+        RailYardDto railYard = new RailYardDto();
+        railYard.setRailContainerId(railContainer.getId());
+        railYard.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null == railContainer.getStationToa()) {
+            railYard.setRailYardToa(DateUtils.stringOf(new Date()));
+        } else {
+            railYard.setRailYardToa(DateUtils.stringOf(railContainer.getStationToa()));
+        }
+        return railYard;
+    }
+
+    private RailPlanDto toRailPlanDto(RailContainer railContainer) {
+        RailPlanDto railPlan = new RailPlanDto();
+        railPlan.setRailContainerId(railContainer.getId());
+        railPlan.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        railPlan.setPlanNo(railContainer.getTransPlanNo());
+        if (null == railContainer.getEts()) {
+            railPlan.setEts(DateUtils.dayStrOf(new Date()));
+        } else {
+            railPlan.setEts(DateUtils.dayStrOf(railContainer.getEts()));
+        }
+        return railPlan;
+    }
+
+    private RailShippingDto toRailShippingDto(RailContainer railContainer) {
+        RailShippingDto railShipping = new RailShippingDto();
+        railShipping.setRailContainerId(railContainer.getId());
+        railShipping.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null == railContainer.getAts()) {
+            railShipping.setAts(DateUtils.stringOf(new Date()));
+        } else {
+            railShipping.setAts(DateUtils.stringOf(railContainer.getAts()));
+        }
+        return railShipping;
+    }
+
+    private RailArrivalDto toRailArrivalDto(RailContainer railContainer) {
+        RailArrivalDto railArrivalDto = new RailArrivalDto();
+        railArrivalDto.setRailContainerId(railContainer.getId());
+        railArrivalDto.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null == railContainer.getAta()) {
+            railArrivalDto.setAta(DateUtils.stringOf(new Date()));
+        } else {
+            railArrivalDto.setAta(DateUtils.stringOf(railContainer.getAta()));
+        }
+        return railArrivalDto;
+    }
+
+    public void saveTruck(TruckDto truck) {
+        RailContainer container = rcRepository.findOne(truck.getRailContainerId());
+
+        if (truck.isBatch()) {
+            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            for (RailContainer railContainer : containers) {
+                railContainer.setPlateNo(truck.getPlateNo());
+                railContainer.setTrucker(truck.getTrucker());
+                railContainer.setLoadingToc(DateUtils.dateOf(truck.getLoadingToc()));
+            }
+
+            rcRepository.save(containers);
+        } else {
+            container.setPlateNo(truck.getPlateNo());
+            container.setTrucker(truck.getTrucker());
+            container.setLoadingToc(DateUtils.dateOf(truck.getLoadingToc()));
+            rcRepository.save(container);
+        }
+    }
+
+    public void saveRailYard(RailYardDto railYard) {
+        RailContainer container = rcRepository.findOne(railYard.getRailContainerId());
+
+        if (railYard.isBatch()) {
+            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            for (RailContainer railContainer : containers) {
+                railContainer.setStationToa(DateUtils.dateOf(railYard.getRailYardToa()));
+            }
+
+            rcRepository.save(containers);
+        } else {
+            container.setStationToa(DateUtils.dateOf(railYard.getRailYardToa()));
+            rcRepository.save(container);
+        }
+    }
+
+    public void saveRailPlan(RailPlanDto railPlan) {
+        RailContainer container = rcRepository.findOne(railPlan.getRailContainerId());
+
+        if (railPlan.isBatch()) {
+            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            for (RailContainer railContainer : containers) {
+                railContainer.setTransPlanNo(railPlan.getPlanNo());
+                railContainer.setEts(DateUtils.dayOf(railPlan.getEts()));
+            }
+
+            rcRepository.save(containers);
+        } else {
+            container.setTransPlanNo(railPlan.getPlanNo());
+            container.setEts(DateUtils.dateOf(railPlan.getEts()));
+            rcRepository.save(container);
+        }
+    }
+
+    public void saveRailShipping(RailShippingDto railShipping) {
+        RailContainer container = rcRepository.findOne(railShipping.getRailContainerId());
+
+        if (railShipping.isBatch()) {
+            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            for (RailContainer railContainer : containers) {
+                railContainer.setAts(DateUtils.dateOf(railShipping.getAts()));
+            }
+
+            rcRepository.save(containers);
+        } else {
+            container.setAts(DateUtils.dateOf(railShipping.getAts()));
+            rcRepository.save(container);
+        }
+    }
+
+    public void saveRailArrival(RailArrivalDto railArrival) {
+        RailContainer container = rcRepository.findOne(railArrival.getRailContainerId());
+
+        if (railArrival.isBatch()) {
+            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            for (RailContainer railContainer : containers) {
+                railContainer.setAta(DateUtils.dateOf(railArrival.getAta()));
+            }
+
+            rcRepository.save(containers);
+        } else {
+            container.setAta(DateUtils.dateOf(railArrival.getAta()));
+            rcRepository.save(container);
+        }
     }
 
     public RailContainer findRailContainer(long containerId) {

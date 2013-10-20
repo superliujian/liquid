@@ -9,4 +9,6 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 10/3/13
  * Time: 3:50 PM
  */
-public interface ContainerRepository extends CrudRepository<Container, Long> {}
+public interface ContainerRepository extends CrudRepository<Container, Long> {
+    Iterable<Container> findByStatus(int status);
+}

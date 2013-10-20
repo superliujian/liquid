@@ -7,12 +7,6 @@
     <!-- Bootstrap -->
     <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
-
-    <style>
-        div#order.container {
-        max-width: 800px;
-        }
-    </style>
 </head>
 
 <body>
@@ -36,18 +30,16 @@
 <div id="order" class="container">
 <form id="orderForm" action="/order" method="POST" th:object="${order}" class="center">
 <div class="panel panel-default">
+<div class="panel-heading" th:text="#{order.detail}">Order Detail</div>
 <div class="panel-body">
 <div class="row" th:if="${order.id}">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{order.id}">Order ID</label>
             <input type="text" th:field="*{id}" class="form-control" disabled="disabled"/>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{customer}">Customer</label>
             <select th:field="*{customerId}" class="form-control" disabled="disabled">
@@ -58,10 +50,7 @@
             </select>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{origination} + ' *'">Origin</label>
             <select th:field="*{origination}" class="form-control" disabled="disabled">
@@ -73,7 +62,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('destination')} ? 'has-error'">
             <label th:text="#{destination} + ' *'">Destination</label>
             <select th:field="*{destination}" class="form-control" disabled="disabled">
@@ -87,7 +76,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('consignee')} ? 'has-error'">
             <label th:text="#{consignee} + ' *'">Consignee</label>
             <input type="text" th:field="*{consignee}" class="form-control" disabled="disabled"/>
@@ -96,7 +85,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('consigneePhone')} ? 'has-error'">
             <label th:text="#{consignee.phone} + ' *'">Consignee</label>
             <input type="text" th:field="*{consigneePhone}" class="form-control" disabled="disabled"/>
@@ -104,10 +93,7 @@
             <span th:errors="*{consigneePhone}">error</span>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-6">
         <div class="form-group" th:classappend="${#fields.hasErrors('consigneeAddress')} ? 'has-error'">
             <label th:text="#{consignee.address} + ' *'">Consignee Address</label>
             <input type="text" th:field="*{consigneeAddress}" class="form-control" disabled="disabled"/>
@@ -118,7 +104,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{cargo}">Cargo</label>
             <select th:field="*{cargoId}" class="form-control" disabled="disabled">
@@ -130,7 +116,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('cargoWeight')} ? 'has-error'">
             <label th:text="#{cargo.weight.with.unit}">Cargo Weight</label>
             <input type="text" th:field="*{cargoWeight}" class="form-control" disabled="disabled"/>
@@ -138,10 +124,7 @@
             <span th:errors="*{cargoWeight}">error</span>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{trade.type}">Trade Type</label>
             <ul class="list-inline">
@@ -153,10 +136,7 @@
             </ul>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{loading.type}">Loading Type</label>
             <ul class="list-inline">
@@ -169,8 +149,10 @@
             </ul>
         </div>
     </div>
+</div>
 
-    <div id="loadingAddressSec" class="col-lg-4">
+<div class="row">
+    <div id="loadingAddressSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingAddress')} ? 'has-error'">
             <label th:text="#{loading.address}">Loading Address</label>
             <input type="text" th:field="*{loadingAddress}" class="form-control" disabled="disabled"/>
@@ -179,7 +161,7 @@
         </div>
     </div>
 
-    <div id="loadingEtSec" class="col-lg-4">
+    <div id="loadingEtSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingEtStr')} ? 'has-error'">
             <label th:text="#{loading.et}">Loading ET</label>
             <input type="text" th:field="*{loadingEtStr}" class="form-control" disabled="disabled"/>
@@ -187,10 +169,8 @@
             <span th:errors="*{loadingEtStr}">error</span>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div id="loadingContactSec" class="col-lg-4">
+    <div id="loadingContactSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingContact')} ? 'has-error'">
             <label th:text="#{loading.contact}">Loading Contact</label>
             <input type="text" th:field="*{loadingContact}" class="form-control" disabled="disabled"/>
@@ -199,7 +179,7 @@
         </div>
     </div>
 
-    <div id="loadingPhoneSec" class="col-lg-4">
+    <div id="loadingPhoneSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingPhone')} ? 'has-error'">
             <label th:text="#{loading.phone}">Loading Phone</label>
             <input type="text" th:field="*{loadingPhone}" class="form-control" disabled="disabled"/>
@@ -210,7 +190,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{container.type}">Container Type</label>
             <ul class="list-inline">
@@ -224,7 +204,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{container.capacity}">Container Capacity</label>
             <ul class="list-inline">
@@ -238,7 +218,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'">
             <label th:text="#{container.quantity} + ' *'">Container Quantity</label>
             <input type="text" th:field="*{containerQty}" class="form-control" disabled="disabled"/>
@@ -246,10 +226,8 @@
             <span th:errors="*{containerQty}">error</span>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{has.delivery}">hasDelivery</label>
             <input type="checkbox" th:field="*{hasDelivery}" class="form-control" disabled="disabled"/>
@@ -258,7 +236,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('price')} ? 'has-error'">
             <label th:text="#{price.with.unit}">Price</label>
             <input type="text" th:field="*{price}" class="form-control" disabled="disabled"/>
@@ -266,10 +244,8 @@
             <span th:errors="*{price}">error</span>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{extra.expense.with.unit}">Extra Expense</label>
             <input type="text" th:field="*{extExp}" class="form-control" disabled="disabled"/>
@@ -277,7 +253,7 @@
             <span th:errors="*{extExp}">error</span>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{extra.expense.comment}">Ext Exp Comments</label>
             <input type="text" th:field="*{extExpComment}" class="form-control" disabled="disabled"/>
@@ -290,7 +266,44 @@
 </div>
 </form>
 </div>
-<!-- /.container -->
+<!-- /#order .container -->
+
+<div th:if="${planning}">
+    <div id="shipping_plan" class="container" th:unless="${#lists.isEmpty(planning.routes)}">
+        <div class="panel panel-default" th:each="route : ${planning.routes}">
+            <div class="panel-heading">
+                <span th:text="#{route} + ${route.id}">Route ID</span>
+                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            </div>
+
+            <div class="panel-body">
+                <table class="table table-striped table-hover table-condensed table-16"
+                       th:unless="${#lists.isEmpty(route.legs)}">
+                    <thead>
+                    <tr>
+                        <th th:text="#{leg.id}">Leg ID</th>
+                        <th th:text="#{trans.mode}">Trans Mode</th>
+                        <th th:text="#{sp.name}">SP Name</th>
+                        <th th:text="#{origination}">Origination</th>
+                        <th th:text="#{destination}">Destination</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="leg : ${route.legs}">
+                        <td th:text="${leg.id}">Leg ID</td>
+                        <td th:text="#{${transModes[leg.transMode]}}">Trans Mode</td>
+                        <td th:text="${leg.sp} ? ${leg.sp.name} : ''">SP Name</td>
+                        <td th:text="${leg.srcLoc.name}">Origination</td>
+                        <td th:text="${leg.dstLoc.name}">Destination</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#shipping_plan -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>

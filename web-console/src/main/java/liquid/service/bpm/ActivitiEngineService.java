@@ -85,7 +85,7 @@ public class ActivitiEngineService {
         taskService.complete(taskId, variableMap);
     }
 
-    public long getOrderIdByTaskId(String taskId) {
+    public String getBusinessKeyByTaskId(String taskId) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -94,7 +94,7 @@ public class ActivitiEngineService {
         if (execution instanceof ExecutionEntity) {
             ExecutionEntity entity = (ExecutionEntity) execution;
             logger.debug("business key: {}", entity.getBusinessKey());
-            return Long.valueOf(entity.getBusinessKey());
+            return entity.getBusinessKey();
         }
         throw new RuntimeException("execution is not an instance of ExecutionEntity");
     }
@@ -102,33 +102,5 @@ public class ActivitiEngineService {
     public List<Task> listTasksByOrderId(long orderId) {
         TaskService taskService = processEngine.getTaskService();
         return taskService.createTaskQuery().processInstanceBusinessKey(String.valueOf(orderId)).list();
-    }
-
-    public String computeTaskMainPath(String taskId) {
-        Task task = getTask(taskId);
-        return computeTaskMainPath(task);
-    }
-
-    public String computeTaskMainPath(Task task) {
-        switch (task.getTaskDefinitionKey()) {
-            case "planRoute":
-                return "/task/" + task.getId() + "/planning";
-            case "allocateContainers":
-                return "/task/" + task.getId() + "/allocation";
-            case "loadOnYard":
-            case "loadByTruck":
-            case "applyRailwayPlan":
-            case "recordTod":
-                return "/task/" + task.getId() + "/rail";
-            case "doBargeOps":
-                return "/task/" + task.getId() + "/barge";
-            case "doVesselOps":
-                return "/task/" + task.getId() + "/vessel";
-            case "deliver":
-                return "/task/" + task.getId() + "/delivery";
-            case "planLoading":
-            default:
-                return "/task/" + task.getId() + "/common";
-        }
     }
 }

@@ -1,14 +1,14 @@
 package liquid.controller;
 
+import liquid.metadata.ChargeWay;
+import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.SpRepository;
 import liquid.service.ChargeService;
 import liquid.service.PlanningService;
 import liquid.service.SpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -65,7 +65,7 @@ public class PurchaseController extends BaseTaskController {
         model.addAttribute("leg", planningService.findLeg(legId));
         model.addAttribute("charges", chargeService.findByLegId(legId));
         model.addAttribute("transModes", TransMode.toMap());
-        model.addAttribute("backToTask", bpmService.computeTaskMainPath(taskId));
+        model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));
         return "charge/dashboard";
     }
 

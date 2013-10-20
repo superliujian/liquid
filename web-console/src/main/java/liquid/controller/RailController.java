@@ -1,5 +1,6 @@
 package liquid.controller;
 
+import liquid.dto.RailShippingDto;
 import liquid.persistence.domain.RailContainer;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
@@ -7,11 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 /**
@@ -34,6 +37,7 @@ public class RailController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("rail_task", "rail");
         return "rail/main";
     }
 
@@ -53,12 +57,17 @@ public class RailController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @ModelAttribute("container") RailContainer formBean,
-                         Principal principal) {
+                         @Valid @ModelAttribute("container") RailContainer railContainer,
+                         BindingResult bindingResult, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
+        logger.debug("railContainer: {}", railContainer);
 
-        scService.saveRailContainer(containerId, formBean);
+        if (bindingResult.hasErrors()) {
+            return "rail/edit";
+        } else {
+            scService.saveRailContainer(containerId, railContainer);
+        }
 
         return "redirect:/task/" + taskId + "/rail";
     }

@@ -1,15 +1,18 @@
 package liquid.controller;
 
 import liquid.context.BusinessContext;
+import liquid.metadata.*;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.CargoRepository;
-import liquid.persistence.repository.CustomerRepository;
 import liquid.service.*;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,6 +45,12 @@ public class OrderController extends BaseChargeController {
 
     @Autowired
     private CargoTypeService cargoTypeService;
+
+    @Autowired
+    private PlanningService planningService;
+
+    @Autowired
+    private RouteService routeService;
 
     @Autowired
     private BusinessContext businessContext;
@@ -90,6 +100,16 @@ public class OrderController extends BaseChargeController {
     public String initFind(Model model, Principal principal) {
         model.addAttribute("orders", orderService.findAllOrderByDesc());
         return "order/find";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "number")
+    public String initFindPaging(@RequestParam int number,
+                                 Model model, Principal principal) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<Order> page = orderService.findAll(pageRequest);
+        model.addAttribute("page", page);
+        return "order/page";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findById")
@@ -166,10 +186,17 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
 
         Order order = orderService.find(id);
-        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
+        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
+
+        Planning planning = planningService.findByOrder(order);
+        routeService.findByPlanning(planning);
+
+        model.addAttribute("transModes", TransMode.toMap());
+        model.addAttribute("planning", planning);
+
         return "order/detail";
     }
 

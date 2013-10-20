@@ -1,4 +1,4 @@
-package liquid.persistence.domain;
+package liquid.metadata;
 
 /**
  * TODO: Comments.

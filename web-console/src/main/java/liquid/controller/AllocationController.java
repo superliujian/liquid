@@ -56,7 +56,7 @@ public class AllocationController extends BaseTaskController {
 
         model.addAttribute("sc", new ShippingContainer());
         model.addAttribute("routeId", routeId);
-        model.addAttribute("containers", containerService.findAll());
+        model.addAttribute("containers", containerService.findAllInStock());
         return "allocation/allocating";
     }
 
@@ -75,6 +75,7 @@ public class AllocationController extends BaseTaskController {
         return "redirect:/task/" + taskId + "/allocation";
     }
 
+    // TODO: change to form submit.
     @RequestMapping(value = "/route/{routeId}/sc/{scId}", method = RequestMethod.GET)
     public String remove(@PathVariable String taskId,
                          @PathVariable long routeId,

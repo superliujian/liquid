@@ -15,7 +15,7 @@ public class TaskHelper {
         if (null == task) {
             return "null";
         }
-        StringBuilder sb = new StringBuilder("Task{");
+        StringBuilder sb = new StringBuilder("TaskDto{");
         sb.append("id='").append(task.getId()).append('\'');
         sb.append(", name='").append(task.getName()).append('\'');
         sb.append(", description='").append(task.getDescription()).append('\'');

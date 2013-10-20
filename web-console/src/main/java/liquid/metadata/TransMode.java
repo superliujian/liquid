@@ -1,4 +1,4 @@
-package liquid.persistence.domain;
+package liquid.metadata;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -24,23 +24,35 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/task" th:text="#{task}">Task</a></li>
-                    <li class="dropdown">
+                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
+                        <a href="/task" th:text="#{task}">Task</a>
+                    </li>
+                    <li class="dropdown" sec:authorize="hasRole('ROLE_SALES')">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span th:text="#{order}">Order</span><b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="/order" th:text="#{order.shipping}">Shipping Order<b class="caret"></b></a>
+                                <a href="/order?number=0" th:text="#{order.shipping}">
+                                    Shipping Order<b class="caret"></b>
+                                </a>
                             </li>
                             <li><a href="/recv_order" th:text="#{order.receiving}">Receiving Order</a></li>
                         </ul>
                     </li>
-                    <li><a href="/container" th:text="#{container}">Container</a></li>
-                    <li><a href="/charge" th:text="#{charge}">Charge</a></li>
-                    <li><a href="/customer" th:text="#{customer}">Customer</a></li>
-                    <li><a href="/sp" th:text="#{sp}">SP</a></li>
-                    <li class="dropdown">
+                    <li sec:authorize="hasRole('ROLE_CONTAINER')">
+                        <a href="/container" th:text="#{container}">Container</a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_COMMERCE')">
+                        <a href="/charge" th:text="#{charge}">Charge</a>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')">
+                        <a href="/customer" th:text="#{customer}">Customer</a>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_MARKETING', 'ROLE_OPERATING')">
+                        <a href="/sp" th:text="#{sp}">SP</a>
+                    </li>
+                    <li class="dropdown" sec:authorize="hasAnyRole('ROLE_MARKETING', 'ROLE_OPERATING')">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span th:text="#{data.dict}">Data Dict</span><b class="caret"></b>
                         </a>
@@ -50,10 +62,12 @@
                             <li><a href="/ct" th:text="#{charge.type}">Charge Type</a></li>
                         </ul>
                     </li>
-                    <li><a href="/diagram" th:text="#{diagram}">Diagram</a></li>
+                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
+                        <a href="/diagram" th:text="#{diagram}">Diagram</a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
+                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
                         <a href="#">
                             <i class="glyphicon glyphicon-user"></i>&nbsp;
                             <span sec:authentication="name">Logged User Name</span>
@@ -67,7 +81,9 @@
                             ]
                         </a>
                     </li>
-                    <li><a href="logout" th:text="#{logout}">Logout</a></li>
+                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
+                        <a href="logout" th:text="#{logout}">Logout</a>
+                    </li>
                     <li><a href="register" th:text="#{register}">Register</a></li>
                 </ul>
             </div>
@@ -88,12 +104,14 @@
     </ul>
 </div>
 
-<!-- Task Bar -->
+<!-- TaskDto Bar -->
 <div th:fragment="task-bar">
     <div class="jumbotron">
         <div class="container">
             <div class="row">
-                <h3 th:text="${task.name}">Task Name</h3>
+                <span th:text="${task.name}">Task Name</span>
+                [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
+                    th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
             </div>
             <div class="row">
                 <div class="col-lg-5">
@@ -111,6 +129,9 @@
                                th:if="${task.assignee}" th:value="#{task.complete}"/>
                     </form>
                 </div>
+            </div>
+            <div class="alert alert-danger" th:if="${task_error}">
+                <span th:text="${task_error}">Task Error</span>
             </div>
         </div>
         <!-- /.container -->

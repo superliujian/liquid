@@ -28,4 +28,8 @@ public abstract class BaseController {
         FieldError filedError = new FieldError(objectName, fieldName, rejectedValue, false, null, null, defaultMessage);
         result.addError(filedError);
     }
+
+    public String getMessage(String code, Object... arguments) {
+        return messageSource.getMessage(code, arguments, locale);
+    }
 }

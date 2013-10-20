@@ -1,8 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.Container;
-import liquid.persistence.domain.ContainerStatus;
-import liquid.persistence.domain.TradeType;
+import liquid.metadata.ContainerStatus;
 import liquid.persistence.repository.ContainerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
