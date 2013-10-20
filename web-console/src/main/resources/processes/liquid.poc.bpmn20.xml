@@ -180,7 +180,7 @@
         <sequenceFlow id="flow170" sourceRef="bargeOpsDecision" targetRef="doBargeOps">
             <conditionExpression xsi:type="tFormalExpression">${hasBarge == true}</conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="flow180" sourceRef="bargeOpsDecision" targetRef="bargeOpAndRecordToaJoin">
+        <sequenceFlow id="flow180" sourceRef="bargeOpsDecision" targetRef="bargeOpsEnd">
             <conditionExpression xsi:type="tFormalExpression">${hasBarge == false}</conditionExpression>
         </sequenceFlow>
 
@@ -194,7 +194,10 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow190" sourceRef="doBargeOps" targetRef="bargeOpAndRecordToaJoin"/>
+        <sequenceFlow id="flow190" sourceRef="doBargeOps" targetRef="bargeOpsEnd"/>
+
+        <exclusiveGateway id="bargeOpsEnd" name="驳船操作结束"/>
+        <sequenceFlow id="flow193" sourceRef="bargeOpsEnd" targetRef="bargeOpAndRecordToaJoin"/>
 
         <parallelGateway id="bargeOpAndRecordToaJoin" name="大船操作同时记录火车到达时间合并"/>
         <sequenceFlow id="flow195" sourceRef="bargeOpAndRecordToaJoin" targetRef="vesselOpsDecision"/>
@@ -255,11 +258,12 @@
             <documentation>
                 ${employeeName}回收签收单已经完成，您需要修正订单价格。
             </documentation>
-            <potentialOwner>
+            <!-- ROLE_SALES -->
+            <humanPerformer>
                 <resourceAssignmentExpression>
-                    <formalExpression>ROLE_SALES</formalExpression>
+                    <formalExpression>${salesperson}</formalExpression>
                 </resourceAssignmentExpression>
-            </potentialOwner>
+            </humanPerformer>
         </userTask>
         <sequenceFlow id="flow270" sourceRef="adjustPrice" targetRef="sendInvoicingAndPsFork"/>
 
@@ -284,11 +288,12 @@
             <documentation>
                 您需要确认发票金额。
             </documentation>
-            <potentialOwner>
+            <!-- ROLE_SALES -->
+            <humanPerformer>
                 <resourceAssignmentExpression>
-                    <formalExpression>ROLE_SALES</formalExpression>
+                    <formalExpression>${salesperson}</formalExpression>
                 </resourceAssignmentExpression>
-            </potentialOwner>
+            </humanPerformer>
         </userTask>
         <sequenceFlow id="flow310" sourceRef="confirmInvoiceAmount" targetRef="invoice"/>
 

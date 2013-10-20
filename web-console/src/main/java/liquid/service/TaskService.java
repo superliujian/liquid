@@ -93,7 +93,7 @@ public class TaskService {
                 break;
         }
 
-//        bpmService.complete(taskId, uid, variableMap);
+        bpmService.complete(taskId, uid, variableMap);
     }
 
     public String computeTaskMainPath(String taskId) {
