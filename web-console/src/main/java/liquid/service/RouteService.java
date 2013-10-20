@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -53,6 +50,9 @@ public class RouteService {
     }
 
     public Collection<Route> findByPlanning(Planning planning) {
+        if (planning == null) {
+            return Collections.EMPTY_LIST;
+        }
         Collection<Route> routes = planning.getRoutes();
         for (Route route : routes) {
             Collection<Leg> legs = legRepository.findByRoute(route);
