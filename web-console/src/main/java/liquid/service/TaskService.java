@@ -7,6 +7,7 @@ import liquid.persistence.domain.Route;
 import liquid.persistence.domain.ShippingContainer;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.task.Task;
@@ -49,6 +50,10 @@ public class TaskService {
         long orderId = getOrderIdByTaskId(task.getId());
         taskDto.setOrderId(orderId);
         return taskDto;
+    }
+
+    public List<HistoricTaskInstance> listCompltedTasks(long orderId) {
+        return bpmService.listCompltedTasks(String.valueOf(orderId));
     }
 
     public TaskDto[] listTasks(String candidateGid) {
@@ -94,6 +99,10 @@ public class TaskService {
         }
 
         bpmService.complete(taskId, uid, variableMap);
+    }
+
+    public List<Task> listTasksByOrderId(long orderId) {
+        return bpmService.listTasksByOrderId(orderId);
     }
 
     public String computeTaskMainPath(String taskId) {

@@ -4,7 +4,7 @@ import liquid.context.BusinessContext;
 import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.service.*;
-import liquid.service.bpm.ActivitiEngineService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +55,6 @@ public class OrderController extends BaseChargeController {
 
     @Autowired
     private BusinessContext businessContext;
-
-    @Autowired
-    private ActivitiEngineService bpmService;
 
     @Autowired
     private ChargeService chargeService;
@@ -228,8 +225,10 @@ public class OrderController extends BaseChargeController {
 
         switch (tab) {
             case "task":
-                List<Task> tasks = bpmService.listTasksByOrderId(id);
+                List<Task> tasks = taskService.listTasksByOrderId(id);
+                List<HistoricTaskInstance> completedTasks = taskService.listCompltedTasks(id);
                 model.addAttribute("tasks", tasks);
+                model.addAttribute("completedTasks", completedTasks);
                 break;
             case "charge":
                 Iterable<Charge> charges = chargeService.getChargesByOrderId(id);

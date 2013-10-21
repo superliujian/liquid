@@ -31,31 +31,43 @@
             <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
     </ul>
 </div>
-
 <!-- /.container -->
 
+<br/>
+
 <div class="container">
-    <table class="table table-striped table-hover table-condensed table-16"
-           sth:unless="${#lists.isEmpty(tasks)}">
-        <thead>
-        <tr>
-            <th th:text="#{task.id}">Task ID</th>
-            <th th:text="#{task.name}">Task Name</th>
-            <th th:text="#{task.description}">Task Description</th>
-            <th th:text="#{task.owner}">Task Owner</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="task : ${tasks}">
-            <td th:text="${task.id}">Task ID</td>
-            <td>
-                <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.name}">Task Name</a>
-            </td>
-            <td th:text="${task.description}">Task Description</td>
-            <td th:text="${task.assignee}">Task Owner</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-striped table-hover table-condensed table-16"
+                   sth:unless="${#lists.isEmpty(completedTasks)}">
+                <thead>
+                <tr>
+                    <th th:text="#{task.id}">Task ID</th>
+                    <th th:text="#{task.name}">Task Name</th>
+                    <th th:text="#{task.description}">Task Description</th>
+                    <th th:text="#{task.owner}">Task Owner</th>
+                    <th th:text="#{task.owner}">Start Time</th>
+                    <th th:text="#{task.owner}">Claim Time</th>
+                    <th th:text="#{task.owner}">End Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${completedTasks}">
+                    <td th:text="${task.id}">Task ID</td>
+                    <td th:text="${task.name}"/>
+                    <td th:text="${task.description}">Task Description</td>
+                    <td th:text="${task.assignee}">Task Owner</td>
+                    <td th:text="${#dates.format(task.startTime, 'yyyy-MM-dd HH:mm')}">Start Time</td>
+                    <td th:text="${task.claimTime} ? ${#dates.format(task.claimTime, 'yyyy-MM-dd HH:mm')} : ''">Claim
+                        Time
+                    </td>
+                    <td th:text="${task.endTime} ? ${#dates.format(task.endTime, 'yyyy-MM-dd HH:mm')} : ''">End Time
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <!-- /.container -->
 

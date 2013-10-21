@@ -1,9 +1,7 @@
 package liquid.service.bpm;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -43,6 +41,12 @@ public class ActivitiEngineService {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", String.valueOf(orderId), variableMap);
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
         System.out.println(dataSource);
+    }
+
+    public List<HistoricTaskInstance> listCompltedTasks(String businessKey) {
+        HistoryService historyService = processEngine.getHistoryService();
+        HistoricTaskInstance instance = null;
+        return historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey).list();
     }
 
     public List<Task> listTasks(String candidateGid) {
