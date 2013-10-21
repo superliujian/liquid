@@ -124,6 +124,8 @@ public class TaskService {
                 return "/task/" + task.getId() + "/vessel";
             case "deliver":
                 return "/task/" + task.getId() + "/delivery";
+            case "adjustPrice":
+                return "/task/" + task.getId() + "/extra";
             case "planLoading":
             default:
                 return "/task/" + task.getId() + "/common";
