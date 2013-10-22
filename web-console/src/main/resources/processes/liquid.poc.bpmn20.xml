@@ -92,7 +92,7 @@
 
         <parallelGateway id="loadByTruckAndRailwayPlanFork" name="外拖同时申报铁路计划"/>
         <sequenceFlow id="flow100" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
-        <sequenceFlow id="flow110" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="loadByTruck"/>
+        <sequenceFlow id="flow110" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="trucking"/>
 
         <userTask id="loadOnYard" name="场装作业">
             <documentation>
@@ -105,6 +105,16 @@
             </potentialOwner>
         </userTask>
         <sequenceFlow id="flow120" sourceRef="loadOnYard" targetRef="recordTory"/>
+
+        <userTask id="trucking" name="派车">
+            <documentation>
+                ${employeeName}已经发布外拖指令。您需要派车。
+            </documentation>
+            <extensionElements>
+                <activiti:taskListener event="create" class="liquid.task.handler.TruckingAssigneeHandler"/>
+            </extensionElements>
+        </userTask>
+        <sequenceFlow id="flow125" sourceRef="trucking" targetRef="loadByTruck"/>
 
         <userTask id="loadByTruck" name="外拖作业">
             <documentation>
@@ -261,7 +271,7 @@
             <!-- ROLE_SALES -->
             <humanPerformer>
                 <resourceAssignmentExpression>
-                    <formalExpression>${salesperson}</formalExpression>
+                    <formalExpression>${orderOwner}</formalExpression>
                 </resourceAssignmentExpression>
             </humanPerformer>
         </userTask>
@@ -291,7 +301,7 @@
             <!-- ROLE_SALES -->
             <humanPerformer>
                 <resourceAssignmentExpression>
-                    <formalExpression>${salesperson}</formalExpression>
+                    <formalExpression>${orderOwner}</formalExpression>
                 </resourceAssignmentExpression>
             </humanPerformer>
         </userTask>
