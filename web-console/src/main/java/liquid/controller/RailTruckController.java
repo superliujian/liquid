@@ -76,9 +76,13 @@ public class RailTruckController extends BaseTaskController {
                                Model model) {
         logger.debug("taskId: {}", taskId);
 
+        TruckingDto trucking = new TruckingDto();
+        Object role = taskService.getVariable(taskId, "truckingRole");
+        if (null != role) trucking.setRole(role.toString());
+
         model.addAttribute("roles", new Role[]{Role.SALES, Role.MARKETING});
         model.addAttribute("done", done);
-        model.addAttribute("trucking", new TruckingDto());
+        model.addAttribute("trucking", trucking);
         return TASK_PATH + "/sending";
     }
 
@@ -88,6 +92,8 @@ public class RailTruckController extends BaseTaskController {
                            Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("trucking: {}", trucking);
+
+        taskService.setVariable(taskId, "truckingRole", trucking.getRole());
 
         model.addAttribute("done", true);
         return "redirect:/task/" + taskId + "/" + TASK_PATH + "/sending";

@@ -139,11 +139,11 @@
 
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="form-group" th:classappend="${#fields.hasErrors('price')} ? 'has-error'">
+                    <div class="form-group" th:classappend="${#fields.hasErrors('salesPrice')} ? 'has-error'">
                         <label th:text="#{price.with.unit}">Price</label>
-                        <input type="text" th:field="*{price}" class="form-control"/>
+                        <input type="text" th:field="*{salesPrice}" class="form-control"/>
 
-                        <span th:errors="*{price}">error</span>
+                        <span th:errors="*{salesPrice}">error</span>
                     </div>
                 </div>
             </div>

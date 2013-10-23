@@ -162,4 +162,12 @@ public class TaskService {
         dto.setAssignee(task.getAssignee());
         return dto;
     }
+
+    public Object getVariable(String taskId, String variableName) {
+        return bpmService.getVariable(taskId, variableName);
+    }
+
+    public void setVariable(String taskId, String variableName, Object value) {
+        bpmService.setVariable(taskId, variableName, value);
+    }
 }

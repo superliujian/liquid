@@ -111,7 +111,7 @@
                 ${employeeName}已经发布外拖指令。您需要派车。
             </documentation>
             <extensionElements>
-                <activiti:taskListener event="create" class="liquid.task.handler.TruckingAssigneeHandler"/>
+                <activiti:taskListener event="create" delegateExpression="${truckingAssigneeHandler}"/>
             </extensionElements>
         </userTask>
         <sequenceFlow id="flow125" sourceRef="trucking" targetRef="loadByTruck"/>

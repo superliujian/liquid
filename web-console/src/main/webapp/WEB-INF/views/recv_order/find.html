@@ -86,7 +86,7 @@
                     <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.price}">Price</td>
+                    <td th:text="${order.salesPrice}">Price</td>
                     <td th:text="${order.extExp}">Extra Expense</td>
                     <td>
                         <a href="/recv_order/id?action=edit" class="btn btn-default btn-xs"

@@ -107,4 +107,16 @@ public class ActivitiEngineService {
         TaskService taskService = processEngine.getTaskService();
         return taskService.createTaskQuery().processInstanceBusinessKey(String.valueOf(orderId)).list();
     }
+
+    public Object getVariable(String taskId, String variableName) {
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        return processEngine.getRuntimeService().getVariable(task.getProcessInstanceId(), variableName);
+    }
+
+    public void setVariable(String taskId, String variableName, Object value) {
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        processEngine.getRuntimeService().setVariable(task.getProcessInstanceId(), variableName, value);
+    }
 }

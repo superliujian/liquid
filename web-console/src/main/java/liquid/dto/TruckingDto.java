@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Time: 12:14 AM
  */
 public class TruckingDto implements Serializable {
-    private String role;
+    private String role = "SALES";
 
     public String getRole() {
         return role;
