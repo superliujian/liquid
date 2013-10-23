@@ -4,14 +4,13 @@ import liquid.context.BusinessContext;
 import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.service.*;
-import liquid.service.bpm.ActivitiEngineService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -50,13 +48,13 @@ public class OrderController extends BaseChargeController {
     private PlanningService planningService;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     private RouteService routeService;
 
     @Autowired
     private BusinessContext businessContext;
-
-    @Autowired
-    private ActivitiEngineService bpmService;
 
     @Autowired
     private ChargeService chargeService;
@@ -227,8 +225,10 @@ public class OrderController extends BaseChargeController {
 
         switch (tab) {
             case "task":
-                List<Task> tasks = bpmService.listTasksByOrderId(id);
+                List<Task> tasks = taskService.listTasksByOrderId(id);
+                List<HistoricTaskInstance> completedTasks = taskService.listCompltedTasks(id);
                 model.addAttribute("tasks", tasks);
+                model.addAttribute("completedTasks", completedTasks);
                 break;
             case "charge":
                 Iterable<Charge> charges = chargeService.getChargesByOrderId(id);

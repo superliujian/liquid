@@ -75,8 +75,11 @@ public class BaseOrder extends BaseEntity {
      * unit yuan
      */
     @Min(1)
-    @Column(name = "PRICE")
-    private long price;
+    @Column(name = "SALES_PRICE")
+    private long salesPrice;
+
+    @Column(name = "DISTY_PRICE")
+    private long distyPrice;
 
     @Column(name = "EXT_EXP")
     private long extExp = 0L;
@@ -208,12 +211,20 @@ public class BaseOrder extends BaseEntity {
         this.containerQty = containerQty;
     }
 
-    public long getPrice() {
-        return price;
+    public long getSalesPrice() {
+        return salesPrice;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setSalesPrice(long salesPrice) {
+        this.salesPrice = salesPrice;
+    }
+
+    public long getDistyPrice() {
+        return distyPrice;
+    }
+
+    public void setDistyPrice(long distyPrice) {
+        this.distyPrice = distyPrice;
     }
 
     public long getExtExp() {
@@ -259,7 +270,8 @@ public class BaseOrder extends BaseEntity {
         sb.append(", containerType=").append(containerType);
         sb.append(", containerCap=").append(containerCap);
         sb.append(", containerQty=").append(containerQty);
-        sb.append(", price=").append(price);
+        sb.append(", salesPrice=").append(salesPrice);
+        sb.append(", distyPrice=").append(distyPrice);
         sb.append(", extExp=").append(extExp);
         sb.append(", extExpComment='").append(extExpComment).append('\'');
         sb.append(", status=").append(status);

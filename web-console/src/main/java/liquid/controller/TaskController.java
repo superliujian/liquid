@@ -109,6 +109,9 @@ public class TaskController extends BaseController {
         } catch (NotCompletedException e) {
             model.addAttribute("task_error", getMessage(e.getCode()));
             return "redirect:" + referer;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:" + referer;
         }
 
         return "redirect:/task";

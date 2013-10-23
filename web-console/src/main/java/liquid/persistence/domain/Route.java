@@ -25,7 +25,7 @@ public class Route extends BaseEntity {
 
     @Min(1)
     @Column(name = "CONTAINER_QTY")
-    private int containerQty;
+    private int containerQty = 1;
 
     @Column(name = "DELIVERY_ADDR")
     private String deliveryAddress;
