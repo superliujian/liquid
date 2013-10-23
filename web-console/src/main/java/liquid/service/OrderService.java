@@ -87,8 +87,7 @@ public class OrderService {
         Map<String, Object> variableMap = new HashMap<>();
         variableMap.put("loadingType", order.getLoadingType());
         variableMap.put("hasDelivery", order.isHasDelivery());
-        variableMap.put("salesperson", businessContext.getUsername());
-
+        variableMap.put("orderOwner", businessContext.getUsername());
         bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
     }
 

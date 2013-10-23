@@ -1,6 +1,8 @@
 package liquid.controller;
 
 import liquid.dto.TruckDto;
+import liquid.dto.TruckingDto;
+import liquid.metadata.Role;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -69,5 +68,34 @@ public class RailTruckController extends BaseTaskController {
         }
 
         return "redirect:/task/" + taskId + "/" + TASK_PATH;
+    }
+
+    @RequestMapping(value = "/sending", method = RequestMethod.GET)
+    public String initTrucking(@PathVariable String taskId,
+                               @RequestParam(required = false) boolean done,
+                               Model model) {
+        logger.debug("taskId: {}", taskId);
+
+        TruckingDto trucking = new TruckingDto();
+        Object role = taskService.getVariable(taskId, "truckingRole");
+        if (null != role) trucking.setRole(role.toString());
+
+        model.addAttribute("roles", new Role[]{Role.SALES, Role.MARKETING});
+        model.addAttribute("done", done);
+        model.addAttribute("trucking", trucking);
+        return TASK_PATH + "/sending";
+    }
+
+    @RequestMapping(value = "/sending", method = RequestMethod.POST)
+    public String trucking(@PathVariable String taskId,
+                           @Valid @ModelAttribute("trucking") TruckingDto trucking,
+                           Model model) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("trucking: {}", trucking);
+
+        taskService.setVariable(taskId, "truckingRole", trucking.getRole());
+
+        model.addAttribute("done", true);
+        return "redirect:/task/" + taskId + "/" + TASK_PATH + "/sending";
     }
 }

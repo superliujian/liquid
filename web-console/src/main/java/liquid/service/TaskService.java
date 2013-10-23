@@ -7,6 +7,7 @@ import liquid.persistence.domain.Route;
 import liquid.persistence.domain.ShippingContainer;
 import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.task.Task;
@@ -49,6 +50,10 @@ public class TaskService {
         long orderId = getOrderIdByTaskId(task.getId());
         taskDto.setOrderId(orderId);
         return taskDto;
+    }
+
+    public List<HistoricTaskInstance> listCompltedTasks(long orderId) {
+        return bpmService.listCompltedTasks(String.valueOf(orderId));
     }
 
     public TaskDto[] listTasks(String candidateGid) {
@@ -96,6 +101,10 @@ public class TaskService {
         bpmService.complete(taskId, uid, variableMap);
     }
 
+    public List<Task> listTasksByOrderId(long orderId) {
+        return bpmService.listTasksByOrderId(orderId);
+    }
+
     public String computeTaskMainPath(String taskId) {
         Task task = bpmService.getTask(taskId);
         return computeTaskMainPath(task);
@@ -112,6 +121,8 @@ public class TaskService {
             case "loadOnYard":
             case "loadByTruck":
                 return "/task/" + task.getId() + "/rail_truck";
+            case "sendLoadingByTruck":
+                return "/task/" + task.getId() + "/rail_truck/sending";
             case "recordTory":
                 return "/task/" + task.getId() + "/rail_yard";
             case "recordTod":
@@ -124,6 +135,8 @@ public class TaskService {
                 return "/task/" + task.getId() + "/vessel";
             case "deliver":
                 return "/task/" + task.getId() + "/delivery";
+            case "adjustPrice":
+                return "/task/" + task.getId() + "/extra";
             case "planLoading":
             default:
                 return "/task/" + task.getId() + "/common";
@@ -148,5 +161,13 @@ public class TaskService {
         dto.setDescription(task.getDescription());
         dto.setAssignee(task.getAssignee());
         return dto;
+    }
+
+    public Object getVariable(String taskId, String variableName) {
+        return bpmService.getVariable(taskId, variableName);
+    }
+
+    public void setVariable(String taskId, String variableName, Object value) {
+        bpmService.setVariable(taskId, variableName, value);
     }
 }

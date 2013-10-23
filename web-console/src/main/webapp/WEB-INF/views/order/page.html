@@ -7,6 +7,12 @@
     <!-- Bootstrap -->
     <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
@@ -83,7 +89,7 @@
                     <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.price}">Price</td>
+                    <td th:text="${order.salesPrice}">Price</td>
                     <td th:text="${order.extExp}">Extra Expense</td>
                     <td>
                         <a href="/order/id?action=edit" class="btn btn-default btn-xs"
