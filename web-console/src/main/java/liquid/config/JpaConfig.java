@@ -47,6 +47,7 @@ import java.util.Properties;
                         RailContainerRepository.class,
                         BargeContainerRepository.class,
                         VesselContainerRepository.class,
+                        DeliveryContainerRepository.class,
                         ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement

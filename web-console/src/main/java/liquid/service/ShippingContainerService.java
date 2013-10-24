@@ -45,6 +45,9 @@ public class ShippingContainerService {
     private VesselContainerRepository vcRepository;
 
     @Autowired
+    private DeliveryContainerRepository dcRepository;
+
+    @Autowired
     private LegRepository legRepository;
 
     @Transactional("transactionManager")
@@ -551,4 +554,79 @@ public class ShippingContainerService {
             vcRepository.save(container);
         }
     }
+
+    public Iterable<DeliveryContainer> initDeliveryContainers(String taskId) {
+        Order order = orderService.findByTaskId(taskId);
+        Collection<DeliveryContainer> dcList = dcRepository.findByOrder(order);
+        if (dcList.size() > 0) {
+            for (DeliveryContainer container : dcList) {
+                if (container.getEtd() != null) {
+                    container.setEtdStr(DateUtils.dayStrOf(container.getEtd()));
+                }
+            }
+            return dcList;
+        }
+
+        dcList = new ArrayList<DeliveryContainer>();
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        for (Route route : routes) {
+            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+            for (ShippingContainer sc : scList) {
+                DeliveryContainer dc = new DeliveryContainer();
+                dc.setOrder(route.getPlanning().getOrder());
+                dc.setSc(sc);
+                dc.setAddress(order.getConsigneeAddress());
+                dcList.add(dc);
+            }
+        }
+
+        return dcRepository.save(dcList);
+    }
+
+    public DeliveryContainer findDeliveryContainer(long containerId) {
+        DeliveryContainer deliveryContainer = dcRepository.findOne(containerId);
+
+        if (null == deliveryContainer.getAddress()) {
+            deliveryContainer.setAddress(deliveryContainer.getOrder().getConsigneeAddress());
+        }
+
+        String defaultDayStr = DateUtils.dayStrOf(new Date());
+        if (null == deliveryContainer.getEtd())
+            deliveryContainer.setEtdStr(defaultDayStr);
+        else
+            deliveryContainer.setEtdStr(DateUtils.dayStrOf(deliveryContainer.getEtd()));
+
+        return deliveryContainer;
+    }
+
+    public void saveDeliveryContainer(long containerId, DeliveryContainer formBean) {
+        DeliveryContainer container = dcRepository.findOne(containerId);
+
+        if (formBean.isBatch()) {
+            Collection<DeliveryContainer> containers = dcRepository.findByOrder(container.getOrder());
+
+            if (formBean.getEtdStr() != null && formBean.getEtdStr().trim().length() > 0) {
+                for (DeliveryContainer dc : containers) {
+                    dc.setEtd(DateUtils.dayOf(formBean.getEtdStr()));
+                }
+            }
+
+            if (formBean.getAddress() != null && formBean.getAddress().trim().length() > 0) {
+                for (DeliveryContainer dc : containers) {
+                    dc.setAddress(formBean.getAddress());
+                }
+            }
+
+            dcRepository.save(containers);
+        } else {
+            if (formBean.getEtdStr() != null && formBean.getEtdStr().trim().length() > 0) {
+                container.setEtd(DateUtils.dayOf(formBean.getEtdStr()));
+            }
+            if (formBean.getAddress() != null && formBean.getAddress().trim().length() > 0) {
+                container.setAddress(formBean.getAddress());
+            }
+            dcRepository.save(container);
+        }
+    }
+
 }
