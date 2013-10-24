@@ -100,6 +100,10 @@ public class OrderService {
         return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
+    public Page<Order> findByCreateUser(String uid, Pageable pageable) {
+        return orderRepository.findByCreateUser(uid, pageable);
+    }
+
     public Page<Order> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);
     }

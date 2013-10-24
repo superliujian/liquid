@@ -27,13 +27,6 @@ public class Route extends BaseEntity {
     @Column(name = "CONTAINER_QTY")
     private int containerQty = 1;
 
-    @Column(name = "DELIVERY_ADDR")
-    private String deliveryAddress;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "DELIVERY_DATE")
-    private Date deliveryDate;
-
     @Transient
     private String deliveryDateStr;
 
@@ -68,22 +61,6 @@ public class Route extends BaseEntity {
 
     public void setContainerQty(int containerQty) {
         this.containerQty = containerQty;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public Date getDeliveryDate() {
-        return deliveryDate;
-    }
-
-    public void setDeliveryDate(Date deliveryDate) {
-        this.deliveryDate = deliveryDate;
     }
 
     public String getDeliveryDateStr() {
@@ -125,8 +102,6 @@ public class Route extends BaseEntity {
         sb.append("planning=").append(planning);
         sb.append(", containerQtyMax=").append(containerQtyMax);
         sb.append(", containerQty=").append(containerQty);
-        sb.append(", deliveryAddress='").append(deliveryAddress).append('\'');
-        sb.append(", deliveryDate=").append(deliveryDate);
         sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
         sb.append(", legs=").append(legs);
         sb.append(", containers=").append(containers);
