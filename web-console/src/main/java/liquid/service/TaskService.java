@@ -112,6 +112,8 @@ public class TaskService {
 
     private String computeTaskMainPath(Task task) {
         switch (task.getTaskDefinitionKey()) {
+            case "feedDistyPrice":
+                return "/task/" + task.getId() + "/disty";
             case "planRoute":
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
