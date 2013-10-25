@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Date;
 
 /**
  * TODO: Comments.
@@ -55,6 +56,8 @@ public class OrderDistyController extends BaseTaskController {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         Order order = orderService.find(orderId);
         order.setDistyPrice(disty.getDistyPrice());
+        order.setUpdateUser(principal.getName());
+        order.setUpdateTime(new Date());
         orderService.save(order);
         model.addAttribute("done", true);
         return "redirect:/task/" + taskId + "/disty";

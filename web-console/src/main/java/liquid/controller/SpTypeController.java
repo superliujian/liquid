@@ -1,10 +1,7 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceProvider;
 import liquid.persistence.domain.SpType;
-import liquid.persistence.repository.SpRepository;
 import liquid.persistence.repository.SpTypeRepository;
-import liquid.service.SpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,47 +14,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Map;
 
 /**
  * TODO: Comments.
  * User: tao
- * Date: 10/2/13
- * Time: 5:02 PM
+ * Date: 10/25/13
+ * Time: 7:37 PM
  */
 @Controller
-@RequestMapping("/sp")
-public class SpController {
-    private static final Logger logger = LoggerFactory.getLogger(SpController.class);
+@RequestMapping("/sp_type")
+public class SpTypeController {
+    private static final Logger logger = LoggerFactory.getLogger(SpTypeController.class);
 
     @Autowired
-    private SpService spService;
-
-    @ModelAttribute("sps")
-    public Iterable<ServiceProvider> populateSps() {
-        return spService.findAll();
-    }
+    private SpTypeRepository spTypeRepository;
 
     @ModelAttribute("spTypes")
-    public Map<Long, String> populateSpTypes() {
-        return spService.getSpTypes();
+    public Iterable<SpType> populateCts() {
+        return spTypeRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public void list(Model model, Principal principal) {
-        model.addAttribute("sp", new ServiceProvider());
+    public String init(Model model, Principal principal) {
+        model.addAttribute("spType", new SpType());
+        return "data_dict/sp_type";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("sp") ServiceProvider sp,
+    public String create(@Valid @ModelAttribute("spType") SpType spType,
                          BindingResult bindingResult, Model model, Principal principal) {
-        logger.debug("sp: {}", sp);
+        logger.debug("spType: {}", spType);
 
         if (bindingResult.hasErrors()) {
-            return "sp";
+            return "data_dict/sp_type";
         } else {
-            spService.save(sp);
-            return "redirect:/sp";
+            spTypeRepository.save(spType);
+            return "redirect:/sp_type";
         }
     }
 }

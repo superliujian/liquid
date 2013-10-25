@@ -2,7 +2,6 @@ package liquid.controller;
 
 import liquid.metadata.ChargeWay;
 import liquid.metadata.LocationType;
-import liquid.metadata.SpType;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
@@ -41,9 +40,6 @@ public class PlanningController extends BaseTaskController {
 
     @Autowired
     private PlanningRepository planningRepository;
-
-    @Autowired
-    private ChargeTypeRepository ctRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -94,7 +90,9 @@ public class PlanningController extends BaseTaskController {
         }
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("planning", planning);
-        model.addAttribute("route", new Route());
+        Route route = new Route();
+        route.setContainerQty(planning.getOrder().getContainerQty());
+        model.addAttribute("route", route);
 
         model.addAttribute("cts", chargeService.getChargeTypes());
         model.addAttribute("chargeWays", ChargeWay.values());
@@ -200,14 +198,14 @@ public class PlanningController extends BaseTaskController {
                 List<Location> portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByType(SpType.BARGE.getType()));
+                model.addAttribute("sps", spRepository.findByType(2));
                 model.addAttribute("locations", portLocs);
                 break;
             case "vessel":
                 portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByType(SpType.VESSEL.getType()));
+                model.addAttribute("sps", spRepository.findByType(3));
                 model.addAttribute("locations", portLocs);
                 break;
             default:

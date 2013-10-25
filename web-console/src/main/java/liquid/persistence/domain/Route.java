@@ -25,7 +25,7 @@ public class Route extends BaseEntity {
 
     @Min(1)
     @Column(name = "CONTAINER_QTY")
-    private int containerQty = 1;
+    private int containerQty;
 
     @Transient
     private String deliveryDateStr;

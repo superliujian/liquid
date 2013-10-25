@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<br/>
+
+<div class="container" th:if="${task.assignee}">
+    <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(charges)}">
+        <thead>
+        <tr>
+            <th th:text="#{charge.id}">ID</th>
+            <th th:text="#{order.id}">Order ID</th>
+            <th th:text="#{charge.type}">Type</th>
+            <th th:text="#{sp.name}">SP Name</th>
+            <th th:text="#{charge.way}">Way</th>
+            <th th:text="#{charge.unit.price}">Unit Price</th>
+            <th th:text="#{charge.total.price}">Total Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="charge : ${charges}">
+            <td th:text="${charge.id}">ID</td>
+            <td th:text="${charge.order.id}">Order ID</td>
+            <td th:text="${cts[charge.type]}">Type</td>
+            <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
+            <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
+            <td th:text="${charge.unitPrice}">Unit Price</td>
+            <td th:text="${charge.totalPrice}">Total Price</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

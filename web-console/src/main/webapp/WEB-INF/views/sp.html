@@ -43,7 +43,7 @@
         <tr th:each="sp : ${sps}">
             <td th:text="${sp.id}">ID</td>
             <td th:text="${sp.name}">Name</td>
-            <td th:text="#{${spTypes[__${sp.type}__].i18nKey}}">Type</td>
+            <td th:text="${spTypes[sp.type]}">Type</td>
             <td th:text="${sp.address} + ', ' + ${sp.postcode}">Name</td>
             <td th:text="${sp.contact}">Contact</td>
             <td th:text="${sp.phone}">Phone</td>
@@ -72,8 +72,8 @@
             <div class="col-lg-9">
                 <select th:field="*{type}" class="form-control">
                     <option th:each="spType : ${spTypes}"
-                            th:value="${spType.type}"
-                            th:text="#{${spType.i18nKey}}">SP Name
+                            th:value="${spType.key}"
+                            th:text="${spType.value}">SP Type
                     </option>
                 </select>
             </div>

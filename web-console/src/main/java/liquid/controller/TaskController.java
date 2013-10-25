@@ -1,9 +1,12 @@
 package liquid.controller;
 
+import liquid.dto.EarningDto;
 import liquid.dto.TaskDto;
-import liquid.service.NotCompletedException;
-import liquid.service.PlanningService;
-import liquid.service.TaskService;
+import liquid.metadata.ChargeStatus;
+import liquid.metadata.ChargeWay;
+import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.Order;
+import liquid.service.*;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
@@ -38,6 +41,12 @@ public class TaskController extends BaseController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ChargeService chargeService;
+
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String tasks(Model model, Principal principal) {
@@ -115,5 +124,78 @@ public class TaskController extends BaseController {
         }
 
         return "redirect:/task";
+    }
+
+    @RequestMapping(value = "/{taskId}/check_amount", method = RequestMethod.GET)
+    public String checkAmount(@PathVariable String taskId,
+                              Model model, Principal principal) {
+        long orderId = taskService.getOrderIdByTaskId(taskId);
+        TaskDto task = taskService.getTask(taskId);
+        model.addAttribute("task", task);
+
+        if ("ROLE_COMMERCE".equals(RoleHelper.getRole(principal))) {
+            Iterable<Charge> charges = chargeService.findByOrderId(orderId);
+            model.addAttribute("charges", charges);
+        } else {
+            Iterable<Charge> charges = chargeService.findByOrderIdAndCreateRole(orderId, RoleHelper.getRole(principal));
+            model.addAttribute("charges", charges);
+        }
+
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        return "charge/list";
+    }
+
+    @RequestMapping(value = "/{taskId}/settlement", method = RequestMethod.GET)
+    public String settle(@PathVariable String taskId,
+                         Model model, Principal principal) {
+        TaskDto task = taskService.getTask(taskId);
+        model.addAttribute("task", task);
+
+        Order order = orderService.findByTaskId(taskId);
+        Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
+        model.addAttribute("charges", charges);
+
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("cts", chargeService.getChargeTypes());
+
+        EarningDto earning = chargeService.calculateEarning(order, charges);
+        model.addAttribute("earning", earning);
+        return "charge/settlement";
+    }
+
+    @RequestMapping(value = "/{taskId}/settlement/{chargeId}", method = RequestMethod.GET)
+    public String initDetail(@PathVariable String taskId,
+                             @PathVariable long chargeId,
+                             Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("chargeId: {}", chargeId);
+
+        TaskDto task = taskService.getTask(taskId);
+        model.addAttribute("task", task);
+
+        Charge charge = chargeService.find(chargeId);
+        model.addAttribute("charge", charge);
+
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("cts", chargeService.getChargeTypes());
+
+        return "charge/settlement_detail";
+    }
+
+    @RequestMapping(value = "/{taskId}/settlement/{chargeId}", method = RequestMethod.POST)
+    public String pay(@PathVariable String taskId,
+                      @PathVariable long chargeId,
+                      Model model, Principal principal) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("chargeId: {}", chargeId);
+
+        TaskDto task = taskService.getTask(taskId);
+        model.addAttribute("task", task);
+
+        Charge charge = chargeService.find(chargeId);
+        charge.setStatus(ChargeStatus.PAID.getValue());
+        chargeService.save(charge);
+        return "redirect:/task/" + taskId + "/settlement";
     }
 }

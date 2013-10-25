@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -159,7 +160,11 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locations);
             return "order/form";
         } else {
+            order.setCreateRole(RoleHelper.getRole(principal));
             order.setCreateUser(principal.getName());
+            order.setCreateTime(new Date());
+            order.setUpdateUser(principal.getName());
+            order.setUpdateTime(new Date());
             orderService.save(order);
             return "redirect:/order?number=0";
         }
@@ -178,7 +183,11 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locations);
             return "order/form";
         } else {
+            order.setCreateRole(RoleHelper.getRole(principal));
             order.setCreateUser(principal.getName());
+            order.setCreateTime(new Date());
+            order.setUpdateUser(principal.getName());
+            order.setUpdateTime(new Date());
             orderService.submit(order);
             return "redirect:/order?number=0";
         }

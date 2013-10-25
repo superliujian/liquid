@@ -87,6 +87,9 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "EXT_EXP_COMMENT")
     private String extExpComment;
 
+    @Column(name = "CREATE_ROLE")
+    private String createRole;
+
     // 1 saved; 2: submitted
     @Column(name = "STATUS")
     private int status;
@@ -243,6 +246,14 @@ public class BaseOrder extends BaseEntity {
         this.extExpComment = extExpComment;
     }
 
+    public String getCreateRole() {
+        return createRole;
+    }
+
+    public void setCreateRole(String createRole) {
+        this.createRole = createRole;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -274,6 +285,7 @@ public class BaseOrder extends BaseEntity {
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", extExp=").append(extExp);
         sb.append(", extExpComment='").append(extExpComment).append('\'');
+        sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

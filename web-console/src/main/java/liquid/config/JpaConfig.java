@@ -33,6 +33,7 @@ import java.util.Properties;
                 value = {
                         CustomerRepository.class,
                         SpRepository.class,
+                        SpTypeRepository.class,
                         LocationRepository.class,
                         CargoRepository.class,
                         ChargeTypeRepository.class,

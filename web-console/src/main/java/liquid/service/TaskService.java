@@ -139,6 +139,13 @@ public class TaskService {
                 return "/task/" + task.getId() + "/delivery";
             case "adjustPrice":
                 return "/task/" + task.getId() + "/extra";
+            case "checkCostByMarketing":
+            case "checkCostByOperating":
+            case "checkFromMarketing":
+            case "checkFromOperating":
+                return "/task/" + task.getId() + "/check_amount";
+            case "confirmPurchaingSettlement":
+                return "/task/" + task.getId() + "/settlement";
             case "planLoading":
             default:
                 return "/task/" + task.getId() + "/common";

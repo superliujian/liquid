@@ -6,6 +6,7 @@ import liquid.persistence.domain.*;
 import liquid.service.ChargeService;
 import liquid.service.PlanningService;
 import liquid.service.SpService;
+import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -79,6 +81,11 @@ public class PurchaseController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("legId: {}", legId);
 
+        charge.setCreateRole(RoleHelper.getRole(principal));
+        charge.setCreateUser(principal.getName());
+        charge.setCreateTime(new Date());
+        charge.setUpdateUser(principal.getName());
+        charge.setUpdateTime(new Date());
         chargeService.addCharge(legId, charge);
         return "redirect:" + request.getServletPath();
     }

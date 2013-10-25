@@ -66,6 +66,7 @@
                             <li><a href="/cargo" th:text="#{cargo}">Cargo</a></li>
                             <li><a href="/location" th:text="#{location}">Location</a></li>
                             <li><a href="/ct" th:text="#{charge.type}">Charge Type</a></li>
+                            <li><a href="/sp_type" th:text="#{sp.type}">Sp Type</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">

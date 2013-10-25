@@ -19,7 +19,7 @@ public class ServiceProvider extends BaseEntity {
     private String name;
 
     @Column(name = "TYPE")
-    private int type;
+    private long type;
 
     @NotNull @NotEmpty
     @Column(name = "ADDRESS")
@@ -49,11 +49,11 @@ public class ServiceProvider extends BaseEntity {
         this.name = name;
     }
 
-    public int getType() {
+    public long getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(long type) {
         this.type = type;
     }
 
