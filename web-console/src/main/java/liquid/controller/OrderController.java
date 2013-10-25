@@ -109,12 +109,7 @@ public class OrderController extends BaseChargeController {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String role = RoleHelper.getRole(principal);
         Page<Order> page = null;
-        if (role.equals("ROLE_SALES")) {
-            page = orderService.findByCreateUser(principal.getName(), pageRequest);
-        } else {
-            page = orderService.findAll(pageRequest);
-        }
-
+        page = orderService.findByCreateUser(principal.getName(), pageRequest);
         model.addAttribute("page", page);
         return "order/page";
     }
