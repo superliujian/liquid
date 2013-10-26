@@ -1,11 +1,14 @@
 package liquid.service;
 
 import liquid.dto.EarningDto;
+import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.persistence.repository.LegRepository;
 import liquid.persistence.repository.SpRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ import java.util.TreeMap;
  */
 @Service
 public class ChargeService {
+    private static final Logger logger = LoggerFactory.getLogger(ChargeService.class);
+
     @Autowired
     private ChargeRepository chargeRepository;
 
@@ -56,6 +61,15 @@ public class ChargeService {
         Leg leg = legRepository.findOne(legId);
         charge.setLeg(leg);
         charge.setOrder(leg.getRoute().getPlanning().getOrder());
+
+        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
+            charge.setUnitPrice(0L);
+        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
+            charge.setTotalPrice(charge.getUnitPrice() * leg.getRoute().getContainerQty());
+        } else {
+            logger.warn("{} is out of charge way range.", charge.getWay());
+        }
+
         return chargeRepository.save(charge);
     }
 
