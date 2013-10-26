@@ -83,15 +83,18 @@ public class PlanningController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("planningId: {}", planningId);
 
+        int containerUsage = 0;
         Planning planning = planningRepository.findOne(Long.valueOf(planningId));
         for (Route route : planning.getRoutes()) {
+            containerUsage += route.getContainerQty();
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
         }
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("planning", planning);
+
         Route route = new Route();
-        route.setContainerQty(planning.getOrder().getContainerQty());
+        route.setContainerQty(planning.getOrder().getContainerQty() - containerUsage);
         model.addAttribute("route", route);
 
         model.addAttribute("cts", chargeService.getChargeTypes());
