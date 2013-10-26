@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.persistence.domain.Order;
 import liquid.persistence.domain.Planning;
@@ -64,6 +65,22 @@ public class TaskService {
     public TaskDto[] listMyTasks(String uid) {
         List<Task> list = bpmService.listMyTasks(uid);
         return toTaskDtoArray(list);
+    }
+
+    public TaskDto[] listWarningTasks() {
+        List<Task> list = bpmService.listWarningTasks();
+        return toTaskDtoArray(list);
+    }
+
+    public TaskBadgeDto calculateTaskBadge(String candidateGid, String uid) {
+        TaskBadgeDto taskBadge = new TaskBadgeDto();
+        TaskDto[] queue = listTasks(candidateGid);
+        TaskDto[] myTasks = listMyTasks(uid);
+        TaskDto[] warnings = listWarningTasks();
+        taskBadge.setQueueSize(queue.length);
+        taskBadge.setMyTasksQty(myTasks.length);
+        taskBadge.setWarningQty(warnings.length);
+        return taskBadge;
     }
 
     public long getOrderIdByTaskId(String taskId) {

@@ -256,7 +256,7 @@ public class ShippingContainerService {
             rcRepository.save(containers);
         } else {
             container.setTransPlanNo(railPlan.getPlanNo());
-            container.setEts(DateUtils.dateOf(railPlan.getEts()));
+            container.setEts(DateUtils.dayOf(railPlan.getEts()));
             rcRepository.save(container);
         }
     }

@@ -1,6 +1,7 @@
 package liquid.controller;
 
 import liquid.dto.EarningDto;
+import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.ChargeStatus;
 import liquid.metadata.ChargeWay;
@@ -52,23 +53,43 @@ public class TaskController extends BaseController {
     public String tasks(Model model, Principal principal) {
         logger.debug("Role: {}", RoleHelper.getRole(principal));
         TaskDto[] tasks = taskService.listTasks(RoleHelper.getRole(principal));
+        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(RoleHelper.getRole(principal), principal.getName());
         model.addAttribute("tasks", tasks);
+        model.addAttribute("taskBadge", taskBadge);
         model.addAttribute("title", "task.queue");
         //TODO: Using js to implement the function
         model.addAttribute("queueActive", "active");
         model.addAttribute("myActive", "");
+        model.addAttribute("warningActive", "");
         return "task/list";
     }
 
     @RequestMapping(value = "/my", method = RequestMethod.GET)
     public String myTasks(Model model, Principal principal) {
         TaskDto[] tasks = taskService.listMyTasks(principal.getName());
+        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(RoleHelper.getRole(principal), principal.getName());
         model.addAttribute("tasks", tasks);
+        model.addAttribute("taskBadge", taskBadge);
         model.addAttribute("title", "task.my");
         //TODO: Using js to implement the function
         model.addAttribute("queueActive", "");
         model.addAttribute("myActive", "active");
+        model.addAttribute("warningActive", "");
         return "task/list";
+    }
+
+    @RequestMapping(value = "/warning", method = RequestMethod.GET)
+    public String warningTasks(Model model, Principal principal) {
+        TaskDto[] tasks = taskService.listWarningTasks();
+        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(RoleHelper.getRole(principal), principal.getName());
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("taskBadge", taskBadge);
+        model.addAttribute("title", "task.my");
+        //TODO: Using js to implement the function
+        model.addAttribute("queueActive", "");
+        model.addAttribute("myActive", "");
+        model.addAttribute("warningActive", "active");
+        return "task/warning";
     }
 
     /**
