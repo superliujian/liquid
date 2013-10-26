@@ -123,6 +123,37 @@
     </ul>
 </div>
 
+<!--
+Leg tab
+varable:
+tab,
+taskId,
+planningId,
+roadId,
+-->
+<div th:fragment="leg-tab">
+    <div id="middle" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active" th:class="${tab} == 'rail' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/rail'"
+                   th:text="#{rail}">Rail</a>
+            </li>
+            <li class="active" th:class="${tab} == 'barge' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/barge'"
+                   th:text="#{barge}">Barge</a>
+            </li>
+            <li class="active" th:class="${tab} == 'vessel' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/vessel'"
+                   th:text="#{vessel}">Vessel</a>
+            </li>
+            <li class="active" th:class="${tab} == 'road' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${routeId} + '/road'"
+                   th:text="#{road}">Road</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <!-- TaskDto Bar -->
 <div th:fragment="task-bar">
     <div class="jumbotron">
@@ -158,48 +189,6 @@
     <!-- /.jumbotron -->
 </div>
 
-<!-- planning -->
-<!-- TODO: planning and allocation can be refactor to a variable. -->
-<div th:fragment="planning-tab">
-    <div class="container" th:if="${task.assignee}">
-        <ul class="nav nav-tabs">
-            <li class="active" th:class="${tab} == 'railway' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/railway'" th:text="#{railway}">Railway</a></li>
-            <li class="active" th:class="${tab} == 'barge' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/barge'" th:text="#{barge}">Barge</a></li>
-            <li class="active" th:class="${tab} == 'vessel' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/vessel'" th:text="#{vessel}">Vessel</a></li>
-            <li class="active" th:class="${tab} == 'charge' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/charge'" th:text="#{charge}">Charge</a></li>
-            <li class="active" th:class="${tab} == 'summary' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/summary'" th:text="#{summary}">Summary</a></li>
-        </ul>
-    </div>
-</div>
-
-<!-- @Deprecated -->
-<div th:fragment="planning-route">
-    <div class="container" th:if="${task.assignee}">
-        <form action="/task/${taskId}/planning/{tab}" method="POST" class="form-inline"
-              th:object="${planning}" th:action="'/task/' + ${taskId} + '/planning/' + ${tab}">
-
-            <input type="submit" name="addPlanning" value="Add Planning" class="btn btn-default"
-                   th:value="#{trans.add.planning}" th:if="${planning['new']}"/>
-
-            <div class="btn-group" th:unless="${planning['new']}">
-                <input type="submit" name="applyMulti" value="Apply Multiple Routes" class="btn btn-default"
-                       th:value="#{trans.same.route}" th:if="${planning['sameRoute']}"/>
-                <input type="submit" name="applySame" value="Apply Same Route" class="btn btn-default"
-                       th:value="#{trans.multi.routes}" th:unless="${planning['sameRoute']}"/>
-
-                <input type="submit" name="deletePlanning" value="Delete Planning Settings" class="btn btn-default"
-                       th:value="#{trans.delete.planning}"/>
-            </div>
-        </form>
-    </div>
-    <!-- /.container -->
-    <br/>
-</div>
 
 <!-- footer -->
 <div th:fragment="footer">

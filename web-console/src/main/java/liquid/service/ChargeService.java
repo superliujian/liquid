@@ -85,6 +85,14 @@ public class ChargeService {
         return chargeRepository.findByTaskId(taskId);
     }
 
+    public long total(Iterable<Charge> charges) {
+        long total = 0L;
+        for (Charge charge : charges) {
+            total += charge.getTotalPrice();
+        }
+        return total;
+    }
+
     public Map<Long, String> getChargeTypes() {
         Map<Long, String> cts = new TreeMap<Long, String>();
         Iterable<ChargeType> iterable = ctRepository.findAll();

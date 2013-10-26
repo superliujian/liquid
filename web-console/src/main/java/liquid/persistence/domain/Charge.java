@@ -36,7 +36,7 @@ public class Charge extends BaseEntity {
     private ServiceProvider sp;
 
     @Column(name = "WAY")
-    private int way;
+    private int way = 1;
 
     @Column(name = "UNIT_PRICE")
     private long unitPrice;
