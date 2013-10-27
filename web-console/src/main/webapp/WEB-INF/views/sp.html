@@ -33,17 +33,17 @@
             <th th:text="#{sp.id}">ID</th>
             <th th:text="#{sp.name}">Name</th>
             <th th:text="#{sp.type}">Type</th>
-            <th th:text="#{sp}">Address</th>
-            <th th:text="#{sp}">Contact</th>
-            <th th:text="#{sp}">Phone</th>
-            <th th:text="#{sp}">Cell</th>
+            <th th:text="#{address}">Address</th>
+            <th th:text="#{contact}">Contact</th>
+            <th th:text="#{phone}">Phone</th>
+            <th th:text="#{cell}">Cell</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="sp : ${sps}">
             <td th:text="${sp.id}">ID</td>
             <td th:text="${sp.name}">Name</td>
-            <td th:text="#{${spTypes[__${sp.type}__].i18nKey}}">Type</td>
+            <td th:text="${sp.type.name}">Type</td>
             <td th:text="${sp.address} + ', ' + ${sp.postcode}">Name</td>
             <td th:text="${sp.contact}">Contact</td>
             <td th:text="${sp.phone}">Phone</td>
@@ -66,14 +66,14 @@
             </div>
         </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('type')} ? 'has-error'">
+        <div class="form-group">
             <label th:text="#{sp.type}" class="col-lg-3 control-label">SP Type</label>
 
             <div class="col-lg-9">
-                <select th:field="*{type}" class="form-control">
+                <select th:field="*{typeId}" class="form-control">
                     <option th:each="spType : ${spTypes}"
-                            th:value="${spType.type}"
-                            th:text="#{${spType.i18nKey}}">SP Name
+                            th:value="${spType.key}"
+                            th:text="${spType.value}">SP Type
                     </option>
                 </select>
             </div>

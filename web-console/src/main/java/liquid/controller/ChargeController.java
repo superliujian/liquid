@@ -42,9 +42,6 @@ public class ChargeController {
     private ChargeTypeRepository ctRepository;
 
     @Autowired
-    private ChargeRepository chargeRepository;
-
-    @Autowired
     private ChargeService chargeService;
 
     @ModelAttribute("chargeWays")
@@ -59,7 +56,7 @@ public class ChargeController {
 
     @ModelAttribute("charges")
     public Iterable<Charge> populateCharges() {
-        return chargeRepository.findAll();
+        return chargeService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -74,7 +71,7 @@ public class ChargeController {
 
         } else {
             try {
-                model.addAttribute("charges", chargeRepository.findByOrderId(Long.parseLong(param)));
+                model.addAttribute("charges", chargeService.findByOrderId(Long.parseLong(param)));
             } catch (Exception e) {
                 logger.warn("An exception was thrown when calling findById", e);
             }
@@ -86,7 +83,7 @@ public class ChargeController {
     public String findBySpName(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
 
-        model.addAttribute("charges", chargeRepository.findBySpNameLike("%" + param + "%"));
+        model.addAttribute("charges", chargeService.findBySpName(param));
         return "charge";
     }
 
@@ -110,7 +107,7 @@ public class ChargeController {
             logger.warn("{} is out of charge way range.", charge.getWay());
         }
 
-        chargeRepository.save(charge);
+        chargeService.save(charge);
 
         String redirect = "redirect:" + referer;
         return redirect;
@@ -120,7 +117,7 @@ public class ChargeController {
     public String initDetail(@PathVariable long chargeId,
                              Model model, Principal principal) {
         logger.debug("chargeId: {}", chargeId);
-        Charge charge = chargeRepository.findOne(chargeId);
+        Charge charge = chargeService.find(chargeId);
         model.addAttribute("charge", charge);
         return "charge/detail";
     }
@@ -129,9 +126,9 @@ public class ChargeController {
     public String pay(@PathVariable long chargeId,
                       Model model, Principal principal) {
         logger.debug("chargeId: {}", chargeId);
-        Charge charge = chargeRepository.findOne(chargeId);
+        Charge charge = chargeService.find(chargeId);
         charge.setStatus(ChargeStatus.PAID.getValue());
-        chargeRepository.save(charge);
+        chargeService.save(charge);
         return "redirect:/charge";
     }
 }

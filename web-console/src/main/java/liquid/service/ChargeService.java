@@ -1,13 +1,14 @@
 package liquid.service;
 
-import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.ChargeType;
-import liquid.persistence.domain.Leg;
-import liquid.persistence.domain.ServiceProvider;
+import liquid.dto.EarningDto;
+import liquid.metadata.ChargeWay;
+import liquid.persistence.domain.*;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.persistence.repository.LegRepository;
 import liquid.persistence.repository.SpRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,8 @@ import java.util.TreeMap;
  */
 @Service
 public class ChargeService {
+    private static final Logger logger = LoggerFactory.getLogger(ChargeService.class);
+
     @Autowired
     private ChargeRepository chargeRepository;
 
@@ -58,6 +61,17 @@ public class ChargeService {
         Leg leg = legRepository.findOne(legId);
         charge.setLeg(leg);
         charge.setOrder(leg.getRoute().getPlanning().getOrder());
+        ChargeType type = ctRepository.findOne(charge.getTypeId());
+        charge.setType(type);
+
+        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
+            charge.setUnitPrice(0L);
+        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
+            charge.setTotalPrice(charge.getUnitPrice() * leg.getRoute().getContainerQty());
+        } else {
+            logger.warn("{} is out of charge way range.", charge.getWay());
+        }
+
         return chargeRepository.save(charge);
     }
 
@@ -73,6 +87,14 @@ public class ChargeService {
         return chargeRepository.findByTaskId(taskId);
     }
 
+    public long total(Iterable<Charge> charges) {
+        long total = 0L;
+        for (Charge charge : charges) {
+            total += charge.getTotalPrice();
+        }
+        return total;
+    }
+
     public Map<Long, String> getChargeTypes() {
         Map<Long, String> cts = new TreeMap<Long, String>();
         Iterable<ChargeType> iterable = ctRepository.findAll();
@@ -80,5 +102,46 @@ public class ChargeService {
             cts.put(chargeType.getId(), chargeType.getName());
         }
         return cts;
+    }
+
+    public Iterable<Charge> findByOrderId(long orderId) {
+        return chargeRepository.findByOrderId(orderId);
+    }
+
+    public Iterable<Charge> findBySpName(String spName) {
+        return chargeRepository.findBySpNameLike("%" + spName + "%");
+    }
+
+    public void save(Charge charge) {
+        ChargeType type = ctRepository.findOne(charge.getTypeId());
+        charge.setType(type);
+        chargeRepository.save(charge);
+    }
+
+    public Charge find(long id) {
+        return chargeRepository.findOne(id);
+    }
+
+    public Iterable<Charge> findAll() {
+        return chargeRepository.findAll();
+    }
+
+    public Iterable<Charge> findByOrderIdAndCreateRole(long orderId, String createRole) {
+        return chargeRepository.findByOrderIdAndCreateRole(orderId, createRole);
+    }
+
+    public EarningDto calculateEarning(Order order, Iterable<Charge> charges) {
+        EarningDto earning = new EarningDto();
+        earning.setCost(order.getDistyPrice());
+        earning.setSalesPrice(order.getSalesPrice());
+
+        long procurementCost = 0L;
+        for (Charge charge : charges) {
+            procurementCost += charge.getTotalPrice();
+        }
+
+        earning.setGrossMargin(earning.getSalesPrice() - procurementCost);
+        earning.setNetProfit(earning.getCost() - procurementCost);
+        return earning;
     }
 }

@@ -1,6 +1,6 @@
 package liquid.persistence.repository;
 
-import liquid.persistence.domain.Cargo;
+import liquid.persistence.domain.Goods;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -10,4 +10,4 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 3:31 PM
  */
 
-public interface CargoRepository extends CrudRepository<Cargo, Long> {}
+public interface CargoRepository extends CrudRepository<Goods, Long> {}

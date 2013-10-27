@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.Cargo;
+import liquid.persistence.domain.Goods;
 import liquid.persistence.repository.CargoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,33 +22,33 @@ import java.security.Principal;
  * Time: 3:30 PM
  */
 @Controller
-@RequestMapping("/cargo")
-public class CargoController {
-    private static final Logger logger = LoggerFactory.getLogger(Cargo.class);
+@RequestMapping("/goods")
+public class GoodsController {
+    private static final Logger logger = LoggerFactory.getLogger(Goods.class);
 
     @Autowired
     private CargoRepository cargoRepository;
 
     @ModelAttribute("cargos")
-    public Iterable<Cargo> populateCargos() {
+    public Iterable<Goods> populateCargos() {
         return cargoRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public void list(Model model, Principal principal) {
-        model.addAttribute("cargo", new Cargo());
+        model.addAttribute("goods", new Goods());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Cargo cargo,
+    public String create(@Valid @ModelAttribute Goods goods,
                          BindingResult bindingResult, Principal principal) {
-        logger.debug("Cargo: {}", cargo);
+        logger.debug("Goods: {}", goods);
 
         if (bindingResult.hasErrors()) {
-            return "cargo";
+            return "goods";
         } else {
-            cargoRepository.save(cargo);
-            return "redirect:/cargo";
+            cargoRepository.save(goods);
+            return "redirect:/goods";
         }
     }
 }

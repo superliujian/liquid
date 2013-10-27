@@ -4,6 +4,7 @@ import liquid.context.BusinessContext;
 import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.service.*;
+import liquid.utils.RoleHelper;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,7 +67,7 @@ public class OrderController extends BaseChargeController {
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Cargo> populateCargos() {
+    public Iterable<Goods> populateCargos() {
         return cargoTypeService.findAll();
     }
 
@@ -94,6 +96,7 @@ public class OrderController extends BaseChargeController {
         return OrderStatus.values();
     }
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET)
     public String initFind(Model model, Principal principal) {
         model.addAttribute("orders", orderService.findAllOrderByDesc());
@@ -105,7 +108,9 @@ public class OrderController extends BaseChargeController {
                                  Model model, Principal principal) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<Order> page = orderService.findAll(pageRequest);
+        String role = RoleHelper.getRole(principal);
+        Page<Order> page = null;
+        page = orderService.findByCreateUser(principal.getName(), pageRequest);
         model.addAttribute("page", page);
         return "order/page";
     }
@@ -155,8 +160,13 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locations);
             return "order/form";
         } else {
+            order.setCreateRole(RoleHelper.getRole(principal));
+            order.setCreateUser(principal.getName());
+            order.setCreateTime(new Date());
+            order.setUpdateUser(principal.getName());
+            order.setUpdateTime(new Date());
             orderService.save(order);
-            return "redirect:/order";
+            return "redirect:/order?number=0";
         }
     }
 
@@ -173,8 +183,13 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locations);
             return "order/form";
         } else {
+            order.setCreateRole(RoleHelper.getRole(principal));
+            order.setCreateUser(principal.getName());
+            order.setCreateTime(new Date());
+            order.setUpdateUser(principal.getName());
+            order.setUpdateTime(new Date());
             orderService.submit(order);
-            return "redirect:/order";
+            return "redirect:/order?number=0";
         }
     }
 

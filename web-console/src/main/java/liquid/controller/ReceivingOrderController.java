@@ -51,7 +51,7 @@ public class ReceivingOrderController {
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Cargo> populateCargoTypes() {
+    public Iterable<Goods> populateCargoTypes() {
         return cargoTypeService.findAll();
     }
 

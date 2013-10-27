@@ -12,7 +12,8 @@ import java.util.Map;
 public enum TransMode {
     RAIL(0, "rail"),
     BARGE(1, "barge"),
-    VESSEL(2, "vessel");
+    VESSEL(2, "vessel"),
+    ROAD(3, "road");
 
     private final int type;
 
@@ -31,6 +32,8 @@ public enum TransMode {
                 return BARGE;
             case 2:
                 return VESSEL;
+            case 3:
+                return ROAD;
             default:
                 break;
         }

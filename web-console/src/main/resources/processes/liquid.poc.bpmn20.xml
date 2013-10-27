@@ -8,20 +8,25 @@
 
     <process id="liquidPoc" name="Liquid POC">
 
-        <startEvent id="placeOrder" activiti:initiator="employeeName">
-            <extensionElements>
-                <activiti:formProperty id="customer" name="Customer" type="string" required="true"/>
-            </extensionElements>
-        </startEvent>
-        <sequenceFlow id="flow0" sourceRef="placeOrder" targetRef="planRoute"/>
+        <startEvent id="placeOrder" activiti:initiator="employeeName"/>
+        <sequenceFlow id="flow0" sourceRef="placeOrder" targetRef="feedDistyPrice"/>
+
+        <userTask id="feedDistyPrice" name="填写渠道价格">
+            <documentation>
+                ${employeeName}已经下订单。您需要填写渠道价格。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_MARKETING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow5" sourceRef="feedDistyPrice" targetRef="planRoute"/>
 
         <userTask id="planRoute" name="路线规划">
             <documentation>
-                ${employeeName}已经下订单。您需要制定运输路线方案。
+                ${employeeName}已经填写渠道价格。您需要制定运输路线方案。
             </documentation>
-            <extensionElements>
-                <activiti:formProperty id="route" name="Route" type="string" required="true"/>
-            </extensionElements>
             <potentialOwner>
                 <resourceAssignmentExpression>
                     <formalExpression>ROLE_MARKETING</formalExpression>

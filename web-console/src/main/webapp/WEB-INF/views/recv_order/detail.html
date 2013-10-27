@@ -128,11 +128,11 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label th:text="#{cargo}">Cargo</label>
-                        <select th:field="*{cargoId}" class="form-control" disabled="disabled">
-                            <option th:each="cargo : ${cargos}"
-                                    th:value="${cargo.id}"
-                                    th:text="${cargo.name}">Cargo Name
+                        <label th:text="#{goods}">Cargo</label>
+                        <select th:field="*{goodsId}" class="form-control" disabled="disabled">
+                            <option th:each="goods : ${cargos}"
+                                    th:value="${goods.id}"
+                                    th:text="${goods.name}">Cargo Name
                             </option>
                         </select>
                     </div>
@@ -140,7 +140,7 @@
 
                 <div class="col-lg-6">
                     <div class="form-group" th:classappend="${#fields.hasErrors('cargoWeight')} ? 'has-error'">
-                        <label th:text="#{cargo.weight.with.unit}">Cargo Weight</label>
+                        <label th:text="#{goods.weight.with.unit}">Cargo Weight</label>
                         <input type="text" th:field="*{cargoWeight}" class="form-control" disabled="disabled"/>
 
                         <span th:errors="*{cargoWeight}">error</span>

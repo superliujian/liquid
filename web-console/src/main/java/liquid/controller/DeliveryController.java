@@ -1,8 +1,7 @@
 package liquid.controller;
 
-import liquid.persistence.domain.RailContainer;
-import liquid.persistence.domain.Route;
-import liquid.service.RouteService;
+import liquid.persistence.domain.DeliveryContainer;
+import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,40 +26,40 @@ public class DeliveryController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(DeliveryController.class);
 
     @Autowired
-    private RouteService routeService;
+    private ShippingContainerService scService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("routes", routeService.findByTaskId(taskId));
+        model.addAttribute("containers", scService.initDeliveryContainers(taskId));
         return "delivery/main";
     }
 
-    @RequestMapping(value = "/{routeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)
     public String initSave(@PathVariable String taskId,
-                           @PathVariable long routeId,
+                           @PathVariable long containerId,
                            Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("containerId: {}", containerId);
 
-        Route route = routeService.find(routeId);
+        DeliveryContainer container = scService.findDeliveryContainer(containerId);
 
-        logger.debug("route: {}", route);
-        model.addAttribute("route", route);
+        logger.debug("container: {}", container);
+        model.addAttribute("container", container);
         return "delivery/edit";
     }
 
-    @RequestMapping(value = "/{routeId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String save(@PathVariable String taskId,
-                       @PathVariable long routeId,
-                       @ModelAttribute("route") Route formBean,
+                       @PathVariable long containerId,
+                       @ModelAttribute("container") DeliveryContainer formBean,
                        Principal principal) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("containerId: {}", containerId);
 
-        routeService.save(formBean);
+        scService.saveDeliveryContainer(containerId, formBean);
 
         return "redirect:/task/" + taskId + "/delivery";
     }

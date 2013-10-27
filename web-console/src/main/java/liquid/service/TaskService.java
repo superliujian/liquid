@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.persistence.domain.Order;
 import liquid.persistence.domain.Planning;
@@ -66,6 +67,22 @@ public class TaskService {
         return toTaskDtoArray(list);
     }
 
+    public TaskDto[] listWarningTasks() {
+        List<Task> list = bpmService.listWarningTasks();
+        return toTaskDtoArray(list);
+    }
+
+    public TaskBadgeDto calculateTaskBadge(String candidateGid, String uid) {
+        TaskBadgeDto taskBadge = new TaskBadgeDto();
+        TaskDto[] queue = listTasks(candidateGid);
+        TaskDto[] myTasks = listMyTasks(uid);
+        TaskDto[] warnings = listWarningTasks();
+        taskBadge.setQueueSize(queue.length);
+        taskBadge.setMyTasksQty(myTasks.length);
+        taskBadge.setWarningQty(warnings.length);
+        return taskBadge;
+    }
+
     public long getOrderIdByTaskId(String taskId) {
         String businessKey = bpmService.getBusinessKeyByTaskId(taskId);
         return null == businessKey ? 0L : Long.valueOf(businessKey);
@@ -112,6 +129,8 @@ public class TaskService {
 
     private String computeTaskMainPath(Task task) {
         switch (task.getTaskDefinitionKey()) {
+            case "feedDistyPrice":
+                return "/task/" + task.getId() + "/disty";
             case "planRoute":
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
@@ -137,6 +156,13 @@ public class TaskService {
                 return "/task/" + task.getId() + "/delivery";
             case "adjustPrice":
                 return "/task/" + task.getId() + "/extra";
+            case "checkCostByMarketing":
+            case "checkCostByOperating":
+            case "checkFromMarketing":
+            case "checkFromOperating":
+                return "/task/" + task.getId() + "/check_amount";
+            case "confirmPurchaingSettlement":
+                return "/task/" + task.getId() + "/settlement";
             case "planLoading":
             default:
                 return "/task/" + task.getId() + "/common";

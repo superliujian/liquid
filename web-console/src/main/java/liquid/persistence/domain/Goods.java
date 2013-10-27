@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
  * Date: 9/28/13
  * Time: 3:27 PM
  */
-@Entity(name = "CARGO")
-public class Cargo {
+@Entity(name = "GOODS")
+public class Goods {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID") private long id;
 
     @NotNull @NotEmpty
-    @Column(name = "Name", nullable = true)
+    @Column(name = "NAME", nullable = true)
     private String name;
 
     public long getId() {
@@ -38,7 +38,7 @@ public class Cargo {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Cargo{");
+        final StringBuilder sb = new StringBuilder("Goods{");
         sb.append("id=").append(id);
         sb.append(", name=").append(name);
         sb.append('}');

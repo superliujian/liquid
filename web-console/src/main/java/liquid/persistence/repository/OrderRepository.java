@@ -1,8 +1,12 @@
 package liquid.persistence.repository;
 
 import liquid.persistence.domain.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -10,4 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 9/28/13
  * Time: 5:19 PM
  */
-public interface OrderRepository extends BaseOrderRepository<Order, Long> {}
+public interface OrderRepository extends BaseOrderRepository<Order, Long> {
+    Page<Order> findByCreateUser(String uid, Pageable pageable);
+}
