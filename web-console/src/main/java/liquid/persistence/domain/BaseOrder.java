@@ -48,11 +48,11 @@ public class BaseOrder extends BaseEntity {
     private String consigneeAddress;
 
     @Transient
-    private long cargoId;
+    private long goodsId;
 
     @OneToOne
-    @JoinColumn(name = "CARGO_ID")
-    private Cargo cargo;
+    @JoinColumn(name = "GOODS_ID")
+    private Goods goods;
 
     /**
      * unit kilogram
@@ -166,20 +166,20 @@ public class BaseOrder extends BaseEntity {
         this.consigneeAddress = consigneeAddress;
     }
 
-    public long getCargoId() {
-        return cargoId;
+    public long getGoodsId() {
+        return goodsId;
     }
 
-    public void setCargoId(long cargoId) {
-        this.cargoId = cargoId;
+    public void setGoodsId(long goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public Cargo getCargo() {
-        return cargo;
+    public Goods getGoods() {
+        return goods;
     }
 
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 
     public int getCargoWeight() {
@@ -275,8 +275,8 @@ public class BaseOrder extends BaseEntity {
         sb.append(", consignee='").append(consignee).append('\'');
         sb.append(", consigneePhone='").append(consigneePhone).append('\'');
         sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
-        sb.append(", cargoId=").append(cargoId);
-        sb.append(", cargo=").append(cargo);
+        sb.append(", goodsId=").append(goodsId);
+        sb.append(", goods=").append(goods);
         sb.append(", cargoWeight=").append(cargoWeight);
         sb.append(", containerType=").append(containerType);
         sb.append(", containerCap=").append(containerCap);

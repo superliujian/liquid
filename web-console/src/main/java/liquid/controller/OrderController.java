@@ -67,7 +67,7 @@ public class OrderController extends BaseChargeController {
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Cargo> populateCargos() {
+    public Iterable<Goods> populateCargos() {
         return cargoTypeService.findAll();
     }
 

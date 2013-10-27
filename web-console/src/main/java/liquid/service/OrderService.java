@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.context.BusinessContext;
-import liquid.persistence.domain.Cargo;
+import liquid.persistence.domain.Goods;
 import liquid.persistence.domain.Customer;
 import liquid.persistence.domain.Location;
 import liquid.persistence.domain.Order;
@@ -67,11 +67,11 @@ public class OrderService {
 
     public void save(Order order) {
         Customer customer = customerRepository.findOne(order.getCustomerId());
-        Cargo cargo = cargoRepository.findOne(order.getCargoId());
+        Goods goods = cargoRepository.findOne(order.getGoodsId());
         Location srcLoc = locationRepository.findOne(order.getOrigination());
         Location dstLoc = locationRepository.findOne(order.getDestination());
         order.setCustomer(customer);
-        order.setCargo(cargo);
+        order.setGoods(goods);
         order.setSrcLoc(srcLoc);
         order.setDstLoc(dstLoc);
         if (StringUtils.valuable(order.getLoadingEtStr()))
@@ -114,7 +114,7 @@ public class OrderService {
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setCustomerId(order.getCustomer().getId());
-        order.setCargoId(order.getCargo().getId());
+        order.setGoodsId(order.getGoods().getId());
         order.setLoadingEtStr(order.getLoadingEt() == null
                 ? DateUtils.stringOf(new Date())
                 : DateUtils.stringOf(order.getLoadingEt()));

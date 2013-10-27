@@ -60,8 +60,8 @@
                     <th th:text="#{customer.name}">Customer Name</th>
                     <th th:text="#{origination}">Origin</th>
                     <th th:text="#{destination}">Destination</th>
-                    <th th:text="#{cargo.name}">Cargo Name</th>
-                    <th th:text="#{cargo.weight}">Cargo Weight</th>
+                    <th th:text="#{goods.name}">Cargo Name</th>
+                    <th th:text="#{goods.weight}">Cargo Weight</th>
                     <th th:text="#{trade.type}">Trade Type</th>
                     <th th:text="#{loading.type}">Loading Type</th>
                     <th th:text="#{has.delivery}">Has Delivery</th>
@@ -81,7 +81,7 @@
                     <td th:text="${order.customer.name}">Customer Name</td>
                     <td th:text="${order.srcLoc.name}">Origin</td>
                     <td th:text="${order.dstLoc.name}">Destination</td>
-                    <td th:text="${order.cargo.name}"></td>
+                    <td th:text="${order.goods.name}"></td>
                     <td th:text="${order.cargoWeight}">Cargo Weight</td>
                     <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
                     <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
