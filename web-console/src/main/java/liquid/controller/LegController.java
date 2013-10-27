@@ -69,21 +69,21 @@ public class LegController extends BaseTaskController {
                 List<Location> portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByType(2));
+                model.addAttribute("sps", spRepository.findByTypeId(2));
                 model.addAttribute("locations", portLocs);
                 break;
             case "vessel":
                 portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByType(3));
+                model.addAttribute("sps", spRepository.findByTypeId(3));
                 model.addAttribute("locations", portLocs);
                 break;
             case "road":
                 List<Location> cityLocs = locationRepository.findByType(LocationType.CITY.getType());
                 defaultDstLocId = computeDefaultDstLocId(cityLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByType(5));
+                model.addAttribute("sps", spRepository.findByTypeId(5));
                 model.addAttribute("locations", cityLocs);
                 break;
             default:
