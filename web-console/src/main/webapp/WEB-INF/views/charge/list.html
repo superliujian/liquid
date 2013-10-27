@@ -20,28 +20,13 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div class="jumbotron">
-    <div class="container">
-        <form action="/charge" method="GET" class="form-inline">
-            <div class="form-group">
-                <label class="sr-only" for="param" th:text="#{charge.id}"/>
-                <input type="text" class="form-control" id="param" name="param"
-                       placeholder="Order ID"/>
-            </div>
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
 
-            <div class="form-group">
-                <input type="submit" name="findByOrderId" value="Find Charges By Order ID" class="btn btn-default"
-                       th:value="#{charge.find.by.order.id}"/>
-                <input type="submit" name="findBySpName" value="Find Charges By Sp Name" class="btn btn-default"
-                       th:value="#{charge.find.by.sp.name}"/>
-            </div>
-        </form>
-    </div>
-    <!-- /.container -->
-</div>
-<!-- /.jumbotron -->
+<br/>
 
-<div class="container">
+<div class="container" th:if="${task.assignee}">
     <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(charges)}">
         <thead>
         <tr>
@@ -52,7 +37,6 @@
             <th th:text="#{charge.way}">Way</th>
             <th th:text="#{charge.unit.price}">Unit Price</th>
             <th th:text="#{charge.total.price}">Total Price</th>
-            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -64,15 +48,6 @@
             <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
             <td th:text="${charge.unitPrice}">Unit Price</td>
             <td th:text="${charge.totalPrice}">Total Price</td>
-            <td>
-                <a href="/charge/id" class="btn btn-default btn-xs"
-                   th:href="'/charge/' + ${charge.id}" th:if="${charge.status} == 0">
-                    <i class="glyphicon glyphicon-credit-card"/>
-                </a>
-                <button class="btn btn-default btn-xs" th:if="${charge.status} == 1">
-                    <i class="glyphicon glyphicon-check"/>
-                </button>
-            </td>
         </tr>
         </tbody>
     </table>

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -118,5 +120,18 @@ public class ActivitiEngineService {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         processEngine.getRuntimeService().setVariable(task.getProcessInstanceId(), variableName, value);
+    }
+
+    public List<Task> listWarningTasks() {
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> taskList = taskService.createTaskQuery().taskDefinitionKey("recordTod").list();
+        Iterator<Task> iterator = taskList.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            Date now = new Date();
+            Date created = task.getCreateTime();
+            if ((now.getTime() - created.getTime()) < 2 * 24 * 60 * 60 * 1000) iterator.remove();
+        }
+        return taskList;
     }
 }

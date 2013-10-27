@@ -33,6 +33,7 @@ import java.util.Properties;
                 value = {
                         CustomerRepository.class,
                         SpRepository.class,
+                        SpTypeRepository.class,
                         LocationRepository.class,
                         CargoRepository.class,
                         ChargeTypeRepository.class,
@@ -47,6 +48,7 @@ import java.util.Properties;
                         RailContainerRepository.class,
                         BargeContainerRepository.class,
                         VesselContainerRepository.class,
+                        DeliveryContainerRepository.class,
                         ChargeRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement

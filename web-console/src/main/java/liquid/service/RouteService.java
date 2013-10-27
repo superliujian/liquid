@@ -43,8 +43,6 @@ public class RouteService {
             route.setLegs(legs);
             Collection<ShippingContainer> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
-            if (null != route.getDeliveryDate())
-                route.setDeliveryDateStr(DateUtils.dayStrOf(route.getDeliveryDate()));
         }
         return routes;
     }
@@ -59,19 +57,12 @@ public class RouteService {
             route.setLegs(legs);
             Collection<ShippingContainer> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
-            if (null != route.getDeliveryDate())
-                route.setDeliveryDateStr(DateUtils.dayStrOf(route.getDeliveryDate()));
         }
         return routes;
     }
 
     public Route find(long id) {
         Route route = routeRepository.findOne(id);
-
-        if (null == route.getDeliveryDate()) {
-            route.setDeliveryDateStr(DateUtils.dayStrOf(new Date()));
-        }
-
         return route;
     }
 
@@ -87,12 +78,8 @@ public class RouteService {
 
         if (formBean.isBatch()) {
             Collection<Route> routes = routeRepository.findByPlanning(oldOne.getPlanning());
-            for (Route route : routes) {
-                route.setDeliveryDate(DateUtils.dayOf(formBean.getDeliveryDateStr()));
-            }
             routeRepository.save(routes);
         } else {
-            oldOne.setDeliveryDate(DateUtils.dayOf(formBean.getDeliveryDateStr()));
             routeRepository.save(oldOne);
         }
     }
@@ -100,7 +87,6 @@ public class RouteService {
     @Transactional("transactionManager")
     public Route save(Route formBean, Planning planning) {
         formBean.setPlanning(planning);
-        formBean.setDeliveryAddress(planning.getOrder().getLoadingAddress());
         Route route = routeRepository.save(formBean);
         return route;
     }

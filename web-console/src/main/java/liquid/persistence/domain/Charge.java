@@ -25,8 +25,12 @@ public class Charge extends BaseEntity {
     @Transient
     private long formLegId;
 
-    @Column(name = "TYPE")
-    private long type;
+    @ManyToOne
+    @JoinColumn(name = "TYPE_ID")
+    private ChargeType type;
+
+    @Transient
+    private long typeId;
 
     @Transient
     private long spId;
@@ -36,13 +40,16 @@ public class Charge extends BaseEntity {
     private ServiceProvider sp;
 
     @Column(name = "WAY")
-    private int way;
+    private int way = 1;
 
     @Column(name = "UNIT_PRICE")
     private long unitPrice;
 
     @Column(name = "TOTAL_PRICE")
     private long totalPrice;
+
+    @Column(name = "CREATE_ROLE")
+    private String createRole;
 
     @Column(name = "STATUS")
     private int status;
@@ -79,12 +86,20 @@ public class Charge extends BaseEntity {
         this.formLegId = formLegId;
     }
 
-    public long getType() {
+    public ChargeType getType() {
         return type;
     }
 
-    public void setType(long type) {
+    public void setType(ChargeType type) {
         this.type = type;
+    }
+
+    public long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(long typeId) {
+        this.typeId = typeId;
     }
 
     public long getSpId() {
@@ -127,6 +142,14 @@ public class Charge extends BaseEntity {
         this.totalPrice = totalPrice;
     }
 
+    public String getCreateRole() {
+        return createRole;
+    }
+
+    public void setCreateRole(String createRole) {
+        this.createRole = createRole;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -144,11 +167,13 @@ public class Charge extends BaseEntity {
         sb.append(", leg=").append(leg);
         sb.append(", formLegId=").append(formLegId);
         sb.append(", type=").append(type);
+        sb.append(", typeId=").append(typeId);
         sb.append(", spId=").append(spId);
         sb.append(", sp=").append(sp);
         sb.append(", way=").append(way);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

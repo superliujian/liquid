@@ -51,11 +51,11 @@ public class ReceivingOrderService {
     @Transactional(value = "transactionManager")
     public ReceivingOrder save(ReceivingOrder order) {
         Customer customer = customerService.find(order.getCustomerId());
-        Cargo cargo = cargoTypeService.find(order.getCargoId());
+        Goods goods = cargoTypeService.find(order.getGoodsId());
         Location srcLoc = locationService.find(order.getOrigination());
         Location dstLoc = locationService.find(order.getDestination());
         order.setCustomer(customer);
-        order.setCargo(cargo);
+        order.setGoods(goods);
         order.setSrcLoc(srcLoc);
         order.setDstLoc(dstLoc);
 
@@ -91,7 +91,7 @@ public class ReceivingOrderService {
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setCustomerId(order.getCustomer().getId());
-        order.setCargoId(order.getCargo().getId());
+        order.setGoodsId(order.getGoods().getId());
 
         Iterable<ReceivingContainer> containers = recvContainerRepository.findByReceivingOrder(order);
         for (ReceivingContainer container : containers) {
