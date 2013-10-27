@@ -113,13 +113,17 @@ public class ChargeService {
     }
 
     public void save(Charge charge) {
-        ChargeType type = ctRepository.findOne(charge.getTypeId());
-        charge.setType(type);
+        if (null == charge.getType()) {
+            ChargeType type = ctRepository.findOne(charge.getTypeId());
+            charge.setType(type);
+        }
         chargeRepository.save(charge);
     }
 
     public Charge find(long id) {
-        return chargeRepository.findOne(id);
+        Charge charge = chargeRepository.findOne(id);
+        charge.setTypeId(charge.getType().getId());
+        return charge;
     }
 
     public Iterable<Charge> findAll() {
