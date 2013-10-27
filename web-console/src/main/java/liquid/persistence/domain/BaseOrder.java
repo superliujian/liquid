@@ -50,7 +50,7 @@ public class BaseOrder extends BaseEntity {
     @Transient
     private long goodsId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "GOODS_ID")
     private Goods goods;
 

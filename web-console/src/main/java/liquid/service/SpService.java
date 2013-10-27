@@ -30,6 +30,8 @@ public class SpService {
     }
 
     public void save(ServiceProvider sp) {
+        SpType type = spTypeRepository.findOne(sp.getTypeId());
+        sp.setType(type);
         spRepository.save(sp);
     }
 

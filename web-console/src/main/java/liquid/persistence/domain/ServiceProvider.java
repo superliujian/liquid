@@ -2,8 +2,7 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,10 +17,13 @@ public class ServiceProvider extends BaseEntity {
     @NotNull @NotEmpty
     private String name;
 
-    @Column(name = "TYPE")
-    private long type;
+    @ManyToOne
+    @JoinColumn(name = "TYPE_ID")
+    private SpType type;
 
-    @NotNull @NotEmpty
+    @Transient
+    private long typeId;
+
     @Column(name = "ADDRESS")
     private String address;
 
@@ -49,12 +51,20 @@ public class ServiceProvider extends BaseEntity {
         this.name = name;
     }
 
-    public long getType() {
+    public SpType getType() {
         return type;
     }
 
-    public void setType(long type) {
+    public void setType(SpType type) {
         this.type = type;
+    }
+
+    public long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(long typeId) {
+        this.typeId = typeId;
     }
 
     public String getAddress() {
@@ -103,6 +113,7 @@ public class ServiceProvider extends BaseEntity {
         sb.append("ServiceProvider{");
         sb.append("name='").append(name).append('\'');
         sb.append(", type=").append(type);
+        sb.append(", typeId=").append(typeId);
         sb.append(", address='").append(address).append('\'');
         sb.append(", postcode='").append(postcode).append('\'');
         sb.append(", contact='").append(contact).append('\'');

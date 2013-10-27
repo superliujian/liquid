@@ -61,6 +61,8 @@ public class ChargeService {
         Leg leg = legRepository.findOne(legId);
         charge.setLeg(leg);
         charge.setOrder(leg.getRoute().getPlanning().getOrder());
+        ChargeType type = ctRepository.findOne(charge.getTypeId());
+        charge.setType(type);
 
         if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
             charge.setUnitPrice(0L);
@@ -111,6 +113,8 @@ public class ChargeService {
     }
 
     public void save(Charge charge) {
+        ChargeType type = ctRepository.findOne(charge.getTypeId());
+        charge.setType(type);
         chargeRepository.save(charge);
     }
 

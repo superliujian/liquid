@@ -43,7 +43,7 @@
         <tr th:each="sp : ${sps}">
             <td th:text="${sp.id}">ID</td>
             <td th:text="${sp.name}">Name</td>
-            <td th:text="${spTypes[sp.type]}">Type</td>
+            <td th:text="${sp.type.name}">Type</td>
             <td th:text="${sp.address} + ', ' + ${sp.postcode}">Name</td>
             <td th:text="${sp.contact}">Contact</td>
             <td th:text="${sp.phone}">Phone</td>
@@ -66,11 +66,11 @@
             </div>
         </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('type')} ? 'has-error'">
+        <div class="form-group">
             <label th:text="#{sp.type}" class="col-lg-3 control-label">SP Type</label>
 
             <div class="col-lg-9">
-                <select th:field="*{type}" class="form-control">
+                <select th:field="*{typeId}" class="form-control">
                     <option th:each="spType : ${spTypes}"
                             th:value="${spType.key}"
                             th:text="${spType.value}">SP Type
