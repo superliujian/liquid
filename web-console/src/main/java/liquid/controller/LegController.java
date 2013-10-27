@@ -2,14 +2,8 @@ package liquid.controller;
 
 import liquid.metadata.LocationType;
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.Leg;
-import liquid.persistence.domain.Location;
-import liquid.persistence.domain.Route;
-import liquid.persistence.domain.ServiceProvider;
-import liquid.persistence.repository.LegRepository;
-import liquid.persistence.repository.LocationRepository;
-import liquid.persistence.repository.RouteRepository;
-import liquid.persistence.repository.SpRepository;
+import liquid.persistence.domain.*;
+import liquid.persistence.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +39,9 @@ public class LegController extends BaseTaskController {
     @Autowired
     private RouteRepository routeRepository;
 
+    @Autowired
+    private SpTypeRepository stRepository;
+
     @RequestMapping(value = "/{tab}", method = RequestMethod.GET)
     public String initLeg(@PathVariable String taskId,
                           @PathVariable long planningId,
@@ -69,21 +66,24 @@ public class LegController extends BaseTaskController {
                 List<Location> portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByTypeId(2));
+                SpType bargeType = stRepository.findOne(2L);
+                model.addAttribute("sps", spRepository.findByType(bargeType));
                 model.addAttribute("locations", portLocs);
                 break;
             case "vessel":
                 portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByTypeId(3));
+                SpType vesselType = stRepository.findOne(3L);
+                model.addAttribute("sps", spRepository.findByType(vesselType));
                 model.addAttribute("locations", portLocs);
                 break;
             case "road":
                 List<Location> cityLocs = locationRepository.findByType(LocationType.CITY.getType());
                 defaultDstLocId = computeDefaultDstLocId(cityLocs);
                 leg.setDstLocId(defaultDstLocId);
-                model.addAttribute("sps", spRepository.findByTypeId(5));
+                SpType roadType = stRepository.findOne(4L);
+                model.addAttribute("sps", spRepository.findByType(roadType));
                 model.addAttribute("locations", cityLocs);
                 break;
             default:

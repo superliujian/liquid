@@ -1,6 +1,7 @@
 package liquid.persistence.repository;
 
 import liquid.persistence.domain.ServiceProvider;
+import liquid.persistence.domain.SpType;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -10,5 +11,5 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 5:03 PM
  */
 public interface SpRepository extends CrudRepository<ServiceProvider, Long> {
-    Iterable<ServiceProvider> findByTypeId(long type);
+    Iterable<ServiceProvider> findByType(SpType type);
 }
