@@ -2,8 +2,7 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -22,6 +21,16 @@ public class Container extends BaseEntity {
     @NotNull @NotEmpty
     @Column(name = "OWNER")
     private String owner;
+
+    @Column(name = "TYPE")
+    private int type;
+
+    @ManyToOne
+    @JoinColumn(name = "YARD")
+    private Location yard;
+
+    @Transient
+    private long yardId;
 
     @Column(name = "STATUS")
     private int status;
@@ -50,12 +59,39 @@ public class Container extends BaseEntity {
         this.status = status;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public Location getYard() {
+        return yard;
+    }
+
+    public void setYard(Location yard) {
+        this.yard = yard;
+    }
+
+    public long getYardId() {
+        return yardId;
+    }
+
+    public void setYardId(long yardId) {
+        this.yardId = yardId;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Container{");
         sb.append("bicCode='").append(bicCode).append('\'');
         sb.append(", owner='").append(owner).append('\'');
+        sb.append(", type=").append(type);
+        sb.append(", yard=").append(yard);
+        sb.append(", yardId=").append(yardId);
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

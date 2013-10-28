@@ -1,8 +1,13 @@
 package liquid.controller;
 
+import liquid.metadata.ContainerCap;
+import liquid.metadata.LocationType;
 import liquid.persistence.domain.Container;
 import liquid.metadata.ContainerStatus;
+import liquid.persistence.domain.Location;
 import liquid.persistence.repository.ContainerRepository;
+import liquid.service.ContainerService;
+import liquid.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -28,11 +35,14 @@ public class ContainerController {
     private static final Logger logger = LoggerFactory.getLogger(ContainerController.class);
 
     @Autowired
-    private ContainerRepository containerRepository;
+    private ContainerService containerService;
+
+    @Autowired
+    private LocationService locationService;
 
     @ModelAttribute("containers")
     public Iterable<Container> populateContainers() {
-        return containerRepository.findAll();
+        return containerService.findAll();
     }
 
     @ModelAttribute("container")
@@ -43,6 +53,21 @@ public class ContainerController {
     @ModelAttribute("statusArray")
     public ContainerStatus[] populateStatus() {
         return ContainerStatus.values();
+    }
+
+    @ModelAttribute("containerTypeMap")
+    public Map<Integer, String> populateContainerTypeMap() {
+        return ContainerCap.toMap();
+    }
+
+    @ModelAttribute("containerTypes")
+    public ContainerCap[] populateContainerTypes() {
+        return ContainerCap.values();
+    }
+
+    @ModelAttribute("locations")
+    public List<Location> populateLocations() {
+        return locationService.findByType(LocationType.YARD.getType());
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -59,7 +84,7 @@ public class ContainerController {
             return "container/list";
         } else {
             container.setStatus(0);
-            containerRepository.save(container);
+            containerService.save(container);
             return "redirect:/container";
         }
     }

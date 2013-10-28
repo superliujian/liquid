@@ -1,9 +1,9 @@
 package liquid.persistence.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO: Comments.
@@ -24,6 +24,14 @@ public class ShippingContainer extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
     private Route route;
+
+    @NotNull @NotEmpty
+    @Column(name = "PICKUP_CONTACT")
+    private String pickupContact;
+
+    @NotNull @NotEmpty
+    @Column(name = "CONTACT_PHONE")
+    private String contactPhone;
 
     public Container getContainer() {
         return container;
@@ -49,6 +57,22 @@ public class ShippingContainer extends BaseEntity {
         this.route = route;
     }
 
+    public String getPickupContact() {
+        return pickupContact;
+    }
+
+    public void setPickupContact(String pickupContact) {
+        this.pickupContact = pickupContact;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
@@ -56,6 +80,8 @@ public class ShippingContainer extends BaseEntity {
         sb.append("container=").append(container);
         sb.append(", containerId=").append(containerId);
         sb.append(", route=").append(route);
+        sb.append(", pickupContact='").append(pickupContact).append('\'');
+        sb.append(", contactPhone='").append(contactPhone).append('\'');
         sb.append('}');
         return sb.toString();
     }

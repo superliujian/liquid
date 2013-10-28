@@ -42,6 +42,24 @@
             </div>
         </div>
 
+        <div class="form-group" th:classappend="${#fields.hasErrors('pickupContact')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{contact}">Contact</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{pickupContact}" class="form-control"/>
+            </div>
+            <span th:errors="*{pickupContact}">error</span>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('contactPhone')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{phone}">Phone</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{contactPhone}" class="form-control"/>
+            </div>
+            <span th:errors="*{contactPhone}">error</span>
+        </div>
+
         <div class="form-group">
             <div class="col-lg-offset-9 col-lg-3">
                 <input type="submit" name="allocate" value="Allocate Container" class="btn btn-default"

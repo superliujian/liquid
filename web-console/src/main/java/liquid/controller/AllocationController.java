@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +55,17 @@ public class AllocationController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
 
-        model.addAttribute("sc", new ShippingContainer());
+        ShippingContainer sc = new ShippingContainer();
+
+        Route route = routeService.find(routeId);
+        Collection<ShippingContainer> scs = scService.findByRoute(route);
+        if (scs.iterator().hasNext()) {
+            ShippingContainer firstOne = scs.iterator().next();
+            sc.setPickupContact(firstOne.getPickupContact());
+            sc.setContactPhone(firstOne.getContactPhone());
+        }
+
+        model.addAttribute("sc", sc);
         model.addAttribute("routeId", routeId);
         model.addAttribute("containers", containerService.findAllInStock());
         return "allocation/allocating";
@@ -64,9 +75,13 @@ public class AllocationController extends BaseTaskController {
     public String allocate(@PathVariable String taskId,
                            @PathVariable long routeId,
                            ShippingContainer sc,
-                           Model model, Principal principal) {
+                           BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
+
+        if (bindingResult.hasErrors()) {
+            return "allocation/allocating";
+        }
 
         scService.add(routeId, sc);
 
