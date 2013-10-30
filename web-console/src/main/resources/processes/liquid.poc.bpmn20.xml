@@ -21,7 +21,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow5" sourceRef="feedDistyPrice" targetRef="planRoute"/>
+        <sequenceFlow id="flow10" sourceRef="feedDistyPrice" targetRef="planRoute"/>
 
         <userTask id="planRoute" name="路线规划">
             <documentation>
@@ -33,7 +33,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow10" sourceRef="planRoute" targetRef="planLoading"/>
+        <sequenceFlow id="flow20" sourceRef="planRoute" targetRef="planLoading"/>
 
         <userTask id="planLoading" name="制定装载方案">
             <documentation>
@@ -45,7 +45,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow20" sourceRef="planLoading" targetRef="allocateContainers"/>
+        <sequenceFlow id="flow30" sourceRef="planLoading" targetRef="allocateContainers"/>
 
         <userTask id="allocateContainers" name="分配集装箱">
             <documentation>
@@ -57,13 +57,13 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow30" sourceRef="allocateContainers" targetRef="loadingDecision"/>
+        <sequenceFlow id="flow40" sourceRef="allocateContainers" targetRef="loadingDecision"/>
 
         <exclusiveGateway id="loadingDecision" name="装货决策"/>
-        <sequenceFlow id="flow40" sourceRef="loadingDecision" targetRef="sendLoadingOnYard">
+        <sequenceFlow id="flow50" sourceRef="loadingDecision" targetRef="sendLoadingOnYard">
             <conditionExpression xsi:type="tFormalExpression">${loadingType == 0}</conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="flow50" sourceRef="loadingDecision" targetRef="sendLoadingByTruck">
+        <sequenceFlow id="flow60" sourceRef="loadingDecision" targetRef="sendLoadingByTruck">
             <conditionExpression xsi:type="tFormalExpression">${loadingType == 1}</conditionExpression>
         </sequenceFlow>
 
@@ -77,7 +77,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow60" sourceRef="sendLoadingOnYard" targetRef="loadOnYardAndRailwayPlanFork"/>
+        <sequenceFlow id="flow70" sourceRef="sendLoadingOnYard" targetRef="loadOnYardAndRailwayPlanFork"/>
 
         <userTask id="sendLoadingByTruck" name="发布外拖指令">
             <documentation>
@@ -89,15 +89,15 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow70" sourceRef="sendLoadingByTruck" targetRef="loadByTruckAndRailwayPlanFork"/>
+        <sequenceFlow id="flow80" sourceRef="sendLoadingByTruck" targetRef="loadByTruckAndRailwayPlanFork"/>
 
         <parallelGateway id="loadOnYardAndRailwayPlanFork" name="场装同时申报铁路计划"/>
-        <sequenceFlow id="flow80" sourceRef="loadOnYardAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
-        <sequenceFlow id="flow90" sourceRef="loadOnYardAndRailwayPlanFork" targetRef="loadOnYard"/>
+        <sequenceFlow id="flow90" sourceRef="loadOnYardAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
+        <sequenceFlow id="flow1000" sourceRef="loadOnYardAndRailwayPlanFork" targetRef="loadOnYard"/>
 
         <parallelGateway id="loadByTruckAndRailwayPlanFork" name="外拖同时申报铁路计划"/>
-        <sequenceFlow id="flow100" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
-        <sequenceFlow id="flow110" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="trucking"/>
+        <sequenceFlow id="flow110" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
+        <sequenceFlow id="flow120" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="sendingTruckDecision"/>
 
         <userTask id="loadOnYard" name="场装作业">
             <documentation>
@@ -109,9 +109,17 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow120" sourceRef="loadOnYard" targetRef="recordTory"/>
+        <sequenceFlow id="flow130" sourceRef="loadOnYard" targetRef="recordTory"/>
 
-        <userTask id="trucking" name="派车">
+        <exclusiveGateway id="sendingTruckDecision" name="派车决策"/>
+        <sequenceFlow id="flow140" sourceRef="sendingTruckDecision" targetRef="salesSendingTruck">
+            <conditionExpression xsi:type="tFormalExpression">${truckingRole == 'SALES'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow150" sourceRef="sendingTruckDecision" targetRef="marketingSendingTruck">
+            <conditionExpression xsi:type="tFormalExpression">${truckingRole == 'MARKETING'}</conditionExpression>
+        </sequenceFlow>
+
+        <userTask id="salesSendingTruck" name="销售派车">
             <documentation>
                 ${employeeName}已经发布外拖指令。您需要派车。
             </documentation>
@@ -119,7 +127,17 @@
                 <activiti:taskListener event="create" delegateExpression="${truckingAssigneeHandler}"/>
             </extensionElements>
         </userTask>
-        <sequenceFlow id="flow125" sourceRef="trucking" targetRef="loadByTruck"/>
+        <sequenceFlow id="flow160" sourceRef="salesSendingTruck" targetRef="recordTory"/>
+
+        <userTask id="marketingSendingTruck" name="市场派车">
+            <documentation>
+                ${employeeName}已经发布外拖指令。您需要派车。
+            </documentation>
+            <extensionElements>
+                <activiti:taskListener event="create" delegateExpression="${truckingAssigneeHandler}"/>
+            </extensionElements>
+        </userTask>
+        <sequenceFlow id="flow170" sourceRef="marketingSendingTruck" targetRef="loadByTruck"/>
 
         <userTask id="loadByTruck" name="外拖作业">
             <documentation>
@@ -131,7 +149,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow130" sourceRef="loadByTruck" targetRef="recordTory"/>
+        <sequenceFlow id="flow180" sourceRef="loadByTruck" targetRef="recordTory"/>
 
         <userTask id="applyRailwayPlan" name="申报铁路计划">
             <documentation>
@@ -143,7 +161,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow140" sourceRef="applyRailwayPlan" targetRef="loadAndRailwayPlanJoin"/>
+        <sequenceFlow id="flow190" sourceRef="applyRailwayPlan" targetRef="loadAndRailwayPlanJoin"/>
 
         <!-- record time of dispatch -->
         <userTask id="recordTory" name="记录进入铁路货场时间">
@@ -156,7 +174,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow145" sourceRef="recordTory" targetRef="recordTod"/>
+        <sequenceFlow id="flow200" sourceRef="recordTory" targetRef="recordTod"/>
 
         <!-- record time of dispatch -->
         <userTask id="recordTod" name="记录装车发运时间">
@@ -169,11 +187,11 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow150" sourceRef="recordTod" targetRef="bargeOpsAndRecordToaFork"/>
+        <sequenceFlow id="flow210" sourceRef="recordTod" targetRef="bargeOpsAndRecordToaFork"/>
 
         <parallelGateway id="bargeOpsAndRecordToaFork" name="驳船操作同时记录火车到达时间"/>
-        <sequenceFlow id="flow152" sourceRef="bargeOpsAndRecordToaFork" targetRef="loadAndRailwayPlanJoin"/>
-        <sequenceFlow id="flow153" sourceRef="bargeOpsAndRecordToaFork" targetRef="recordToa"/>
+        <sequenceFlow id="flow220" sourceRef="bargeOpsAndRecordToaFork" targetRef="loadAndRailwayPlanJoin"/>
+        <sequenceFlow id="flow230" sourceRef="bargeOpsAndRecordToaFork" targetRef="recordToa"/>
 
         <!-- record time of dispatch -->
         <userTask id="recordToa" name="记录火车到达时间">
@@ -186,16 +204,16 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow155" sourceRef="recordToa" targetRef="bargeOpAndRecordToaJoin"/>
+        <sequenceFlow id="flow240" sourceRef="recordToa" targetRef="bargeOpAndRecordToaJoin"/>
 
         <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
-        <sequenceFlow id="flow160" sourceRef="loadAndRailwayPlanJoin" targetRef="bargeOpsDecision"/>
+        <sequenceFlow id="flow250" sourceRef="loadAndRailwayPlanJoin" targetRef="bargeOpsDecision"/>
 
         <exclusiveGateway id="bargeOpsDecision" name="驳船操作决策"/>
-        <sequenceFlow id="flow170" sourceRef="bargeOpsDecision" targetRef="doBargeOps">
+        <sequenceFlow id="flow260" sourceRef="bargeOpsDecision" targetRef="doBargeOps">
             <conditionExpression xsi:type="tFormalExpression">${hasBarge == true}</conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="flow180" sourceRef="bargeOpsDecision" targetRef="bargeOpsEnd">
+        <sequenceFlow id="flow270" sourceRef="bargeOpsDecision" targetRef="bargeOpsEnd">
             <conditionExpression xsi:type="tFormalExpression">${hasBarge == false}</conditionExpression>
         </sequenceFlow>
 
@@ -209,19 +227,19 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow190" sourceRef="doBargeOps" targetRef="bargeOpsEnd"/>
+        <sequenceFlow id="flow280" sourceRef="doBargeOps" targetRef="bargeOpsEnd"/>
 
         <exclusiveGateway id="bargeOpsEnd" name="驳船操作结束"/>
-        <sequenceFlow id="flow193" sourceRef="bargeOpsEnd" targetRef="bargeOpAndRecordToaJoin"/>
+        <sequenceFlow id="flow290" sourceRef="bargeOpsEnd" targetRef="bargeOpAndRecordToaJoin"/>
 
         <parallelGateway id="bargeOpAndRecordToaJoin" name="大船操作同时记录火车到达时间合并"/>
-        <sequenceFlow id="flow195" sourceRef="bargeOpAndRecordToaJoin" targetRef="vesselOpsDecision"/>
+        <sequenceFlow id="flow300" sourceRef="bargeOpAndRecordToaJoin" targetRef="vesselOpsDecision"/>
 
         <exclusiveGateway id="vesselOpsDecision" name="大船操作决策"/>
-        <sequenceFlow id="flow200" sourceRef="vesselOpsDecision" targetRef="doVesselOps">
+        <sequenceFlow id="flow310" sourceRef="vesselOpsDecision" targetRef="doVesselOps">
             <conditionExpression xsi:type="tFormalExpression">${hasVessel == true}</conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="flow210" sourceRef="vesselOpsDecision" targetRef="deliveryDecision">
+        <sequenceFlow id="flow320" sourceRef="vesselOpsDecision" targetRef="deliveryDecision">
             <conditionExpression xsi:type="tFormalExpression">${hasVessel == false}</conditionExpression>
         </sequenceFlow>
 
@@ -235,13 +253,13 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow220" sourceRef="doVesselOps" targetRef="deliveryDecision"/>
+        <sequenceFlow id="flow330" sourceRef="doVesselOps" targetRef="deliveryDecision"/>
 
         <exclusiveGateway id="deliveryDecision" name="配送决策"/>
-        <sequenceFlow id="flow230" sourceRef="deliveryDecision" targetRef="deliver">
+        <sequenceFlow id="flow340" sourceRef="deliveryDecision" targetRef="deliver">
             <conditionExpression xsi:type="tFormalExpression">${hasDelivery == true}</conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="flow240" sourceRef="deliveryDecision" targetRef="reclaimReceipt">
+        <sequenceFlow id="flow350" sourceRef="deliveryDecision" targetRef="reclaimReceipt">
             <conditionExpression xsi:type="tFormalExpression">${hasDelivery == false}</conditionExpression>
         </sequenceFlow>
 
@@ -255,7 +273,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow250" sourceRef="deliver" targetRef="reclaimReceipt"/>
+        <sequenceFlow id="flow360" sourceRef="deliver" targetRef="reclaimReceipt"/>
 
         <userTask id="reclaimReceipt" name="回收签收单">
             <documentation>
@@ -267,7 +285,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow260" sourceRef="reclaimReceipt" targetRef="adjustPrice"/>
+        <sequenceFlow id="flow370" sourceRef="reclaimReceipt" targetRef="adjustPrice"/>
 
         <userTask id="adjustPrice" name="修正订单价格">
             <documentation>
@@ -280,12 +298,12 @@
                 </resourceAssignmentExpression>
             </humanPerformer>
         </userTask>
-        <sequenceFlow id="flow270" sourceRef="adjustPrice" targetRef="sendInvoicingAndPsFork"/>
+        <sequenceFlow id="flow380" sourceRef="adjustPrice" targetRef="sendInvoicingAndPsFork"/>
 
         <!-- ps means purchasing settlement -->
         <parallelGateway id="sendInvoicingAndPsFork" name=""/>
-        <sequenceFlow id="flow280" sourceRef="sendInvoicingAndPsFork" targetRef="sendInvoicing"/>
-        <sequenceFlow id="flow290" sourceRef="sendInvoicingAndPsFork" targetRef="sendSettling"/>
+        <sequenceFlow id="flow390" sourceRef="sendInvoicingAndPsFork" targetRef="sendInvoicing"/>
+        <sequenceFlow id="flow400" sourceRef="sendInvoicingAndPsFork" targetRef="sendSettling"/>
 
         <userTask id="sendInvoicing" name="发送开发票指令">
             <documentation>
@@ -297,7 +315,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow300" sourceRef="sendInvoicing" targetRef="confirmInvoiceAmount"/>
+        <sequenceFlow id="flow410" sourceRef="sendInvoicing" targetRef="confirmInvoiceAmount"/>
 
         <userTask id="confirmInvoiceAmount" name="确认发票金额">
             <documentation>
@@ -310,7 +328,7 @@
                 </resourceAssignmentExpression>
             </humanPerformer>
         </userTask>
-        <sequenceFlow id="flow310" sourceRef="confirmInvoiceAmount" targetRef="invoice"/>
+        <sequenceFlow id="flow420" sourceRef="confirmInvoiceAmount" targetRef="invoice"/>
 
         <userTask id="invoice" name="开发票">
             <documentation>
@@ -322,7 +340,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow320" sourceRef="invoice" targetRef="return"/>
+        <sequenceFlow id="flow430" sourceRef="invoice" targetRef="return"/>
 
         <userTask id="return" name="催收款">
             <documentation>
@@ -334,7 +352,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow330" sourceRef="return" targetRef="confirmIncomeSettlement"/>
+        <sequenceFlow id="flow440" sourceRef="return" targetRef="confirmIncomeSettlement"/>
 
         <userTask id="confirmIncomeSettlement" name="确认收入结算">
             <documentation>
@@ -346,7 +364,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow340" sourceRef="confirmIncomeSettlement" targetRef="settlementJoin"/>
+        <sequenceFlow id="flow450" sourceRef="confirmIncomeSettlement" targetRef="settlementJoin"/>
 
         <userTask id="sendSettling" name="发送采购结算指令">
             <documentation>
@@ -358,11 +376,11 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow350" sourceRef="sendSettling" targetRef="checkCostFork"/>
+        <sequenceFlow id="flow460" sourceRef="sendSettling" targetRef="checkCostFork"/>
 
         <parallelGateway id="checkCostFork" name="市场操作同时核对金额"/>
-        <sequenceFlow id="flow360" sourceRef="checkCostFork" targetRef="checkCostByMarketing"/>
-        <sequenceFlow id="flow370" sourceRef="checkCostFork" targetRef="checkCostByOperating"/>
+        <sequenceFlow id="flow470" sourceRef="checkCostFork" targetRef="checkCostByMarketing"/>
+        <sequenceFlow id="flow480" sourceRef="checkCostFork" targetRef="checkCostByOperating"/>
 
         <userTask id="checkCostByMarketing" name="核对金额">
             <documentation>
@@ -374,7 +392,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow380" sourceRef="checkCostByMarketing" targetRef="confirmProviderInvoicingByMarketing"/>
+        <sequenceFlow id="flow490" sourceRef="checkCostByMarketing" targetRef="confirmProviderInvoicingByMarketing"/>
 
         <userTask id="confirmProviderInvoicingByMarketing" name="确认供应商开具发票">
             <documentation>
@@ -386,7 +404,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow390" sourceRef="confirmProviderInvoicingByMarketing"
+        <sequenceFlow id="flow500" sourceRef="confirmProviderInvoicingByMarketing"
                       targetRef="checkFromMarketing"/>
 
         <userTask id="checkFromMarketing" name="核对市场采购金额">
@@ -399,7 +417,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow400" sourceRef="checkFromMarketing" targetRef="checkJoin"/>
+        <sequenceFlow id="flow510" sourceRef="checkFromMarketing" targetRef="checkJoin"/>
 
         <userTask id="checkCostByOperating" name="核对金额">
             <documentation>
@@ -411,7 +429,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow410" sourceRef="checkCostByOperating" targetRef="confirmProviderInvoicingByOperating"/>
+        <sequenceFlow id="flow520" sourceRef="checkCostByOperating" targetRef="confirmProviderInvoicingByOperating"/>
 
         <userTask id="confirmProviderInvoicingByOperating" name="确认供应商开具发票">
             <documentation>
@@ -423,7 +441,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow420" sourceRef="confirmProviderInvoicingByOperating"
+        <sequenceFlow id="flow530" sourceRef="confirmProviderInvoicingByOperating"
                       targetRef="checkFromOperating"/>
 
         <userTask id="checkFromOperating" name="核对操作采购金额">
@@ -436,10 +454,10 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow430" sourceRef="checkFromOperating" targetRef="checkJoin"/>
+        <sequenceFlow id="flow540" sourceRef="checkFromOperating" targetRef="checkJoin"/>
 
         <parallelGateway id="checkJoin" name="核对采购金额合并"/>
-        <sequenceFlow id="flow440" sourceRef="checkJoin" targetRef="confirmPurchaingSettlement"/>
+        <sequenceFlow id="flow550" sourceRef="checkJoin" targetRef="confirmPurchaingSettlement"/>
 
         <userTask id="confirmPurchaingSettlement" name="确认采购结算">
             <documentation>
@@ -451,10 +469,10 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow450" sourceRef="confirmPurchaingSettlement" targetRef="settlementJoin"/>
+        <sequenceFlow id="flow560" sourceRef="confirmPurchaingSettlement" targetRef="settlementJoin"/>
 
         <parallelGateway id="settlementJoin" name="结算合并"/>
-        <sequenceFlow id="flow460" sourceRef="settlementJoin" targetRef="comfirmData"/>
+        <sequenceFlow id="flow570" sourceRef="settlementJoin" targetRef="comfirmData"/>
 
         <userTask id="comfirmData" name="确认修正数据">
             <documentation>
@@ -466,7 +484,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow470" sourceRef="comfirmData" targetRef="theEnd1"/>
+        <sequenceFlow id="flow580" sourceRef="comfirmData" targetRef="theEnd1"/>
 
         <endEvent id="theEnd1"/>
 

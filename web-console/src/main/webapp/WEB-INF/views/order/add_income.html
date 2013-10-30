@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<div class="container">
+    <form action="/task/{taskId}/ajustement/income" method="POST" class="form-horizontal center"
+          th:object="${income}" th:action="'/task/' + ${taskId} + '/ajustement/income'">
+
+        <div class="form-group">
+            <label class="col-lg-4 control-label" th:text="#{income.type}">Income Type</label>
+
+            <div class="col-lg-8">
+                <select class="form-control" th:field="*{type}">
+                    <option th:each="incomeType : ${incomeTypes}"
+                            th:value="${incomeType.key}"
+                            th:text="#{${incomeType.value}}">Income Type Name
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('amount')} ? 'has-error'">
+            <label class="col-lg-4 control-label" th:text="#{amount}">Amount</label>
+
+            <div class="col-lg-8">
+                <input type="text" th:field="*{amount}" class="form-control"/>
+                <span th:errors="*{amount}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
+            <label class="col-lg-4 control-label" th:text="#{comment}">Comment</label>
+
+            <div class="col-lg-8">
+                <input type="text" th:field="*{comment}" class="form-control"/>
+                <span th:errors="*{comment}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-4 col-lg-8">
+                <input type="submit" name="save" value="Save Order" class="btn btn-default"
+                       th:attr="value=#{order.save}"/>
+                <span th:if="${done}" class="glyphicon glyphicon-ok"/>
+            </div>
+        </div>
+
+    </form>
+</div>
+<!-- /.container -->
+
+<br/>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

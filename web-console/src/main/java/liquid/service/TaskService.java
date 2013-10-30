@@ -139,6 +139,8 @@ public class TaskService {
                 return "/task/" + task.getId() + "/rail_plan";
             case "loadOnYard":
             case "loadByTruck":
+            case "salesSendingTruck":
+            case "marketingSendingTruck":
                 return "/task/" + task.getId() + "/rail_truck";
             case "sendLoadingByTruck":
                 return "/task/" + task.getId() + "/rail_truck/sending";
@@ -155,7 +157,7 @@ public class TaskService {
             case "deliver":
                 return "/task/" + task.getId() + "/delivery";
             case "adjustPrice":
-                return "/task/" + task.getId() + "/extra";
+                return "/task/" + task.getId() + "/ajustement";
             case "checkCostByMarketing":
             case "checkCostByOperating":
             case "checkFromMarketing":

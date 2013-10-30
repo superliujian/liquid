@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<br/>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span th:text="#{income}"></span>
+            <span class="pull-right">
+                <a href="/task/{taskId}/ajustement/income" class="btn btn-default btn-xs"
+                   th:href="'/task/' + ${taskId} + '/ajustement/income'">
+                    <i class="glyphicon glyphicon-plus"/>
+                </a>
+            </span>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-striped table-hover table-condensed table-16"
+                   th:unless="${#lists.isEmpty(incomes)}">
+                <thead>
+                <tr>
+                    <th th:text="#{income.type}">Type</th>
+                    <th th:text="#{customer.name}">Customer Name</th>
+                    <th th:text="#{amount}">Amount</th>
+                    <th th:text="#{comment}">Comment</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="income : ${incomes}">
+                    <td th:text="#{${incomeTypes[income.type]}}">Type</td>
+                    <td th:text="${income.order.customer.name}">SP Name</td>
+                    <td th:text="${income.amount}">Amount</td>
+                    <td th:text="${income.comment}">Comment</td>
+                    <th>
+                        <a class="btn btn-default btn-xs"
+                           th:href="'/task/' + ${taskId} + '/ajustement/income/' + ${income.id}">
+                            <i class="glyphicon glyphicon-minus"/>
+                        </a>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.panel-body -->
+        <div class="panel-footer">
+            <span th:text="#{total} + ':' + ${incomesTotal}"></span>
+        </div>
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.container -->
+
+<br/>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span th:text="#{charge}"></span>
+            <span class="pull-right">
+                <a href="/task/{taskId}/ajustement/income" class="btn btn-default btn-xs"
+                   th:href="'/task/' + ${taskId} + '/ajustement/charge'">
+                    <i class="glyphicon glyphicon-plus"/>
+                </a>
+            </span>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-striped table-hover table-condensed table-16"
+                   th:unless="${#lists.isEmpty(charges)}">
+                <thead>
+                <tr>
+                    <th th:text="#{charge.type}">Type</th>
+                    <th th:text="#{sp.name}">SP Name</th>
+                    <th th:text="#{charge.way}">Way</th>
+                    <th th:text="#{charge.unit.price}">Unit Price</th>
+                    <th th:text="#{charge.total.price}">Total Price</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="charge : ${charges}">
+                    <td th:text="${charge.type.name}">Type</td>
+                    <td th:text="${charge.sp.name}">SP Name</td>
+                    <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
+                    <td th:text="${charge.unitPrice}">Unit Price</td>
+                    <td th:text="${charge.totalPrice}">Total Price</td>
+                    <th>
+                        <a class="btn btn-default btn-xs"
+                           th:href="'/task/' + ${taskId} + '/ajustement/charge/' + ${charge.id}">
+                            <i class="glyphicon glyphicon-minus"/>
+                        </a>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.panel-body -->
+        <div class="panel-footer">
+            <span th:text="#{total} + ':' + ${chargesTotal}"></span>
+        </div>
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.container -->
+
+<br/>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

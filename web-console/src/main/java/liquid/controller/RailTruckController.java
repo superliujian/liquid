@@ -2,7 +2,11 @@ package liquid.controller;
 
 import liquid.dto.TruckDto;
 import liquid.dto.TruckingDto;
+import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
+import liquid.metadata.TransMode;
+import liquid.persistence.domain.Charge;
+import liquid.service.ChargeService;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +34,23 @@ public class RailTruckController extends BaseTaskController {
     @Autowired
     private ShippingContainerService scService;
 
+    @Autowired
+    private ChargeService chargeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("containers", scService.initialize(taskId));
         model.addAttribute("rail_task", TASK_PATH);
+
+        // for charges
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("transModes", TransMode.toMap());
+        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        model.addAttribute("charges", charges);
+        model.addAttribute("total", chargeService.total(charges));
         return "rail/main";
     }
 

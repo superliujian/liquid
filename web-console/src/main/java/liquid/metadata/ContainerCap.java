@@ -1,5 +1,8 @@
 package liquid.metadata;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO: Comments.
  * User: tao
@@ -17,6 +20,15 @@ public enum ContainerCap {
     private ContainerCap(int type, String name) {
         this.type = type;
         this.name = name;
+    }
+
+    public static Map<Integer, String> toMap() {
+        Map<Integer, String> types = new HashMap<Integer, String>();
+        ContainerCap[] typeArray = values();
+        for (ContainerCap type : typeArray) {
+            types.put(type.type, type.name);
+        }
+        return types;
     }
 
     public int getType() {

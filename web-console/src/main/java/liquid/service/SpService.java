@@ -1,6 +1,5 @@
 package liquid.service;
 
-import liquid.persistence.domain.ChargeType;
 import liquid.persistence.domain.ServiceProvider;
 import liquid.persistence.domain.SpType;
 import liquid.persistence.repository.SpRepository;
