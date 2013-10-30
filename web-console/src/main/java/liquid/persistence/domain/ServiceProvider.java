@@ -13,8 +13,12 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "SERVICE_PROVIDER")
 public class ServiceProvider extends BaseEntity {
-    @Column(name = "NAME")
     @NotNull @NotEmpty
+    @Column(name = "CODE")
+    private String code;
+
+    @NotNull @NotEmpty
+    @Column(name = "NAME")
     private String name;
 
     @ManyToOne
@@ -27,21 +31,31 @@ public class ServiceProvider extends BaseEntity {
     @Column(name = "ADDRESS")
     private String address;
 
-    @NotNull @NotEmpty
     @Column(name = "POSTCODE")
     private String postcode;
 
-    @NotNull @NotEmpty
     @Column(name = "CONTACT")
     private String contact;
 
-    @NotNull @NotEmpty
     @Column(name = "PHONE")
     private String phone;
 
-    @NotNull @NotEmpty
     @Column(name = "CELL")
     private String cell;
+
+    /**
+     * enabled or disabled
+     */
+    @Column(name = "STATUS")
+    private int status;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;
@@ -107,11 +121,20 @@ public class ServiceProvider extends BaseEntity {
         this.cell = cell;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("ServiceProvider{");
-        sb.append("name='").append(name).append('\'');
+        sb.append("code='").append(code).append('\'');
+        sb.append(", name='").append(name).append('\'');
         sb.append(", type=").append(type);
         sb.append(", typeId=").append(typeId);
         sb.append(", address='").append(address).append('\'');
@@ -119,6 +142,7 @@ public class ServiceProvider extends BaseEntity {
         sb.append(", contact='").append(contact).append('\'');
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", cell='").append(cell).append('\'');
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

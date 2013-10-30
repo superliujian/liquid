@@ -31,6 +31,7 @@
         <thead>
         <tr>
             <th th:text="#{sp.id}">ID</th>
+            <th th:text="#{sp.code}">Code</th>
             <th th:text="#{sp.name}">Name</th>
             <th th:text="#{sp.type}">Type</th>
             <th th:text="#{address}">Address</th>
@@ -42,9 +43,10 @@
         <tbody>
         <tr th:each="sp : ${sps}">
             <td th:text="${sp.id}">ID</td>
+            <td th:text="${sp.code}">Code</td>
             <td th:text="${sp.name}">Name</td>
             <td th:text="${sp.type.name}">Type</td>
-            <td th:text="${sp.address} + ', ' + ${sp.postcode}">Name</td>
+            <td th:text="${sp.address} + ' ' + ${sp.postcode}">Name</td>
             <td th:text="${sp.contact}">Contact</td>
             <td th:text="${sp.phone}">Phone</td>
             <td th:text="${sp.cell}">Cell</td>
@@ -55,8 +57,19 @@
 
 <div class="container">
     <form action="/sp" method="POST" th:object="${sp}" class="form-horizontal center">
+        <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
+            <label th:text="#{sp.code} + '*'" class="col-lg-3 control-label">Name</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{code}" class="form-control"/>
+            </div>
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{code}">error</span>
+            </div>
+        </div>
+
         <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
-            <label th:text="#{sp.name}" class="col-lg-3 control-label">Name</label>
+            <label th:text="#{sp.name} + '*'" class="col-lg-3 control-label">Name</label>
 
             <div class="col-lg-9">
                 <input type="text" th:field="*{name}" class="form-control"/>

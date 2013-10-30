@@ -13,35 +13,36 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "CUSTOMER")
 public class Customer extends BaseEntity {
+    @NotNull @NotEmpty
+    @Column(name = "CODE")
+    private String code;
+
+    @NotNull @NotEmpty
     @Column(name = "NAME")
-    @NotNull
-    @NotEmpty
     private String name;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "ADDRESS")
     private String address;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "POSTCODE")
     private String postcode;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "CONTACT")
     private String contact;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "PHONE")
     private String phone;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "CELL")
     private String cell;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;
@@ -95,7 +96,8 @@ public class Customer extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Customer{");
-        sb.append("name='").append(name).append('\'');
+        sb.append("code='").append(code).append('\'');
+        sb.append(", name='").append(name).append('\'');
         sb.append(", address='").append(address).append('\'');
         sb.append(", postcode='").append(postcode).append('\'');
         sb.append(", contact='").append(contact).append('\'');
