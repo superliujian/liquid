@@ -10,4 +10,4 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 3:31 PM
  */
 
-public interface CargoRepository extends CrudRepository<Goods, Long> {}
+public interface GoodsRepository extends CrudRepository<Goods, Long> {}

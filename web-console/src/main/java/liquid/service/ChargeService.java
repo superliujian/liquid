@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,6 +38,9 @@ public class ChargeService {
 
     @Autowired
     private SpRepository spRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     public Iterable<Charge> getChargesByOrderId(long orderId) {
         return chargeRepository.findByOrderId(orderId);
@@ -72,6 +76,31 @@ public class ChargeService {
             logger.warn("{} is out of charge way range.", charge.getWay());
         }
 
+        return chargeRepository.save(charge);
+    }
+
+    public Charge addCharge(Charge charge, String uid) {
+        Order order = orderService.findByTaskId(charge.getTaskId());
+        charge.setOrder(order);
+
+        ServiceProvider sp = spRepository.findOne(charge.getSpId());
+        charge.setSp(sp);
+
+        ChargeType type = ctRepository.findOne(charge.getTypeId());
+        charge.setType(type);
+
+        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
+            charge.setUnitPrice(0L);
+        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
+            charge.setTotalPrice(charge.getUnitPrice() * order.getContainerQty());
+        } else {
+            logger.warn("{} is out of charge way range.", charge.getWay());
+        }
+
+        charge.setCreateUser(uid);
+        charge.setCreateTime(new Date());
+        charge.setUpdateUser(uid);
+        charge.setUpdateTime(new Date());
         return chargeRepository.save(charge);
     }
 

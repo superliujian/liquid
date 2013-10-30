@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.persistence.domain.Goods;
-import liquid.persistence.repository.CargoRepository;
+import liquid.persistence.repository.GoodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 public class CargoTypeService {
 
     @Autowired
-    private CargoRepository cargoRepository;
+    private GoodsRepository goodsRepository;
 
     public Iterable<Goods> findAll() {
-        return cargoRepository.findAll();
+        return goodsRepository.findAll();
     }
 
     public Goods find(long id) {
-        return cargoRepository.findOne(id);
+        return goodsRepository.findOne(id);
     }
 }

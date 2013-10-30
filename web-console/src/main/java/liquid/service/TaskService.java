@@ -157,7 +157,7 @@ public class TaskService {
             case "deliver":
                 return "/task/" + task.getId() + "/delivery";
             case "adjustPrice":
-                return "/task/" + task.getId() + "/extra";
+                return "/task/" + task.getId() + "/ajustement";
             case "checkCostByMarketing":
             case "checkCostByOperating":
             case "checkFromMarketing":

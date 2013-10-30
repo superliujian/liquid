@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.Goods;
-import liquid.persistence.repository.CargoRepository;
+import liquid.persistence.repository.GoodsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +27,11 @@ public class GoodsController {
     private static final Logger logger = LoggerFactory.getLogger(Goods.class);
 
     @Autowired
-    private CargoRepository cargoRepository;
+    private GoodsRepository goodsRepository;
 
     @ModelAttribute("cargos")
     public Iterable<Goods> populateCargos() {
-        return cargoRepository.findAll();
+        return goodsRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -47,7 +47,7 @@ public class GoodsController {
         if (bindingResult.hasErrors()) {
             return "goods";
         } else {
-            cargoRepository.save(goods);
+            goodsRepository.save(goods);
             return "redirect:/goods";
         }
     }

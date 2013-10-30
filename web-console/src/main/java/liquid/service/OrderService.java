@@ -5,7 +5,7 @@ import liquid.persistence.domain.Goods;
 import liquid.persistence.domain.Customer;
 import liquid.persistence.domain.Location;
 import liquid.persistence.domain.Order;
-import liquid.persistence.repository.CargoRepository;
+import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.OrderRepository;
@@ -43,7 +43,7 @@ public class OrderService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private CargoRepository cargoRepository;
+    private GoodsRepository goodsRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -67,7 +67,7 @@ public class OrderService {
 
     public void save(Order order) {
         Customer customer = customerRepository.findOne(order.getCustomerId());
-        Goods goods = cargoRepository.findOne(order.getGoodsId());
+        Goods goods = goodsRepository.findOne(order.getGoodsId());
         Location srcLoc = locationRepository.findOne(order.getOrigination());
         Location dstLoc = locationRepository.findOne(order.getDestination());
         order.setCustomer(customer);
