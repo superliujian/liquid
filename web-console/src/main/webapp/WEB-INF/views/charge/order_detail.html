@@ -16,25 +16,20 @@
 </head>
 
 <body>
+
 <!-- {!begin layout} -->
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<!-- {!begin task bar} -->
-<div th:include="layout :: task-bar"/>
-<!-- {!end task bar} -->
-
 <br/>
 
-<div th:unless="${#lists.isEmpty(charges)}">
-    <!-- {!begin layout} -->
-    <div th:include="chargeTemplate :: overview"></div>
-    <!-- {!end layout} -->
+<!-- {!begin layout} -->
+<div th:include="chargeTemplate :: overview"></div>
+<!-- {!end layout} -->
 
-    <!-- {!begin layout} -->
-    <div th:include="chargeTemplate :: list"></div>
-    <!-- {!end layout} -->
-</div>
+<!-- {!begin layout} -->
+<div th:include="chargeTemplate :: list"></div>
+<!-- {!end layout} -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>

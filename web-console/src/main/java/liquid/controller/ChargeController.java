@@ -1,7 +1,8 @@
 package liquid.controller;
 
-import liquid.metadata.ChargeStatus;
-import liquid.metadata.ChargeWay;
+import liquid.dto.EarningDto;
+import liquid.dto.TaskDto;
+import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
@@ -9,9 +10,13 @@ import liquid.service.ChargeService;
 import liquid.service.OrderService;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
+import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,9 +59,29 @@ public class ChargeController {
         return chargeService.getChargeTypes();
     }
 
-    @ModelAttribute("charges")
-    public Iterable<Charge> populateCharges() {
-        return chargeService.findAll();
+    @ModelAttribute("tradeTypes")
+    public TradeType[] populateTradeTypes() {
+        return TradeType.values();
+    }
+
+    @ModelAttribute("loadingTypes")
+    public LoadingType[] populateLoadings() {
+        return LoadingType.values();
+    }
+
+    @ModelAttribute("containerTypes")
+    public ContainerType[] populateContainerTypes() {
+        return ContainerType.values();
+    }
+
+    @ModelAttribute("containerCaps")
+    public ContainerCap[] populateContainerCaps() {
+        return ContainerCap.values();
+    }
+
+    @ModelAttribute("status")
+    public OrderStatus[] populateStatus() {
+        return OrderStatus.values();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -85,6 +110,28 @@ public class ChargeController {
 
         model.addAttribute("charges", chargeService.findBySpName(param));
         return "charge";
+    }
+
+    @RequestMapping(value = "/summary", method = RequestMethod.GET, params = "number")
+    public String summary(@RequestParam int number,
+                          Model model, Principal principal) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<Order> page = orderService.findAll(pageRequest);
+        model.addAttribute("tab", "summary");
+        model.addAttribute("page", page);
+        return "/charge/summary";
+    }
+
+    @RequestMapping(value = "/details", method = RequestMethod.GET, params = "number")
+    public String details(@RequestParam int number,
+                          Model model, Principal principal) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<Order> page = orderService.findAll(pageRequest);
+        model.addAttribute("tab", "details");
+        model.addAttribute("charges", chargeService.findAll());
+        return "/charge/details";
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -130,5 +177,53 @@ public class ChargeController {
         charge.setStatus(ChargeStatus.PAID.getValue());
         chargeService.save(charge);
         return "redirect:/charge";
+    }
+
+    @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
+    public String order(@PathVariable long orderId,
+                        Model model, Principal principal) {
+        logger.debug("orderId: {}", orderId);
+
+        Order order = orderService.find(orderId);
+
+        Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
+        model.addAttribute("charges", charges);
+
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("cts", chargeService.getChargeTypes());
+
+        EarningDto earning = chargeService.calculateEarning(order, charges);
+        model.addAttribute("earning", earning);
+        return "charge/order_detail";
+    }
+
+    @RequestMapping(value = "/{chargeId}/settle", method = RequestMethod.GET)
+    public String initSettlement(@PathVariable long chargeId,
+                                 @RequestHeader(value = "referer") String referer,
+                                 Model model, Principal principal) {
+        logger.debug("chargeId: {}", chargeId);
+        logger.debug("referer: {}", referer);
+
+        Charge charge = chargeService.find(chargeId);
+        model.addAttribute("charge", charge);
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("redirectTo", referer);
+
+        return "charge/settlement_detail";
+    }
+
+    @RequestMapping(value = "/{chargeId}/settle", method = RequestMethod.POST)
+    public String settle(@PathVariable long chargeId,
+                         @RequestParam("redirectTo") String redirectTo,
+                         Model model, Principal principal) {
+        logger.debug("chargeId: {}", chargeId);
+        logger.debug("redirectTo: {}", redirectTo);
+
+        Charge charge = chargeService.find(chargeId);
+        charge.setStatus(ChargeStatus.PAID.getValue());
+        chargeService.save(charge);
+
+        return "redirect:" + redirectTo;
     }
 }

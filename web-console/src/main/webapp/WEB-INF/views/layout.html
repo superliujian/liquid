@@ -50,7 +50,7 @@
                         <a href="/container" th:text="#{container}">Container</a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_COMMERCE')">
-                        <a href="/charge" th:text="#{charge}">Charge</a>
+                        <a href="/charge/summary?number=0" th:text="#{charge}">Charge</a>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')">
                         <a href="/customer" th:text="#{customer}">Customer</a>
@@ -189,6 +189,18 @@ roadId,
     <!-- /.jumbotron -->
 </div>
 
+<div th:fragment="charge-tab">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active" th:class="${tab} == 'summary' ? 'active'">
+                <a href="/charge/summary?number=0" th:text="#{charge.summary}">Summary</a>
+            </li>
+            <li class="active" th:class="${tab} == 'details' ? 'active'">
+                <a href="/charge/details?number=0" th:text="#{charge.details}">Details</a>
+            </li>
+        </ul>
+    </div>
+</div>
 
 <!-- footer -->
 <div th:fragment="footer">
