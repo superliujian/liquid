@@ -26,14 +26,16 @@
 
 <br/>
 
-<div th:unless="${#lists.isEmpty(charges)}">
-    <!-- {!begin layout} -->
-    <div th:include="chargeTemplate :: overview"></div>
-    <!-- {!end layout} -->
+<div th:if="${task.assignee}">
+    <div th:unless="${#lists.isEmpty(charges)}">
+        <!-- {!begin layout} -->
+        <div th:include="chargeTemplate :: overview"></div>
+        <!-- {!end layout} -->
 
-    <!-- {!begin layout} -->
-    <div th:include="chargeTemplate :: list"></div>
-    <!-- {!end layout} -->
+        <!-- {!begin layout} -->
+        <div th:include="chargeTemplate :: list"></div>
+        <!-- {!end layout} -->
+    </div>
 </div>
 
 <!-- {!begin layout} -->

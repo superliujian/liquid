@@ -63,8 +63,12 @@ public class PurchaseController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("legId: {}", legId);
 
-        model.addAttribute("charge", new Charge());
-        model.addAttribute("leg", planningService.findLeg(legId));
+        Leg leg = planningService.findLeg(legId);
+        Charge charge = new Charge();
+        charge.setSpId(leg.getSpId());
+
+        model.addAttribute("charge", charge);
+        model.addAttribute("leg", leg);
         model.addAttribute("charges", chargeService.findByLegId(legId));
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));
