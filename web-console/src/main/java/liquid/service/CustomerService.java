@@ -18,7 +18,7 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     public Iterable<Customer> findAll() {
-        return customerRepository.findAll();
+        return customerRepository.findOrderByName();
     }
 
     public Customer find(long id) {

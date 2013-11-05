@@ -25,7 +25,7 @@ public class SpService {
     private SpTypeRepository spTypeRepository;
 
     public Iterable<ServiceProvider> findAll() {
-        return spRepository.findAll();
+        return spRepository.findOrderByName();
     }
 
     public void save(ServiceProvider sp) {
