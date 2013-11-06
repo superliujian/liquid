@@ -1,5 +1,6 @@
 package liquid.controller;
 
+import liquid.metadata.ContainerCap;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.service.*;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Container allocation controller.
@@ -44,6 +46,7 @@ public class AllocationController extends BaseTaskController {
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         Collection<Route> routes = routeService.findByTaskId(taskId);
+        model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
         return "allocation/main";
     }
