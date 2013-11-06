@@ -184,39 +184,4 @@ public class TaskController extends BaseController {
         model.addAttribute("earning", earning);
         return "charge/settlement";
     }
-
-    @RequestMapping(value = "/{taskId}/settlement/{chargeId}", method = RequestMethod.GET)
-    public String initDetail(@PathVariable String taskId,
-                             @PathVariable long chargeId,
-                             Model model, Principal principal) {
-        logger.debug("taskId: {}", taskId);
-        logger.debug("chargeId: {}", chargeId);
-
-        TaskDto task = taskService.getTask(taskId);
-        model.addAttribute("task", task);
-
-        Charge charge = chargeService.find(chargeId);
-        model.addAttribute("charge", charge);
-
-        model.addAttribute("chargeWays", ChargeWay.values());
-        model.addAttribute("cts", chargeService.getChargeTypes());
-
-        return "charge/settlement_detail";
-    }
-
-    @RequestMapping(value = "/{taskId}/settlement/{chargeId}", method = RequestMethod.POST)
-    public String pay(@PathVariable String taskId,
-                      @PathVariable long chargeId,
-                      Model model, Principal principal) {
-        logger.debug("taskId: {}", taskId);
-        logger.debug("chargeId: {}", chargeId);
-
-        TaskDto task = taskService.getTask(taskId);
-        model.addAttribute("task", task);
-
-        Charge charge = chargeService.find(chargeId);
-        charge.setStatus(ChargeStatus.PAID.getValue());
-        chargeService.save(charge);
-        return "redirect:/task/" + taskId + "/settlement";
-    }
 }

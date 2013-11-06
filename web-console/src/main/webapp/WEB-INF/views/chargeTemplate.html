@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="overview">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-2">
+                    <strong th:text="#{sales.price} + ':'">Sales Price: </strong>
+                    <span th:text="${earning.salesPrice}">1800</span>
+                </div>
+                <div class="col-lg-2">
+                    <strong th:text="#{disty.price} + ':'">Disty Price: </strong>
+                    <span th:text="${earning.distyPrice}">3000</span>
+                </div>
+                <div class="col-lg-2">
+                    <strong th:text="#{grand.total} + ':'">Grand Total: </strong>
+                    <span th:text="${earning.grandTotal}">1200</span>
+                </div>
+                <div class="col-lg-2">
+                    <strong th:text="#{gross.margin} + ':'">Gross Margin: </strong>
+                    <span th:text="${earning.grossMargin}">600</span>
+                </div>
+
+                <div class="col-lg-2">
+                    <strong th:text="#{sales.profit} + ':'">Sales Profit: </strong>
+                    <span th:text="${earning.salesProfit}">600</span>
+                </div>
+
+                <div class="col-lg-2">
+                    <strong th:text="#{disty.profit} + ':'">Disty Profit: </strong>
+                    <span th:text="${earning.distyProfit}">600</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="list">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-striped table-hover table-condensed table-16"
+                       th:unless="${#lists.isEmpty(charges)}">
+                    <thead>
+                    <tr>
+                        <th th:text="#{charge.id}">ID</th>
+                        <th th:text="#{order.id}">Order ID</th>
+                        <th th:text="#{charge.type}">Type</th>
+                        <th th:text="#{sp.name}">SP Name</th>
+                        <th th:text="#{charge.way}">Way</th>
+                        <th th:text="#{charge.unit.price}">Unit Price</th>
+                        <th th:text="#{charge.total.price}">Total Price</th>
+                        <th th:text="#{charge.pay}">Settlement</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="charge : ${charges}">
+                        <td th:text="${charge.id}">ID</td>
+                        <td th:text="${charge.order.id}">Order ID</td>
+                        <td th:text="${charge.type.name}">Type</td>
+                        <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
+                        <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
+                        <td th:text="${charge.unitPrice}">Unit Price</td>
+                        <td th:text="${charge.totalPrice}">Total Price</td>
+                        <td>
+                            <a href="/charge/{chargeId}/settle" class="btn btn-default btn-xs"
+                               th:href="'/charge/' + ${charge.id} + '/settle'"
+                               th:if="${charge.status} == 0">
+                                <i class="glyphicon glyphicon-credit-card"/>
+                            </a>
+                            <button class="btn btn-default btn-xs" th:if="${charge.status} == 1">
+                                <i class="glyphicon glyphicon-check"/>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+</body>
+
+</html>

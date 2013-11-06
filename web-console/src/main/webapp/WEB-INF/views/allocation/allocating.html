@@ -36,7 +36,7 @@
                 <select th:field="*{containerId}" class="form-control">
                     <option th:each="container : ${containers}"
                             th:value="${container.id}"
-                            th:text="${container.bicCode}">BIC Code
+                            th:text="${container.bicCode} + '(' + ${container.owner} + ')'">BIC Code
                     </option>
                 </select>
             </div>

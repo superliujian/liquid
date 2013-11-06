@@ -52,9 +52,10 @@
                 <dd th:text="*{totalPrice}">Total Price</dd>
             </dl>
 
-            <form action="/task/{taskId}/settlement/{chargeId}" method="POST"
-                  th:action="'/task/' + ${taskId} + '/settlement/' + ${charge.id}">
+            <form action="/charge/{chargeId}/settle" method="POST"
+                  th:action="'/charge/' + ${charge.id} + '/settle'">
                 <div class="form-group">
+                    <input type="hidden" name="redirectTo" th:value="${redirectTo}"/>
                     <input type="submit" name="pay" value="Pay" class="btn btn-default pull-right"
                            th:value="#{charge.pay}"/>
                 </div>

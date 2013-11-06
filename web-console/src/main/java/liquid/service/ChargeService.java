@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -59,12 +60,16 @@ public class ChargeService {
         return charge;
     }
 
+    @Transactional("transactionManager")
     public Charge addCharge(long legId, Charge charge) {
         ServiceProvider sp = spRepository.findOne(charge.getSpId());
         charge.setSp(sp);
         Leg leg = legRepository.findOne(legId);
         charge.setLeg(leg);
-        charge.setOrder(leg.getRoute().getPlanning().getOrder());
+
+        Order order = leg.getRoute().getPlanning().getOrder();
+
+        charge.setOrder(order);
         ChargeType type = ctRepository.findOne(charge.getTypeId());
         charge.setType(type);
 
@@ -76,9 +81,13 @@ public class ChargeService {
             logger.warn("{} is out of charge way range.", charge.getWay());
         }
 
+        order.setGrandTotal(order.getGrandTotal() + charge.getTotalPrice());
+        orderService.save(order);
+
         return chargeRepository.save(charge);
     }
 
+    @Transactional("transactionManager")
     public Charge addCharge(Charge charge, String uid) {
         Order order = orderService.findByTaskId(charge.getTaskId());
         charge.setOrder(order);
@@ -97,14 +106,25 @@ public class ChargeService {
             logger.warn("{} is out of charge way range.", charge.getWay());
         }
 
+        order.setGrandTotal(order.getGrandTotal() + charge.getTotalPrice());
+        orderService.save(order);
+
         charge.setCreateUser(uid);
         charge.setCreateTime(new Date());
         charge.setUpdateUser(uid);
         charge.setUpdateTime(new Date());
+
         return chargeRepository.save(charge);
     }
 
+    @Transactional("transactionManager")
     public void removeCharge(long chargeId) {
+        Charge charge = chargeRepository.findOne(chargeId);
+        Order order = charge.getOrder();
+
+        order.setGrandTotal(order.getGrandTotal() - charge.getTotalPrice());
+        orderService.save(order);
+
         chargeRepository.delete(chargeId);
     }
 
@@ -165,16 +185,13 @@ public class ChargeService {
 
     public EarningDto calculateEarning(Order order, Iterable<Charge> charges) {
         EarningDto earning = new EarningDto();
-        earning.setCost(order.getDistyPrice());
+
         earning.setSalesPrice(order.getSalesPrice());
-
-        long procurementCost = 0L;
-        for (Charge charge : charges) {
-            procurementCost += charge.getTotalPrice();
-        }
-
-        earning.setGrossMargin(earning.getSalesPrice() - procurementCost);
-        earning.setNetProfit(earning.getCost() - procurementCost);
+        earning.setDistyPrice(order.getDistyPrice());
+        earning.setGrandTotal(order.getGrandTotal());
+        earning.setGrossMargin(earning.getSalesPrice() - order.getGrandTotal());
+        earning.setSalesProfit(order.getSalesPrice() - order.getDistyPrice());
+        earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
         return earning;
     }
 }

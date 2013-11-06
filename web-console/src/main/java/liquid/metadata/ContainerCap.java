@@ -10,8 +10,8 @@ import java.util.Map;
  * Time: 10:31 PM
  */
 public enum ContainerCap {
-    FT20(0, "20-ft"),
-    FT40(1, "40-ft");
+    FT20(0, "20`GP"),
+    FT40(1, "40`HQ");
 
     private final int type;
 

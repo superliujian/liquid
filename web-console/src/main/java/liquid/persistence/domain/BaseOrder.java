@@ -81,6 +81,9 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
+    @Column(name = "GRAND_TOTAL")
+    private long grandTotal;
+
     @Column(name = "EXT_EXP")
     private long extExp = 0L;
 
@@ -230,6 +233,14 @@ public class BaseOrder extends BaseEntity {
         this.distyPrice = distyPrice;
     }
 
+    public long getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(long grandTotal) {
+        this.grandTotal = grandTotal;
+    }
+
     public long getExtExp() {
         return extExp;
     }
@@ -283,6 +294,7 @@ public class BaseOrder extends BaseEntity {
         sb.append(", containerQty=").append(containerQty);
         sb.append(", salesPrice=").append(salesPrice);
         sb.append(", distyPrice=").append(distyPrice);
+        sb.append(", grandTotal=").append(grandTotal);
         sb.append(", extExp=").append(extExp);
         sb.append(", extExpComment='").append(extExpComment).append('\'');
         sb.append(", createRole='").append(createRole).append('\'');

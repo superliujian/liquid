@@ -9,21 +9,17 @@ import java.io.Serializable;
  * Time: 11:39 PM
  */
 public class EarningDto implements Serializable {
-    private long cost;
-
     private long salesPrice;
+
+    private long distyPrice;
+
+    private long grandTotal;
 
     private long grossMargin;
 
-    private long netProfit;
+    private long salesProfit;
 
-    public long getCost() {
-        return cost;
-    }
-
-    public void setCost(long cost) {
-        this.cost = cost;
-    }
+    private long distyProfit;
 
     public long getSalesPrice() {
         return salesPrice;
@@ -31,6 +27,22 @@ public class EarningDto implements Serializable {
 
     public void setSalesPrice(long salesPrice) {
         this.salesPrice = salesPrice;
+    }
+
+    public long getDistyPrice() {
+        return distyPrice;
+    }
+
+    public void setDistyPrice(long distyPrice) {
+        this.distyPrice = distyPrice;
+    }
+
+    public long getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(long grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
     public long getGrossMargin() {
@@ -41,22 +53,32 @@ public class EarningDto implements Serializable {
         this.grossMargin = grossMargin;
     }
 
-    public long getNetProfit() {
-        return netProfit;
+    public long getSalesProfit() {
+        return salesProfit;
     }
 
-    public void setNetProfit(long netProfit) {
-        this.netProfit = netProfit;
+    public void setSalesProfit(long salesProfit) {
+        this.salesProfit = salesProfit;
+    }
+
+    public long getDistyProfit() {
+        return distyProfit;
+    }
+
+    public void setDistyProfit(long distyProfit) {
+        this.distyProfit = distyProfit;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("EarningDto{");
-        sb.append("cost=").append(cost);
-        sb.append(", salesPrice=").append(salesPrice);
+        sb.append("salesPrice=").append(salesPrice);
+        sb.append(", distyPrice=").append(distyPrice);
+        sb.append(", grandTotal=").append(grandTotal);
         sb.append(", grossMargin=").append(grossMargin);
-        sb.append(", netProfit=").append(netProfit);
+        sb.append(", salesProfit=").append(salesProfit);
+        sb.append(", distyProfit=").append(distyProfit);
         sb.append('}');
         return sb.toString();
     }

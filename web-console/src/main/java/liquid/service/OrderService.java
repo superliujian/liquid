@@ -70,10 +70,10 @@ public class OrderService {
         Goods goods = goodsRepository.findOne(order.getGoodsId());
         Location srcLoc = locationRepository.findOne(order.getOrigination());
         Location dstLoc = locationRepository.findOne(order.getDestination());
-        order.setCustomer(customer);
-        order.setGoods(goods);
-        order.setSrcLoc(srcLoc);
-        order.setDstLoc(dstLoc);
+        if (null != customer) order.setCustomer(customer);
+        if (null != goods) order.setGoods(goods);
+        if (null != srcLoc) order.setSrcLoc(srcLoc);
+        if (null != dstLoc) order.setDstLoc(dstLoc);
         if (StringUtils.valuable(order.getLoadingEtStr()))
             order.setLoadingEt(DateUtils.dateOf(order.getLoadingEtStr()));
         logger.debug("Order: {}", order);
