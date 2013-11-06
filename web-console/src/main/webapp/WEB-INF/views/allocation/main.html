@@ -53,7 +53,7 @@
                     <tr th:each="sc : ${route.containers}">
                         <td th:text="${sc.container.bicCode}">BIC Code</td>
                         <td th:text="${sc.container.owner}">Owner</td>
-                        <td th:text="${sc.container.owner}">Type</td>
+                        <td th:text="${containerTypeMap[sc.container.type]}">Type</td>
                         <td th:text="${sc.container.yard.name}">Yard</td>
                         <td th:text="${sc.pickupContact}">Contact</td>
                         <td th:text="${sc.contactPhone}">Phone</td>
