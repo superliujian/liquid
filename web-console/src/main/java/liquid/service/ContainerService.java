@@ -27,8 +27,8 @@ public class ContainerService {
         return containerRepository.findAll();
     }
 
-    public Iterable<Container> findAllInStock() {
-        return containerRepository.findByStatus(ContainerStatus.IN_STOCK.getValue());
+    public Iterable<Container> findAllInStock(int type) {
+        return containerRepository.findByStatusAndType(ContainerStatus.IN_STOCK.getValue(), type);
     }
 
     public Container find(long id) {
