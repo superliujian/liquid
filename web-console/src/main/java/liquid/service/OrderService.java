@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -124,5 +125,10 @@ public class OrderService {
 
     public Iterable<Order> findByCustomerName(String customerName) {
         return orderRepository.findByCustomerNameLike("%" + customerName + "%");
+    }
+
+    @Transactional("transactionManager")
+    public void moveToHistory(long orderId) {
+
     }
 }
