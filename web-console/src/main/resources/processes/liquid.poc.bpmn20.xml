@@ -8,6 +8,10 @@
 
     <process id="liquidPoc" name="Liquid POC">
 
+        <extensionElements>
+            <activiti:executionListener event="end" class="liquid.task.handler.ProcessEndHandler"/>
+        </extensionElements>
+
         <startEvent id="placeOrder" activiti:initiator="employeeName"/>
         <sequenceFlow id="flow0" sourceRef="placeOrder" targetRef="feedDistyPrice"/>
 

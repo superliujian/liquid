@@ -60,6 +60,7 @@ public class AllocationController extends BaseTaskController {
 
         ShippingContainer sc = new ShippingContainer();
 
+        // Set up pickup contact and his phone by default
         Route route = routeService.find(routeId);
         Collection<ShippingContainer> scs = scService.findByRoute(route);
         if (scs.iterator().hasNext()) {
@@ -70,7 +71,7 @@ public class AllocationController extends BaseTaskController {
 
         model.addAttribute("sc", sc);
         model.addAttribute("routeId", routeId);
-        model.addAttribute("containers", containerService.findAllInStock());
+        model.addAttribute("containers", containerService.findAllInStock(route.getPlanning().getOrder().getContainerType()));
         return "allocation/allocating";
     }
 

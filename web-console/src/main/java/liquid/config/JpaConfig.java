@@ -39,6 +39,7 @@ import java.util.Properties;
                         ChargeTypeRepository.class,
                         ContainerRepository.class,
                         OrderRepository.class,
+                        OrderHistoryRepository.class,
                         IncomeRepository.class,
                         ReceivingOrderRepository.class,
                         ReceivingContainerRepository.class,
