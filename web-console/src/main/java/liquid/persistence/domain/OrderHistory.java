@@ -56,7 +56,7 @@ public class OrderHistory {
      */
     @Min(1)
     @Column(name = "WEIGHT")
-    private int cargoWeight;
+    private int goodsWeight;
 
     // 0: domestic; 1: foreign
     @Column(name = "TRADE_TYPE")
@@ -92,18 +92,29 @@ public class OrderHistory {
     @Column(name = "LOADING_ET")
     private Date loadingEt;
 
+    @Column(name = "SALES_PRICE_CNY")
+    private long salesPriceCny;
+
     /**
-     * unit yuan
+     * unit $
      */
-    @Min(1)
-    @Column(name = "SALES_PRICE")
-    private long salesPrice;
+    @Column(name = "SALES_PRICE_USD")
+    private long salesPriceUsd;
 
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
     @Column(name = "GRAND_TOTAL")
     private long grandTotal;
+
+    @Column(name = "GROSS_MARGIN")
+    private long grossMargin;
+
+    @Column(name = "SALES_PROFIT")
+    private long salesProfit;
+
+    @Column(name = "DISTY_PROFIT")
+    private long distyProfit;
 
     @Column(name = "CREATE_ROLE")
     private String createRole;
@@ -189,12 +200,12 @@ public class OrderHistory {
         this.goods = goods;
     }
 
-    public int getCargoWeight() {
-        return cargoWeight;
+    public int getGoodsWeight() {
+        return goodsWeight;
     }
 
-    public void setCargoWeight(int cargoWeight) {
-        this.cargoWeight = cargoWeight;
+    public void setGoodsWeight(int goodsWeight) {
+        this.goodsWeight = goodsWeight;
     }
 
     public int getTradeType() {
@@ -269,12 +280,20 @@ public class OrderHistory {
         this.loadingEt = loadingEt;
     }
 
-    public long getSalesPrice() {
-        return salesPrice;
+    public long getSalesPriceCny() {
+        return salesPriceCny;
     }
 
-    public void setSalesPrice(long salesPrice) {
-        this.salesPrice = salesPrice;
+    public void setSalesPriceCny(long salesPriceCny) {
+        this.salesPriceCny = salesPriceCny;
+    }
+
+    public long getSalesPriceUsd() {
+        return salesPriceUsd;
+    }
+
+    public void setSalesPriceUsd(long salesPriceUsd) {
+        this.salesPriceUsd = salesPriceUsd;
     }
 
     public long getDistyPrice() {
@@ -291,6 +310,30 @@ public class OrderHistory {
 
     public void setGrandTotal(long grandTotal) {
         this.grandTotal = grandTotal;
+    }
+
+    public long getGrossMargin() {
+        return grossMargin;
+    }
+
+    public void setGrossMargin(long grossMargin) {
+        this.grossMargin = grossMargin;
+    }
+
+    public long getSalesProfit() {
+        return salesProfit;
+    }
+
+    public void setSalesProfit(long salesProfit) {
+        this.salesProfit = salesProfit;
+    }
+
+    public long getDistyProfit() {
+        return distyProfit;
+    }
+
+    public void setDistyProfit(long distyProfit) {
+        this.distyProfit = distyProfit;
     }
 
     public String getCreateRole() {
@@ -338,7 +381,7 @@ public class OrderHistory {
         sb.append(", consigneePhone='").append(consigneePhone).append('\'');
         sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
         sb.append(", goods=").append(goods);
-        sb.append(", cargoWeight=").append(cargoWeight);
+        sb.append(", goodsWeight=").append(goodsWeight);
         sb.append(", tradeType=").append(tradeType);
         sb.append(", containerType=").append(containerType);
         sb.append(", containerCap=").append(containerCap);
@@ -348,9 +391,13 @@ public class OrderHistory {
         sb.append(", loadingContact='").append(loadingContact).append('\'');
         sb.append(", loadingPhone='").append(loadingPhone).append('\'');
         sb.append(", loadingEt=").append(loadingEt);
-        sb.append(", salesPrice=").append(salesPrice);
+        sb.append(", salesPriceCny=").append(salesPriceCny);
+        sb.append(", salesPriceUsd=").append(salesPriceUsd);
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", grandTotal=").append(grandTotal);
+        sb.append(", grossMargin=").append(grossMargin);
+        sb.append(", salesProfit=").append(salesProfit);
+        sb.append(", distyProfit=").append(distyProfit);
         sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", createUser='").append(createUser).append('\'');
         sb.append(", createTime=").append(createTime);

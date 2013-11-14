@@ -127,11 +127,11 @@
     </div>
 
     <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('cargoWeight')} ? 'has-error'">
+        <div class="form-group" th:classappend="${#fields.hasErrors('goodsWeight')} ? 'has-error'">
             <label th:text="#{goods.weight.with.unit}">Cargo Weight</label>
-            <input type="text" th:field="*{cargoWeight}" class="form-control"/>
+            <input type="text" th:field="*{goodsWeight}" class="form-control"/>
 
-            <span th:errors="*{cargoWeight}">error</span>
+            <span th:errors="*{goodsWeight}">error</span>
         </div>
     </div>
 </div>

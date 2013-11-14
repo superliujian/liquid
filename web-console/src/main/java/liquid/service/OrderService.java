@@ -1,14 +1,8 @@
 package liquid.service;
 
 import liquid.context.BusinessContext;
-import liquid.persistence.domain.Goods;
-import liquid.persistence.domain.Customer;
-import liquid.persistence.domain.Location;
-import liquid.persistence.domain.Order;
-import liquid.persistence.repository.GoodsRepository;
-import liquid.persistence.repository.CustomerRepository;
-import liquid.persistence.repository.LocationRepository;
-import liquid.persistence.repository.OrderRepository;
+import liquid.persistence.domain.*;
+import liquid.persistence.repository.*;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.utils.CollectionUtils;
 import liquid.utils.DateUtils;
@@ -48,6 +42,9 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -128,7 +125,44 @@ public class OrderService {
     }
 
     @Transactional("transactionManager")
-    public void moveToHistory(long orderId) {
+    public void moveToHistory(long id) {
+        Order order = find(id);
 
+        OrderHistory orderHistory = newOrderHistory(order);
+        orderHistoryRepository.save(orderHistory);
+    }
+
+    private OrderHistory newOrderHistory(Order order) {
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setOrderId(order.getId());
+        orderHistory.setCustomer(order.getCustomer());
+        orderHistory.setSrcLoc(order.getSrcLoc());
+        orderHistory.setDstLoc(order.getDstLoc());
+        orderHistory.setConsignee(order.getConsignee());
+        orderHistory.setConsigneePhone(order.getConsigneePhone());
+        orderHistory.setConsigneeAddress(order.getConsigneeAddress());
+        orderHistory.setGoods(order.getGoods());
+        orderHistory.setGoodsWeight(order.getGoodsWeight());
+        orderHistory.setTradeType(order.getTradeType());
+        orderHistory.setContainerType(order.getContainerType());
+        orderHistory.setContainerCap(order.getContainerCap());
+        orderHistory.setContainerQty(order.getContainerQty());
+        orderHistory.setLoadingType(order.getLoadingType());
+        orderHistory.setLoadingAddress(order.getLoadingAddress());
+        orderHistory.setLoadingContact(order.getLoadingContact());
+        orderHistory.setLoadingEt(order.getLoadingEt());
+        orderHistory.setSalesPriceCny(order.getSalesPriceCny());
+        orderHistory.setSalesPriceUsd(order.getSalesPriceUsd());
+        orderHistory.setGrandTotal(order.getGrandTotal());
+        // Calculate earning
+        orderHistory.setGrossMargin(order.getSalesPriceCny() - order.getGrandTotal());
+        orderHistory.setSalesProfit(order.getSalesPriceCny() - order.getDistyPrice());
+        orderHistory.setDistyProfit(orderHistory.getDistyPrice() - order.getGrandTotal());
+        // End
+        orderHistory.setCreateRole(order.getCreateRole());
+        orderHistory.setCreateUser(order.getCreateUser());
+        orderHistory.setCreateTime(order.getCreateTime());
+        orderHistory.setFinishTime(new Date());
+        return orderHistory;
     }
 }

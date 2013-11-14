@@ -59,7 +59,7 @@ public class BaseOrder extends BaseEntity {
      */
     @Min(1)
     @Column(name = "WEIGHT")
-    private int cargoWeight;
+    private int goodsWeight;
 
     @Column(name = "CONTAINER_TYPE")
     private int containerType;
@@ -185,12 +185,12 @@ public class BaseOrder extends BaseEntity {
         this.goods = goods;
     }
 
-    public int getCargoWeight() {
-        return cargoWeight;
+    public int getGoodsWeight() {
+        return goodsWeight;
     }
 
-    public void setCargoWeight(int cargoWeight) {
-        this.cargoWeight = cargoWeight;
+    public void setGoodsWeight(int goodsWeight) {
+        this.goodsWeight = goodsWeight;
     }
 
     public int getContainerType() {
@@ -280,7 +280,7 @@ public class BaseOrder extends BaseEntity {
         sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
         sb.append(", goodsId=").append(goodsId);
         sb.append(", goods=").append(goods);
-        sb.append(", cargoWeight=").append(cargoWeight);
+        sb.append(", goodsWeight=").append(goodsWeight);
         sb.append(", containerType=").append(containerType);
         sb.append(", containerCap=").append(containerCap);
         sb.append(", containerQty=").append(containerQty);
