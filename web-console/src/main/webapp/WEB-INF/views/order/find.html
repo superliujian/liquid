@@ -69,7 +69,6 @@
                     <th th:text="#{container.capacity}">Container Capacity</th>
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price}">Price</th>
-                    <th th:text="#{extra.expense}">Extra Expense</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -89,8 +88,7 @@
                     <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.salesPrice}">Price</td>
-                    <td th:text="${order.extExp}">Extra Expense</td>
+                    <td th:text="${order.salesPriceCny}">Price</td>
                     <td>
                         <a href="/order/id?action=edit" class="btn btn-default btn-xs"
                            th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">

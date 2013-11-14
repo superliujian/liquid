@@ -75,20 +75,20 @@ public class BaseOrder extends BaseEntity {
      * unit yuan
      */
     @Min(1)
-    @Column(name = "SALES_PRICE")
-    private long salesPrice;
+    @Column(name = "SALES_PRICE_CNY")
+    private long salesPriceCny;
+
+    /**
+     * unit $
+     */
+    @Column(name = "SALES_PRICE_USD")
+    private long salesPriceUsd;
 
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
     @Column(name = "GRAND_TOTAL")
     private long grandTotal;
-
-    @Column(name = "EXT_EXP")
-    private long extExp = 0L;
-
-    @Column(name = "EXT_EXP_COMMENT")
-    private String extExpComment;
 
     @Column(name = "CREATE_ROLE")
     private String createRole;
@@ -217,12 +217,20 @@ public class BaseOrder extends BaseEntity {
         this.containerQty = containerQty;
     }
 
-    public long getSalesPrice() {
-        return salesPrice;
+    public long getSalesPriceCny() {
+        return salesPriceCny;
     }
 
-    public void setSalesPrice(long salesPrice) {
-        this.salesPrice = salesPrice;
+    public void setSalesPriceCny(long salesPriceCny) {
+        this.salesPriceCny = salesPriceCny;
+    }
+
+    public long getSalesPriceUsd() {
+        return salesPriceUsd;
+    }
+
+    public void setSalesPriceUsd(long salesPriceUsd) {
+        this.salesPriceUsd = salesPriceUsd;
     }
 
     public long getDistyPrice() {
@@ -239,22 +247,6 @@ public class BaseOrder extends BaseEntity {
 
     public void setGrandTotal(long grandTotal) {
         this.grandTotal = grandTotal;
-    }
-
-    public long getExtExp() {
-        return extExp;
-    }
-
-    public void setExtExp(long extExp) {
-        this.extExp = extExp;
-    }
-
-    public String getExtExpComment() {
-        return extExpComment;
-    }
-
-    public void setExtExpComment(String extExpComment) {
-        this.extExpComment = extExpComment;
     }
 
     public String getCreateRole() {
@@ -292,11 +284,10 @@ public class BaseOrder extends BaseEntity {
         sb.append(", containerType=").append(containerType);
         sb.append(", containerCap=").append(containerCap);
         sb.append(", containerQty=").append(containerQty);
-        sb.append(", salesPrice=").append(salesPrice);
+        sb.append(", salesPriceCny=").append(salesPriceCny);
+        sb.append(", salesPriceUsd=").append(salesPriceUsd);
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", grandTotal=").append(grandTotal);
-        sb.append(", extExp=").append(extExp);
-        sb.append(", extExpComment='").append(extExpComment).append('\'');
         sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');

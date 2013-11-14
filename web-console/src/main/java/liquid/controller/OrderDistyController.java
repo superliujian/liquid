@@ -24,7 +24,7 @@ import java.util.Date;
 @Controller
 @RequestMapping("/task/{taskId}/disty")
 public class OrderDistyController extends BaseTaskController {
-    private static final Logger logger = LoggerFactory.getLogger(OrderExtraController.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderDistyController.class);
 
     @Autowired
     private TaskService taskService;

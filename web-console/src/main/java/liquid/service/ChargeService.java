@@ -186,11 +186,11 @@ public class ChargeService {
     public EarningDto calculateEarning(Order order, Iterable<Charge> charges) {
         EarningDto earning = new EarningDto();
 
-        earning.setSalesPrice(order.getSalesPrice());
+        earning.setSalesPrice(order.getSalesPriceCny());
         earning.setDistyPrice(order.getDistyPrice());
         earning.setGrandTotal(order.getGrandTotal());
         earning.setGrossMargin(earning.getSalesPrice() - order.getGrandTotal());
-        earning.setSalesProfit(order.getSalesPrice() - order.getDistyPrice());
+        earning.setSalesProfit(order.getSalesPriceCny() - order.getDistyPrice());
         earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
         return earning;
     }
