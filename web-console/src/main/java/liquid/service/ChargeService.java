@@ -3,16 +3,14 @@ package liquid.service;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.ChargeRepository;
-import liquid.persistence.repository.ChargeTypeRepository;
-import liquid.persistence.repository.LegRepository;
-import liquid.persistence.repository.SpRepository;
+import liquid.persistence.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Max;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +31,9 @@ public class ChargeService {
 
     @Autowired
     private ChargeTypeRepository ctRepository;
+
+    @Autowired
+    private ExchangeRateRepository exchangeRateRepository;
 
     @Autowired
     private LegRepository legRepository;
@@ -186,12 +187,27 @@ public class ChargeService {
     public EarningDto calculateEarning(Order order, Iterable<Charge> charges) {
         EarningDto earning = new EarningDto();
 
-        earning.setSalesPrice(order.getSalesPriceCny());
+        double exchangeRate = getExchangeRate();
+
+        earning.setSalesPriceCny(order.getSalesPriceCny());
+        earning.setSalesPriceUsd(order.getSalesPriceUsd());
         earning.setDistyPrice(order.getDistyPrice());
         earning.setGrandTotal(order.getGrandTotal());
-        earning.setGrossMargin(earning.getSalesPrice() - order.getGrandTotal());
-        earning.setSalesProfit(order.getSalesPriceCny() - order.getDistyPrice());
+        earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getGrandTotal());
+        earning.setSalesProfit(order.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
         earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
         return earning;
+    }
+
+    public double getExchangeRate() {
+        ExchangeRate exchangeRate = exchangeRateRepository.findOne(1L);
+        return null == exchangeRate ? 0.00 : exchangeRate.getValue();
+    }
+
+    public void setExchangeRate(double value) {
+        ExchangeRate exchangeRate = new ExchangeRate();
+        exchangeRate.setId(1L);
+        exchangeRate.setValue(value);
+        exchangeRateRepository.save(exchangeRate);
     }
 }
