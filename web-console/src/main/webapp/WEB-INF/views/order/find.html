@@ -69,7 +69,6 @@
                     <th th:text="#{container.capacity}">Container Capacity</th>
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price}">Price</th>
-                    <th th:text="#{extra.expense}">Extra Expense</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -82,15 +81,14 @@
                     <td th:text="${order.srcLoc.name}">Origin</td>
                     <td th:text="${order.dstLoc.name}">Destination</td>
                     <td th:text="${order.goods.name}"></td>
-                    <td th:text="${order.cargoWeight}">Cargo Weight</td>
+                    <td th:text="${order.goodsWeight}">Cargo Weight</td>
                     <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
                     <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
                     <td th:text="#{${order.hasDelivery}}">Has Delivery</td>
                     <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.salesPrice}">Price</td>
-                    <td th:text="${order.extExp}">Extra Expense</td>
+                    <td th:text="${order.salesPriceCny}">Price</td>
                     <td>
                         <a href="/order/id?action=edit" class="btn btn-default btn-xs"
                            th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">

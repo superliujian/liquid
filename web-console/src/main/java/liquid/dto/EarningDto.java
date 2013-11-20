@@ -9,7 +9,9 @@ import java.io.Serializable;
  * Time: 11:39 PM
  */
 public class EarningDto implements Serializable {
-    private long salesPrice;
+    private long salesPriceCny;
+
+    private long salesPriceUsd;
 
     private long distyPrice;
 
@@ -21,12 +23,22 @@ public class EarningDto implements Serializable {
 
     private long distyProfit;
 
-    public long getSalesPrice() {
-        return salesPrice;
+    public EarningDto() { }
+
+    public long getSalesPriceCny() {
+        return salesPriceCny;
     }
 
-    public void setSalesPrice(long salesPrice) {
-        this.salesPrice = salesPrice;
+    public void setSalesPriceCny(long salesPriceCny) {
+        this.salesPriceCny = salesPriceCny;
+    }
+
+    public long getSalesPriceUsd() {
+        return salesPriceUsd;
+    }
+
+    public void setSalesPriceUsd(long salesPriceUsd) {
+        this.salesPriceUsd = salesPriceUsd;
     }
 
     public long getDistyPrice() {
@@ -73,7 +85,8 @@ public class EarningDto implements Serializable {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("EarningDto{");
-        sb.append("salesPrice=").append(salesPrice);
+        sb.append("salesPriceCny=").append(salesPriceCny);
+        sb.append(", salesPriceUsd=").append(salesPriceUsd);
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", grandTotal=").append(grandTotal);
         sb.append(", grossMargin=").append(grossMargin);
