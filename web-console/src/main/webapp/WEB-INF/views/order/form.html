@@ -263,15 +263,6 @@
             <span th:errors="*{salesPriceCny}">error</span>
         </div>
     </div>
-
-    <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('salesPriceUsd')} ? 'has-error'">
-            <label th:text="#{price.usd}">Price</label>
-            <input type="text" th:field="*{salesPriceUsd}" class="form-control"/>
-
-            <span th:errors="*{salesPriceUsd}">error</span>
-        </div>
-    </div>
 </div>
 </div>
 </div>

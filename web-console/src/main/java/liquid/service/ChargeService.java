@@ -190,7 +190,6 @@ public class ChargeService {
         double exchangeRate = getExchangeRate();
 
         earning.setSalesPriceCny(order.getSalesPriceCny());
-        earning.setSalesPriceUsd(order.getSalesPriceUsd());
         earning.setDistyPrice(order.getDistyPrice());
         earning.setGrandTotal(order.getGrandTotal());
         earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getGrandTotal());

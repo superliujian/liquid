@@ -152,7 +152,6 @@ public class OrderService {
         orderHistory.setLoadingContact(order.getLoadingContact());
         orderHistory.setLoadingEt(order.getLoadingEt());
         orderHistory.setSalesPriceCny(order.getSalesPriceCny());
-        orderHistory.setSalesPriceUsd(order.getSalesPriceUsd());
         orderHistory.setGrandTotal(order.getGrandTotal());
         // Calculate earning
         orderHistory.setGrossMargin(order.getSalesPriceCny() - order.getGrandTotal());

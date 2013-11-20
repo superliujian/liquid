@@ -78,12 +78,6 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "SALES_PRICE_CNY")
     private long salesPriceCny;
 
-    /**
-     * unit $
-     */
-    @Column(name = "SALES_PRICE_USD")
-    private long salesPriceUsd;
-
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
@@ -225,14 +219,6 @@ public class BaseOrder extends BaseEntity {
         this.salesPriceCny = salesPriceCny;
     }
 
-    public long getSalesPriceUsd() {
-        return salesPriceUsd;
-    }
-
-    public void setSalesPriceUsd(long salesPriceUsd) {
-        this.salesPriceUsd = salesPriceUsd;
-    }
-
     public long getDistyPrice() {
         return distyPrice;
     }
@@ -285,7 +271,6 @@ public class BaseOrder extends BaseEntity {
         sb.append(", containerCap=").append(containerCap);
         sb.append(", containerQty=").append(containerQty);
         sb.append(", salesPriceCny=").append(salesPriceCny);
-        sb.append(", salesPriceUsd=").append(salesPriceUsd);
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", grandTotal=").append(grandTotal);
         sb.append(", createRole='").append(createRole).append('\'');
