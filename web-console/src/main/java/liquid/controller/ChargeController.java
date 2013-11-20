@@ -1,6 +1,7 @@
 package liquid.controller;
 
 import liquid.dto.EarningDto;
+import liquid.dto.ExchangeRateDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.*;
 import liquid.persistence.domain.*;
@@ -225,5 +226,30 @@ public class ChargeController {
         chargeService.save(charge);
 
         return "redirect:" + redirectTo;
+    }
+
+    @RequestMapping(value = "/exchange_rate", method = RequestMethod.GET)
+    public String getExchangeRate(@RequestParam(required = false) boolean done,
+                                  Model model, Principal principal) {
+        logger.debug("done: {}", done);
+
+        double value = chargeService.getExchangeRate();
+        ExchangeRateDto exchangeRate = new ExchangeRateDto();
+        exchangeRate.setValue(value);
+
+        model.addAttribute("exchangeRate", exchangeRate);
+        model.addAttribute("done", done);
+        return "charge/exchange_rate";
+    }
+
+    @RequestMapping(value = "/exchange_rate", method = RequestMethod.POST)
+    public String setExchangeRate(@ModelAttribute("exchangeRate") ExchangeRateDto exchangeRate,
+                                  Model model, Principal principal) {
+        logger.debug("exchangeRate: {}", exchangeRate);
+
+        chargeService.setExchangeRate(exchangeRate.getValue());
+        model.addAttribute("done", true);
+
+        return "redirect:/charge/exchange_rate";
     }
 }

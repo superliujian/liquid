@@ -30,7 +30,7 @@
         <servlet-version>3.0.1</servlet-version>
         <tomcat7-version>2.1</tomcat7-version>
 
-        <tomcat-port>8090</tomcat-port>
+        <tomcat-port>8080</tomcat-port>
 
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>

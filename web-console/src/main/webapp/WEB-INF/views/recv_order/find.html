@@ -82,11 +82,11 @@
                     <td th:text="${order.srcLoc.name}">Origin</td>
                     <td th:text="${order.dstLoc.name}">Destination</td>
                     <td th:text="${order.goods.name}"></td>
-                    <td th:text="${order.cargoWeight}">Cargo Weight</td>
+                    <td th:text="${order.goodsWeight}">Cargo Weight</td>
                     <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.salesPrice}">Price</td>
+                    <td th:text="${order.salesPriceCny}">Price</td>
                     <td th:text="${order.extExp}">Extra Expense</td>
                     <td>
                         <a href="/recv_order/id?action=edit" class="btn btn-default btn-xs"

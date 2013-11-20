@@ -51,7 +51,8 @@ import java.util.Properties;
                         BargeContainerRepository.class,
                         VesselContainerRepository.class,
                         DeliveryContainerRepository.class,
-                        ChargeRepository.class},
+                        ChargeRepository.class,
+                        ExchangeRateRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JpaConfig {

@@ -1,7 +1,6 @@
 package liquid.service;
 
 import liquid.metadata.IncomeType;
-import liquid.persistence.domain.Charge;
 import liquid.persistence.domain.Income;
 import liquid.persistence.domain.Order;
 import liquid.persistence.repository.IncomeRepository;
@@ -42,7 +41,7 @@ public class IncomeService {
         Income income = new Income();
         income.setOrder(order);
         income.setType(IncomeType.ORDER.getType());
-        income.setAmount(order.getSalesPrice());
+        income.setAmount(order.getSalesPriceCny());
         income.setComment("Order");
         return addIncome(income, uid);
     }
