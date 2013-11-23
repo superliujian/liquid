@@ -50,6 +50,9 @@ public class ShippingContainerService {
     @Autowired
     private LegRepository legRepository;
 
+    @Autowired
+    private SpService spService;
+
     @Transactional("transactionManager")
     public void add(long routeId, ShippingContainer formBean) {
         Route route = routeService.find(routeId);
@@ -146,6 +149,8 @@ public class ShippingContainerService {
 
     private TruckDto toTruckDto(RailContainer railContainer) {
         TruckDto truck = new TruckDto();
+        if (null != railContainer.getFleet())
+            truck.setFleetId(railContainer.getFleet().getId());
         truck.setRailContainerId(railContainer.getId());
         truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
         truck.setPlateNo(railContainer.getPlateNo());
@@ -209,10 +214,12 @@ public class ShippingContainerService {
 
     public void saveTruck(TruckDto truck) {
         RailContainer container = rcRepository.findOne(truck.getRailContainerId());
+        ServiceProvider fleet = spService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
             Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
             for (RailContainer railContainer : containers) {
+                railContainer.setFleet(fleet);
                 railContainer.setPlateNo(truck.getPlateNo());
                 railContainer.setTrucker(truck.getTrucker());
                 railContainer.setLoadingToc(DateUtils.dateOf(truck.getLoadingToc()));
@@ -220,6 +227,7 @@ public class ShippingContainerService {
 
             rcRepository.save(containers);
         } else {
+            container.setFleet(fleet);
             container.setPlateNo(truck.getPlateNo());
             container.setTrucker(truck.getTrucker());
             container.setLoadingToc(DateUtils.dateOf(truck.getLoadingToc()));

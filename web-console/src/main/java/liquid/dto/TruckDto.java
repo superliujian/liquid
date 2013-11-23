@@ -19,6 +19,8 @@ public class TruckDto {
 
     private String bicCode;
 
+    private long fleetId;
+
     @NotNull @NotEmpty
     private String trucker;
 
@@ -44,6 +46,14 @@ public class TruckDto {
 
     public void setBicCode(String bicCode) {
         this.bicCode = bicCode;
+    }
+
+    public long getFleetId() {
+        return fleetId;
+    }
+
+    public void setFleetId(long fleetId) {
+        this.fleetId = fleetId;
     }
 
     public String getTrucker() {
@@ -84,6 +94,7 @@ public class TruckDto {
         sb.append("TruckDto{");
         sb.append("railContainerId=").append(railContainerId);
         sb.append(", bicCode='").append(bicCode).append('\'');
+        sb.append(", fleetId=").append(fleetId);
         sb.append(", trucker='").append(trucker).append('\'');
         sb.append(", plateNo='").append(plateNo).append('\'');
         sb.append(", loadingToc='").append(loadingToc).append('\'');

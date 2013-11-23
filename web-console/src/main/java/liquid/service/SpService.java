@@ -28,6 +28,19 @@ public class SpService {
         return spRepository.findOrderByName();
     }
 
+    public ServiceProvider find(long id) {
+        return spRepository.findOne(id);
+    }
+
+    public Iterable<ServiceProvider> findByType(long typeId) {
+        SpType type = spTypeRepository.findOne(typeId);
+        return spRepository.findByType(type);
+    }
+
+    public Iterable<ServiceProvider> findByType(SpType type) {
+        return spRepository.findByType(type);
+    }
+
     public void save(ServiceProvider sp) {
         SpType type = spTypeRepository.findOne(sp.getTypeId());
         sp.setType(type);

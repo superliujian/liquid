@@ -36,6 +36,7 @@
                         <th th:text="#{rail.origination}">Railway Origination</th>
                         <th th:text="#{rail.destination}">Railway Destination</th>
                         <th th:text="#{container.no}">Container No.</th>
+                        <th th:text="#{fleet}">Fleet</th>
                         <th th:text="#{plate.no}">Plate No.</th>
                         <th th:text="#{trucker}">Trucker</th>
                         <th th:text="#{loading.toc}">Loading TOC</th>
@@ -52,6 +53,7 @@
                         <td th:text="${container.leg.srcLoc.name}">Railway Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Railway Destination</td>
                         <td th:text="${container.sc.container.bicCode}">Container No.</td>
+                        <td th:text="${container.fleet} ? ${container.fleet.name} : ''">Trucker</td>
                         <td th:text="${container.plateNo}">Container No.</td>
                         <td th:text="${container.trucker}">Trucker</td>
                         <td th:text="${container.loadingTocStr}">Loading TOC</td>
