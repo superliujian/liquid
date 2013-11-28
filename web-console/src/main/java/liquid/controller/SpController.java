@@ -11,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +45,12 @@ public class SpController {
     @RequestMapping(method = RequestMethod.GET)
     public void list(Model model, Principal principal) {
         model.addAttribute("sp", new ServiceProvider());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "type")
+    @ResponseBody
+    public Iterable<ServiceProvider> list(@RequestParam long type) {
+        return spService.findByType(type);
     }
 
     @RequestMapping(method = RequestMethod.POST)

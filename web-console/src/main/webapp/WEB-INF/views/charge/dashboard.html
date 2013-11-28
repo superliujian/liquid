@@ -92,6 +92,8 @@
                 <div class="panel-body">
                     <form action="/task/{taskId}/leg/{legId}/charge" method="POST" class="form-horizontal"
                           th:object="${charge}" th:action="@{${#httpServletRequest.servletPath}}">
+                        <input type="text"/><input id="getSp" type="button"/>
+
                         <div class="form-group">
                             <label th:text="#{charge.type}" class="col-lg-3 control-label">Charge Type</label>
 
@@ -176,6 +178,20 @@
 <!-- {!begin layout} -->
 <div th:include="layout :: js"></div>
 <!-- {!end layout} -->
+
+<script>
+    $(document).ready(function() {
+    $("#getSp").click(function() {
+    $.ajax({
+    url: '/sp?type=2',
+    type: 'GET',
+    success: function (result) {
+    alert("result" + result);
+    }
+    });
+    });
+    });
+</script>
 </body>
 
 </html>
