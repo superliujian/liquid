@@ -92,8 +92,6 @@
                 <div class="panel-body">
                     <form action="/task/{taskId}/leg/{legId}/charge" method="POST" class="form-horizontal"
                           th:object="${charge}" th:action="@{${#httpServletRequest.servletPath}}">
-                        <input type="text"/><input id="getSp" type="button"/>
-
                         <div class="form-group">
                             <label th:text="#{charge.type}" class="col-lg-3 control-label">Charge Type</label>
 
@@ -180,17 +178,23 @@
 <!-- {!end layout} -->
 
 <script>
+/*<![CDATA[*/
     $(document).ready(function() {
-    $("#getSp").click(function() {
-    $.ajax({
-    url: '/sp?type=2',
-    type: 'GET',
-    success: function (result) {
-    alert("result" + result);
-    }
+        $("#typeId").change(function() {
+            var typeId = $( "#typeId" ).val();
+            $.ajax({
+                url: '/sp?type=' + typeId,
+                type: 'GET',
+                success: function (result) {  
+                    $("#spId").children().remove().end();
+                    for (i = 0; i < result.length; i++) {                    
+                        $("#spId").append('<option value=' + result[i].id + '>' + result[i].name + '</option>');  
+                    }
+                }   
+            });
+        });
     });
-    });
-    });
+/*]]>*/
 </script>
 </body>
 
