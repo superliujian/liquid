@@ -178,7 +178,10 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow200" sourceRef="recordTory" targetRef="recordTod"/>
+        <sequenceFlow id="flow200" sourceRef="recordTory" targetRef="loadAndRailwayPlanJoin"/>
+
+        <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
+        <sequenceFlow id="flow210" sourceRef="loadAndRailwayPlanJoin" targetRef="recordTod"/>
 
         <!-- record time of dispatch -->
         <userTask id="recordTod" name="记录装车发运时间">
@@ -191,33 +194,13 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow210" sourceRef="recordTod" targetRef="bargeOpsAndRecordToaFork"/>
-
-        <parallelGateway id="bargeOpsAndRecordToaFork" name="驳船操作同时记录火车到达时间"/>
-        <sequenceFlow id="flow220" sourceRef="bargeOpsAndRecordToaFork" targetRef="loadAndRailwayPlanJoin"/>
-        <sequenceFlow id="flow230" sourceRef="bargeOpsAndRecordToaFork" targetRef="recordToa"/>
-
-        <!-- record time of dispatch -->
-        <userTask id="recordToa" name="记录火车到达时间">
-            <documentation>
-                ${employeeName}记录装车发运时间。您需要记录记录火车到达时间。
-            </documentation>
-            <potentialOwner>
-                <resourceAssignmentExpression>
-                    <formalExpression>ROLE_FIELD</formalExpression>
-                </resourceAssignmentExpression>
-            </potentialOwner>
-        </userTask>
-        <sequenceFlow id="flow240" sourceRef="recordToa" targetRef="bargeOpAndRecordToaJoin"/>
-
-        <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
-        <sequenceFlow id="flow250" sourceRef="loadAndRailwayPlanJoin" targetRef="bargeOpsDecision"/>
+        <sequenceFlow id="flow220" sourceRef="recordTod" targetRef="bargeOpsDecision"/>
 
         <exclusiveGateway id="bargeOpsDecision" name="驳船操作决策"/>
         <sequenceFlow id="flow260" sourceRef="bargeOpsDecision" targetRef="doBargeOps">
             <conditionExpression xsi:type="tFormalExpression">${hasBarge == true}</conditionExpression>
         </sequenceFlow>
-        <sequenceFlow id="flow270" sourceRef="bargeOpsDecision" targetRef="bargeOpsEnd">
+        <sequenceFlow id="flow270" sourceRef="bargeOpsDecision" targetRef="vesselOpsDecision">
             <conditionExpression xsi:type="tFormalExpression">${hasBarge == false}</conditionExpression>
         </sequenceFlow>
 
@@ -231,13 +214,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow280" sourceRef="doBargeOps" targetRef="bargeOpsEnd"/>
-
-        <exclusiveGateway id="bargeOpsEnd" name="驳船操作结束"/>
-        <sequenceFlow id="flow290" sourceRef="bargeOpsEnd" targetRef="bargeOpAndRecordToaJoin"/>
-
-        <parallelGateway id="bargeOpAndRecordToaJoin" name="大船操作同时记录火车到达时间合并"/>
-        <sequenceFlow id="flow300" sourceRef="bargeOpAndRecordToaJoin" targetRef="vesselOpsDecision"/>
+        <sequenceFlow id="flow280" sourceRef="doBargeOps" targetRef="vesselOpsDecision"/>
 
         <exclusiveGateway id="vesselOpsDecision" name="大船操作决策"/>
         <sequenceFlow id="flow310" sourceRef="vesselOpsDecision" targetRef="doVesselOps">
