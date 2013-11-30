@@ -50,7 +50,8 @@ public class SpController {
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
     public Iterable<ServiceProvider> list(@RequestParam long type) {
-        return spService.findByType(type);
+        long spType = spService.spTypeByChargeType((int) type);
+        return spService.findByType(spType);
     }
 
     @RequestMapping(method = RequestMethod.POST)
