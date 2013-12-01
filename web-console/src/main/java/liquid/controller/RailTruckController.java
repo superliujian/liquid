@@ -45,7 +45,7 @@ public class RailTruckController extends BaseTaskController {
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
 
         // for charges

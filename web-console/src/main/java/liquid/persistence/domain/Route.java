@@ -99,8 +99,7 @@ public class Route extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Route{");
-        sb.append("planning=").append(planning);
-        sb.append(", containerQtyMax=").append(containerQtyMax);
+        sb.append("containerQtyMax=").append(containerQtyMax);
         sb.append(", containerQty=").append(containerQty);
         sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
         sb.append(", legs=").append(legs);

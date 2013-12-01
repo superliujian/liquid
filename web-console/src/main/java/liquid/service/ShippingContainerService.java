@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -25,6 +22,9 @@ import java.util.List;
 public class ShippingContainerService {
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private PlanningService planningService;
 
     @Autowired
     private RouteService routeService;
@@ -54,9 +54,39 @@ public class ShippingContainerService {
     private SpService spService;
 
     @Transactional("transactionManager")
-    public void add(long routeId, ShippingContainer formBean) {
-        Route route = routeService.find(routeId);
-        formBean.setRoute(route);
+    public void initialize(String taskId) {
+        Planning planning = planningService.findByTaskId(taskId);
+        Collection<Route> routes = routeService.findByPlanning(planning);
+        for (Route route : routes) {
+            Collection<ShippingContainer> containers = route.getContainers();
+            if (null == containers) containers = new ArrayList<>();
+            if (containers.size() == 0) {
+                for (int i = 0; i < route.getContainerQty(); i++) {
+                    ShippingContainer container = new ShippingContainer();
+                    container.setRoute(route);
+                    container.setCreateTime(new Date());
+                    container.setUpdateTime(new Date());
+                    containers.add(container);
+                }
+                scRepository.save(containers);
+            }
+        }
+    }
+
+    public ShippingContainer find(long scId) {
+        return scRepository.findOne(scId);
+    }
+
+    @Transactional("transactionManager")
+    public void allocate(long routeId, ShippingContainer formBean) {
+        ShippingContainer oldOne = find(formBean.getId());
+        formBean.setRoute(oldOne.getRoute());
+
+        if (null != oldOne.getContainer()) {
+            oldOne.getContainer().setStatus(ContainerStatus.IN_STOCK.getValue());
+            containerService.save(oldOne.getContainer());
+        }
+
         Container container = containerService.find(formBean.getContainerId());
         formBean.setContainer(container);
         scRepository.save(formBean);
@@ -71,15 +101,17 @@ public class ShippingContainerService {
         Container container = sc.getContainer();
         scRepository.delete(scId);
 
-        container.setStatus(ContainerStatus.IN_STOCK.getValue());
-        containerService.save(container);
+        if (null != container) {
+            container.setStatus(ContainerStatus.IN_STOCK.getValue());
+            containerService.save(container);
+        }
     }
 
     public Collection<ShippingContainer> findByRoute(Route route) {
         return scRepository.findByRoute(route);
     }
 
-    public Iterable<RailContainer> initialize(String taskId) {
+    public Iterable<RailContainer> initializeRailContainers(String taskId) {
         Order order = orderService.findByTaskId(taskId);
         Collection<RailContainer> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
@@ -152,7 +184,8 @@ public class ShippingContainerService {
         if (null != railContainer.getFleet())
             truck.setFleetId(railContainer.getFleet().getId());
         truck.setRailContainerId(railContainer.getId());
-        truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null != railContainer.getSc().getContainer())
+            truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
         truck.setPlateNo(railContainer.getPlateNo());
         truck.setTrucker(railContainer.getTrucker());
         if (null == railContainer.getLoadingToc()) {
@@ -166,7 +199,8 @@ public class ShippingContainerService {
     private RailYardDto toRailYardDto(RailContainer railContainer) {
         RailYardDto railYard = new RailYardDto();
         railYard.setRailContainerId(railContainer.getId());
-        railYard.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null != railContainer.getSc().getContainer())
+            railYard.setBicCode(railContainer.getSc().getContainer().getBicCode());
         if (null == railContainer.getStationToa()) {
             railYard.setRailYardToa(DateUtils.stringOf(new Date()));
         } else {
@@ -178,7 +212,8 @@ public class ShippingContainerService {
     private RailPlanDto toRailPlanDto(RailContainer railContainer) {
         RailPlanDto railPlan = new RailPlanDto();
         railPlan.setRailContainerId(railContainer.getId());
-        railPlan.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null != railContainer.getSc().getContainer())
+            railPlan.setBicCode(railContainer.getSc().getContainer().getBicCode());
         railPlan.setPlanNo(railContainer.getTransPlanNo());
         if (null == railContainer.getEts()) {
             railPlan.setEts(DateUtils.dayStrOf(new Date()));
@@ -191,7 +226,8 @@ public class ShippingContainerService {
     private RailShippingDto toRailShippingDto(RailContainer railContainer) {
         RailShippingDto railShipping = new RailShippingDto();
         railShipping.setRailContainerId(railContainer.getId());
-        railShipping.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null != railContainer.getSc().getContainer())
+            railShipping.setBicCode(railContainer.getSc().getContainer().getBicCode());
         if (null == railContainer.getAts()) {
             railShipping.setAts(DateUtils.stringOf(new Date()));
         } else {
@@ -203,7 +239,8 @@ public class ShippingContainerService {
     private RailArrivalDto toRailArrivalDto(RailContainer railContainer) {
         RailArrivalDto railArrivalDto = new RailArrivalDto();
         railArrivalDto.setRailContainerId(railContainer.getId());
-        railArrivalDto.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        if (null != railContainer.getSc().getContainer())
+            railArrivalDto.setBicCode(railContainer.getSc().getContainer().getBicCode());
         if (null == railContainer.getAta()) {
             railArrivalDto.setAta(DateUtils.stringOf(new Date()));
         } else {

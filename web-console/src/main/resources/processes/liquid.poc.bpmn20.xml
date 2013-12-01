@@ -178,10 +178,22 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow200" sourceRef="recordTory" targetRef="loadAndRailwayPlanJoin"/>
+        <sequenceFlow id="flow200" sourceRef="recordTory" targetRef="feedContainerNo"/>
+
+        <userTask id="feedContainerNo" name="填写集装箱号">
+            <documentation>
+                货物进入铁路货场。您需要填写集装箱号。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_CONTAINER</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow210" sourceRef="feedContainerNo" targetRef="loadAndRailwayPlanJoin"/>
 
         <parallelGateway id="loadAndRailwayPlanJoin" name="装货发车同时申报铁路计划合并"/>
-        <sequenceFlow id="flow210" sourceRef="loadAndRailwayPlanJoin" targetRef="recordTod"/>
+        <sequenceFlow id="flow220" sourceRef="loadAndRailwayPlanJoin" targetRef="recordTod"/>
 
         <!-- record time of dispatch -->
         <userTask id="recordTod" name="记录装车发运时间">
@@ -194,7 +206,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow220" sourceRef="recordTod" targetRef="bargeOpsDecision"/>
+        <sequenceFlow id="flow230" sourceRef="recordTod" targetRef="bargeOpsDecision"/>
 
         <exclusiveGateway id="bargeOpsDecision" name="驳船操作决策"/>
         <sequenceFlow id="flow260" sourceRef="bargeOpsDecision" targetRef="doBargeOps">

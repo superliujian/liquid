@@ -131,6 +131,7 @@ public class TaskService {
             case "planRoute":
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
+            case "feedContainerNo":
                 return "/task/" + task.getId() + "/allocation";
             case "applyRailwayPlan":
                 return "/task/" + task.getId() + "/rail_plan";
