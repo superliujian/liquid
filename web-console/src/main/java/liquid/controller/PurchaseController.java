@@ -41,19 +41,9 @@ public class PurchaseController extends BaseTaskController {
     @Autowired
     private SpService spService;
 
-    @ModelAttribute("cts")
-    public Map<Long, String> populateChargeTypes() {
-        return chargeService.getChargeTypes();
-    }
-
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
         return ChargeWay.values();
-    }
-
-    @ModelAttribute("sps")
-    public Iterable<ServiceProvider> populateSps() {
-        return spService.findAll();
     }
 
     @RequestMapping(value = "/task/{taskId}/leg/{legId}/charge", method = RequestMethod.GET)
@@ -63,10 +53,14 @@ public class PurchaseController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("legId: {}", legId);
 
+        Map<Long, String> chargeTypes = chargeService.getChargeTypes();
+        Iterable<ServiceProvider> sps = spService.findByType(spService.spTypeByChargeType(chargeTypes.entrySet().iterator().next().getKey().intValue()));
+
         Leg leg = planningService.findLeg(legId);
         Charge charge = new Charge();
-        charge.setSpId(leg.getSpId());
 
+        model.addAttribute("cts", chargeTypes);
+        model.addAttribute("sps", sps);
         model.addAttribute("charge", charge);
         model.addAttribute("leg", leg);
         model.addAttribute("charges", chargeService.findByLegId(legId));

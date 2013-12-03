@@ -45,20 +45,22 @@ public class AllocationController extends BaseTaskController {
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
+        scService.initialize(taskId);
         Collection<Route> routes = routeService.findByTaskId(taskId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
         return "allocation/main";
     }
 
-    @RequestMapping(value = "/route/{routeId}/sc", method = RequestMethod.GET)
+    @RequestMapping(value = "/route/{routeId}/sc/{scId}", method = RequestMethod.GET)
     public String initAllocation(@PathVariable String taskId,
                                  @PathVariable long routeId,
+                                 @PathVariable long scId,
                                  Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
 
-        ShippingContainer sc = new ShippingContainer();
+        ShippingContainer sc = scService.find(scId);
 
         // Set up pickup contact and his phone by default
         Route route = routeService.find(routeId);
@@ -87,7 +89,7 @@ public class AllocationController extends BaseTaskController {
             return "allocation/allocating";
         }
 
-        scService.add(routeId, sc);
+        scService.allocate(routeId, sc);
 
         Collection<Route> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
@@ -95,18 +97,18 @@ public class AllocationController extends BaseTaskController {
     }
 
     // TODO: change to form submit.
-    @RequestMapping(value = "/route/{routeId}/sc/{scId}", method = RequestMethod.GET)
-    public String remove(@PathVariable String taskId,
-                         @PathVariable long routeId,
-                         @PathVariable long scId,
-                         Model model, Principal principal) {
-        logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
-
-        scService.remove(scId);
-
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        model.addAttribute("routes", routes);
-        return "redirect:/task/" + taskId + "/allocation";
-    }
+//    @RequestMapping(value = "/route/{routeId}/sc/{scId}", method = RequestMethod.GET)
+//    public String remove(@PathVariable String taskId,
+//                         @PathVariable long routeId,
+//                         @PathVariable long scId,
+//                         Model model, Principal principal) {
+//        logger.debug("taskId: {}", taskId);
+//        logger.debug("routeId: {}", routeId);
+//
+//        scService.remove(scId);
+//
+//        Collection<Route> routes = routeService.findByTaskId(taskId);
+//        model.addAttribute("routes", routes);
+//        return "redirect:/task/" + taskId + "/allocation";
+//    }
 }

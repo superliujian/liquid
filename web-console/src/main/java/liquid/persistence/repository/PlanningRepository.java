@@ -14,6 +14,4 @@ import java.util.Collection;
  */
 public interface PlanningRepository extends CrudRepository<Planning, Long> {
     Planning findByOrder(Order order);
-
-    Planning findByOrderAndTransMode(Order order, int transMode);
 }

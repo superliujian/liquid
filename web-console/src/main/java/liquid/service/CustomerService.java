@@ -1,6 +1,7 @@
 package liquid.service;
 
 import liquid.persistence.domain.Customer;
+import liquid.persistence.domain.Order;
 import liquid.persistence.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,9 @@ public class CustomerService {
 
     public Customer find(long id) {
         return customerRepository.findOne(id);
+    }
+
+    public Iterable<Customer> findByName(String name) {
+        return customerRepository.findByNameLike("%" + name + "%");
     }
 }

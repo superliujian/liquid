@@ -11,6 +11,7 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 11:14 PM
  */
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
-    @Query(value = "SELECT * FROM CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
-    public Iterable<Customer> findOrderByName();
+    @Query(value = "SELECT * FROM CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true) Iterable<Customer> findOrderByName();
+
+    Iterable<Customer> findByNameLike(String name);
 }

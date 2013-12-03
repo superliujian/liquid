@@ -176,6 +176,26 @@
 <!-- {!begin layout} -->
 <div th:include="layout :: js"></div>
 <!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        $("#typeId").change(function() {
+            var typeId = $( "#typeId" ).val();
+            $.ajax({
+                url: '/sp?type=' + typeId,
+                type: 'GET',
+                success: function (result) {  
+                    $("#spId").children().remove().end();
+                    for (i = 0; i < result.length; i++) {                    
+                        $("#spId").append('<option value=' + result[i].id + '>' + result[i].name + '</option>');  
+                    }
+                }   
+            });
+        });
+    });
+/*]]>*/
+</script>
 </body>
 
 </html>
