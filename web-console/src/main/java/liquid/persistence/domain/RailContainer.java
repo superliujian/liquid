@@ -15,6 +15,10 @@ import java.util.Date;
 @Entity(name = "RAIL_CONTAINER")
 public class RailContainer extends BaseLegContainer {
 
+    @ManyToOne
+    @JoinColumn(name = "FLEET_ID")
+    private ServiceProvider fleet;
+
     @Column(name = "TRUCKER")
     private String trucker;
 
@@ -81,6 +85,16 @@ public class RailContainer extends BaseLegContainer {
 
     @Transient
     private boolean batch;
+
+    public RailContainer() {}
+
+    public ServiceProvider getFleet() {
+        return fleet;
+    }
+
+    public void setFleet(ServiceProvider fleet) {
+        this.fleet = fleet;
+    }
 
     public String getTrucker() {
         return trucker;
@@ -199,7 +213,8 @@ public class RailContainer extends BaseLegContainer {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("RailContainer{");
-        sb.append("trucker='").append(trucker).append('\'');
+        sb.append("fleet=").append(fleet);
+        sb.append(", trucker='").append(trucker).append('\'');
         sb.append(", plateNo='").append(plateNo).append('\'');
         sb.append(", loadingTocStr='").append(loadingTocStr).append('\'');
         sb.append(", loadingToc=").append(loadingToc);

@@ -20,14 +20,12 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<!-- {!begin task bar} -->
-<div th:include="layout :: task-bar"/>
-<!-- {!end task bar} -->
-
 <div class="container">
     <form action="/task/{taskId}/allocation/{routeId}/sc" method="POST" class="form-horizontal center"
           th:object="${sc}"
           th:action="'/task/' + ${taskId} + '/allocation/route/' + ${routeId} + '/sc'">
+
+        <input type="hidden" th:field="*{id}" />
 
         <div class="form-group">
             <label class="col-lg-3 control-label" th:text="#{container}">Container</label>

@@ -8,6 +8,7 @@ import liquid.metadata.TransMode;
 import liquid.persistence.domain.Charge;
 import liquid.service.ChargeService;
 import liquid.service.ShippingContainerService;
+import liquid.service.SpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,14 @@ public class RailTruckController extends BaseTaskController {
     @Autowired
     private ChargeService chargeService;
 
+    @Autowired
+    private SpService spService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
 
         // for charges
@@ -64,6 +68,7 @@ public class RailTruckController extends BaseTaskController {
         TruckDto truck = scService.findTruckDto(containerId);
         logger.debug("truck: {}", truck);
         model.addAttribute("truck", truck);
+        model.addAttribute("sps", spService.findByType(4L));
         return TASK_PATH + "/edit";
     }
 

@@ -1,7 +1,6 @@
 package liquid.controller;
 
 import liquid.dto.RailYardDto;
-import liquid.dto.TruckDto;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,7 @@ public class RailYardController extends BaseTaskController {
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
         return "rail/main";
     }

@@ -1,6 +1,5 @@
 package liquid.controller;
 
-import liquid.dto.RailShippingDto;
 import liquid.persistence.domain.RailContainer;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
@@ -36,7 +35,7 @@ public class RailController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("containers", scService.initialize(taskId));
+        model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", "rail");
         return "rail/main";
     }
