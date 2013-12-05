@@ -18,6 +18,10 @@ public class BaseLegContainer extends BaseEntity {
     private Order order;
 
     @ManyToOne
+    @JoinColumn(name = "ROUTE_ID")
+    private Route route;
+
+    @ManyToOne
     @JoinColumn(name = "LEG_ID")
     private Leg leg;
 
@@ -31,6 +35,14 @@ public class BaseLegContainer extends BaseEntity {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
     public Leg getLeg() {
@@ -49,11 +61,11 @@ public class BaseLegContainer extends BaseEntity {
         this.sc = sc;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("BaseLegContainer{");
         sb.append("order=").append(order);
+        sb.append(", route=").append(route);
         sb.append(", leg=").append(leg);
         sb.append(", sc=").append(sc);
         sb.append('}');

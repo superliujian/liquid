@@ -1,6 +1,8 @@
 package liquid.controller;
 
 import liquid.dto.RailPlanDto;
+import liquid.persistence.domain.Route;
+import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -29,6 +32,9 @@ public class RailPlanController extends BaseTaskController {
     private static final String TASK_PATH = "rail_plan";
 
     @Autowired
+    private RouteService routeService;
+
+    @Autowired
     private ShippingContainerService scService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -37,6 +43,9 @@ public class RailPlanController extends BaseTaskController {
 
         model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
+
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        model.addAttribute("routes", routes);
         return "rail/main";
     }
 

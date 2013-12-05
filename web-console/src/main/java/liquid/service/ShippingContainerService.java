@@ -144,6 +144,7 @@ public class ShippingContainerService {
                 for (ShippingContainer sc : scList) {
                     RailContainer rc = new RailContainer();
                     rc.setOrder(route.getPlanning().getOrder());
+                    rc.setRoute(route);
                     rc.setLeg(legList.get(0));
                     rc.setSc(sc);
                     rcList.add(rc);
@@ -292,7 +293,7 @@ public class ShippingContainerService {
         RailContainer container = rcRepository.findOne(railPlan.getRailContainerId());
 
         if (railPlan.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
             for (RailContainer railContainer : containers) {
                 railContainer.setTransPlanNo(railPlan.getPlanNo());
                 railContainer.setEts(DateUtils.dayOf(railPlan.getEts()));

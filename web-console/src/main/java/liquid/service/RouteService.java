@@ -1,10 +1,8 @@
 package liquid.service;
 
-import liquid.persistence.domain.Leg;
-import liquid.persistence.domain.Planning;
-import liquid.persistence.domain.Route;
-import liquid.persistence.domain.ShippingContainer;
+import liquid.persistence.domain.*;
 import liquid.persistence.repository.LegRepository;
+import liquid.persistence.repository.RailContainerRepository;
 import liquid.persistence.repository.RouteRepository;
 import liquid.persistence.repository.ShippingContainerRepository;
 import liquid.utils.DateUtils;
@@ -33,6 +31,9 @@ public class RouteService {
     private LegRepository legRepository;
 
     @Autowired
+    private RailContainerRepository railContainerRepository;
+
+    @Autowired
     private ShippingContainerRepository scRepository;
 
     public Collection<Route> findByTaskId(String taskId) {
@@ -43,6 +44,8 @@ public class RouteService {
             route.setLegs(legs);
             Collection<ShippingContainer> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
+            Collection<RailContainer> railContainers = railContainerRepository.findByRoute(route);
+            route.setRailContainers(railContainers);
         }
         return routes;
     }
