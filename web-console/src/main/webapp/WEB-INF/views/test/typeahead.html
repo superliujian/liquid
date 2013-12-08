@@ -39,13 +39,13 @@
   <body>    
     <div class="container">
       <h1>Customer</h1>
-      <form class="form-horizontal">
+
+      <form >
           <input type="hidden" id="cId" />
           
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Customer ID</label>
-            
-            <div class="col-lg-9">
+          <div class="col-lg-8">    
+            <div class="form-group">            
+              <label>Customer ID</label>
               <input class="form-control" id="cName" type="text" placeholder="customer name" />
             </div>
           </div>
@@ -77,6 +77,7 @@ $('#cName').typeahead(
     $('#cId').val(datum.id);
     console.log("customer id " + $('#cId').val());    
 });
+
 
 });    
     </script>
