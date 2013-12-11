@@ -6,7 +6,9 @@ import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.Route;
 import liquid.service.ChargeService;
+import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import liquid.service.SpService;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -36,6 +39,9 @@ public class RailTruckController extends BaseTaskController {
     private ShippingContainerService scService;
 
     @Autowired
+    private RouteService routeService;
+
+    @Autowired
     private ChargeService chargeService;
 
     @Autowired
@@ -47,6 +53,9 @@ public class RailTruckController extends BaseTaskController {
 
         model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
+
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        model.addAttribute("routes", routes);
 
         // for charges
         model.addAttribute("cts", chargeService.getChargeTypes());

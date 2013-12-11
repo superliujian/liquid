@@ -69,6 +69,7 @@
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price.cny}">CNY Price</th>
                     <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -93,6 +94,12 @@
                            th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
                             <i class="glyphicon glyphicon-edit"/>
                         </a>
+                    </td>
+                    <td>
+                        <a href="/order/id?action=duplicate" class="btn btn-default btn-xs"
+                           th:href="'/order/' + ${order.id + '?action=duplicate'}">
+                            <i class="glyphicon glyphicon-file"/>
+                        </a> 
                     </td>
                 </tr>
                 </tbody>

@@ -10,15 +10,7 @@ import java.util.Date;
  * Time: 10:52 PM
  */
 @Entity(name = "DELIVERY_CONTAINER")
-public class DeliveryContainer extends BaseEntity {
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
-
-    @OneToOne
-    @JoinColumn(name = "SC_ID")
-    private ShippingContainer sc;
-
+public class DeliveryContainer extends BaseLegContainer {
     @Column(name = "ADDRESS")
     private String address;
 
@@ -33,22 +25,6 @@ public class DeliveryContainer extends BaseEntity {
 
     @Transient
     private boolean batch;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public ShippingContainer getSc() {
-        return sc;
-    }
-
-    public void setSc(ShippingContainer sc) {
-        this.sc = sc;
-    }
 
     public String getAddress() {
         return address;
@@ -86,8 +62,6 @@ public class DeliveryContainer extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("DeliveryContainer{");
-        sb.append("order=").append(order);
-        sb.append(", sc=").append(sc);
         sb.append(", address='").append(address).append('\'');
         sb.append(", etd=").append(etd);
         sb.append(", etdStr='").append(etdStr).append('\'');

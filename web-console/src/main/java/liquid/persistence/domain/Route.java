@@ -37,6 +37,9 @@ public class Route extends BaseEntity {
     private Collection<ShippingContainer> containers;
 
     @Transient
+    private Collection<RailContainer> railContainers;
+
+    @Transient
     private boolean batch;
 
     public Planning getPlanning() {
@@ -87,6 +90,14 @@ public class Route extends BaseEntity {
         this.containers = containers;
     }
 
+    public Collection<RailContainer> getRailContainers() {
+        return railContainers;
+    }
+
+    public void setRailContainers(Collection<RailContainer> railContainers) {
+        this.railContainers = railContainers;
+    }
+
     public boolean isBatch() {
         return batch;
     }
@@ -95,15 +106,16 @@ public class Route extends BaseEntity {
         this.batch = batch;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Route{");
-        sb.append("containerQtyMax=").append(containerQtyMax);
+//        sb.append("planning=").append(planning);
+        sb.append(", containerQtyMax=").append(containerQtyMax);
         sb.append(", containerQty=").append(containerQty);
         sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
         sb.append(", legs=").append(legs);
         sb.append(", containers=").append(containers);
+        sb.append(", railContainers=").append(railContainers);
         sb.append(", batch=").append(batch);
         sb.append('}');
         return sb.toString();

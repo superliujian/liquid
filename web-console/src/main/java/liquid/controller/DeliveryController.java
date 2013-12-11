@@ -1,6 +1,12 @@
 package liquid.controller;
 
+import liquid.metadata.ChargeWay;
+import liquid.metadata.TransMode;
+import liquid.persistence.domain.Charge;
 import liquid.persistence.domain.DeliveryContainer;
+import liquid.persistence.domain.Route;
+import liquid.service.ChargeService;
+import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -28,12 +35,29 @@ public class DeliveryController extends BaseTaskController {
     @Autowired
     private ShippingContainerService scService;
 
+    @Autowired
+    private RouteService routeService;
+
+    @Autowired
+    private ChargeService chargeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        model.addAttribute("routes", routes);
+
         model.addAttribute("containers", scService.initDeliveryContainers(taskId));
+
+        // for charges
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("transModes", TransMode.toMap());
+        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        model.addAttribute("charges", charges);
+        model.addAttribute("total", chargeService.total(charges));
         return "delivery/main";
     }
 

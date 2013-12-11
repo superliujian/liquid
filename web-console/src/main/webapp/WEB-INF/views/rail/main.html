@@ -25,9 +25,12 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <div th:unless="${#lists.isEmpty(containers)}">
-        <div class="panel panel-default">
-            <div class="panel-heading"></div>
+    <div th:unless="${#lists.isEmpty(routes)}">
+        <div class="panel panel-default" th:each="route : ${routes}">
+            <div class="panel-heading">
+                <span th:text="#{route} + ${route.id}">Route ID</span>
+                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            </div>
 
             <div class="panel-body">
                 <table class="table table-striped table-hover table-condensed table-16">
@@ -44,12 +47,11 @@
                         <th th:text="#{rail.ets}">Rail ETS</th>
                         <th th:text="#{station.toa}">Station TOA</th>
                         <th th:text="#{rail.ats}">Rail ATS</th>
-                        <th th:text="#{rail.ata}">Rail ATA</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="container : ${containers}">
+                    <tr th:each="container : ${route.railContainers}">
                         <td th:text="${container.leg.srcLoc.name}">Railway Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Railway Destination</td>
                         <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ''">Container No.</td>
@@ -61,7 +63,6 @@
                         <td th:text="${container.etsStr}">Rail TOA</td>
                         <td th:text="${container.stationToaStr}">Station TOA</td>
                         <td th:text="${container.atsStr}">Rail ATS</td>
-                        <td th:text="${container.ataStr}">Rail ATA</td>
                         <td>
                             <a href="/task/{taskId}/loading/edit" class="btn btn-default btn-xs"
                                sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_OPERATING', 'ROLE_FIELD')"

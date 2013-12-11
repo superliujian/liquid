@@ -17,6 +17,12 @@ public class BaseOrder extends BaseEntity {
     @Transient
     private long customerId;
 
+    /**
+     * Can't use customerName, there is a conflict with Repository
+     */
+    @Transient
+    private String customerName0;
+
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
@@ -35,15 +41,18 @@ public class BaseOrder extends BaseEntity {
     @Transient
     private long destination;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONSIGNEE")
     private String consignee;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONSIGNEE_PHONE")
     private String consigneePhone;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONSIGNEE_ADDR")
     private String consigneeAddress;
 
@@ -97,6 +106,14 @@ public class BaseOrder extends BaseEntity {
 
     public void setCustomerId(long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerName0() {
+        return customerName0;
+    }
+
+    public void setCustomerName0(String customerName0) {
+        this.customerName0 = customerName0;
     }
 
     public Customer getCustomer() {
@@ -256,6 +273,7 @@ public class BaseOrder extends BaseEntity {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("BaseOrder{");
         sb.append("customerId=").append(customerId);
+        sb.append(", customerName0=").append(customerName0);
         sb.append(", customer=").append(customer);
         sb.append(", srcLoc=").append(srcLoc);
         sb.append(", origination=").append(origination);
