@@ -48,7 +48,7 @@
     <div class="col-lg-8">    
         <div class="form-group">
             <label th:text="#{customer}">Customer</label><br/>
-            <input type="text" id="cName" class="typeahead form-control" placeholder="customer name" />
+            <input type="text" th:field="*{customerName0}" class="typeahead form-control" placeholder="customer name" />
         </div> 
     </div>
 </div>
@@ -311,7 +311,7 @@
             }
         });
         
-        $('#cName').typeahead({
+        $('#customerName0').typeahead({
             name: 'customer',
             valueKey: 'name',
             limit: 10,

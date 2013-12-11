@@ -30,8 +30,12 @@ public class RouteService {
     @Autowired
     private LegRepository legRepository;
 
+    @Deprecated
     @Autowired
     private RailContainerRepository railContainerRepository;
+
+    @Autowired
+    private RailContainerService railContainerService;
 
     @Autowired
     private ShippingContainerRepository scRepository;
@@ -44,7 +48,7 @@ public class RouteService {
             route.setLegs(legs);
             Collection<ShippingContainer> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
-            Collection<RailContainer> railContainers = railContainerRepository.findByRoute(route);
+            Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
             route.setRailContainers(railContainers);
         }
         return routes;

@@ -34,6 +34,7 @@ public class RailShippingController extends BaseTaskController {
     @Autowired
     private ShippingContainerService scService;
 
+    @Autowired
     private RouteService routeService;
 
     @RequestMapping(method = RequestMethod.GET)

@@ -255,7 +255,7 @@ public class ShippingContainerService {
         ServiceProvider fleet = spService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
             for (RailContainer railContainer : containers) {
                 railContainer.setFleet(fleet);
                 railContainer.setPlateNo(truck.getPlateNo());
@@ -277,7 +277,7 @@ public class ShippingContainerService {
         RailContainer container = rcRepository.findOne(railYard.getRailContainerId());
 
         if (railYard.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
             for (RailContainer railContainer : containers) {
                 railContainer.setStationToa(DateUtils.dateOf(railYard.getRailYardToa()));
             }
@@ -311,7 +311,7 @@ public class ShippingContainerService {
         RailContainer container = rcRepository.findOne(railShipping.getRailContainerId());
 
         if (railShipping.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
             for (RailContainer railContainer : containers) {
                 railContainer.setAts(DateUtils.dateOf(railShipping.getAts()));
             }
@@ -327,7 +327,7 @@ public class ShippingContainerService {
         RailContainer container = rcRepository.findOne(railArrival.getRailContainerId());
 
         if (railArrival.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
             for (RailContainer railContainer : containers) {
                 railContainer.setAta(DateUtils.dateOf(railArrival.getAta()));
             }
@@ -374,7 +374,7 @@ public class ShippingContainerService {
         RailContainer container = rcRepository.findOne(containerId);
 
         if (formBean.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByOrder(container.getOrder());
+            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
             if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
                 for (RailContainer rc : containers) {
                     rc.setLoadingToc(DateUtils.dateOf(formBean.getLoadingTocStr()));
