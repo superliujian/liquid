@@ -117,7 +117,8 @@ public class OrderController extends BaseChargeController {
     @RequestMapping(method = RequestMethod.GET, params = "findById")
     public String findById(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
-        if (null == param || param.trim().length() == 0) {} else {
+        if (null == param || param.trim().length() == 0) {
+        } else {
             try {
                 model.addAttribute("orders", orderService.find(Long.parseLong(param)));
                 return "order/find";
@@ -221,7 +222,12 @@ public class OrderController extends BaseChargeController {
         Order order = orderService.find(id);
         logger.debug("order: {}", order);
 
-        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
+        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+
+        if ("duplicate".equals(action)) {
+            order = orderService.duplicate(order);
+            logger.debug("order: {}", order);
+        }
 
         model.addAttribute("locations", locations);
         model.addAttribute("order", order);

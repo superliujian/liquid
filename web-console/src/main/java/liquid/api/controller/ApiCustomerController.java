@@ -4,10 +4,7 @@ import liquid.persistence.domain.Customer;
 import liquid.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * TODO: Comments.
@@ -22,9 +19,15 @@ public class ApiCustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
+    public Iterable<Customer> list() {
+        return customerService.findAll();
+    }
+
     @RequestMapping(method = RequestMethod.GET, params = "name")
     @ResponseBody
-    public Iterable<Customer> list(@RequestParam String name) {
+    public Iterable<Customer> listByName(@RequestParam String name) {
         return customerService.findByName(name);
     }
 }

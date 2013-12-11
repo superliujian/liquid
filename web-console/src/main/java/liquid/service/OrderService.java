@@ -63,6 +63,37 @@ public class OrderService {
         return order;
     }
 
+    public Order duplicate(Order oldOne) {
+        Order order = new Order();
+        order.setCustomer(oldOne.getCustomer());
+        order.setSrcLoc(oldOne.getSrcLoc());
+        order.setDstLoc(oldOne.getDstLoc());
+        order.setConsignee(oldOne.getConsignee());
+        order.setConsigneePhone(oldOne.getConsigneePhone());
+        order.setConsigneeAddress(oldOne.getConsigneeAddress());
+        order.setGoods(oldOne.getGoods());
+        order.setGoodsWeight(oldOne.getGoodsWeight());
+        order.setTradeType(oldOne.getTradeType());
+        order.setContainerType(oldOne.getContainerType());
+        order.setContainerCap(oldOne.getContainerCap());
+        order.setContainerQty(oldOne.getContainerQty());
+        order.setLoadingType(oldOne.getLoadingType());
+        order.setLoadingAddress(oldOne.getLoadingAddress());
+        order.setLoadingContact(oldOne.getLoadingContact());
+        order.setLoadingEt(oldOne.getLoadingEt());
+        order.setSalesPriceCny(oldOne.getSalesPriceCny());
+
+        order.setOrigination(oldOne.getSrcLoc().getId());
+        order.setDestination(oldOne.getDstLoc().getId());
+        order.setCustomerId(oldOne.getCustomer().getId());
+        order.setCustomerName0(oldOne.getCustomer().getName());
+        order.setGoodsId(oldOne.getGoods().getId());
+        order.setLoadingEtStr(oldOne.getLoadingEt() == null
+                ? DateUtils.stringOf(new Date())
+                : DateUtils.stringOf(oldOne.getLoadingEt()));
+        return order;
+    }
+
     public void save(Order order) {
         Customer customer = customerRepository.findOne(order.getCustomerId());
         Goods goods = goodsRepository.findOne(order.getGoodsId());
@@ -112,6 +143,7 @@ public class OrderService {
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setCustomerId(order.getCustomer().getId());
+        order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
         order.setLoadingEtStr(order.getLoadingEt() == null
                 ? DateUtils.stringOf(new Date())
