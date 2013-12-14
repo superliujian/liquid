@@ -2,6 +2,7 @@ package liquid.persistence.repository;
 
 import liquid.persistence.domain.BargeContainer;
 import liquid.persistence.domain.Order;
+import liquid.persistence.domain.Route;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
@@ -14,4 +15,6 @@ import java.util.Collection;
  */
 public interface BargeContainerRepository extends CrudRepository<BargeContainer, Long> {
     Collection<BargeContainer> findByOrder(Order order);
+
+    Collection<BargeContainer> findByRoute(Route route);
 }

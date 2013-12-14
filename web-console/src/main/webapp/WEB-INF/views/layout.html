@@ -179,7 +179,7 @@ roadId,
                             <span th:text="#{task.claim}" />
                         </button>
                         
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#completeTask">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#completeTask" th:if="${task.assignee}">
                             <span th:text="#{task.complete}" />
                         </button>                               
                     </form>
@@ -194,18 +194,18 @@ roadId,
     <!-- /.jumbotron -->
     
     <!-- Modal -->
-    <div class="modal fade" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y: hidden;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-info-sign"></span></h4>
+                    <h4 class="modal-title" id="myModalLabel"><span th:text="#{modal.complete.task}" /></h4>
                     <!--
                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                     -->
                 </div>
                 <div class="modal-body">
-                    <h4><span th:text="#{modal.complete.task}" /></h4>
+                    <h4><span class="glyphicon glyphicon-info-sign"></span></h4>
                 </div>
                 <div class="modal-footer">
                     <form action="/task" method="POST">
@@ -213,7 +213,7 @@ roadId,
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <span th:text="#{modal.close}" />
                         </button>
-                        <button type="submit" name="complete" value="Complete" class="btn btn-primary" th:if="${task.assignee}">
+                        <button type="submit" name="complete" value="Complete" class="btn btn-primary">
                             <span th:text="#{task.complete}" />
                         </button>
                     </form>

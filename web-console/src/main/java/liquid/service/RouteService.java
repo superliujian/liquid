@@ -1,10 +1,7 @@
 package liquid.service;
 
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.LegRepository;
-import liquid.persistence.repository.RailContainerRepository;
-import liquid.persistence.repository.RouteRepository;
-import liquid.persistence.repository.ShippingContainerRepository;
+import liquid.persistence.repository.*;
 import liquid.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +35,12 @@ public class RouteService {
     private RailContainerService railContainerService;
 
     @Autowired
+    private BargeContainerService bargeContainerService;
+
+    @Autowired
+    private VesselContainerService vesselContainerService;
+
+    @Autowired
     private ShippingContainerRepository scRepository;
 
     public Collection<Route> findByTaskId(String taskId) {
@@ -50,6 +53,10 @@ public class RouteService {
             route.setContainers(containers);
             Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
             route.setRailContainers(railContainers);
+            Collection<BargeContainer> bargeContainers = bargeContainerService.findByRoute(route);
+            route.setBargeContainers(bargeContainers);
+            Collection<VesselContainer> vesselContainers = vesselContainerService.findByRoute(route);
+            route.setVesselContainers(vesselContainers);
         }
         return routes;
     }

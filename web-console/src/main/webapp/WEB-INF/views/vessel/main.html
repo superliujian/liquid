@@ -25,9 +25,12 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <div th:unless="${#lists.isEmpty(containers)}">
-        <div class="panel panel-default">
-            <div class="panel-heading"></div>
+    <div th:unless="${#lists.isEmpty(routes)}">
+        <div class="panel panel-default" th:each="route : ${routes}">
+            <div class="panel-heading">
+                <span th:text="#{route} + ${route.id}">Route ID</span>
+                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            </div>
 
             <div class="panel-body">
                 <table class="table table-striped table-hover table-condensed table-16">
@@ -44,7 +47,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="container : ${containers}">
+                    <tr th:each="container : ${route.vesselContainers}">
                         <td th:text="${container.leg.srcLoc.name}">Vessel Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Vessel Destination</td>
                         <td th:text="${container.leg.sp.name}">SP Name</td>

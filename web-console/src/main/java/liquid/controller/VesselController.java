@@ -1,6 +1,8 @@
 package liquid.controller;
 
+import liquid.persistence.domain.Route;
 import liquid.persistence.domain.VesselContainer;
+import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -29,12 +32,16 @@ public class VesselController extends BaseTaskController {
     @Autowired
     private ShippingContainerService scService;
 
+    @Autowired
+    private RouteService routeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("containers", scService.initVesselContainers(taskId));
+        Collection<Route> routes = routeService.findByTaskId(taskId);
+        model.addAttribute("routes", routes);
         return "vessel/main";
     }
 
