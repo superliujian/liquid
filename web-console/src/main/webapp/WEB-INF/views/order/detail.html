@@ -254,6 +254,12 @@
             <span th:errors="*{salesPriceCny}">error</span>
         </div>
     </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{create.time}">Create Time</label>
+            <input type="text" th:field="*{createTime}" class="form-control" disabled="disabled"/>
+        </div>
+    </div>
 </div>
 </div>
 </div>
