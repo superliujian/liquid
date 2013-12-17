@@ -108,8 +108,8 @@
                            th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${route.id} + '/leg/' + ${leg.id}">
                             <i class="glyphicon glyphicon-minus"/>
                         </a>
-                        <a href="/task/{taskId}/leg/{legId}/charge" class="btn btn-default btn-xs"
-                           th:href="'/task/' + ${taskId} + '/leg/' + ${leg.id} + '/charge'">
+                        <a href="/task/{taskId}/charge?legId={legId}" class="btn btn-default btn-xs"
+                           th:href="'/task/' + ${taskId} + '/charge?legId=' + ${leg.id}">
                             <i class="glyphicon glyphicon-shopping-cart"/>
                         </a>
                     </td>

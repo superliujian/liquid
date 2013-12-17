@@ -19,6 +19,13 @@ public class Charge extends BaseEntity {
     private String taskId;
 
     @ManyToOne
+    @JoinColumn(name = "ROUTE_ID")
+    private Route route;
+
+    @Transient
+    private long formRouteId;
+
+    @ManyToOne
     @JoinColumn(name = "LEG_ID")
     private Leg leg;
 
@@ -76,6 +83,22 @@ public class Charge extends BaseEntity {
 
     public void setLeg(Leg leg) {
         this.leg = leg;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public long getFormRouteId() {
+        return formRouteId;
+    }
+
+    public void setFormRouteId(long formRouteId) {
+        this.formRouteId = formRouteId;
     }
 
     public long getFormLegId() {
@@ -160,11 +183,10 @@ public class Charge extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Charge{");
+        final StringBuilder sb = new StringBuilder("Charge{");
         sb.append("order=").append(order);
         sb.append(", taskId='").append(taskId).append('\'');
-        sb.append(", leg=").append(leg);
+        sb.append(", formRouteId=").append(formRouteId);
         sb.append(", formLegId=").append(formLegId);
         sb.append(", type=").append(type);
         sb.append(", typeId=").append(typeId);

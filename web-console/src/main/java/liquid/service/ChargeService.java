@@ -44,6 +44,9 @@ public class ChargeService {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private RouteService routeService;
+
     public Iterable<Charge> getChargesByOrderId(long orderId) {
         return chargeRepository.findByOrderId(orderId);
     }
@@ -62,13 +65,23 @@ public class ChargeService {
     }
 
     @Transactional("transactionManager")
-    public Charge addCharge(long legId, Charge charge) {
+    public Charge addCharge(Charge charge) {
         ServiceProvider sp = spRepository.findOne(charge.getSpId());
         charge.setSp(sp);
-        Leg leg = legRepository.findOne(legId);
-        charge.setLeg(leg);
 
-        Order order = leg.getRoute().getPlanning().getOrder();
+        Route route = routeService.find(charge.getFormRouteId());
+        Leg leg = legRepository.findOne(charge.getFormLegId());
+
+        Order order = null;
+        if (null != route) {
+            order = route.getPlanning().getOrder();
+            charge.setRoute(route);
+        }
+        if (null != leg) {
+            route = leg.getRoute();
+            order = route.getPlanning().getOrder();
+            charge.setLeg(leg);
+        }
 
         charge.setOrder(order);
         ChargeType type = ctRepository.findOne(charge.getTypeId());
@@ -77,7 +90,7 @@ public class ChargeService {
         if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
             charge.setUnitPrice(0L);
         } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
-            charge.setTotalPrice(charge.getUnitPrice() * leg.getRoute().getContainerQty());
+            charge.setTotalPrice(charge.getUnitPrice() * route.getContainerQty());
         } else {
             logger.warn("{} is out of charge way range.", charge.getWay());
         }
@@ -131,6 +144,10 @@ public class ChargeService {
 
     public Iterable<Charge> findByLegId(long legId) {
         return chargeRepository.findByLegId(legId);
+    }
+
+    public Iterable<Charge> findByRouteId(long routeId) {
+        return chargeRepository.findByRouteId(routeId);
     }
 
     public Iterable<Charge> findByTaskId(String taskId) {

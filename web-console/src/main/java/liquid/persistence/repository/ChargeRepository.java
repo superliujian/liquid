@@ -21,5 +21,7 @@ public interface ChargeRepository extends CrudRepository<Charge, Long> {
 
     Iterable<Charge> findByLegId(long legId);
 
+    Iterable<Charge> findByRouteId(long routeId);
+
     Iterable<Charge> findByOrderIdAndCreateRole(long orderId, String createRole);
 }
