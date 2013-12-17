@@ -169,6 +169,7 @@
                             </div>
                         </div>
 
+                        <!--
                         <div class="form-group">
                             <label th:text="#{charge.way}" class="col-lg-3 control-label">Charge Way</label>
 
@@ -182,27 +183,54 @@
                                 </ul>
                             </div>
                         </div>
+                        -->
 
                         <div class="form-group">
-                            <label th:text="#{charge.unit.price}" class="col-lg-3 control-label">Unit Price</label>
+                            <label th:text="#{price}" class="col-lg-3 control-label">Price</label>
 
-                            <div class="col-lg-9">
+                            <div class="col-lg-3">
+                                <select th:field="*{way}" class="form-control">
+                                    <option th:each="chargeWay : ${chargeWays}"
+                                            th:value="${chargeWay.value}"
+                                            th:text="#{${chargeWay.i18nKey}}">
+                                        Charge Way                                    
+                                    </option>
+                               </select> 
+                            </div><!-- /.col-lg-3 -->  
+
+                            <div class="col-lg-3">
                                 <input type="text" th:field="*{unitPrice}" class="form-control"/>
-                            </div>
+                            </div><!-- /.col-lg-6 -->
+                            
+                            <div class="col-lg-3">
+                                <select th:field="*{currency}" class="form-control">
+                                    <option value="0">CNY</option>
+                                    <option value="1">USD</option>
+                               </select> 
+                            </div><!-- /.col-lg-3 -->  
 
                             <span th:errors="*{unitPrice}">error</span>
                         </div>
 
+                        <!--
                         <div class="form-group">
                             <label th:text="#{charge.total.price}" class="col-lg-3 control-label">Total Price</label>
 
-                            <div class="col-lg-9">
-                                <input type="text" th:field="*{totalPrice}" class="form-control"/>
+                            <div class="col-lg-6">
+                                <input type="text" th:field="*{totalPrice}" class="form-control"/>                           
                             </div>
+                            
+                            <div class="col-lg-3">
+                                <select class="form-control">
+                                    <option>CNY</option>
+                                    <option>USD</option>
+                               </select> 
+                            </div>                
 
                             <span th:errors="*{totalPrice}">error</span>
                         </div>
-
+                        -->
+                     
                         <input type="hidden" name="taskId" th:value="${task.id}" value="0"/>
 
                         <div class="form-group">

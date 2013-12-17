@@ -88,14 +88,18 @@ public class ChargeService {
         charge.setType(type);
 
         if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
+            charge.setTotalPrice(charge.getUnitPrice());
             charge.setUnitPrice(0L);
         } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
             charge.setTotalPrice(charge.getUnitPrice() * route.getContainerQty());
         } else {
             logger.warn("{} is out of charge way range.", charge.getWay());
         }
-
-        order.setGrandTotal(order.getGrandTotal() + charge.getTotalPrice());
+        if (charge.getCurrency() == 0) {
+            order.setGrandTotal(order.getGrandTotal() + charge.getTotalPrice());
+        } else {
+            order.setGrandTotal(order.getGrandTotal() + Math.round(charge.getTotalPrice() * getExchangeRate()));
+        }
         orderService.save(order);
 
         return chargeRepository.save(charge);
@@ -136,7 +140,12 @@ public class ChargeService {
         Charge charge = chargeRepository.findOne(chargeId);
         Order order = charge.getOrder();
 
-        order.setGrandTotal(order.getGrandTotal() - charge.getTotalPrice());
+        if (charge.getCurrency() == 0) {
+            order.setGrandTotal(order.getGrandTotal() - charge.getTotalPrice());
+        } else {
+            order.setGrandTotal(order.getGrandTotal() - Math.round(charge.getTotalPrice() * getExchangeRate()));
+        }
+
         orderService.save(order);
 
         chargeRepository.delete(chargeId);
@@ -157,7 +166,11 @@ public class ChargeService {
     public long total(Iterable<Charge> charges) {
         long total = 0L;
         for (Charge charge : charges) {
-            total += charge.getTotalPrice();
+            if (charge.getCurrency() == 0) {
+                total += charge.getTotalPrice();
+            } else {
+                total += Math.round(charge.getTotalPrice() * getExchangeRate());
+            }
         }
         return total;
     }

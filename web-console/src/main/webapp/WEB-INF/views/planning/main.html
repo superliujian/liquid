@@ -141,6 +141,7 @@
                     <th th:text="#{charge.way}">Way</th>
                     <th th:text="#{charge.unit.price}">Unit Price</th>
                     <th th:text="#{charge.total.price}">Total Price</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -154,6 +155,7 @@
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>
+                    <td th:text="${charge.currency} ? 'USD' : 'CNY'">Total Price</td>
                 </tr>
                 </tbody>
             </table>

@@ -55,6 +55,9 @@ public class Charge extends BaseEntity {
     @Column(name = "TOTAL_PRICE")
     private long totalPrice;
 
+    @Column(name = "CURRENCY")
+    private int currency;
+
     @Column(name = "CREATE_ROLE")
     private String createRole;
 
@@ -165,6 +168,14 @@ public class Charge extends BaseEntity {
         this.totalPrice = totalPrice;
     }
 
+    public int getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(int currency) {
+        this.currency = currency;
+    }
+
     public String getCreateRole() {
         return createRole;
     }
@@ -195,6 +206,7 @@ public class Charge extends BaseEntity {
         sb.append(", way=").append(way);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", currency=").append(currency);
         sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');
