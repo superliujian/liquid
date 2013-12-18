@@ -80,7 +80,7 @@ public class OrderService {
         order.setLoadingType(oldOne.getLoadingType());
         order.setLoadingAddress(oldOne.getLoadingAddress());
         order.setLoadingContact(oldOne.getLoadingContact());
-        order.setLoadingEt(oldOne.getLoadingEt());
+        order.setLoadingPhone(oldOne.getLoadingPhone());
         order.setSalesPriceCny(oldOne.getSalesPriceCny());
 
         order.setOrigination(oldOne.getSrcLoc().getId());
@@ -88,9 +88,7 @@ public class OrderService {
         order.setCustomerId(oldOne.getCustomer().getId());
         order.setCustomerName0(oldOne.getCustomer().getName());
         order.setGoodsId(oldOne.getGoods().getId());
-        order.setLoadingEtStr(oldOne.getLoadingEt() == null
-                ? DateUtils.stringOf(new Date())
-                : DateUtils.stringOf(oldOne.getLoadingEt()));
+        order.setLoadingEtStr(DateUtils.stringOf(new Date()));
         return order;
     }
 

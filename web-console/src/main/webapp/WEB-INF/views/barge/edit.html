@@ -5,7 +5,7 @@
     <title>Liquid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Bootstrap -->
-    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -19,10 +19,6 @@
 <!-- {!begin layout} -->
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
-
-<!-- {!begin task bar} -->
-<div th:include="layout :: task-bar"/>
-<!-- {!end task bar} -->
 
 <div class="container">
     <form action="/task/{taskId}/barge/{containerId}" method="POST" class="form-horizontal center"

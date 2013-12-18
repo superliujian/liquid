@@ -5,7 +5,7 @@
     <title>Liquid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Bootstrap -->
-    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -25,9 +25,12 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <div th:unless="${#lists.isEmpty(containers)}">
-        <div class="panel panel-default">
-            <div class="panel-heading"></div>
+    <div th:unless="${#lists.isEmpty(routes)}">
+        <div class="panel panel-default" th:each="route : ${routes}">
+            <div class="panel-heading">
+                <span th:text="#{route} + ${route.id}">Route ID</span>
+                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            </div>
 
             <div class="panel-body">
                 <table class="table table-striped table-hover table-condensed table-16">
@@ -44,7 +47,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="container : ${containers}">
+                    <tr th:each="container : ${route.bargeContainers}">
                         <td th:text="${container.leg.srcLoc.name}">Barge Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Barge Destination</td>
                         <td th:text="${container.leg.sp.name}">SP Name</td>

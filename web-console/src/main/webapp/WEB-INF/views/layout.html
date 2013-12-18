@@ -5,7 +5,7 @@
     <title>Liquid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Bootstrap -->
-    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -175,10 +175,13 @@ roadId,
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
 
-                        <input type="submit" name="claim" value="Claim" class="btn btn-default"
-                               th:unless="${task.assignee}" th:value="#{task.claim}"/>
-                        <input type="submit" name="complete" value="Complete" class="btn btn-default"
-                               th:if="${task.assignee}" th:value="#{task.complete}"/>
+                        <button type="submit" name="claim" value="Claim" class="btn btn-default" th:unless="${task.assignee}">
+                            <span th:text="#{task.claim}" />
+                        </button>
+                        
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#completeTask" th:if="${task.assignee}">
+                            <span th:text="#{task.complete}" />
+                        </button>                               
                     </form>
                 </div>
             </div>
@@ -189,7 +192,37 @@ roadId,
         <!-- /.container -->
     </div>
     <!-- /.jumbotron -->
+    
+    <!-- Modal -->
+    <div class="modal" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y: hidden;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel"><span th:text="#{modal.complete.task}" /></h4>
+                    <!--
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    -->
+                </div>
+                <div class="modal-body">
+                    <h4><span class="glyphicon glyphicon-info-sign"></span></h4>
+                </div>
+                <div class="modal-footer">
+                    <form action="/task" method="POST">
+                        <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <span th:text="#{modal.close}" />
+                        </button>
+                        <button type="submit" name="complete" value="Complete" class="btn btn-primary">
+                            <span th:text="#{task.complete}" />
+                        </button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->    
 </div>
+
 
 <div th:fragment="charge-tab">
     <div class="container">

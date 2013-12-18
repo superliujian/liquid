@@ -5,7 +5,7 @@
     <title>Liquid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Bootstrap -->
-    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -252,6 +252,12 @@
             <input type="text" th:field="*{salesPriceCny}" class="form-control" disabled="disabled"/>
 
             <span th:errors="*{salesPriceCny}">error</span>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{create.time}">Create Time</label>
+            <input type="text" th:field="*{createTime}" class="form-control" disabled="disabled"/>
         </div>
     </div>
 </div>

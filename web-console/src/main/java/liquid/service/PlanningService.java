@@ -84,6 +84,7 @@ public class PlanningService {
     }
 
     public Leg findLeg(long legId) {
+        if (0L == legId) return null;
         Leg leg = legRepository.findOne(legId);
         if (null != leg.getSp()) leg.setSpId(leg.getSp().getId());
         return leg;

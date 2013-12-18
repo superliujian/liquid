@@ -456,6 +456,7 @@ public class ShippingContainerService {
                 for (ShippingContainer sc : scList) {
                     BargeContainer bc = new BargeContainer();
                     bc.setOrder(route.getPlanning().getOrder());
+                    bc.setRoute(route);
                     bc.setLeg(legList.get(0));
                     bc.setSc(sc);
                     bcList.add(bc);
@@ -482,7 +483,7 @@ public class ShippingContainerService {
         BargeContainer container = bcRepository.findOne(containerId);
 
         if (formBean.isBatch()) {
-            Collection<BargeContainer> containers = bcRepository.findByOrder(container.getOrder());
+            Collection<BargeContainer> containers = bcRepository.findByRoute(container.getRoute());
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (BargeContainer rc : containers) {
@@ -537,11 +538,12 @@ public class ShippingContainerService {
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
                 for (ShippingContainer sc : scList) {
-                    VesselContainer bc = new VesselContainer();
-                    bc.setOrder(route.getPlanning().getOrder());
-                    bc.setLeg(legList.get(0));
-                    bc.setSc(sc);
-                    vcList.add(bc);
+                    VesselContainer vc = new VesselContainer();
+                    vc.setOrder(route.getPlanning().getOrder());
+                    vc.setRoute(route);
+                    vc.setLeg(legList.get(0));
+                    vc.setSc(sc);
+                    vcList.add(vc);
                 }
             }
         }
@@ -565,7 +567,7 @@ public class ShippingContainerService {
         VesselContainer container = vcRepository.findOne(containerId);
 
         if (formBean.isBatch()) {
-            Collection<VesselContainer> containers = vcRepository.findByOrder(container.getOrder());
+            Collection<VesselContainer> containers = vcRepository.findByRoute(container.getRoute());
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (VesselContainer rc : containers) {

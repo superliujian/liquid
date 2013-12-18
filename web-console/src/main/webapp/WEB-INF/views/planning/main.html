@@ -5,7 +5,7 @@
     <title>Liquid</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!-- Bootstrap -->
-    <link href="/resources/css/bootstrap-3.0.0.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -108,8 +108,8 @@
                            th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${route.id} + '/leg/' + ${leg.id}">
                             <i class="glyphicon glyphicon-minus"/>
                         </a>
-                        <a href="/task/{taskId}/leg/{legId}/charge" class="btn btn-default btn-xs"
-                           th:href="'/task/' + ${taskId} + '/leg/' + ${leg.id} + '/charge'">
+                        <a href="/task/{taskId}/charge?legId={legId}" class="btn btn-default btn-xs"
+                           th:href="'/task/' + ${taskId} + '/charge?legId=' + ${leg.id}">
                             <i class="glyphicon glyphicon-shopping-cart"/>
                         </a>
                     </td>
@@ -141,6 +141,7 @@
                     <th th:text="#{charge.way}">Way</th>
                     <th th:text="#{charge.unit.price}">Unit Price</th>
                     <th th:text="#{charge.total.price}">Total Price</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -154,6 +155,7 @@
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>
+                    <td th:text="${charge.currency} ? 'USD' : 'CNY'">Total Price</td>
                 </tr>
                 </tbody>
             </table>
