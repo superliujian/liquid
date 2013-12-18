@@ -39,7 +39,7 @@ public class BargeController extends BaseTaskController {
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-
+        scService.initBargeContainers(taskId);
         Collection<Route> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
         return "barge/main";
