@@ -39,7 +39,7 @@ public class VesselController extends BaseTaskController {
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-
+	scService.initVesselContainers(taskId);
         Collection<Route> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
         return "vessel/main";
