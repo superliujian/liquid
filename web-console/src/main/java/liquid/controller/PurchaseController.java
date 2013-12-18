@@ -5,6 +5,7 @@ import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.service.ChargeService;
 import liquid.service.PlanningService;
+import liquid.service.RouteService;
 import liquid.service.SpService;
 import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
@@ -12,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -39,6 +37,9 @@ public class PurchaseController extends BaseTaskController {
     private PlanningService planningService;
 
     @Autowired
+    private RouteService routeService;
+
+    @Autowired
     private SpService spService;
 
     @ModelAttribute("chargeWays")
@@ -46,58 +47,74 @@ public class PurchaseController extends BaseTaskController {
         return ChargeWay.values();
     }
 
-    @RequestMapping(value = "/task/{taskId}/leg/{legId}/charge", method = RequestMethod.GET)
+    @RequestMapping(value = "/task/{taskId}/charge", method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
-                       @PathVariable long legId,
+                       @RequestParam(value = "routeId", required = false, defaultValue = "0") long routeId,
+                       @RequestParam(value = "legId", required = false, defaultValue = "0") long legId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
+        logger.debug("routeId: {}", routeId);
         logger.debug("legId: {}", legId);
 
         Map<Long, String> chargeTypes = chargeService.getChargeTypes();
         Iterable<ServiceProvider> sps = spService.findByType(spService.spTypeByChargeType(chargeTypes.entrySet().iterator().next().getKey().intValue()));
 
+        Route route = routeService.find(routeId);
         Leg leg = planningService.findLeg(legId);
+
+        Iterable<Charge> charges = null;
+        if (null != route) {
+            charges = chargeService.findByRouteId(routeId);
+        }
+        if (null != leg) {
+            charges = chargeService.findByLegId(legId);
+        }
+
         Charge charge = new Charge();
+        charge.setFormRouteId(routeId);
+        charge.setFormLegId(legId);
 
         model.addAttribute("cts", chargeTypes);
         model.addAttribute("sps", sps);
         model.addAttribute("charge", charge);
+        model.addAttribute("route", route);
         model.addAttribute("leg", leg);
-        model.addAttribute("charges", chargeService.findByLegId(legId));
+        model.addAttribute("charges", charges);
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));
         return "charge/dashboard";
     }
 
-    @RequestMapping(value = "/task/{taskId}/leg/{legId}/charge", method = RequestMethod.POST)
+    @RequestMapping(value = "/task/{taskId}/charge", method = RequestMethod.POST)
     public String addCharge(@PathVariable String taskId,
-                            @PathVariable long legId,
+                            @RequestHeader(value = "referer", required = false) final String referer,
                             Charge charge,
                             Model model,
                             HttpServletRequest request,
                             Principal principal) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("legId: {}", legId);
+        logger.debug("charge: {}", charge);
 
         charge.setCreateRole(RoleHelper.getRole(principal));
         charge.setCreateUser(principal.getName());
         charge.setCreateTime(new Date());
         charge.setUpdateUser(principal.getName());
         charge.setUpdateTime(new Date());
-        chargeService.addCharge(legId, charge);
-        return "redirect:" + request.getServletPath();
+        chargeService.addCharge(charge);
+
+        logger.debug("referer: {}", referer);
+        return "redirect:" + referer;
     }
 
-    @RequestMapping(value = "/task/{taskId}/leg/{legId}/charge/{chargeId}", method = RequestMethod.GET)
-    public String init(@PathVariable String taskId,
-                       @PathVariable long legId,
-                       @PathVariable long chargeId,
-                       Model model, Principal principal) {
+    @RequestMapping(value = "/task/{taskId}/charge/{chargeId}", method = RequestMethod.GET)
+    public String init0(@PathVariable String taskId,
+                        @RequestHeader(value = "referer", required = false) final String referer,
+                        @PathVariable long chargeId,
+                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("legId: {}", legId);
 
         chargeService.removeCharge(chargeId);
 
-        return "redirect:/task/" + taskId + "/leg/" + legId + "/charge";
+        return "redirect:" + referer;
     }
 }

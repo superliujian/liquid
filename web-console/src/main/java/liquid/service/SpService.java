@@ -61,6 +61,8 @@ public class SpService {
             case 1://驳船费
                 return 2;//驳船
             case 2:  //大船费
+            case 4: // 用箱费
+            case 6: // 用柜费用
                 return 3;
             case 3: //铁路运费
             case 5: //铁路包干费
@@ -77,8 +79,6 @@ public class SpService {
                 return 4; // 拖车
             case 13: // 堆存费
                 return 6; //堆场
-            case 4: // 用箱费
-            case 6: // 用柜费用
             default:
                 return 0;
         }

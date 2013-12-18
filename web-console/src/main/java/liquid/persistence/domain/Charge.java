@@ -19,6 +19,13 @@ public class Charge extends BaseEntity {
     private String taskId;
 
     @ManyToOne
+    @JoinColumn(name = "ROUTE_ID")
+    private Route route;
+
+    @Transient
+    private long formRouteId;
+
+    @ManyToOne
     @JoinColumn(name = "LEG_ID")
     private Leg leg;
 
@@ -48,6 +55,9 @@ public class Charge extends BaseEntity {
     @Column(name = "TOTAL_PRICE")
     private long totalPrice;
 
+    @Column(name = "CURRENCY")
+    private int currency;
+
     @Column(name = "CREATE_ROLE")
     private String createRole;
 
@@ -76,6 +86,22 @@ public class Charge extends BaseEntity {
 
     public void setLeg(Leg leg) {
         this.leg = leg;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public long getFormRouteId() {
+        return formRouteId;
+    }
+
+    public void setFormRouteId(long formRouteId) {
+        this.formRouteId = formRouteId;
     }
 
     public long getFormLegId() {
@@ -142,6 +168,14 @@ public class Charge extends BaseEntity {
         this.totalPrice = totalPrice;
     }
 
+    public int getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(int currency) {
+        this.currency = currency;
+    }
+
     public String getCreateRole() {
         return createRole;
     }
@@ -160,11 +194,10 @@ public class Charge extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Charge{");
+        final StringBuilder sb = new StringBuilder("Charge{");
         sb.append("order=").append(order);
         sb.append(", taskId='").append(taskId).append('\'');
-        sb.append(", leg=").append(leg);
+        sb.append(", formRouteId=").append(formRouteId);
         sb.append(", formLegId=").append(formLegId);
         sb.append(", type=").append(type);
         sb.append(", typeId=").append(typeId);
@@ -173,6 +206,7 @@ public class Charge extends BaseEntity {
         sb.append(", way=").append(way);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", currency=").append(currency);
         sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');

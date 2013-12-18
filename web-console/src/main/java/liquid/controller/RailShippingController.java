@@ -41,7 +41,6 @@ public class RailShippingController extends BaseTaskController {
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
-        model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
         Collection<Route> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);

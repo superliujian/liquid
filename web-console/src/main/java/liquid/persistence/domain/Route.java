@@ -40,6 +40,12 @@ public class Route extends BaseEntity {
     private Collection<RailContainer> railContainers;
 
     @Transient
+    private Collection<BargeContainer> bargeContainers;
+
+    @Transient
+    private Collection<VesselContainer> vesselContainers;
+
+    @Transient
     private boolean batch;
 
     public Planning getPlanning() {
@@ -98,6 +104,22 @@ public class Route extends BaseEntity {
         this.railContainers = railContainers;
     }
 
+    public Collection<BargeContainer> getBargeContainers() {
+        return bargeContainers;
+    }
+
+    public void setBargeContainers(Collection<BargeContainer> bargeContainers) {
+        this.bargeContainers = bargeContainers;
+    }
+
+    public Collection<VesselContainer> getVesselContainers() {
+        return vesselContainers;
+    }
+
+    public void setVesselContainers(Collection<VesselContainer> vesselContainers) {
+        this.vesselContainers = vesselContainers;
+    }
+
     public boolean isBatch() {
         return batch;
     }
@@ -106,7 +128,8 @@ public class Route extends BaseEntity {
         this.batch = batch;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Route{");
 //        sb.append("planning=").append(planning);
@@ -114,8 +137,6 @@ public class Route extends BaseEntity {
         sb.append(", containerQty=").append(containerQty);
         sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
         sb.append(", legs=").append(legs);
-        sb.append(", containers=").append(containers);
-        sb.append(", railContainers=").append(railContainers);
         sb.append(", batch=").append(batch);
         sb.append('}');
         return sb.toString();

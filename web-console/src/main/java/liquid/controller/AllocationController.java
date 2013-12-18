@@ -1,5 +1,6 @@
 package liquid.controller;
 
+import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
@@ -42,6 +43,9 @@ public class AllocationController extends BaseTaskController {
     @Autowired
     private ContainerService containerService;
 
+    @Autowired
+    private ChargeService chargeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
@@ -49,6 +53,12 @@ public class AllocationController extends BaseTaskController {
         Collection<Route> routes = routeService.findByTaskId(taskId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
+
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("chargeWays", ChargeWay.values());
+        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        model.addAttribute("charges", charges);
+        model.addAttribute("total", chargeService.total(charges));
         return "allocation/main";
     }
 
