@@ -102,7 +102,7 @@ public class ChargeController {
                 logger.warn("An exception was thrown when calling findById", e);
             }
         }
-        return "charge";
+        return "/charge/details";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findBySpName")
@@ -110,7 +110,7 @@ public class ChargeController {
         logger.debug("param: {}", param);
 
         model.addAttribute("charges", chargeService.findBySpName(param));
-        return "charge";
+        return "/charge/details";
     }
 
     @RequestMapping(value = "/summary", method = RequestMethod.GET, params = "number")

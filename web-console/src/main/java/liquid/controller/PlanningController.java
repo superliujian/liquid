@@ -56,7 +56,8 @@ public class PlanningController extends BaseTaskController {
     @Autowired
     private ChargeService chargeService;
 
-    public PlanningController() {}
+    public PlanningController() {
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
@@ -165,11 +166,21 @@ public class PlanningController extends BaseTaskController {
         logger.debug("route: {}", route);
 
         Planning planning = planningRepository.findOne(Long.valueOf(planningId));
+
+        int containerUsage = 0;
+        Collection<Route> routes = planning.getRoutes();
+        for (Route r : planning.getRoutes()) {
+            containerUsage += r.getContainerQty();
+            Collection<Leg> legs = legRepository.findByRoute(r);
+            r.setLegs(legs);
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("planning", planning);
             return "planning/main";
-        } else if (route.getContainerQty() > planning.getOrder().getContainerQty()) {
-            setFieldError(result, "route", "containerQty", route.getContainerQty(), planning.getOrder().getContainerQty());
+        } else if (route.getContainerQty() > (planning.getOrder().getContainerQty() - containerUsage)) {
+            setFieldError(result, "route", "containerQty", route.getContainerQty(), (planning.getOrder().getContainerQty() - containerUsage));
+            model.addAttribute("transModes", TransMode.toMap());
             model.addAttribute("planning", planning);
             return "planning/main";
         } else {
