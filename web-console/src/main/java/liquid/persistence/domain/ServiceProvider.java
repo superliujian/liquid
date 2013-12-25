@@ -13,11 +13,13 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "SERVICE_PROVIDER")
 public class ServiceProvider extends BaseEntity {
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CODE")
     private String code;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "NAME")
     private String name;
 
@@ -48,6 +50,9 @@ public class ServiceProvider extends BaseEntity {
      */
     @Column(name = "STATUS")
     private int status;
+
+    @Transient
+    private long[] chargeTypeIds;
 
     public String getCode() {
         return code;
@@ -127,6 +132,14 @@ public class ServiceProvider extends BaseEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public long[] getChargeTypeIds() {
+        return chargeTypeIds;
+    }
+
+    public void setChargeTypeIds(long[] chargeTypeIds) {
+        this.chargeTypeIds = chargeTypeIds;
     }
 
     @Override
