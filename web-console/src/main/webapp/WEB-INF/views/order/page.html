@@ -78,7 +78,7 @@
                     <td>
                         <a href="/order/id?action=edit" th:href="'/order/' + ${order.id}" th:text="${order.id}"/>
                     </td>
-                    <td th:text="${order.customer.name}">Customer Name</td>
+                    <td th:text="${order.customer} ? ${order.customer.name} : ''">Customer Name</td>
                     <td th:text="${order.srcLoc.name}">Origin</td>
                     <td th:text="${order.dstLoc.name}">Destination</td>
                     <td th:text="${order.goods.name}"></td>
