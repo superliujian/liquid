@@ -32,6 +32,8 @@
     <div class="panel panel-default">
         <div class="panel-body">
     <form action="/sp" method="POST" th:object="${sp}" class="form-horizontal center">
+        <input type="hidden" th:field="*{id}"/>
+    
         <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
             <label th:text="#{sp.code} + '*'" class="control-label">Name</label>
             <input type="text" th:field="*{code}" class="form-control"/>
@@ -87,7 +89,7 @@
         <div class="form-group">
             <div class="col-lg-3" th:each="ct : ${cts}">
             <label class="checkbox-inline" >
-                <input type="checkbox" name="chargeTypeIds" value="chargeTypeId" th:value="${ct.key}"/>
+                <input type="checkbox" th:field="*{chargeTypeIds}" value="chargeTypeId" th:value="${ct.key}"/>
                 <span th:text="${ct.value}">Charge Type Name</span>
             </label>
             </div>

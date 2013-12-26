@@ -42,18 +42,18 @@ public class SpService {
 
     public ServiceProvider find(long id) {
         ServiceProvider serviceProvider = spRepository.findOne(id);
-//        Collection<liquid.persistence.domain.Service> servicesCollection = serviceRepository.findByServiceProvider(serviceProvider);
-//
-//        if (servicesCollection != null) {
-//            liquid.persistence.domain.Service[] services = servicesCollection.toArray(new liquid.persistence.domain.Service[0]);
-//            long[] chargeTypeIds = new long[services.length];
-//            for (int i = 0; i < chargeTypeIds.length; i++) {
-//                chargeTypeIds[i] = services[i].getChargeType().getId();
-//            }
-//            serviceProvider.setChargeTypeIds(chargeTypeIds);
-//        } else {
-//            serviceProvider.setChargeTypeIds(new long[0]);
-//        }
+        Collection<liquid.persistence.domain.Service> servicesCollection = serviceRepository.findBySp(serviceProvider);
+
+        if (servicesCollection != null) {
+            liquid.persistence.domain.Service[] services = servicesCollection.toArray(new liquid.persistence.domain.Service[0]);
+            long[] chargeTypeIds = new long[services.length];
+            for (int i = 0; i < chargeTypeIds.length; i++) {
+                chargeTypeIds[i] = services[i].getChargeType().getId();
+            }
+            serviceProvider.setChargeTypeIds(chargeTypeIds);
+        } else {
+            serviceProvider.setChargeTypeIds(new long[0]);
+        }
 
         return serviceProvider;
     }
@@ -73,22 +73,22 @@ public class SpService {
         sp.setType(type);
         spRepository.save(sp);
 
-//        Iterable<liquid.persistence.domain.Service> deletingServices = serviceRepository.findByServiceProvider(sp);
-//        serviceRepository.delete(deletingServices);
-//
-//        long[] chargeTypeIds = sp.getChargeTypeIds();
-//        if (chargeTypeIds != null && chargeTypeIds.length > 0) {
-//            liquid.persistence.domain.Service[] services = new liquid.persistence.domain.Service[chargeTypeIds.length];
-//            for (int i = 0; i < services.length; i++) {
-//                ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeIds[i]);
-//
-//                services[i] = new liquid.persistence.domain.Service();
-//                services[i].setSp(sp);
-//                services[i].setChargeType(chargeType);
-//                services[i].setName(chargeType.getName());
-//            }
-//            serviceRepository.save(Arrays.asList(services));
-//        }
+        Iterable<liquid.persistence.domain.Service> deletingServices = serviceRepository.findBySp(sp);
+        serviceRepository.delete(deletingServices);
+
+        long[] chargeTypeIds = sp.getChargeTypeIds();
+        if (chargeTypeIds != null && chargeTypeIds.length > 0) {
+            liquid.persistence.domain.Service[] services = new liquid.persistence.domain.Service[chargeTypeIds.length];
+            for (int i = 0; i < services.length; i++) {
+                ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeIds[i]);
+
+                services[i] = new liquid.persistence.domain.Service();
+                services[i].setSp(sp);
+                services[i].setChargeType(chargeType);
+                services[i].setName(chargeType.getName());
+            }
+            serviceRepository.save(Arrays.asList(services));
+        }
     }
 
     public Map<Long, String> getSpTypes() {
@@ -126,5 +126,15 @@ public class SpService {
             default:
                 return 0;
         }
+    }
+
+    public List<ServiceProvider> findByChargeType(long chargeTypeId) {
+        List<ServiceProvider> serviceProviders = new ArrayList<ServiceProvider>();
+        ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeId);
+        Iterable<liquid.persistence.domain.Service> services = serviceRepository.findByChargeType(chargeType);
+        for (liquid.persistence.domain.Service service : services) {
+            serviceProviders.add(service.getSp());
+        }
+        return serviceProviders;
     }
 }

@@ -53,9 +53,10 @@ public class SpController {
 
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
-    public Iterable<ServiceProvider> list(@RequestParam long type) {
-        long spType = spService.spTypeByChargeType((int) type);
-        return spService.findByType(spType);
+    public List<ServiceProvider> list(@RequestParam long type) {
+//        long spType = spService.spTypeByChargeType((int) type);
+//        return spService.findByType(spType);
+        return spService.findByChargeType(type);
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
