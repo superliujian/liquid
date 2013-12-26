@@ -20,6 +20,8 @@ public class BaseOrder extends BaseEntity {
     /**
      * Can't use customerName, there is a conflict with Repository
      */
+    @NotNull
+    @NotEmpty
     @Transient
     private String customerName0;
 
