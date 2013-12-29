@@ -88,8 +88,10 @@
                 <thead>
                 <tr>
                     <th th:text="#{route}">Route ID</th>
+                    <!--
                     <th th:text="#{leg}">Leg ID</th>
                     <th th:text="#{trans.mode}">Trans Mode</th>
+                    -->
                     <th th:text="#{charge.type}">Type</th>
                     <th th:text="#{sp.name}">SP Name</th>
                     <th th:text="#{charge.way}">Way</th>
@@ -100,9 +102,11 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
-                    <td th:text="${charge.leg.route.id}">Route ID</td>
+                    <td th:text="${charge.route.id}">Route ID</td>
+                    <!--
                     <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Route ID</td>
                     <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>
+                    -->
                     <td th:text="${charge.type.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
