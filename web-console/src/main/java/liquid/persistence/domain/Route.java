@@ -46,6 +46,9 @@ public class Route extends BaseEntity {
     private Collection<VesselContainer> vesselContainers;
 
     @Transient
+    private Collection<DeliveryContainer> deliveryContainers;
+
+    @Transient
     private boolean batch;
 
     public Planning getPlanning() {
@@ -118,6 +121,14 @@ public class Route extends BaseEntity {
 
     public void setVesselContainers(Collection<VesselContainer> vesselContainers) {
         this.vesselContainers = vesselContainers;
+    }
+
+    public Collection<DeliveryContainer> getDeliveryContainers() {
+        return deliveryContainers;
+    }
+
+    public void setDeliveryContainers(Collection<DeliveryContainer> deliveryContainers) {
+        this.deliveryContainers = deliveryContainers;
     }
 
     public boolean isBatch() {
