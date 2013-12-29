@@ -26,6 +26,9 @@ public class DeliveryContainer extends BaseLegContainer {
     @Transient
     private boolean batch;
 
+    public DeliveryContainer() {
+    }
+
     public String getAddress() {
         return address;
     }

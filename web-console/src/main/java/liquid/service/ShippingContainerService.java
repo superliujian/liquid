@@ -622,6 +622,7 @@ public class ShippingContainerService {
             for (ShippingContainer sc : scList) {
                 DeliveryContainer dc = new DeliveryContainer();
                 dc.setOrder(route.getPlanning().getOrder());
+                dc.setRoute(route);
                 dc.setSc(sc);
                 dc.setAddress(order.getConsigneeAddress());
                 dcList.add(dc);
