@@ -15,5 +15,5 @@ public interface SpRepository extends CrudRepository<ServiceProvider, Long> {
     Iterable<ServiceProvider> findByType(SpType type);
 
     @Query(value = "SELECT * FROM SERVICE_PROVIDER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
-    public Iterable<ServiceProvider> findOrderByName();
+    Iterable<ServiceProvider> findOrderByName();
 }

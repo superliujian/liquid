@@ -3,8 +3,11 @@ package liquid.service;
 import liquid.persistence.domain.Customer;
 import liquid.persistence.domain.Order;
 import liquid.persistence.repository.CustomerRepository;
+import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.xml.bind.ValidationException;
 
 /**
  * TODO: Comments.
@@ -28,5 +31,22 @@ public class CustomerService {
 
     public Iterable<Customer> findByName(String name) {
         return customerRepository.findByNameLike("%" + name + "%");
+    }
+
+    public FormValidationResult validateCustomer(long id, String name) {
+        Customer customer = find(id);
+        if (name == null) {
+            return FormValidationResult.newFailure("");
+        }
+
+        if (null == customer) {
+            return FormValidationResult.newFailure("");
+        }
+
+        if (name.equals(customer.getName())) {
+            return FormValidationResult.newSuccess();
+        } else {
+            return FormValidationResult.newFailure("");
+        }
     }
 }

@@ -4,6 +4,7 @@ import liquid.persistence.domain.ServiceProvider;
 import liquid.persistence.domain.SpType;
 import liquid.persistence.repository.SpRepository;
 import liquid.persistence.repository.SpTypeRepository;
+import liquid.service.ChargeService;
 import liquid.service.SpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public class SpController {
     @Autowired
     private SpService spService;
 
+    @Autowired
+    private ChargeService chargeService;
+
     @ModelAttribute("sps")
     public Iterable<ServiceProvider> populateSps() {
         return spService.findAll();
@@ -43,15 +47,22 @@ public class SpController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public void list(Model model, Principal principal) {
-        model.addAttribute("sp", new ServiceProvider());
+    public String list(Model model, Principal principal) {
+        return "sp/sp";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
-    public Iterable<ServiceProvider> list(@RequestParam long type) {
-        long spType = spService.spTypeByChargeType((int) type);
-        return spService.findByType(spType);
+    public List<ServiceProvider> list(@RequestParam long type) {
+//        long spType = spService.spTypeByChargeType((int) type);
+//        return spService.findByType(spType);
+        return spService.findByChargeType(type);
+    }
+
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    public String initForm(Model model, Principal principal) {
+        model.addAttribute("sp", new ServiceProvider());
+        return "sp/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -60,10 +71,20 @@ public class SpController {
         logger.debug("sp: {}", sp);
 
         if (bindingResult.hasErrors()) {
-            return "sp";
+            return "sp/sp";
         } else {
             spService.save(sp);
             return "redirect:/sp";
         }
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String initEdit(@PathVariable long id,
+                           Model model, Principal principal) {
+        logger.debug("id: {}", id);
+        ServiceProvider sp = spService.find(id);
+        model.addAttribute("sp", sp);
+        model.addAttribute("cts", chargeService.getChargeTypes());
+        return "sp/form";
     }
 }
