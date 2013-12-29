@@ -66,7 +66,7 @@ public class BaseLegContainer extends BaseEntity {
         sb.append("BaseLegContainer{");
         sb.append("order=").append(order.getId());
         sb.append(", route=").append(route.getId());
-        sb.append(", leg=").append(leg.getId());
+//        sb.append(", leg=").append(leg.getId());
         sb.append(", sc=").append(sc.getId());
         sb.append('}');
         return sb.toString();

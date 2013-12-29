@@ -56,7 +56,7 @@
                             </a>
                             <a href="/task/{taskId}/charge?legId={legId}" class="btn btn-default btn-xs"
                                sec:authorize="hasRole('ROLE_OPERATING')"
-                               th:href="'/task/' + ${taskId} + '/charge?legId=' + ${container.leg.id}">
+                               th:href="'/task/' + ${taskId} + '/charge?routeId=' + ${route.id}">
                                 <i class="glyphicon glyphicon-shopping-cart"/>
                             </a>
                             <!-- Button trigger modal -->
