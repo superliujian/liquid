@@ -45,7 +45,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="container : ${containers}">
+                    <tr th:each="container : ${route.deliveryContainers}">
                         <td th:text="${container.sc.container.bicCode}">BIC Code</td>
                         <td th:text="${container.address}">Delivery Address</td>
                         <td th:text="${container.etdStr}">Delivery Date</td>
@@ -56,7 +56,7 @@
                             </a>
                             <a href="/task/{taskId}/charge?legId={legId}" class="btn btn-default btn-xs"
                                sec:authorize="hasRole('ROLE_OPERATING')"
-                               th:href="'/task/' + ${taskId} + '/charge?legId=' + ${leg.id}">
+                               th:href="'/task/' + ${taskId} + '/charge?legId=' + ${container.leg.id}">
                                 <i class="glyphicon glyphicon-shopping-cart"/>
                             </a>
                             <!-- Button trigger modal -->
