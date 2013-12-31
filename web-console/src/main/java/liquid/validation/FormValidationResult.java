@@ -17,7 +17,7 @@ public class FormValidationResult {
     }
 
     public static FormValidationResult newFailure(String messageKey) {
-        return new FormValidationResult(true, messageKey);
+        return new FormValidationResult(false, messageKey);
     }
 
     public boolean isSuccessful() {

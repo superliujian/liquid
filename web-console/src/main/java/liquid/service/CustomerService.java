@@ -30,23 +30,19 @@ public class CustomerService {
     }
 
     public Iterable<Customer> findByName(String name) {
-        return customerRepository.findByNameLike("%" + name + "%");
+        Iterable<Customer> customers = customerRepository.findByNameLike("%" + name + "%");
+        return customers;
     }
 
     public FormValidationResult validateCustomer(long id, String name) {
+        if (id == 0L) return FormValidationResult.newFailure("invalid.customer");
+
         Customer customer = find(id);
-        if (name == null) {
-            return FormValidationResult.newFailure("");
-        }
+        if (name == null) return FormValidationResult.newFailure("invalid.customer");
 
-        if (null == customer) {
-            return FormValidationResult.newFailure("");
-        }
+        if (null == customer) return FormValidationResult.newFailure("invalid.customer");
 
-        if (name.equals(customer.getName())) {
-            return FormValidationResult.newSuccess();
-        } else {
-            return FormValidationResult.newFailure("");
-        }
+        if (name.equals(customer.getName())) return FormValidationResult.newSuccess();
+        else return FormValidationResult.newFailure("invalid.customer");
     }
 }

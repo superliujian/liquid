@@ -5,6 +5,7 @@ import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.service.*;
 import liquid.utils.RoleHelper;
+import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -160,6 +161,14 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locations);
             return "order/form";
         } else {
+            FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+            if (!result.isSuccessful()) {
+                setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+                List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+                model.addAttribute("locations", locations);
+                return "order/form";
+            }
+
             order.setCreateRole(RoleHelper.getRole(principal));
             order.setCreateUser(principal.getName());
             order.setCreateTime(new Date());
