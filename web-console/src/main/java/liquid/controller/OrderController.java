@@ -156,19 +156,16 @@ public class OrderController extends BaseChargeController {
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SAVED.getValue());
 
+        FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+        if (!result.isSuccessful()) {
+            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+        }
+
         if (bindingResult.hasErrors()) {
             List<Location> locations = locationService.findByType(LocationType.CITY.getType());
             model.addAttribute("locations", locations);
             return "order/form";
         } else {
-            FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
-            if (!result.isSuccessful()) {
-                setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
-                List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-                model.addAttribute("locations", locations);
-                return "order/form";
-            }
-
             order.setCreateRole(RoleHelper.getRole(principal));
             order.setCreateUser(principal.getName());
             order.setCreateTime(new Date());
@@ -182,11 +179,18 @@ public class OrderController extends BaseChargeController {
     @RequestMapping(method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Model model, Principal principal) {
+        logger.debug("order: {}", order);
+
         // TODO: add to interceptor.
         businessContext.setUsername(principal.getName());
 
-        logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SUBMITTED.getValue());
+
+        FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+        if (!result.isSuccessful()) {
+            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+        }
+
         if (bindingResult.hasErrors()) {
             List<Location> locations = locationService.findByType(LocationType.CITY.getType());
             model.addAttribute("locations", locations);
