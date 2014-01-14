@@ -312,7 +312,7 @@
 
         <userTask id="confirmInvoiceAmount" name="确认发票金额">
             <documentation>
-                您需要确认发票金额。
+                您需要确认发票金额${salesPrice}元。
             </documentation>
             <!-- ROLE_SALES -->
             <humanPerformer>

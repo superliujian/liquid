@@ -108,6 +108,11 @@ public class TaskService {
                     throw new NotCompletedException("container.allocation.is.not.completed");
                 }
                 break;
+            case "sendInvoicing":
+                orderId = getOrderIdByTaskId(taskId);
+                order = orderService.find(orderId);
+                variableMap.put("salesPrice", order.getSalesPriceCny());
+                break;
             default:
                 break;
         }
