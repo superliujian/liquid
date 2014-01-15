@@ -52,7 +52,7 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <td th:text="${charge.id}">ID</td>
-                    <td th:text="${cts[charge.type]}">Type</td>
+                    <td th:text="${charge.type.name}">Type</td>
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>

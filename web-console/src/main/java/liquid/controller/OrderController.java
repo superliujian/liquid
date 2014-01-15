@@ -5,6 +5,7 @@ import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.service.*;
 import liquid.utils.RoleHelper;
+import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -155,6 +156,11 @@ public class OrderController extends BaseChargeController {
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SAVED.getValue());
 
+        FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+        if (!result.isSuccessful()) {
+            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+        }
+
         if (bindingResult.hasErrors()) {
             List<Location> locations = locationService.findByType(LocationType.CITY.getType());
             model.addAttribute("locations", locations);
@@ -173,11 +179,18 @@ public class OrderController extends BaseChargeController {
     @RequestMapping(method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Model model, Principal principal) {
+        logger.debug("order: {}", order);
+
         // TODO: add to interceptor.
         businessContext.setUsername(principal.getName());
 
-        logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SUBMITTED.getValue());
+
+        FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+        if (!result.isSuccessful()) {
+            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+        }
+
         if (bindingResult.hasErrors()) {
             List<Location> locations = locationService.findByType(LocationType.CITY.getType());
             model.addAttribute("locations", locations);

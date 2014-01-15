@@ -54,6 +54,7 @@ public class SpController {
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
     public List<ServiceProvider> list(@RequestParam long type) {
+        logger.debug("type: {}", type);
 //        long spType = spService.spTypeByChargeType((int) type);
 //        return spService.findByType(spType);
         return spService.findByChargeType(type);
