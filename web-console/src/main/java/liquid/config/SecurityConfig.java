@@ -30,8 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LdapContextSource contextSource;
 
-    @Override
-    protected void registerAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+//    @Override
+//    protected void registerAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.ldapAuthentication().contextSource(contextSource)
+//                .userDnPatterns("uid={0},ou=people")
+//                .groupSearchBase("ou=groups")
+//                .groupSearchFilter("(uniqueMember={0})");
+//    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.ldapAuthentication().contextSource(contextSource)
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups")
@@ -62,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeUrls()
+                .csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/register", "/about").permitAll() // #4
                 .antMatchers("/admin/**").hasRole("ADMIN") // #6
                 .antMatchers("/container/**").hasRole("CONTAINER")
@@ -71,13 +80,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated() // 7
                 .and()
                 .formLogin()  // #8
-                .loginPage("/signin") // #9
+                .loginPage("/login") // #9
                 .permitAll() // #5
                 .and()
                 .logout()
-                .logoutSuccessUrl("/signin")
+                .permitAll()
+                .logoutSuccessUrl("/login")
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
-
 }

@@ -40,6 +40,6 @@ public class AuthController {
         return "redirect:/task";
     }
 
-    @RequestMapping("/signin")
+    @RequestMapping("/login")
     public void signin(Model model, Principal principal) {}
 }

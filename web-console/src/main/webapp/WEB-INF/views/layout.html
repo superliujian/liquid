@@ -91,9 +91,9 @@
                         </a>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
-                        <a href="logout" th:text="#{logout}">Logout</a>
+                        <a href="/logout" th:text="#{logout}">Logout</a>
                     </li>
-                    <li><a href="register" th:text="#{register}">Register</a></li>
+                    <li><a href="/register" th:text="#{register}">Register</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
