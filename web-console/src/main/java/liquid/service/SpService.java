@@ -42,6 +42,8 @@ public class SpService {
 
     public ServiceProvider find(long id) {
         ServiceProvider serviceProvider = spRepository.findOne(id);
+        serviceProvider.setTypeId(serviceProvider.getType().getId());
+
         Collection<liquid.persistence.domain.Service> servicesCollection = serviceRepository.findBySp(serviceProvider);
 
         if (servicesCollection != null) {
