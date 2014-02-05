@@ -52,6 +52,8 @@ public class OrderDistyController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
+        //TODO: Validate distributor price data.
+
         long orderId = taskService.getOrderIdByTaskId(taskId);
         Order order = orderService.find(orderId);
         order.setDistyPrice(disty.getDistyPrice());

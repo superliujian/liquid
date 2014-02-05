@@ -30,6 +30,9 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
+                    <li sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                        <a href="/account" th:text="#{account}">User</a>
+                    </li>                
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
                         <a href="/task" th:text="#{task}">Task</a>
                     </li>
@@ -90,10 +93,10 @@
                             ]
                         </a>
                     </li>
-                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
+                    <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
                         <a href="/logout" th:text="#{logout}">Logout</a>
                     </li>
-                    <li><a href="/register" th:text="#{register}">Register</a></li>
+                    <li><a href="/account/register" th:text="#{register}">Register</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -161,17 +164,12 @@ roadId,
     <div class="jumbotron">
         <div class="container">
             <div class="row">
+                <div class="col-lg-8">
                 <span th:text="${task.name}">Task Name</span>
                 [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
                     th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
-            </div>
-            <div class="row">
-                <div class="col-lg-5">
-                    <blockquote>
-                        <p th:text="${task.description}"></p>
-                    </blockquote>
                 </div>
-                <div class="col-lg-3">
+                <div class="pull-right">
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
 
@@ -184,6 +182,11 @@ roadId,
                         </button>                               
                     </form>
                 </div>
+            </div>
+            <div class="row">
+                <blockquote class="col-lg-offset-1">
+                    <p th:text="${task.description}"></p>
+                </blockquote>
             </div>
             <div class="alert alert-danger" th:if="${task_error}">
                 <span th:text="${task_error}">Task Error</span>

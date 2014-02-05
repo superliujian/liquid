@@ -30,14 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LdapContextSource contextSource;
 
-//    @Override
-//    protected void registerAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.ldapAuthentication().contextSource(contextSource)
-//                .userDnPatterns("uid={0},ou=people")
-//                .groupSearchBase("ou=groups")
-//                .groupSearchFilter("(uniqueMember={0})");
-//    }
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.ldapAuthentication().contextSource(contextSource)
@@ -72,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/about").permitAll() // #4
+                .antMatchers("/account/register", "/about").permitAll() // #4
                 .antMatchers("/admin/**").hasRole("ADMIN") // #6
                 .antMatchers("/container/**").hasRole("CONTAINER")
                 .antMatchers("/task/*/planning/**").hasRole("MARKETING")

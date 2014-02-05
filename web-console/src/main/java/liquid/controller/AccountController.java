@@ -10,12 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -24,7 +23,7 @@ import java.security.Principal;
  * Time: 11:50 AM
  */
 @Controller
-@RequestMapping
+@RequestMapping("/account")
 public class AccountController {
     private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
@@ -34,6 +33,13 @@ public class AccountController {
     @ModelAttribute("groupTypes")
     public GroupType[] populateGroups() {
         return GroupType.values();
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String list(Model model, Principal principal) {
+        List list = accountService.findAll();
+        model.addAttribute("accounts", list);
+        return "account/list";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -51,12 +57,27 @@ public class AccountController {
         } else {
             if (account.getPassword().equals(account.getPassword2())) {
                 accountService.register(account);
-                return "redirect:/signin";
+                return "redirect:/login";
             } else {
                 ObjectError objectError = new ObjectError("password", "passwords are not same.");
                 bindingResult.addError(objectError);
                 return "register";
             }
         }
+    }
+
+    @RequestMapping(value = "/{uid}", method = RequestMethod.GET, params = "action")
+    public String unlock(@PathVariable String uid, @RequestParam String action,
+                         Model model, Principal principal) {
+        logger.debug("uid: {}", uid);
+        logger.debug("action: {}", action);
+
+        if ("unlock".equals(action)) {
+            accountService.unlock(uid);
+        } else {
+            accountService.lock(uid);
+        }
+
+        return "redirect:/account";
     }
 }

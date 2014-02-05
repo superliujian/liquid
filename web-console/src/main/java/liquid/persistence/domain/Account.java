@@ -37,6 +37,8 @@ public class Account {
 
     private String description;
 
+    private String pwdAccountLockedTime;
+
     public String getUid() {
         return uid;
     }
@@ -117,10 +119,17 @@ public class Account {
         this.description = description;
     }
 
+    public String getPwdAccountLockedTime() {
+        return pwdAccountLockedTime;
+    }
+
+    public void setPwdAccountLockedTime(String pwdAccountLockedTime) {
+        this.pwdAccountLockedTime = pwdAccountLockedTime;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Account{");
+        final StringBuilder sb = new StringBuilder("Account{");
         sb.append("uid='").append(uid).append('\'');
         sb.append(", surname='").append(surname).append('\'');
         sb.append(", givenName='").append(givenName).append('\'');
@@ -131,6 +140,7 @@ public class Account {
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", group='").append(group).append('\'');
         sb.append(", description='").append(description).append('\'');
+        sb.append(", pwdAccountLockedTime='").append(pwdAccountLockedTime).append('\'');
         sb.append('}');
         return sb.toString();
     }

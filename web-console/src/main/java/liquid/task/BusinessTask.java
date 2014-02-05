@@ -1,5 +1,7 @@
 package liquid.task;
 
+import org.springframework.validation.BindingResult;
+
 /**
  * Created by tao on 12/19/13.
  */
@@ -11,7 +13,7 @@ public interface BusinessTask<T> {
      *
      * @return
      */
-    ValidationResult validate();
+    ValidationResult validate(T formBean, BindingResult result);
 
     T summary();
 

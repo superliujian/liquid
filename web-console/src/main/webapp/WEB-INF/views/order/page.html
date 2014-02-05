@@ -30,8 +30,7 @@
                 <span class="input-group-addon"
                       th:text="#{order.shipping} + ' (' + #{order.id} + ', ' + #{customer.name} + ')'">Shipping Order</span>
 
-                <input type="text" class="form-control" id="param" name="param" placeholder="ID or Customer Name"/>
-
+                <input type="text" class="form-control" id="param" name="param" placeholder="ID or Customer Name" th:placeholder="#{order.id} + ' ' + #{customer.name}" /> 
                 <span class="input-group-btn">
                     <button type="submit" name="findById" value="Find Orders By ID" class="btn btn-default"
                             th:text="#{order.find.by.id}"/>

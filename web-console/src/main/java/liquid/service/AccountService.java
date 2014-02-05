@@ -1,14 +1,21 @@
 package liquid.service;
 
+import liquid.config.LdapConfig;
 import liquid.persistence.domain.Account;
 import liquid.persistence.domain.Group;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.ldap.core.*;
+import org.springframework.ldap.core.support.AbstractContextMapper;
+import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.security.ldap.userdetails.Person;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeSet;
+import javax.naming.Name;
+import javax.naming.NamingException;
+import javax.naming.directory.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -21,13 +28,13 @@ public class AccountService {
     @Autowired
     private LdapOperations ldapOperations;
 
-    public void register(Account accout) {
+    public void register(Account account) {
         // throw NameAlreadyBoundException
-        createPerson(accout);
+        createPerson(account);
 
         // add the person to group in ldap.
-        Group group = findGroupByName(accout.getGroup());
-        group.getUniqueMembers().add(buildAccountDn(accout).toString() + ",dc=suncapital-logistics,dc=com");
+        Group group = findGroupByName(account.getGroup());
+        group.getUniqueMembers().add(buildAccountDn(account).toString() + ",dc=suncapital-logistics,dc=com");
         updateGroup(group);
     }
 
@@ -42,6 +49,51 @@ public class AccountService {
         return dn;
     }
 
+    public List<Account> findAll() {
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        searchControls.setDerefLinkFlag(true);
+        searchControls.setReturningAttributes(new String[]{"uid", "ou", "pwdAccountLockedTime"});
+
+        List<Account> accounts = ldapOperations.search(
+                "", "(objectclass=person)", searchControls,
+                new AttributesMapper() {
+                    public Object mapFromAttributes(Attributes attrs)
+                            throws NamingException {
+                        Account account = new Account();
+                        account.setUid((String) attrs.get("uid").get());
+                        account.setGroup((String) attrs.get("ou").get());
+
+                        Attribute pwdAccountLockedTime = attrs.get("pwdAccountLockedTime");
+                        if (null != pwdAccountLockedTime)
+                            account.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
+                        return account;
+                    }
+                });
+
+        return accounts;
+    }
+
+    public void unlock(String uid) {
+        Account account = new Account();
+        account.setUid(uid);
+
+        Name dn = buildAccountDn(account);
+        Attribute attr = new BasicAttribute("pwdAccountLockedTime");
+        ModificationItem item = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
+        ldapOperations.modifyAttributes(dn, new ModificationItem[]{item});
+    }
+
+    public void lock(String uid) {
+        Account account = new Account();
+        account.setUid(uid);
+
+        Name dn = buildAccountDn(account);
+        Attribute attr = new BasicAttribute("pwdAccountLockedTime", date2string());
+        ModificationItem item = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
+        ldapOperations.modifyAttributes(dn, new ModificationItem[]{item});
+    }
+
     private DirContextOperations setAccountAttributes(DirContextOperations adapter, Account account) {
         adapter.setAttributeValues("objectclass", new String[]{"top",
                 "person", "organizationalPerson", "inetOrgPerson"});
@@ -52,6 +104,8 @@ public class AccountService {
         adapter.setAttributeValue("description", account.getDescription());
         adapter.setAttributeValue("telephoneNumber", account.getCell());
         adapter.setAttributeValue("cn", account.getSurname() + account.getGivenName());
+
+        adapter.setAttributeValue("pwdAccountLockedTime", date2string());
         return adapter;
     }
 
@@ -98,6 +152,24 @@ public class AccountService {
                     .toArray(new String[0]));
         }
         return adapter;
+    }
+
+    private static class PersonContextMapper extends AbstractContextMapper {
+        public Object doMapFromContext(DirContextOperations context) {
+            Account account = new Account();
+            account.setUid(context.getStringAttribute("cn"));
+            account.setSurname(context.getStringAttribute("sn"));
+            account.setDescription(context.getStringAttribute("description"));
+            account.setPwdAccountLockedTime(context.getStringAttribute("pwdAccountLockedTime"));
+            return account;
+        }
+    }
+
+    private String date2string() {
+        String pattern = "yyyyMMddHHmmss.SSS'Z'";
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(new Date(Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTimeInMillis()));
     }
 }
 

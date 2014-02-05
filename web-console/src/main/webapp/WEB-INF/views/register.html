@@ -21,7 +21,7 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <form action="/register" method="POST" class="form-horizontal center"
+    <form action="/account/register" method="POST" class="form-horizontal center"
           th:object="${account}">
 
         <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">
