@@ -57,7 +57,7 @@ public class AccountController {
         } else {
             if (account.getPassword().equals(account.getPassword2())) {
                 accountService.register(account);
-                return "redirect:/login";
+                return "account/success";
             } else {
                 ObjectError objectError = new ObjectError("password", "passwords are not same.");
                 bindingResult.addError(objectError);
