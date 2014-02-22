@@ -31,7 +31,8 @@ public class Income extends BaseEntity {
     @Column(name = "AMOUNT")
     private long amount;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "COMMENT")
     private String comment;
 

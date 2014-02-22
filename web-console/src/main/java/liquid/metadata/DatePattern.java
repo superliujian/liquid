@@ -12,7 +12,9 @@ public enum DatePattern {
 
     private final String pattern;
 
-    private DatePattern(String pattern) {this.pattern = pattern;}
+    private DatePattern(String pattern) {
+        this.pattern = pattern;
+    }
 
     public String getPattern() {
         return pattern;

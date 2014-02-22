@@ -29,20 +29,20 @@
             <th th:text="#{account.locked}">Locked</th>
         </tr>
         </thead>
-        
+
         <tbody>
         <tr th:each="account : ${accounts}">
             <td th:text="${account.uid}">Account ID</td>
             <td th:text="#{'role.' + ${account.group}}">Account Group</td>
             <td>
-                <a th:if="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=unlock'" 
+                <a th:if="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=unlock'"
                    class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-lock"/>
-                </a> 
-                <a th:unless="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=lock'" 
+                </a>
+                <a th:unless="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=lock'"
                    class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-ok"/>
-                </a> 
+                </a>
             </td>
         </tr>
         </tbody>

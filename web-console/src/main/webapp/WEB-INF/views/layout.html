@@ -32,7 +32,7 @@
                 <ul class="nav navbar-nav">
                     <li sec:authorize="hasAnyRole('ROLE_ADMIN')">
                         <a href="/account" th:text="#{account}">User</a>
-                    </li>                
+                    </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
                         <a href="/task" th:text="#{task}">Task</a>
                     </li>
@@ -165,21 +165,23 @@ roadId,
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
-                <span th:text="${task.name}">Task Name</span>
-                [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
-                    th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
+                    <span th:text="${task.name}">Task Name</span>
+                    [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
+                        th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
                 </div>
                 <div class="pull-right">
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
 
-                        <button type="submit" name="claim" value="Claim" class="btn btn-default" th:unless="${task.assignee}">
-                            <span th:text="#{task.claim}" />
+                        <button type="submit" name="claim" value="Claim" class="btn btn-default"
+                                th:unless="${task.assignee}">
+                            <span th:text="#{task.claim}"/>
                         </button>
-                        
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#completeTask" th:if="${task.assignee}">
-                            <span th:text="#{task.complete}" />
-                        </button>                               
+
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#completeTask"
+                                th:if="${task.assignee}">
+                            <span th:text="#{task.complete}"/>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -195,14 +197,15 @@ roadId,
         <!-- /.container -->
     </div>
     <!-- /.jumbotron -->
-    
+
     <!-- Modal -->
-    <div class="modal" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y: hidden;">
+    <div class="modal" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+         style="overflow-y: hidden;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel"><span th:text="#{modal.complete.task}" /></h4>
+                    <h4 class="modal-title" id="myModalLabel"><span th:text="#{modal.complete.task}"/></h4>
                     <!--
                     <h4 class="modal-title" id="myModalLabel">Modal title</h4>
                     -->
@@ -214,16 +217,19 @@ roadId,
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
                         <button type="button" class="btn btn-default" data-dismiss="modal">
-                            <span th:text="#{modal.close}" />
+                            <span th:text="#{modal.close}"/>
                         </button>
                         <button type="submit" name="complete" value="Complete" class="btn btn-primary">
-                            <span th:text="#{task.complete}" />
+                            <span th:text="#{task.complete}"/>
                         </button>
                     </form>
                 </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->    
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </div>
 
 

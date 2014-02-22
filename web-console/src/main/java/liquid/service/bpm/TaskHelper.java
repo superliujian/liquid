@@ -9,7 +9,8 @@ import org.activiti.engine.task.Task;
  * Time: 12:08 PM
  */
 public class TaskHelper {
-    private TaskHelper() {}
+    private TaskHelper() {
+    }
 
     public static String stringOf(Task task) {
         if (null == task) {

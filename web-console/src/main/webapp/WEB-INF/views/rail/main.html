@@ -54,7 +54,8 @@
                     <tr th:each="container : ${route.railContainers}">
                         <td th:text="${container.leg.srcLoc.name}">Railway Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Railway Destination</td>
-                        <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ''">Container No.</td>
+                        <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ''">Container No.
+                        </td>
                         <td th:text="${container.fleet} ? ${container.fleet.name} : ''">Trucker</td>
                         <td th:text="${container.plateNo}">Container No.</td>
                         <td th:text="${container.trucker}">Trucker</td>

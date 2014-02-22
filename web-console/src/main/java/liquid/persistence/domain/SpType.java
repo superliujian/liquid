@@ -14,7 +14,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "SP_TYPE")
 public class SpType extends BaseEntity {
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "NAME")
     private String name;
 

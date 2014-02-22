@@ -35,15 +35,18 @@ public class OrderHistory {
     @JoinColumn(name = "DST_LOC_ID")
     private Location dstLoc;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONSIGNEE")
     private String consignee;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONSIGNEE_PHONE")
     private String consigneePhone;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONSIGNEE_ADDR")
     private String consigneeAddress;
 

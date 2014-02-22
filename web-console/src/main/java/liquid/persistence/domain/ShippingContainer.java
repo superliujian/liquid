@@ -25,11 +25,13 @@ public class ShippingContainer extends BaseEntity {
     @JoinColumn(name = "ROUTE_ID")
     private Route route;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "PICKUP_CONTACT")
     private String pickupContact;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CONTACT_PHONE")
     private String contactPhone;
 

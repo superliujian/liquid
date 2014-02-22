@@ -13,11 +13,13 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "CUSTOMER")
 public class Customer extends BaseEntity {
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "CODE")
     private String code;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "NAME")
     private String name;
 

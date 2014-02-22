@@ -13,10 +13,13 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "GOODS")
 public class Goods {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID") private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private long id;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "NAME", nullable = true)
     private String name;
 

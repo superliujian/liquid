@@ -44,14 +44,15 @@
 </div>
 
 <div class="row">
-    <input type="hidden" th:field="*{customerId}" />
+    <input type="hidden" th:field="*{customerId}"/>
 
-    <div class="col-lg-8">    
+    <div class="col-lg-8">
         <div class="form-group" th:classappend="${#fields.hasErrors('customerName0')} ? 'has-error'">
             <label th:text="#{customer}">Customer</label><br/>
-            <input type="text" th:field="*{customerName0}" class="typeahead form-control" placeholder="customer name" th:placeholder="#{customer.name}" />
-	    <span th:errors="*{customerName0}">error</span>
-        </div> 
+            <input type="text" th:field="*{customerName0}" class="typeahead form-control" placeholder="customer name"
+                   th:placeholder="#{customer.name}"/>
+            <span th:errors="*{customerName0}">error</span>
+        </div>
     </div>
 </div>
 
@@ -332,6 +333,7 @@
             console.log("customer id " + $('#cId').val());    
         });        
     });
+
 </script>
 </body>
 

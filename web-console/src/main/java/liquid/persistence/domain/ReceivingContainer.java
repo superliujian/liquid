@@ -20,7 +20,8 @@ public class ReceivingContainer extends BaseEntity {
     @JoinColumn(name = "RECV_ORDER_ID")
     private ReceivingOrder receivingOrder;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "BIC_CODE")
     private String bicCode;
 

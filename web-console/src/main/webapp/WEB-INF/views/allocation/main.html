@@ -65,10 +65,10 @@
                                 <i class="glyphicon glyphicon-edit"/>
                             </a>
                             <a class="btn btn-default btn-xs"
-                               href="/task/{taskId}/charge?routeId={routeId}" 
+                               href="/task/{taskId}/charge?routeId={routeId}"
                                th:href="'/task/' + ${taskId} + '/charge?routeId=' + ${route.id}">
-                            <i class="glyphicon glyphicon-shopping-cart"/>
-                        </a>                       
+                                <i class="glyphicon glyphicon-shopping-cart"/>
+                            </a>
                         </td>
                     </tr>
                     </tbody>
@@ -106,7 +106,9 @@
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
                     <td th:text="${charge.route.id}">Route ID</td>
-                    <td th:text="${charge.leg} ? (${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}) : ''">Route ID</td>
+                    <td th:text="${charge.leg} ? (${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}) : ''">
+                        Route ID
+                    </td>
                     <td th:text="${charge.leg} ? (#{${transModes[charge.leg.transMode]}}) : ''">Trans Mode</td>
                     <td th:text="${charge.type.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>

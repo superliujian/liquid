@@ -14,7 +14,8 @@ import java.util.Collection;
  * Time: 11:27 PM
  */
 public final class RoleHelper {
-    private RoleHelper() {}
+    private RoleHelper() {
+    }
 
     public static String getRole(Principal principal) {
         if (principal instanceof UsernamePasswordAuthenticationToken) {

@@ -9,7 +9,8 @@ import java.util.List;
  * Time: 9:18 PM
  */
 public class CollectionUtils {
-    private CollectionUtils() {}
+    private CollectionUtils() {
+    }
 
     public static <T> T tryToGet2ndElement(List<T> list) {
         int size = list.size();

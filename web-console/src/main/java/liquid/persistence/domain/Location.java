@@ -15,7 +15,8 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "LOCATION")
 public class Location extends BaseEntity {
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "NAME")
     private String name;
 

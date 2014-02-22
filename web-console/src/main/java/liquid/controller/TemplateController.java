@@ -16,8 +16,10 @@ import java.security.Principal;
 @Controller
 public class TemplateController {
     @RequestMapping(value = "/template", method = RequestMethod.GET)
-    public void template(Model model, Principal principal) {}
+    public void template(Model model, Principal principal) {
+    }
 
     @RequestMapping(value = "/template1", method = RequestMethod.GET)
-    public void template1(Model model, Principal principal) {}
+    public void template1(Model model, Principal principal) {
+    }
 }

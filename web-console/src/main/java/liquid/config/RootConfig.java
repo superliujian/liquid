@@ -2,10 +2,13 @@ package liquid.config;
 
 import liquid.context.BusinessContext;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.context.support.SimpleThreadScope;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -38,5 +41,17 @@ public class RootConfig {
     public BusinessContext businessContext() {
         BusinessContext businessContext = new BusinessContext();
         return businessContext;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("ServiceMessages");
+        return messageSource;
+    }
+
+    @Bean
+    public Locale locale() {
+        return Locale.CHINA;
     }
 }

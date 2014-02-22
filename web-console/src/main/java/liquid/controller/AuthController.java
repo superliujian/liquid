@@ -41,5 +41,6 @@ public class AuthController {
     }
 
     @RequestMapping("/login")
-    public void signin(Model model, Principal principal) {}
+    public void signin(Model model, Principal principal) {
+    }
 }

@@ -31,76 +31,77 @@
 <div id="sp" class="container">
     <div class="panel panel-default">
         <div class="panel-body">
-    <form action="/sp" method="POST" th:object="${sp}" class="form-horizontal center">
-        <input type="hidden" th:field="*{id}"/>
-    
-        <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
-            <label th:text="#{sp.code} + '*'" class="control-label">Name</label>
-            <input type="text" th:field="*{code}" class="form-control"/>
-            <span th:errors="*{code}">error</span>
-        </div>
+            <form action="/sp" method="POST" th:object="${sp}" class="form-horizontal center">
+                <input type="hidden" th:field="*{id}"/>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
-            <label th:text="#{sp.name} + '*'" class="control-label">Name</label>
-            <input type="text" th:field="*{name}" class="form-control"/>
-            <span th:errors="*{name}">error</span>
-        </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
+                    <label th:text="#{sp.code} + '*'" class="control-label">Name</label>
+                    <input type="text" th:field="*{code}" class="form-control"/>
+                    <span th:errors="*{code}">error</span>
+                </div>
 
-        <div class="form-group">
-            <label th:text="#{sp.type}" class="control-label">SP Type</label>            
-            <select th:field="*{typeId}" class="form-control">
-                <option th:each="spType : ${spTypes}"
-                        th:value="${spType.key}"
-                        th:text="${spType.value}">SP Type
-                </option>
-            </select>
-        </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+                    <label th:text="#{sp.name} + '*'" class="control-label">Name</label>
+                    <input type="text" th:field="*{name}" class="form-control"/>
+                    <span th:errors="*{name}">error</span>
+                </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('address')} ? 'has-error'">
-            <label th:text="#{address}" class="control-label">Address</label>            
-            <input type="text" th:field="*{address}" class="form-control"/>            
-            <span th:errors="*{address}">error</span>
-        </div>
+                <div class="form-group">
+                    <label th:text="#{sp.type}" class="control-label">SP Type</label>
+                    <select th:field="*{typeId}" class="form-control">
+                        <option th:each="spType : ${spTypes}"
+                                th:value="${spType.key}"
+                                th:text="${spType.value}">SP Type
+                        </option>
+                    </select>
+                </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('postcode')} ? 'has-error'">
-            <label th:text="#{postcode}" class="control-label">Postcode</label>           
-            <input type="text" th:field="*{postcode}" class="form-control"/>
-            <span th:errors="*{postcode}">error</span>
-        </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('address')} ? 'has-error'">
+                    <label th:text="#{address}" class="control-label">Address</label>
+                    <input type="text" th:field="*{address}" class="form-control"/>
+                    <span th:errors="*{address}">error</span>
+                </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('contact')} ? 'has-error'">
-            <label th:text="#{contact}" class="control-label">Contact</label>            
-            <input type="text" th:field="*{contact}" class="form-control"/>         
-            <span th:errors="*{contact}">error</span>
-        </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('postcode')} ? 'has-error'">
+                    <label th:text="#{postcode}" class="control-label">Postcode</label>
+                    <input type="text" th:field="*{postcode}" class="form-control"/>
+                    <span th:errors="*{postcode}">error</span>
+                </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
-            <label th:text="#{phone}" class="control-label">Phone</label>
-            <input type="text" th:field="*{phone}" class="form-control"/>
-            <span th:errors="*{phone}">error</span>
-        </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('contact')} ? 'has-error'">
+                    <label th:text="#{contact}" class="control-label">Contact</label>
+                    <input type="text" th:field="*{contact}" class="form-control"/>
+                    <span th:errors="*{contact}">error</span>
+                </div>
 
-        <div class="form-group" th:classappend="${#fields.hasErrors('cell')} ? 'has-error'">
-            <label th:text="#{cell}" class="control-label">Cell</label>
-            <input type="text" th:field="*{cell}" class="form-control"/>
-            <span th:errors="*{cell}">error</span>
+                <div class="form-group" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
+                    <label th:text="#{phone}" class="control-label">Phone</label>
+                    <input type="text" th:field="*{phone}" class="form-control"/>
+                    <span th:errors="*{phone}">error</span>
+                </div>
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('cell')} ? 'has-error'">
+                    <label th:text="#{cell}" class="control-label">Cell</label>
+                    <input type="text" th:field="*{cell}" class="form-control"/>
+                    <span th:errors="*{cell}">error</span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-3" th:each="ct : ${cts}">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" th:field="*{chargeTypeIds}" value="chargeTypeId"
+                                   th:value="${ct.key}"/>
+                            <span th:text="${ct.value}">Charge Type Name</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Add SP" class="btn btn-default pull-right"
+                           th:attr="value=#{save}"/>
+                </div>
+            </form>
         </div>
-        
-        <div class="form-group">
-            <div class="col-lg-3" th:each="ct : ${cts}">
-            <label class="checkbox-inline" >
-                <input type="checkbox" th:field="*{chargeTypeIds}" value="chargeTypeId" th:value="${ct.key}"/>
-                <span th:text="${ct.value}">Charge Type Name</span>
-            </label>
-            </div>
-        </div>
-        
-        <div class="form-group">            
-            <input type="submit" value="Add SP" class="btn btn-default pull-right"
-                   th:attr="value=#{save}"/>
-        </div>
-    </form>
-    </div>
     </div>
 </div>
 <!-- /.container -->

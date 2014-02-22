@@ -61,7 +61,8 @@ public class BaseLegContainer extends BaseEntity {
         this.sc = sc;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("BaseLegContainer{");
         sb.append("order=").append(order.getId());

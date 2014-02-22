@@ -79,7 +79,8 @@ public class ReceivingOrderController {
     @RequestMapping(method = RequestMethod.GET, params = "findById")
     public String findById(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
-        if (null == param || param.trim().length() == 0) {} else {
+        if (null == param || param.trim().length() == 0) {
+        } else {
             try {
                 model.addAttribute("orders", recvOrderService.find(Long.parseLong(param)));
                 return "recv_order/find";

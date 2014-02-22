@@ -23,7 +23,8 @@ public class Planning extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "planning")
     private Collection<Route> routes;
 
-    public Planning() {}
+    public Planning() {
+    }
 
     public Order getOrder() {
         return order;
@@ -51,7 +52,8 @@ public class Planning extends BaseEntity {
         this.routes = routes;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("Planning{");
         sb.append("order=").append(order);

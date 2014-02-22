@@ -14,7 +14,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "CHARGE_TYPE")
 public class ChargeType extends BaseEntity {
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(name = "NAME")
     private String name;
 

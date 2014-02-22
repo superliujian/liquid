@@ -9,4 +9,5 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 10/2/13
  * Time: 8:36 PM
  */
-public interface ChargeTypeRepository extends CrudRepository<ChargeType, Long> {}
+public interface ChargeTypeRepository extends CrudRepository<ChargeType, Long> {
+}

@@ -4,6 +4,7 @@ import liquid.config.LdapConfig;
 import liquid.persistence.domain.Account;
 import liquid.persistence.domain.Group;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.ldap.core.*;
 import org.springframework.ldap.core.support.AbstractContextMapper;
@@ -28,6 +29,12 @@ public class AccountService {
     @Autowired
     private LdapOperations ldapOperations;
 
+    @Autowired
+    private MailNotificationService mailNotificationService;
+
+    @Autowired
+    private MessageSource messageSource;
+
     public void register(Account account) {
         // throw NameAlreadyBoundException
         createPerson(account);
@@ -36,6 +43,12 @@ public class AccountService {
         Group group = findGroupByName(account.getGroup());
         group.getUniqueMembers().add(buildAccountDn(account).toString() + ",dc=suncapital-logistics,dc=com");
         updateGroup(group);
+
+        // Send mail notification
+        mailNotificationService.sendToAdmin(messageSource.getMessage("mail.registration", null, Locale.CHINA),
+                messageSource.getMessage("mail.registration.content",
+                        new String[]{account.getSurname() + account.getGivenName()},
+                        Locale.CHINA));
     }
 
     public void createPerson(Account account) {

@@ -24,7 +24,7 @@ public class SendMail {
 
         // Setup mail server
         properties.setProperty("mail.smtp.host", host);
-        properties.setProperty("mail.smtp.auth","true");
+        properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.user", "liquid_admin@163.com");
         properties.setProperty("mail.password", "liquid");
 

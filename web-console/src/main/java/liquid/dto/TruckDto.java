@@ -21,10 +21,12 @@ public class TruckDto {
 
     private long fleetId;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String trucker;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String plateNo;
 
     @DateFormat(DatePattern.UNTIL_MINUTE)

@@ -23,7 +23,8 @@ public class EarningDto implements Serializable {
 
     private long distyProfit;
 
-    public EarningDto() { }
+    public EarningDto() {
+    }
 
     public long getSalesPriceCny() {
         return salesPriceCny;

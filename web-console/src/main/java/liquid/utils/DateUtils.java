@@ -13,7 +13,8 @@ import java.util.Date;
  * Time: 10:45 PM
  */
 public class DateUtils {
-    private DateUtils() {}
+    private DateUtils() {
+    }
 
     public static String stringOf(Date date) {
         SimpleDateFormat format = new SimpleDateFormat(DatePattern.UNTIL_MINUTE.getPattern());

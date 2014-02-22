@@ -86,7 +86,8 @@ public class RailContainer extends BaseLegContainer {
     @Transient
     private boolean batch;
 
-    public RailContainer() {}
+    public RailContainer() {
+    }
 
     public ServiceProvider getFleet() {
         return fleet;

@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
  * Time: 2:21 PM
  */
 public class RailPlanDto extends RailContainerDto {
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String planNo;
 
     @DateFormat(DatePattern.UNTIL_DAY)

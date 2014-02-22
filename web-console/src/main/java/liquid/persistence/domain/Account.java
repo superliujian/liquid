@@ -11,22 +11,28 @@ import javax.validation.constraints.NotNull;
  * Time: 11:36 AM
  */
 public class Account {
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String uid;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String surname;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String givenName;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String password;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String password2;
 
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     private String email;
 
     private String cell;
