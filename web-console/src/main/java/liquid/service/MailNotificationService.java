@@ -1,8 +1,8 @@
 package liquid.service;
 
+import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -22,10 +22,10 @@ public class MailNotificationService {
     }
 
     public void sendToAdmin(String subject, String content) {
-        send(properties.getProperty("mail.user"), subject, content);
+        send(subject, content, properties.getProperty("mail.user"));
     }
 
-    public void send(String mailTo, String subject, String content) {
+    public void send(String subject, String content, String... mailTo) {
         Session session = Session
                 .getDefaultInstance(properties, new Authenticator() {
                     @Override
@@ -41,9 +41,13 @@ public class MailNotificationService {
             // Set From: header field of the header.
             message.setFrom(new InternetAddress(properties.getProperty("mail.user")));
 
-            // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(properties.getProperty("mail.admin")));
-//            message.addRecipient(Message.RecipientType.CC, new InternetAddress((mailTo)));
+            if (null != mailTo) {
+                // Set To: header field of the header.
+                for (String mailToAddress : mailTo) {
+                    message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailToAddress));
+                }
+            }
+            // message.addRecipient(Message.RecipientType.CC, new InternetAddress((mailTo)));
 
             // Set Subject: header field
             message.setSubject(subject);
@@ -53,7 +57,7 @@ public class MailNotificationService {
 
             // Send message
             Transport.send(message);
-            logger.debug("Mail has been successfully sent to {}", properties.getProperty("mail.user"));
+            logger.debug("Mail has been successfully sent to {}", StringUtils.toString(mailTo));
         } catch (MessagingException e) {
             logger.warn(e.getMessage(), e);
         }

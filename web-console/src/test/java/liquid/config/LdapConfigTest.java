@@ -1,22 +1,22 @@
 package liquid.config;
 
 import liquid.persistence.domain.Account;
+import liquid.persistence.domain.Group;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.ldap.core.*;
 import org.springframework.ldap.core.support.AbstractContextMapper;
+import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 
 import javax.naming.Name;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import java.text.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -61,6 +61,86 @@ public class LdapConfigTest {
         for (Account account : accounts) {
             System.out.println(account);
         }
+    }
+
+    @Test
+    public void find() {
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+        ctx.register(LdapConfig.class);
+        ctx.refresh();
+
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        searchControls.setDerefLinkFlag(true);
+        searchControls.setReturningAttributes(new String[]{"uid", "ou", "mail", "pwdAccountLockedTime"});
+
+        LdapOperations ldapOperations = ctx.getBean(LdapOperations.class);
+
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person"));
+        filter.and(new EqualsFilter("uid", "马小二"));
+
+        List<Account> accounts = ldapOperations.search(
+                "", filter.encode(), searchControls,
+                new AttributesMapper() {
+                    public Object mapFromAttributes(Attributes attrs)
+                            throws NamingException {
+                        Account account = new Account();
+                        account.setUid((String) attrs.get("uid").get());
+                        account.setGroup((String) attrs.get("ou").get());
+                        account.setEmail((String) attrs.get("mail").get());
+
+                        Attribute pwdAccountLockedTime = attrs.get("pwdAccountLockedTime");
+                        if (null != pwdAccountLockedTime)
+                            account.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
+                        return account;
+                    }
+                });
+    }
+
+    @Test
+    public void findAllGroup() {
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+        ctx.register(LdapConfig.class);
+        ctx.refresh();
+
+        LdapOperations ldapOperations = ctx.getBean(LdapOperations.class);
+
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        searchControls.setDerefLinkFlag(true);
+        searchControls.setReturningAttributes(new String[]{"cn", "ou", "uniqueMember"});
+
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "groupOfUniqueNames"));
+        filter.and(new EqualsFilter("cn", "sales"));
+
+        String filterEncoding = filter.encode();
+        List<Group> groups = ldapOperations.search(
+                "", filter.encode(), searchControls,
+                new AttributesMapper() {
+                    public Object mapFromAttributes(Attributes attrs)
+                            throws NamingException {
+                        Group group = new Group();
+                        group.setName((String) attrs.get("cn").get());
+
+                        Set<String> uniqueMembers = new HashSet<>();
+                        Attribute attribute = attrs.get("uniqueMember");
+                        if (null != attribute) {
+                            NamingEnumeration<?> values = attribute.getAll();
+                            if (null != values) {
+                                while (values.hasMore()) {
+                                    Object memberObj = values.next();
+                                    if (null != memberObj) {
+                                        uniqueMembers.add(memberObj.toString());
+                                    }
+                                }
+                            }
+                        }
+                        group.setUniqueMembers(uniqueMembers);
+                        return group;
+                    }
+                });
     }
 
     @Test
