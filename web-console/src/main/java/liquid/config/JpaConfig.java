@@ -61,7 +61,7 @@ public class JpaConfig {
     public DataSource dataSource() throws SQLException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-        dataSource.setUrl("jdbc:mysql://localhost:3306/liquid?autoReconnect=true");
+        dataSource.setUrl("jdbc:mysql://rdseurqiqevfzn2.mysql.rds.aliyuncs.com:3306/liquid?autoReconnect=true");
         dataSource.setUsername("liquid");
         dataSource.setPassword("liquid");
         return dataSource;
