@@ -11,13 +11,13 @@ import java.util.Properties;
 public class SendMail {
     public static void main(String[] args) {
         // Recipient's email ID needs to be mentioned.
-        String to = "taoma09@gmail.com";
+        String to = "taoma9@163.com";
 
         // Sender's email ID needs to be mentioned
-        String from = "liquid_admin@163.com";
+        String from = "admin@suncapital-logistics.com";
 
         // Assuming you are sending email from localhost
-        String host = "smtp.163.com";
+        String host = "smtp.suncapital-logistics.com";
 
         // Get system properties
         Properties properties = System.getProperties();
@@ -25,8 +25,8 @@ public class SendMail {
         // Setup mail server
         properties.setProperty("mail.smtp.host", host);
         properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.user", "liquid_admin@163.com");
-        properties.setProperty("mail.password", "liquid");
+        properties.setProperty("mail.user", "admin@suncapital-logistics.com");
+        properties.setProperty("mail.password", "1qazxsw2");
 
         // Get the default Session object.
 //        Session session = Session.getDefaultInstance(properties);
@@ -34,7 +34,7 @@ public class SendMail {
                 .getDefaultInstance(properties, new Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("liquid_admin@163.com", "liquid");
+                        return new PasswordAuthentication("admin@suncapital-logistics.com", "sc3627858");
                     }
                 });
         try {

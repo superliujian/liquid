@@ -40,6 +40,7 @@ public class MailNotificationService {
 
             // Set From: header field of the header.
             message.setFrom(new InternetAddress(properties.getProperty("mail.user")));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(properties.getProperty("mail.user")));
 
             if (null != mailTo) {
                 // Set To: header field of the header.
