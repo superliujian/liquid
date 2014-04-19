@@ -1,5 +1,8 @@
 package liquid.service.bpm;
 
+import liquid.persistence.domain.Account;
+import liquid.service.AccountService;
+import liquid.service.MailNotificationService;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
@@ -10,13 +13,11 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -34,6 +35,15 @@ public class ActivitiEngineService {
     @Autowired
     private SimpleDriverDataSource dataSource;
 
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private MailNotificationService mailNotificationService;
+
+    @Autowired
+    private MessageSource messageSource;
+
     public void startProcess(String uid, long orderId, Map<String, Object> variableMap) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
         RepositoryService repositoryService = processEngine.getRepositoryService();
@@ -42,7 +52,11 @@ public class ActivitiEngineService {
         variableMap.put("employeeName", uid);
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", String.valueOf(orderId), variableMap);
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
-        System.out.println(dataSource);
+
+        Account account = accountService.find(uid);
+        mailNotificationService.send(messageSource.getMessage("process.start", null, Locale.CHINA),
+                messageSource.getMessage("process.start.content", new String[]{uid}, Locale.CHINA),
+                account.getEmail());
     }
 
     public List<HistoricTaskInstance> listCompltedTasks(String businessKey) {
@@ -83,12 +97,22 @@ public class ActivitiEngineService {
     public void claimTask(String taskId, String uid) {
         TaskService taskService = processEngine.getTaskService();
         taskService.claim(taskId, uid);
+
+        Account account = accountService.find(uid);
+        mailNotificationService.send(messageSource.getMessage("claim.task", null, Locale.CHINA),
+                messageSource.getMessage("claim.content", new String[]{uid}, Locale.CHINA),
+                account.getEmail());
     }
 
     public void complete(String taskId, String uid, Map<String, Object> variableMap) {
         variableMap.put("employeeName", uid);
         TaskService taskService = processEngine.getTaskService();
         taskService.complete(taskId, variableMap);
+
+        Account account = accountService.find(uid);
+        mailNotificationService.send(messageSource.getMessage("complete.task", null, Locale.CHINA),
+                messageSource.getMessage("complete.task.content", new String[]{uid}, Locale.CHINA),
+                account.getEmail());
     }
 
     public String getBusinessKeyByTaskId(String taskId) {
