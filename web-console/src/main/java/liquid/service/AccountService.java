@@ -89,9 +89,9 @@ public class AccountService {
                     public Object mapFromAttributes(Attributes attrs)
                             throws NamingException {
                         Account account = new Account();
-                        account.setUid((String) attrs.get("uid").get());
-                        account.setGroup((String) attrs.get("ou").get());
-                        account.setEmail((String) attrs.get("mail").get());
+                        account.setUid(attr2Str(attrs.get("uid")));
+                        account.setGroup(attr2Str(attrs.get("ou")));
+                        account.setEmail(attr2Str(attrs.get("mail")));
 
                         Attribute pwdAccountLockedTime = attrs.get("pwdAccountLockedTime");
                         if (null != pwdAccountLockedTime)
