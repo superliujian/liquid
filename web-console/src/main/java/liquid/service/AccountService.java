@@ -59,7 +59,8 @@ public class AccountService {
         mailNotificationService.send(messageSource.getMessage("mail.registration", null, Locale.CHINA),
                 messageSource.getMessage("mail.registration.content",
                         new String[]{account.getSurname() + account.getGivenName()},
-                        Locale.CHINA), mailTo);
+                        Locale.CHINA), mailTo
+        );
         mailNotificationService.send(messageSource.getMessage("mail.registration", null, Locale.CHINA),
                 messageSource.getMessage("mail.registration.content.for.account", null, Locale.CHINA),
                 account.getEmail());
@@ -97,7 +98,8 @@ public class AccountService {
                             account.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
                         return account;
                     }
-                });
+                }
+        );
 
         return accounts;
     }
@@ -118,22 +120,33 @@ public class AccountService {
                     public Object mapFromAttributes(Attributes attrs)
                             throws NamingException {
                         Account account = new Account();
-                        account.setUid((String) attrs.get("uid").get());
-                        account.setGroup((String) attrs.get("ou").get());
-                        account.setEmail((String) attrs.get("mail").get());
+                        account.setUid(attr2Str(attrs.get("uid")));
+                        account.setGroup(attr2Str(attrs.get("ou")));
+                        account.setEmail(attr2Str(attrs.get("mail")));
 
                         Attribute pwdAccountLockedTime = attrs.get("pwdAccountLockedTime");
                         if (null != pwdAccountLockedTime)
                             account.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
                         return account;
                     }
-                });
+                }
+        );
 
         if (null != accounts && accounts.size() > 0) {
             return accounts.get(0);
         } else {
             throw new RuntimeException(String.format("Account %s not found.", uid));
         }
+    }
+
+    private String attr2Str(Attribute attr) {
+        String result = null;
+        try {
+            result = null == attr ? "null" : String.valueOf(attr.get());
+        } catch (NamingException e) {
+            // Ignore.
+        }
+        return result;
     }
 
     public List<Account> findAll(String groupName) {
@@ -211,7 +224,8 @@ public class AccountService {
                         group.setUniqueMembers(uniqueMembers);
                         return group;
                     }
-                });
+                }
+        );
     }
 
     public void unlock(String uid) {
