@@ -100,7 +100,7 @@ public class ActivitiEngineService {
 
         Account account = accountService.find(uid);
         mailNotificationService.send(messageSource.getMessage("claim.task", null, Locale.CHINA),
-                messageSource.getMessage("claim.content", new String[]{uid}, Locale.CHINA),
+                messageSource.getMessage("claim.task.content", new String[]{uid}, Locale.CHINA),
                 account.getEmail());
     }
 
