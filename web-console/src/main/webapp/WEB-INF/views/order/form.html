@@ -17,7 +17,7 @@
 
     <style>
         div#order.container {
-        max-width: 800px;
+            max-width: 800px;
         }
     </style>
 </head>
@@ -44,6 +44,18 @@
 </div>
 
 <div class="row">
+    <div class="col-lg-4">
+        <div class="form-group">
+            <label th:text="#{service.type}">Service Type</label>
+            <select th:field="*{serviceTypeId}" class="form-control">
+                <option th:each="serviceType : ${serviceTypes}"
+                        th:value="${serviceType.id}"
+                        th:text="'(' + ${serviceType.code} + ')' + ${serviceType.name}">Service Type Name
+                </option>
+            </select>
+        </div>
+    </div>
+
     <input type="hidden" th:field="*{customerId}"/>
 
     <div class="col-lg-8">

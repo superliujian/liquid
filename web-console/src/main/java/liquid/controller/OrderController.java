@@ -62,6 +62,14 @@ public class OrderController extends BaseChargeController {
     @Autowired
     private ChargeService chargeService;
 
+    @Autowired
+    private ServiceTypeService serviceTypeService;
+
+    @ModelAttribute("serviceTypes")
+    public Iterable<ServiceType> populateServiceTypes() {
+        return serviceTypeService.findAll();
+    }
+
     @ModelAttribute("customers")
     public Iterable<Customer> populateCustomers() {
         return customerService.findAll();

@@ -21,8 +21,7 @@ public class BaseOrder extends BaseEntity {
     @JoinColumn(name = "SERVICE_TYPE_ID")
     private ServiceType serviceType;
 
-    @NotNull
-    @NotEmpty
+    @Column(name = "ORDER_NO")
     private String orderNo;
 
     @Transient
