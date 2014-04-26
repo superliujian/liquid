@@ -12,5 +12,7 @@ import java.io.Serializable;
  * Time: 9:45 PM
  */
 public interface BaseOrderRepository<T, ID extends Serializable> extends CrudRepository<T, ID>, JpaRepository<T, ID> {
+    Iterable<T> findByOrderNoLike(String orderNo);
+
     Iterable<T> findByCustomerNameLike(String cumtomerName);
 }

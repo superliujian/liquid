@@ -35,7 +35,7 @@
                 <thead>
                 <tr>
                     <th th:text="#{task.name}">Task Name</th>
-                    <th th:text="#{order.id}">Order ID</th>
+                    <th th:text="#{order.no}">Order No</th>
                     <th th:text="#{task.description}">Task Description</th>
                 </tr>
                 </thead>
@@ -44,7 +44,7 @@
                     <td>
                         <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.name}">Task Name</a>
                     </td>
-                    <td th:text="${task.orderId}">Order ID</td>
+                    <td th:text="${task.orderNo}">Order No</td>
                     <td th:text="${task.description}">Task Description</td>
                 </tr>
                 </tbody>

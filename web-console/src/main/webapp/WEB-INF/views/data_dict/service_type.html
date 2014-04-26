@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<div class="container">
+    <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(serviceTypes)}">
+        <thead>
+        <tr>
+            <!--
+            <th th:text="#{service.type.id}">ID</th>
+            -->
+            <th th:text="#{service.type.code}">Code</th>
+            <th th:text="#{service.type.name}">Name</th>
+            <th th:text="#{status}">State</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="serviceType : ${serviceTypes}">
+            <!--
+            <td th:text="${serviceType.id}">ID</td>
+            -->
+            <td th:text="${serviceType.code}">Code</td>
+            <td th:text="${serviceType.name}">Name</td>
+            <td>
+                <i th:unless="${serviceType.state}" class="glyphicon glyphicon-ok"/>
+                <i th:if="${serviceType.state}" class="glyphicon glyphicon-ban-circle"/>                
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <form action="/service_type" method="POST" th:object="${serviceType}" class="form-horizontal center">
+        <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{service.type.code}">Code</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{code}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{name}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{service.type.name}">Name</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{name}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{name}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <input type="submit" value="Add Service Type" class="btn btn-default"
+                       th:value="#{service.type.add}"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

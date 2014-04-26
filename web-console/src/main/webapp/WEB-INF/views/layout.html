@@ -72,6 +72,7 @@
                             <li><a href="/location" th:text="#{location}">Location</a></li>
                             <li><a href="/ct" th:text="#{charge.type}">Charge Type</a></li>
                             <li><a href="/sp_type" th:text="#{sp.type}">Sp Type</a></li>
+                            <li><a href="/service_type" th:text="#{service.type}">Sp Type</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
@@ -167,7 +168,7 @@ roadId,
                 <div class="col-lg-8">
                     <span th:text="${task.name}">Task Name</span>
                     [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
-                        th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
+                        th:text="${task.orderNo}">Order Link</a>]
                 </div>
                 <div class="pull-right">
                     <form action="/task" method="POST">

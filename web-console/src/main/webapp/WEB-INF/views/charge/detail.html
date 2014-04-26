@@ -33,8 +33,8 @@
 
         <div class="panel-body">
             <dl class="dl-horizontal" th:object="${charge}">
-                <dt th:text="#{order.id}">Order ID</dt>
-                <dd th:text="*{order.id}">Order ID</dd>
+                <dt th:text="#{order.no}">Order No</dt>
+                <dd th:text="*{order.orderNo}">Order NO</dd>
 
                 <dt th:text="#{charge.type}">Charge Type</dt>
                 <dd th:text="${charge.type.name}">Charge Type</dd>

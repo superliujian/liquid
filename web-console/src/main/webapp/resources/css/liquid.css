@@ -36,6 +36,11 @@ div#middle.container {
   margin-right: auto;
 }
 
+.panel {
+  margin-right:10px;
+  margin-left:10px;
+}
+
 /*
 .input-group {
   margin-left: 5px;

@@ -90,18 +90,11 @@ public class ChargeController {
         logger.debug("init");
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "findByOrderId")
-    public String findByOrderId(@RequestParam String param, Model model, Principal principal) {
+    @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
+    public String findByOrderNo(@RequestParam String param, Model model, Principal principal) {
         logger.debug("param: {}", param);
-        if (null == param || param.trim().length() == 0) {
 
-        } else {
-            try {
-                model.addAttribute("charges", chargeService.findByOrderId(Long.parseLong(param)));
-            } catch (Exception e) {
-                logger.warn("An exception was thrown when calling findById", e);
-            }
-        }
+        model.addAttribute("charges", chargeService.findByOrderNo(param));
         return "/charge/details";
     }
 

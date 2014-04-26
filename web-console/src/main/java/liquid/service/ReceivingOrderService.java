@@ -101,6 +101,10 @@ public class ReceivingOrderService {
         return order;
     }
 
+    public Iterable<ReceivingOrder> findByOrderNo(String orderNo) {
+        return recvOrderRepository.findByOrderNoLike("%" + orderNo + "%");
+    }
+
     public Iterable<ReceivingOrder> findByCustomerName(String customerName) {
         return recvOrderRepository.findByCustomerNameLike("%" + customerName + "%");
     }
