@@ -28,13 +28,13 @@
         <div class="col-lg-8">
             <div class="input-group">
                 <span class="input-group-addon"
-                      th:text="#{order.receiving} + ' (' + #{order.id} + ', ' + #{customer.name} + ')'">Receiving Order</span>
+                      th:text="#{order.receiving} + ' (' + #{order.no} + ', ' + #{customer.name} + ')'">Receiving Order</span>
 
                 <input type="text" class="form-control" id="param" name="param" placeholder="ID or Customer Name"/>
 
                 <span class="input-group-btn">
-                    <button type="submit" name="findById" value="Find Orders By ID" class="btn btn-default"
-                            th:text="#{order.find.by.id}"/>
+                    <button type="submit" name="findByOrderNo" value="Find Orders By No" class="btn btn-default"
+                            th:text="#{order.find.by.no}"/>
                     <button type="submit" name="findByCustomerName" value="Find Orders By Customer Name"
                             class="btn btn-default"
                             th:text="#{order.find.by.customer.name}"/>
@@ -58,7 +58,7 @@
                    th:unless="${#lists.isEmpty(orders)}">
                 <thead>
                 <tr>
-                    <th th:text="#{order.id}">ID</th>
+                    <th th:text="#{order.no}">Order No</th>
                     <th th:text="#{customer.name}">Customer Name</th>
                     <th th:text="#{origination}">Origin</th>
                     <th th:text="#{destination}">Destination</th>
@@ -76,7 +76,7 @@
                 <tr th:each="order : ${orders}">
                     <td>
                         <a href="/recv_order/id?action=edit" th:href="'/recv_order/' + ${order.id}"
-                           th:text="${order.id}"/>
+                           th:text="${order.orderNo}"/>
                     </td>
                     <td th:text="${order.customer.name}">Customer Name</td>
                     <td th:text="${order.srcLoc.name}">Origin</td>

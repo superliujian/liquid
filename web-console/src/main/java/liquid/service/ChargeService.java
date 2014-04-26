@@ -188,6 +188,10 @@ public class ChargeService {
         return chargeRepository.findByOrderId(orderId);
     }
 
+    public Iterable<Charge> findByOrderNo(String orderNo) {
+        return chargeRepository.findByOrderOrderNoLike("%" + orderNo + "%");
+    }
+
     public Iterable<Charge> findBySpName(String spName) {
         return chargeRepository.findBySpNameLike("%" + spName + "%");
     }

@@ -46,7 +46,10 @@ public class TaskService {
         TaskDto taskDto = toTaskDto(task);
 
         long orderId = getOrderIdByTaskId(task.getId());
+        Order order = orderService.find(orderId);
+
         taskDto.setOrderId(orderId);
+        taskDto.setOrderNo(order.getOrderNo());
         return taskDto;
     }
 
@@ -180,7 +183,9 @@ public class TaskService {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
             long orderId = getOrderIdByTaskId(task.getId());
+            Order order = orderService.find(orderId);
             tasks[i].setOrderId(orderId);
+            tasks[i].setOrderNo(order.getOrderNo());
         }
         return tasks;
     }

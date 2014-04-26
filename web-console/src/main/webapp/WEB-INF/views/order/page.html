@@ -28,13 +28,13 @@
         <div class="col-lg-8">
             <div class="input-group">
                 <span class="input-group-addon"
-                      th:text="#{order.shipping} + ' (' + #{order.id} + ', ' + #{customer.name} + ')'">Shipping Order</span>
+                      th:text="#{order.shipping} + ' (' + #{order.no} + ', ' + #{customer.name} + ')'">Shipping Order</span>
 
-                <input type="text" class="form-control" id="param" name="param" placeholder="ID or Customer Name"
-                       th:placeholder="#{order.id} + ' ' + #{customer.name}"/>
+                <input type="text" class="form-control" id="param" name="param" placeholder="Order No. or Customer Name"
+                       th:placeholder="#{order.no} + ' ' + #{customer.name}"/>
                 <span class="input-group-btn">
-                    <button type="submit" name="findById" value="Find Orders By ID" class="btn btn-default"
-                            th:text="#{order.find.by.id}"/>
+                    <button type="submit" name="findByOrderNo" value="Find Orders By ID" class="btn btn-default"
+                            th:text="#{order.find.by.no}"/>
                     <button type="submit" name="findByCustomerName" value="Find Orders By Customer Name"
                             class="btn btn-default"
                             th:text="#{order.find.by.customer.name}"/>

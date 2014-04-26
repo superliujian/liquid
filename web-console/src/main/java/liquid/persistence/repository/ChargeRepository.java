@@ -17,6 +17,8 @@ public interface ChargeRepository extends CrudRepository<Charge, Long> {
 
     Iterable<Charge> findByOrderId(long orderId);
 
+    Iterable<Charge> findByOrderOrderNoLike(String orderNo);
+
     Iterable<Charge> findBySpNameLike(String cumtomerName);
 
     Iterable<Charge> findByLegId(long legId);

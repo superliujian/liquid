@@ -123,24 +123,16 @@ public class OrderController extends BaseChargeController {
         return "order/page";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "findById")
-    public String findById(@RequestParam String param, Model model, Principal principal) {
+    @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
+    public String findById(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
-        if (null == param || param.trim().length() == 0) {
-        } else {
-            try {
-                model.addAttribute("orders", orderService.find(Long.parseLong(param)));
-                return "order/find";
-            } catch (Exception e) {
-                logger.warn("An exception was thrown when calling findById", e);
-            }
-        }
-        model.addAttribute("orders", orderService.findAllOrderByDesc());
+
+        model.addAttribute("orders", orderService.findByOrderNo(param));
         return "order/find";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
-    public String findByCustomerName(@RequestParam String param, Model model, Principal principal) {
+    public String findByCustomerName(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
 
         model.addAttribute("orders", orderService.findByCustomerName(param));
@@ -148,7 +140,7 @@ public class OrderController extends BaseChargeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
-    public String initCreationForm(Model model, Principal principal) {
+    public String initCreationForm(Model model) {
         List<Location> locations = locationService.findByType(LocationType.CITY.getType());
 
         Order order = orderService.newOrder(locations);

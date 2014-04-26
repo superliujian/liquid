@@ -13,6 +13,8 @@ public class TaskDto implements Serializable {
 
     private long orderId;
 
+    private String orderNo;
+
     private String name;
 
     private String description;
@@ -33,6 +35,14 @@ public class TaskDto implements Serializable {
 
     public void setOrderId(long orderId) {
         this.orderId = orderId;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public String getName() {
@@ -61,10 +71,10 @@ public class TaskDto implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("TaskDto{");
+        final StringBuilder sb = new StringBuilder("TaskDto{");
         sb.append("id='").append(id).append('\'');
         sb.append(", orderId=").append(orderId);
+        sb.append(", orderNo='").append(orderNo).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", assignee='").append(assignee).append('\'');

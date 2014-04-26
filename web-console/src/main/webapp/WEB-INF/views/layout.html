@@ -168,7 +168,7 @@ roadId,
                 <div class="col-lg-8">
                     <span th:text="${task.name}">Task Name</span>
                     [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
-                        th:text="#{order.id} + ':' + ${task.orderId}">Order Link</a>]
+                        th:text="${task.orderNo}">Order Link</a>]
                 </div>
                 <div class="pull-right">
                     <form action="/task" method="POST">

@@ -184,6 +184,10 @@ public class OrderService {
         return order;
     }
 
+    public Iterable<Order> findByOrderNo(String orderNo) {
+        return orderRepository.findByOrderNoLike("%" + orderNo + "%");
+    }
+
     public Iterable<Order> findByCustomerName(String customerName) {
         return orderRepository.findByCustomerNameLike("%" + customerName + "%");
     }

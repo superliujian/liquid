@@ -31,7 +31,7 @@
         <thead>
         <tr>
             <th th:text="#{charge.id}">ID</th>
-            <th th:text="#{order.id}">Order ID</th>
+            <th th:text="#{order.no}">Order No</th>
             <th th:text="#{charge.type}">Type</th>
             <th th:text="#{sp.name}">SP Name</th>
             <th th:text="#{charge.way}">Way</th>
@@ -42,7 +42,7 @@
         <tbody>
         <tr th:each="charge : ${charges}">
             <td th:text="${charge.id}">ID</td>
-            <td th:text="${charge.order.id}">Order ID</td>
+            <td th:text="${charge.order.orderNo}">Order No</td>
             <td th:text="${charge.type.name}">Type</td>
             <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
             <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
