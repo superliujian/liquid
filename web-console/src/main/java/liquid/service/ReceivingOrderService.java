@@ -21,7 +21,7 @@ import java.util.List;
  * Time: 4:57 PM
  */
 @Service
-public class ReceivingOrderService {
+public class ReceivingOrderService extends AbstractBaseOrderService {
     private static Logger logger = LoggerFactory.getLogger(ReceivingOrderService.class);
 
     // Repositories
@@ -50,15 +50,18 @@ public class ReceivingOrderService {
 
     @Transactional(value = "transactionManager")
     public ReceivingOrder save(ReceivingOrder order) {
+        ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
         Customer customer = customerService.find(order.getCustomerId());
         Goods goods = cargoTypeService.find(order.getGoodsId());
         Location srcLoc = locationService.find(order.getOrigination());
         Location dstLoc = locationService.find(order.getDestination());
-        order.setCustomer(customer);
-        order.setGoods(goods);
-        order.setSrcLoc(srcLoc);
-        order.setDstLoc(dstLoc);
+        if (null != serviceType) order.setServiceType(serviceType);
+        if (null != customer) order.setCustomer(customer);
+        if (null != goods) order.setGoods(goods);
+        if (null != srcLoc) order.setSrcLoc(srcLoc);
+        if (null != dstLoc) order.setDstLoc(dstLoc);
 
+        order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
         logger.debug("receivingOrder: {}", order);
         ReceivingOrder newOne = recvOrderRepository.save(order);
 
@@ -90,7 +93,9 @@ public class ReceivingOrderService {
 
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
+        order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomer().getId());
+        order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
 
         Iterable<ReceivingContainer> containers = recvContainerRepository.findByReceivingOrder(order);

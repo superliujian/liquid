@@ -5,10 +5,7 @@ import liquid.metadata.ContainerType;
 import liquid.metadata.LocationType;
 import liquid.metadata.OrderStatus;
 import liquid.persistence.domain.*;
-import liquid.service.CargoTypeService;
-import liquid.service.CustomerService;
-import liquid.service.LocationService;
-import liquid.service.ReceivingOrderService;
+import liquid.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,14 @@ public class ReceivingOrderController {
 
     @Autowired
     private CargoTypeService cargoTypeService;
+
+    @Autowired
+    private ServiceTypeService serviceTypeService;
+
+    @ModelAttribute("serviceTypes")
+    public Iterable<ServiceType> populateServiceTypes() {
+        return serviceTypeService.findAll();
+    }
 
     @ModelAttribute("customers")
     public Iterable<Customer> populateCustomers() {
@@ -175,7 +180,7 @@ public class ReceivingOrderController {
         if (bindingResult.hasErrors()) {
             return "recv_order/form";
         } else {
-//            recvOrderService.submit(order);
+            recvOrderService.save(order);
             return "redirect:/recv_order";
         }
     }

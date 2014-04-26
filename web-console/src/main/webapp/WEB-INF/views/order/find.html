@@ -94,7 +94,7 @@
                     <td>
                         <a href="/order/id?action=edit" class="btn btn-default btn-xs"
                            th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
-                            <i class="glyphicon glyphicon-edit"/>
+                            <i class="glyphicon glyphicon-edit" th:if="${order.status} != 2"/>
                         </a>
                     </td>
                 </tr>

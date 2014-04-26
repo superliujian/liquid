@@ -25,7 +25,7 @@ import java.util.*;
  * Time: 8:03 PM
  */
 @Service
-public class OrderService {
+public class OrderService extends AbstractBaseOrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
@@ -51,12 +51,6 @@ public class OrderService {
 
     @Autowired
     private ActivitiEngineService bpmService;
-
-    @Autowired
-    private SequenceService sequenceService;
-
-    @Autowired
-    private ServiceTypeService serviceTypeService;
 
     public Order newOrder(List<Location> locations) {
         Order order = new Order();
@@ -121,7 +115,7 @@ public class OrderService {
     public void submit(Order order) {
         prepare(order);
         // compute order no.
-        order.setOrderNo(computeOrderNo(order));
+        order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
         logger.info("Order No: {}", order.getOrderNo());
         orderRepository.save(order);
         logger.debug("username: {}", businessContext.getUsername());
@@ -131,24 +125,6 @@ public class OrderService {
         variableMap.put("hasDelivery", order.isHasDelivery());
         variableMap.put("orderOwner", businessContext.getUsername());
         bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
-    }
-
-    public String computeOrderNo(Order order) {
-        String sequenceName = String.format("%1$s%2$s%3$s%4$ty",
-                salesOrMarketing(order.getCreateRole()),
-                "C", // TODO
-                order.getServiceType().getCode(),
-                Calendar.getInstance());
-        return String.format("%1$s%2$05d",
-                sequenceName, sequenceService.getNextValue(sequenceName));
-    }
-
-    /**
-     * @param role is like "ROLE_SALES" from LDAP.
-     * @return
-     */
-    private String salesOrMarketing(String role) {
-        return "ROLE_SALES".equals(role) ? "S" : "M";
     }
 
     public Order findByTaskId(String taskId) {

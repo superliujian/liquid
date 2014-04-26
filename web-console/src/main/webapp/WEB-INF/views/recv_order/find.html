@@ -68,8 +68,7 @@
                     <th th:text="#{container.capacity}">Container Capacity</th>
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price}">Price</th>
-                    <th th:text="#{extra.expense}">Extra Expense</th>
-                    <th></th>
+                      <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -87,7 +86,6 @@
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
                     <td th:text="${order.salesPriceCny}">Price</td>
-                    <td th:text="${order.extExp}">Extra Expense</td>
                     <td>
                         <a href="/recv_order/id?action=edit" class="btn btn-default btn-xs"
                            th:href="'/recv_order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
