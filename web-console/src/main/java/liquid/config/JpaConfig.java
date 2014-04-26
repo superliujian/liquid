@@ -34,6 +34,7 @@ import java.util.Properties;
                         CustomerRepository.class,
                         SpRepository.class,
                         SpTypeRepository.class,
+                        ServiceTypeRepository.class,
                         LocationRepository.class,
                         GoodsRepository.class,
                         ChargeTypeRepository.class,
