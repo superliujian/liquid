@@ -16,10 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -54,6 +51,9 @@ public class OrderService {
 
     @Autowired
     private ActivitiEngineService bpmService;
+
+    @Autowired
+    private SequenceService sequenceService;
 
     public Order newOrder(List<Location> locations) {
         Order order = new Order();
@@ -108,6 +108,9 @@ public class OrderService {
     }
 
     public void submit(Order order) {
+        // compute order no.
+//        order.setOrderNo(computeOrderNo(order));
+
         save(order);
         logger.debug("username: {}", businessContext.getUsername());
 
@@ -116,6 +119,24 @@ public class OrderService {
         variableMap.put("hasDelivery", order.isHasDelivery());
         variableMap.put("orderOwner", businessContext.getUsername());
         bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
+    }
+
+    public String computeOrderNo(Order order) {
+        String sequenceName = String.format("%1$s%2$s%3$s%4$ty",
+                salesOrMarketing(order.getCreateRole()),
+                "C", // TODO
+                order.getServiceType().getCode(),
+                Calendar.getInstance());
+        return String.format("%1$s%2$05d",
+                sequenceName, sequenceService.getNextValue(sequenceName));
+    }
+
+    /**
+     * @param role is like "ROLE_SALES" from LDAP.
+     * @return
+     */
+    private String salesOrMarketing(String role) {
+        return "ROLE_SALES".equals(role) ? "S" : "M";
     }
 
     public Order findByTaskId(String taskId) {
@@ -193,5 +214,9 @@ public class OrderService {
         orderHistory.setCreateTime(order.getCreateTime());
         orderHistory.setFinishTime(new Date());
         return orderHistory;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

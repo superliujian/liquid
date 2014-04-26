@@ -15,6 +15,17 @@ import javax.validation.constraints.NotNull;
 @MappedSuperclass
 public class BaseOrder extends BaseEntity {
     @Transient
+    private long serviceTypeId;
+
+    @ManyToOne
+    @JoinColumn(name = "SERVICE_TYPE_ID")
+    private ServiceType serviceType;
+
+    @NotNull
+    @NotEmpty
+    private String orderNo;
+
+    @Transient
     private long customerId;
 
     /**
@@ -101,6 +112,30 @@ public class BaseOrder extends BaseEntity {
     // 1 saved; 2: submitted
     @Column(name = "STATUS")
     private int status;
+
+    public long getServiceTypeId() {
+        return serviceTypeId;
+    }
+
+    public void setServiceTypeId(long serviceTypeId) {
+        this.serviceTypeId = serviceTypeId;
+    }
+
+    public ServiceType getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(ServiceType serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
     public long getCustomerId() {
         return customerId;
@@ -274,7 +309,10 @@ public class BaseOrder extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("BaseOrder{");
-        sb.append("customerId=").append(customerId);
+        sb.append("serviceTypeid =").append(serviceTypeId);
+        sb.append(", serviceType=").append(serviceType);
+        sb.append(", orderNo=").append(orderNo);
+        sb.append(", customerId=").append(customerId);
         sb.append(", customerName0=").append(customerName0);
         sb.append(", customer=").append(customer);
         sb.append(", srcLoc=").append(srcLoc);
