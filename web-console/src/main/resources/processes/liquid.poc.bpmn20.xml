@@ -17,7 +17,7 @@
 
         <userTask id="feedDistyPrice" name="填写渠道价格">
             <documentation>
-                ${employeeName}已经下订单。您需要填写渠道价格。
+                ${employeeName}已经在${endTime}下订单。您需要填写渠道价格。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -29,7 +29,7 @@
 
         <userTask id="planRoute" name="路线规划">
             <documentation>
-                ${employeeName}已经填写渠道价格。您需要制定运输路线方案。
+                ${employeeName}已经在${endTime}填写渠道价格。您需要制定运输路线方案。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -41,7 +41,7 @@
 
         <userTask id="planLoading" name="制定装载方案">
             <documentation>
-                ${employeeName}已经制定运输路线方案。您需要制定装载方案。
+                ${employeeName}已经在${endTime}制定运输路线方案。您需要制定装载方案。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -53,7 +53,7 @@
 
         <userTask id="allocateContainers" name="分配集装箱">
             <documentation>
-                ${employeeName}已经制定制定装载方案。您需要分配集装箱。
+                ${employeeName}已经在${endTime}制定制定装载方案。您需要分配集装箱。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -73,7 +73,7 @@
 
         <userTask id="sendLoadingOnYard" name="发布场装指令">
             <documentation>
-                ${employeeName}已经分配集装箱。您需要发布场装指令。
+                ${employeeName}已经在${endTime}分配集装箱。您需要发布场装指令。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -85,7 +85,7 @@
 
         <userTask id="sendLoadingByTruck" name="发布外拖指令">
             <documentation>
-                ${employeeName}已经分配集装箱。您需要发布外拖指令。
+                ${employeeName}已经在${endTime}分配集装箱。您需要发布外拖指令。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -105,7 +105,7 @@
 
         <userTask id="loadOnYard" name="场装作业">
             <documentation>
-                ${employeeName}已经发布场装指令。您需要进行场装作业。
+                ${employeeName}已经在${endTime}发布场装指令。您需要进行场装作业。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -125,7 +125,7 @@
 
         <userTask id="salesSendingTruck" name="销售派车">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要派车。
+                ${employeeName}已经在${endTime}发布外拖指令。您需要派车。
             </documentation>
             <extensionElements>
                 <activiti:taskListener event="create" delegateExpression="${truckingAssigneeHandler}"/>
@@ -135,7 +135,7 @@
 
         <userTask id="marketingSendingTruck" name="市场派车">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要派车。
+                ${employeeName}已经在${endTime}发布外拖指令。您需要派车。
             </documentation>
             <extensionElements>
                 <activiti:taskListener event="create" delegateExpression="${truckingAssigneeHandler}"/>
@@ -145,7 +145,7 @@
 
         <userTask id="loadByTruck" name="外拖作业">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要进行外拖作业。
+                ${employeeName}已经在${endTime}发布外拖指令。您需要进行外拖作业。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -157,7 +157,7 @@
 
         <userTask id="applyRailwayPlan" name="申报铁路计划">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要申报铁路计划。
+                ${employeeName}已经在${endTime}发布外拖指令。您需要申报铁路计划。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -170,7 +170,7 @@
         <!-- record time of dispatch -->
         <userTask id="recordTory" name="记录进入铁路货场时间">
             <documentation>
-                ${employeeName}已经发布外拖指令。您需要记录进入铁路货场时间。
+                ${employeeName}已经在${endTime}发布外拖指令。您需要记录进入铁路货场时间。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -182,7 +182,7 @@
 
         <userTask id="feedContainerNo" name="填写集装箱号">
             <documentation>
-                货物进入铁路货场。您需要填写集装箱号。
+                ${employeeName}已经在${endTime}记录进入铁路货场时间。您需要填写集装箱号。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -198,7 +198,7 @@
         <!-- record time of dispatch -->
         <userTask id="recordTod" name="记录装车发运时间">
             <documentation>
-                ${employeeName}已经记录进入铁路货场时间。您需要记录装车发运时间。
+                ${employeeName}已经在${endTime}记录进入铁路货场时间。您需要记录装车发运时间。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -218,7 +218,7 @@
 
         <userTask id="doBargeOps" name="驳船操作">
             <documentation>
-                铁路已经发车。您需要驳船操作。
+                ${employeeName}已经在${endTime}记录装车发运时间。您需要驳船操作。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -238,7 +238,7 @@
 
         <userTask id="doVesselOps" name="大船操作">
             <documentation>
-                您需要大船操作。
+                上一操作已经在${endTime}完成，您记录您需要大船操作。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -258,7 +258,7 @@
 
         <userTask id="deliver" name="配送">
             <documentation>
-                货物已经到达，您需要配送。
+                上一操作已经在${endTime}完成，您需要配送。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -270,7 +270,7 @@
 
         <userTask id="reclaimReceipt" name="回收签收单">
             <documentation>
-                货物已经到达，您需要回收签收单。
+                ${employeeName}已经在${endTime}完成配送，您需要回收签收单。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -282,7 +282,7 @@
 
         <userTask id="adjustPrice" name="修正订单价格">
             <documentation>
-                ${employeeName}回收签收单已经完成，您需要修正订单价格。
+                ${employeeName}已经在${endTime}完成回收签收单，您需要修正订单价格。
             </documentation>
             <!-- ROLE_SALES -->
             <humanPerformer>
@@ -300,7 +300,7 @@
 
         <userTask id="sendInvoicing" name="发送开发票指令">
             <documentation>
-                您需要发送开发票指令。
+                上一操作已经在${endTime}完成，您需要发送开发票指令。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
