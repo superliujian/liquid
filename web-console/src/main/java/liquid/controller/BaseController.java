@@ -17,7 +17,7 @@ import java.util.Locale;
 @Component
 public abstract class BaseController {
     @Autowired
-    private MessageSource messageSource;
+    protected MessageSource messageSource;
 
     @Autowired
     private Locale locale;
