@@ -11,6 +11,7 @@ import liquid.service.*;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
+import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -122,9 +126,15 @@ public class TaskController extends BaseController {
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")
     public String claim(@RequestParam String taskId,
-                        Model model, Principal principal) {
+                        Model model, Principal principal, HttpServletRequest request, HttpServletResponse response) {
         logger.debug("taskId: {}", taskId);
-        bpmService.claimTask(taskId, principal.getName());
+        try {
+            bpmService.claimTask(taskId, principal.getName());
+        } catch (ActivitiTaskAlreadyClaimedException e) {
+            request.getSession().setAttribute("message",
+                    messageSource.getMessage("task.claimed.by.someone.else", new String[]{}, Locale.CHINA));
+            return "error/error";
+        }
         return "redirect:/task/" + taskId;
     }
 
