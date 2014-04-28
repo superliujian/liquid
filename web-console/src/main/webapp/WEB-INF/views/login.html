@@ -25,6 +25,10 @@
     <form name='f' action="/login" method='POST' class="form">
         <h2 class="form-heading" th:text="#{login}">Login</h2>
 
+        <div th:if="${param.error}">    
+            <p class="alert" th:text="#{invalid.username.or.password}"/>
+        </div>
+
         <div class="form-group">
             <label th:text="#{username}">Username</label>
             <input type="text" name="username" class="form-control"/>
