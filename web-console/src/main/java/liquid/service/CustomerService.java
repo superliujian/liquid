@@ -34,8 +34,26 @@ public class CustomerService {
         return customers;
     }
 
-    public FormValidationResult validateCustomer(long id, String name) {
-        if (id == 0L) return FormValidationResult.newFailure("invalid.customer");
+    /**
+     * If customer name is exactly equals to the one in database, the customer id is set.
+     *
+     * @param order
+     * @return
+     */
+    public FormValidationResult validateCustomer(Order order) {
+        long id = order.getCustomerId();
+        String name = order.getCustomerName0();
+        if (id == 0L) {
+            if (null != name && name.trim().length() > 0) {
+                Customer customer = customerRepository.findByName(name);
+                if (null != customer) {
+                    order.setCustomerId(customer.getId());
+                    return FormValidationResult.newSuccess();
+                }
+            } else {
+                return FormValidationResult.newFailure("invalid.customer");
+            }
+        }
 
         Customer customer = find(id);
         if (name == null) return FormValidationResult.newFailure("invalid.customer");

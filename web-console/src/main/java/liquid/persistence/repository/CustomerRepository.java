@@ -14,5 +14,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
     @Query(value = "SELECT * FROM CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
     Iterable<Customer> findOrderByName();
 
+    Customer findByName(String name);
+
     Iterable<Customer> findByNameLike(String name);
 }

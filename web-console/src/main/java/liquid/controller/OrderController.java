@@ -156,7 +156,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SAVED.getValue());
 
-        FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+        FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
             setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
         }
@@ -186,7 +186,7 @@ public class OrderController extends BaseChargeController {
 
         order.setStatus(OrderStatus.SUBMITTED.getValue());
 
-        FormValidationResult result = customerService.validateCustomer(order.getCustomerId(), order.getCustomerName0());
+        FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
             setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
         }
