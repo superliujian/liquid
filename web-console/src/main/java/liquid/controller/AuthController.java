@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.Collection;
@@ -41,6 +42,7 @@ public class AuthController {
     }
 
     @RequestMapping("/login")
-    public void signin(Model model, Principal principal) {
+    public void signin(Model model, Principal principal, @RequestParam(required = false) String error) {
+        logger.debug("error: '{}'", error);
     }
 }
