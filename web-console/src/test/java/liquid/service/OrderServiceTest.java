@@ -28,6 +28,6 @@ public class OrderServiceTest {
         serviceType.setCode("1");
         order.setServiceType(serviceType);
         OrderService orderService = context.getBean(OrderService.class);
-        System.out.println(orderService.computeOrderNo(order));
+        System.out.println(orderService.computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
     }
 }

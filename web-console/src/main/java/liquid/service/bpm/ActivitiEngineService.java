@@ -1,8 +1,10 @@
 package liquid.service.bpm;
 
+import liquid.metadata.DatePattern;
 import liquid.persistence.domain.Account;
 import liquid.service.AccountService;
 import liquid.service.MailNotificationService;
+import liquid.utils.DateUtils;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
@@ -50,6 +52,7 @@ public class ActivitiEngineService {
         repositoryService.createDeployment().addClasspathResource("processes/liquid.poc.bpmn20.xml").deploy();
 
         variableMap.put("employeeName", uid);
+        variableMap.put("endTime", DateUtils.stringOf(Calendar.getInstance().getTime(), DatePattern.UNTIL_SECOND));
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", String.valueOf(orderId), variableMap);
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
 
@@ -106,6 +109,7 @@ public class ActivitiEngineService {
 
     public void complete(String taskId, String uid, Map<String, Object> variableMap) {
         variableMap.put("employeeName", uid);
+        variableMap.put("endTime", DateUtils.stringOf(Calendar.getInstance().getTime(), DatePattern.UNTIL_SECOND));
         TaskService taskService = processEngine.getTaskService();
         taskService.complete(taskId, variableMap);
 
@@ -157,5 +161,9 @@ public class ActivitiEngineService {
             if ((now.getTime() - created.getTime()) < 2 * 24 * 60 * 60 * 1000) iterator.remove();
         }
         return taskList;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(DateUtils.stringOf(Calendar.getInstance().getTime(), DatePattern.UNTIL_SECOND));
     }
 }

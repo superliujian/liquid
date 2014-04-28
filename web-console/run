@@ -1,0 +1,3 @@
+#!/bin/sh
+# mvn -f /home/redbrick9/Repo/git/github/liquid/web-console/pom.xml -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run > /var/log/liquid/console.log 2>&1 & 
+exec mvn -f /home/redbrick9/Repo/git/github/liquid/web-console/pom.xml -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run > /var/log/liquid/console.log 2>&1 
