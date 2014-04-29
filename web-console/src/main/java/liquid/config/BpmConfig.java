@@ -4,8 +4,10 @@ import org.activiti.engine.impl.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -21,15 +23,23 @@ import java.util.List;
  * Time: 9:37 PM
  */
 @Configuration
+@Import(PropertyPlaceholderConfig.class)
 public class BpmConfig {
+
+    @Value("${bpm.jdbc.url}")
+    private String jdbcUrl;
+    @Value("${bpm.jdbc.username}")
+    private String jdbcUsername;
+    @Value("${bpm.jdbc.password}")
+    private String jdbcPassword;
 
     @Bean
     public SimpleDriverDataSource bpmDataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriverClass(com.mysql.jdbc.Driver.class);
-        dataSource.setUrl("jdbc:mysql://rdseurqiqevfzn2.mysql.rds.aliyuncs.com:3306/liquid_bpm?autoReconnect=true");
-        dataSource.setUsername("liquid");
-        dataSource.setPassword("liquid");
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUsername(jdbcUsername);
+        dataSource.setPassword(jdbcPassword);
         return dataSource;
     }
 

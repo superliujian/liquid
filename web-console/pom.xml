@@ -226,6 +226,9 @@
                 <configuration>
                     <port>${tomcat-port}</port>
                     <path>/</path>
+                    <systemProperties>
+                        <APP_ENV>liquid_dev</APP_ENV>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>

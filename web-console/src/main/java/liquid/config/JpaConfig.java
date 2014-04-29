@@ -1,10 +1,8 @@
 package liquid.config;
 
 import liquid.persistence.repository.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
@@ -58,14 +56,22 @@ import java.util.Properties;
                         ExchangeRateRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
+@Import(PropertyPlaceholderConfig.class)
 public class JpaConfig {
+    @Value("${jdbc.url}")
+    private String jdbcUrl;
+    @Value("${jdbc.username}")
+    private String jdbcUsername;
+    @Value("${jdbc.password}")
+    private String jdbcPassword;
+
     @Bean
     public DataSource dataSource() throws SQLException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-        dataSource.setUrl("jdbc:mysql://rdseurqiqevfzn2.mysql.rds.aliyuncs.com:3306/liquid?autoReconnect=true");
-        dataSource.setUsername("liquid");
-        dataSource.setPassword("liquid");
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUsername(jdbcUsername);
+        dataSource.setPassword(jdbcPassword);
         return dataSource;
     }
 
