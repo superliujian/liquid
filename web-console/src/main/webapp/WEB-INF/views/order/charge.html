@@ -27,8 +27,10 @@
             <a th:href="'/order/' + ${order.id} + '/detail'" th:text="#{order.detail}">Order Detail</a></li>
         <li class="active" th:class="${tab} == 'task' ? 'active'">
             <a th:href="'/order/' + ${order.id} + '/task'" th:text="#{task}">Task</a></li>
+        <!--
         <li class="active" th:class="${tab} == 'charge' ? 'active'">
             <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
+        -->
     </ul>
 </div>
 <!-- /.container -->
