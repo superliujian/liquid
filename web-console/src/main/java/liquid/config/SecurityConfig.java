@@ -5,17 +5,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -59,12 +64,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return accessDeniedHandler;
     }
 
+    @Bean
+    public ExceptionMappingAuthenticationFailureHandler authenticationFailureHandler() {
+        final ExceptionMappingAuthenticationFailureHandler authenticationFailureHandler =
+                new ExceptionMappingAuthenticationFailureHandler();
+        final Map<String, String> mappings = new HashMap<>();
+
+        mappings.put(BadCredentialsException.class.getCanonicalName(), "/login?error=login.failure.badcredentials");
+
+        authenticationFailureHandler.setExceptionMappings(mappings);
+        return authenticationFailureHandler;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/account/register", "/about", "/error", "/error/403").permitAll() // #4
+                .antMatchers("/account/register", "/login", "/about", "/error/**").permitAll() // #4
                 .antMatchers("/admin/**").hasRole("ADMIN") // #6
                 .antMatchers("/container/**").hasRole("CONTAINER")
                 .antMatchers("/task/*/planning/**").hasRole("MARKETING")
@@ -73,6 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()  // #8
                 .loginPage("/login") // #9
+                .failureHandler(authenticationFailureHandler())
                 .permitAll() // #5
                 .and()
                 .logout()

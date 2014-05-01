@@ -3,6 +3,7 @@ package liquid.service;
 import liquid.metadata.GroupType;
 import liquid.persistence.domain.Account;
 import liquid.persistence.domain.Group;
+import liquid.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +140,35 @@ public class AccountService {
         }
     }
 
+    public PasswordPolicy fetchPasswordPolicy() {
+        SearchControls searchControls = new SearchControls();
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        searchControls.setDerefLinkFlag(true);
+        searchControls.setReturningAttributes(new String[]{"pwdMaxFailure"});
+
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "pwdPolicy"));
+        filter.and(new EqualsFilter("cn", "ppolicy"));
+
+        List<PasswordPolicy> policies = ldapOperations.search(
+                "", filter.encode(), searchControls,
+                new AttributesMapper() {
+                    public Object mapFromAttributes(Attributes attrs)
+                            throws NamingException {
+                        PasswordPolicy policy = new PasswordPolicy();
+                        policy.setPwdMaxFailure(attr2Int(attrs.get("pwdMaxFailure")));
+                        return policy;
+                    }
+                }
+        );
+
+        if (null != policies && policies.size() > 0) {
+            return policies.get(0);
+        } else {
+            throw new RuntimeException("PasswordPolicy not found.");
+        }
+    }
+
     private String attr2Str(Attribute attr) {
         String result = null;
         try {
@@ -146,6 +176,21 @@ public class AccountService {
         } catch (NamingException e) {
             // Ignore.
         }
+        return result;
+    }
+
+    private int attr2Int(Attribute attr) {
+        int result = 0;
+
+        if (null != attr) {
+            try {
+                String value = String.valueOf(attr.get());
+                result = Integer.valueOf(value);
+            } catch (NamingException | NumberFormatException e) {
+                logger.warn(e.getMessage(), e);
+            }
+        }
+
         return result;
     }
 
