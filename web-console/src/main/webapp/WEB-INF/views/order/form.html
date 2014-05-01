@@ -97,7 +97,7 @@
 <div class="row">
     <div class="col-lg-4">
         <div class="form-group" th:classappend="${#fields.hasErrors('consignee')} ? 'has-error'">
-            <label th:text="#{consignee} + ' *'">Consignee</label>
+            <label th:text="#{consignee}">Consignee</label>
             <input type="text" th:field="*{consignee}" class="form-control"/>
 
             <span th:errors="*{consignee}">error</span>
@@ -106,7 +106,7 @@
 
     <div class="col-lg-4">
         <div class="form-group" th:classappend="${#fields.hasErrors('consigneePhone')} ? 'has-error'">
-            <label th:text="#{consignee.phone} + ' *'">Consignee</label>
+            <label th:text="#{consignee.phone}">Consignee</label>
             <input type="text" th:field="*{consigneePhone}" class="form-control"/>
 
             <span th:errors="*{consigneePhone}">error</span>
@@ -117,7 +117,7 @@
 <div class="row">
     <div class="col-lg-8">
         <div class="form-group" th:classappend="${#fields.hasErrors('consigneeAddress')} ? 'has-error'">
-            <label th:text="#{consignee.address} + ' *'">Consignee Address</label>
+            <label th:text="#{consignee.address}">Consignee Address</label>
             <input type="text" th:field="*{consigneeAddress}" class="form-control"/>
 
             <span th:errors="*{consigneeAddress}">error</span>

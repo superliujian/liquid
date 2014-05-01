@@ -53,18 +53,12 @@ public class BaseOrder extends BaseEntity {
     @Transient
     private long destination;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "CONSIGNEE")
     private String consignee;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "CONSIGNEE_PHONE")
     private String consigneePhone;
 
-    @NotNull
-    @NotEmpty
     @Column(name = "CONSIGNEE_ADDR")
     private String consigneeAddress;
 
