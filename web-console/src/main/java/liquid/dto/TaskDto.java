@@ -21,6 +21,8 @@ public class TaskDto implements Serializable {
 
     private String assignee;
 
+    private String prompt;
+
     public String getId() {
         return id;
     }
@@ -69,6 +71,14 @@ public class TaskDto implements Serializable {
         this.assignee = assignee;
     }
 
+    public String getPrompt() {
+        return prompt;
+    }
+
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("TaskDto{");
@@ -78,6 +88,7 @@ public class TaskDto implements Serializable {
         sb.append(", name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", assignee='").append(assignee).append('\'');
+        sb.append(", prompt='").append(prompt).append('\'');
         sb.append('}');
         return sb.toString();
     }

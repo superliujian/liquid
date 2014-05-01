@@ -10,12 +10,10 @@ import liquid.service.bpm.ActivitiEngineService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -41,6 +39,9 @@ public class TaskService {
     @Autowired
     private ShippingContainerService scService;
 
+    @Autowired
+    protected MessageSource messageSource;
+
     public TaskDto getTask(String taskId) {
         Task task = bpmService.getTask(taskId);
         TaskDto taskDto = toTaskDto(task);
@@ -50,6 +51,8 @@ public class TaskService {
 
         taskDto.setOrderId(orderId);
         taskDto.setOrderNo(order.getOrderNo());
+        taskDto.setPrompt(messageSource.getMessage("task.complete.prompt." + task.getTaskDefinitionKey(),
+                new Object[0], "", Locale.CHINA));
         return taskDto;
     }
 

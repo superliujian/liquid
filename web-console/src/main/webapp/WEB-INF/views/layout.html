@@ -213,7 +213,10 @@ roadId,
                     -->
                 </div>
                 <div class="modal-body">
-                    <h4><span class="glyphicon glyphicon-info-sign"></span></h4>
+                    <h4>
+                        <span class="glyphicon glyphicon-info-sign" />
+                        <span th:text="${task.prompt}" />
+                    </h4>
                 </div>
                 <div class="modal-footer">
                     <form action="/task" method="POST">

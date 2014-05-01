@@ -117,8 +117,8 @@ public class TaskController extends BaseController {
     public String toRealTask(@PathVariable String taskId,
                              Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Task task = bpmService.getTask(taskId);
-        logger.debug("task: {}", TaskHelper.stringOf(task));
+        TaskDto task = taskService.getTask(taskId);
+        logger.debug("task: {}", task);
         model.addAttribute("task", task);
 
         return "redirect:" + taskService.computeTaskMainPath(taskId);
