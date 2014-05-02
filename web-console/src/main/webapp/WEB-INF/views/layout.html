@@ -80,11 +80,12 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
-                        <a href="#">
+                    <li class="dropdown" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-user"></i>&nbsp;
                             <span sec:authentication="name">Logged User Name</span>
                             [
+                            <span sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{role.admin}"></span>
                             <span sec:authorize="hasRole('ROLE_SALES')" th:text="#{role.sales}"></span>
                             <span sec:authorize="hasRole('ROLE_MARKETING')" th:text="#{role.marketing}"></span>
                             <span sec:authorize="hasRole('ROLE_OPERATING')" th:text="#{role.operating}"></span>
@@ -92,7 +93,15 @@
                             <span sec:authorize="hasRole('ROLE_FIELD')" th:text="#{role.field}"></span>
                             <span sec:authorize="hasRole('ROLE_COMMERCE')" th:text="#{role.commerce}"></span>
                             ]
+                            <b class="caret" />
                         </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/account/password/uid" th:href="'/account/password/' + ${#authentication.name}">
+                                    <i class="glyphicon glyphicon-cog" />&nbsp;<span th:text="#{password.change}">Change Password</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
                         <a href="/logout" th:text="#{logout}">Logout</a>

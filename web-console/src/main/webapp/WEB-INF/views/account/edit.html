@@ -21,42 +21,18 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <form action="/account/register" method="POST" class="form-horizontal center"
-          th:object="${account}">
+    <form action="/account/uid" method="POST" class="form-horizontal center"
+          th:object="${account}" th:action="'/account/' + *{uid}">
 
         <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{account.uid}">Account UID</label>
 
-            <div class="col-lg-9">
-                <input type="text" th:field="*{uid}" class="form-control"/>
+            <div class="col-lg-9"><p class="form-control-static" th:text="*{uid}" />
+
             </div>
 
             <div class="col-lg-offset-3 col-lg-9">
                 <span th:errors="*{uid}">error</span>
-            </div>
-        </div>
-
-        <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{password}">Account Password</label>
-
-            <div class="col-lg-9">
-                <input type="password" th:field="*{password}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{password}">error</span>
-            </div>
-        </div>
-
-        <div class="form-group" th:classappend="${#fields.hasErrors('password2')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{password2}">Account Password 2</label>
-
-            <div class="col-lg-9">
-                <input type="password" th:field="*{password2}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{password2}">error</span>
             </div>
         </div>
 
@@ -111,8 +87,8 @@
 
         <div class="form-group">
             <div class="col-lg-offset-3 col-lg-9">
-                <input type="submit" name="register" value="Register" class="btn btn-default"
-                       th:value="#{account.register}"/>
+                <input type="submit" name="apply" value="Apply" class="btn btn-default"
+                       th:value="#{update}"/>
             </div>
         </div>
     </form>

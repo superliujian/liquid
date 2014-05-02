@@ -3,6 +3,7 @@ package liquid.service;
 import liquid.metadata.GroupType;
 import liquid.persistence.domain.Account;
 import liquid.persistence.domain.Group;
+import liquid.persistence.domain.PasswordChange;
 import liquid.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.ldap.core.*;
 import org.springframework.ldap.core.support.AbstractContextMapper;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.ldap.support.LdapUtils;
 import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
@@ -30,6 +33,9 @@ import java.util.*;
 @Service
 public class AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
+
+    @Autowired
+    private LdapContextSource contextSource;
 
     @Autowired
     private LdapOperations ldapOperations;
@@ -109,7 +115,7 @@ public class AccountService {
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         searchControls.setDerefLinkFlag(true);
-        searchControls.setReturningAttributes(new String[]{"uid", "ou", "mail", "pwdAccountLockedTime"});
+        searchControls.setReturningAttributes(new String[]{"uid", "ou", "givenName", "sn", "mail", "pwdAccountLockedTime"});
 
         AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter("objectclass", "person"));
@@ -122,6 +128,8 @@ public class AccountService {
                             throws NamingException {
                         Account account = new Account();
                         account.setUid(attr2Str(attrs.get("uid")));
+                        account.setGivenName(attr2Str(attrs.get("givenName")));
+                        account.setSurname(attr2Str(attrs.get("sn")));
                         account.setGroup(attr2Str(attrs.get("ou")));
                         account.setEmail(attr2Str(attrs.get("mail")));
 
@@ -295,6 +303,46 @@ public class AccountService {
         mailNotificationService.send(messageSource.getMessage("mail.account.lock", null, Locale.CHINA),
                 messageSource.getMessage("mail.account.lock.content", null, Locale.CHINA),
                 account.getEmail());
+    }
+
+    public void edit(Account newOne) {
+        Account account = find(newOne.getUid());
+        Name dn = buildAccountDn(account);
+
+        DirContextOperations context = ldapOperations.lookupContext(dn);
+        context.setAttributeValues("objectclass", new String[]{"top",
+                "person", "organizationalPerson", "inetOrgPerson"});
+        context.setAttributeValue("mail", newOne.getEmail());
+
+        ldapOperations.modifyAttributes(context);
+    }
+
+    public void resetPassword(String uid, PasswordChange passwordChange) {
+        Account account = find(uid);
+        Name dn = buildAccountDn(account);
+
+        DirContextOperations context = ldapOperations.lookupContext(dn);
+        context.setAttributeValues("objectclass", new String[]{"top",
+                "person", "organizationalPerson", "inetOrgPerson"});
+
+        context.setAttributeValue("userPassword", passwordChange.getNewPassword());
+
+        ldapOperations.modifyAttributes(context);
+    }
+
+    public boolean authenticate(String userDn, String credentials) {
+        DirContext ctx = null;
+        try {
+            ctx = contextSource.getContext(userDn, credentials);
+            return true;
+        } catch (Exception e) {
+            // Context creation failed - authentication did not succeed
+            logger.error("Login failed", e);
+            return false;
+        } finally {
+            // It is imperative that the created DirContext instance is always closed
+            LdapUtils.closeContext(ctx);
+        }
     }
 
     private DirContextOperations setAccountAttributes(DirContextOperations adapter, Account account) {

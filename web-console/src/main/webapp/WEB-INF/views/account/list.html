@@ -28,6 +28,8 @@
             <th th:text="#{group}">Account Group</th>
             <th th:text="#{email}">Email</th>
             <th th:text="#{account.locked}">Locked</th>
+            <th th:text="#{edit}">Edit</th>
+            <th th:text="#{password.reset}">Edit</th>
         </tr>
         </thead>
 
@@ -44,6 +46,18 @@
                 <a th:unless="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=lock'"
                    class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-ok"/>
+                </a>
+            </td>
+            <td>
+                <a th:href="'/account/' + ${account.uid}"
+                   class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-pencil"/>
+                </a>
+            </td>
+            <td>
+                <a th:href="'/account/password/' + ${account.uid}"
+                   class="btn btn-default btn-xs">
+                    <i class="glyphicon glyphicon-cog"/>
                 </a>
             </td>
         </tr>
