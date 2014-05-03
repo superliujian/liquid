@@ -70,7 +70,7 @@ public class ActivitiEngineService {
 
     public List<Task> listTasks(String candidateGid) {
         TaskService taskService = processEngine.getTaskService();
-        List<Task> taskList = taskService.createTaskQuery().taskCandidateGroup(candidateGid).list();
+        List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskCandidateGroup(candidateGid).list();
         if (logger.isDebugEnabled()) {
             for (Task task : taskList) {
                 logger.debug("task: {}; owner: {}", task, task.getOwner());
@@ -82,7 +82,7 @@ public class ActivitiEngineService {
 
     public List<Task> listMyTasks(String uid) {
         TaskService taskService = processEngine.getTaskService();
-        List<Task> taskList = taskService.createTaskQuery().taskAssignee(uid).list();
+        List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskAssignee(uid).list();
         if (logger.isDebugEnabled()) {
             for (Task task : taskList) {
                 logger.debug("task: {}; owner: {}", task, task.getOwner());

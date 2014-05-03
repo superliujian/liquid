@@ -21,6 +21,8 @@ public class TaskDto implements Serializable {
 
     private String assignee;
 
+    private String createDate;
+
     private String prompt;
 
     public String getId() {
@@ -71,6 +73,14 @@ public class TaskDto implements Serializable {
         this.assignee = assignee;
     }
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
     public String getPrompt() {
         return prompt;
     }
@@ -88,6 +98,7 @@ public class TaskDto implements Serializable {
         sb.append(", name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", assignee='").append(assignee).append('\'');
+        sb.append(", createDate='").append(createDate).append('\'');
         sb.append(", prompt='").append(prompt).append('\'');
         sb.append('}');
         return sb.toString();

@@ -34,18 +34,22 @@
                    sth:unless="${#lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
+                    <th th:text="#{task.id}">Task ID</th>
                     <th th:text="#{task.name}">Task Name</th>
                     <th th:text="#{order.no}">Order No</th>
                     <th th:text="#{task.description}">Task Description</th>
+                    <th th:text="#{task.create.time}">Task Cteate Date</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}">
                     <td>
-                        <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.name}">Task Name</a>
+                        <a href="/task/taskId" th:href="'/task/' + ${task.id}" th:text="${task.id}">Task ID</a>
                     </td>
+                    <td th:text="${task.name}">Task Name</td>
                     <td th:text="${task.orderNo}">Order No</td>
                     <td th:text="${task.description}">Task Description</td>
+                    <td th:text="${task.createDate}">Task Create Date</td>                    
                 </tr>
                 </tbody>
             </table>
