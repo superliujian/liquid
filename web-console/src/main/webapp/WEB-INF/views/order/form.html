@@ -254,6 +254,20 @@
 </div>
 
 <div class="row">
+   <div id="containerSubtypeSec" class="col-lg-4">
+        <div class="form-group">
+            <label th:text="#{container.subtype}">Container Subtype</label>
+            <select  class="form-control">
+                <option th:each="containerSubtype : ${containerSubtypes}"
+                        th:value="${containerSubtype.id}"
+                        th:text="${containerSubtype.name}">Container Subtype Name
+                </option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-lg-4">
         <div class="form-group">
             <div class="checkbox">
@@ -303,6 +317,25 @@
 
 <script>
     $(document).ready(function() {
+        $('#customerName0').typeahead({
+            name: 'customer',
+            valueKey: 'name',
+            limit: 10,
+            remote: '/api/customer?name=%QUERY',
+            template: '<p><strong>{{name}}</strong> – {{code}}</p>',
+            engine: Hogan
+          })
+          .on('typeahead:selected', function (obj, datum) {
+            console.log("obj");
+            console.log(obj);
+            console.log('datum');
+            console.log(datum);
+            console.log(datum.name);
+            console.log(datum.id);
+            $('#customerId').val(datum.id);
+            console.log("customer id " + $('#cId').val());    
+        });        
+
         if($('input[name=loadingType]:checked', '#orderForm').val() == 0) {
             $("#loadingAddressSec").hide();
             $("#loadingEtSec").hide();
@@ -326,25 +359,20 @@
             }
         });
         
-        $('#customerName0').typeahead({
-            name: 'customer',
-            valueKey: 'name',
-            limit: 10,
-            remote: '/api/customer?name=%QUERY',
-            template: '<p><strong>{{name}}</strong> – {{code}}</p>',
-            engine: Hogan
-          })
-          .on('typeahead:selected', function (obj, datum) {
-            console.log("obj");
-            console.log(obj);
-            console.log('datum');
-            console.log(datum);
-            console.log(datum.name);
-            console.log(datum.id);
-            $('#customerId').val(datum.id);
-            console.log("customer id " + $('#cId').val());    
-        });        
-    });
+        if($('input[name=containerType]:checked', '#orderForm').val() == 0) {
+            $("#containerSubtypeSec").hide();
+        }
+        
+        $("input[name$='containerType']").click(function() {
+            var value = $(this).val();
+            if(value == 0) {
+                $("#containerSubtypeSec").hide();
+            }
+            else {
+                $("#containerSubtypeSec").show();
+            }
+        });
+    }); // ready end
 
 </script>
 </body>

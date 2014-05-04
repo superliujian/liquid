@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<div class="container">
+    <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(containerSubtypes)}">
+        <thead>
+        <tr>
+            <!--
+            <th th:text="#{service.type.id}">ID</th>
+            -->
+            <th th:text="#{container.subtype.code}">Code</th>
+            <th th:text="#{container.subtype.name}">Name</th>
+            <th th:text="#{status}">State</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="containerSubtype : ${containerSubtypes}">
+            <!--
+            <td th:text="${serviceType.id}">ID</td>
+            -->
+            <td th:text="${containerSubtype.code}">Code</td>
+            <td th:text="${containerSubtype.name}">Name</td>
+            <td>
+                <i th:unless="${containerSubtype.state}" class="glyphicon glyphicon-ok"/>
+                <i th:if="${containerSubtype.state}" class="glyphicon glyphicon-ban-circle"/>                
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <form action="/data_dict/container_subtype" method="POST" th:object="${containerSubtype}" class="form-horizontal center">
+        <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{container.subtype.code}">Code</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{code}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{name}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{container.subtype.name}">Name</label>
+
+            <div class="col-lg-9">
+                <input type="text" th:field="*{name}" class="form-control"/>
+            </div>
+
+            <div class="col-lg-offset-3 col-lg-9">
+                <span th:errors="*{name}">error</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-9">
+                <input type="submit" value="Add Container Subtype" class="btn btn-default"
+                       th:value="#{container.subtype.add}"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.*;
+import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;

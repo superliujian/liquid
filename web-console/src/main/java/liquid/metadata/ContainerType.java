@@ -8,7 +8,7 @@ package liquid.metadata;
  */
 public enum ContainerType {
     RAIL(0, "container.rail"),
-    MARINE(1, "container.marine"),
+//    MARINE(1, "container.marine"),
     OWNED(2, "container.owned");
 
     private final int type;

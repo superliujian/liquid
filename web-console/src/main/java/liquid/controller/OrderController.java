@@ -2,6 +2,7 @@ package liquid.controller;
 
 import liquid.context.BusinessContext;
 import liquid.metadata.*;
+import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
 import liquid.service.*;
 import liquid.utils.RoleHelper;
@@ -65,6 +66,9 @@ public class OrderController extends BaseChargeController {
     @Autowired
     private ServiceTypeService serviceTypeService;
 
+    @Autowired
+    private ContainerSubtypeService containerSubtypeService;
+
     @ModelAttribute("serviceTypes")
     public Iterable<ServiceType> populateServiceTypes() {
         return serviceTypeService.findAll();
@@ -98,6 +102,11 @@ public class OrderController extends BaseChargeController {
     @ModelAttribute("containerCaps")
     public ContainerCap[] populateContainerCaps() {
         return ContainerCap.values();
+    }
+
+    @ModelAttribute("containerSubtypes")
+    public Iterable<ContainerSubtype> populateContainerSubtypes() {
+        return containerSubtypeService.findEnabled();
     }
 
     @ModelAttribute("status")

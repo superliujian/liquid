@@ -73,6 +73,7 @@
                             <li><a href="/ct" th:text="#{charge.type}">Charge Type</a></li>
                             <li><a href="/sp_type" th:text="#{sp.type}">Sp Type</a></li>
                             <li><a href="/service_type" th:text="#{service.type}">Sp Type</a></li>
+                            <li><a href="/data_dict/container_subtype" th:text="#{container.subtype}">Sp Type</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
