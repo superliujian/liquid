@@ -221,10 +221,10 @@
         <div class="form-group">
             <label th:text="#{container.type}">Container Type</label>
             <ul class="list-inline">
-                <li th:each="containerType : ${containerTypes}">
-                    <input type="radio" th:field="*{containerType}" th:value="${containerType.type}"/>
+                <li th:each="containerType : ${containerTypeMap}">
+                    <input type="radio" th:field="*{containerType}" th:value="${containerType.key}"/>
                     <label th:for="${#ids.prev('containerType')}"
-                           th:text="#{${containerType.i18nKey}}">Container Type</label>
+                           th:text="#{${containerType.value}}">Container Type</label>
                 </li>
             </ul>
         </div>
@@ -257,7 +257,7 @@
    <div id="containerSubtypeSec" class="col-lg-4">
         <div class="form-group">
             <label th:text="#{container.subtype}">Container Subtype</label>
-            <select  class="form-control">
+            <select th:field="*{containerSubtypeId}" class="form-control">
                 <option th:each="containerSubtype : ${containerSubtypes}"
                         th:value="${containerSubtype.id}"
                         th:text="${containerSubtype.name}">Container Subtype Name

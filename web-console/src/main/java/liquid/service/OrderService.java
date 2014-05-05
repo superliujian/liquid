@@ -1,6 +1,7 @@
 package liquid.service;
 
 import liquid.context.BusinessContext;
+import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.service.bpm.ActivitiEngineService;
@@ -52,6 +53,9 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private ActivitiEngineService bpmService;
 
+    @Autowired
+    private ContainerSubtypeService containerSubtypeService;
+
     public Order newOrder(List<Location> locations) {
         Order order = new Order();
         Location second = CollectionUtils.tryToGet2ndElement(locations);
@@ -95,11 +99,18 @@ public class OrderService extends AbstractBaseOrderService {
         ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
         Customer customer = customerRepository.findOne(order.getCustomerId());
         Goods goods = goodsRepository.findOne(order.getGoodsId());
+        ContainerSubtype containerSubtype = null;
+        if (order.getContainerType() == ContainerType.OWNED.getType()) {
+            containerSubtype = containerSubtypeService.find(order.getContainerSubtypeId());
+        } else {
+            containerSubtype = containerSubtypeService.find(1L);
+        }
         Location srcLoc = locationRepository.findOne(order.getOrigination());
         Location dstLoc = locationRepository.findOne(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
         if (null != goods) order.setGoods(goods);
+        order.setContainerSubtype(containerSubtype);
         if (null != srcLoc) order.setSrcLoc(srcLoc);
         if (null != dstLoc) order.setDstLoc(dstLoc);
         if (StringUtils.valuable(order.getLoadingEtStr()))
@@ -151,6 +162,7 @@ public class OrderService extends AbstractBaseOrderService {
         order.setDestination(order.getDstLoc().getId());
         order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomer().getId());
+        order.setContainerSubtypeId(order.getContainerSubtype().getId());
         order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
         order.setLoadingEtStr(order.getLoadingEt() == null

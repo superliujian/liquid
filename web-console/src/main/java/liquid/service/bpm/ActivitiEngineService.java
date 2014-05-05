@@ -56,10 +56,10 @@ public class ActivitiEngineService {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", String.valueOf(orderId), variableMap);
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
 
-        Account account = accountService.find(uid);
-        mailNotificationService.send(messageSource.getMessage("process.start", null, Locale.CHINA),
-                messageSource.getMessage("process.start.content", new String[]{uid}, Locale.CHINA),
-                account.getEmail());
+//        Account account = accountService.find(uid);
+//        mailNotificationService.send(messageSource.getMessage("process.start", null, Locale.CHINA),
+//                messageSource.getMessage("process.start.content", new String[]{uid}, Locale.CHINA),
+//                account.getEmail());
     }
 
     public List<HistoricTaskInstance> listCompltedTasks(String businessKey) {

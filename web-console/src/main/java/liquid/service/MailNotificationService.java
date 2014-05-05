@@ -26,6 +26,10 @@ public class MailNotificationService {
     }
 
     public void send(String subject, String content, String... mailTo) {
+        
+    }
+
+    public void send0(String subject, String content, String... mailTo) {
         Session session = Session
                 .getDefaultInstance(properties, new Authenticator() {
                     @Override

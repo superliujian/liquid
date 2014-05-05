@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -94,9 +95,9 @@ public class OrderController extends BaseChargeController {
         return LoadingType.values();
     }
 
-    @ModelAttribute("containerTypes")
-    public ContainerType[] populateContainerTypes() {
-        return ContainerType.values();
+    @ModelAttribute("containerTypeMap")
+    public Map<Integer, String> populateContainerTypes() {
+        return ContainerType.toMap();
     }
 
     @ModelAttribute("containerCaps")

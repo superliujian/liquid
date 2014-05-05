@@ -79,6 +79,13 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "CONTAINER_TYPE")
     private int containerType;
 
+    @Transient
+    private long containerSubtypeId;
+
+    @ManyToOne
+    @JoinColumn(name = "CONTAINER_SUBTYPE_ID")
+    private ContainerSubtype containerSubtype;
+
     @Column(name = "CONTAINER_CAP")
     private int containerCap;
 
@@ -242,6 +249,22 @@ public class BaseOrder extends BaseEntity {
         this.containerType = containerType;
     }
 
+    public long getContainerSubtypeId() {
+        return containerSubtypeId;
+    }
+
+    public void setContainerSubtypeId(long containerSubtypeId) {
+        this.containerSubtypeId = containerSubtypeId;
+    }
+
+    public ContainerSubtype getContainerSubtype() {
+        return containerSubtype;
+    }
+
+    public void setContainerSubtype(ContainerSubtype containerSubtype) {
+        this.containerSubtype = containerSubtype;
+    }
+
     public int getContainerCap() {
         return containerCap;
     }
@@ -300,13 +323,12 @@ public class BaseOrder extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("BaseOrder{");
-        sb.append("serviceTypeid =").append(serviceTypeId);
+        final StringBuilder sb = new StringBuilder("BaseOrder{");
+        sb.append("serviceTypeId=").append(serviceTypeId);
         sb.append(", serviceType=").append(serviceType);
-        sb.append(", orderNo=").append(orderNo);
+        sb.append(", orderNo='").append(orderNo).append('\'');
         sb.append(", customerId=").append(customerId);
-        sb.append(", customerName0=").append(customerName0);
+        sb.append(", customerName0='").append(customerName0).append('\'');
         sb.append(", customer=").append(customer);
         sb.append(", srcLoc=").append(srcLoc);
         sb.append(", origination=").append(origination);
@@ -319,6 +341,8 @@ public class BaseOrder extends BaseEntity {
         sb.append(", goods=").append(goods);
         sb.append(", goodsWeight=").append(goodsWeight);
         sb.append(", containerType=").append(containerType);
+        sb.append(", containerSubtypeId=").append(containerSubtypeId);
+        sb.append(", containerSubtype=").append(containerSubtype);
         sb.append(", containerCap=").append(containerCap);
         sb.append(", containerQty=").append(containerQty);
         sb.append(", salesPriceCny=").append(salesPriceCny);
