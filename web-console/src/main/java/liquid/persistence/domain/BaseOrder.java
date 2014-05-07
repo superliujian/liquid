@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -112,6 +114,9 @@ public class BaseOrder extends BaseEntity {
     // 1 saved; 2: submitted
     @Column(name = "STATUS")
     private int status;
+
+    @Transient
+    private List<ServiceItem> serviceItems = new ArrayList<>();
 
     public long getServiceTypeId() {
         return serviceTypeId;
@@ -319,6 +324,14 @@ public class BaseOrder extends BaseEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<ServiceItem> getServiceItems() {
+        return serviceItems;
+    }
+
+    public void setServiceItems(List<ServiceItem> serviceItems) {
+        this.serviceItems = serviceItems;
     }
 
     @Override

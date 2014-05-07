@@ -115,6 +115,9 @@ public class OrderController extends BaseChargeController {
         return OrderStatus.values();
     }
 
+    @ModelAttribute("chargeTypeMap")
+    public Map<Long, String> populateChargeTypes() {return chargeService.getChargeTypes(); }
+
     @Deprecated
     @RequestMapping(method = RequestMethod.GET)
     public String initFind(Model model, Principal principal) {
@@ -213,6 +216,17 @@ public class OrderController extends BaseChargeController {
             order.setUpdateTime(new Date());
             orderService.submit(order);
             return "redirect:/order?number=0";
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "addServiceItem")
+    public String addServiceItem(@Valid @ModelAttribute Order order, BindingResult bindingResult) {
+        logger.debug("order: {}", order);
+        if (bindingResult.hasErrors()) {
+            return "order/form";
+        } else {
+            order.getServiceItems().add(new ServiceItem());
+            return "order/form";
         }
     }
 
