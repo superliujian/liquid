@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
@@ -220,14 +221,17 @@ public class OrderController extends BaseChargeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "addServiceItem")
-    public String addServiceItem(@Valid @ModelAttribute Order order, BindingResult bindingResult) {
+    public String addServiceItem(@ModelAttribute Order order) {
         logger.debug("order: {}", order);
-        if (bindingResult.hasErrors()) {
-            return "order/form";
-        } else {
-            order.getServiceItems().add(new ServiceItem());
-            return "order/form";
-        }
+        order.getServiceItems().add(new ServiceItem());
+        return "order/form";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "removeServiceItem")
+    public String removeRow(@ModelAttribute Order order, HttpServletRequest req) {
+        final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
+        order.getServiceItems().remove(rowId.intValue());
+        return "order/form";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
