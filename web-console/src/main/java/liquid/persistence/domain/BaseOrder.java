@@ -108,6 +108,12 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "GRAND_TOTAL")
     private long grandTotal;
 
+    @Column(name = "USD_TOTAL")
+    private long usdTotal;
+
+    @Column(name = "CNY_TOTAL")
+    private long cnyTotal;
+
     @Column(name = "CREATE_ROLE")
     private String createRole;
 
@@ -318,6 +324,22 @@ public class BaseOrder extends BaseEntity {
         this.createRole = createRole;
     }
 
+    public long getUsdTotal() {
+        return usdTotal;
+    }
+
+    public void setUsdTotal(long usdTotal) {
+        this.usdTotal = usdTotal;
+    }
+
+    public long getCnyTotal() {
+        return cnyTotal;
+    }
+
+    public void setCnyTotal(long cnyTotal) {
+        this.cnyTotal = cnyTotal;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -362,6 +384,8 @@ public class BaseOrder extends BaseEntity {
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", grandTotal=").append(grandTotal);
         sb.append(", createRole='").append(createRole).append('\'');
+        sb.append(", usdTotal=").append(usdTotal);
+        sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

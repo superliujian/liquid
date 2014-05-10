@@ -71,6 +71,9 @@ public class OrderController extends BaseChargeController {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
+
     @ModelAttribute("serviceTypes")
     public Iterable<ServiceType> populateServiceTypes() {
         return serviceTypeService.findAll();
@@ -118,6 +121,9 @@ public class OrderController extends BaseChargeController {
 
     @ModelAttribute("chargeTypeMap")
     public Map<Long, String> populateChargeTypes() {return chargeService.getChargeTypes(); }
+
+    @ModelAttribute("serviceSubtypes")
+    public Iterable<ServiceSubtype> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
 
     @Deprecated
     @RequestMapping(method = RequestMethod.GET)
@@ -229,7 +235,7 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.POST, params = "removeServiceItem")
     public String removeRow(@ModelAttribute Order order, HttpServletRequest req) {
-        final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
+        final Integer rowId = Integer.valueOf(req.getParameter("removeServiceItem"));
         order.getServiceItems().remove(rowId.intValue());
         return "order/form";
     }

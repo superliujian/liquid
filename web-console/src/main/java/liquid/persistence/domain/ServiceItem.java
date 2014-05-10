@@ -14,18 +14,11 @@ public class ServiceItem extends BaseEntity {
     private String name;
 
     @Transient
-    private long chargeTypeId;
+    private long serviceSubtypeId;
 
     @ManyToOne
-    @JoinColumn(name = "CHARGE_TYPE_ID")
-    private ChargeType chargeType;
-
-    @Transient
-    private long serviceProviderId;
-
-    @ManyToOne
-    @JoinColumn(name = "SP_ID")
-    private ServiceProvider serviceProvider;
+    @JoinColumn(name = "SERVICE_SUBTYPE_ID")
+    private ServiceSubtype serviceSubtype;
 
     @Column(name = "CURRENCY")
     private String currency;
@@ -33,8 +26,8 @@ public class ServiceItem extends BaseEntity {
     @Column(name = "PRICE")
     private long price;
 
-    @Column(name = "COST")
-    private long cost;
+    @Column(name = "STATUS")
+    private int status;
 
     public String getCode() {
         return code;
@@ -52,36 +45,20 @@ public class ServiceItem extends BaseEntity {
         this.name = name;
     }
 
-    public long getChargeTypeId() {
-        return chargeTypeId;
+    public long getServiceSubtypeId() {
+        return serviceSubtypeId;
     }
 
-    public void setChargeTypeId(long chargeTypeId) {
-        this.chargeTypeId = chargeTypeId;
+    public void setServiceSubtypeId(long serviceSubtypeId) {
+        this.serviceSubtypeId = serviceSubtypeId;
     }
 
-    public ChargeType getChargeType() {
-        return chargeType;
+    public ServiceSubtype getServiceSubtype() {
+        return serviceSubtype;
     }
 
-    public void setChargeType(ChargeType chargeType) {
-        this.chargeType = chargeType;
-    }
-
-    public long getServiceProviderId() {
-        return serviceProviderId;
-    }
-
-    public void setServiceProviderId(long serviceProviderId) {
-        this.serviceProviderId = serviceProviderId;
-    }
-
-    public ServiceProvider getServiceProvider() {
-        return serviceProvider;
-    }
-
-    public void setServiceProvider(ServiceProvider serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public void setServiceSubtype(ServiceSubtype serviceSubtype) {
+        this.serviceSubtype = serviceSubtype;
     }
 
     public String getCurrency() {
@@ -100,12 +77,12 @@ public class ServiceItem extends BaseEntity {
         this.price = price;
     }
 
-    public long getCost() {
-        return cost;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCost(long cost) {
-        this.cost = cost;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override
@@ -113,13 +90,11 @@ public class ServiceItem extends BaseEntity {
         final StringBuilder sb = new StringBuilder("ServiceItem{");
         sb.append("code='").append(code).append('\'');
         sb.append(", name='").append(name).append('\'');
-        sb.append(", chargeTypeId=").append(chargeTypeId);
-        sb.append(", chargeType=").append(chargeType);
-        sb.append(", serviceProviderId=").append(serviceProviderId);
-        sb.append(", serviceProvider=").append(serviceProvider);
+        sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
+        sb.append(", serviceSubtype=").append(serviceSubtype);
         sb.append(", currency='").append(currency).append('\'');
         sb.append(", price=").append(price);
-        sb.append(", cost=").append(cost);
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

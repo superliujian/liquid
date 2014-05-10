@@ -56,7 +56,16 @@
                         <a href="/charge/summary?number=0" th:text="#{charge}">Charge</a>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')">
-                        <a href="/customer" th:text="#{customer}">Customer</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span th:text="#{customer.service}">Customer Service</span><b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/customer" th:text="#{customer}">Customer</a></li>
+                            <li><a href="/service_subtype" th:text="#{service.subtype}">Service Subtype</a></li>
+                            <!--
+                            <li><a href="/service_item" th:text="#{service.item}">Service Item</a></li>
+                            -->
+                        </ul>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_MARKETING', 'ROLE_OPERATING')">
                         <a href="/sp" th:text="#{sp}">SP</a>

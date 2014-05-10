@@ -33,6 +33,8 @@ import java.util.Properties;
                         SpRepository.class,
                         SpTypeRepository.class,
                         ServiceTypeRepository.class,
+                        ServiceSubtypeRepository.class,
+                        ServiceItemRepository.class,
                         ContainerSubtypeRepository.class,
                         SequenceRepository.class,
                         LocationRepository.class,
