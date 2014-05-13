@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<!-- /.container -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-th"></span><br/>
+                <span th:text="#{service.type.yard}">Yard</span>
+            </button>
+        </div>
+
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-globe"></span><br/>
+                <span th:text="#{service.type.foreign}">Foreign</span>
+            </button>
+        </div>
+
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-transfer"></span><br/>
+                <span th:text="#{service.type.domestic}">Domestic</span>
+            </button>
+        </div>
+
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-home"></span><br/>
+                <span th:text="#{service.type.vessel.and.rail}">Vessel and Rail</span>
+            </button>
+        </div>        
+    </div><!-- row -->   
+    
+    <br />
+    
+    <div class="row">
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-road"></span><br/>
+                <span th:text="#{service.type.truck.and.rail}">Truck and Rail</span>
+            </button>
+        </div>
+
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-link"></span><br/>
+                <span th:text="#{service.type.truck.and.port}">Truck and Port</span>
+            </button>
+        </div>
+
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-primary btn-lg btn-block">
+                <span class="glyphicon glyphicon-send"></span><br/>
+                <span th:text="#{service.type.delivery}">Delivery</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

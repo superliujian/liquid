@@ -289,4 +289,10 @@ public class OrderController extends BaseChargeController {
         model.addAttribute("tab", tab);
         return "order/" + tab;
     }
+
+    @RequestMapping(value = "/service_type", method = RequestMethod.GET)
+    public String listServiceType() {
+
+        return "order/service_type";
+    }
 }
