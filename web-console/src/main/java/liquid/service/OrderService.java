@@ -99,18 +99,21 @@ public class OrderService extends AbstractBaseOrderService {
         ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
         Customer customer = customerRepository.findOne(order.getCustomerId());
         Goods goods = goodsRepository.findOne(order.getGoodsId());
-        ContainerSubtype containerSubtype = null;
-        if (order.getContainerType() == ContainerType.OWNED.getType()) {
-            containerSubtype = containerSubtypeService.find(order.getContainerSubtypeId());
-        } else {
-            containerSubtype = containerSubtypeService.find(1L);
+        if (null == order.getContainerSubtype()) {
+            ContainerSubtype containerSubtype;
+            if (order.getContainerType() == ContainerType.OWNED.getType()) {
+                containerSubtype = containerSubtypeService.find(order.getContainerSubtypeId());
+            } else {
+                containerSubtype = containerSubtypeService.find(1L);
+            }
+            order.setContainerSubtype(containerSubtype);
         }
         Location srcLoc = locationRepository.findOne(order.getOrigination());
         Location dstLoc = locationRepository.findOne(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
         if (null != goods) order.setGoods(goods);
-        order.setContainerSubtype(containerSubtype);
+
         if (null != srcLoc) order.setSrcLoc(srcLoc);
         if (null != dstLoc) order.setDstLoc(dstLoc);
         if (StringUtils.valuable(order.getLoadingEtStr()))
