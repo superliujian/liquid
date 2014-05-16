@@ -69,7 +69,9 @@
                     <th th:text="#{has.delivery}">Has Delivery</th>
                     <th th:text="#{container.type}">Container Type</th>
                     <th th:text="#{container.subtype}">Container Subtype</th>
+                    <!--
                     <th th:text="#{container.capacity}">Container Capacity</th>
+                    -->
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price.cny}">CNY Price</th>
                     <th th:text="#{create.time}">Create Time</th>
@@ -93,7 +95,9 @@
                     <td th:text="#{${order.hasDelivery}}">Has Delivery</td>
                     <td th:text="#{${containerTypeMap[order.containerType]}}">Container Type</td>
                     <td th:text="${order.containerSubtype.name}">Container Subtype</td>
+                    <!--
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
+                    -->
                     <td th:text="${order.containerQty}">Container Quantity</td>
                     <td th:text="${order.salesPriceCny}">CNY Price</td>
                     <td th:text="${order.createTime}">Create Time</td>

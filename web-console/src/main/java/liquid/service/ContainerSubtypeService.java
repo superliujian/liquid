@@ -29,4 +29,8 @@ public class ContainerSubtypeService {
     public Iterable<ContainerSubtype> findEnabled() {
         return containerSubtypeRepository.findByState(0);
     }
+
+    public Iterable<ContainerSubtype> findByContainerType(int containerType) {
+        return containerSubtypeRepository.findByContainerType(containerType);
+    }
 }

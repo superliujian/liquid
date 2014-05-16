@@ -105,9 +105,14 @@ public class OrderController extends BaseChargeController {
         return ContainerCap.values();
     }
 
-    @ModelAttribute("containerSubtypes")
-    public Iterable<ContainerSubtype> populateContainerSubtypes() {
-        return containerSubtypeService.findEnabled();
+    @ModelAttribute("railContainerSubtypes")
+    public Iterable<ContainerSubtype> populateRailContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.RAIL.getType());
+    }
+
+    @ModelAttribute("ownContainerSubtypes")
+    public Iterable<ContainerSubtype> populateOwnContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.OWNED.getType());
     }
 
     @ModelAttribute("status")

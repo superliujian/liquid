@@ -29,6 +29,7 @@
             <!--
             <th th:text="#{service.type.id}">ID</th>
             -->
+            <th th:text="#{container.type}">Container Type</th>
             <th th:text="#{container.subtype.code}">Code</th>
             <th th:text="#{container.subtype.name}">Name</th>
             <th th:text="#{status}">State</th>
@@ -39,6 +40,7 @@
             <!--
             <td th:text="${serviceType.id}">ID</td>
             -->
+            <td th:text="#{${containerTypeMap[containerSubtype.containerType]}}">Container Type</td>
             <td th:text="${containerSubtype.code}">Code</td>
             <td th:text="${containerSubtype.name}">Name</td>
             <td>
@@ -52,6 +54,20 @@
 
 <div class="container">
     <form action="/data_dict/container_subtype" method="POST" th:object="${containerSubtype}" class="form-horizontal center">
+        <div class="form-group">
+            <label class="col-lg-3 control-label" th:text="#{container.type}">Container Type</label>
+            
+            <div class="col-lg-9">
+                <ul class="list-inline">
+                    <li th:each="containerType : ${containerTypeMap}">
+                        <input type="radio" th:field="*{containerType}" th:value="${containerType.key}"/>
+                        <label th:for="${#ids.prev('containerType')}"
+                               th:text="#{${containerType.value}}">Container Type</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
         <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{container.subtype.code}">Code</label>
 

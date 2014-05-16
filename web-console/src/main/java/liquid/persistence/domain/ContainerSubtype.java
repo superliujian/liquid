@@ -11,6 +11,9 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "CONTAINER_SUBTYPE")
 public class ContainerSubtype extends BaseEntity {
+    @Column(name = "CONTAINER_TYPE")
+    private int containerType;
+
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -23,6 +26,16 @@ public class ContainerSubtype extends BaseEntity {
 
     @Column(name = "STATE")
     private int state;
+
+    public ContainerSubtype() {}
+
+    public int getContainerType() {
+        return containerType;
+    }
+
+    public void setContainerType(int containerType) {
+        this.containerType = containerType;
+    }
 
     public String getCode() {
         return code;
@@ -50,8 +63,9 @@ public class ContainerSubtype extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ContainerType{");
-        sb.append("code='").append(code).append('\'');
+        final StringBuilder sb = new StringBuilder("ContainerSubtype{");
+        sb.append("containerType=").append(containerType);
+        sb.append(", code='").append(code).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", state=").append(state);
         sb.append('}');

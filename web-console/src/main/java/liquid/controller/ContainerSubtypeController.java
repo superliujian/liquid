@@ -1,5 +1,6 @@
 package liquid.controller;
 
+import liquid.metadata.ContainerType;
 import liquid.persistence.domain.ContainerSubtype;
 import liquid.service.ContainerSubtypeService;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * Created by redbrick9 on 5/4/14.
@@ -24,6 +26,11 @@ public class ContainerSubtypeController {
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
+
+    @ModelAttribute("containerTypeMap")
+    public Map<Integer, String> populateContainerTypes() {
+        return ContainerType.toMap();
+    }
 
     @ModelAttribute("containerSubtypes")
     public Iterable<ContainerSubtype> findAll() {

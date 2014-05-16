@@ -8,4 +8,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ContainerSubtypeRepository extends CrudRepository<ContainerSubtype, Long> {
     Iterable<ContainerSubtype> findByState(int state);
+
+    Iterable<ContainerSubtype> findByContainerType(int containerType);
 }
