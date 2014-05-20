@@ -1,7 +1,10 @@
 package liquid.persistence.repository;
 
 import liquid.persistence.domain.Container;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+
 
 /**
  * TODO: Comments.
@@ -11,4 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ContainerRepository extends CrudRepository<Container, Long> {
     Iterable<Container> findByStatusAndType(int status, int type);
+
+    Page<Container> findAll(Pageable pageable);
 }

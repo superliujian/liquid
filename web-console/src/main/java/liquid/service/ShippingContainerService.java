@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -107,7 +110,7 @@ public class ShippingContainerService {
         }
     }
 
-    public Collection<ShippingContainer> findByRoute(Route route) {
+    public List<ShippingContainer> findByRoute(Route route) {
         return scRepository.findByRoute(route);
     }
 

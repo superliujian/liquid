@@ -98,7 +98,13 @@ public class OrderService extends AbstractBaseOrderService {
     public void prepare(Order order) {
         ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
         Customer customer = customerRepository.findOne(order.getCustomerId());
-        Goods goods = goodsRepository.findOne(order.getGoodsId());
+
+//        Goods goods = goodsRepository.findOne(order.getGoodsId());
+        if (order.getGoodsId() > 0) {
+            Goods goods = new Goods(order.getGoodsId());
+            order.setGoods(goods);
+        }
+
         if (null == order.getContainerSubtype()) {
             if (order.getContainerType() == ContainerType.OWNED.getType()) {
                 order.setContainerSubtypeId(order.getOwnContainerSubtypeId());
@@ -112,7 +118,6 @@ public class OrderService extends AbstractBaseOrderService {
         Location dstLoc = locationRepository.findOne(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
-        if (null != goods) order.setGoods(goods);
 
         if (null != srcLoc) order.setSrcLoc(srcLoc);
         if (null != dstLoc) order.setDstLoc(dstLoc);

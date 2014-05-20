@@ -46,9 +46,9 @@ public class RouteService {
     @Autowired
     private ShippingContainerRepository scRepository;
 
-    public Collection<Route> findByTaskId(String taskId) {
+    public List<Route> findByTaskId(String taskId) {
         Planning planning = planningService.findByTaskId(taskId);
-        Collection<Route> routes = planning.getRoutes();
+        List<Route> routes = planning.getRoutes();
         for (Route route : routes) {
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);

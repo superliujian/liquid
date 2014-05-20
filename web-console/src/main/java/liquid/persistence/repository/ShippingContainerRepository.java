@@ -4,7 +4,7 @@ import liquid.persistence.domain.Route;
 import liquid.persistence.domain.ShippingContainer;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -13,5 +13,5 @@ import java.util.Collection;
  * Time: 12:42 AM
  */
 public interface ShippingContainerRepository extends CrudRepository<ShippingContainer, Long> {
-    Collection<ShippingContainer> findByRoute(Route route);
+    List<ShippingContainer> findByRoute(Route route);
 }

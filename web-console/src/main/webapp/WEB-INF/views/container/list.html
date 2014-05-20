@@ -30,7 +30,7 @@
 
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-body" th:unless="${#lists.isEmpty(containers)}">
+        <div class="panel-body" th:unless="${#lists.isEmpty(page.content)}">
             <table class="table table-striped table-hover table-condensed table-16">
                 <thead>
                 <tr>
@@ -43,7 +43,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="container : ${containers}">
+                <tr th:each="container : ${page.content}">
                     <td th:text="${container.id}">ID</td>
                     <td th:text="${container.bicCode}">BIC Code</td>
                     <td th:text="${container.owner}">Owner</td>
@@ -54,6 +54,23 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    
+    <div id="pagination_bar" class="col-md-offset-1">
+        <ul class="pagination">
+            <li>
+                <a href="/container?number=0">&laquo;</a>
+            </li>
+            <li><a href="/container?nubmer=1" th:if="${page.hasPreviousPage()}"
+                   th:href="'/container?number=' + ${page.number - 1}"
+                   th:text="${page.number}">1</a></li>
+            <li><a href="" th:text="${page.number + 1}">2</a></li>
+            <li><a href="#" th:if="${page.hasNextPage()}"
+                   th:href="'/container?number=' + ${page.number + 1}"
+                   th:text="${page.number + 2}">3</a></li>
+            <li><a href="/container?number={totalPages}" th:href="'/container?number=' + ${page.totalPages - 1}">&raquo;</a>
+            </li>
+        </ul>
     </div>
 </div>
 <!-- /.container -->
@@ -87,6 +104,7 @@
                     </div>
                 </div>
 
+                <!--
                 <div class="form-group">
                     <label class="col-lg-3 control-label" th:text="#{container.type}">Owner</label>
 
@@ -99,7 +117,21 @@
                         </select>
                     </div>
                 </div>
+                -->
 
+                <div class="form-group">
+                    <label class="col-lg-3 control-label" th:text="#{container.subtype}">Container Subtype</label>
+                    
+                    <div class="col-lg-9">
+                        <select th:field="*{type}" class="form-control">
+                            <option th:each="subtype : ${containerSubtypes}"
+                                    th:value="${subtype.id}"
+                                    th:text="${subtype.name}">Container Subtype Name
+                            </option>
+                        </select>
+                    </div>
+                </div>
+        
                 <div class="form-group">
                     <label class="col-lg-3 control-label" th:text="#{container.yard}">Owner</label>
 

@@ -5,6 +5,8 @@ import liquid.persistence.domain.Container;
 import liquid.persistence.domain.Location;
 import liquid.persistence.repository.ContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -29,6 +31,10 @@ public class ContainerService {
 
     public Iterable<Container> findAllInStock(int type) {
         return containerRepository.findByStatusAndType(ContainerStatus.IN_STOCK.getValue(), type);
+    }
+
+    public Page<Container> findAll(Pageable pageable) {
+        return containerRepository.findAll(pageable);
     }
 
     public Container find(long id) {

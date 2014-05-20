@@ -50,7 +50,7 @@
                         </ul>
                     </li>
                     <li sec:authorize="hasRole('ROLE_CONTAINER')">
-                        <a href="/container" th:text="#{container}">Container</a>
+                        <a href="/container?number=0" th:text="#{container}">Container</a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_COMMERCE')">
                         <a href="/charge/summary?number=0" th:text="#{charge}">Charge</a>

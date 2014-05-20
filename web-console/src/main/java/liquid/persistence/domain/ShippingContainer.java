@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "SHIPPING_CONTAINER")
 public class ShippingContainer extends BaseEntity {
+    @Column(name = "BIC_CODE")
+    private String bicCode;
 
     @ManyToOne
     @JoinColumn(name = "CONTAINER_ID")
@@ -34,6 +36,14 @@ public class ShippingContainer extends BaseEntity {
     @NotEmpty
     @Column(name = "CONTACT_PHONE")
     private String contactPhone;
+
+    public String getBicCode() {
+        return bicCode;
+    }
+
+    public void setBicCode(String bicCode) {
+        this.bicCode = bicCode;
+    }
 
     public Container getContainer() {
         return container;

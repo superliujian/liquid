@@ -1,27 +1,29 @@
 package liquid.controller;
 
+import liquid.domain.ContainerAllocation;
+import liquid.domain.RouteContainerAllocation;
+import liquid.facade.ContainerAllocationFacade;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
-import liquid.service.*;
-import liquid.service.bpm.ActivitiEngineService;
-import org.activiti.engine.task.Task;
+import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.Route;
+import liquid.persistence.domain.ShippingContainer;
+import liquid.service.ChargeService;
+import liquid.service.ContainerService;
+import liquid.service.RouteService;
+import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Container allocation controller.
@@ -46,7 +48,9 @@ public class AllocationController extends BaseTaskController {
     @Autowired
     private ChargeService chargeService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @Autowired
+    private ContainerAllocationFacade containerAllocationFacade;
+
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         scService.initialize(taskId);
@@ -60,6 +64,24 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "allocation/main";
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String init(@PathVariable String taskId, Model model) {
+        logger.debug("taskId: {}", taskId);
+
+        ContainerAllocation containerAllocation = containerAllocationFacade.computeContainerAllocation(taskId);
+
+        model.addAttribute("containerAllocation", containerAllocation);
+        return "allocation/rail_container";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String allocate(@PathVariable String taskId, ContainerAllocation containerAllocation, Model model) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("containerAllocation: {}", containerAllocation);
+
+        return "redirect:/task/" + taskId + "/allocation";
     }
 
     @RequestMapping(value = "/route/{routeId}/sc/{scId}", method = RequestMethod.GET)
