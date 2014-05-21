@@ -80,7 +80,7 @@ public class AllocationController extends BaseTaskController {
     public String allocate(@PathVariable String taskId, ContainerAllocation containerAllocation, Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerAllocation: {}", containerAllocation);
-
+        containerAllocationFacade.allocate(containerAllocation);
         return "redirect:/task/" + taskId + "/allocation";
     }
 

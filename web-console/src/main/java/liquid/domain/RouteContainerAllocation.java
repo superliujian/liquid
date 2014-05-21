@@ -1,23 +1,51 @@
 package liquid.domain;
 
-import liquid.persistence.domain.Route;
-
 /**
  * Created by redbrick9 on 5/20/14.
  */
 public class RouteContainerAllocation {
-    private Route route;
+    private long allocationId;
+
+    private long routeId;
+
+    private String typeNameKey;
+
+    private String subtypeName;
 
     private String bicCode;
 
     public RouteContainerAllocation() {}
 
-    public Route getRoute() {
-        return route;
+    public long getAllocationId() {
+        return allocationId;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setAllocationId(long allocationId) {
+        this.allocationId = allocationId;
+    }
+
+    public long getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(long routeId) {
+        this.routeId = routeId;
+    }
+
+    public String getTypeNameKey() {
+        return typeNameKey;
+    }
+
+    public void setTypeNameKey(String typeNameKey) {
+        this.typeNameKey = typeNameKey;
+    }
+
+    public String getSubtypeName() {
+        return subtypeName;
+    }
+
+    public void setSubtypeName(String subtypeName) {
+        this.subtypeName = subtypeName;
     }
 
     public String getBicCode() {

@@ -681,4 +681,7 @@ public class ShippingContainerService {
         }
     }
 
+    public void save(Iterable<ShippingContainer> shippingContainers) {
+        scRepository.save(shippingContainers);
+    }
 }
