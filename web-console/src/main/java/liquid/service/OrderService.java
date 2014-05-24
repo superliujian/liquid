@@ -56,9 +56,9 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
-    public Order newOrder(List<Location> locations) {
+    public Order newOrder(List<LocationEntity> locationEntities) {
         Order order = new Order();
-        Location second = CollectionUtils.tryToGet2ndElement(locations);
+        LocationEntity second = CollectionUtils.tryToGet2ndElement(locationEntities);
         order.setDestination(second.getId());
         order.setLoadingEtStr(DateUtils.stringOf(new Date()));
         return order;
@@ -111,11 +111,11 @@ public class OrderService extends AbstractBaseOrderService {
             } else {
                 order.setContainerSubtypeId(order.getRailContainerSubtypeId());
             }
-            ContainerSubtype containerSubtype = containerSubtypeService.find(order.getContainerSubtypeId());
-            order.setContainerSubtype(containerSubtype);
+            ContainerSubtypeEntity containerSubtypeEntity = containerSubtypeService.find(order.getContainerSubtypeId());
+            order.setContainerSubtype(containerSubtypeEntity);
         }
-        Location srcLoc = locationRepository.findOne(order.getOrigination());
-        Location dstLoc = locationRepository.findOne(order.getDestination());
+        LocationEntity srcLoc = locationRepository.findOne(order.getOrigination());
+        LocationEntity dstLoc = locationRepository.findOne(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
 

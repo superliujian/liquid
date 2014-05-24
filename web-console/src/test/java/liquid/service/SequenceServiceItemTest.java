@@ -7,7 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * Created by redbrick9 on 4/26/14.
  */
-public class SequenceServiceTest {
+public class SequenceServiceItemTest {
     @Test
     public void getNextValue() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();

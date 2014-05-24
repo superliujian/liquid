@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Time: 10:33 AM
  */
 @Entity(name = "LOCATION")
-public class Location extends BaseEntity {
+public class LocationEntity extends BaseEntity {
 
     @NotNull
     @NotEmpty
@@ -37,6 +37,12 @@ public class Location extends BaseEntity {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public LocationEntity() { }
+
+    public LocationEntity(Long id) {
+        super(id);
     }
 
     @Override

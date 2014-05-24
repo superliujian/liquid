@@ -17,7 +17,7 @@ public class RailContainer extends BaseLegContainer {
 
     @ManyToOne
     @JoinColumn(name = "FLEET_ID")
-    private ServiceProvider fleet;
+    private ServiceProviderEntity fleet;
 
     @Column(name = "TRUCKER")
     private String trucker;
@@ -89,11 +89,11 @@ public class RailContainer extends BaseLegContainer {
     public RailContainer() {
     }
 
-    public ServiceProvider getFleet() {
+    public ServiceProviderEntity getFleet() {
         return fleet;
     }
 
-    public void setFleet(ServiceProvider fleet) {
+    public void setFleet(ServiceProviderEntity fleet) {
         this.fleet = fleet;
     }
 

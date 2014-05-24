@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * Created by redbrick9 on 5/4/14.
  */
 @Entity(name = "CONTAINER_SUBTYPE")
-public class ContainerSubtype extends BaseEntity {
+public class ContainerSubtypeEntity extends BaseEntity {
     @Column(name = "CONTAINER_TYPE")
     private int containerType;
 
@@ -27,7 +27,11 @@ public class ContainerSubtype extends BaseEntity {
     @Column(name = "STATE")
     private int state;
 
-    public ContainerSubtype() {}
+    public ContainerSubtypeEntity() {}
+
+    public ContainerSubtypeEntity(Long id) {
+        super(id);
+    }
 
     public int getContainerType() {
         return containerType;

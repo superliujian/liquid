@@ -19,6 +19,12 @@ public class ChargeType extends BaseEntity {
     @Column(name = "NAME")
     private String name;
 
+    public ChargeType() {}
+
+    public ChargeType(Long id) {
+        super(id);
+    }
+
     public String getName() {
         return name;
     }

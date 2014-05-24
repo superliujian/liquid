@@ -54,7 +54,7 @@ public class ShippingContainerService {
     private LegRepository legRepository;
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
 
     @Transactional("transactionManager")
     public void initialize(String taskId) {
@@ -90,23 +90,23 @@ public class ShippingContainerService {
             containerService.save(oldOne.getContainer());
         }
 
-        Container container = containerService.find(formBean.getContainerId());
-        formBean.setContainer(container);
+        ContainerEntity containerEntity = containerService.find(formBean.getContainerId());
+        formBean.setContainer(containerEntity);
         scRepository.save(formBean);
 
-        container.setStatus(ContainerStatus.ALLOCATED.getValue());
-        containerService.save(container);
+        containerEntity.setStatus(ContainerStatus.ALLOCATED.getValue());
+        containerService.save(containerEntity);
     }
 
     @Transactional("transactionManager")
     public void remove(long scId) {
         ShippingContainer sc = scRepository.findOne(scId);
-        Container container = sc.getContainer();
+        ContainerEntity containerEntity = sc.getContainer();
         scRepository.delete(scId);
 
-        if (null != container) {
-            container.setStatus(ContainerStatus.IN_STOCK.getValue());
-            containerService.save(container);
+        if (null != containerEntity) {
+            containerEntity.setStatus(ContainerStatus.IN_STOCK.getValue());
+            containerService.save(containerEntity);
         }
     }
 
@@ -255,7 +255,7 @@ public class ShippingContainerService {
 
     public void saveTruck(TruckDto truck) {
         RailContainer container = rcRepository.findOne(truck.getRailContainerId());
-        ServiceProvider fleet = spService.find(truck.getFleetId());
+        ServiceProviderEntity fleet = serviceProviderService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
             Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());

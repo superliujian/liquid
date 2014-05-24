@@ -18,7 +18,7 @@ public class ShippingContainer extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "CONTAINER_ID")
-    private Container container;
+    private ContainerEntity container;
 
     @Transient
     private long containerId;
@@ -45,11 +45,11 @@ public class ShippingContainer extends BaseEntity {
         this.bicCode = bicCode;
     }
 
-    public Container getContainer() {
+    public ContainerEntity getContainer() {
         return container;
     }
 
-    public void setContainer(Container container) {
+    public void setContainer(ContainerEntity container) {
         this.container = container;
     }
 

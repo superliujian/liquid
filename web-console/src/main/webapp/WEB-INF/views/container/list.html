@@ -36,8 +36,8 @@
                 <tr>
                     <th th:text="#{container.id}">ID</th>
                     <th>BIC Code</th>
+                    <th th:text="#{container.subtype}">Subtype</th>
                     <th th:text="#{container.owner}">Owner</th>
-                    <th th:text="#{container.type}">Type</th>
                     <th th:text="#{container.yard}">Yard</th>
                     <th th:text="#{status}">Status</th>
                 </tr>
@@ -46,8 +46,8 @@
                 <tr th:each="container : ${page.content}">
                     <td th:text="${container.id}">ID</td>
                     <td th:text="${container.bicCode}">BIC Code</td>
-                    <td th:text="${container.owner}">Owner</td>
-                    <td th:text="${containerTypeMap[container.type]}">Type</td>
+                    <td th:text="${container.subtype.name}">Type</td>
+                    <td th:text="${container.owner.name}">Owner</td>
                     <td th:text="${container.yard.name}">Yard</td>
                     <td th:text="#{${statusArray[__${container.status}__].i18nKey}}">Status</td>
                 </tr>
@@ -92,17 +92,18 @@
                     </div>
                 </div>
 
-                <div class="form-group" th:classappend="${#fields.hasErrors('owner')} ? 'has-error'">
+                <div class="form-group">
                     <label class="col-lg-3 control-label" th:text="#{container.owner} + ' *'">Owner</label>
 
                     <div class="col-lg-9">
-                        <input type="text" th:field="*{owner}" class="form-control"/>
+                        <select th:field="*{ownerId}" class="form-control">
+                            <option th:each="owner : ${owners}"
+                                    th:value="${owner.id}"
+                                    th:text="${owner.name}">Owner Name
+                            </option>
+                        </select>
                     </div>
-
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <span class="help-inline" th:errors="*{owner}">error</span>
-                    </div>
-                </div>
+                </div><!-- Owner -->
 
                 <!--
                 <div class="form-group">
@@ -123,7 +124,7 @@
                     <label class="col-lg-3 control-label" th:text="#{container.subtype}">Container Subtype</label>
                     
                     <div class="col-lg-9">
-                        <select th:field="*{type}" class="form-control">
+                        <select th:field="*{subtypeId}" class="form-control">
                             <option th:each="subtype : ${containerSubtypes}"
                                     th:value="${subtype.id}"
                                     th:text="${subtype.name}">Container Subtype Name

@@ -25,5 +25,5 @@ public class ContainerAllocation extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "CONTAINER_ID")
-    private Container container;
+    private ContainerEntity containerEntity;
 }

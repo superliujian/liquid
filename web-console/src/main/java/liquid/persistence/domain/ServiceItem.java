@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by tao on 12/24/13.
  */
-@Entity(name = "SERVICE")
-public class Service extends BaseEntity {
+@Entity(name = "SERVICE_ITEM")
+public class ServiceItem extends BaseEntity {
     @NotNull
     @NotEmpty
     @Column(name = "NAME")
@@ -24,7 +24,7 @@ public class Service extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
-    private ServiceProvider sp;
+    private ServiceProviderEntity serviceProvider;
 
     public String getName() {
         return name;
@@ -42,12 +42,12 @@ public class Service extends BaseEntity {
         this.chargeType = chargeType;
     }
 
-    public ServiceProvider getSp() {
-        return sp;
+    public ServiceProviderEntity getServiceProvider() {
+        return serviceProvider;
     }
 
-    public void setSp(ServiceProvider sp) {
-        this.sp = sp;
+    public void setServiceProvider(ServiceProviderEntity serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Service extends BaseEntity {
         final StringBuilder sb = new StringBuilder("Service{");
         sb.append("name='").append(name).append('\'');
         sb.append(", chargeType=").append(chargeType);
-        sb.append(", sp=").append(sp);
+        sb.append(", sp=").append(serviceProvider);
         sb.append('}');
         return sb.toString();
     }

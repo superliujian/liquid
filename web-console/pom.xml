@@ -24,6 +24,7 @@
         <mysql-version>5.1.28</mysql-version>
         <hibernate-version>4.3.0.Final</hibernate-version>
         <hibernate-validator-version>5.0.2.Final</hibernate-validator-version>
+        <hibernate-jpamodelgen.version>4.3.5.Final</hibernate-jpamodelgen.version>
         <jackson-version>2.3.1</jackson-version>
 
         <native2ascii-version>1.0-beta-1</native2ascii-version>
@@ -184,6 +185,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>${hibernate-jpamodelgen.version}</version>
+            <optional>true</optional>
+        </dependency>
 
         <!-- jackson -->
         <dependency>
@@ -229,6 +236,19 @@
                     <systemProperties>
                         <APP_ENV>liquid_dev</APP_ENV>
                     </systemProperties>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-version}</version>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                    <compilerArguments>
+                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                    </compilerArguments>
                 </configuration>
             </plugin>
         </plugins>

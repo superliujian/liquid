@@ -6,7 +6,7 @@ import liquid.persistence.domain.*;
 import liquid.service.ChargeService;
 import liquid.service.PlanningService;
 import liquid.service.RouteService;
-import liquid.service.SpService;
+import liquid.service.ServiceProviderService;
 import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class PurchaseController extends BaseTaskController {
     private RouteService routeService;
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
 
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
@@ -57,7 +57,7 @@ public class PurchaseController extends BaseTaskController {
         logger.debug("legId: {}", legId);
 
         Map<Long, String> chargeTypes = chargeService.getChargeTypes();
-        Iterable<ServiceProvider> sps = spService.findByType(spService.spTypeByChargeType(chargeTypes.entrySet().iterator().next().getKey().intValue()));
+        Iterable<ServiceProviderEntity> sps = serviceProviderService.findByType(serviceProviderService.spTypeByChargeType(chargeTypes.entrySet().iterator().next().getKey().intValue()));
 
         Route route = routeService.find(routeId);
         Leg leg = planningService.findLeg(legId);

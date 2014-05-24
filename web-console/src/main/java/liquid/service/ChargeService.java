@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.Max;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class ChargeService {
     private LegRepository legRepository;
 
     @Autowired
-    private SpRepository spRepository;
+    private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
     private OrderService orderService;
@@ -66,7 +65,7 @@ public class ChargeService {
 
     @Transactional("transactionManager")
     public Charge addCharge(Charge charge) {
-        ServiceProvider sp = spRepository.findOne(charge.getSpId());
+        ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
         charge.setSp(sp);
 
         Route route = routeService.find(charge.getFormRouteId());
@@ -110,7 +109,7 @@ public class ChargeService {
         Order order = orderService.findByTaskId(charge.getTaskId());
         charge.setOrder(order);
 
-        ServiceProvider sp = spRepository.findOne(charge.getSpId());
+        ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
         charge.setSp(sp);
 
         ChargeType type = ctRepository.findOne(charge.getTypeId());

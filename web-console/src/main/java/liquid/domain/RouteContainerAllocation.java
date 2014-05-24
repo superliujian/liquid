@@ -12,7 +12,19 @@ public class RouteContainerAllocation {
 
     private String subtypeName;
 
+    /**
+     * For the rail container.
+     */
     private String bicCode;
+
+    /**
+     * For the non rail container.
+     */
+    private long containerId;
+
+    private String owner;
+
+    private String yard;
 
     public RouteContainerAllocation() {}
 
@@ -54,5 +66,29 @@ public class RouteContainerAllocation {
 
     public void setBicCode(String bicCode) {
         this.bicCode = bicCode;
+    }
+
+    public long getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(long containerId) {
+        this.containerId = containerId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getYard() {
+        return yard;
+    }
+
+    public void setYard(String yard) {
+        this.yard = yard;
     }
 }
