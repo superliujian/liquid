@@ -105,9 +105,14 @@ public class OrderController extends BaseChargeController {
         return ContainerCap.values();
     }
 
-    @ModelAttribute("containerSubtypes")
-    public Iterable<ContainerSubtype> populateContainerSubtypes() {
-        return containerSubtypeService.findEnabled();
+    @ModelAttribute("railContainerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateRailContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.RAIL);
+    }
+
+    @ModelAttribute("ownContainerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateOwnContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.OWNED);
     }
 
     @ModelAttribute("status")
@@ -151,11 +156,11 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model) {
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
 
-        Order order = orderService.newOrder(locations);
+        Order order = orderService.newOrder(locationEntities);
 
-        model.addAttribute("locations", locations);
+        model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         return "order/form";
     }
@@ -172,8 +177,8 @@ public class OrderController extends BaseChargeController {
         }
 
         if (bindingResult.hasErrors()) {
-            List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-            model.addAttribute("locations", locations);
+            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+            model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
             order.setCreateRole(RoleHelper.getRole(principal));
@@ -202,8 +207,8 @@ public class OrderController extends BaseChargeController {
         }
 
         if (bindingResult.hasErrors()) {
-            List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-            model.addAttribute("locations", locations);
+            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+            model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
             order.setCreateRole(RoleHelper.getRole(principal));
@@ -222,8 +227,8 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
 
         Order order = orderService.find(id);
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-        model.addAttribute("locations", locations);
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+        model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
@@ -245,14 +250,14 @@ public class OrderController extends BaseChargeController {
         Order order = orderService.find(id);
         logger.debug("order: {}", order);
 
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
 
         if ("duplicate".equals(action)) {
             order = orderService.duplicate(order);
             logger.debug("order: {}", order);
         }
 
-        model.addAttribute("locations", locations);
+        model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         return "order/form";
     }

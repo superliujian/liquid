@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Time: 4:38 PM
  */
 @Entity(name = "SERVICE_PROVIDER")
-public class ServiceProvider extends BaseEntity {
+public class ServiceProviderEntity extends BaseEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -53,6 +53,12 @@ public class ServiceProvider extends BaseEntity {
 
     @Transient
     private long[] chargeTypeIds;
+
+    public ServiceProviderEntity() { }
+
+    public ServiceProviderEntity(Long id) {
+        super(id);
+    }
 
     public String getCode() {
         return code;

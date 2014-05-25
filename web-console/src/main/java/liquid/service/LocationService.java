@@ -1,6 +1,6 @@
 package liquid.service;
 
-import liquid.persistence.domain.Location;
+import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,20 @@ import java.util.List;
  */
 @Service
 public class LocationService {
+    private static final int LOCATION_YARD_TYPE = 3;
 
     @Autowired
     private LocationRepository locationRepository;
 
-    public List<Location> findByType(int type) {
+    public List<LocationEntity> findByType(int type) {
         return locationRepository.findByType(type);
     }
 
-    public Location find(long id) {
+    public LocationEntity find(long id) {
         return locationRepository.findOne(id);
+    }
+
+    public List<LocationEntity> findYards() {
+        return findByType(LOCATION_YARD_TYPE);
     }
 }

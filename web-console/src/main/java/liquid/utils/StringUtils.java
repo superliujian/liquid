@@ -7,8 +7,7 @@ package liquid.utils;
  * Time: 9:43 PM
  */
 public class StringUtils {
-    private StringUtils() {
-    }
+    private StringUtils() {}
 
     public static boolean valuable(String value) {
         return value != null && value.trim().length() > 0;
@@ -26,5 +25,9 @@ public class StringUtils {
             sb.append(values[i]);
         }
         return sb.toString();
+    }
+
+    public static boolean valid(String value) {
+        return (null == value || 0 == value.trim().length()) ? false : true;
     }
 }

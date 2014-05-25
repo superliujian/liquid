@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.persistence.domain.SpType;
-import liquid.persistence.repository.SpTypeRepository;
+import liquid.persistence.repository.ServiceProviderTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +27,11 @@ public class SpTypeController {
     private static final Logger logger = LoggerFactory.getLogger(SpTypeController.class);
 
     @Autowired
-    private SpTypeRepository spTypeRepository;
+    private ServiceProviderTypeRepository serviceProviderTypeRepository;
 
     @ModelAttribute("spTypes")
     public Iterable<SpType> populateCts() {
-        return spTypeRepository.findAll();
+        return serviceProviderTypeRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -48,7 +48,7 @@ public class SpTypeController {
         if (bindingResult.hasErrors()) {
             return "data_dict/sp_type";
         } else {
-            spTypeRepository.save(spType);
+            serviceProviderTypeRepository.save(spType);
             return "redirect:/sp_type";
         }
     }

@@ -1,8 +1,6 @@
 package liquid.persistence.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,7 +19,7 @@ public class Planning extends BaseEntity {
     private boolean sameRoute;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "planning")
-    private Collection<Route> routes;
+    private List<Route> routes;
 
     public Planning() {
     }
@@ -44,11 +42,11 @@ public class Planning extends BaseEntity {
 
     // Transient
 
-    public Collection<Route> getRoutes() {
+    public List<Route> getRoutes() {
         return routes;
     }
 
-    public void setRoutes(Collection<Route> routes) {
+    public void setRoutes(List<Route> routes) {
         this.routes = routes;
     }
 

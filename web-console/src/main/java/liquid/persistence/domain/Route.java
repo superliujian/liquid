@@ -51,6 +51,12 @@ public class Route extends BaseEntity {
     @Transient
     private boolean batch;
 
+    public Route() { }
+
+    public Route(Long id) {
+        super(id);
+    }
+
     public Planning getPlanning() {
         return planning;
     }

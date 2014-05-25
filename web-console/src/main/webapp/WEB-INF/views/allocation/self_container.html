@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->    
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<div class="row">
+
+</div>
+
+<div class="container" th:if="${task.assignee}">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span th:text="#{container.list}">Container List</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span th:text="#{route} + ${routeId}">Route ID</span><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li th:each="route : ${containerAllocation.routes}">
+                            <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                                th:text="#{route} + ${route.id}">Route ID</a>
+                        </li>
+                    </ul>
+                </div><!-- route -->
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">  
+                        <span th:if="${ownerId==0}" th:text="#{container.all.owners}">All Owner</span>
+                        <span th:unless="${ownerId==0}" th:text="${owners.?[id == __${ownerId}__][0].name}">Owner</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
+                                th:text="#{container.all.owners}">All Owners</a>
+                        </li>
+                        <li th:each="owner : ${owners}">
+                            <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
+                                th:text="${owner.name}">Owner</a>
+                        </li>
+                    </ul>
+                </div><!-- owner -->
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span th:if="${yardId==0}" th:text="#{container.all.yards}">All Yards</span>
+                        <span th:unless="${yardId==0}" th:text="${yards.?[id == __${yardId}__][0].name}">Yard</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
+                                th:text="#{container.all.yards}">All Yard</a>
+                        </li>
+                        <li th:each="yard : ${yards}">
+                            <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
+                                th:text="${yard.name}">Yard</a>
+                        </li>
+                    </ul>
+                </div><!-- yard -->                
+            </div><!-- panel-heading -->
+            
+            <form method="post" action="#" th:action="'/task/' + ${taskId} + '/allocation'" th:object="${selfContainerAllocation}">
+                <input type="hidden" th:field="*{routeId}"/>
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="container, rowStat: ${page.content}">
+                        <input type="checkbox" th:value="${container.id}" th:field="*{containerIds}"/>
+                        <span class="label label-default" th:text="${container.bicCode}">BIC Code</span>
+                        <span class="label label-primary" th:text="${container.owner.name}">Owner Name</span>
+                        <span class="label label-success" th:text="${container.yard.name}">Yard Name</span>
+                    </li>
+                    <li class="list-group-item">
+                        <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-xs btn-block" th:value="#{container.allocate}"/> 
+                        <span th:text="#{container.no.matched}"></span>               
+                    </li>
+                </ul><!-- container -->
+            </form>
+            
+            <div class="panel-footer">
+                    <div id="pagination_bar">
+                        <ul class="pagination pagination-sm">
+                            <li>
+                                <a th:href="'/task/' + ${taskId} + '/allocation?number=0' + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}">&laquo;</a>
+                            </li>
+                            <li>
+                                <a th:if="${page.hasPreviousPage()}"    
+                                   href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number - 1} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                                   th:text="${page.number}">1</a>
+                            </li>
+                            <li>
+                                <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                                   th:text="${page.number + 1}">2</a>
+                            </li>
+                            <li>
+                                <a th:if="${page.hasNextPage()}"
+                                   href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number + 1} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                                   th:text="${page.number + 2}">3</a>
+                            </li>
+                            <li>
+                                <a th:if="${page.totalPages}"
+                                   href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.totalPages - 1} + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div><!-- pagination_bar -->                  
+            </div><!-- panel-footer -->
+        </div><!-- panel -->
+    </div><!-- container in stock -->
+
+    <div class="col-lg-6">
+        <div class="panel panel-default" th:each="route : ${containerAllocation.routes}">   
+            <div class="panel-heading">
+                <span th:text="#{route} + ${route.id}">Route</span>
+                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            </div>
+                           
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="routeContainerAllocation : ${containerAllocation.routeContainerAllocations.?[routeId == __${route.id}__]}">
+                        <form method="post" th:action="'/task/' + ${taskId} + '/allocation'">
+                            <input type="hidden" name="allocationId" th:value="${routeContainerAllocation.allocationId}" />
+                            <button type="submit" class="close" aria-hidden="true" name="undo">&times;</button>
+                            <span class="label label-default" th:text="${routeContainerAllocation.bicCode}">BIC Code</span>
+                            <span class="label label-primary" th:text="${routeContainerAllocation.owner}">Owner Name</span>
+                            <span class="label label-success" th:text="${routeContainerAllocation.yard}">Yard Name</span>
+                        </form>
+                    </li>
+                </ul><!-- allocated container -->
+            </div>
+        </div><!-- panel -->
+    </div>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

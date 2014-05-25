@@ -41,14 +41,14 @@ public class BaseOrder extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
-    private Location srcLoc;
+    private LocationEntity srcLoc;
 
     @Transient
     private long origination;
 
     @ManyToOne
     @JoinColumn(name = "DST_LOC_ID")
-    private Location dstLoc;
+    private LocationEntity dstLoc;
 
     @Transient
     private long destination;
@@ -82,9 +82,15 @@ public class BaseOrder extends BaseEntity {
     @Transient
     private long containerSubtypeId;
 
+    @Transient
+    private long railContainerSubtypeId;
+
+    @Transient
+    private long ownContainerSubtypeId;
+
     @ManyToOne
     @JoinColumn(name = "CONTAINER_SUBTYPE_ID")
-    private ContainerSubtype containerSubtype;
+    private ContainerSubtypeEntity containerSubtype;
 
     @Column(name = "CONTAINER_CAP")
     private int containerCap;
@@ -161,11 +167,11 @@ public class BaseOrder extends BaseEntity {
         this.customer = customer;
     }
 
-    public Location getSrcLoc() {
+    public LocationEntity getSrcLoc() {
         return srcLoc;
     }
 
-    public void setSrcLoc(Location srcLoc) {
+    public void setSrcLoc(LocationEntity srcLoc) {
         this.srcLoc = srcLoc;
     }
 
@@ -177,11 +183,11 @@ public class BaseOrder extends BaseEntity {
         this.origination = origination;
     }
 
-    public Location getDstLoc() {
+    public LocationEntity getDstLoc() {
         return dstLoc;
     }
 
-    public void setDstLoc(Location dstLoc) {
+    public void setDstLoc(LocationEntity dstLoc) {
         this.dstLoc = dstLoc;
     }
 
@@ -257,11 +263,27 @@ public class BaseOrder extends BaseEntity {
         this.containerSubtypeId = containerSubtypeId;
     }
 
-    public ContainerSubtype getContainerSubtype() {
+    public long getRailContainerSubtypeId() {
+        return railContainerSubtypeId;
+    }
+
+    public void setRailContainerSubtypeId(long railContainerSubtypeId) {
+        this.railContainerSubtypeId = railContainerSubtypeId;
+    }
+
+    public long getOwnContainerSubtypeId() {
+        return ownContainerSubtypeId;
+    }
+
+    public void setOwnContainerSubtypeId(long ownContainerSubtypeId) {
+        this.ownContainerSubtypeId = ownContainerSubtypeId;
+    }
+
+    public ContainerSubtypeEntity getContainerSubtype() {
         return containerSubtype;
     }
 
-    public void setContainerSubtype(ContainerSubtype containerSubtype) {
+    public void setContainerSubtype(ContainerSubtypeEntity containerSubtype) {
         this.containerSubtype = containerSubtype;
     }
 
@@ -342,6 +364,8 @@ public class BaseOrder extends BaseEntity {
         sb.append(", goodsWeight=").append(goodsWeight);
         sb.append(", containerType=").append(containerType);
         sb.append(", containerSubtypeId=").append(containerSubtypeId);
+        sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
+        sb.append(", ownContainerSubtypeId=").append(ownContainerSubtypeId);
         sb.append(", containerSubtype=").append(containerSubtype);
         sb.append(", containerCap=").append(containerCap);
         sb.append(", containerQty=").append(containerQty);

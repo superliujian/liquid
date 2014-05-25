@@ -23,6 +23,12 @@ public class Goods {
     @Column(name = "NAME", nullable = true)
     private String name;
 
+    public Goods() { }
+
+    public Goods(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

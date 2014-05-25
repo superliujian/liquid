@@ -72,6 +72,15 @@ public class BaseEntity {
         return (this.id == null);
     }
 
+    public BaseEntity() {
+        this.setUpdateTime(new Date());
+    }
+
+    public BaseEntity(Long id) {
+        this();
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());

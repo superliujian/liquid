@@ -28,7 +28,7 @@
             <label class="col-lg-3 control-label" th:text="#{container.no}">BIC Code</label>
 
             <div class="col-lg-9">
-                <input type="text" th:field="*{sc.container.bicCode}" class="form-control" readonly="readonly"/>
+                <input type="text" th:value="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}" class="form-control" readonly="readonly"/>
             </div>
         </div>
 

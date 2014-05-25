@@ -1,7 +1,7 @@
 package liquid.api.controller;
 
-import liquid.persistence.domain.ServiceProvider;
-import liquid.service.SpService;
+import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.service.ServiceProviderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class ApiServiceProviderController {
     private static final Logger logger = LoggerFactory.getLogger(ApiServiceProviderController.class);
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
 
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
-    public List<ServiceProvider> list(@RequestParam long type) {
-        return spService.findByChargeType(type);
+    public List<ServiceProviderEntity> list(@RequestParam long type) {
+        return serviceProviderService.findByChargeType(type);
     }
 }
