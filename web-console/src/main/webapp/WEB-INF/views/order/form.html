@@ -242,7 +242,7 @@
         </div>
     </div>
     
-    <div id="railContainerSubtypeSec" class="col-lg-4">
+   <div id="railContainerSubtypeSec" class="col-lg-4">
         <div class="form-group">
             <label th:text="#{container.subtype}">Container Subtype</label>
             <select th:field="*{railContainerSubtypeId}" class="form-control">
@@ -374,6 +374,10 @@
         if($('input[name=containerType]:checked', '#orderForm').val() == 0) {
             $("#ownContainerSubtypeSec").hide();
             $("#railContainerSubtypeSec").show();
+        }
+        else {
+            $("#ownContainerSubtypeSec").show();
+            $("#railContainerSubtypeSec").hide();           
         }
         
         $("input[name$='containerType']").click(function() {

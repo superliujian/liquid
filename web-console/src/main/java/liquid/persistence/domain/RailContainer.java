@@ -214,7 +214,7 @@ public class RailContainer extends BaseLegContainer {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("RailContainer{");
-        sb.append("fleet=").append(fleet.getName());
+        sb.append("fleet=").append(fleet);
         sb.append(", trucker='").append(trucker).append('\'');
         sb.append(", plateNo='").append(plateNo).append('\'');
         sb.append(", loadingTocStr='").append(loadingTocStr).append('\'');

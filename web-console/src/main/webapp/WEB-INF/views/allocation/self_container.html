@@ -28,7 +28,7 @@
 
 </div>
 
-<div class="container">
+<div class="container" th:if="${task.assignee}">
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -92,7 +92,8 @@
                         <span class="label label-success" th:text="${container.yard.name}">Yard Name</span>
                     </li>
                     <li class="list-group-item">
-                        <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-xs btn-block" th:value="#{container.allocate}"/>                
+                        <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-xs btn-block" th:value="#{container.allocate}"/> 
+                        <span th:text="#{container.no.matched}"></span>               
                     </li>
                 </ul><!-- container -->
             </form>
@@ -129,11 +130,14 @@
 
     <div class="col-lg-6">
         <div class="panel panel-default" th:each="route : ${containerAllocation.routes}">   
-            <div class="panel-heading" th:text="#{route} + ${routeId}">Route</div>
+            <div class="panel-heading">
+                <span th:text="#{route} + ${route.id}">Route</span>
+                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+            </div>
                            
             <div class="panel-body">
                 <ul class="list-group">
-                    <li class="list-group-item" th:each="routeContainerAllocation : ${containerAllocation.routeContainerAllocations}">
+                    <li class="list-group-item" th:each="routeContainerAllocation : ${containerAllocation.routeContainerAllocations.?[routeId == __${route.id}__]}">
                         <form method="post" th:action="'/task/' + ${taskId} + '/allocation'">
                             <input type="hidden" name="allocationId" th:value="${routeContainerAllocation.allocationId}" />
                             <button type="submit" class="close" aria-hidden="true" name="undo">&times;</button>

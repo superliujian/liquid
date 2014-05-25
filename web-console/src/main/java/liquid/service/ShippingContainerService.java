@@ -190,6 +190,8 @@ public class ShippingContainerService {
         truck.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            truck.setBicCode(railContainer.getSc().getBicCode());
         truck.setPlateNo(railContainer.getPlateNo());
         truck.setTrucker(railContainer.getTrucker());
         if (null == railContainer.getLoadingToc()) {
@@ -205,6 +207,8 @@ public class ShippingContainerService {
         railYard.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railYard.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railYard.setBicCode(railContainer.getSc().getBicCode());
         if (null == railContainer.getStationToa()) {
             railYard.setRailYardToa(DateUtils.stringOf(new Date()));
         } else {
@@ -218,6 +222,8 @@ public class ShippingContainerService {
         railPlan.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railPlan.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railPlan.setBicCode(railContainer.getSc().getBicCode());
         railPlan.setPlanNo(railContainer.getTransPlanNo());
         if (null == railContainer.getEts()) {
             railPlan.setEts(DateUtils.dayStrOf(new Date()));
@@ -232,6 +238,8 @@ public class ShippingContainerService {
         railShipping.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railShipping.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railShipping.setBicCode(railContainer.getSc().getBicCode());
         if (null == railContainer.getAts()) {
             railShipping.setAts(DateUtils.stringOf(new Date()));
         } else {
@@ -245,6 +253,8 @@ public class ShippingContainerService {
         railArrivalDto.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railArrivalDto.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railArrivalDto.setBicCode(railContainer.getSc().getBicCode());
         if (null == railContainer.getAta()) {
             railArrivalDto.setAta(DateUtils.stringOf(new Date()));
         } else {
