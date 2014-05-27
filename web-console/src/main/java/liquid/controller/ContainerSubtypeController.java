@@ -1,6 +1,7 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ContainerSubtype;
+import liquid.metadata.ContainerType;
+import liquid.persistence.domain.ContainerSubtypeEntity;
 import liquid.service.ContainerSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * Created by redbrick9 on 5/4/14.
@@ -25,26 +27,31 @@ public class ContainerSubtypeController {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
+    @ModelAttribute("containerTypeMap")
+    public Map<Integer, String> populateContainerTypes() {
+        return ContainerType.toMap();
+    }
+
     @ModelAttribute("containerSubtypes")
-    public Iterable<ContainerSubtype> findAll() {
+    public Iterable<ContainerSubtypeEntity> findAll() {
         return containerSubtypeService.findEnabled();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(Model model) {
-        model.addAttribute("containerSubtype", new ContainerSubtype());
+        model.addAttribute("containerSubtype", new ContainerSubtypeEntity());
         return "data_dict/container_subtype";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("containerSubtype") ContainerSubtype containerSubtype,
+    public String create(@Valid @ModelAttribute("containerSubtype") ContainerSubtypeEntity containerSubtypeEntity,
                          BindingResult bindingResult) {
-        logger.debug("containerSubtype: {}", containerSubtype);
+        logger.debug("containerSubtype: {}", containerSubtypeEntity);
 
         if (bindingResult.hasErrors()) {
             return "data_dict/container_subtype";
         } else {
-            containerSubtypeService.save(containerSubtype);
+            containerSubtypeService.save(containerSubtypeEntity);
             return "redirect:/data_dict/container_subtype";
         }
     }

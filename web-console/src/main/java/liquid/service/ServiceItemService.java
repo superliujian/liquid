@@ -1,19 +1,22 @@
 package liquid.service;
 
-import liquid.persistence.domain.ServiceItem;
+import liquid.persistence.domain.ChargeType;
+import liquid.persistence.domain.ServiceItemEntity;
+import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtype;
 import liquid.persistence.repository.ServiceItemRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by redbrick9 on 5/9/14.
+ * Created by redbrick9 on 5/24/14.
  */
 @Service
 public class ServiceItemService {
-    private static final Logger logger = LoggerFactory.getLogger(ServiceItemService.class);
+    private static final int CONTAINER_PROVIDER_TYPE_ID = 4;
 
     @Autowired
     private ServiceItemRepository serviceItemRepository;
@@ -21,17 +24,30 @@ public class ServiceItemService {
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
 
-    public Iterable<ServiceItem> findEnabled() {
+    public List<ServiceProviderEntity> findByChargeType(long chargeTypeId) {
+        List<ServiceProviderEntity> serviceProviderEntities = new ArrayList<>();
+        Iterable<ServiceItemEntity> serviceItems = serviceItemRepository.findByChargeType(new ChargeType(chargeTypeId));
+        for (ServiceItemEntity serviceItem : serviceItems) {
+            serviceProviderEntities.add(serviceItem.getServiceProvider());
+        }
+        return serviceProviderEntities;
+    }
+
+    public List<ServiceProviderEntity> findContainerOwners() {
+        return findByChargeType(CONTAINER_PROVIDER_TYPE_ID);
+    }
+
+    public Iterable<ServiceItemEntity> findEnabled() {
         return serviceItemRepository.findAll();
     }
 
-    public void add(ServiceItem serviceItem) {
+    public void add(ServiceItemEntity serviceItem) {
         ServiceSubtype serviceSubtype = serviceSubtypeService.find(serviceItem.getServiceSubtypeId());
         serviceItem.setServiceSubtype(serviceSubtype);
         serviceItemRepository.save(serviceItem);
     }
 
-    public ServiceItem find(long id) {
+    public ServiceItemEntity find(long id) {
         return serviceItemRepository.findOne(id);
     }
 }

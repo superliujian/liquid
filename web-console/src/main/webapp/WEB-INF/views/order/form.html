@@ -236,7 +236,7 @@
             </ul>
         </div>
     </div>
-
+    
     <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{container.capacity}">Container Capacity</label>
@@ -248,8 +248,32 @@
                 </li>
             </ul>
         </div>
+    </div>    
+    
+    <div id="ownContainerSubtypeSec" class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{container.subtype}">Container Subtype</label>
+            <select th:field="*{ownContainerSubtypeId}" class="form-control">
+                <option th:each="containerSubtype : ${ownContainerSubtypes}"
+                        th:value="${containerSubtype.id}"
+                        th:text="${containerSubtype.name}">Container Subtype Name
+                </option>
+            </select>
+        </div>
     </div>
-
+    
+   <div id="railContainerSubtypeSec" class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{container.subtype}">Container Subtype</label>
+            <select th:field="*{railContainerSubtypeId}" class="form-control">
+                <option th:each="containerSubtype : ${railContainerSubtypes}"
+                        th:value="${containerSubtype.id}"
+                        th:text="${containerSubtype.name}">Container Subtype Name
+                </option>
+            </select>
+        </div>
+    </div>
+    
     <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'">
             <label th:text="#{container.quantity} + ' *'">Container Quantity</label>
@@ -258,22 +282,11 @@
             <span th:errors="*{containerQty}">error</span>
         </div>
     </div> 
-    
-    <div id="containerSubtypeSec" class="col-lg-3">
-        <div class="form-group">
-            <label th:text="#{container.subtype}">Container Subtype</label>
-            <select th:field="*{containerSubtypeId}" class="form-control">
-                <option th:each="containerSubtype : ${containerSubtypes}"
-                        th:value="${containerSubtype.id}"
-                        th:text="${containerSubtype.name}">Container Subtype Name
-                </option>
-            </select>
-        </div>
-    </div>
 </div>
 
 </div><!-- panel-body -->
 </div><!-- panel -->
+
 
 <div class="panel panel-default">
 <div class="panel-heading" th:text="#{order.price.info}">Price Info</div>
@@ -407,16 +420,23 @@
         });
         
         if($('input[name=containerType]:checked', '#orderForm').val() == 0) {
-            $("#containerSubtypeSec").hide();
+            $("#ownContainerSubtypeSec").hide();
+            $("#railContainerSubtypeSec").show();
+        }
+        else {
+            $("#ownContainerSubtypeSec").show();
+            $("#railContainerSubtypeSec").hide();           
         }
         
         $("input[name$='containerType']").click(function() {
             var value = $(this).val();
             if(value == 0) {
-                $("#containerSubtypeSec").hide();
+                $("#ownContainerSubtypeSec").hide();
+                $("#railContainerSubtypeSec").show();
             }
             else {
-                $("#containerSubtypeSec").show();
+                $("#ownContainerSubtypeSec").show();
+                $("#railContainerSubtypeSec").hide();
             }
         });
              

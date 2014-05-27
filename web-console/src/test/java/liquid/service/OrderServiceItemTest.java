@@ -9,7 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * Created by redbrick9 on 4/26/14.
  */
-public class OrderServiceTest {
+public class OrderServiceItemTest {
 
     @Test
     public void computeOrderNo() {

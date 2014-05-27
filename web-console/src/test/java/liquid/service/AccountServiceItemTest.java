@@ -9,7 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * Created by redbrick9 on 5/1/14.
  */
-public class AccountServiceTest {
+public class AccountServiceItemTest {
     @Test
     public void fetchPasswordPolicy() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();

@@ -44,7 +44,7 @@ public class Charge extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
-    private ServiceProvider sp;
+    private ServiceProviderEntity sp;
 
     @Column(name = "WAY")
     private int way = 1;
@@ -136,11 +136,11 @@ public class Charge extends BaseEntity {
         this.spId = spId;
     }
 
-    public ServiceProvider getSp() {
+    public ServiceProviderEntity getSp() {
         return sp;
     }
 
-    public void setSp(ServiceProvider sp) {
+    public void setSp(ServiceProviderEntity sp) {
         this.sp = sp;
     }
 

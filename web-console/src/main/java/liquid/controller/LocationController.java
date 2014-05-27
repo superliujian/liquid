@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.Location;
+import liquid.persistence.domain.LocationEntity;
 import liquid.metadata.LocationType;
 import liquid.persistence.repository.LocationRepository;
 import org.slf4j.Logger;
@@ -31,13 +31,13 @@ public class LocationController {
     private LocationRepository locationRepository;
 
     @ModelAttribute("locations")
-    public Iterable<Location> populateLocations() {
+    public Iterable<LocationEntity> populateLocations() {
         return locationRepository.findAll();
     }
 
     @ModelAttribute("location")
-    public Location populateLocation() {
-        return new Location();
+    public LocationEntity populateLocation() {
+        return new LocationEntity();
     }
 
     @ModelAttribute("locationTypes")
@@ -51,14 +51,14 @@ public class LocationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String add(@Valid @ModelAttribute Location location,
+    public String add(@Valid @ModelAttribute LocationEntity locationEntity,
                       BindingResult bindingResult, Principal principal) {
-        logger.debug("location: {}", location);
+        logger.debug("location: {}", locationEntity);
 
         if (bindingResult.hasErrors()) {
             return "location";
         } else {
-            locationRepository.save(location);
+            locationRepository.save(locationEntity);
             return "redirect:/location";
         }
     }

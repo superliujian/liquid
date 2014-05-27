@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 10/25/13
  * Time: 7:33 PM
  */
-public interface SpTypeRepository extends CrudRepository<SpType, Long> {
+public interface ServiceProviderTypeRepository extends CrudRepository<SpType, Long> {
 }

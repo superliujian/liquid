@@ -61,7 +61,7 @@ public class ReceivingOrderController {
     }
 
     @ModelAttribute("locations")
-    public Iterable<Location> populateLocations() {
+    public Iterable<LocationEntity> populateLocations() {
         return locationService.findByType(LocationType.CITY.getType());
     }
 
@@ -99,9 +99,9 @@ public class ReceivingOrderController {
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model) {
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
 
-        ReceivingOrder order = recvOrderService.newOrder(locations);
+        ReceivingOrder order = recvOrderService.newOrder(locationEntities);
 
         model.addAttribute("order", order);
         return "recv_order/form";
@@ -151,8 +151,8 @@ public class ReceivingOrderController {
         logger.debug("id: {}", id);
 
         ReceivingOrder order = recvOrderService.find(id);
-        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
-        model.addAttribute("locations", locations);
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());
+        model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
         return "recv_order/detail";
@@ -167,7 +167,7 @@ public class ReceivingOrderController {
         ReceivingOrder order = recvOrderService.find(id);
         logger.debug("order: {}", order);
 
-        List<Location> locations = locationService.findByType(LocationType.STATION.getType());
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());
         model.addAttribute("order", order);
         return "recv_order/form";
     }

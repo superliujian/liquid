@@ -1,7 +1,6 @@
 package liquid.controller;
 
 import liquid.metadata.ChargeWay;
-import liquid.metadata.LocationType;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
@@ -45,7 +44,7 @@ public class PlanningController extends BaseTaskController {
     private LocationRepository locationRepository;
 
     @Autowired
-    private SpRepository spRepository;
+    private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
     private RouteRepository routeRepository;

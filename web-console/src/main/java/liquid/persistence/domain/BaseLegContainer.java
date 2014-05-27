@@ -65,7 +65,7 @@ public class BaseLegContainer extends BaseEntity {
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());
         sb.append("BaseLegContainer{");
-        sb.append("order=").append(order.getId());
+//        sb.append("order=").append(order.getId());
         sb.append(", route=").append(route.getId());
 //        sb.append(", leg=").append(leg.getId());
         sb.append(", sc=").append(sc.getId());

@@ -29,11 +29,11 @@ public class OrderHistory {
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
-    private Location srcLoc;
+    private LocationEntity srcLoc;
 
     @ManyToOne
     @JoinColumn(name = "DST_LOC_ID")
-    private Location dstLoc;
+    private LocationEntity dstLoc;
 
     @NotNull
     @NotEmpty
@@ -155,19 +155,19 @@ public class OrderHistory {
         this.customer = customer;
     }
 
-    public Location getSrcLoc() {
+    public LocationEntity getSrcLoc() {
         return srcLoc;
     }
 
-    public void setSrcLoc(Location srcLoc) {
+    public void setSrcLoc(LocationEntity srcLoc) {
         this.srcLoc = srcLoc;
     }
 
-    public Location getDstLoc() {
+    public LocationEntity getDstLoc() {
         return dstLoc;
     }
 
-    public void setDstLoc(Location dstLoc) {
+    public void setDstLoc(LocationEntity dstLoc) {
         this.dstLoc = dstLoc;
     }
 

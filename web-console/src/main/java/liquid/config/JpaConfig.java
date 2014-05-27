@@ -30,8 +30,8 @@ import java.util.Properties;
         includeFilters = @ComponentScan.Filter(
                 value = {
                         CustomerRepository.class,
-                        SpRepository.class,
-                        SpTypeRepository.class,
+                        ServiceProviderRepository.class,
+                        ServiceProviderTypeRepository.class,
                         ServiceTypeRepository.class,
                         ServiceSubtypeRepository.class,
                         ServiceItemRepository.class,
@@ -55,7 +55,7 @@ import java.util.Properties;
                         VesselContainerRepository.class,
                         DeliveryContainerRepository.class,
                         ChargeRepository.class,
-                        ServiceRepository.class,
+                        ServiceItemRepository.class,
                         ExchangeRateRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement

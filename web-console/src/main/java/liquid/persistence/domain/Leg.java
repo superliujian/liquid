@@ -23,18 +23,18 @@ public class Leg extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
-    private ServiceProvider sp;
+    private ServiceProviderEntity sp;
 
     @Transient
     private long spId;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
-    private Location srcLoc;
+    private LocationEntity srcLoc;
 
     @ManyToOne
     @JoinColumn(name = "DST_LOC_ID")
-    private Location dstLoc;
+    private LocationEntity dstLoc;
 
     @Transient
     private long srcLocId;
@@ -70,11 +70,11 @@ public class Leg extends BaseEntity {
         this.transMode = transMode;
     }
 
-    public ServiceProvider getSp() {
+    public ServiceProviderEntity getSp() {
         return sp;
     }
 
-    public void setSp(ServiceProvider sp) {
+    public void setSp(ServiceProviderEntity sp) {
         this.sp = sp;
     }
 
@@ -86,19 +86,19 @@ public class Leg extends BaseEntity {
         this.spId = spId;
     }
 
-    public Location getSrcLoc() {
+    public LocationEntity getSrcLoc() {
         return srcLoc;
     }
 
-    public void setSrcLoc(Location srcLoc) {
+    public void setSrcLoc(LocationEntity srcLoc) {
         this.srcLoc = srcLoc;
     }
 
-    public Location getDstLoc() {
+    public LocationEntity getDstLoc() {
         return dstLoc;
     }
 
-    public void setDstLoc(Location dstLoc) {
+    public void setDstLoc(LocationEntity dstLoc) {
         this.dstLoc = dstLoc;
     }
 

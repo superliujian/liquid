@@ -56,9 +56,9 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
-    public Order newOrder(List<Location> locations) {
+    public Order newOrder(List<LocationEntity> locationEntities) {
         Order order = new Order();
-        Location second = CollectionUtils.tryToGet2ndElement(locations);
+        LocationEntity second = CollectionUtils.tryToGet2ndElement(locationEntities);
         order.setDestination(second.getId());
         order.setLoadingEtStr(DateUtils.stringOf(new Date()));
         return order;
@@ -98,19 +98,27 @@ public class OrderService extends AbstractBaseOrderService {
     public void prepare(Order order) {
         ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
         Customer customer = customerRepository.findOne(order.getCustomerId());
-        Goods goods = goodsRepository.findOne(order.getGoodsId());
-        ContainerSubtype containerSubtype = null;
-        if (order.getContainerType() == ContainerType.OWNED.getType()) {
-            containerSubtype = containerSubtypeService.find(order.getContainerSubtypeId());
-        } else {
-            containerSubtype = containerSubtypeService.find(1L);
+
+//        Goods goods = goodsRepository.findOne(order.getGoodsId());
+        if (order.getGoodsId() > 0) {
+            Goods goods = new Goods(order.getGoodsId());
+            order.setGoods(goods);
         }
-        Location srcLoc = locationRepository.findOne(order.getOrigination());
-        Location dstLoc = locationRepository.findOne(order.getDestination());
+
+        if (null == order.getContainerSubtype()) {
+            if (order.getContainerType() == ContainerType.OWNED.getType()) {
+                order.setContainerSubtypeId(order.getOwnContainerSubtypeId());
+            } else {
+                order.setContainerSubtypeId(order.getRailContainerSubtypeId());
+            }
+            ContainerSubtypeEntity containerSubtypeEntity = containerSubtypeService.find(order.getContainerSubtypeId());
+            order.setContainerSubtype(containerSubtypeEntity);
+        }
+        LocationEntity srcLoc = locationRepository.findOne(order.getOrigination());
+        LocationEntity dstLoc = locationRepository.findOne(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
-        if (null != goods) order.setGoods(goods);
-        order.setContainerSubtype(containerSubtype);
+
         if (null != srcLoc) order.setSrcLoc(srcLoc);
         if (null != dstLoc) order.setDstLoc(dstLoc);
         if (StringUtils.valuable(order.getLoadingEtStr()))
@@ -163,6 +171,11 @@ public class OrderService extends AbstractBaseOrderService {
         order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomer().getId());
         order.setContainerSubtypeId(order.getContainerSubtype().getId());
+        if (order.getContainerType() == ContainerType.OWNED.getType()) {
+            order.setOwnContainerSubtypeId(order.getContainerSubtypeId());
+        } else {
+            order.setRailContainerSubtypeId(order.getContainerSubtypeId());
+        }
         order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
         order.setLoadingEtStr(order.getLoadingEt() == null

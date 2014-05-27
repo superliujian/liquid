@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceItem;
+import liquid.persistence.domain.ServiceItemEntity;
 import liquid.persistence.domain.ServiceSubtype;
 import liquid.service.ServiceItemService;
 import liquid.service.ServiceSubtypeService;
@@ -34,15 +34,15 @@ public class ServiceItemController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listEnabled(Model model) {
-        Iterable<ServiceItem> serviceItems = serviceItemService.findEnabled();
-        model.addAttribute("serviceItems", serviceItems);
-        model.addAttribute("serviceItem", new ServiceItem());
+//        Iterable<ServiceItem> serviceItems = serviceItemService.findEnabled();
+//        model.addAttribute("serviceItems", serviceItems);
+//        model.addAttribute("serviceItem", new ServiceItem());
         return "service/item";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String newServiceSubtype(@ModelAttribute("serviceItem") ServiceItem serviceItem) {
-        serviceItemService.add(serviceItem);
+    public String newServiceSubtype(@ModelAttribute("serviceItem") ServiceItemEntity serviceItem) {
+//        serviceItemService.add(serviceItem);
         return "redirect:/service_item";
     }
 }

@@ -3,12 +3,11 @@ package liquid.controller;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.IncomeType;
 import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.Customer;
 import liquid.persistence.domain.Income;
-import liquid.persistence.domain.ServiceProvider;
+import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ChargeService;
 import liquid.service.IncomeService;
-import liquid.service.SpService;
+import liquid.service.ServiceProviderService;
 import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public class AjustementController extends BaseTaskController {
     private ChargeService chargeService;
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
 
     @ModelAttribute("incomeTypes")
     public Map<Integer, String> populateCustomers() {
@@ -62,8 +61,8 @@ public class AjustementController extends BaseTaskController {
     }
 
     @ModelAttribute("sps")
-    public Iterable<ServiceProvider> populateSps() {
-        return spService.findAll();
+    public Iterable<ServiceProviderEntity> populateSps() {
+        return serviceProviderService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)

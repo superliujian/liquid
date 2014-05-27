@@ -6,12 +6,20 @@ import javax.persistence.*;
  * Created by redbrick9 on 5/7/14.
  */
 @Entity(name = "SERVICE_ITEM")
-public class ServiceItem extends BaseEntity {
+public class ServiceItemEntity extends BaseEntity {
     @Column(name = "CODE")
     private String code;
 
     @Column(name = "NAME")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "CHARGE_TYPE_ID")
+    private ChargeType chargeType;
+
+    @ManyToOne
+    @JoinColumn(name = "SP_ID")
+    private ServiceProviderEntity serviceProvider;
 
     @Transient
     private long serviceSubtypeId;
@@ -43,6 +51,22 @@ public class ServiceItem extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ChargeType getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(ChargeType chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public ServiceProviderEntity getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(ServiceProviderEntity serviceProvider) {
+        this.serviceProvider = serviceProvider;
     }
 
     public long getServiceSubtypeId() {

@@ -1,5 +1,6 @@
 package liquid.persistence.domain;
 
+import liquid.metadata.ContainerStatus;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -12,30 +13,35 @@ import javax.validation.constraints.NotNull;
  * Time: 2:36 PM
  */
 @Entity(name = "CONTAINER")
-public class Container extends BaseEntity {
-
+public class ContainerEntity extends BaseEntity {
     @NotNull
     @NotEmpty
     @Column(name = "BIC_CODE")
     private String bicCode;
 
-    @NotNull
-    @NotEmpty
-    @Column(name = "OWNER")
-    private String owner;
-
-    @Column(name = "TYPE")
-    private int type;
+    @ManyToOne
+    @JoinColumn(name = "OWNER_ID")
+    private ServiceProviderEntity owner;
 
     @ManyToOne
-    @JoinColumn(name = "YARD")
-    private Location yard;
+    @JoinColumn(name = "SUBTYPE_ID")
+    private ContainerSubtypeEntity subtype;
+
+    @ManyToOne
+    @JoinColumn(name = "YARD_ID")
+    private LocationEntity yard;
 
     @Transient
     private long yardId;
 
     @Column(name = "STATUS")
     private int status;
+
+    public ContainerEntity() { }
+
+    public ContainerEntity(Long id) {
+        super(id);
+    }
 
     public String getBicCode() {
         return bicCode;
@@ -45,11 +51,11 @@ public class Container extends BaseEntity {
         this.bicCode = bicCode;
     }
 
-    public String getOwner() {
+    public ServiceProviderEntity getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(ServiceProviderEntity owner) {
         this.owner = owner;
     }
 
@@ -61,19 +67,19 @@ public class Container extends BaseEntity {
         this.status = status;
     }
 
-    public int getType() {
-        return type;
+    public ContainerSubtypeEntity getSubtype() {
+        return subtype;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setSubtype(ContainerSubtypeEntity subtype) {
+        this.subtype = subtype;
     }
 
-    public Location getYard() {
+    public LocationEntity getYard() {
         return yard;
     }
 
-    public void setYard(Location yard) {
+    public void setYard(LocationEntity yard) {
         this.yard = yard;
     }
 
@@ -91,7 +97,7 @@ public class Container extends BaseEntity {
         sb.append("Container{");
         sb.append("bicCode='").append(bicCode).append('\'');
         sb.append(", owner='").append(owner).append('\'');
-        sb.append(", type=").append(type);
+        sb.append(", type=").append(subtype);
         sb.append(", yard=").append(yard);
         sb.append(", yardId=").append(yardId);
         sb.append(", status=").append(status);
