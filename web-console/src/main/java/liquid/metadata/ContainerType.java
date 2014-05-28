@@ -12,7 +12,7 @@ import java.util.Map;
 public enum ContainerType {
     RAIL(0, "container.rail"),
     //    MARINE(1, "container.marine"),
-    OWNED(2, "container.owned");
+    SELF(2, "container.owned");
 
     private final int type;
 

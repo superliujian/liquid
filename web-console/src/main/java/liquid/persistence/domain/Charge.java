@@ -13,7 +13,7 @@ public class Charge extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @Column(name = "TASK_ID")
     private String taskId;
@@ -64,11 +64,11 @@ public class Charge extends BaseEntity {
     @Column(name = "STATUS")
     private int status;
 
-    public Order getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 

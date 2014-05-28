@@ -1,6 +1,9 @@
 package liquid.controller;
 
 import liquid.context.BusinessContext;
+import liquid.domain.Order;
+import liquid.domain.ServiceItem;
+import liquid.facade.OrderFacade;
 import liquid.metadata.*;
 import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
@@ -36,7 +39,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseChargeController {
-    private static final Logger logger = LoggerFactory.getLogger(Order.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderEntity.class);
 
     @Autowired
     private OrderService orderService;
@@ -73,6 +76,9 @@ public class OrderController extends BaseChargeController {
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
+
+    @Autowired
+    private OrderFacade orderFacade;
 
     @ModelAttribute("serviceTypes")
     public Iterable<ServiceType> populateServiceTypes() {
@@ -114,9 +120,9 @@ public class OrderController extends BaseChargeController {
         return containerSubtypeService.findByContainerType(ContainerType.RAIL);
     }
 
-    @ModelAttribute("ownContainerSubtypes")
+    @ModelAttribute("selfContainerSubtypes")
     public Iterable<ContainerSubtypeEntity> populateOwnContainerSubtypes() {
-        return containerSubtypeService.findByContainerType(ContainerType.OWNED);
+        return containerSubtypeService.findByContainerType(ContainerType.SELF);
     }
 
     @ModelAttribute("status")
@@ -129,6 +135,10 @@ public class OrderController extends BaseChargeController {
 
     @ModelAttribute("serviceSubtypes")
     public Iterable<ServiceSubtype> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
+
+    public List<LocationEntity> populateLocations() {
+        return locationService.findByType(LocationType.CITY.getType());
+    }
 
     @Deprecated
     @RequestMapping(method = RequestMethod.GET)
@@ -143,7 +153,7 @@ public class OrderController extends BaseChargeController {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String role = RoleHelper.getRole(principal);
-        Page<Order> page = orderService.findByCreateUser(principal.getName(), pageRequest);
+        Page<OrderEntity> page = orderService.findByCreateUser(principal.getName(), pageRequest);
         model.addAttribute("page", page);
         return "order/page";
     }
@@ -166,17 +176,27 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model) {
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-
-        Order order = orderService.newOrder(locationEntities);
-
-        model.addAttribute("locations", locationEntities);
+        Order order = orderFacade.initOrder();
         model.addAttribute("order", order);
         return "order/form";
     }
 
+    @RequestMapping(method = RequestMethod.POST, params = "addServiceItem")
+    public String addServiceItem(@ModelAttribute Order order) {
+        logger.debug("order: {}", order);
+        order.getServiceItems().add(new ServiceItem());
+        return "order/form";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "removeServiceItem")
+    public String removeRow(@ModelAttribute Order order, HttpServletRequest request) {
+        final Integer rowId = Integer.valueOf(request.getParameter("removeServiceItem"));
+        order.getServiceItems().remove(rowId.intValue());
+        return "order/form";
+    }
+
     @RequestMapping(method = RequestMethod.POST, params = "save")
-    public String save(@Valid @ModelAttribute Order order,
+    public String save(@Valid @ModelAttribute OrderEntity order,
                        BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SAVED.getValue());
@@ -202,7 +222,7 @@ public class OrderController extends BaseChargeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "submit")
-    public String submit(@Valid @ModelAttribute Order order,
+    public String submit(@Valid @ModelAttribute OrderEntity order,
                          BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);
 
@@ -231,26 +251,12 @@ public class OrderController extends BaseChargeController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "addServiceItem")
-    public String addServiceItem(@ModelAttribute Order order) {
-        logger.debug("order: {}", order);
-        order.getServiceItems().add(new ServiceItemEntity());
-        return "order/form";
-    }
-
-    @RequestMapping(method = RequestMethod.POST, params = "removeServiceItem")
-    public String removeRow(@ModelAttribute Order order, HttpServletRequest req) {
-        final Integer rowId = Integer.valueOf(req.getParameter("removeServiceItem"));
-        order.getServiceItems().remove(rowId.intValue());
-        return "order/form";
-    }
-
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String detail(@PathVariable long id,
                          Model model, Principal principal) {
         logger.debug("id: {}", id);
 
-        Order order = orderService.find(id);
+        OrderEntity order = orderService.find(id);
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
@@ -271,7 +277,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
         logger.debug("action: {}", action);
 
-        Order order = orderService.find(id);
+        OrderEntity order = orderService.find(id);
         logger.debug("order: {}", order);
 
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
@@ -293,7 +299,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
         logger.debug("tab: {}", tab);
 
-        Order order = orderService.find(id);
+        OrderEntity order = orderService.find(id);
 
         switch (tab) {
             case "task":

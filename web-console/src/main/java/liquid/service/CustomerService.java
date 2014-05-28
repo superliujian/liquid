@@ -1,13 +1,11 @@
 package liquid.service;
 
 import liquid.persistence.domain.Customer;
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.xml.bind.ValidationException;
 
 /**
  * TODO: Comments.
@@ -40,7 +38,7 @@ public class CustomerService {
      * @param order
      * @return
      */
-    public FormValidationResult validateCustomer(Order order) {
+    public FormValidationResult validateCustomer(OrderEntity order) {
         long id = order.getCustomerId();
         String name = order.getCustomerName0();
         if (id == 0L) {

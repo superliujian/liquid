@@ -5,7 +5,7 @@ import liquid.domain.RouteContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
 import liquid.metadata.ContainerType;
 import liquid.persistence.domain.ContainerEntity;
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.domain.Route;
 import liquid.persistence.domain.ShippingContainer;
 import liquid.service.ContainerAllocationService;
@@ -40,7 +40,7 @@ public class ContainerAllocationFacade {
     public ContainerAllocation computeContainerAllocation(String taskId) {
         ContainerAllocation containerAllocation = new ContainerAllocation();
 
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         int type = order.getContainerType();
         String subtypeName = order.getContainerSubtype().getName();
 

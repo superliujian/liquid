@@ -79,7 +79,7 @@ public class PlanningService {
     }
 
     public Planning findByTaskId(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         return planningRepository.findByOrder(order);
     }
 
@@ -90,7 +90,7 @@ public class PlanningService {
         return leg;
     }
 
-    public Planning findByOrder(Order order) {
+    public Planning findByOrder(OrderEntity order) {
         return planningRepository.findByOrder(order);
     }
 }

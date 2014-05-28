@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 public class BaseLegContainer extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
@@ -29,11 +29,11 @@ public class BaseLegContainer extends BaseEntity {
     @JoinColumn(name = "SC_ID")
     private ShippingContainer sc;
 
-    public Order getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public class Planning extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @Column(name = "SAME_ROUTE")
     private boolean sameRoute;
@@ -24,11 +24,11 @@ public class Planning extends BaseEntity {
     public Planning() {
     }
 
-    public Order getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 

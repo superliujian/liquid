@@ -115,7 +115,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<RailContainer> initializeRailContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<RailContainer> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
             for (RailContainer container : rcList) {
@@ -449,7 +449,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<BargeContainer> initBargeContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<BargeContainer> bcList = bcRepository.findByOrder(order);
         if (bcList.size() > 0) {
             for (BargeContainer container : bcList) {
@@ -533,7 +533,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<VesselContainer> initVesselContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<VesselContainer> vcList = vcRepository.findByOrder(order);
         if (vcList.size() > 0) {
             for (VesselContainer container : vcList) {
@@ -617,7 +617,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<DeliveryContainer> initDeliveryContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<DeliveryContainer> dcList = dcRepository.findByOrder(order);
         if (dcList.size() > 0) {
             for (DeliveryContainer container : dcList) {

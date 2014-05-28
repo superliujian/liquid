@@ -56,16 +56,17 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
-    public Order newOrder(List<LocationEntity> locationEntities) {
-        Order order = new Order();
+    @Deprecated
+    public OrderEntity newOrder(List<LocationEntity> locationEntities) {
+        OrderEntity order = new OrderEntity();
         LocationEntity second = CollectionUtils.tryToGet2ndElement(locationEntities);
         order.setDestination(second.getId());
         order.setLoadingEtStr(DateUtils.stringOf(new Date()));
         return order;
     }
 
-    public Order duplicate(Order oldOne) {
-        Order order = new Order();
+    public OrderEntity duplicate(OrderEntity oldOne) {
+        OrderEntity order = new OrderEntity();
 
         order.setCustomer(oldOne.getCustomer());
         order.setSrcLoc(oldOne.getSrcLoc());
@@ -95,7 +96,7 @@ public class OrderService extends AbstractBaseOrderService {
         return order;
     }
 
-    public void prepare(Order order) {
+    public void prepare(OrderEntity order) {
         ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
         Customer customer = customerRepository.findOne(order.getCustomerId());
 
@@ -106,7 +107,7 @@ public class OrderService extends AbstractBaseOrderService {
         }
 
         if (null == order.getContainerSubtype()) {
-            if (order.getContainerType() == ContainerType.OWNED.getType()) {
+            if (order.getContainerType() == ContainerType.SELF.getType()) {
                 order.setContainerSubtypeId(order.getOwnContainerSubtypeId());
             } else {
                 order.setContainerSubtypeId(order.getRailContainerSubtypeId());
@@ -126,12 +127,12 @@ public class OrderService extends AbstractBaseOrderService {
         logger.debug("Order: {}", order);
     }
 
-    public void save(Order order) {
+    public void save(OrderEntity order) {
         prepare(order);
         orderRepository.save(order);
     }
 
-    public void submit(Order order) {
+    public void submit(OrderEntity order) {
         prepare(order);
         // compute order no.
         order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
@@ -146,32 +147,32 @@ public class OrderService extends AbstractBaseOrderService {
         bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
     }
 
-    public Order findByTaskId(String taskId) {
+    public OrderEntity findByTaskId(String taskId) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         return find(orderId);
     }
 
-    public List<Order> findAllOrderByDesc() {
+    public List<OrderEntity> findAllOrderByDesc() {
         return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
-    public Page<Order> findByCreateUser(String uid, Pageable pageable) {
+    public Page<OrderEntity> findByCreateUser(String uid, Pageable pageable) {
         return orderRepository.findByCreateUser(uid, pageable);
     }
 
-    public Page<Order> findAll(Pageable pageable) {
+    public Page<OrderEntity> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);
     }
 
-    public Order find(long id) {
-        Order order = orderRepository.findOne(id);
+    public OrderEntity find(long id) {
+        OrderEntity order = orderRepository.findOne(id);
 
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomer().getId());
         order.setContainerSubtypeId(order.getContainerSubtype().getId());
-        if (order.getContainerType() == ContainerType.OWNED.getType()) {
+        if (order.getContainerType() == ContainerType.SELF.getType()) {
             order.setOwnContainerSubtypeId(order.getContainerSubtypeId());
         } else {
             order.setRailContainerSubtypeId(order.getContainerSubtypeId());
@@ -185,23 +186,23 @@ public class OrderService extends AbstractBaseOrderService {
         return order;
     }
 
-    public Iterable<Order> findByOrderNo(String orderNo) {
+    public Iterable<OrderEntity> findByOrderNo(String orderNo) {
         return orderRepository.findByOrderNoLike("%" + orderNo + "%");
     }
 
-    public Iterable<Order> findByCustomerName(String customerName) {
+    public Iterable<OrderEntity> findByCustomerName(String customerName) {
         return orderRepository.findByCustomerNameLike("%" + customerName + "%");
     }
 
     @Transactional("transactionManager")
     public void moveToHistory(long id) {
-        Order order = find(id);
+        OrderEntity order = find(id);
 
         OrderHistory orderHistory = newOrderHistory(order);
         orderHistoryRepository.save(orderHistory);
     }
 
-    private OrderHistory newOrderHistory(Order order) {
+    private OrderHistory newOrderHistory(OrderEntity order) {
         OrderHistory orderHistory = new OrderHistory();
         orderHistory.setOrderId(order.getId());
         orderHistory.setCustomer(order.getCustomer());

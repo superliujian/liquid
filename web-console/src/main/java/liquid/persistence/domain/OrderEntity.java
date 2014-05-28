@@ -11,7 +11,7 @@ import java.util.Date;
  * Time: 2:59 PM
  */
 @Entity(name = "ORDER_BASE")
-public class Order extends BaseOrder {
+public class OrderEntity extends BaseOrder {
     // 0: domestic; 1: foreign
     @Column(name = "TRADE_TYPE")
     private int tradeType;

@@ -5,7 +5,7 @@ import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.OrderEntity;
 import liquid.service.ChargeService;
 import liquid.service.NotCompletedException;
 import liquid.service.OrderService;
@@ -179,7 +179,7 @@ public class TaskController extends BaseController {
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
 

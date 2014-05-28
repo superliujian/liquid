@@ -3,7 +3,7 @@ package liquid.service;
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.DatePattern;
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.domain.Planning;
 import liquid.persistence.domain.Route;
 import liquid.persistence.domain.ShippingContainer;
@@ -49,7 +49,7 @@ public class TaskService {
         TaskDto taskDto = toTaskDto(task);
 
         long orderId = getOrderIdByTaskId(task.getId());
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
 
         taskDto.setOrderId(orderId);
         taskDto.setOrderNo(order.getOrderNo());
@@ -104,7 +104,7 @@ public class TaskService {
                 break;
             case "allocateContainers":
                 long orderId = getOrderIdByTaskId(taskId);
-                Order order = orderService.find(orderId);
+                OrderEntity order = orderService.find(orderId);
                 Planning planning = planningService.findByOrder(order);
                 Collection<Route> routes = routeService.findByPlanning(planning);
                 int allocatedContainerQty = 0;
@@ -188,7 +188,7 @@ public class TaskService {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
             long orderId = getOrderIdByTaskId(task.getId());
-            Order order = orderService.find(orderId);
+            OrderEntity order = orderService.find(orderId);
             tasks[i].setOrderId(orderId);
             tasks[i].setOrderNo(order.getOrderNo());
         }

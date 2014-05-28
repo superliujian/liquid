@@ -111,7 +111,7 @@ public class PlanningController extends BaseTaskController {
                                  Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Order order = orderService.find(taskService.getOrderIdByTaskId(taskId));
+        OrderEntity order = orderService.find(taskService.getOrderIdByTaskId(taskId));
         planning.setOrder(order);
         Planning newOne = planningRepository.save(planning);
         model.addAttribute("planning", newOne);

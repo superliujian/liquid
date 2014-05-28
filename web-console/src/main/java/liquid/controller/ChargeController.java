@@ -2,17 +2,13 @@ package liquid.controller;
 
 import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
-import liquid.dto.TaskDto;
 import liquid.metadata.*;
 import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.ChargeRepository;
 import liquid.persistence.repository.ChargeTypeRepository;
 import liquid.service.ChargeService;
 import liquid.service.OrderService;
 import liquid.service.TaskService;
-import liquid.service.bpm.ActivitiEngineService;
-import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +108,7 @@ public class ChargeController {
                           Model model, Principal principal) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<Order> page = orderService.findAll(pageRequest);
+        Page<OrderEntity> page = orderService.findAll(pageRequest);
         model.addAttribute("tab", "summary");
         model.addAttribute("page", page);
         return "/charge/summary";
@@ -123,7 +119,7 @@ public class ChargeController {
                           Model model, Principal principal) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<Order> page = orderService.findAll(pageRequest);
+        Page<OrderEntity> page = orderService.findAll(pageRequest);
         model.addAttribute("tab", "details");
         model.addAttribute("charges", chargeService.findAll());
         return "/charge/details";
@@ -137,7 +133,7 @@ public class ChargeController {
         logger.debug("referer: {}", referer);
 
         long orderId = taskService.getOrderIdByTaskId(charge.getTaskId());
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
 
         charge.setOrder(order);
 
@@ -179,7 +175,7 @@ public class ChargeController {
                         Model model, Principal principal) {
         logger.debug("orderId: {}", orderId);
 
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
 
         Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
