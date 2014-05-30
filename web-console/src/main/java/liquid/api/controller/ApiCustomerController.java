@@ -1,6 +1,6 @@
 package liquid.api.controller;
 
-import liquid.persistence.domain.Customer;
+import liquid.persistence.domain.CustomerEntity;
 import liquid.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +28,13 @@ public class ApiCustomerController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Customer> list() {
+    public Iterable<CustomerEntity> list() {
         return customerService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "name")
     @ResponseBody
-    public Iterable<Customer> listByName(@RequestParam String name) {
+    public Iterable<CustomerEntity> listByName(@RequestParam String name) {
         logger.debug("name: {}", name);
         return customerService.findByName(name);
     }

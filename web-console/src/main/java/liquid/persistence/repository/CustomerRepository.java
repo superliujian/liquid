@@ -1,6 +1,6 @@
 package liquid.persistence.repository;
 
-import liquid.persistence.domain.Customer;
+import liquid.persistence.domain.CustomerEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -10,11 +10,11 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 9/24/13
  * Time: 11:14 PM
  */
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends CrudRepository<CustomerEntity, Long> {
     @Query(value = "SELECT * FROM CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
-    Iterable<Customer> findOrderByName();
+    Iterable<CustomerEntity> findOrderByName();
 
-    Customer findByName(String name);
+    CustomerEntity findByName(String name);
 
-    Iterable<Customer> findByNameLike(String name);
+    Iterable<CustomerEntity> findByNameLike(String name);
 }

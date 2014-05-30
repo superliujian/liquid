@@ -3,7 +3,7 @@ package liquid.service;
 import liquid.persistence.domain.ChargeType;
 import liquid.persistence.domain.ServiceItemEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.ServiceSubtype;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.repository.ServiceItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class ServiceItemService {
     }
 
     public void add(ServiceItemEntity serviceItem) {
-        ServiceSubtype serviceSubtype = serviceSubtypeService.find(serviceItem.getServiceSubtypeId());
+        ServiceSubtypeEntity serviceSubtype = serviceSubtypeService.find(serviceItem.getServiceSubtypeId());
         serviceItem.setServiceSubtype(serviceSubtype);
         serviceItemRepository.save(serviceItem);
     }

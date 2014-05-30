@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceSubtype;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +24,14 @@ public class ServiceSubtypeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listEnabled(Model model) {
-        Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
-        model.addAttribute("serviceSubtype", new ServiceSubtype());
+        model.addAttribute("serviceSubtype", new ServiceSubtypeEntity());
         return "service/subtype";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String newServiceSubtype(@ModelAttribute("serviceSubtype") ServiceSubtype serviceSubtype) {
+    public String newServiceSubtype(@ModelAttribute("serviceSubtype") ServiceSubtypeEntity serviceSubtype) {
         serviceSubtypeService.add(serviceSubtype);
         return "redirect:/service_subtype";
     }

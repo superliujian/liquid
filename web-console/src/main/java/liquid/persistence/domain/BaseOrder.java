@@ -21,7 +21,7 @@ public class BaseOrder extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "SERVICE_TYPE_ID")
-    private ServiceType serviceType;
+    private ServiceTypeEntity serviceType;
 
     @Column(name = "ORDER_NO")
     private String orderNo;
@@ -39,7 +39,7 @@ public class BaseOrder extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
-    private Customer customer;
+    private CustomerEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
@@ -69,7 +69,7 @@ public class BaseOrder extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "GOODS_ID")
-    private Goods goods;
+    private GoodsEntity goods;
 
     /**
      * unit kilogram
@@ -138,11 +138,11 @@ public class BaseOrder extends BaseEntity {
         this.serviceTypeId = serviceTypeId;
     }
 
-    public ServiceType getServiceType() {
+    public ServiceTypeEntity getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(ServiceType serviceType) {
+    public void setServiceType(ServiceTypeEntity serviceType) {
         this.serviceType = serviceType;
     }
 
@@ -170,11 +170,11 @@ public class BaseOrder extends BaseEntity {
         this.customerName0 = customerName0;
     }
 
-    public Customer getCustomer() {
+    public CustomerEntity getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
 
@@ -242,11 +242,11 @@ public class BaseOrder extends BaseEntity {
         this.goodsId = goodsId;
     }
 
-    public Goods getGoods() {
+    public GoodsEntity getGoods() {
         return goods;
     }
 
-    public void setGoods(Goods goods) {
+    public void setGoods(GoodsEntity goods) {
         this.goods = goods;
     }
 

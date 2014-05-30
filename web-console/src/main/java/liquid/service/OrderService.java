@@ -97,12 +97,12 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     public void prepare(OrderEntity order) {
-        ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
-        Customer customer = customerRepository.findOne(order.getCustomerId());
+        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
+        CustomerEntity customer = customerRepository.findOne(order.getCustomerId());
 
 //        Goods goods = goodsRepository.findOne(order.getGoodsId());
         if (order.getGoodsId() > 0) {
-            Goods goods = new Goods(order.getGoodsId());
+            GoodsEntity goods = new GoodsEntity(order.getGoodsId());
             order.setGoods(goods);
         }
 

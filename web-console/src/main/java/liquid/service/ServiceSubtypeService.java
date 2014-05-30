@@ -1,6 +1,6 @@
 package liquid.service;
 
-import liquid.persistence.domain.ServiceSubtype;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.repository.ServiceSubtypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,15 @@ public class ServiceSubtypeService {
     @Autowired
     private ServiceSubtypeRepository serviceSubtypeRepository;
 
-    public Iterable<ServiceSubtype> findEnabled() {
+    public Iterable<ServiceSubtypeEntity> findEnabled() {
         return serviceSubtypeRepository.findAll();
     }
 
-    public void add(ServiceSubtype serviceSubtype) {
+    public void add(ServiceSubtypeEntity serviceSubtype) {
         serviceSubtypeRepository.save(serviceSubtype);
     }
 
-    public ServiceSubtype find(long id) {
+    public ServiceSubtypeEntity find(long id) {
         return serviceSubtypeRepository.findOne(id);
     }
 }

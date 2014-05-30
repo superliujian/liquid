@@ -50,9 +50,9 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
 
     @Transactional(value = "transactionManager")
     public ReceivingOrder save(ReceivingOrder order) {
-        ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
-        Customer customer = customerService.find(order.getCustomerId());
-        Goods goods = cargoTypeService.find(order.getGoodsId());
+        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
+        CustomerEntity customer = customerService.find(order.getCustomerId());
+        GoodsEntity goods = cargoTypeService.find(order.getGoodsId());
         LocationEntity srcLoc = locationService.find(order.getOrigination());
         LocationEntity dstLoc = locationService.find(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);

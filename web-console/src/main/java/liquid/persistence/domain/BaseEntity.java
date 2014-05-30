@@ -28,6 +28,16 @@ public class BaseEntity {
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
 
+    public static <E extends BaseEntity> E newInstance(Class<E> clazz, long id) {
+        try {
+            E entity = clazz.newInstance();
+            entity.setId(id);
+            return entity;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new EntityInstantiationException(e);
+        }
+    }
+
     public Long getId() {
         return id;
     }

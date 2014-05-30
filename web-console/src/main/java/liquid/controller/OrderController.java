@@ -81,17 +81,17 @@ public class OrderController extends BaseChargeController {
     private OrderFacade orderFacade;
 
     @ModelAttribute("serviceTypes")
-    public Iterable<ServiceType> populateServiceTypes() {
+    public Iterable<ServiceTypeEntity> populateServiceTypes() {
         return serviceTypeService.findAll();
     }
 
     @ModelAttribute("customers")
-    public Iterable<Customer> populateCustomers() {
+    public Iterable<CustomerEntity> populateCustomers() {
         return customerService.findAll();
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Goods> populateCargos() {
+    public Iterable<GoodsEntity> populateCargos() {
         return cargoTypeService.findAll();
     }
 
@@ -134,7 +134,7 @@ public class OrderController extends BaseChargeController {
     public Map<Long, String> populateChargeTypes() {return chargeService.getChargeTypes(); }
 
     @ModelAttribute("serviceSubtypes")
-    public Iterable<ServiceSubtype> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
+    public Iterable<ServiceSubtypeEntity> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
 
     public List<LocationEntity> populateLocations() {
         return locationService.findByType(LocationType.CITY.getType());
@@ -196,6 +196,26 @@ public class OrderController extends BaseChargeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "save")
+    public String save(@Valid @ModelAttribute Order order,
+                       BindingResult bindingResult, Model model, Principal principal) {
+        logger.debug("order: {}", order);
+        FormValidationResult result = customerService.validateCustomer(order);
+        if (!result.isSuccessful()) {
+            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
+        }
+        if (bindingResult.hasErrors()) {
+            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+            model.addAttribute("locations", locationEntities);
+            return "order/form";
+        } else {
+            order.setRole(RoleHelper.getRole(principal));
+            order.setUsername(principal.getName());
+            order.setStatus(OrderStatus.SAVED);
+            orderFacade.save(order);
+            return "redirect:/order?number=0";
+        }
+    }
+
     public String save(@Valid @ModelAttribute OrderEntity order,
                        BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);

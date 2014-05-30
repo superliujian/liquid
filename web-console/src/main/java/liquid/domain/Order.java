@@ -1,5 +1,7 @@
 package liquid.domain;
 
+import liquid.metadata.OrderStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +30,12 @@ public class Order {
     private long railContainerSubtypeId;
     private long selfContainerSubtypeId;
     private int containerQuantity;
+    private List<ServiceItem> serviceItems;
     private long usdTotal;
     private long cnyTotal;
-    private List<ServiceItem> serviceItems;
+    private String username;
+    private String role;
+    private OrderStatus status;
 
     public Order() {
         serviceItems = new ArrayList<>();
@@ -204,6 +209,14 @@ public class Order {
         this.containerQuantity = containerQuantity;
     }
 
+    public List<ServiceItem> getServiceItems() {
+        return serviceItems;
+    }
+
+    public void setServiceItems(List<ServiceItem> serviceItems) {
+        this.serviceItems = serviceItems;
+    }
+
     public long getUsdTotal() {
         return usdTotal;
     }
@@ -220,12 +233,28 @@ public class Order {
         this.cnyTotal = cnyTotal;
     }
 
-    public List<ServiceItem> getServiceItems() {
-        return serviceItems;
+    public String getUsername() {
+        return username;
     }
 
-    public void setServiceItems(List<ServiceItem> serviceItems) {
-        this.serviceItems = serviceItems;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -252,9 +281,12 @@ public class Order {
         sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
         sb.append(", selfContainerSubtypeId=").append(selfContainerSubtypeId);
         sb.append(", containerQuantity=").append(containerQuantity);
+        sb.append(", serviceItems=").append(serviceItems);
         sb.append(", usdTotal=").append(usdTotal);
         sb.append(", cnyTotal=").append(cnyTotal);
-        sb.append(", serviceItems=").append(serviceItems);
+        sb.append(", username='").append(username).append('\'');
+        sb.append(", role='").append(role).append('\'');
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }
