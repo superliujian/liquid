@@ -4,16 +4,17 @@ package liquid.domain;
  * Created by redbrick9 on 5/27/14.
  */
 public class ServiceItem {
-    private long id;
+    private Long id;
     private long serviceSubtypeId;
     private String currency;
     private long quotation;
+    private String comment;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,5 +40,25 @@ public class ServiceItem {
 
     public void setQuotation(long quotation) {
         this.quotation = quotation;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ServiceItem{");
+        sb.append("id=").append(id);
+        sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
+        sb.append(", currency='").append(currency).append('\'');
+        sb.append(", quotation=").append(quotation);
+        sb.append(", comment='").append(comment).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

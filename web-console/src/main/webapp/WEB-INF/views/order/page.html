@@ -24,26 +24,30 @@
 
 <!-- /.container -->
 <div class="container">
-    <form action="/order" method="GET" class="form-inline">
+    <div class="row">
         <div class="col-lg-8">
-            <div class="input-group">
-                <span class="input-group-addon"
-                      th:text="#{order.shipping} + ' (' + #{order.no} + ', ' + #{customer.name} + ')'">Shipping Order</span>
+            <form action="/order" method="GET" class="form-inline">
+                <div class="input-group">
+                    <span class="input-group-addon"
+                          th:text="#{order.shipping} + ' (' + #{order.no} + ', ' + #{customer.name} + ')'">Shipping Order</span>
 
-                <input type="text" class="form-control" id="param" name="param" placeholder="Order No. or Customer Name"
-                       th:placeholder="#{order.no} + ' ' + #{customer.name}"/>
-                <span class="input-group-btn">
-                    <button type="submit" name="findByOrderNo" value="Find Orders By ID" class="btn btn-default"
-                            th:text="#{order.find.by.no}"/>
-                    <button type="submit" name="findByCustomerName" value="Find Orders By Customer Name"
-                            class="btn btn-default"
-                            th:text="#{order.find.by.customer.name}"/>
-                    <button type="submit" name="add" value="Create Order" class="btn btn-default"
-                            th:text="#{order.create}"/>
-                </span>
-            </div>
+                    <input type="text" class="form-control" id="param" name="param" placeholder="Order No. or Customer Name"
+                           th:placeholder="#{order.no} + ' ' + #{customer.name}"/>
+                    <span class="input-group-btn">
+                        <button type="submit" name="findByOrderNo" value="Find Orders By ID" class="btn btn-default"
+                                th:text="#{order.find.by.no}"/>
+                        <button type="submit" name="findByCustomerName" value="Find Orders By Customer Name"
+                                class="btn btn-default"
+                                th:text="#{order.find.by.customer.name}"/>
+                    </span>
+                </div>
+            </form>
         </div>
-    </form>
+        
+        <div class="col-lg-4">
+            <a href="/order/new" class="btn btn-success btn-block" role="button" th:text="#{order.create}">New Order</a>
+        </div>
+    </div>
 </div>
 <!-- /.container -->
 
@@ -74,6 +78,7 @@
                     -->
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price.cny}">CNY Price</th>
+                    <th th:text="#{price.usd}">USD Price</th>
                     <th th:text="#{create.time}">Create Time</th>
                     <th></th>
                     <th></th>
@@ -99,17 +104,18 @@
                     <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
                     -->
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.salesPriceCny}">CNY Price</td>
-                    <td th:text="${order.createTime}">Create Time</td>
+                    <td th:text="${order.cnyTotal}">CNY Price</td>
+                    <td th:text="${order.usdTotal}">USD Price</td>
+                    <td th:text="${order.updateTime}">Create Time</td>
                     <td>
-                        <a href="/order/id?action=edit" class="btn btn-default btn-xs"
-                           th:href="'/order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">
+                        <a href="#edit" class="btn btn-default btn-xs"
+                           th:href="'/order/' + ${order.id} + '/edit'" th:if="${order.status} != 2">
                             <i class="glyphicon glyphicon-edit"/>
                         </a>
                     </td>
                     <td>
-                        <a href="/order/id?action=duplicate" class="btn btn-default btn-xs"
-                           th:href="'/order/' + ${order.id + '?action=duplicate'}" th:if="${order.status} != 1">
+                        <a href="#duplicate" class="btn btn-default btn-xs"
+                           th:href="'/order/' + ${order.id} + '/duplicate'" th:if="${order.status} != 1">
                             <i class="glyphicon glyphicon-file"/>
                         </a>
                     </td>

@@ -1,7 +1,10 @@
 package liquid.domain;
 
 import liquid.metadata.OrderStatus;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +12,13 @@ import java.util.List;
  * Created by redbrick9 on 5/27/14.
  */
 public class Order {
-    private long id;
+    private Long id;
+    private String orderNo;
     private long serviceTypeId;
     private long customerId;
+
+    @NotNull
+    @NotEmpty
     private String customerName;
     private int tradeType;
     private long originId;
@@ -20,6 +27,8 @@ public class Order {
     private String consigneePhone;
     private String consigneeAddress;
     private long goodsId;
+
+    @Min(1)
     private int goodsWeight;
     private int loadingType;
     private String loadingAddress;
@@ -29,24 +38,37 @@ public class Order {
     private int containerType;
     private long railContainerSubtypeId;
     private long selfContainerSubtypeId;
+
+    @Min(1)
     private int containerQuantity;
     private List<ServiceItem> serviceItems;
-    private long usdTotal;
+
+    @Min(1)
     private long cnyTotal;
+    private long usdTotal;
+
     private String username;
     private String role;
-    private OrderStatus status;
+    private int status;
 
     public Order() {
         serviceItems = new ArrayList<>();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public long getServiceTypeId() {
@@ -249,11 +271,11 @@ public class Order {
         this.role = role;
     }
 
-    public OrderStatus getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -261,6 +283,7 @@ public class Order {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Order{");
         sb.append("id=").append(id);
+        sb.append(", orderNo=").append(orderNo);
         sb.append(", serviceTypeId=").append(serviceTypeId);
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName='").append(customerName).append('\'');

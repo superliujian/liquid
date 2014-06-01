@@ -127,9 +127,6 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "STATUS")
     private int status;
 
-    @Transient
-    private List<ServiceItemEntity> serviceItems = new ArrayList<>();
-
     public long getServiceTypeId() {
         return serviceTypeId;
     }
@@ -370,48 +367,4 @@ public class BaseOrder extends BaseEntity {
         this.status = status;
     }
 
-    public List<ServiceItemEntity> getServiceItems() {
-        return serviceItems;
-    }
-
-    public void setServiceItems(List<ServiceItemEntity> serviceItems) {
-        this.serviceItems = serviceItems;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("BaseOrder{");
-        sb.append("serviceTypeId=").append(serviceTypeId);
-        sb.append(", serviceType=").append(serviceType);
-        sb.append(", orderNo='").append(orderNo).append('\'');
-        sb.append(", customerId=").append(customerId);
-        sb.append(", customerName0='").append(customerName0).append('\'');
-        sb.append(", customer=").append(customer);
-        sb.append(", srcLoc=").append(srcLoc);
-        sb.append(", origination=").append(origination);
-        sb.append(", dstLoc=").append(dstLoc);
-        sb.append(", destination=").append(destination);
-        sb.append(", consignee='").append(consignee).append('\'');
-        sb.append(", consigneePhone='").append(consigneePhone).append('\'');
-        sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
-        sb.append(", goodsId=").append(goodsId);
-        sb.append(", goods=").append(goods);
-        sb.append(", goodsWeight=").append(goodsWeight);
-        sb.append(", containerType=").append(containerType);
-        sb.append(", containerSubtypeId=").append(containerSubtypeId);
-        sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
-        sb.append(", ownContainerSubtypeId=").append(ownContainerSubtypeId);
-        sb.append(", containerSubtype=").append(containerSubtype);
-        sb.append(", containerCap=").append(containerCap);
-        sb.append(", containerQty=").append(containerQty);
-        sb.append(", salesPriceCny=").append(salesPriceCny);
-        sb.append(", distyPrice=").append(distyPrice);
-        sb.append(", grandTotal=").append(grandTotal);
-        sb.append(", createRole='").append(createRole).append('\'');
-        sb.append(", usdTotal=").append(usdTotal);
-        sb.append(", cnyTotal=").append(cnyTotal);
-        sb.append(", status=").append(status);
-        sb.append('}');
-        return sb.toString();
-    }
 }

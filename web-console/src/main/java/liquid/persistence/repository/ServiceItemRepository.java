@@ -11,9 +11,9 @@ import java.util.Collection;
  * Created by tao on 12/25/13.
  */
 public interface ServiceItemRepository extends CrudRepository<ServiceItemEntity, Long> {
-    Iterable<ServiceItemEntity> findByChargeType(ChargeType chargeType);
+//    Iterable<ServiceItemEntity> findByChargeType(ChargeType chargeType);
 
-    Collection<ServiceItemEntity> findByServiceProvider(ServiceProviderEntity serviceProviderEntity);
+//    Collection<ServiceItemEntity> findByServiceProvider(ServiceProviderEntity serviceProviderEntity);
 
-    Collection<ServiceItemEntity> findByName(String name);
+//    Collection<ServiceItemEntity> findByName(String name);
 }

@@ -45,13 +45,13 @@ public class ServiceProviderService {
         ServiceProviderEntity serviceProviderEntity = serviceProviderRepository.findOne(id);
         serviceProviderEntity.setTypeId(serviceProviderEntity.getType().getId());
 
-        Collection<ServiceItemEntity> servicesCollection = serviceItemRepository.findByServiceProvider(serviceProviderEntity);
+        Collection<ServiceItemEntity> servicesCollection = null;// serviceItemRepository.findByServiceProvider(serviceProviderEntity);
 
         if (servicesCollection != null) {
             ServiceItemEntity[] serviceItems = servicesCollection.toArray(new ServiceItemEntity[0]);
             long[] chargeTypeIds = new long[serviceItems.length];
             for (int i = 0; i < chargeTypeIds.length; i++) {
-                chargeTypeIds[i] = serviceItems[i].getChargeType().getId();
+//                chargeTypeIds[i] = serviceItems[i].getChargeType().getId();
             }
             serviceProviderEntity.setChargeTypeIds(chargeTypeIds);
         } else {
@@ -76,7 +76,7 @@ public class ServiceProviderService {
         sp.setType(type);
         serviceProviderRepository.save(sp);
 
-        Iterable<ServiceItemEntity> deletingServices = serviceItemRepository.findByServiceProvider(sp);
+        Iterable<ServiceItemEntity> deletingServices = null;//serviceItemRepository.findByServiceProvider(sp);
         serviceItemRepository.delete(deletingServices);
 
         long[] chargeTypeIds = sp.getChargeTypeIds();
@@ -86,9 +86,9 @@ public class ServiceProviderService {
                 ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeIds[i]);
 
                 serviceItems[i] = new ServiceItemEntity();
-                serviceItems[i].setServiceProvider(sp);
-                serviceItems[i].setChargeType(chargeType);
-                serviceItems[i].setName(chargeType.getName());
+//                serviceItems[i].setServiceProvider(sp);
+//                serviceItems[i].setChargeType(chargeType);
+//                serviceItems[i].setName(chargeType.getName());
             }
             serviceItemRepository.save(Arrays.asList(serviceItems));
         }
@@ -134,10 +134,10 @@ public class ServiceProviderService {
     public List<ServiceProviderEntity> findByChargeType(long chargeTypeId) {
         List<ServiceProviderEntity> serviceProviderEntities = new ArrayList<ServiceProviderEntity>();
         ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeId);
-        Iterable<ServiceItemEntity> services = serviceItemRepository.findByChargeType(chargeType);
-        for (ServiceItemEntity serviceItem : services) {
-            serviceProviderEntities.add(serviceItem.getServiceProvider());
-        }
+//        Iterable<ServiceItemEntity> services = serviceItemRepository.findByChargeType(chargeType);
+//        for (ServiceItemEntity serviceItem : services) {
+//            serviceProviderEntities.add(serviceItem.getServiceProvider());
+//        }
         return serviceProviderEntities;
     }
 }

@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.domain.ServiceItem;
 import liquid.persistence.domain.ChargeType;
 import liquid.persistence.domain.ServiceItemEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by redbrick9 on 5/24/14.
@@ -26,10 +28,10 @@ public class ServiceItemService {
 
     public List<ServiceProviderEntity> findByChargeType(long chargeTypeId) {
         List<ServiceProviderEntity> serviceProviderEntities = new ArrayList<>();
-        Iterable<ServiceItemEntity> serviceItems = serviceItemRepository.findByChargeType(new ChargeType(chargeTypeId));
-        for (ServiceItemEntity serviceItem : serviceItems) {
-            serviceProviderEntities.add(serviceItem.getServiceProvider());
-        }
+//        Iterable<ServiceItemEntity> serviceItems = serviceItemRepository.findByChargeType(new ChargeType(chargeTypeId));
+//        for (ServiceItemEntity serviceItem : serviceItems) {
+//            serviceProviderEntities.add(serviceItem.getServiceProvider());
+//        }
         return serviceProviderEntities;
     }
 
@@ -42,12 +44,16 @@ public class ServiceItemService {
     }
 
     public void add(ServiceItemEntity serviceItem) {
-        ServiceSubtypeEntity serviceSubtype = serviceSubtypeService.find(serviceItem.getServiceSubtypeId());
-        serviceItem.setServiceSubtype(serviceSubtype);
-        serviceItemRepository.save(serviceItem);
+//        ServiceSubtypeEntity serviceSubtype = serviceSubtypeService.find(serviceItem.getServiceSubtypeId());
+//        serviceItem.setServiceSubtype(serviceSubtype);
+//        serviceItemRepository.save(serviceItem);
     }
 
     public ServiceItemEntity find(long id) {
         return serviceItemRepository.findOne(id);
+    }
+
+    public void delete(Set<ServiceItemEntity> serviceItems) {
+        serviceItemRepository.delete(serviceItems);
     }
 }

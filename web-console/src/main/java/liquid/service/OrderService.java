@@ -17,7 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -55,6 +58,9 @@ public class OrderService extends AbstractBaseOrderService {
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
+
+    @Autowired
+    private ServiceItemService serviceItemService;
 
     @Deprecated
     public OrderEntity newOrder(List<LocationEntity> locationEntities) {
@@ -127,8 +133,14 @@ public class OrderService extends AbstractBaseOrderService {
         logger.debug("Order: {}", order);
     }
 
+    @Transactional("transactionManager")
     public void save(OrderEntity order) {
-        prepare(order);
+        if (null != order.getId()) {
+            OrderEntity oldOrder = find(order.getId());
+            oldOrder.getServiceItems().removeAll(order.getServiceItems());
+            if (oldOrder.getServiceItems().size() > 0)
+                serviceItemService.delete(oldOrder.getServiceItems());
+        }
         orderRepository.save(order);
     }
 
@@ -156,8 +168,8 @@ public class OrderService extends AbstractBaseOrderService {
         return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
-    public Page<OrderEntity> findByCreateUser(String uid, Pageable pageable) {
-        return orderRepository.findByCreateUser(uid, pageable);
+    public Page<OrderEntity> findByUpdateUser(String uid, Pageable pageable) {
+        return orderRepository.findByUpdateUser(uid, pageable);
     }
 
     public Page<OrderEntity> findAll(Pageable pageable) {

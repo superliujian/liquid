@@ -8,6 +8,10 @@ import javax.persistence.*;
 @Entity(name = "SERVICE_ITEM")
 public class ServiceItemEntity extends BaseEntity {
     @ManyToOne
+    @JoinColumn(name = "ORDER_ID")
+    private OrderEntity order;
+
+    @ManyToOne
     @JoinColumn(name = "SERVICE_SUBTYPE_ID")
     private ServiceSubtypeEntity serviceSubtype;
 
@@ -19,6 +23,14 @@ public class ServiceItemEntity extends BaseEntity {
 
     @Column(name = "COMMENT")
     private String comment;
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
 
     public ServiceSubtypeEntity getServiceSubtype() {
         return serviceSubtype;
