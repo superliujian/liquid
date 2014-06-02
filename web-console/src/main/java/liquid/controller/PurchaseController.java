@@ -59,7 +59,7 @@ public class PurchaseController extends BaseTaskController {
         Map<Long, String> chargeTypes = chargeService.getChargeTypes();
         Iterable<ServiceProviderEntity> sps = serviceProviderService.findByType(serviceProviderService.spTypeByChargeType(chargeTypes.entrySet().iterator().next().getKey().intValue()));
 
-        Route route = routeService.find(routeId);
+        RouteEntity route = routeService.find(routeId);
         Leg leg = planningService.findLeg(legId);
 
         Iterable<Charge> charges = null;

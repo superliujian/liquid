@@ -20,7 +20,7 @@ public class Charge extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private Route route;
+    private RouteEntity route;
 
     @Transient
     private long formRouteId;
@@ -88,11 +88,11 @@ public class Charge extends BaseEntity {
         this.leg = leg;
     }
 
-    public Route getRoute() {
+    public RouteEntity getRoute() {
         return route;
     }
 
-    public void setRoute(Route route) {
+    public void setRoute(RouteEntity route) {
         this.route = route;
     }
 

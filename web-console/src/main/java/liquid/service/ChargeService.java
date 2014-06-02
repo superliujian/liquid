@@ -68,7 +68,7 @@ public class ChargeService {
         ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
         charge.setSp(sp);
 
-        Route route = routeService.find(charge.getFormRouteId());
+        RouteEntity route = routeService.find(charge.getFormRouteId());
         Leg leg = legRepository.findOne(charge.getFormLegId());
 
         OrderEntity order = null;

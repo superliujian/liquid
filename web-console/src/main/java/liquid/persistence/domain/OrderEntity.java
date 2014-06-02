@@ -36,9 +36,6 @@ public class OrderEntity extends BaseOrder {
     @Column(name = "LOADING_ET")
     private Date loadingEt;
 
-    @Transient
-    private String loadingEtStr;
-
     @Column(name = "HAS_DELIVERY")
     private boolean hasDelivery;
 
@@ -91,14 +88,6 @@ public class OrderEntity extends BaseOrder {
 
     public void setLoadingEt(Date loadingEt) {
         this.loadingEt = loadingEt;
-    }
-
-    public String getLoadingEtStr() {
-        return loadingEtStr;
-    }
-
-    public void setLoadingEtStr(String loadingEtStr) {
-        this.loadingEtStr = loadingEtStr;
     }
 
     public boolean isHasDelivery() {

@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.persistence.domain.RailContainer;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 import liquid.persistence.repository.RailContainerRepository;
 import liquid.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class RailContainerService {
     @Autowired
     private RailContainerRepository railContainerRepository;
 
-    public Collection<RailContainer> findByRoute(Route route) {
+    public Collection<RailContainer> findByRoute(RouteEntity route) {
         Collection<RailContainer> railContainers = railContainerRepository.findByRoute(route);
         for (RailContainer railContainer : railContainers) {
             if (railContainer.getLoadingToc() != null) {

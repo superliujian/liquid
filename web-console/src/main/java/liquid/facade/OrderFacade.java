@@ -4,7 +4,6 @@ import liquid.domain.Order;
 import liquid.domain.ServiceItem;
 import liquid.metadata.ContainerType;
 import liquid.metadata.LocationType;
-import liquid.metadata.OrderStatus;
 import liquid.persistence.domain.*;
 import liquid.service.LocationService;
 import liquid.service.OrderService;
@@ -115,8 +114,21 @@ public class OrderFacade {
     }
 
     public Order find(long id) {
-        Order order = new Order();
         OrderEntity orderEntity = orderService.find(id);
+        Order order = convert(orderEntity);
+        return order;
+    }
+
+    public Order duplicate(long id) {
+        OrderEntity orderEntity = orderService.find(id);
+        Order order = convert(orderEntity);
+        order.setId(null);
+        order.setOrderNo(null);
+        return order;
+    }
+
+    private Order convert(OrderEntity orderEntity) {
+        Order order = new Order();
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
         order.setServiceTypeId(orderEntity.getServiceType().getId());
@@ -160,7 +172,6 @@ public class OrderFacade {
         order.setUsername(orderEntity.getUpdateUser());
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
-
         return order;
     }
 }

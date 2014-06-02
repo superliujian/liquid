@@ -25,7 +25,7 @@ public class ShippingContainer extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private Route route;
+    private RouteEntity route;
 
     @NotNull
     @NotEmpty
@@ -61,11 +61,11 @@ public class ShippingContainer extends BaseEntity {
         this.containerId = containerId;
     }
 
-    public Route getRoute() {
+    public RouteEntity getRoute() {
         return route;
     }
 
-    public void setRoute(Route route) {
+    public void setRoute(RouteEntity route) {
         this.route = route;
     }
 

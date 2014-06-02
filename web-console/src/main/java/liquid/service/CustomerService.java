@@ -62,29 +62,4 @@ public class CustomerService {
         if (name.equals(customer.getName())) return FormValidationResult.newSuccess();
         else return FormValidationResult.newFailure("invalid.customer");
     }
-
-    @Deprecated
-    public FormValidationResult validateCustomer(OrderEntity order) {
-        long id = order.getCustomerId();
-        String name = order.getCustomerName0();
-        if (id == 0L) {
-            if (null != name && name.trim().length() > 0) {
-                CustomerEntity customer = customerRepository.findByName(name);
-                if (null != customer) {
-                    order.setCustomerId(customer.getId());
-                    return FormValidationResult.newSuccess();
-                }
-            } else {
-                return FormValidationResult.newFailure("invalid.customer");
-            }
-        }
-
-        CustomerEntity customer = find(id);
-        if (name == null) return FormValidationResult.newFailure("invalid.customer");
-
-        if (null == customer) return FormValidationResult.newFailure("invalid.customer");
-
-        if (name.equals(customer.getName())) return FormValidationResult.newSuccess();
-        else return FormValidationResult.newFailure("invalid.customer");
-    }
 }

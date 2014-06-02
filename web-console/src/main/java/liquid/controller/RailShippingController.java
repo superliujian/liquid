@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.dto.RailShippingDto;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class RailShippingController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("rail_task", TASK_PATH);
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

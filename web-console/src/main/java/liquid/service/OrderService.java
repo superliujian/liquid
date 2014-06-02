@@ -2,12 +2,10 @@ package liquid.service;
 
 import liquid.context.BusinessContext;
 import liquid.metadata.ContainerType;
-import liquid.persistence.domain.*;
+import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.OrderHistory;
 import liquid.persistence.repository.*;
 import liquid.service.bpm.ActivitiEngineService;
-import liquid.utils.CollectionUtils;
-import liquid.utils.DateUtils;
-import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -62,15 +58,6 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private ServiceItemService serviceItemService;
 
-    @Deprecated
-    public OrderEntity newOrder(List<LocationEntity> locationEntities) {
-        OrderEntity order = new OrderEntity();
-        LocationEntity second = CollectionUtils.tryToGet2ndElement(locationEntities);
-        order.setDestination(second.getId());
-        order.setLoadingEtStr(DateUtils.stringOf(new Date()));
-        return order;
-    }
-
     public OrderEntity duplicate(OrderEntity oldOne) {
         OrderEntity order = new OrderEntity();
 
@@ -98,39 +85,7 @@ public class OrderService extends AbstractBaseOrderService {
         order.setCustomerId(oldOne.getCustomer().getId());
         order.setCustomerName0(oldOne.getCustomer().getName());
         order.setGoodsId(oldOne.getGoods().getId());
-        order.setLoadingEtStr(DateUtils.stringOf(new Date()));
         return order;
-    }
-
-    public void prepare(OrderEntity order) {
-        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
-        CustomerEntity customer = customerRepository.findOne(order.getCustomerId());
-
-//        Goods goods = goodsRepository.findOne(order.getGoodsId());
-        if (order.getGoodsId() > 0) {
-            GoodsEntity goods = new GoodsEntity(order.getGoodsId());
-            order.setGoods(goods);
-        }
-
-        if (null == order.getContainerSubtype()) {
-            if (order.getContainerType() == ContainerType.SELF.getType()) {
-                order.setContainerSubtypeId(order.getOwnContainerSubtypeId());
-            } else {
-                order.setContainerSubtypeId(order.getRailContainerSubtypeId());
-            }
-            ContainerSubtypeEntity containerSubtypeEntity = containerSubtypeService.find(order.getContainerSubtypeId());
-            order.setContainerSubtype(containerSubtypeEntity);
-        }
-        LocationEntity srcLoc = locationRepository.findOne(order.getOrigination());
-        LocationEntity dstLoc = locationRepository.findOne(order.getDestination());
-        if (null != serviceType) order.setServiceType(serviceType);
-        if (null != customer) order.setCustomer(customer);
-
-        if (null != srcLoc) order.setSrcLoc(srcLoc);
-        if (null != dstLoc) order.setDstLoc(dstLoc);
-        if (StringUtils.valuable(order.getLoadingEtStr()))
-            order.setLoadingEt(DateUtils.dateOf(order.getLoadingEtStr()));
-        logger.debug("Order: {}", order);
     }
 
     @Transactional("transactionManager")
@@ -142,21 +97,6 @@ public class OrderService extends AbstractBaseOrderService {
                 serviceItemService.delete(oldOrder.getServiceItems());
         }
         return orderRepository.save(order);
-    }
-
-    public void submit(OrderEntity order) {
-        prepare(order);
-        // compute order no.
-        order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
-        logger.info("Order No: {}", order.getOrderNo());
-        orderRepository.save(order);
-        logger.debug("username: {}", businessContext.getUsername());
-
-        Map<String, Object> variableMap = new HashMap<>();
-        variableMap.put("loadingType", order.getLoadingType());
-        variableMap.put("hasDelivery", order.isHasDelivery());
-        variableMap.put("orderOwner", businessContext.getUsername());
-        bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
     }
 
     public OrderEntity findByTaskId(String taskId) {
@@ -191,9 +131,6 @@ public class OrderService extends AbstractBaseOrderService {
         }
         order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
-        order.setLoadingEtStr(order.getLoadingEt() == null
-                ? DateUtils.stringOf(new Date())
-                : DateUtils.stringOf(order.getLoadingEt()));
 
         return order;
     }

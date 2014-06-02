@@ -1,6 +1,6 @@
 package liquid.domain;
 
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 
 /**
  * Created by redbrick9 on 5/20/14.
@@ -8,7 +8,7 @@ import liquid.persistence.domain.Route;
 public class ContainerAllocation {
     private int type;
 
-    private Route[] routes;
+    private RouteEntity[] routes;
 
     private RouteContainerAllocation[] routeContainerAllocations;
 
@@ -20,11 +20,11 @@ public class ContainerAllocation {
         this.type = type;
     }
 
-    public Route[] getRoutes() {
+    public RouteEntity[] getRoutes() {
         return routes;
     }
 
-    public void setRoutes(Route[] routes) {
+    public void setRoutes(RouteEntity[] routes) {
         this.routes = routes;
     }
 

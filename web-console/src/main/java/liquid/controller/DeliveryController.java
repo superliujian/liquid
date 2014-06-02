@@ -4,7 +4,7 @@ import liquid.metadata.ChargeWay;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.Charge;
 import liquid.persistence.domain.DeliveryContainer;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 import liquid.service.ChargeService;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
@@ -46,7 +46,7 @@ public class DeliveryController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
 
         model.addAttribute("containers", scService.initDeliveryContainers(taskId));

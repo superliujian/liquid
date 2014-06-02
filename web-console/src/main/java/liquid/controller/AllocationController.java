@@ -61,7 +61,7 @@ public class AllocationController extends BaseTaskController {
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         scService.initialize(taskId);
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
 
@@ -151,7 +151,7 @@ public class AllocationController extends BaseTaskController {
         ShippingContainer sc = scService.find(scId);
 
         // Set up pickup contact and his phone by default
-        Route route = routeService.find(routeId);
+        RouteEntity route = routeService.find(routeId);
         Collection<ShippingContainer> scs = scService.findByRoute(route);
         if (scs.iterator().hasNext()) {
             ShippingContainer firstOne = scs.iterator().next();
@@ -179,7 +179,7 @@ public class AllocationController extends BaseTaskController {
 
         scService.allocate(routeId, sc);
 
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
         return "redirect:/task/" + taskId + "/allocation";
     }

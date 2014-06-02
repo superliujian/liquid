@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -237,35 +236,6 @@ public class OrderController extends BaseChargeController {
         }
     }
 
-    public String submit(@Valid @ModelAttribute OrderEntity order,
-                         BindingResult bindingResult, Model model, Principal principal) {
-        logger.debug("order: {}", order);
-
-        // TODO: add to interceptor.
-        businessContext.setUsername(principal.getName());
-
-        order.setStatus(OrderStatus.SUBMITTED.getValue());
-
-        FormValidationResult result = customerService.validateCustomer(order);
-        if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
-        }
-
-        if (bindingResult.hasErrors()) {
-            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-            model.addAttribute("locations", locationEntities);
-            return "order/form";
-        } else {
-            order.setCreateRole(RoleHelper.getRole(principal));
-            order.setCreateUser(principal.getName());
-            order.setCreateTime(new Date());
-            order.setUpdateUser(principal.getName());
-            order.setUpdateTime(new Date());
-            orderService.submit(order);
-            return "redirect:/order?number=0";
-        }
-    }
-
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String detail(@PathVariable long id,
                          Model model, Principal principal) {
@@ -302,15 +272,9 @@ public class OrderController extends BaseChargeController {
                                 Model model, Principal principal) {
         logger.debug("id: {}", id);
 
-        OrderEntity order = orderService.find(id);
+        Order order = orderFacade.duplicate(id);
         logger.debug("order: {}", order);
 
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-
-        order = orderService.duplicate(order);
-        logger.debug("order: {}", order);
-
-        model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         return "order/form";
     }

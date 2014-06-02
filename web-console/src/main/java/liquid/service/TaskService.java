@@ -5,7 +5,7 @@ import liquid.dto.TaskDto;
 import liquid.metadata.DatePattern;
 import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.domain.Planning;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 import liquid.persistence.domain.ShippingContainer;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.utils.DateUtils;
@@ -106,9 +106,9 @@ public class TaskService {
                 long orderId = getOrderIdByTaskId(taskId);
                 OrderEntity order = orderService.find(orderId);
                 Planning planning = planningService.findByOrder(order);
-                Collection<Route> routes = routeService.findByPlanning(planning);
+                Collection<RouteEntity> routes = routeService.findByPlanning(planning);
                 int allocatedContainerQty = 0;
-                for (Route route : routes) {
+                for (RouteEntity route : routes) {
                     Collection<ShippingContainer> scs = scService.findByRoute(route);
                     allocatedContainerQty += scs.size();
                 }
