@@ -86,7 +86,7 @@ public class OrderFacade {
         orderEntity.setUsdTotal(order.getUsdTotal());
         orderEntity.setUpdateUser(order.getUsername());
         orderEntity.setCreateRole(order.getRole());
-        orderEntity.setStatus(OrderStatus.SAVED.getValue());
+        orderEntity.setStatus(order.getStatus());
 
         return orderService.save(orderEntity);
     }

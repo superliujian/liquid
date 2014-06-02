@@ -271,13 +271,13 @@ public class OrderController extends BaseChargeController {
                          Model model, Principal principal) {
         logger.debug("id: {}", id);
 
-        OrderEntity order = orderService.find(id);
+        Order order = orderFacade.find(id);
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        Planning planning = planningService.findByOrder(order);
+        Planning planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         routeService.findByPlanning(planning);
 
         model.addAttribute("transModes", TransMode.toMap());
@@ -322,7 +322,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
         logger.debug("tab: {}", tab);
 
-        OrderEntity order = orderService.find(id);
+        Order order = orderFacade.find(id);
 
         switch (tab) {
             case "task":

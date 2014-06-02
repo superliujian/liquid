@@ -34,7 +34,7 @@
                     <input type="text" class="form-control" id="param" name="param" placeholder="Order No. or Customer Name"
                            th:placeholder="#{order.no} + ' ' + #{customer.name}"/>
                     <span class="input-group-btn">
-                        <button type="submit" name="findByOrderNo" value="Find Orders By ID" class="btn btn-default"
+                        <button type="submit" name="findByOrderNo" value="Find Orders By No." class="btn btn-default"
                                 th:text="#{order.find.by.no}"/>
                         <button type="submit" name="findByCustomerName" value="Find Orders By Customer Name"
                                 class="btn btn-default"
@@ -70,12 +70,8 @@
                     <th th:text="#{goods.weight.with.unit}">Cargo Weight</th>
                     <th th:text="#{trade.type}">Trade Type</th>
                     <th th:text="#{loading.type}">Loading Type</th>
-                    <th th:text="#{has.delivery}">Has Delivery</th>
                     <th th:text="#{container.type}">Container Type</th>
                     <th th:text="#{container.subtype}">Container Subtype</th>
-                    <!--
-                    <th th:text="#{container.capacity}">Container Capacity</th>
-                    -->
                     <th th:text="#{container.quantity}">Container Quantity</th>
                     <th th:text="#{price.cny}">CNY Price</th>
                     <th th:text="#{price.usd}">USD Price</th>
@@ -97,12 +93,8 @@
                     <td th:text="${order.goodsWeight}">Cargo Weight</td>
                     <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
                     <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
-                    <td th:text="#{${order.hasDelivery}}">Has Delivery</td>
                     <td th:text="#{${containerTypeMap[order.containerType]}}">Container Type</td>
                     <td th:text="${order.containerSubtype.name}">Container Subtype</td>
-                    <!--
-                    <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
-                    -->
                     <td th:text="${order.containerQty}">Container Quantity</td>
                     <td th:text="${order.cnyTotal}">CNY Price</td>
                     <td th:text="${order.usdTotal}">USD Price</td>
