@@ -33,6 +33,8 @@ import java.util.Properties;
                         ServiceProviderRepository.class,
                         ServiceProviderTypeRepository.class,
                         ServiceTypeRepository.class,
+                        ServiceSubtypeRepository.class,
+                        ServiceItemRepository.class,
                         ContainerSubtypeRepository.class,
                         SequenceRepository.class,
                         LocationRepository.class,
@@ -54,7 +56,8 @@ import java.util.Properties;
                         DeliveryContainerRepository.class,
                         ChargeRepository.class,
                         ServiceItemRepository.class,
-                        ExchangeRateRepository.class},
+                        ExchangeRateRepository.class,
+                        AuthorRepository.class},
                 type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 @Import(PropertyPlaceholderConfig.class)

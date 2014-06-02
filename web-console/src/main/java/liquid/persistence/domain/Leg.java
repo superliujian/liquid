@@ -13,7 +13,7 @@ public class Leg extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private Route route;
+    private RouteEntity route;
 
     @Column(name = "IS_HEAD")
     private boolean head;
@@ -46,11 +46,11 @@ public class Leg extends BaseEntity {
     @JoinColumn(name = "PREV")
     private Leg prev;
 
-    public Route getRoute() {
+    public RouteEntity getRoute() {
         return route;
     }
 
-    public void setRoute(Route route) {
+    public void setRoute(RouteEntity route) {
         this.route = route;
     }
 

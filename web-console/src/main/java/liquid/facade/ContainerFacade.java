@@ -23,9 +23,9 @@ public class ContainerFacade {
         ContainerEntity containerEntity = new ContainerEntity();
 
         containerEntity.setBicCode(container.getBicCode());
-        containerEntity.setOwner(new ServiceProviderEntity(container.getOwnerId()));
-        containerEntity.setYard(new LocationEntity(container.getYardId()));
-        containerEntity.setSubtype(new ContainerSubtypeEntity(container.getSubtypeId()));
+        containerEntity.setOwner(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, container.getOwnerId()));
+        containerEntity.setYard(LocationEntity.newInstance(LocationEntity.class, container.getYardId()));
+        containerEntity.setSubtype(ContainerSubtypeEntity.newInstance(ContainerSubtypeEntity.class, container.getSubtypeId()));
         containerEntity.setStatus(0);
         containerService.save(containerEntity);
     }

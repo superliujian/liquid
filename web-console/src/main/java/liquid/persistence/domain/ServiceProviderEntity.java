@@ -54,12 +54,6 @@ public class ServiceProviderEntity extends BaseEntity {
     @Transient
     private long[] chargeTypeIds;
 
-    public ServiceProviderEntity() { }
-
-    public ServiceProviderEntity(Long id) {
-        super(id);
-    }
-
     public String getCode() {
         return code;
     }

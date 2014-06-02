@@ -2,7 +2,7 @@ package liquid.persistence.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import java.util.Date;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -11,7 +11,7 @@ import java.util.Date;
  * Time: 2:59 PM
  */
 @Entity(name = "ORDER_BASE")
-public class Order extends BaseOrder {
+public class OrderEntity extends BaseOrder {
     // 0: domestic; 1: foreign
     @Column(name = "TRADE_TYPE")
     private int tradeType;
@@ -36,11 +36,11 @@ public class Order extends BaseOrder {
     @Column(name = "LOADING_ET")
     private Date loadingEt;
 
-    @Transient
-    private String loadingEtStr;
-
     @Column(name = "HAS_DELIVERY")
     private boolean hasDelivery;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+    private Set<ServiceItemEntity> serviceItems = new HashSet<>();
 
     public int getTradeType() {
         return tradeType;
@@ -90,14 +90,6 @@ public class Order extends BaseOrder {
         this.loadingEt = loadingEt;
     }
 
-    public String getLoadingEtStr() {
-        return loadingEtStr;
-    }
-
-    public void setLoadingEtStr(String loadingEtStr) {
-        this.loadingEtStr = loadingEtStr;
-    }
-
     public boolean isHasDelivery() {
         return hasDelivery;
     }
@@ -106,19 +98,11 @@ public class Order extends BaseOrder {
         this.hasDelivery = hasDelivery;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Order{");
-        sb.append("tradeType=").append(tradeType);
-        sb.append(", loadingType=").append(loadingType);
-        sb.append(", loadingAddress='").append(loadingAddress).append('\'');
-        sb.append(", loadingContact='").append(loadingContact).append('\'');
-        sb.append(", loadingPhone='").append(loadingPhone).append('\'');
-        sb.append(", loadingEt=").append(loadingEt);
-        sb.append(", loadingEtStr='").append(loadingEtStr).append('\'');
-        sb.append(", hasDelivery=").append(hasDelivery);
-        sb.append('}');
-        return sb.toString();
+    public Set<ServiceItemEntity> getServiceItems() {
+        return serviceItems;
+    }
+
+    public void setServiceItems(Set<ServiceItemEntity> serviceItems) {
+        this.serviceItems = serviceItems;
     }
 }

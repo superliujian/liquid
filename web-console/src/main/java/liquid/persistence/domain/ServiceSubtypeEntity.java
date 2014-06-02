@@ -7,10 +7,10 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by redbrick9 on 4/26/14.
+ * Created by redbrick9 on 5/9/14.
  */
-@Entity(name = "SERVICE_TYPE")
-public class ServiceType extends BaseEntity {
+@Entity(name = "SERVICE_SUBTYPE")
+public class ServiceSubtypeEntity extends BaseEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -21,8 +21,8 @@ public class ServiceType extends BaseEntity {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "STATE")
-    private int state;
+    @Column(name = "STATUS")
+    private int status;
 
     public String getCode() {
         return code;
@@ -40,20 +40,20 @@ public class ServiceType extends BaseEntity {
         this.name = name;
     }
 
-    public int getState() {
-        return state;
+    public int getStatus() {
+        return status;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ServiceType{");
+        final StringBuilder sb = new StringBuilder("ServiceSubtype{");
         sb.append("code='").append(code).append('\'');
         sb.append(", name='").append(name).append('\'');
-        sb.append(", state=").append(state);
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

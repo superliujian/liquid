@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class ContainerAllocation extends BaseEntity {
     @OneToMany
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @OneToMany
     @JoinColumn(name = "LEG_ID")

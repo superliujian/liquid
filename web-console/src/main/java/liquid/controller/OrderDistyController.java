@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.dto.DistyDto;
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.OrderEntity;
 import liquid.service.OrderService;
 import liquid.service.TaskService;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class OrderDistyController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         long orderId = taskService.getOrderIdByTaskId(taskId);
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
         DistyDto disty = new DistyDto();
         disty.setDistyPrice(order.getDistyPrice());
         model.addAttribute("done", done);
@@ -55,7 +55,7 @@ public class OrderDistyController extends BaseTaskController {
         //TODO: Validate distributor price data.
 
         long orderId = taskService.getOrderIdByTaskId(taskId);
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
         order.setDistyPrice(disty.getDistyPrice());
         order.setUpdateUser(principal.getName());
         order.setUpdateTime(new Date());

@@ -1,8 +1,8 @@
 package liquid.service;
 
 import liquid.config.*;
-import liquid.persistence.domain.Order;
-import liquid.persistence.domain.ServiceType;
+import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.ServiceTypeEntity;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -22,9 +22,9 @@ public class OrderServiceItemTest {
         context.register(MailConfig.class);
         context.refresh();
 
-        Order order = new Order();
+        OrderEntity order = new OrderEntity();
         order.setCreateRole("ROLE_SALES");
-        ServiceType serviceType = new ServiceType();
+        ServiceTypeEntity serviceType = new ServiceTypeEntity();
         serviceType.setCode("1");
         order.setServiceType(serviceType);
         OrderService orderService = context.getBean(OrderService.class);

@@ -13,14 +13,14 @@ public class Charge extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @Column(name = "TASK_ID")
     private String taskId;
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private Route route;
+    private RouteEntity route;
 
     @Transient
     private long formRouteId;
@@ -64,11 +64,11 @@ public class Charge extends BaseEntity {
     @Column(name = "STATUS")
     private int status;
 
-    public Order getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 
@@ -88,11 +88,11 @@ public class Charge extends BaseEntity {
         this.leg = leg;
     }
 
-    public Route getRoute() {
+    public RouteEntity getRoute() {
         return route;
     }
 
-    public void setRoute(Route route) {
+    public void setRoute(RouteEntity route) {
         this.route = route;
     }
 

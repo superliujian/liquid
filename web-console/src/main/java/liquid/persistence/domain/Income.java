@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class Income extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @Column(name = "TASK_ID")
     private String taskId;
@@ -36,11 +36,11 @@ public class Income extends BaseEntity {
     @Column(name = "COMMENT")
     private String comment;
 
-    public Order getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 

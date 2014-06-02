@@ -6,7 +6,7 @@ import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 import liquid.service.ChargeService;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
@@ -54,7 +54,7 @@ public class RailTruckController extends BaseTaskController {
         model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
 
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
 
         // for charges

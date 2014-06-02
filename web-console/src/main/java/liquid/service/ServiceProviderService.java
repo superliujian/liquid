@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.persistence.domain.ChargeType;
-import liquid.persistence.domain.ServiceItem;
+import liquid.persistence.domain.ServiceItemEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.SpType;
 import liquid.persistence.repository.ChargeTypeRepository;
@@ -45,13 +45,13 @@ public class ServiceProviderService {
         ServiceProviderEntity serviceProviderEntity = serviceProviderRepository.findOne(id);
         serviceProviderEntity.setTypeId(serviceProviderEntity.getType().getId());
 
-        Collection<ServiceItem> servicesCollection = serviceItemRepository.findByServiceProvider(serviceProviderEntity);
+        Collection<ServiceItemEntity> servicesCollection = null;// serviceItemRepository.findByServiceProvider(serviceProviderEntity);
 
         if (servicesCollection != null) {
-            ServiceItem[] serviceItems = servicesCollection.toArray(new ServiceItem[0]);
+            ServiceItemEntity[] serviceItems = servicesCollection.toArray(new ServiceItemEntity[0]);
             long[] chargeTypeIds = new long[serviceItems.length];
             for (int i = 0; i < chargeTypeIds.length; i++) {
-                chargeTypeIds[i] = serviceItems[i].getChargeType().getId();
+//                chargeTypeIds[i] = serviceItems[i].getChargeType().getId();
             }
             serviceProviderEntity.setChargeTypeIds(chargeTypeIds);
         } else {
@@ -76,19 +76,19 @@ public class ServiceProviderService {
         sp.setType(type);
         serviceProviderRepository.save(sp);
 
-        Iterable<ServiceItem> deletingServices = serviceItemRepository.findByServiceProvider(sp);
+        Iterable<ServiceItemEntity> deletingServices = null;//serviceItemRepository.findByServiceProvider(sp);
         serviceItemRepository.delete(deletingServices);
 
         long[] chargeTypeIds = sp.getChargeTypeIds();
         if (chargeTypeIds != null && chargeTypeIds.length > 0) {
-            ServiceItem[] serviceItems = new ServiceItem[chargeTypeIds.length];
+            ServiceItemEntity[] serviceItems = new ServiceItemEntity[chargeTypeIds.length];
             for (int i = 0; i < serviceItems.length; i++) {
                 ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeIds[i]);
 
-                serviceItems[i] = new ServiceItem();
-                serviceItems[i].setServiceProvider(sp);
-                serviceItems[i].setChargeType(chargeType);
-                serviceItems[i].setName(chargeType.getName());
+                serviceItems[i] = new ServiceItemEntity();
+//                serviceItems[i].setServiceProvider(sp);
+//                serviceItems[i].setChargeType(chargeType);
+//                serviceItems[i].setName(chargeType.getName());
             }
             serviceItemRepository.save(Arrays.asList(serviceItems));
         }
@@ -134,10 +134,10 @@ public class ServiceProviderService {
     public List<ServiceProviderEntity> findByChargeType(long chargeTypeId) {
         List<ServiceProviderEntity> serviceProviderEntities = new ArrayList<ServiceProviderEntity>();
         ChargeType chargeType = chargeTypeRepository.findOne(chargeTypeId);
-        Iterable<ServiceItem> services = serviceItemRepository.findByChargeType(chargeType);
-        for (ServiceItem serviceItem : services) {
-            serviceProviderEntities.add(serviceItem.getServiceProvider());
-        }
+//        Iterable<ServiceItemEntity> services = serviceItemRepository.findByChargeType(chargeType);
+//        for (ServiceItemEntity serviceItem : services) {
+//            serviceProviderEntities.add(serviceItem.getServiceProvider());
+//        }
         return serviceProviderEntities;
     }
 }

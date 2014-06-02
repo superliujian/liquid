@@ -1,11 +1,8 @@
 package liquid.persistence.domain;
 
-import liquid.validation.constraints.ContainerQtyMax;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * TODO: Comments.
@@ -14,8 +11,7 @@ import java.util.Date;
  * Time: 9:15 PM
  */
 @Entity(name = "ROUTE")
-public class Route extends BaseEntity {
-
+public class RouteEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "PLANNING_ID")
     private Planning planning;
@@ -50,12 +46,6 @@ public class Route extends BaseEntity {
 
     @Transient
     private boolean batch;
-
-    public Route() { }
-
-    public Route(Long id) {
-        super(id);
-    }
 
     public Planning getPlanning() {
         return planning;

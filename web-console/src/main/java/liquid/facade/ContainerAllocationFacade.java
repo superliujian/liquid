@@ -5,8 +5,8 @@ import liquid.domain.RouteContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
 import liquid.metadata.ContainerType;
 import liquid.persistence.domain.ContainerEntity;
-import liquid.persistence.domain.Order;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.RouteEntity;
 import liquid.persistence.domain.ShippingContainer;
 import liquid.service.ContainerAllocationService;
 import liquid.service.OrderService;
@@ -40,11 +40,11 @@ public class ContainerAllocationFacade {
     public ContainerAllocation computeContainerAllocation(String taskId) {
         ContainerAllocation containerAllocation = new ContainerAllocation();
 
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         int type = order.getContainerType();
         String subtypeName = order.getContainerSubtype().getName();
 
-        List<Route> routes = routeService.findByTaskId(taskId);
+        List<RouteEntity> routes = routeService.findByTaskId(taskId);
 
         List<RouteContainerAllocation> routeContainerAllocations = null;
         if (ContainerType.RAIL.getType() == type)
@@ -52,16 +52,16 @@ public class ContainerAllocationFacade {
         else
             routeContainerAllocations = computeSelfContainerAllocations(type, subtypeName, routes);
 
-        containerAllocation.setRoutes(routes.toArray(new Route[0]));
+        containerAllocation.setRoutes(routes.toArray(new RouteEntity[0]));
         containerAllocation.setType(type);
         containerAllocation.setRouteContainerAllocations(routeContainerAllocations.toArray(new RouteContainerAllocation[0]));
         return containerAllocation;
     }
 
-    private List<RouteContainerAllocation> computeSelfContainerAllocations(int type, String subtypeName, List<Route> routes) {
+    private List<RouteContainerAllocation> computeSelfContainerAllocations(int type, String subtypeName, List<RouteEntity> routes) {
         List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
         for (int i = 0; i < routes.size(); i++) {
-            Route route = routes.get(i);
+            RouteEntity route = routes.get(i);
             List<ShippingContainer> shippingContainers = shippingContainerService.findByRoute(route);
             int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
             for (int j = 0; j < allocatedQuantity; j++) {
@@ -81,10 +81,10 @@ public class ContainerAllocationFacade {
         return routeContainerAllocations;
     }
 
-    private List<RouteContainerAllocation> computeRailContainerAllocations(int type, String subtypeName, List<Route> routes) {
+    private List<RouteContainerAllocation> computeRailContainerAllocations(int type, String subtypeName, List<RouteEntity> routes) {
         List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
         for (int i = 0; i < routes.size(); i++) {
-            Route route = routes.get(i);
+            RouteEntity route = routes.get(i);
             List<ShippingContainer> shippingContainers = shippingContainerService.findByRoute(route);
             int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
             for (int j = 0; j < allocatedQuantity; j++) {
@@ -116,7 +116,7 @@ public class ContainerAllocationFacade {
             if (!StringUtils.valid(routeContainerAllocations[i].getBicCode())) continue;
             ShippingContainer shippingContainer = new ShippingContainer();
             shippingContainer.setId(routeContainerAllocations[i].getAllocationId());
-            shippingContainer.setRoute(new Route(routeContainerAllocations[i].getRouteId()));
+            shippingContainer.setRoute(RouteEntity.newInstance(RouteEntity.class, routeContainerAllocations[i].getRouteId()));
             shippingContainer.setBicCode(routeContainerAllocations[i].getBicCode());
 
             shippingContainers.add(shippingContainer);
@@ -129,8 +129,8 @@ public class ContainerAllocationFacade {
         List<ShippingContainer> shippingContainers = new ArrayList<ShippingContainer>();
         for (int i = 0; i < selfContainerAllocation.getContainerIds().length; i++) {
             ShippingContainer shippingContainer = new ShippingContainer();
-            shippingContainer.setContainer(new ContainerEntity(selfContainerAllocation.getContainerIds()[i]));
-            shippingContainer.setRoute(new Route(selfContainerAllocation.getRouteId()));
+            shippingContainer.setContainer(ContainerEntity.newInstance(ContainerEntity.class, selfContainerAllocation.getContainerIds()[i]));
+            shippingContainer.setRoute(RouteEntity.newInstance(RouteEntity.class, selfContainerAllocation.getRouteId()));
 
             shippingContainers.add(shippingContainer);
         }

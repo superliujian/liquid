@@ -25,7 +25,7 @@ public class OrderHistory {
 
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
-    private Customer customer;
+    private CustomerEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
@@ -52,7 +52,7 @@ public class OrderHistory {
 
     @ManyToOne
     @JoinColumn(name = "GOODS_ID")
-    private Goods goods;
+    private GoodsEntity goods;
 
     /**
      * unit kilogram
@@ -147,11 +147,11 @@ public class OrderHistory {
         this.orderId = orderId;
     }
 
-    public Customer getCustomer() {
+    public CustomerEntity getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
 
@@ -195,11 +195,11 @@ public class OrderHistory {
         this.consigneeAddress = consigneeAddress;
     }
 
-    public Goods getGoods() {
+    public GoodsEntity getGoods() {
         return goods;
     }
 
-    public void setGoods(Goods goods) {
+    public void setGoods(GoodsEntity goods) {
         this.goods = goods;
     }
 

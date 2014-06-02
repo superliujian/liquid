@@ -3,16 +3,16 @@ package liquid.controller;
 import liquid.dto.EarningDto;
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
-import liquid.metadata.ChargeStatus;
 import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.Order;
-import liquid.service.*;
+import liquid.persistence.domain.OrderEntity;
+import liquid.service.ChargeService;
+import liquid.service.NotCompletedException;
+import liquid.service.OrderService;
+import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
-import liquid.service.bpm.TaskHelper;
 import liquid.utils.RoleHelper;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
-import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -183,7 +179,7 @@ public class TaskController extends BaseController {
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
 

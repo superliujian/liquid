@@ -13,22 +13,22 @@ import java.util.List;
 public class Planning extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    private OrderEntity order;
 
     @Column(name = "SAME_ROUTE")
     private boolean sameRoute;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "planning")
-    private List<Route> routes;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "planning")
+    private List<RouteEntity> routes;
 
     public Planning() {
     }
 
-    public Order getOrder() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
 
@@ -40,13 +40,11 @@ public class Planning extends BaseEntity {
         this.sameRoute = sameRoute;
     }
 
-    // Transient
-
-    public List<Route> getRoutes() {
+    public List<RouteEntity> getRoutes() {
         return routes;
     }
 
-    public void setRoutes(List<Route> routes) {
+    public void setRoutes(List<RouteEntity> routes) {
         this.routes = routes;
     }
 

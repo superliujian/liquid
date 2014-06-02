@@ -1,8 +1,10 @@
 package liquid.controller;
 
 import liquid.context.BusinessContext;
+import liquid.domain.Order;
+import liquid.domain.ServiceItem;
+import liquid.facade.OrderFacade;
 import liquid.metadata.*;
-import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
 import liquid.service.*;
 import liquid.utils.RoleHelper;
@@ -20,9 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +37,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseChargeController {
-    private static final Logger logger = LoggerFactory.getLogger(Order.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderEntity.class);
 
     @Autowired
     private OrderService orderService;
@@ -70,18 +72,24 @@ public class OrderController extends BaseChargeController {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
+
+    @Autowired
+    private OrderFacade orderFacade;
+
     @ModelAttribute("serviceTypes")
-    public Iterable<ServiceType> populateServiceTypes() {
+    public Iterable<ServiceTypeEntity> populateServiceTypes() {
         return serviceTypeService.findAll();
     }
 
     @ModelAttribute("customers")
-    public Iterable<Customer> populateCustomers() {
+    public Iterable<CustomerEntity> populateCustomers() {
         return customerService.findAll();
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Goods> populateCargos() {
+    public Iterable<GoodsEntity> populateCargos() {
         return cargoTypeService.findAll();
     }
 
@@ -110,14 +118,25 @@ public class OrderController extends BaseChargeController {
         return containerSubtypeService.findByContainerType(ContainerType.RAIL);
     }
 
-    @ModelAttribute("ownContainerSubtypes")
+    @ModelAttribute("selfContainerSubtypes")
     public Iterable<ContainerSubtypeEntity> populateOwnContainerSubtypes() {
-        return containerSubtypeService.findByContainerType(ContainerType.OWNED);
+        return containerSubtypeService.findByContainerType(ContainerType.SELF);
     }
 
     @ModelAttribute("status")
     public OrderStatus[] populateStatus() {
         return OrderStatus.values();
+    }
+
+    @ModelAttribute("chargeTypeMap")
+    public Map<Long, String> populateChargeTypes() {return chargeService.getChargeTypes(); }
+
+    @ModelAttribute("serviceSubtypes")
+    public Iterable<ServiceSubtypeEntity> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
+
+    @ModelAttribute("locations")
+    public List<LocationEntity> populateLocations() {
+        return locationService.findByType(LocationType.CITY.getType());
     }
 
     @Deprecated
@@ -133,7 +152,7 @@ public class OrderController extends BaseChargeController {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String role = RoleHelper.getRole(principal);
-        Page<Order> page = orderService.findByCreateUser(principal.getName(), pageRequest);
+        Page<OrderEntity> page = orderService.findByUpdateUser(principal.getName(), pageRequest);
         model.addAttribute("page", page);
         return "order/page";
     }
@@ -154,69 +173,65 @@ public class OrderController extends BaseChargeController {
         return "order/find";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "add")
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-
-        Order order = orderService.newOrder(locationEntities);
-
-        model.addAttribute("locations", locationEntities);
+        Order order = orderFacade.initOrder();
         model.addAttribute("order", order);
         return "order/form";
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "save")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "addServiceItem")
+    public String addServiceItem(@ModelAttribute Order order) {
+        logger.debug("order: {}", order);
+        order.getServiceItems().add(new ServiceItem());
+        return "order/form";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "removeServiceItem")
+    public String removeRow(@ModelAttribute Order order, HttpServletRequest request) {
+        final Integer rowId = Integer.valueOf(request.getParameter("removeServiceItem"));
+        order.getServiceItems().remove(rowId.intValue());
+        return "order/form";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
     public String save(@Valid @ModelAttribute Order order,
                        BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);
-        order.setStatus(OrderStatus.SAVED.getValue());
-
         FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
         }
-
         if (bindingResult.hasErrors()) {
             List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
             model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
-            order.setCreateRole(RoleHelper.getRole(principal));
-            order.setCreateUser(principal.getName());
-            order.setCreateTime(new Date());
-            order.setUpdateUser(principal.getName());
-            order.setUpdateTime(new Date());
-            orderService.save(order);
+            order.setRole(RoleHelper.getRole(principal));
+            order.setUsername(principal.getName());
+            order.setStatus(OrderStatus.SAVED.getValue());
+            orderFacade.save(order);
             return "redirect:/order?number=0";
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "submit")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);
-
-        // TODO: add to interceptor.
-        businessContext.setUsername(principal.getName());
-
-        order.setStatus(OrderStatus.SUBMITTED.getValue());
-
         FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
         }
-
         if (bindingResult.hasErrors()) {
             List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
             model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
-            order.setCreateRole(RoleHelper.getRole(principal));
-            order.setCreateUser(principal.getName());
-            order.setCreateTime(new Date());
-            order.setUpdateUser(principal.getName());
-            order.setUpdateTime(new Date());
-            orderService.submit(order);
+            order.setRole(RoleHelper.getRole(principal));
+            order.setUsername(principal.getName());
+            order.setStatus(OrderStatus.SUBMITTED.getValue());
+            orderFacade.submit(order);
             return "redirect:/order?number=0";
         }
     }
@@ -226,13 +241,13 @@ public class OrderController extends BaseChargeController {
                          Model model, Principal principal) {
         logger.debug("id: {}", id);
 
-        Order order = orderService.find(id);
+        Order order = orderFacade.find(id);
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        Planning planning = planningService.findByOrder(order);
+        Planning planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         routeService.findByPlanning(planning);
 
         model.addAttribute("transModes", TransMode.toMap());
@@ -241,23 +256,25 @@ public class OrderController extends BaseChargeController {
         return "order/detail";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")
-    public String getOrder(@PathVariable long id, @RequestParam String action,
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String getOrder(@PathVariable long id,
                            Model model, Principal principal) {
         logger.debug("id: {}", id);
-        logger.debug("action: {}", action);
-
-        Order order = orderService.find(id);
+        Order order = orderFacade.find(id);
         logger.debug("order: {}", order);
 
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+        model.addAttribute("order", order);
+        return "order/form";
+    }
 
-        if ("duplicate".equals(action)) {
-            order = orderService.duplicate(order);
-            logger.debug("order: {}", order);
-        }
+    @RequestMapping(value = "/{id}/duplicate", method = RequestMethod.GET)
+    public String initDuplicate(@PathVariable long id,
+                                Model model, Principal principal) {
+        logger.debug("id: {}", id);
 
-        model.addAttribute("locations", locationEntities);
+        Order order = orderFacade.duplicate(id);
+        logger.debug("order: {}", order);
+
         model.addAttribute("order", order);
         return "order/form";
     }
@@ -269,7 +286,7 @@ public class OrderController extends BaseChargeController {
         logger.debug("id: {}", id);
         logger.debug("tab: {}", tab);
 
-        Order order = orderService.find(id);
+        Order order = orderFacade.find(id);
 
         switch (tab) {
             case "task":

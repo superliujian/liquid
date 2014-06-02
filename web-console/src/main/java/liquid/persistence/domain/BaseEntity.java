@@ -2,6 +2,7 @@ package liquid.persistence.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * TODO: Comments.
@@ -27,6 +28,16 @@ public class BaseEntity {
 
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
+
+    public static <E extends BaseEntity> E newInstance(Class<E> clazz, long id) {
+        try {
+            E entity = clazz.newInstance();
+            entity.setId(id);
+            return entity;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new EntityInstantiationException(e);
+        }
+    }
 
     public Long getId() {
         return id;
@@ -73,12 +84,14 @@ public class BaseEntity {
     }
 
     public BaseEntity() {
-        this.setUpdateTime(new Date());
+        this(null);
     }
 
-    public BaseEntity(Long id) {
-        this();
-        this.id = id;
+    public BaseEntity(String createUser) {
+        this.createUser = createUser;
+        this.createTime = new Date();
+        this.updateUser = this.createUser;
+        this.updateTime = this.createTime;
     }
 
     @Override

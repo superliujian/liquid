@@ -91,7 +91,7 @@ public class ContainerController {
 
     @ModelAttribute("containerSubtypes")
     public Iterable<ContainerSubtypeEntity> populateContainerSubtypes() {
-        return containerSubtypeService.findByContainerType(ContainerType.OWNED);
+        return containerSubtypeService.findByContainerType(ContainerType.SELF);
     }
 
     @ModelAttribute("owners")

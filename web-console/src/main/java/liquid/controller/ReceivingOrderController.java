@@ -46,17 +46,17 @@ public class ReceivingOrderController {
     private ServiceTypeService serviceTypeService;
 
     @ModelAttribute("serviceTypes")
-    public Iterable<ServiceType> populateServiceTypes() {
+    public Iterable<ServiceTypeEntity> populateServiceTypes() {
         return serviceTypeService.findAll();
     }
 
     @ModelAttribute("customers")
-    public Iterable<Customer> populateCustomers() {
+    public Iterable<CustomerEntity> populateCustomers() {
         return customerService.findAll();
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Goods> populateCargoTypes() {
+    public Iterable<GoodsEntity> populateCargoTypes() {
         return cargoTypeService.findAll();
     }
 

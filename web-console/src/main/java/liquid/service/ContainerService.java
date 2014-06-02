@@ -70,7 +70,7 @@ public class ContainerService {
         if (ownerId > 0L) specifications = specifications.and(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(ContainerEntity_.owner), new ServiceProviderEntity(ownerId));
+                return builder.equal(root.get(ContainerEntity_.owner), ServiceProviderEntity.newInstance(ServiceProviderEntity.class, ownerId));
             }
         });
 
@@ -78,7 +78,7 @@ public class ContainerService {
         if (yardId > 0L) specifications = specifications.and(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(ContainerEntity_.yard), new LocationEntity(yardId));
+                return builder.equal(root.get(ContainerEntity_.yard), LocationEntity.newInstance(LocationEntity.class, yardId));
             }
         });
 

@@ -1,7 +1,5 @@
 package liquid.service;
 
-import liquid.persistence.domain.Order;
-import liquid.service.SequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

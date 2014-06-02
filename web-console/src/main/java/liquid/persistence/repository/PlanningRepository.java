@@ -1,10 +1,8 @@
 package liquid.persistence.repository;
 
-import liquid.persistence.domain.Order;
+import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.domain.Planning;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -13,5 +11,5 @@ import java.util.Collection;
  * Time: 12:07 PM
  */
 public interface PlanningRepository extends CrudRepository<Planning, Long> {
-    Planning findByOrder(Order order);
+    Planning findByOrder(OrderEntity order);
 }

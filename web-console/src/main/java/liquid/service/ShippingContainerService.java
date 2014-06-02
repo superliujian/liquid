@@ -59,8 +59,8 @@ public class ShippingContainerService {
     @Transactional("transactionManager")
     public void initialize(String taskId) {
         Planning planning = planningService.findByTaskId(taskId);
-        Collection<Route> routes = routeService.findByPlanning(planning);
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = routeService.findByPlanning(planning);
+        for (RouteEntity route : routes) {
             Collection<ShippingContainer> containers = route.getContainers();
             if (null == containers) containers = new ArrayList<>();
             if (containers.size() == 0) {
@@ -110,12 +110,12 @@ public class ShippingContainerService {
         }
     }
 
-    public List<ShippingContainer> findByRoute(Route route) {
+    public List<ShippingContainer> findByRoute(RouteEntity route) {
         return scRepository.findByRoute(route);
     }
 
     public Iterable<RailContainer> initializeRailContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<RailContainer> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
             for (RailContainer container : rcList) {
@@ -139,8 +139,8 @@ public class ShippingContainerService {
         }
 
         rcList = new ArrayList<RailContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
             Collection<ShippingContainer> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
@@ -449,7 +449,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<BargeContainer> initBargeContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<BargeContainer> bcList = bcRepository.findByOrder(order);
         if (bcList.size() > 0) {
             for (BargeContainer container : bcList) {
@@ -461,8 +461,8 @@ public class ShippingContainerService {
         }
 
         bcList = new ArrayList<BargeContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
             Collection<ShippingContainer> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
@@ -533,7 +533,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<VesselContainer> initVesselContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<VesselContainer> vcList = vcRepository.findByOrder(order);
         if (vcList.size() > 0) {
             for (VesselContainer container : vcList) {
@@ -545,8 +545,8 @@ public class ShippingContainerService {
         }
 
         vcList = new ArrayList<VesselContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
             Collection<ShippingContainer> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
@@ -617,7 +617,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<DeliveryContainer> initDeliveryContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<DeliveryContainer> dcList = dcRepository.findByOrder(order);
         if (dcList.size() > 0) {
             for (DeliveryContainer container : dcList) {
@@ -629,8 +629,8 @@ public class ShippingContainerService {
         }
 
         dcList = new ArrayList<DeliveryContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
             Collection<ShippingContainer> scList = scRepository.findByRoute(route);
             for (ShippingContainer sc : scList) {
                 DeliveryContainer dc = new DeliveryContainer();

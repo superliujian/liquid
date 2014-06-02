@@ -17,7 +17,7 @@
 
     <style>
         div#order.container {
-            max-width: 800px;
+            max-width: 1200px;
         }
     </style>
 </head>
@@ -31,20 +31,22 @@
 
 <div id="order" class="container">
 
-<form id="orderForm" action="/order" method="POST" th:object="${order}" class="center">
+<form id="orderForm" action="/order/edit" method="POST" th:object="${order}" class="center">
+
 <div class="panel panel-default">
+<div class="panel-heading" th:text="#{order.basic.info}">Order Basic Info</div>
 <div class="panel-body">
 
 <div class="row">
     <div class="row" th:if="${order.id}">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="form-group">
-                <input type="hidden" th:field="*{id}" class="form-control" readonly="readonly"/>
+                <input type="hidden" th:field="*{id}" />
             </div>
         </div>
     </div>
     
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{service.type}">Service Type</label>
             <select th:field="*{serviceTypeId}" class="form-control">
@@ -58,98 +60,16 @@
 
     <input type="hidden" th:field="*{customerId}"/>
 
-    <div class="col-lg-8">
-        <div class="form-group" th:classappend="${#fields.hasErrors('customerName0')} ? 'has-error'">
-            <label th:text="#{customer}">Customer</label><br/>
-            <input type="text" th:field="*{customerName0}" class="typeahead form-control" placeholder="customer name"
+    <div class="col-lg-6">
+        <div class="form-group" th:classappend="${#fields.hasErrors('customerName')} ? 'has-error'">
+            <label th:text="#{customer} + ' *'">Customer</label><br/>
+            <input type="text" th:field="*{customerName}" class="typeahead form-control" placeholder="customer name"
                    th:placeholder="#{customer.name}"/>
-            <span th:errors="*{customerName0}">error</span>
+            <span th:errors="*{customerName}">error</span>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
-        <div class="form-group">
-            <label th:text="#{origination} + ' *'">Origin</label>
-            <select th:field="*{origination}" class="form-control">
-                <option th:each="location : ${locations}"
-                        th:value="${location.id}"
-                        th:text="${location.name}">Location Name
-                </option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div class="form-group">
-            <label th:text="#{destination} + ' *'">Destination</label>
-            <select th:field="*{destination}" class="form-control">
-                <option th:each="location : ${locations}"
-                        th:value="${location.id}"
-                        th:text="${location.name}">Location Name
-                </option>
-            </select>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('consignee')} ? 'has-error'">
-            <label th:text="#{consignee}">Consignee</label>
-            <input type="text" th:field="*{consignee}" class="form-control"/>
-
-            <span th:errors="*{consignee}">error</span>
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('consigneePhone')} ? 'has-error'">
-            <label th:text="#{consignee.phone}">Consignee</label>
-            <input type="text" th:field="*{consigneePhone}" class="form-control"/>
-
-            <span th:errors="*{consigneePhone}">error</span>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-8">
-        <div class="form-group" th:classappend="${#fields.hasErrors('consigneeAddress')} ? 'has-error'">
-            <label th:text="#{consignee.address}">Consignee Address</label>
-            <input type="text" th:field="*{consigneeAddress}" class="form-control"/>
-
-            <span th:errors="*{consigneeAddress}">error</span>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
-        <div class="form-group">
-            <label th:text="#{goods}">Cargo</label>
-            <select th:field="*{goodsId}" class="form-control">
-                <option th:each="goods : ${cargos}"
-                        th:value="${goods.id}"
-                        th:text="${goods.name}">Cargo Name
-                </option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('goodsWeight')} ? 'has-error'">
-            <label th:text="#{goods.weight.with.unit}">Cargo Weight</label>
-            <input type="text" th:field="*{goodsWeight}" class="form-control"/>
-
-            <span th:errors="*{goodsWeight}">error</span>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
+    
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{trade.type}">Trade Type</label>
             <ul class="list-inline">
@@ -164,7 +84,96 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{origination}">Origin</label>
+            <select th:field="*{originId}" class="form-control">
+                <option th:each="location : ${locations}"
+                        th:value="${location.id}"
+                        th:text="${location.name}">Location Name
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{destination}">Destination</label>
+            <select th:field="*{destinationId}" class="form-control">
+                <option th:each="location : ${locations}"
+                        th:value="${location.id}"
+                        th:text="${location.name}">Location Name
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!--
+    <div class="col-lg-3">
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" th:field="*{hasDelivery}"/>
+                    <strong th:text="#{has.delivery}">hasDelivery</strong>
+                </label>
+            </div>
+        </div>
+    </div>
+    -->
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="form-group" th:classappend="${#fields.hasErrors('consignee')} ? 'has-error'">
+            <label th:text="#{consignee}">Consignee</label>
+            <input type="text" th:field="*{consignee}" class="form-control"/>
+
+            <span th:errors="*{consignee}">error</span>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="form-group" th:classappend="${#fields.hasErrors('consigneePhone')} ? 'has-error'">
+            <label th:text="#{consignee.phone}">Consignee</label>
+            <input type="text" th:field="*{consigneePhone}" class="form-control"/>
+
+            <span th:errors="*{consigneePhone}">error</span>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="form-group" th:classappend="${#fields.hasErrors('consigneeAddress')} ? 'has-error'">
+            <label th:text="#{consignee.address}">Consignee Address</label>
+            <input type="text" th:field="*{consigneeAddress}" class="form-control"/>
+
+            <span th:errors="*{consigneeAddress}">error</span>
+        </div>
+    </div>    
+</div>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="form-group">
+            <label th:text="#{goods}">Cargo</label>
+            <select th:field="*{goodsId}" class="form-control">
+                <option th:each="goods : ${cargos}"
+                        th:value="${goods.id}"
+                        th:text="${goods.name}">Cargo Name
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <div class="form-group" th:classappend="${#fields.hasErrors('goodsWeight')} ? 'has-error'">
+            <label th:text="#{goods.weight.with.unit} + ' *'">Cargo Weight</label>
+            <input type="text" th:field="*{goodsWeight}" class="form-control"/>
+
+            <span th:errors="*{goodsWeight}">error</span>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{loading.type}">Loading Type</label>
             <ul class="list-inline">
@@ -175,9 +184,11 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div>    
+</div>
 
-    <div id="loadingAddressSec" class="col-lg-4">
+<div class="row">
+    <div id="loadingAddressSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingAddress')} ? 'has-error'">
             <label th:text="#{loading.address}">Loading Address</label>
             <input type="text" th:field="*{loadingAddress}" class="form-control"/>
@@ -186,18 +197,16 @@
         </div>
     </div>
 
-    <div id="loadingEtSec" class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('loadingEtStr')} ? 'has-error'">
+    <div id="loadingEtSec" class="col-lg-3">
+        <div class="form-group" th:classappend="${#fields.hasErrors('loadingEstimatedTime')} ? 'has-error'">
             <label th:text="#{loading.et}">Loading ET</label>
-            <input type="text" th:field="*{loadingEtStr}" class="form-control"/>
+            <input type="text" th:field="*{loadingEstimatedTime}" class="form-control"/>
 
-            <span th:errors="*{loadingEtStr}">error</span>
+            <span th:errors="*{loadingEstimatedTime}">error</span>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div id="loadingContactSec" class="col-lg-4">
+    <div id="loadingContactSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingContact')} ? 'has-error'">
             <label th:text="#{loading.contact}">Loading Contact</label>
             <input type="text" th:field="*{loadingContact}" class="form-control"/>
@@ -206,7 +215,7 @@
         </div>
     </div>
 
-    <div id="loadingPhoneSec" class="col-lg-4">
+    <div id="loadingPhoneSec" class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingPhone')} ? 'has-error'">
             <label th:text="#{loading.phone}">Loading Phone</label>
             <input type="text" th:field="*{loadingPhone}" class="form-control"/>
@@ -217,7 +226,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <div class="form-group">
             <label th:text="#{container.type}">Container Type</label>
             <ul class="list-inline">
@@ -228,13 +237,13 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div>    
     
-    <div id="ownContainerSubtypeSec" class="col-lg-4">
+    <div id="ownContainerSubtypeSec" class="col-lg-3">
         <div class="form-group">
             <label th:text="#{container.subtype}">Container Subtype</label>
-            <select th:field="*{ownContainerSubtypeId}" class="form-control">
-                <option th:each="containerSubtype : ${ownContainerSubtypes}"
+            <select th:field="*{selfContainerSubtypeId}" class="form-control">
+                <option th:each="containerSubtype : ${selfContainerSubtypes}"
                         th:value="${containerSubtype.id}"
                         th:text="${containerSubtype.name}">Container Subtype Name
                 </option>
@@ -242,7 +251,7 @@
         </div>
     </div>
     
-   <div id="railContainerSubtypeSec" class="col-lg-4">
+   <div id="railContainerSubtypeSec" class="col-lg-3">
         <div class="form-group">
             <label th:text="#{container.subtype}">Container Subtype</label>
             <select th:field="*{railContainerSubtypeId}" class="form-control">
@@ -252,68 +261,103 @@
                 </option>
             </select>
         </div>
-    </div>    
-
-    <!--
-    <div class="col-lg-4">
-        <div class="form-group">
-            <label th:text="#{container.capacity}">Container Capacity</label>
-            <ul class="list-inline">
-                <li th:each="capacity : ${containerCaps}">
-                    <input type="radio" th:field="*{containerCap}" th:value="${capacity.type}"/>
-                    <label th:for="${#ids.prev('containerCap')}"
-                           th:text="${capacity.name}">Container Capacity</label>
-                </li>
-            </ul>
-        </div>
     </div>
-    -->
     
-    <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'">
+    <div class="col-lg-3">
+        <div class="form-group" th:classappend="${#fields.hasErrors('containerQuantity')} ? 'has-error'">
             <label th:text="#{container.quantity} + ' *'">Container Quantity</label>
-            <input type="text" th:field="*{containerQty}" class="form-control"/>
+            <input type="text" th:field="*{containerQuantity}" class="form-control"/>
 
-            <span th:errors="*{containerQty}">error</span>
+            <span th:errors="*{containerQuantity}">error</span>
         </div>
-    </div>
+    </div> 
 </div>
 
-<div class="row">
-    <div class="col-lg-4">
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" th:field="*{hasDelivery}"/>
-                    <strong th:text="#{has.delivery}">hasDelivery</strong>
-                </label>
+</div><!-- panel-body -->
+</div><!-- panel -->
+
+
+<div class="panel panel-default">
+<div class="panel-heading" th:text="#{order.price.info}">Price Info</div>
+<div class="panel-body">
+<table class="table table-striped table-hover table-condensed table-16">
+    <thead>
+    <tr>
+        <th th:text="#{service.item}">Service Item</th>
+        <th th:text="#{currency}">Unit Price</th>
+        <th th:text="#{price}">Unit Price</th>
+        <th th:text="#{comment}">Comment</th>
+        <th>
+            <button type="submit" class="btn btn-default pull-right" name="addServiceItem">
+                <i class="glyphicon glyphicon-plus"></i>
+            </button>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="serviceItem, rowStat : *{serviceItems}">
+        <td>
+            <input type="hidden" th:field="*{serviceItems[__${rowStat.index}__].id}" />
+            <select class="form-control" th:field="*{serviceItems[__${rowStat.index}__].serviceSubtypeId}">
+                <option th:each="serviceSubtype : ${serviceSubtypes}" th:value="${serviceSubtype.id}" th:text="${serviceSubtype.name}">Service Subtype</option>
+            </select>
+        </td>
+        <td>
+	        <select th:field="*{serviceItems[__${rowStat.index}__].currency}" class="form-control">
+	            <option value="0">CNY</option>
+	            <option value="1">USD</option>
+	        </select>        
+        </td>
+        <td>
+            <input type="text" class="form-control" th:field="*{serviceItems[__${rowStat.index}__].quotation}" />
+        </td>
+        <td>
+            <input type="text" class="form-control" th:field="*{serviceItems[__${rowStat.index}__].comment}" />
+        </td>        
+        <td>
+            <button type="submit" name="removeServiceItem" class="btn btn-default pull-right" th:value="${rowStat.index}" >
+                <i class="glyphicon glyphicon-minus"></i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div><!-- panel-body -->
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label th:text="#{usd.total} + ' *'">USD Total</label>
+                    <input type="text" th:field="*{usdTotal}" class="form-control" readonly="readonly"/>
+                    <span th:errors="*{usdTotal}">error</span>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-4">
-        <div class="form-group" th:classappend="${#fields.hasErrors('salesPriceCny')} ? 'has-error'">
-            <label th:text="#{price.cny}">Price</label>
-            <input type="text" th:field="*{salesPriceCny}" class="form-control"/>
-
-            <span th:errors="*{salesPriceCny}">error</span>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-
-<div class="row">
-    <div class="col-md-9"></div>
-    <div class="col-md-3">
-        <input type="submit" name="save" value="Save Order" class="btn btn-default"
-               th:attr="value=#{order.save}"/>
-        <input type="submit" name="submit" value="Submit Order" class="btn btn-default"
-               th:attr="value=#{order.submit}"/>
-    </div>
-</div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label th:text="#{cny.total} + ' *'">CNY Total</label>
+                    <input type="text" th:field="*{cnyTotal}" class="form-control" readonly="readonly"/>
+                    <span th:errors="*{cnyTotal}">error</span>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <input type="submit" name="save" value="Save Order" class="btn btn-success form-control" th:attr="value=#{order.save}"/>
+               </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <input type="submit" name="submit" value="Submit Order" class="btn btn-primary form-control" th:attr="value=#{order.submit}"/>
+                </div>
+            </div>
+        </div>        
+    </li>
+</ul>
+        
+</div><!-- panel -->
 
 </form>
 </div>
@@ -329,7 +373,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#customerName0').typeahead({
+        $('#customerName').typeahead({
             name: 'customer',
             valueKey: 'name',
             limit: 10,
@@ -391,6 +435,25 @@
                 $("#railContainerSubtypeSec").hide();
             }
         });
+             
+        caculateTotal();     
+        $("input[name$='.quotation']").change(caculateTotal);
+        $("select[name$='.currency']").change(caculateTotal);
+        $("button[name='removeServiceItem']").click(caculateTotal);
+                
+        function caculateTotal() {
+            var usd = 0, cny = 0;
+            $('table > tbody > tr').each(function() {
+                var subtype = $('td:eq(0) select option:selected', this).val();
+                var currency = $('td:eq(1) select option:selected', this).val();
+                var price = $('td:eq(2) input', this).val();
+                if(currency == 0) cny += parseInt(price, 10);
+                else usd += parseInt(price, 10);
+            });
+            
+            $('#usdTotal').val(usd);
+            $('#cnyTotal').val(cny);
+        }
     }); // ready end
 
 </script>

@@ -68,10 +68,10 @@ public class ChargeService {
         ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
         charge.setSp(sp);
 
-        Route route = routeService.find(charge.getFormRouteId());
+        RouteEntity route = routeService.find(charge.getFormRouteId());
         Leg leg = legRepository.findOne(charge.getFormLegId());
 
-        Order order = null;
+        OrderEntity order = null;
         if (null != route) {
             order = route.getPlanning().getOrder();
             charge.setRoute(route);
@@ -106,7 +106,7 @@ public class ChargeService {
 
     @Transactional("transactionManager")
     public Charge addCharge(Charge charge, String uid) {
-        Order order = orderService.findByTaskId(charge.getTaskId());
+        OrderEntity order = orderService.findByTaskId(charge.getTaskId());
         charge.setOrder(order);
 
         ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
@@ -137,7 +137,7 @@ public class ChargeService {
     @Transactional("transactionManager")
     public void removeCharge(long chargeId) {
         Charge charge = chargeRepository.findOne(chargeId);
-        Order order = charge.getOrder();
+        OrderEntity order = charge.getOrder();
 
         if (charge.getCurrency() == 0) {
             order.setGrandTotal(order.getGrandTotal() - charge.getTotalPrice());
@@ -217,7 +217,7 @@ public class ChargeService {
         return chargeRepository.findByOrderIdAndCreateRole(orderId, createRole);
     }
 
-    public EarningDto calculateEarning(Order order, Iterable<Charge> charges) {
+    public EarningDto calculateEarning(OrderEntity order, Iterable<Charge> charges) {
         EarningDto earning = new EarningDto();
 
         double exchangeRate = getExchangeRate();

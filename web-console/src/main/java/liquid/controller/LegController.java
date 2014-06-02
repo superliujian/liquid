@@ -107,7 +107,7 @@ public class LegController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
-        Route route = routeRepository.findOne(routeId);
+        RouteEntity route = routeRepository.findOne(routeId);
         LocationEntity srcLoc = locationRepository.findOne(leg.getSrcLocId());
         LocationEntity dstLoc = locationRepository.findOne(leg.getDstLocId());
 

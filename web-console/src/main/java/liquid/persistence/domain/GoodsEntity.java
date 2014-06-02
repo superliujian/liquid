@@ -12,28 +12,15 @@ import javax.validation.constraints.NotNull;
  * Time: 3:27 PM
  */
 @Entity(name = "GOODS")
-public class Goods {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private long id;
-
+public class GoodsEntity extends BaseEntity {
     @NotNull
     @NotEmpty
     @Column(name = "NAME", nullable = true)
     private String name;
 
-    public Goods() { }
+    public GoodsEntity() { }
 
-    public Goods(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public GoodsEntity(long id) {
         this.id = id;
     }
 
