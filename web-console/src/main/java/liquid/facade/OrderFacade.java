@@ -125,6 +125,12 @@ public class OrderFacade {
         Order order = convert(orderEntity);
         order.setId(null);
         order.setOrderNo(null);
+
+        List<ServiceItem> serviceItems = order.getServiceItems();
+        for (ServiceItem serviceItem : serviceItems) {
+            serviceItem.setId(null);
+        }
+
         return order;
     }
 
