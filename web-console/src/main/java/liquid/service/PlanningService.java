@@ -54,8 +54,10 @@ public class PlanningService {
     @Transactional("transactionManager")
     public Planning findOne(Long id) {
         Planning planning = planningRepository.findOne(id);
-        List<RouteEntity> routes = planning.getRoutes();
-        for (RouteEntity route : routes) { }
+        if (null != planning) {
+            List<RouteEntity> routes = planning.getRoutes();
+            for (RouteEntity route : routes) { }
+        }
         return planning;
     }
 
@@ -108,8 +110,10 @@ public class PlanningService {
     @Transactional(value = "transactionManager")
     public Planning findByOrder(OrderEntity order) {
         Planning planning = planningRepository.findByOrder(order);
-        List<RouteEntity> routes = planning.getRoutes();
-        for (RouteEntity route : routes) { }
+        if (null != planning) {
+            List<RouteEntity> routes = planning.getRoutes();
+            for (RouteEntity route : routes) { }
+        }
         return planning;
     }
 }
