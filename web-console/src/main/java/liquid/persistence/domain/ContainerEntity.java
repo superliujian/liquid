@@ -37,12 +37,6 @@ public class ContainerEntity extends BaseEntity {
     @Column(name = "STATUS")
     private int status;
 
-    public ContainerEntity() { }
-
-    public ContainerEntity(Long id) {
-        super(id);
-    }
-
     public String getBicCode() {
         return bicCode;
     }

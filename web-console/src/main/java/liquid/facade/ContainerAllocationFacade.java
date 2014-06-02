@@ -116,7 +116,7 @@ public class ContainerAllocationFacade {
             if (!StringUtils.valid(routeContainerAllocations[i].getBicCode())) continue;
             ShippingContainer shippingContainer = new ShippingContainer();
             shippingContainer.setId(routeContainerAllocations[i].getAllocationId());
-            shippingContainer.setRoute(new Route(routeContainerAllocations[i].getRouteId()));
+            shippingContainer.setRoute(Route.newInstance(Route.class, routeContainerAllocations[i].getRouteId()));
             shippingContainer.setBicCode(routeContainerAllocations[i].getBicCode());
 
             shippingContainers.add(shippingContainer);
@@ -129,8 +129,8 @@ public class ContainerAllocationFacade {
         List<ShippingContainer> shippingContainers = new ArrayList<ShippingContainer>();
         for (int i = 0; i < selfContainerAllocation.getContainerIds().length; i++) {
             ShippingContainer shippingContainer = new ShippingContainer();
-            shippingContainer.setContainer(new ContainerEntity(selfContainerAllocation.getContainerIds()[i]));
-            shippingContainer.setRoute(new Route(selfContainerAllocation.getRouteId()));
+            shippingContainer.setContainer(ContainerEntity.newInstance(ContainerEntity.class, selfContainerAllocation.getContainerIds()[i]));
+            shippingContainer.setRoute(Route.newInstance(Route.class, selfContainerAllocation.getRouteId()));
 
             shippingContainers.add(shippingContainer);
         }

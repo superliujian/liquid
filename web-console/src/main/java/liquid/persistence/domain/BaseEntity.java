@@ -2,6 +2,7 @@ package liquid.persistence.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * TODO: Comments.
@@ -83,30 +84,14 @@ public class BaseEntity {
     }
 
     public BaseEntity() {
-        this.setUpdateTime(new Date());
+        this(null);
     }
 
-    public BaseEntity(Long id) {
-        this();
-        this.id = id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        BaseEntity that = (BaseEntity) o;
-
-        if (!id.equals(that.id)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        if (null == id) return 0;
-        return id.hashCode();
+    public BaseEntity(String createUser) {
+        this.createUser = createUser;
+        this.createTime = new Date();
+        this.updateUser = this.createUser;
+        this.updateTime = this.createTime;
     }
 
     @Override

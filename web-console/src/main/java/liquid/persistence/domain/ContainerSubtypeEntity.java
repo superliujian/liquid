@@ -27,12 +27,6 @@ public class ContainerSubtypeEntity extends BaseEntity {
     @Column(name = "STATE")
     private int state;
 
-    public ContainerSubtypeEntity() {}
-
-    public ContainerSubtypeEntity(Long id) {
-        super(id);
-    }
-
     public int getContainerType() {
         return containerType;
     }

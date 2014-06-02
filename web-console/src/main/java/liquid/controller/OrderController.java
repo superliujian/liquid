@@ -174,28 +174,28 @@ public class OrderController extends BaseChargeController {
         return "order/find";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
         Order order = orderFacade.initOrder();
         model.addAttribute("order", order);
         return "order/form";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST, params = "addServiceItem")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "addServiceItem")
     public String addServiceItem(@ModelAttribute Order order) {
         logger.debug("order: {}", order);
         order.getServiceItems().add(new ServiceItem());
         return "order/form";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST, params = "removeServiceItem")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "removeServiceItem")
     public String removeRow(@ModelAttribute Order order, HttpServletRequest request) {
         final Integer rowId = Integer.valueOf(request.getParameter("removeServiceItem"));
         order.getServiceItems().remove(rowId.intValue());
         return "order/form";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST, params = "save")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
     public String save(@Valid @ModelAttribute Order order,
                        BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);
@@ -216,7 +216,7 @@ public class OrderController extends BaseChargeController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "submit")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("order: {}", order);

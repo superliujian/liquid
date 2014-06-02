@@ -43,9 +43,10 @@ public class OrderFacade {
         return order;
     }
 
-    public void save(Order order) {
+    public OrderEntity save(Order order) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(order.getId());
+        orderEntity.setOrderNo(order.getOrderNo());
         orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
         orderEntity.setCustomer(CustomerEntity.newInstance(CustomerEntity.class, order.getCustomerId()));
         orderEntity.setTradeType(order.getTradeType());
@@ -87,14 +88,14 @@ public class OrderFacade {
         orderEntity.setCreateRole(order.getRole());
         orderEntity.setStatus(OrderStatus.SAVED.getValue());
 
-        orderService.save(orderEntity);
+        return orderService.save(orderEntity);
     }
 
-    public void submit(Order order) {
+    public OrderEntity submit(Order order) {
         ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
         // compute order no.
         order.setOrderNo(orderService.computeOrderNo(order.getRole(), serviceType.getCode()));
-        save(order);
+        OrderEntity orderEntity = save(order);
 
         boolean hasDelivery = false;
         List<ServiceItem> serviceItems = order.getServiceItems();
@@ -106,10 +107,11 @@ public class OrderFacade {
         }
 
         Map<String, Object> variableMap = new HashMap<>();
-        variableMap.put("loadingType", order.getLoadingType());
+        variableMap.put("loadingType", orderEntity.getLoadingType());
         variableMap.put("hasDelivery", hasDelivery);
-        variableMap.put("orderOwner", order.getUsername());
-        bpmService.startProcess(order.getUsername(), order.getId(), variableMap);
+        variableMap.put("orderOwner", orderEntity.getUpdateUser());
+        bpmService.startProcess(orderEntity.getUpdateUser(), orderEntity.getId(), variableMap);
+        return orderEntity;
     }
 
     public Order find(long id) {

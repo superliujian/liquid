@@ -39,12 +39,6 @@ public class LocationEntity extends BaseEntity {
         this.type = type;
     }
 
-    public LocationEntity() { }
-
-    public LocationEntity(Long id) {
-        super(id);
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());

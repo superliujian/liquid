@@ -1,11 +1,8 @@
 package liquid.persistence.domain;
 
-import liquid.validation.constraints.ContainerQtyMax;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * TODO: Comments.
@@ -50,12 +47,6 @@ public class Route extends BaseEntity {
 
     @Transient
     private boolean batch;
-
-    public Route() { }
-
-    public Route(Long id) {
-        super(id);
-    }
 
     public Planning getPlanning() {
         return planning;

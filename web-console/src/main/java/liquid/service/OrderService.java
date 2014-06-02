@@ -134,14 +134,14 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     @Transactional("transactionManager")
-    public void save(OrderEntity order) {
+    public OrderEntity save(OrderEntity order) {
         if (null != order.getId()) {
             OrderEntity oldOrder = find(order.getId());
             oldOrder.getServiceItems().removeAll(order.getServiceItems());
             if (oldOrder.getServiceItems().size() > 0)
                 serviceItemService.delete(oldOrder.getServiceItems());
         }
-        orderRepository.save(order);
+        return orderRepository.save(order);
     }
 
     public void submit(OrderEntity order) {
