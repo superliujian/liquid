@@ -11,5 +11,5 @@ import org.springframework.data.domain.Pageable;
  * Time: 5:19 PM
  */
 public interface OrderRepository extends BaseOrderRepository<OrderEntity, Long> {
-    Page<OrderEntity> findByUpdateUser(String uid, Pageable pageable);
+    Page<OrderEntity> findByCreateUser(String uid, Pageable pageable);
 }

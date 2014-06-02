@@ -83,6 +83,7 @@ public class OrderFacade {
 
         orderEntity.setCnyTotal(order.getCnyTotal());
         orderEntity.setUsdTotal(order.getUsdTotal());
+        orderEntity.setCreateUser(order.getUsername());
         orderEntity.setUpdateUser(order.getUsername());
         orderEntity.setCreateRole(order.getRole());
         orderEntity.setStatus(order.getStatus());
@@ -169,7 +170,7 @@ public class OrderFacade {
 
         order.setUsdTotal(orderEntity.getUsdTotal());
         order.setCnyTotal(orderEntity.getCnyTotal());
-        order.setUsername(orderEntity.getUpdateUser());
+        order.setUsername(orderEntity.getCreateUser());
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
         return order;

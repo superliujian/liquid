@@ -152,7 +152,7 @@ public class OrderController extends BaseChargeController {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String role = RoleHelper.getRole(principal);
-        Page<OrderEntity> page = orderService.findByUpdateUser(principal.getName(), pageRequest);
+        Page<OrderEntity> page = orderService.findByCreateUser(principal.getName(), pageRequest);
         model.addAttribute("page", page);
         return "order/page";
     }

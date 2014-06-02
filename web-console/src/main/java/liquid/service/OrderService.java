@@ -108,8 +108,8 @@ public class OrderService extends AbstractBaseOrderService {
         return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
-    public Page<OrderEntity> findByUpdateUser(String uid, Pageable pageable) {
-        return orderRepository.findByUpdateUser(uid, pageable);
+    public Page<OrderEntity> findByCreateUser(String uid, Pageable pageable) {
+        return orderRepository.findByCreateUser(uid, pageable);
     }
 
     public Page<OrderEntity> findAll(Pageable pageable) {
