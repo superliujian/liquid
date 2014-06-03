@@ -43,51 +43,7 @@ public class OrderFacade {
     }
 
     public OrderEntity save(Order order) {
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setId(order.getId());
-        orderEntity.setOrderNo(order.getOrderNo());
-        orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
-        orderEntity.setCustomer(CustomerEntity.newInstance(CustomerEntity.class, order.getCustomerId()));
-        orderEntity.setTradeType(order.getTradeType());
-        orderEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, order.getOriginId()));
-        orderEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, order.getDestinationId()));
-        orderEntity.setConsignee(order.getConsignee());
-        orderEntity.setConsigneePhone(order.getConsigneePhone());
-        orderEntity.setConsigneeAddress(order.getConsigneeAddress());
-        orderEntity.setGoods(GoodsEntity.newInstance(GoodsEntity.class, order.getGoodsId()));
-        orderEntity.setGoodsWeight(order.getGoodsWeight());
-        orderEntity.setLoadingType(order.getLoadingType());
-        orderEntity.setLoadingAddress(order.getLoadingAddress());
-        orderEntity.setLoadingContact(order.getLoadingContact());
-        orderEntity.setLoadingPhone(order.getLoadingPhone());
-        orderEntity.setLoadingEt(DateUtils.dateOf(order.getLoadingEstimatedTime()));
-        orderEntity.setContainerType(order.getContainerType());
-        if (order.getContainerType() == ContainerType.RAIL.getType())
-            orderEntity.setContainerSubtype(ContainerSubtypeEntity.
-                    newInstance(ContainerSubtypeEntity.class, order.getRailContainerSubtypeId()));
-        else
-            orderEntity.setContainerSubtype(ContainerSubtypeEntity.
-                    newInstance(ContainerSubtypeEntity.class, order.getSelfContainerSubtypeId()));
-        orderEntity.setContainerQty(order.getContainerQuantity());
-
-        for (ServiceItem serviceItem : order.getServiceItems()) {
-            ServiceItemEntity serviceItemEntity = new ServiceItemEntity();
-            serviceItemEntity.setId(serviceItem.getId());
-            serviceItemEntity.setOrder(orderEntity);
-            serviceItemEntity.setServiceSubtype(ServiceSubtypeEntity.
-                    newInstance(ServiceSubtypeEntity.class, serviceItem.getServiceSubtypeId()));
-            serviceItemEntity.setCurrency(serviceItem.getCurrency());
-            serviceItemEntity.setQuotation(serviceItem.getQuotation());
-            orderEntity.getServiceItems().add(serviceItemEntity);
-        }
-
-        orderEntity.setCnyTotal(order.getCnyTotal());
-        orderEntity.setUsdTotal(order.getUsdTotal());
-        orderEntity.setCreateUser(order.getUsername());
-        orderEntity.setUpdateUser(order.getUsername());
-        orderEntity.setCreateRole(order.getRole());
-        orderEntity.setStatus(order.getStatus());
-
+        OrderEntity orderEntity = convert(order);
         return orderService.save(orderEntity);
     }
 
@@ -134,6 +90,52 @@ public class OrderFacade {
         return order;
     }
 
+    private OrderEntity convert(Order order) {
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setId(order.getId());
+        orderEntity.setOrderNo(order.getOrderNo());
+        orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
+        orderEntity.setCustomer(CustomerEntity.newInstance(CustomerEntity.class, order.getCustomerId()));
+        orderEntity.setTradeType(order.getTradeType());
+        orderEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, order.getOriginId()));
+        orderEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, order.getDestinationId()));
+        orderEntity.setConsignee(order.getConsignee());
+        orderEntity.setConsigneePhone(order.getConsigneePhone());
+        orderEntity.setConsigneeAddress(order.getConsigneeAddress());
+        orderEntity.setGoods(GoodsEntity.newInstance(GoodsEntity.class, order.getGoodsId()));
+        orderEntity.setGoodsWeight(order.getGoodsWeight());
+        orderEntity.setLoadingType(order.getLoadingType());
+        orderEntity.setLoadingAddress(order.getLoadingAddress());
+        orderEntity.setLoadingContact(order.getLoadingContact());
+        orderEntity.setLoadingPhone(order.getLoadingPhone());
+        orderEntity.setLoadingEt(DateUtils.dateOf(order.getLoadingEstimatedTime()));
+        orderEntity.setContainerType(order.getContainerType());
+        if (order.getContainerType() == ContainerType.RAIL.getType())
+            orderEntity.setContainerSubtype(ContainerSubtypeEntity.
+                    newInstance(ContainerSubtypeEntity.class, order.getRailContainerSubtypeId()));
+        else
+            orderEntity.setContainerSubtype(ContainerSubtypeEntity.
+                    newInstance(ContainerSubtypeEntity.class, order.getSelfContainerSubtypeId()));
+        orderEntity.setContainerQty(order.getContainerQuantity());
+
+        for (ServiceItem serviceItem : order.getServiceItems()) {
+            ServiceItemEntity serviceItemEntity = new ServiceItemEntity();
+            serviceItemEntity.setId(serviceItem.getId());
+            serviceItemEntity.setOrder(orderEntity);
+            serviceItemEntity.setServiceSubtype(ServiceSubtypeEntity.
+                    newInstance(ServiceSubtypeEntity.class, serviceItem.getServiceSubtypeId()));
+            serviceItemEntity.setCurrency(serviceItem.getCurrency());
+            serviceItemEntity.setQuotation(serviceItem.getQuotation());
+            orderEntity.getServiceItems().add(serviceItemEntity);
+        }
+
+        orderEntity.setCnyTotal(order.getCnyTotal());
+        orderEntity.setUsdTotal(order.getUsdTotal());
+        orderEntity.setCreateRole(order.getRole());
+        orderEntity.setStatus(order.getStatus());
+        return orderEntity;
+    }
+
     private Order convert(OrderEntity orderEntity) {
         Order order = new Order();
         order.setId(orderEntity.getId());
@@ -176,7 +178,6 @@ public class OrderFacade {
 
         order.setUsdTotal(orderEntity.getUsdTotal());
         order.setCnyTotal(orderEntity.getCnyTotal());
-        order.setUsername(orderEntity.getCreateUser());
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
         return order;

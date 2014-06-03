@@ -48,6 +48,11 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
         return order;
     }
 
+    @Override
+    public void doSaveBefore(OrderEntity entity) {
+
+    }
+
     @Transactional(value = "transactionManager")
     public ReceivingOrder save(ReceivingOrder order) {
         ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());

@@ -2,7 +2,6 @@ package liquid.persistence.domain;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * TODO: Comments.
@@ -81,17 +80,6 @@ public class BaseEntity {
 
     public boolean isNew() {
         return (this.id == null);
-    }
-
-    public BaseEntity() {
-        this(null);
-    }
-
-    public BaseEntity(String createUser) {
-        this.createUser = createUser;
-        this.createTime = new Date();
-        this.updateUser = this.createUser;
-        this.updateTime = this.createTime;
     }
 
     @Override

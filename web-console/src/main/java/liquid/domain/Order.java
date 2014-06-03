@@ -47,7 +47,6 @@ public class Order {
     private long cnyTotal;
     private long usdTotal;
 
-    private String username;
     private String role;
     private int status;
 
@@ -255,14 +254,6 @@ public class Order {
         this.cnyTotal = cnyTotal;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getRole() {
         return role;
     }
@@ -307,7 +298,6 @@ public class Order {
         sb.append(", serviceItems=").append(serviceItems);
         sb.append(", usdTotal=").append(usdTotal);
         sb.append(", cnyTotal=").append(cnyTotal);
-        sb.append(", username='").append(username).append('\'');
         sb.append(", role='").append(role).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');

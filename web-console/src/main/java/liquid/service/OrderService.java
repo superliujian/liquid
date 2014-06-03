@@ -5,6 +5,7 @@ import liquid.metadata.ContainerType;
 import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.domain.OrderHistory;
 import liquid.persistence.repository.*;
+import liquid.security.SecurityContext;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +38,8 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private GoodsRepository goodsRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
+//    @Autowired
+//    private OrderRepository orderRepository;
 
     @Autowired
     private OrderHistoryRepository orderHistoryRepository;
@@ -89,14 +90,13 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     @Transactional("transactionManager")
-    public OrderEntity save(OrderEntity order) {
+    public void doSaveBefore(OrderEntity order) {
         if (null != order.getId()) {
             OrderEntity oldOrder = find(order.getId());
             oldOrder.getServiceItems().removeAll(order.getServiceItems());
             if (oldOrder.getServiceItems().size() > 0)
                 serviceItemService.delete(oldOrder.getServiceItems());
         }
-        return orderRepository.save(order);
     }
 
     public OrderEntity findByTaskId(String taskId) {
@@ -105,19 +105,19 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     public List<OrderEntity> findAllOrderByDesc() {
-        return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+        return repository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
     public Page<OrderEntity> findByCreateUser(String uid, Pageable pageable) {
-        return orderRepository.findByCreateUser(uid, pageable);
+        return repository.findByCreateUser(uid, pageable);
     }
 
     public Page<OrderEntity> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+        return repository.findAll(pageable);
     }
 
     public OrderEntity find(long id) {
-        OrderEntity order = orderRepository.findOne(id);
+        OrderEntity order = repository.findOne(id);
 
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
@@ -136,11 +136,11 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     public Iterable<OrderEntity> findByOrderNo(String orderNo) {
-        return orderRepository.findByOrderNoLike("%" + orderNo + "%");
+        return repository.findByOrderNoLike("%" + orderNo + "%");
     }
 
     public Iterable<OrderEntity> findByCustomerName(String customerName) {
-        return orderRepository.findByCustomerNameLike("%" + customerName + "%");
+        return repository.findByCustomerNameLike("%" + customerName + "%");
     }
 
     @Transactional("transactionManager")

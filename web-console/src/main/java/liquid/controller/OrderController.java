@@ -208,7 +208,6 @@ public class OrderController extends BaseChargeController {
             return "order/form";
         } else {
             order.setRole(RoleHelper.getRole(principal));
-            order.setUsername(principal.getName());
             order.setStatus(OrderStatus.SAVED.getValue());
             orderFacade.save(order);
             return "redirect:/order?number=0";
@@ -229,7 +228,6 @@ public class OrderController extends BaseChargeController {
             return "order/form";
         } else {
             order.setRole(RoleHelper.getRole(principal));
-            order.setUsername(principal.getName());
             order.setStatus(OrderStatus.SUBMITTED.getValue());
             orderFacade.submit(order);
             return "redirect:/order?number=0";
