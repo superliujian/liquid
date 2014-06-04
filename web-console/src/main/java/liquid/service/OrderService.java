@@ -1,11 +1,12 @@
 package liquid.service;
 
-import liquid.context.BusinessContext;
 import liquid.metadata.ContainerType;
 import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.domain.OrderHistory;
-import liquid.persistence.repository.*;
-import liquid.security.SecurityContext;
+import liquid.persistence.repository.CustomerRepository;
+import liquid.persistence.repository.GoodsRepository;
+import liquid.persistence.repository.LocationRepository;
+import liquid.persistence.repository.OrderHistoryRepository;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +31,10 @@ public class OrderService extends AbstractBaseOrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
-    BusinessContext businessContext;
-
-    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
     private GoodsRepository goodsRepository;
-
-//    @Autowired
-//    private OrderRepository orderRepository;
 
     @Autowired
     private OrderHistoryRepository orderHistoryRepository;

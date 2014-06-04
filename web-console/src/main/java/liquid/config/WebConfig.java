@@ -1,12 +1,10 @@
 package liquid.config;
 
 import liquid.interceptor.LoggingInterceptor;
-import liquid.interceptor.ThreadScopeInterceptor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -40,7 +38,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggingInterceptor());
-//        registry.addInterceptor(new ThreadScopeInterceptor());
     }
 
     @Bean

@@ -1,9 +1,11 @@
 package liquid.config;
 
-import liquid.context.BusinessContext;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.context.support.SimpleThreadScope;
 
@@ -34,13 +36,6 @@ public class RootConfig {
         scopes.put("thread", threadScope());
         scopeConfigurer.setScopes(scopes);
         return scopeConfigurer;
-    }
-
-    @Bean
-    @Scope(value = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public BusinessContext businessContext() {
-        BusinessContext businessContext = new BusinessContext();
-        return businessContext;
     }
 
     @Bean
