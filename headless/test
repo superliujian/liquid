@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for testfile in *.js
+do 
+  casperjs test $testfile
+  echo ""
+done

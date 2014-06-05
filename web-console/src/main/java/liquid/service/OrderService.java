@@ -7,6 +7,7 @@ import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.OrderHistoryRepository;
+import liquid.security.SecurityContext;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,8 +104,8 @@ public class OrderService extends AbstractBaseOrderService {
         return repository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
-    public Page<OrderEntity> findByCreateUser(String uid, Pageable pageable) {
-        return repository.findByCreateUser(uid, pageable);
+    public Page<OrderEntity> findByCreateUser(String username, Pageable pageable) {
+        return repository.findByCreateUser(username, pageable);
     }
 
     public Page<OrderEntity> findAll(Pageable pageable) {

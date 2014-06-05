@@ -4,7 +4,9 @@ import liquid.domain.Order;
 import liquid.domain.ServiceItem;
 import liquid.metadata.ContainerType;
 import liquid.metadata.LocationType;
+import liquid.metadata.OrderStatus;
 import liquid.persistence.domain.*;
+import liquid.security.SecurityContext;
 import liquid.service.LocationService;
 import liquid.service.OrderService;
 import liquid.service.ServiceTypeService;
@@ -131,8 +133,12 @@ public class OrderFacade {
 
         orderEntity.setCnyTotal(order.getCnyTotal());
         orderEntity.setUsdTotal(order.getUsdTotal());
-        orderEntity.setCreateRole(order.getRole());
-        orderEntity.setStatus(order.getStatus());
+        
+        orderEntity.setCreateRole(SecurityContext.getInstance().getRole());
+
+        if (null == order.getId()) orderEntity.setStatus(OrderStatus.SAVED.getValue());
+        else orderEntity.setStatus(OrderStatus.SUBMITTED.getValue());
+
         return orderEntity;
     }
 

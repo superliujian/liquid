@@ -5,6 +5,7 @@ import liquid.domain.ServiceItem;
 import liquid.facade.OrderFacade;
 import liquid.metadata.*;
 import liquid.persistence.domain.*;
+import liquid.security.SecurityContext;
 import liquid.service.*;
 import liquid.utils.RoleHelper;
 import liquid.validation.FormValidationResult;
@@ -104,6 +105,7 @@ public class OrderController extends BaseChargeController {
         return ContainerType.toMap();
     }
 
+    @Deprecated
     @ModelAttribute("containerCaps")
     public ContainerCap[] populateContainerCaps() {
         return ContainerCap.values();
@@ -137,22 +139,18 @@ public class OrderController extends BaseChargeController {
 
     @Deprecated
     @RequestMapping(method = RequestMethod.GET)
-    public String initFind(Model model, Principal principal) {
+    public String initFind(Model model) {
         model.addAttribute("orders", orderService.findAllOrderByDesc());
         return "order/find";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "number")
-    public String initFindPaging(@RequestParam int number,
-                                 Model model, Principal principal) {
-        int size = 20;
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        String role = RoleHelper.getRole(principal);
-        Page<OrderEntity> page = orderService.findByCreateUser(principal.getName(), pageRequest);
-        model.addAttribute("page", page);
-        return "order/page";
-    }
-
+    /**
+     * TODO: pageable
+     *
+     * @param param
+     * @param model
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
     public String findById(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
@@ -161,6 +159,13 @@ public class OrderController extends BaseChargeController {
         return "order/find";
     }
 
+    /**
+     * TODO: pageable
+     *
+     * @param param
+     * @param model
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
     public String findByCustomerName(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
@@ -169,9 +174,21 @@ public class OrderController extends BaseChargeController {
         return "order/find";
     }
 
+    @RequestMapping(method = RequestMethod.GET, params = "number")
+    public String initFindPaging(@RequestParam int number, Model model) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        String username = SecurityContext.getInstance().getUsername();
+        Page<OrderEntity> page = orderService.findByCreateUser(username, pageRequest);
+
+        model.addAttribute("page", page);
+        return "order/page";
+    }
+
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
         Order order = orderFacade.initOrder();
+
         model.addAttribute("order", order);
         return "order/form";
     }
@@ -180,6 +197,7 @@ public class OrderController extends BaseChargeController {
     public String addServiceItem(@ModelAttribute Order order) {
         logger.debug("order: {}", order);
         order.getServiceItems().add(new ServiceItem());
+
         return "order/form";
     }
 
@@ -191,8 +209,7 @@ public class OrderController extends BaseChargeController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-    public String save(@Valid @ModelAttribute Order order,
-                       BindingResult bindingResult, Model model, Principal principal) {
+    public String save(@Valid @ModelAttribute Order order, BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
         FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
@@ -200,12 +217,12 @@ public class OrderController extends BaseChargeController {
         }
         if (bindingResult.hasErrors()) {
             List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+
             model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
-            order.setRole(RoleHelper.getRole(principal));
-            order.setStatus(OrderStatus.SAVED.getValue());
             orderFacade.save(order);
+
             return "redirect:/order?number=0";
         }
     }
@@ -220,19 +237,40 @@ public class OrderController extends BaseChargeController {
         }
         if (bindingResult.hasErrors()) {
             List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+
             model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
-            order.setRole(RoleHelper.getRole(principal));
-            order.setStatus(OrderStatus.SUBMITTED.getValue());
             orderFacade.submit(order);
+
             return "redirect:/order?number=0";
         }
     }
 
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String initEdit(@PathVariable long id, Model model) {
+        logger.debug("id: {}", id);
+
+        Order order = orderFacade.find(id);
+        logger.debug("order: {}", order);
+
+        model.addAttribute("order", order);
+        return "order/form";
+    }
+
+    @RequestMapping(value = "/{id}/duplicate", method = RequestMethod.GET)
+    public String initDuplicate(@PathVariable long id, Model model) {
+        logger.debug("id: {}", id);
+
+        Order order = orderFacade.duplicate(id);
+        logger.debug("order: {}", order);
+
+        model.addAttribute("order", order);
+        return "order/form";
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable long id,
-                         Model model, Principal principal) {
+    public String detail(@PathVariable long id, Model model) {
         logger.debug("id: {}", id);
 
         Order order = orderFacade.find(id);
@@ -244,39 +282,15 @@ public class OrderController extends BaseChargeController {
         Planning planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         routeService.findByPlanning(planning);
 
+        // TODO: move to an appropriate place
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("planning", planning);
 
         return "order/detail";
     }
 
-    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
-    public String getOrder(@PathVariable long id,
-                           Model model, Principal principal) {
-        logger.debug("id: {}", id);
-        Order order = orderFacade.find(id);
-        logger.debug("order: {}", order);
-
-        model.addAttribute("order", order);
-        return "order/form";
-    }
-
-    @RequestMapping(value = "/{id}/duplicate", method = RequestMethod.GET)
-    public String initDuplicate(@PathVariable long id,
-                                Model model, Principal principal) {
-        logger.debug("id: {}", id);
-
-        Order order = orderFacade.duplicate(id);
-        logger.debug("order: {}", order);
-
-        model.addAttribute("order", order);
-        return "order/form";
-    }
-
     @RequestMapping(value = "/{id}/{tab}", method = RequestMethod.GET)
-    public String charge(@PathVariable long id,
-                         @PathVariable String tab,
-                         Model model, Principal principal) {
+    public String charge(@PathVariable long id, @PathVariable String tab, Model model) {
         logger.debug("id: {}", id);
         logger.debug("tab: {}", tab);
 
