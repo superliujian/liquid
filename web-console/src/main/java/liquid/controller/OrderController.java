@@ -221,6 +221,7 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
+            order.setStatus(OrderStatus.SAVED.getValue());
             orderFacade.save(order);
 
             return "redirect:/order?number=0";
@@ -241,6 +242,7 @@ public class OrderController extends BaseChargeController {
             model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
+            order.setStatus(OrderStatus.SUBMITTED.getValue());
             orderFacade.submit(order);
 
             return "redirect:/order?number=0";

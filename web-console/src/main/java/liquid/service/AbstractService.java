@@ -27,6 +27,10 @@ public abstract class AbstractService<E extends BaseEntity, R extends CrudReposi
         if (null == entity.getId()) {
             entity.setCreateUser(entity.getUpdateUser());
             entity.setCreateTime(entity.getUpdateTime());
+        } else {
+            E oldOne = repository.findOne(entity.getId());
+            entity.setCreateUser(oldOne.getCreateUser());
+            entity.setCreateTime(oldOne.getCreateTime());
         }
         return repository.save(entity);
     }

@@ -93,7 +93,7 @@ public class OrderFacade {
     }
 
     private OrderEntity convert(Order order) {
-        OrderEntity orderEntity = new OrderEntity();
+        OrderEntity orderEntity =  new OrderEntity();
         orderEntity.setId(order.getId());
         orderEntity.setOrderNo(order.getOrderNo());
         orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
@@ -133,11 +133,8 @@ public class OrderFacade {
 
         orderEntity.setCnyTotal(order.getCnyTotal());
         orderEntity.setUsdTotal(order.getUsdTotal());
-        
         orderEntity.setCreateRole(SecurityContext.getInstance().getRole());
-
-        if (null == order.getId()) orderEntity.setStatus(OrderStatus.SAVED.getValue());
-        else orderEntity.setStatus(OrderStatus.SUBMITTED.getValue());
+        orderEntity.setStatus(order.getStatus());
 
         return orderEntity;
     }
