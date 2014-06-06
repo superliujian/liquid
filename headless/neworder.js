@@ -12,7 +12,7 @@ casper.test.begin('get liquid homepage', 7, function suite(test) {
 	}, true);
   });
 
-  casper.then(function() {  
+  casper.waitForSelector('i[class="glyphicon glyphicon-user"]', function() {  
     test.assertTextExists("胡一兵", "username is found");
     test.assertTextExists("任务", "task is found");
   });
@@ -32,21 +32,21 @@ casper.test.begin('get liquid homepage', 7, function suite(test) {
     this.click('button[type="submit"][name="addServiceItem"]');
   });
 
-  casper.then(function() {
+  casper.waitForSelector('input[id="serviceItems0.id"]', function() {
     this.fill('form[action="/order/edit"]', {
       'serviceTypeId':1
     });
     this.click('button[type="submit"][name="addServiceItem"]');
   });
 
-  casper.then(function() {
+  casper.waitForSelector('input[id="serviceItems1.id"]', function() {
     this.fill('form[action="/order/edit"]', {
       'serviceTypeId':1
     });
     this.click('button[type="submit"][name="addServiceItem"]');
   });
 
-  casper.then(function() {
+  casper.waitForSelector('input[id="serviceItems2.id"]', function() {
       this.fill('form[action="/order/edit"]', {
         'serviceTypeId': 2,
         'customerId': 18,
@@ -68,21 +68,18 @@ casper.test.begin('get liquid homepage', 7, function suite(test) {
         'serviceItems[1].serviceSubtypeId' : 2,
         'serviceItems[1].currency' : 'CNY',
         'serviceItems[1].quotation' : 4800,
-//        'serviceItems[2].id' : '',
-//        'serviceItems[2].serviceSubtypeId' : 3,
-//        'serviceItems[2].currency' : 'USD',
-//        'serviceItems[2].quotation' : 2000,
+        'serviceItems[2].id' : '',
+        'serviceItems[2].serviceSubtypeId' : 3,
+        'serviceItems[2].currency' : 'USD',
+        'serviceItems[2].quotation' : 2000,
         'cnyTotal' : 6400,
-        'usdTotal' : 1 
+        'usdTotal' : '0'
       });
       this.click('input[type="submit"][name="save"]');
   });
 
-  casper.then(function() {
-    this.wait(1000, function() {
-      this.echo("I've waited for a second.");
-      test.assertTextExists("发货订单 (订单号, 客户名称)", "find bar is found");
-    });
+  casper.waitForSelector('form[action="/order"]', function() {
+    test.assertTextExists("发货订单 (订单号, 客户名称)", "find bar is found");
   });
 
   casper.run(function() {
