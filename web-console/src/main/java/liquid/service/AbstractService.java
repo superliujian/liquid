@@ -34,4 +34,21 @@ public abstract class AbstractService<E extends BaseEntity, R extends CrudReposi
         }
         return repository.save(entity);
     }
+
+    public Iterable<E> save(Iterable<E> entities) {
+        for (E entity : entities) {
+            entity.setUpdateUser(SecurityContext.getInstance().getUsername());
+            entity.setUpdateTime(new Date());
+            // new entity
+            if (null == entity.getId()) {
+                entity.setCreateUser(entity.getUpdateUser());
+                entity.setCreateTime(entity.getUpdateTime());
+            } else {
+                E oldOne = repository.findOne(entity.getId());
+                entity.setCreateUser(oldOne.getCreateUser());
+                entity.setCreateTime(oldOne.getCreateTime());
+            }
+        }
+        return repository.save(entities);
+    }
 }

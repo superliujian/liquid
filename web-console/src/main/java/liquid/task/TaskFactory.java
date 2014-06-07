@@ -38,10 +38,7 @@ public class TaskFactory {
                 }
             }
             if (null == task) {
-                task = new AbstractTaskProxy() {
-                    @Override
-                    public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {}
-                };
+                task = context.getBean(CommonTask.class);
             }
             cache.put(definitionKey, task);
         }

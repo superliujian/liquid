@@ -22,7 +22,7 @@ import java.util.List;
  * Time: 12:36 AM
  */
 @Service
-public class ShippingContainerService {
+public class ShippingContainerService extends AbstractService<ShippingContainerEntity, ShippingContainerRepository> {
     @Autowired
     private OrderService orderService;
 
@@ -56,16 +56,21 @@ public class ShippingContainerService {
     @Autowired
     private ServiceProviderService serviceProviderService;
 
+    @Override
+    public void doSaveBefore(ShippingContainerEntity entity) {
+
+    }
+
     @Transactional("transactionManager")
     public void initialize(String taskId) {
         Planning planning = planningService.findByTaskId(taskId);
         Collection<RouteEntity> routes = routeService.findByPlanning(planning);
         for (RouteEntity route : routes) {
-            Collection<ShippingContainer> containers = route.getContainers();
+            Collection<ShippingContainerEntity> containers = route.getContainers();
             if (null == containers) containers = new ArrayList<>();
             if (containers.size() == 0) {
                 for (int i = 0; i < route.getContainerQty(); i++) {
-                    ShippingContainer container = new ShippingContainer();
+                    ShippingContainerEntity container = new ShippingContainerEntity();
                     container.setRoute(route);
                     container.setCreateTime(new Date());
                     container.setUpdateTime(new Date());
@@ -76,13 +81,13 @@ public class ShippingContainerService {
         }
     }
 
-    public ShippingContainer find(long scId) {
+    public ShippingContainerEntity find(long scId) {
         return scRepository.findOne(scId);
     }
 
     @Transactional("transactionManager")
-    public void allocate(long routeId, ShippingContainer formBean) {
-        ShippingContainer oldOne = find(formBean.getId());
+    public void allocate(long routeId, ShippingContainerEntity formBean) {
+        ShippingContainerEntity oldOne = find(formBean.getId());
         formBean.setRoute(oldOne.getRoute());
 
         if (null != oldOne.getContainer()) {
@@ -100,7 +105,7 @@ public class ShippingContainerService {
 
     @Transactional("transactionManager")
     public void remove(long scId) {
-        ShippingContainer sc = scRepository.findOne(scId);
+        ShippingContainerEntity sc = scRepository.findOne(scId);
         ContainerEntity containerEntity = sc.getContainer();
         scRepository.delete(scId);
 
@@ -110,7 +115,7 @@ public class ShippingContainerService {
         }
     }
 
-    public List<ShippingContainer> findByRoute(RouteEntity route) {
+    public List<ShippingContainerEntity> findByRoute(RouteEntity route) {
         return scRepository.findByRoute(route);
     }
 
@@ -141,10 +146,10 @@ public class ShippingContainerService {
         rcList = new ArrayList<RailContainer>();
         Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         for (RouteEntity route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainer sc : scList) {
+                for (ShippingContainerEntity sc : scList) {
                     RailContainer rc = new RailContainer();
                     rc.setOrder(route.getPlanning().getOrder());
                     rc.setRoute(route);
@@ -463,10 +468,10 @@ public class ShippingContainerService {
         bcList = new ArrayList<BargeContainer>();
         Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         for (RouteEntity route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
-                for (ShippingContainer sc : scList) {
+                for (ShippingContainerEntity sc : scList) {
                     BargeContainer bc = new BargeContainer();
                     bc.setOrder(route.getPlanning().getOrder());
                     bc.setRoute(route);
@@ -547,10 +552,10 @@ public class ShippingContainerService {
         vcList = new ArrayList<VesselContainer>();
         Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         for (RouteEntity route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainer sc : scList) {
+                for (ShippingContainerEntity sc : scList) {
                     VesselContainer vc = new VesselContainer();
                     vc.setOrder(route.getPlanning().getOrder());
                     vc.setRoute(route);
@@ -631,8 +636,8 @@ public class ShippingContainerService {
         dcList = new ArrayList<DeliveryContainer>();
         Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         for (RouteEntity route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
-            for (ShippingContainer sc : scList) {
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
+            for (ShippingContainerEntity sc : scList) {
                 DeliveryContainer dc = new DeliveryContainer();
                 dc.setOrder(route.getPlanning().getOrder());
                 dc.setRoute(route);
@@ -689,9 +694,5 @@ public class ShippingContainerService {
             }
             dcRepository.save(container);
         }
-    }
-
-    public void save(Iterable<ShippingContainer> shippingContainers) {
-        scRepository.save(shippingContainers);
     }
 }

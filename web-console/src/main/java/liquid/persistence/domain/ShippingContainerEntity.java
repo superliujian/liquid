@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Time: 8:15 PM
  */
 @Entity(name = "SHIPPING_CONTAINER")
-public class ShippingContainer extends BaseEntity {
+public class ShippingContainerEntity extends BaseEntity {
     @Column(name = "BIC_CODE")
     private String bicCode;
 

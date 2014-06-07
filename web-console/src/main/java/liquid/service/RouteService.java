@@ -51,7 +51,7 @@ public class RouteService {
         for (RouteEntity route : routes) {
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
-            Collection<ShippingContainer> containers = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
             Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
             route.setRailContainers(railContainers);
@@ -73,7 +73,7 @@ public class RouteService {
         for (RouteEntity route : routes) {
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
-            Collection<ShippingContainer> containers = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
         }
         return routes;

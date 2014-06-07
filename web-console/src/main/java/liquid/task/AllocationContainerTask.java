@@ -1,12 +1,11 @@
 package liquid.task;
 
-import liquid.persistence.domain.OrderEntity;
-import liquid.persistence.domain.Planning;
-import liquid.persistence.domain.RouteEntity;
-import liquid.persistence.domain.ShippingContainer;
+import liquid.persistence.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,12 +22,24 @@ public class AllocationContainerTask extends AbstractTaskProxy {
         Planning planning = planningService.findByOrder(order);
         Collection<RouteEntity> routes = routeService.findByPlanning(planning);
         int allocatedContainerQty = 0;
+
+        // TODO: This is temp solution for dual-allocated containers.
+        List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (RouteEntity route : routes) {
-            Collection<ShippingContainer> scs = shippingContainerService.findByRoute(route);
+            Collection<ShippingContainerEntity> scs = shippingContainerService.findByRoute(route);
             allocatedContainerQty += scs.size();
+
+            // TODO: This is temp solution for dual-allocated containers.
+            if (scs.size() < route.getContainerQty()) {
+                ShippingContainerEntity shippingContainer = new ShippingContainerEntity();
+                shippingContainer.setRoute(route);
+                shippingContainers.add(shippingContainer);
+            }
         }
-        if (allocatedContainerQty != order.getContainerQty()) {
-            throw new NotCompletedException("container.allocation.is.not.completed");
-        }
+        // TODO: This is temp solution for dual-allocated containers.
+        shippingContainerService.save(shippingContainers);
+//        if (allocatedContainerQty != order.getContainerQty()) {
+//            throw new NotCompletedException("container.allocation.is.not.completed");
+//        }
     }
 }

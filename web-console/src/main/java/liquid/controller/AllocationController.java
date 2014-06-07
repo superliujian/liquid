@@ -58,8 +58,7 @@ public class AllocationController extends BaseTaskController {
     @Autowired
     private ContainerAllocationFacade containerAllocationFacade;
 
-    public String init(@PathVariable String taskId,
-                       Model model, Principal principal) {
+    public String init(@PathVariable String taskId, Model model) {
         scService.initialize(taskId);
         Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
@@ -148,13 +147,13 @@ public class AllocationController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
 
-        ShippingContainer sc = scService.find(scId);
+        ShippingContainerEntity sc = scService.find(scId);
 
         // Set up pickup contact and his phone by default
         RouteEntity route = routeService.find(routeId);
-        Collection<ShippingContainer> scs = scService.findByRoute(route);
+        Collection<ShippingContainerEntity> scs = scService.findByRoute(route);
         if (scs.iterator().hasNext()) {
-            ShippingContainer firstOne = scs.iterator().next();
+            ShippingContainerEntity firstOne = scs.iterator().next();
             sc.setPickupContact(firstOne.getPickupContact());
             sc.setContactPhone(firstOne.getContactPhone());
         }
@@ -168,7 +167,7 @@ public class AllocationController extends BaseTaskController {
     @RequestMapping(value = "/route/{routeId}/sc", method = RequestMethod.POST)
     public String allocate(@PathVariable String taskId,
                            @PathVariable long routeId,
-                           ShippingContainer sc,
+                           ShippingContainerEntity sc,
                            BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);

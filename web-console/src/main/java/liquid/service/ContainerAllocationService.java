@@ -2,7 +2,7 @@ package liquid.service;
 
 import liquid.metadata.ContainerStatus;
 import liquid.persistence.domain.ContainerEntity;
-import liquid.persistence.domain.ShippingContainer;
+import liquid.persistence.domain.ShippingContainerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +22,9 @@ public class ContainerAllocationService {
     private ShippingContainerService shippingContainerService;
 
     @Transactional("transactionManager")
-    public void allocate(List<ShippingContainer> shippingContainers) {
+    public void allocate(List<ShippingContainerEntity> shippingContainers) {
         List<ContainerEntity> containers = new ArrayList<>();
-        for (ShippingContainer shippingContainer : shippingContainers) {
+        for (ShippingContainerEntity shippingContainer : shippingContainers) {
             ContainerEntity container = containerService.find(shippingContainer.getContainer().getId());
             container.setStatus(ContainerStatus.ALLOCATED.getValue());
             containers.add(container);
@@ -35,7 +35,7 @@ public class ContainerAllocationService {
     }
 
     @Transactional("transactionManager")
-    public void undo(ShippingContainer shippingContainer) {
+    public void undo(ShippingContainerEntity shippingContainer) {
         ContainerEntity container = shippingContainer.getContainer();
         container.setStatus(ContainerStatus.IN_STOCK.getValue());
         shippingContainerService.remove(shippingContainer.getId());

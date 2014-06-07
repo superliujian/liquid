@@ -30,7 +30,7 @@ public class RouteEntity extends BaseEntity {
     private Collection<Leg> legs;
 
     @Transient
-    private Collection<ShippingContainer> containers;
+    private Collection<ShippingContainerEntity> containers;
 
     @Transient
     private Collection<RailContainer> railContainers;
@@ -87,11 +87,11 @@ public class RouteEntity extends BaseEntity {
         this.legs = legs;
     }
 
-    public Collection<ShippingContainer> getContainers() {
+    public Collection<ShippingContainerEntity> getContainers() {
         return containers;
     }
 
-    public void setContainers(Collection<ShippingContainer> containers) {
+    public void setContainers(Collection<ShippingContainerEntity> containers) {
         this.containers = containers;
     }
 
