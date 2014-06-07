@@ -1,4 +1,4 @@
-package liquid.service;
+package liquid.task;
 
 /**
  * TODO: Comments.
@@ -6,7 +6,7 @@ package liquid.service;
  * Date: 10/19/13
  * Time: 10:11 PM
  */
-public class NotCompletedException extends RuntimeException {
+public class NotCompletedException extends TaskException {
     private final String code;
 
     private final Object[] arguments;

@@ -7,7 +7,7 @@ import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.Charge;
 import liquid.persistence.domain.OrderEntity;
 import liquid.service.ChargeService;
-import liquid.service.NotCompletedException;
+import liquid.task.NotCompletedException;
 import liquid.service.OrderService;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
@@ -137,11 +137,11 @@ public class TaskController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, params = "complete")
     public String complete(@RequestParam String taskId,
                            @RequestHeader(value = "referer") String referer,
-                           Model model, Principal principal) {
+                           Model model) {
         logger.debug("taskId: {}", taskId);
 
         try {
-            taskService.complete(taskId, principal.getName());
+            taskService.complete(taskId);
         } catch (NotCompletedException e) {
             model.addAttribute("task_error", getMessage(e.getCode()));
             return "redirect:" + referer;
