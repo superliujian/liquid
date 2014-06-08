@@ -30,7 +30,7 @@ public class AllocationContainerTask extends AbstractTaskProxy {
             allocatedContainerQty += scs.size();
 
             // TODO: This is temp solution for dual-allocated containers.
-            if (scs.size() < route.getContainerQty()) {
+            for (int i = 0; i < route.getContainerQty() - scs.size(); i++) {
                 ShippingContainerEntity shippingContainer = new ShippingContainerEntity();
                 shippingContainer.setRoute(route);
                 shippingContainers.add(shippingContainer);

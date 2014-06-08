@@ -1,4 +1,4 @@
-casper.test.begin('get liquid homepage', 7, function suite(test) {
+casper.test.begin('new order', 7, function suite(test) {
 //  casper.on('resource.received', function(resource) {
 //    this.echo(JSON.stringify(resource, null, 4));
 //  });

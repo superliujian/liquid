@@ -4,7 +4,7 @@ package liquid.domain;
  * Created by redbrick9 on 5/20/14.
  */
 public class RouteContainerAllocation {
-    private long allocationId;
+    private Long allocationId;
 
     private long routeId;
 
@@ -28,11 +28,11 @@ public class RouteContainerAllocation {
 
     public RouteContainerAllocation() {}
 
-    public long getAllocationId() {
+    public Long getAllocationId() {
         return allocationId;
     }
 
-    public void setAllocationId(long allocationId) {
+    public void setAllocationId(Long allocationId) {
         this.allocationId = allocationId;
     }
 
