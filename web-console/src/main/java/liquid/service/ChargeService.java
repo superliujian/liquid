@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.domain.Order;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.*;
@@ -44,6 +45,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     @Autowired
     private RouteService routeService;
 
+    // TODO: have to enhance this function.
     @Override
     public void doSaveBefore(ChargeEntity entity) {
         // update charge
@@ -59,6 +61,10 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             Leg leg = legRepository.findOne(entity.getLeg().getId());
             route = leg.getRoute();
             entity.setOrder(route.getPlanning().getOrder());
+        }
+        if (null == entity.getOrder()) {
+            OrderEntity order = orderService.findByTaskId(entity.getTaskId());
+            entity.setOrder(order);
         }
 
         if (ChargeWay.PER_ORDER.getValue() == entity.getWay()) {
