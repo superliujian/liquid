@@ -1,6 +1,6 @@
 package liquid.service;
 
-import liquid.persistence.domain.BaseEntity;
+import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.security.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by redbrick9 on 6/3/14.
  */
-public abstract class AbstractService<E extends BaseEntity, R extends CrudRepository<E, Long>> {
+public abstract class AbstractService<E extends BaseUpdateEntity, R extends CrudRepository<E, Long>> {
     @Autowired
     protected R repository;
 

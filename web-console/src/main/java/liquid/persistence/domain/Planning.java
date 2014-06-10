@@ -10,7 +10,7 @@ import java.util.List;
  * Time: 11:53 AM
  */
 @Entity(name = "PLANNING")
-public class Planning extends BaseEntity {
+public class Planning extends BaseUpdateEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

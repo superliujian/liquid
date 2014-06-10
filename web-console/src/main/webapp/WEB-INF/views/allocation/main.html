@@ -110,7 +110,7 @@
                         Route ID
                     </td>
                     <td th:text="${charge.leg} ? (#{${transModes[charge.leg.transMode]}}) : ''">Trans Mode</td>
-                    <td th:text="${charge.type.name}">Type</td>
+                    <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>

@@ -5,7 +5,7 @@ import javax.persistence.*;
 /**
  * Created by redbrick9 on 5/19/14.
  */
-public class ContainerAllocation extends BaseEntity {
+public class ContainerAllocation extends BaseUpdateEntity {
     @OneToMany
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

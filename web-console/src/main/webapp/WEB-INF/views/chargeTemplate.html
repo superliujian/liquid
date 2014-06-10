@@ -9,7 +9,7 @@
             <div class="panel-body">
                 <div class="col-lg-2">
                     <strong th:text="#{sales.price} + ':'">Sales Price: </strong>
-                    <span th:text="${earning.salesPriceCny}">1800</span>
+                    <span th:text="${earning.salesPriceCny} + '+' + ${earning.salesPriceUsd} + '$'">1800</span>
                 </div>
                 <div class="col-lg-2">
                     <strong th:text="#{disty.price} + ':'">Disty Price: </strong>
@@ -61,7 +61,7 @@
                     <tr th:each="charge : ${charges}">
                         <td th:text="${charge.id}">ID</td>
                         <td th:text="${charge.order.orderNo}">Order No</td>
-                        <td th:text="${charge.type.name}">Type</td>
+                        <td th:text="${charge.serviceSubtype.name}">Type</td>
                         <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
                         <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                         <td th:text="${charge.unitPrice}">Unit Price</td>

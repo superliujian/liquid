@@ -4,9 +4,11 @@ import liquid.dto.EarningDto;
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.ChargeWay;
-import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.ChargeEntity;
 import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
+import liquid.service.ServiceSubtypeService;
 import liquid.task.NotCompletedException;
 import liquid.service.OrderService;
 import liquid.service.TaskService;
@@ -48,6 +50,9 @@ public class TaskController extends BaseController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String tasks(Model model, Principal principal) {
@@ -161,15 +166,16 @@ public class TaskController extends BaseController {
         model.addAttribute("task", task);
 
         if ("ROLE_COMMERCE".equals(RoleHelper.getRole(principal))) {
-            Iterable<Charge> charges = chargeService.findByOrderId(orderId);
+            Iterable<ChargeEntity> charges = chargeService.findByOrderId(orderId);
             model.addAttribute("charges", charges);
         } else {
-            Iterable<Charge> charges = chargeService.findByOrderIdAndCreateRole(orderId, RoleHelper.getRole(principal));
+            Iterable<ChargeEntity> charges = chargeService.findByOrderIdAndCreateRole(orderId, RoleHelper.getRole(principal));
             model.addAttribute("charges", charges);
         }
 
         model.addAttribute("chargeWays", ChargeWay.values());
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
         return "charge/list";
     }
 
@@ -180,11 +186,12 @@ public class TaskController extends BaseController {
         model.addAttribute("task", task);
 
         OrderEntity order = orderService.findByTaskId(taskId);
-        Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
+        Iterable<ChargeEntity> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
 
         model.addAttribute("chargeWays", ChargeWay.values());
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
 
         EarningDto earning = chargeService.calculateEarning(order, charges);
         model.addAttribute("earning", earning);

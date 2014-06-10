@@ -3,17 +3,18 @@ package liquid.service;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
+import liquid.persistence.repository.ChargeRepository;
+import liquid.persistence.repository.ExchangeRateRepository;
+import liquid.persistence.repository.LegRepository;
+import liquid.persistence.repository.ServiceProviderRepository;
+import liquid.security.SecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * TODO: Comments.
@@ -22,14 +23,11 @@ import java.util.TreeMap;
  * Time: 2:59 PM
  */
 @Service
-public class ChargeService {
+public class ChargeService extends AbstractService<ChargeEntity, ChargeRepository> {
     private static final Logger logger = LoggerFactory.getLogger(ChargeService.class);
 
     @Autowired
     private ChargeRepository chargeRepository;
-
-    @Autowired
-    private ChargeTypeRepository ctRepository;
 
     @Autowired
     private ExchangeRateRepository exchangeRateRepository;
@@ -46,97 +44,55 @@ public class ChargeService {
     @Autowired
     private RouteService routeService;
 
-    public Iterable<Charge> getChargesByOrderId(long orderId) {
+    @Override
+    public void doSaveBefore(ChargeEntity entity) {
+        // update charge
+        if (null != entity.getId()) return;
+
+        // new charge
+        RouteEntity route = null;
+        if (null != entity.getRoute()) {
+            route = routeService.find(entity.getRoute().getId());
+            entity.setOrder(route.getPlanning().getOrder());
+        }
+        if (null != entity.getLeg()) {
+            Leg leg = legRepository.findOne(entity.getLeg().getId());
+            route = leg.getRoute();
+            entity.setOrder(route.getPlanning().getOrder());
+        }
+
+        if (ChargeWay.PER_ORDER.getValue() == entity.getWay()) {
+            entity.setTotalPrice(entity.getUnitPrice());
+            entity.setUnitPrice(0L);
+        } else if (ChargeWay.PER_CONTAINER.getValue() == entity.getWay()) {
+            entity.setTotalPrice(entity.getUnitPrice() * route.getContainerQty());
+        } else {
+            logger.warn("{} is out of charge way range.", entity.getWay());
+        }
+
+        entity.setCreateRole(SecurityContext.getInstance().getRole());
+        // Compute grand total
+        OrderEntity order = orderService.find(entity.getOrder().getId());
+        if (entity.getCurrency() == 0) {
+            order.setGrandTotal(order.getGrandTotal() + entity.getTotalPrice());
+        } else {
+            order.setGrandTotal(order.getGrandTotal() + Math.round(entity.getTotalPrice() * getExchangeRate()));
+        }
+        orderService.save(order);
+
+    }
+
+    public Iterable<ChargeEntity> getChargesByOrderId(long orderId) {
         return chargeRepository.findByOrderId(orderId);
     }
 
-    public List<Charge> getChargesByTaskId(String taskId) {
+    public List<ChargeEntity> getChargesByTaskId(String taskId) {
         return chargeRepository.findByTaskId(taskId);
-    }
-
-    public Charge newCharge(long legId) {
-        Charge charge = new Charge();
-
-        Leg leg = legRepository.findOne(legId);
-        charge.setSp(leg.getSp());
-
-        return charge;
-    }
-
-    @Transactional("transactionManager")
-    public Charge addCharge(Charge charge) {
-        ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
-        charge.setSp(sp);
-
-        RouteEntity route = routeService.find(charge.getFormRouteId());
-        Leg leg = legRepository.findOne(charge.getFormLegId());
-
-        OrderEntity order = null;
-        if (null != route) {
-            order = route.getPlanning().getOrder();
-            charge.setRoute(route);
-        }
-        if (null != leg) {
-            route = leg.getRoute();
-            order = route.getPlanning().getOrder();
-            charge.setLeg(leg);
-        }
-
-        charge.setOrder(order);
-        ChargeType type = ctRepository.findOne(charge.getTypeId());
-        charge.setType(type);
-
-        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
-            charge.setTotalPrice(charge.getUnitPrice());
-            charge.setUnitPrice(0L);
-        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
-            charge.setTotalPrice(charge.getUnitPrice() * route.getContainerQty());
-        } else {
-            logger.warn("{} is out of charge way range.", charge.getWay());
-        }
-        if (charge.getCurrency() == 0) {
-            order.setGrandTotal(order.getGrandTotal() + charge.getTotalPrice());
-        } else {
-            order.setGrandTotal(order.getGrandTotal() + Math.round(charge.getTotalPrice() * getExchangeRate()));
-        }
-        orderService.save(order);
-
-        return chargeRepository.save(charge);
-    }
-
-    @Transactional("transactionManager")
-    public Charge addCharge(Charge charge, String uid) {
-        OrderEntity order = orderService.findByTaskId(charge.getTaskId());
-        charge.setOrder(order);
-
-        ServiceProviderEntity sp = serviceProviderRepository.findOne(charge.getSpId());
-        charge.setSp(sp);
-
-        ChargeType type = ctRepository.findOne(charge.getTypeId());
-        charge.setType(type);
-
-        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
-            charge.setUnitPrice(0L);
-        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
-            charge.setTotalPrice(charge.getUnitPrice() * order.getContainerQty());
-        } else {
-            logger.warn("{} is out of charge way range.", charge.getWay());
-        }
-
-        order.setGrandTotal(order.getGrandTotal() + charge.getTotalPrice());
-        orderService.save(order);
-
-        charge.setCreateUser(uid);
-        charge.setCreateTime(new Date());
-        charge.setUpdateUser(uid);
-        charge.setUpdateTime(new Date());
-
-        return chargeRepository.save(charge);
     }
 
     @Transactional("transactionManager")
     public void removeCharge(long chargeId) {
-        Charge charge = chargeRepository.findOne(chargeId);
+        ChargeEntity charge = chargeRepository.findOne(chargeId);
         OrderEntity order = charge.getOrder();
 
         if (charge.getCurrency() == 0) {
@@ -150,21 +106,21 @@ public class ChargeService {
         chargeRepository.delete(chargeId);
     }
 
-    public Iterable<Charge> findByLegId(long legId) {
+    public Iterable<ChargeEntity> findByLegId(long legId) {
         return chargeRepository.findByLegId(legId);
     }
 
-    public Iterable<Charge> findByRouteId(long routeId) {
+    public Iterable<ChargeEntity> findByRouteId(long routeId) {
         return chargeRepository.findByRouteId(routeId);
     }
 
-    public Iterable<Charge> findByTaskId(String taskId) {
+    public Iterable<ChargeEntity> findByTaskId(String taskId) {
         return chargeRepository.findByTaskId(taskId);
     }
 
-    public long total(Iterable<Charge> charges) {
+    public long total(Iterable<ChargeEntity> charges) {
         long total = 0L;
-        for (Charge charge : charges) {
+        for (ChargeEntity charge : charges) {
             if (charge.getCurrency() == 0) {
                 total += charge.getTotalPrice();
             } else {
@@ -174,59 +130,41 @@ public class ChargeService {
         return total;
     }
 
-    public Map<Long, String> getChargeTypes() {
-        Map<Long, String> cts = new TreeMap<Long, String>();
-        Iterable<ChargeType> iterable = ctRepository.findAll();
-        for (ChargeType chargeType : iterable) {
-            cts.put(chargeType.getId(), chargeType.getName());
-        }
-        return cts;
-    }
-
-    public Iterable<Charge> findByOrderId(long orderId) {
+    public Iterable<ChargeEntity> findByOrderId(long orderId) {
         return chargeRepository.findByOrderId(orderId);
     }
 
-    public Iterable<Charge> findByOrderNo(String orderNo) {
+    public Iterable<ChargeEntity> findByOrderNo(String orderNo) {
         return chargeRepository.findByOrderOrderNoLike("%" + orderNo + "%");
     }
 
-    public Iterable<Charge> findBySpName(String spName) {
+    public Iterable<ChargeEntity> findBySpName(String spName) {
         return chargeRepository.findBySpNameLike("%" + spName + "%");
     }
 
-    public void save(Charge charge) {
-        if (null == charge.getType()) {
-            ChargeType type = ctRepository.findOne(charge.getTypeId());
-            charge.setType(type);
-        }
-        chargeRepository.save(charge);
+    public ChargeEntity find(long id) {
+        return chargeRepository.findOne(id);
     }
 
-    public Charge find(long id) {
-        Charge charge = chargeRepository.findOne(id);
-        charge.setTypeId(charge.getType().getId());
-        return charge;
-    }
-
-    public Iterable<Charge> findAll() {
+    public Iterable<ChargeEntity> findAll() {
         return chargeRepository.findAll();
     }
 
-    public Iterable<Charge> findByOrderIdAndCreateRole(long orderId, String createRole) {
+    public Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole) {
         return chargeRepository.findByOrderIdAndCreateRole(orderId, createRole);
     }
 
-    public EarningDto calculateEarning(OrderEntity order, Iterable<Charge> charges) {
+    public EarningDto calculateEarning(OrderEntity order, Iterable<ChargeEntity> charges) {
         EarningDto earning = new EarningDto();
 
         double exchangeRate = getExchangeRate();
 
-        earning.setSalesPriceCny(order.getSalesPriceCny());
+        earning.setSalesPriceCny(order.getCnyTotal());
+        earning.setSalesPriceUsd(order.getUsdTotal());
         earning.setDistyPrice(order.getDistyPrice());
         earning.setGrandTotal(order.getGrandTotal());
         earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getGrandTotal());
-        earning.setSalesProfit(order.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
+        earning.setSalesProfit(order.getCnyTotal() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
         earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
         return earning;
     }

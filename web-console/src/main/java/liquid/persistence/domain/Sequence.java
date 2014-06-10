@@ -4,15 +4,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.validation.constraints.NotNull;
 
 /**
  * Created by redbrick9 on 4/26/14.
  */
 @Entity(name = "SEQUENCE")
-public class Sequence extends BaseEntity {
+public class Sequence extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "NAME")

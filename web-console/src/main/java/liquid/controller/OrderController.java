@@ -7,7 +7,6 @@ import liquid.metadata.*;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.utils.RoleHelper;
 import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
@@ -36,7 +35,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/order")
-public class OrderController extends BaseChargeController {
+public class OrderController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderEntity.class);
 
     @Autowired
@@ -125,9 +124,6 @@ public class OrderController extends BaseChargeController {
     public OrderStatus[] populateStatus() {
         return OrderStatus.values();
     }
-
-    @ModelAttribute("chargeTypeMap")
-    public Map<Long, String> populateChargeTypes() {return chargeService.getChargeTypes(); }
 
     @ModelAttribute("serviceSubtypes")
     public Iterable<ServiceSubtypeEntity> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
@@ -230,7 +226,7 @@ public class OrderController extends BaseChargeController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
-                         BindingResult bindingResult, Model model, Principal principal) {
+                         BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
         FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
@@ -306,9 +302,10 @@ public class OrderController extends BaseChargeController {
                 model.addAttribute("completedTasks", completedTasks);
                 break;
             case "charge":
-                Iterable<Charge> charges = chargeService.getChargesByOrderId(id);
+                Iterable<ChargeEntity> charges = chargeService.getChargesByOrderId(id);
 
-                model.addAttribute("cts", chargeTypesToMap());
+                Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+                model.addAttribute("serviceSubtypes", serviceSubtypes);
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
                 break;

@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * TODO: Comments.
@@ -12,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * Time: 4:38 PM
  */
 @Entity(name = "SERVICE_PROVIDER")
-public class ServiceProviderEntity extends BaseEntity {
+public class ServiceProviderEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -26,9 +28,6 @@ public class ServiceProviderEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "TYPE_ID")
     private SpType type;
-
-    @Transient
-    private long typeId;
 
     @Column(name = "ADDRESS")
     private String address;
@@ -51,8 +50,11 @@ public class ServiceProviderEntity extends BaseEntity {
     @Column(name = "STATUS")
     private int status;
 
-    @Transient
-    private long[] chargeTypeIds;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "SERVICE_PROVIDER_SUBTYPE",
+            joinColumns = @JoinColumn(name = "SERVICE_PROVIDER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SERVICE_SUBTYPE_ID"))
+    private Set<ServiceSubtypeEntity> serviceSubtypes = new HashSet<>();
 
     public String getCode() {
         return code;
@@ -76,14 +78,6 @@ public class ServiceProviderEntity extends BaseEntity {
 
     public void setType(SpType type) {
         this.type = type;
-    }
-
-    public long getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(long typeId) {
-        this.typeId = typeId;
     }
 
     public String getAddress() {
@@ -134,29 +128,11 @@ public class ServiceProviderEntity extends BaseEntity {
         this.status = status;
     }
 
-    public long[] getChargeTypeIds() {
-        return chargeTypeIds;
+    public Set<ServiceSubtypeEntity> getServiceSubtypes() {
+        return serviceSubtypes;
     }
 
-    public void setChargeTypeIds(long[] chargeTypeIds) {
-        this.chargeTypeIds = chargeTypeIds;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("ServiceProvider{");
-        sb.append("code='").append(code).append('\'');
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", type=").append(type);
-        sb.append(", typeId=").append(typeId);
-        sb.append(", address='").append(address).append('\'');
-        sb.append(", postcode='").append(postcode).append('\'');
-        sb.append(", contact='").append(contact).append('\'');
-        sb.append(", phone='").append(phone).append('\'');
-        sb.append(", cell='").append(cell).append('\'');
-        sb.append(", status=").append(status);
-        sb.append('}');
-        return sb.toString();
+    public void setServiceSubtypes(Set<ServiceSubtypeEntity> serviceSubtypes) {
+        this.serviceSubtypes = serviceSubtypes;
     }
 }

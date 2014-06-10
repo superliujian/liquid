@@ -9,8 +9,7 @@ import java.util.List;
  * Time: 9:18 PM
  */
 public class CollectionUtils {
-    private CollectionUtils() {
-    }
+    private CollectionUtils() {}
 
     public static <T> T tryToGet2ndElement(List<T> list) {
         int size = list.size();
@@ -20,5 +19,11 @@ public class CollectionUtils {
         } else {
             return list.get(1);
         }
+    }
+
+    public static <T> boolean isEmpty(List<T> list) {
+        if (null == list) return true;
+        if (list.size() == 0) return true;
+        return false;
     }
 }

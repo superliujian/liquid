@@ -20,7 +20,7 @@ public class RouteContainerAllocation {
     /**
      * For the non rail container.
      */
-    private long containerId;
+    private Long containerId;
 
     private String owner;
 
@@ -68,11 +68,11 @@ public class RouteContainerAllocation {
         this.bicCode = bicCode;
     }
 
-    public long getContainerId() {
+    public Long getContainerId() {
         return containerId;
     }
 
-    public void setContainerId(long containerId) {
+    public void setContainerId(Long containerId) {
         this.containerId = containerId;
     }
 

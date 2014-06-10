@@ -11,7 +11,7 @@ import java.util.Collection;
  * Time: 9:15 PM
  */
 @Entity(name = "ROUTE")
-public class RouteEntity extends BaseEntity {
+public class RouteEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "PLANNING_ID")
     private Planning planning;

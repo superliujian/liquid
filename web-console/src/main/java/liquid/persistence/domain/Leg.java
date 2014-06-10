@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Time: 8:18 PM
  */
 @Entity(name = "LEG")
-public class Leg extends BaseEntity {
+public class Leg extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")

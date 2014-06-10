@@ -4,7 +4,6 @@ import liquid.domain.Order;
 import liquid.domain.ServiceItem;
 import liquid.metadata.ContainerType;
 import liquid.metadata.LocationType;
-import liquid.metadata.OrderStatus;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.LocationService;
@@ -14,6 +13,7 @@ import liquid.service.bpm.ActivitiEngineService;
 import liquid.utils.CollectionUtils;
 import liquid.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,6 +23,9 @@ import java.util.*;
  */
 @Service
 public class OrderFacade {
+    @Autowired
+    private Environment env;
+
     @Autowired
     private LocationService locationService;
 
@@ -58,7 +61,7 @@ public class OrderFacade {
         boolean hasDelivery = false;
         List<ServiceItem> serviceItems = order.getServiceItems();
         for (ServiceItem serviceItem : serviceItems) {
-            if (serviceItem.getServiceSubtypeId() == 12) {
+            if (serviceItem.getServiceSubtypeId() == Integer.valueOf(env.getProperty("service.subtype.delivery.id"))) {
                 hasDelivery = true;
                 break;
             }
@@ -93,7 +96,7 @@ public class OrderFacade {
     }
 
     private OrderEntity convert(Order order) {
-        OrderEntity orderEntity =  new OrderEntity();
+        OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(order.getId());
         orderEntity.setOrderNo(order.getOrderNo());
         orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));

@@ -1,42 +1,20 @@
-package liquid.persistence.domain;
+package liquid.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 /**
- * TODO: Comments.
- * User: tao
- * Date: 9/24/13
- * Time: 10:10 PM
+ * Created by redbrick9 on 6/9/14.
  */
-@Entity(name = "CUSTOMER")
-public class CustomerEntity extends BaseUpdateEntity {
-    @NotNull
-    @NotEmpty
-    @Column(name = "CODE")
+public class ServiceProvider extends BaseIdObject {
     private String code;
-
-    @NotNull
-    @NotEmpty
-    @Column(name = "NAME")
     private String name;
-
-    @Column(name = "ADDRESS")
+    private Long typeId;
     private String address;
-
-    @Column(name = "POSTCODE")
     private String postcode;
-
-    @Column(name = "CONTACT")
     private String contact;
-
-    @Column(name = "PHONE")
     private String phone;
-
-    @Column(name = "CELL")
     private String cell;
+    private Long[] subtypeIds;
 
     public String getCode() {
         return code;
@@ -52,6 +30,14 @@ public class CustomerEntity extends BaseUpdateEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public String getAddress() {
@@ -94,17 +80,27 @@ public class CustomerEntity extends BaseUpdateEntity {
         this.cell = cell;
     }
 
+    public Long[] getSubtypeIds() {
+        return subtypeIds;
+    }
+
+    public void setSubtypeIds(Long[] subtypeIds) {
+        this.subtypeIds = subtypeIds;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Customer{");
-        sb.append("code='").append(code).append('\'');
+        final StringBuilder sb = new StringBuilder("ServiceProvider{");
+        sb.append("super=").append(super.toString());
+        sb.append(", code='").append(code).append('\'');
         sb.append(", name='").append(name).append('\'');
+        sb.append(", typeId=").append(typeId);
         sb.append(", address='").append(address).append('\'');
         sb.append(", postcode='").append(postcode).append('\'');
         sb.append(", contact='").append(contact).append('\'');
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", cell='").append(cell).append('\'');
+        sb.append(", subtypeIds=").append(Arrays.toString(subtypeIds));
         sb.append('}');
         return sb.toString();
     }

@@ -1,6 +1,6 @@
 package liquid.persistence.repository;
 
-import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.ChargeEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -11,18 +11,18 @@ import java.util.List;
  * Date: 10/2/13
  * Time: 8:37 PM
  */
-public interface ChargeRepository extends CrudRepository<Charge, Long> {
-    List<Charge> findByTaskId(String taskId);
+public interface ChargeRepository extends CrudRepository<ChargeEntity, Long> {
+    List<ChargeEntity> findByTaskId(String taskId);
 
-    Iterable<Charge> findByOrderId(long orderId);
+    Iterable<ChargeEntity> findByOrderId(long orderId);
 
-    Iterable<Charge> findByOrderOrderNoLike(String orderNo);
+    Iterable<ChargeEntity> findByOrderOrderNoLike(String orderNo);
 
-    Iterable<Charge> findBySpNameLike(String cumtomerName);
+    Iterable<ChargeEntity> findBySpNameLike(String cumtomerName);
 
-    Iterable<Charge> findByLegId(long legId);
+    Iterable<ChargeEntity> findByLegId(long legId);
 
-    Iterable<Charge> findByRouteId(long routeId);
+    Iterable<ChargeEntity> findByRouteId(long routeId);
 
-    Iterable<Charge> findByOrderIdAndCreateRole(long orderId, String createRole);
+    Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole);
 }

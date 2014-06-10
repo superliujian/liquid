@@ -5,12 +5,10 @@ import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.ChargeEntity;
 import liquid.persistence.domain.RouteEntity;
-import liquid.service.ChargeService;
-import liquid.service.RouteService;
-import liquid.service.ShippingContainerService;
-import liquid.service.ServiceProviderService;
+import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,9 @@ public class RailTruckController extends BaseTaskController {
     @Autowired
     private ServiceProviderService serviceProviderService;
 
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
@@ -58,10 +59,11 @@ public class RailTruckController extends BaseTaskController {
         model.addAttribute("routes", routes);
 
         // for charges
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("chargeWays", ChargeWay.values());
         model.addAttribute("transModes", TransMode.toMap());
-        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "rail/main";

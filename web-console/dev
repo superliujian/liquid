@@ -4,5 +4,10 @@
 # Or, alternatively, you can set useBodyEncodingForURI="True".
 
 # If you're using the maven tomcat plugin, just add this parameter:
+if [ -z $MAVEN_OPTS ]
+  then
+    export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+fi
+
 mvn -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run
 # mvn -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run > log/console.log 2>&1 &

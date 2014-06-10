@@ -1,6 +1,5 @@
 package liquid.domain;
 
-import liquid.metadata.OrderStatus;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
@@ -11,8 +10,7 @@ import java.util.List;
 /**
  * Created by redbrick9 on 5/27/14.
  */
-public class Order {
-    private Long id;
+public class Order extends BaseIdObject {
     private String orderNo;
     private long serviceTypeId;
     private long customerId;
@@ -52,14 +50,6 @@ public class Order {
 
     public Order() {
         serviceItems = new ArrayList<>();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getOrderNo() {
@@ -273,8 +263,8 @@ public class Order {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("id=").append(id);
-        sb.append(", orderNo=").append(orderNo);
+        sb.append("super=").append(super.toString());
+        sb.append(", orderNo='").append(orderNo).append('\'');
         sb.append(", serviceTypeId=").append(serviceTypeId);
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName='").append(customerName).append('\'');
@@ -296,8 +286,8 @@ public class Order {
         sb.append(", selfContainerSubtypeId=").append(selfContainerSubtypeId);
         sb.append(", containerQuantity=").append(containerQuantity);
         sb.append(", serviceItems=").append(serviceItems);
-        sb.append(", usdTotal=").append(usdTotal);
         sb.append(", cnyTotal=").append(cnyTotal);
+        sb.append(", usdTotal=").append(usdTotal);
         sb.append(", role='").append(role).append('\'');
         sb.append(", status=").append(status);
         sb.append('}');

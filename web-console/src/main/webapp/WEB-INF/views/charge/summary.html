@@ -61,11 +61,11 @@
                     <td th:text="${order.goods.name}"></td>
                     <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.salesPriceCny}">Sales Price</td>
+                    <td th:text="${order.cnyTotal} + '+' + ${order.usdTotal} + '$'">Sales Price</td>
                     <td th:text="${order.distyPrice}">Disty Price</td>
                     <td th:text="${order.grandTotal}">Grand Total</td>
-                    <td th:text="${order.salesPriceCny - order.grandTotal}">Gross Margin</td>
-                    <td th:text="${order.salesPriceCny - order.distyPrice}">Sales Profit</td>
+                    <td th:text="${order.cnyTotal + order.usdTotal * 6 - order.grandTotal}">Gross Margin</td>
+                    <td th:text="${order.cnyTotal + order.usdTotal * 6 - order.distyPrice}">Sales Profit</td>
                     <td th:text="${order.distyPrice - order.grandTotal}">Disty Profit</td>
                 </tr>
                 </tbody>

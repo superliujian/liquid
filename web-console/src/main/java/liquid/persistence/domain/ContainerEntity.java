@@ -1,6 +1,5 @@
 package liquid.persistence.domain;
 
-import liquid.metadata.ContainerStatus;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Time: 2:36 PM
  */
 @Entity(name = "CONTAINER")
-public class ContainerEntity extends BaseEntity {
+public class ContainerEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "BIC_CODE")

@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Time: 7:43 PM
  */
 @Entity(name = "CHARGE")
-public class Charge extends BaseEntity {
+public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
@@ -22,25 +22,13 @@ public class Charge extends BaseEntity {
     @JoinColumn(name = "ROUTE_ID")
     private RouteEntity route;
 
-    @Transient
-    private long formRouteId;
-
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
     private Leg leg;
 
-    @Transient
-    private long formLegId;
-
     @ManyToOne
-    @JoinColumn(name = "TYPE_ID")
-    private ChargeType type;
-
-    @Transient
-    private long typeId;
-
-    @Transient
-    private long spId;
+    @JoinColumn(name = "SERVICE_SUBTYPE_ID")
+    private ServiceSubtypeEntity serviceSubtype;
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
@@ -96,44 +84,12 @@ public class Charge extends BaseEntity {
         this.route = route;
     }
 
-    public long getFormRouteId() {
-        return formRouteId;
+    public ServiceSubtypeEntity getServiceSubtype() {
+        return serviceSubtype;
     }
 
-    public void setFormRouteId(long formRouteId) {
-        this.formRouteId = formRouteId;
-    }
-
-    public long getFormLegId() {
-        return formLegId;
-    }
-
-    public void setFormLegId(long formLegId) {
-        this.formLegId = formLegId;
-    }
-
-    public ChargeType getType() {
-        return type;
-    }
-
-    public void setType(ChargeType type) {
-        this.type = type;
-    }
-
-    public long getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(long typeId) {
-        this.typeId = typeId;
-    }
-
-    public long getSpId() {
-        return spId;
-    }
-
-    public void setSpId(long spId) {
-        this.spId = spId;
+    public void setServiceSubtype(ServiceSubtypeEntity serviceSubtype) {
+        this.serviceSubtype = serviceSubtype;
     }
 
     public ServiceProviderEntity getSp() {
@@ -190,26 +146,5 @@ public class Charge extends BaseEntity {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Charge{");
-        sb.append("order=").append(order);
-        sb.append(", taskId='").append(taskId).append('\'');
-        sb.append(", formRouteId=").append(formRouteId);
-        sb.append(", formLegId=").append(formLegId);
-        sb.append(", type=").append(type);
-        sb.append(", typeId=").append(typeId);
-        sb.append(", spId=").append(spId);
-        sb.append(", sp=").append(sp);
-        sb.append(", way=").append(way);
-        sb.append(", unitPrice=").append(unitPrice);
-        sb.append(", totalPrice=").append(totalPrice);
-        sb.append(", currency=").append(currency);
-        sb.append(", createRole='").append(createRole).append('\'');
-        sb.append(", status=").append(status);
-        sb.append('}');
-        return sb.toString();
     }
 }

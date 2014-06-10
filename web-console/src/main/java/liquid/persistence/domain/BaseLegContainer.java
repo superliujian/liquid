@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
  * Time: 8:10 PM
  */
 @MappedSuperclass
-public class BaseLegContainer extends BaseEntity {
+public class BaseLegContainer extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

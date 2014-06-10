@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Container allocation controller.
@@ -64,9 +65,8 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
 
-        model.addAttribute("cts", chargeService.getChargeTypes());
         model.addAttribute("chargeWays", ChargeWay.values());
-        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "allocation/main";
@@ -88,7 +88,7 @@ public class AllocationController extends BaseTaskController {
             return "allocation/rail_container";
         else {
             // Owner list
-            List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+            Set<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
 
             // Yard list
             List<LocationEntity> yards = locationService.findYards();

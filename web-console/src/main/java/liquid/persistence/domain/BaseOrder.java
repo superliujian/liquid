@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
  * Time: 8:34 PM
  */
 @MappedSuperclass
-public class BaseOrder extends BaseEntity {
+public class BaseOrder extends BaseUpdateEntity {
+    // Receiving order use it.
     @Transient
     private long serviceTypeId;
 
@@ -79,6 +80,7 @@ public class BaseOrder extends BaseEntity {
     @Column(name = "CONTAINER_TYPE")
     private int containerType;
 
+    // The following three filed are used for list order
     @Transient
     private long containerSubtypeId;
 
@@ -98,13 +100,6 @@ public class BaseOrder extends BaseEntity {
     @Min(1)
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
-
-    /**
-     * unit yuan
-     */
-    @Min(1)
-    @Column(name = "SALES_PRICE_CNY")
-    private long salesPriceCny;
 
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
@@ -307,14 +302,6 @@ public class BaseOrder extends BaseEntity {
 
     public void setContainerQty(int containerQty) {
         this.containerQty = containerQty;
-    }
-
-    public long getSalesPriceCny() {
-        return salesPriceCny;
-    }
-
-    public void setSalesPriceCny(long salesPriceCny) {
-        this.salesPriceCny = salesPriceCny;
     }
 
     public long getDistyPrice() {

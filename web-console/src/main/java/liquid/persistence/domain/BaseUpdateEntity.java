@@ -4,18 +4,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * TODO: Comments.
+ * A super entity for create and update info.
  * User: tao
  * Date: 9/29/13
  * Time: 9:06 PM
  */
 @MappedSuperclass
-public class BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    protected Long id;
-
+public class BaseUpdateEntity extends BaseIdEntity {
     @Column(name = "CREATE_USER")
     private String createUser;
 
@@ -27,24 +22,6 @@ public class BaseEntity {
 
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
-
-    public static <E extends BaseEntity> E newInstance(Class<E> clazz, long id) {
-        try {
-            E entity = clazz.newInstance();
-            entity.setId(id);
-            return entity;
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new EntityInstantiationException(e);
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCreateUser() {
         return createUser;
@@ -80,18 +57,5 @@ public class BaseEntity {
 
     public boolean isNew() {
         return (this.id == null);
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("BaseEntity{");
-        sb.append("id=").append(id);
-        sb.append(", createUser='").append(createUser).append('\'');
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateUser='").append(updateUser).append('\'');
-        sb.append(", updateTime=").append(updateTime);
-        sb.append('}');
-        return sb.toString();
     }
 }

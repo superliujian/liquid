@@ -39,7 +39,6 @@ import java.util.Properties;
                         SequenceRepository.class,
                         LocationRepository.class,
                         GoodsRepository.class,
-                        ChargeTypeRepository.class,
                         ContainerRepository.class,
                         OrderRepository.class,
                         OrderHistoryRepository.class,

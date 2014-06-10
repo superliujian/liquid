@@ -3,20 +3,11 @@ package liquid.domain;
 /**
  * Created by redbrick9 on 5/27/14.
  */
-public class ServiceItem {
-    private Long id;
+public class ServiceItem extends BaseIdObject {
     private long serviceSubtypeId;
     private String currency;
     private long quotation;
     private String comment;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public long getServiceSubtypeId() {
         return serviceSubtypeId;
@@ -53,7 +44,7 @@ public class ServiceItem {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ServiceItem{");
-        sb.append("id=").append(id);
+        sb.append("super=").append(super.toString());
         sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
         sb.append(", currency='").append(currency).append('\'');
         sb.append(", quotation=").append(quotation);

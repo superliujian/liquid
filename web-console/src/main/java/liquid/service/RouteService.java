@@ -40,7 +40,7 @@ public class RouteService {
     private VesselContainerService vesselContainerService;
 
     @Autowired
-    private DeliveryContainerRepository deliveryContainerRepository;
+    private DeliveryContainerService deliveryContainerService;
 
     @Autowired
     private ShippingContainerRepository scRepository;
@@ -59,7 +59,7 @@ public class RouteService {
             route.setBargeContainers(bargeContainers);
             Collection<VesselContainer> vesselContainers = vesselContainerService.findByRoute(route);
             route.setVesselContainers(vesselContainers);
-            Collection<DeliveryContainer> deliveryContainers = deliveryContainerRepository.findByRoute(route);
+            Collection<DeliveryContainer> deliveryContainers = deliveryContainerService.findByRoute(route);
             route.setDeliveryContainers(deliveryContainers);
         }
         return routes;

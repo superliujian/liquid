@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * Time: 12:55 PM
  */
 @Entity(name = "INCOME")
-public class Income extends BaseEntity {
+public class Income extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

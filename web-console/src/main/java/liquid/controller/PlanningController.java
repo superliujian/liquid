@@ -97,9 +97,8 @@ public class PlanningController extends BaseTaskController {
         route.setContainerQty(planning.getOrder().getContainerQty() - containerUsage);
         model.addAttribute("route", route);
 
-        model.addAttribute("cts", chargeService.getChargeTypes());
         model.addAttribute("chargeWays", ChargeWay.values());
-        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "planning/main";

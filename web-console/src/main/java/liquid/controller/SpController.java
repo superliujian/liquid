@@ -1,8 +1,12 @@
 package liquid.controller;
 
+import liquid.domain.ServiceProvider;
+import liquid.facade.ServiceProviderFacade;
 import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.ServiceProviderService;
+import liquid.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO: Comments.
@@ -31,6 +35,12 @@ public class SpController {
     private ServiceProviderService serviceProviderService;
 
     @Autowired
+    private ServiceProviderFacade serviceProviderFacade;
+
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
+
+    @Autowired
     private ChargeService chargeService;
 
     @ModelAttribute("sps")
@@ -43,46 +53,46 @@ public class SpController {
         return serviceProviderService.getSpTypes();
     }
 
+    @ModelAttribute("serviceSubtypes")
+    public Iterable<ServiceSubtypeEntity> populateServiceSubtypes() {
+        return serviceSubtypeService.findEnabled();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public String list(Model model, Principal principal) {
+    public String list() {
         return "sp/sp";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
-    public List<ServiceProviderEntity> list(@RequestParam long type) {
+    public Set<ServiceProviderEntity> list(@RequestParam long type) {
         logger.debug("type: {}", type);
-//        long spType = spService.spTypeByChargeType((int) type);
-//        return spService.findByType(spType);
-        return serviceProviderService.findByChargeType(type);
+        return serviceSubtypeService.find(type).getServiceProviders();
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String initForm(Model model, Principal principal) {
-        model.addAttribute("sp", new ServiceProviderEntity());
+        model.addAttribute("sp", new ServiceProvider());
         return "sp/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("sp") ServiceProviderEntity sp,
-                         BindingResult bindingResult, Model model, Principal principal) {
+    public String create(@Valid @ModelAttribute("sp") ServiceProvider sp, BindingResult bindingResult) {
         logger.debug("sp: {}", sp);
 
         if (bindingResult.hasErrors()) {
             return "sp/sp";
         } else {
-            serviceProviderService.save(sp);
+            serviceProviderFacade.save(sp);
             return "redirect:/sp";
         }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String initEdit(@PathVariable long id,
-                           Model model, Principal principal) {
+    public String initEdit(@PathVariable long id, Model model) {
         logger.debug("id: {}", id);
-        ServiceProviderEntity sp = serviceProviderService.find(id);
+        ServiceProvider sp = serviceProviderFacade.find(id);
         model.addAttribute("sp", sp);
-        model.addAttribute("cts", chargeService.getChargeTypes());
         return "sp/form";
     }
 }

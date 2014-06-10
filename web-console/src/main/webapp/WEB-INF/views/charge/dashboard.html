@@ -62,7 +62,7 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
-                    <td th:text="${charge.type.name}">Type</td>
+                    <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>
@@ -112,7 +112,7 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
-                    <td th:text="${charge.type.name}">Type</td>
+                    <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>
@@ -140,17 +140,17 @@
             <form action="/task/{taskId}/leg/{legId}/charge" method="POST" class="form-horizontal"
                   th:object="${charge}" th:action="@{${#httpServletRequest.servletPath}}">
 
-                <input type="hidden" th:field="*{formRouteId}"/>
-                <input type="hidden" th:field="*{formLegId}"/>
+                <input type="hidden" th:field="*{routeId}"/>
+                <input type="hidden" th:field="*{legId}"/>
 
                 <div class="form-group">
                     <label th:text="#{charge.type}" class="col-lg-3 control-label">Charge Type</label>
 
                     <div class="col-lg-9">
-                        <select th:field="*{typeId}" class="form-control">
-                            <option th:each="ct : ${cts}"
-                                    th:value="${ct.key}"
-                                    th:text="${ct.value}">Charge Type
+                        <select th:field="*{serviceSubtypeId}" class="form-control">
+                            <option th:each="serviceSubtype : ${serviceSubtypes}"
+                                    th:value="${serviceSubtype.id}"
+                                    th:text="${serviceSubtype.name}">Service Subtype
                             </option>
                         </select>
                     </div>
@@ -160,30 +160,15 @@
                     <label class="col-lg-3 control-label" th:text="#{sp}">SP</label>
 
                     <div class="col-lg-9">
-                        <select th:field="*{spId}" class="form-control">
+                        <select th:field="*{serviceProviderId}" class="form-control">
                             <option th:each="sp : ${sps}"
                                     th:value="${sp.id}"
                                     th:text="${sp.name}">SP Name
                             </option>
                         </select>
+                        <span th:errors="*{serviceProviderId}">error</span>
                     </div>
                 </div>
-
-                <!--
-                <div class="form-group">
-                    <label th:text="#{charge.way}" class="col-lg-3 control-label">Charge Way</label>
-
-                    <div class="col-lg-9">
-                        <ul class="list-inline">
-                            <li th:each="chargeWay : ${chargeWays}">
-                                <input type="radio" th:field="*{way}" th:value="${chargeWay.value}"/>
-                                <label th:for="${#ids.prev('way')}"
-                                       th:text="#{${chargeWay.i18nKey}}">Charge Way</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                -->
 
                 <div class="form-group">
                     <label th:text="#{price}" class="col-lg-3 control-label">Price</label>
@@ -201,6 +186,7 @@
 
                     <div class="col-lg-3">
                         <input type="text" th:field="*{unitPrice}" class="form-control"/>
+                        <span th:errors="*{unitPrice}">error</span>
                     </div>
                     <!-- /.col-lg-6 -->
 
@@ -211,30 +197,9 @@
                         </select>
                     </div>
                     <!-- /.col-lg-3 -->
-
-                    <span th:errors="*{unitPrice}">error</span>
                 </div>
 
-                <!--
-                <div class="form-group">
-                    <label th:text="#{charge.total.price}" class="col-lg-3 control-label">Total Price</label>
-
-                    <div class="col-lg-6">
-                        <input type="text" th:field="*{totalPrice}" class="form-control"/>
-                    </div>
-
-                    <div class="col-lg-3">
-                        <select class="form-control">
-                            <option>CNY</option>
-                            <option>USD</option>
-                       </select>
-                    </div>
-
-                    <span th:errors="*{totalPrice}">error</span>
-                </div>
-                -->
-
-                <input type="hidden" name="taskId" th:value="${task.id}" value="0"/>
+                <input type="hidden" name="taskId" th:value="${task.id}"/>
 
                 <div class="form-group">
                     <div class="col-lg-offset-3 col-lg-9">
@@ -262,15 +227,15 @@
 <script>
 /*<![CDATA[*/
     $(document).ready(function() {
-        $("#typeId").change(function() {
-            var typeId = $( "#typeId" ).val();
+        $("#serviceSubtypeId").change(function() {
+            var typeId = $( "#serviceSubtypeId" ).val();
             $.ajax({
-                url: '/sp?type=' + typeId,
+                url: '/api/sp?subtypeId=' + typeId,
                 type: 'GET',
                 success: function (result) {  
-                    $("#spId").children().remove().end();
+                    $("#serviceProviderId").children().remove().end();
                     for (i = 0; i < result.length; i++) {                    
-                        $("#spId").append('<option value=' + result[i].id + '>' + result[i].name + '</option>');  
+                        $("#serviceProviderId").append('<option value=' + result[i].id + '>' + result[i].name + '</option>');  
                     }
                 }   
             });

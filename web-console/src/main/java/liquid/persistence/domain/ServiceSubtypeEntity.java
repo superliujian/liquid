@@ -2,15 +2,16 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by redbrick9 on 5/9/14.
  */
 @Entity(name = "SERVICE_SUBTYPE")
-public class ServiceSubtypeEntity extends BaseEntity {
+public class ServiceSubtypeEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -23,6 +24,9 @@ public class ServiceSubtypeEntity extends BaseEntity {
 
     @Column(name = "STATUS")
     private int status;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "serviceSubtypes")
+    private Set<ServiceProviderEntity> serviceProviders = new HashSet<>();
 
     public String getCode() {
         return code;
@@ -48,13 +52,11 @@ public class ServiceSubtypeEntity extends BaseEntity {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("ServiceSubtype{");
-        sb.append("code='").append(code).append('\'');
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", status=").append(status);
-        sb.append('}');
-        return sb.toString();
+    public Set<ServiceProviderEntity> getServiceProviders() {
+        return serviceProviders;
+    }
+
+    public void setServiceProviders(Set<ServiceProviderEntity> serviceProviders) {
+        this.serviceProviders = serviceProviders;
     }
 }

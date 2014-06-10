@@ -25,9 +25,11 @@ public class ContainerAllocationService {
     public void allocate(List<ShippingContainerEntity> shippingContainers) {
         List<ContainerEntity> containers = new ArrayList<>();
         for (ShippingContainerEntity shippingContainer : shippingContainers) {
-            ContainerEntity container = containerService.find(shippingContainer.getContainer().getId());
-            container.setStatus(ContainerStatus.ALLOCATED.getValue());
-            containers.add(container);
+            if (null != shippingContainer.getContainer()) {
+                ContainerEntity container = containerService.find(shippingContainer.getContainer().getId());
+                container.setStatus(ContainerStatus.ALLOCATED.getValue());
+                containers.add(container);
+            }
         }
 
         containerService.save(containers);
@@ -38,7 +40,8 @@ public class ContainerAllocationService {
     public void undo(ShippingContainerEntity shippingContainer) {
         ContainerEntity container = shippingContainer.getContainer();
         container.setStatus(ContainerStatus.IN_STOCK.getValue());
-        shippingContainerService.remove(shippingContainer.getId());
+        shippingContainer.setContainer(null);
+        shippingContainerService.save(shippingContainer);
         containerService.save(container);
     }
 }
