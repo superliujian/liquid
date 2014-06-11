@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <groupId>liquid</groupId>
+        <artifactId>liquid</artifactId>
+        <version>FIXED</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>liquid</groupId>
+    <artifactId>excel</artifactId>
+    <packaging>jar</packaging>
+    <version>${application-version}</version>
+    <name>Excel</name>
+
+    <properties>
+        <poi-version>3.10-FINAL</poi-version>
+    </properties>
+
+    <dependencies>
+        <!-- poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi-version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-version}</version>
+        </dependency>
+    </dependencies>
+</project>
