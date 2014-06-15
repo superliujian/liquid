@@ -2,9 +2,12 @@ package liquid.excel;
 
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
+import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.springframework.stereotype.Service;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -12,26 +15,42 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by redbrick9 on 6/14/14.
  */
-public class AbstractExcelService<T> {
-    public List<T> extract(InputStream inputStream, RowMapper<T> rowMapper, final Class<T> clazz) throws IOException, OpenXML4JException, SAXException {
-        final List<T> list = new ArrayList<>();
+@Service
+public class AbstractExcelService<E> {
+    public List<E> extract(InputStream inputStream, final Class<E> clazz, final CellTranslator<E> cellTranslator) throws IOException {
+        final List<E> list = new ArrayList<>();
 
-        OPCPackage opcPackage = OPCPackage.open(inputStream);
-        XSSFReader reader = new XSSFReader(opcPackage);
-        final SharedStringsTable sharedStringsTable = reader.getSharedStringsTable();
-
-        XMLReader parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        OPCPackage opcPackage = null;
+        XSSFReader reader = null;
+        final SharedStringsTable sharedStringsTable;
+        final StylesTable stylesTable;
+        XMLReader parser = null;
+        Iterator<InputStream> sheets = null;
+        try {
+            opcPackage = OPCPackage.open(inputStream);
+            reader = new XSSFReader(opcPackage);
+            sharedStringsTable = reader.getSharedStringsTable();
+            stylesTable = reader.getStylesTable();
+            reader.getWorkbookData();
+            sheets = reader.getSheetsData();
+        } catch (OpenXML4JException e) {
+            throw new ExcelOperationException(e);
+        }
 
         ContentHandler handler = new DefaultHandler() {
             private String lastContents;
             private boolean nextIsString;
-            T entity;
+            private String r = "";
+            private String s = "";
+            boolean isDate = false;
+            E entity;
 
             @Override
             public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -49,13 +68,21 @@ public class AbstractExcelService<T> {
                 // c => cell
                 if (qName.equals("c")) {
                     // Print the cell reference
-                    System.out.print(attributes.getValue("r") + " - ");
+                    r = attributes.getValue("r");
+                    s = attributes.getValue("s");
+
+                    System.out.print(r + " - ");
                     // Figure out if the value is an index in the SST
                     String cellType = attributes.getValue("t");
+
                     if (cellType != null && cellType.equals("s")) {
                         nextIsString = true;
                     } else {
                         nextIsString = false;
+                    }
+
+                    if (cellType == null) {
+                        isDate = DateUtil.isInternalDateFormat(Integer.valueOf(s));
                     }
                 }
                 // Clear contents cache
@@ -75,7 +102,17 @@ public class AbstractExcelService<T> {
                 // v => contents of a cell
                 // Output after we've seen the string contents
                 if (qName.equals("v")) {
-                    System.out.println(lastContents);
+                    if (isDate) {
+                        Date date = DateUtil.getJavaDate(Double.valueOf(lastContents));
+                        cellTranslator.translate(entity, r, date);
+                    } else {
+                        cellTranslator.translate(entity, r, lastContents);
+                    }
+                }
+                if (qName.equals("c")) {
+                    r = "";
+                    s = "";
+                    isDate = false;
                 }
                 if (qName.equals("row")) {
                     list.add(entity);
@@ -88,18 +125,20 @@ public class AbstractExcelService<T> {
             }
         };
 
-        parser.setContentHandler(handler);
+        try {
+            parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+            parser.setContentHandler(handler);
 
-        reader.getWorkbookData();
-
-        Iterator<InputStream> sheets = reader.getSheetsData();
-        while (sheets.hasNext()) {
-            System.out.println("Processing new sheet:\n");
-            InputStream sheet = sheets.next();
-            InputSource sheetSource = new InputSource(sheet);
-            parser.parse(sheetSource);
-            sheet.close();
-            System.out.println("");
+            while (sheets.hasNext()) {
+                System.out.println("Processing new sheet:\n");
+                InputStream sheet = sheets.next();
+                InputSource sheetSource = new InputSource(sheet);
+                parser.parse(sheetSource);
+                sheet.close();
+                System.out.println("");
+            }
+        } catch (SAXException e) {
+            throw new ExcelOperationException(e);
         }
         return list;
     }

@@ -76,6 +76,7 @@ public class AdvancedExcelService {
             @Override
             public void characters(char[] ch, int start, int length) throws SAXException {
                 lastContents += new String(ch, start, length);
+                System.out.print("lastContent: " + lastContents + " - ");
             }
         };
 
