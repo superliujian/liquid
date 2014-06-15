@@ -8,7 +8,8 @@ package liquid.metadata;
  */
 public enum ContainerStatus {
     IN_STOCK(0, "container.in.stock"),
-    ALLOCATED(1, "container.allocated");
+    ALLOCATED(1, "container.allocated"),
+    LOADED(2, "container.loaded");
 
     private final int value;
 

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * TODO: Comments.
@@ -33,8 +34,20 @@ public class ContainerEntity extends BaseUpdateEntity {
     @JoinColumn(name = "YARD_ID")
     private LocationEntity yard;
 
+    @Column(name = "MOVE_IN_TIME")
+    private Date moveInTime;
+
+    @Column(name = "LOAD_TIME")
+    private Date loadTime;
+
+    @Column(name = "MOVE_OUT_TIME")
+    private Date moveOutTime;
+
     @Column(name = "STATUS")
     private int status;
+
+    @Column(name = "COMMENT")
+    private String comment;
 
     public String getBicCode() {
         return bicCode;
@@ -74,5 +87,37 @@ public class ContainerEntity extends BaseUpdateEntity {
 
     public void setYard(LocationEntity yard) {
         this.yard = yard;
+    }
+
+    public Date getMoveInTime() {
+        return moveInTime;
+    }
+
+    public void setMoveInTime(Date moveInTime) {
+        this.moveInTime = moveInTime;
+    }
+
+    public Date getLoadTime() {
+        return loadTime;
+    }
+
+    public void setLoadTime(Date loadTime) {
+        this.loadTime = loadTime;
+    }
+
+    public Date getMoveOutTime() {
+        return moveOutTime;
+    }
+
+    public void setMoveOutTime(Date moveOutTime) {
+        this.moveOutTime = moveOutTime;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
