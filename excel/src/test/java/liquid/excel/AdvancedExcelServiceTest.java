@@ -1,7 +1,8 @@
 package liquid.excel;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,14 +19,11 @@ public class AdvancedExcelServiceTest {
             inputStream = this.getClass().getClassLoader().getResourceAsStream("book.xlsx");
             service = new AdvancedExcelService();
             service.read(inputStream);
-        } catch (IOException | InvalidFormatException e) {
+        } catch (IOException | OpenXML4JException | SAXException e) {
             e.printStackTrace();
         } finally {
-            if (null != inputStream) try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if (null != inputStream)
+                try { inputStream.close(); } catch (IOException e) { e.printStackTrace(); }
         }
     }
 }
