@@ -13,8 +13,8 @@ import java.io.InputStream;
  * Created by redbrick9 on 6/11/14.
  */
 @Service
-public class ExcelService {
-    private static final Logger logger = LoggerFactory.getLogger(ExcelService.class);
+public class SimpleExcelService {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleExcelService.class);
 
     public void read(InputStream inputStream) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(inputStream);
@@ -33,8 +33,7 @@ public class ExcelService {
             System.out.println(String.format("Sheet name %s. The first row is %s, the last num is %s", sheetName, firstRowNum, lastRowNum));
             lastRowNum = lastRowNum <= 0 ? -1 : lastRowNum;
             for (int j = firstRowNum; j <= lastRowNum; j++) {
-                Row row = null;
-                row = sheet.getRow(j);
+                Row row = sheet.getRow(j);
                 if (null == row) {
                     logger.warn("Row {} is null. The sheet is {}.", j, sheetName);
                     System.out.println(String.format("Row %s is null. The sheet is %s.", j, sheetName));

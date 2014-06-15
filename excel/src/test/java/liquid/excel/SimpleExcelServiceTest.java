@@ -1,6 +1,5 @@
-package liquid.liquid;
+package liquid.excel;
 
-import liquid.excel.ExcelService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.Test;
 
@@ -10,14 +9,14 @@ import java.io.InputStream;
 /**
  * Created by redbrick9 on 6/11/14.
  */
-public class ExcelServiceTest {
+public class SimpleExcelServiceTest {
     @Test
     public void testRead() {
         InputStream inputStream = null;
-        ExcelService service = null;
+        SimpleExcelService service = null;
         try {
             inputStream = this.getClass().getClassLoader().getResourceAsStream("book.xlsx");
-            service = new ExcelService();
+            service = new SimpleExcelService();
             service.read(inputStream);
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
@@ -35,7 +34,7 @@ public class ExcelServiceTest {
         InputStream inputStream = null;
         try {
             inputStream = this.getClass().getClassLoader().getResourceAsStream("container.xlsx");
-            ExcelService service = new ExcelService();
+            SimpleExcelService service = new SimpleExcelService();
             service.read(inputStream);
         } catch (IOException | InvalidFormatException e) {
             e.printStackTrace();
