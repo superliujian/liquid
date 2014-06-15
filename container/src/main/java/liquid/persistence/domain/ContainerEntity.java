@@ -2,7 +2,10 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -29,9 +32,6 @@ public class ContainerEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "YARD_ID")
     private LocationEntity yard;
-
-    @Transient
-    private long yardId;
 
     @Column(name = "STATUS")
     private int status;
@@ -74,27 +74,5 @@ public class ContainerEntity extends BaseUpdateEntity {
 
     public void setYard(LocationEntity yard) {
         this.yard = yard;
-    }
-
-    public long getYardId() {
-        return yardId;
-    }
-
-    public void setYardId(long yardId) {
-        this.yardId = yardId;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Container{");
-        sb.append("bicCode='").append(bicCode).append('\'');
-        sb.append(", owner='").append(owner).append('\'');
-        sb.append(", type=").append(subtype);
-        sb.append(", yard=").append(yard);
-        sb.append(", yardId=").append(yardId);
-        sb.append(", status=").append(status);
-        sb.append('}');
-        return sb.toString();
     }
 }

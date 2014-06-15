@@ -15,9 +15,7 @@
 
     <properties>
         <spring-version>4.0.5.RELEASE</spring-version>
-        <spring-security-version>3.2.0.RELEASE</spring-security-version>
         <spring-ldap-version>1.3.2.RELEASE</spring-ldap-version>
-        <spring-data-version>1.4.3.RELEASE</spring-data-version>
 
         <servlet-version>3.0.1</servlet-version>
 
@@ -27,9 +25,7 @@
         <aspectj-version>1.7.4</aspectj-version>
         <activiti-version>5.14</activiti-version>
         <mysql-version>5.1.28</mysql-version>
-        <hibernate-version>4.3.0.Final</hibernate-version>
-        <hibernate-validator-version>5.0.2.Final</hibernate-validator-version>
-        <hibernate-jpamodelgen.version>4.3.5.Final</hibernate-jpamodelgen.version>
+
         <jackson-version>2.3.1</jackson-version>
 
         <native2ascii-version>1.0-beta-1</native2ascii-version>
@@ -41,18 +37,19 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>springframework-milestones</id>
-            <url>http://maven.springframework.org/milestone/</url>
-        </repository>
-        <repository>
-            <id>Alfresco Maven Repository</id>
-            <url>https://maven.alfresco.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
+        <!-- liquid -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>common</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>container</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -79,26 +76,18 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- spring ldap -->
@@ -106,14 +95,6 @@
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-core</artifactId>
             <version>${spring-ldap-version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- spring data -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring-data-version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -173,30 +154,57 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>${hibernate-jpamodelgen.version}</version>
-            <optional>true</optional>
-        </dependency>
-
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-version}</version>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- spring data -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+
+        <!-- hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 

@@ -27,7 +27,7 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "TYPE_ID")
-    private SpType type;
+    private SpTypeEnity type;
 
     @Column(name = "ADDRESS")
     private String address;
@@ -72,11 +72,11 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
         this.name = name;
     }
 
-    public SpType getType() {
+    public SpTypeEnity getType() {
         return type;
     }
 
-    public void setType(SpType type) {
+    public void setType(SpTypeEnity type) {
         this.type = type;
     }
 

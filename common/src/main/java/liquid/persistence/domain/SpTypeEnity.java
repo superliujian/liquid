@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Time: 7:31 PM
  */
 @Entity(name = "SP_TYPE")
-public class SpType extends BaseUpdateEntity {
+public class SpTypeEnity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "NAME")

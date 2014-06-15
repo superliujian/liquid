@@ -66,7 +66,7 @@ public class LegController extends BaseTaskController {
                 List<LocationEntity> portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                SpType bargeType = stRepository.findOne(2L);
+                SpTypeEnity bargeType = stRepository.findOne(2L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(bargeType));
                 model.addAttribute("locations", portLocs);
                 break;
@@ -74,7 +74,7 @@ public class LegController extends BaseTaskController {
                 portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDstLocId(defaultDstLocId);
-                SpType vesselType = stRepository.findOne(3L);
+                SpTypeEnity vesselType = stRepository.findOne(3L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(vesselType));
                 model.addAttribute("locations", portLocs);
                 break;
@@ -82,7 +82,7 @@ public class LegController extends BaseTaskController {
                 List<LocationEntity> cityLocs = locationRepository.findByType(LocationType.CITY.getType());
                 defaultDstLocId = computeDefaultDstLocId(cityLocs);
                 leg.setDstLocId(defaultDstLocId);
-                SpType roadType = stRepository.findOne(4L);
+                SpTypeEnity roadType = stRepository.findOne(4L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(roadType));
                 model.addAttribute("locations", cityLocs);
                 break;

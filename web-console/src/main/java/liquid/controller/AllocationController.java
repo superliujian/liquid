@@ -96,7 +96,10 @@ public class AllocationController extends BaseTaskController {
             // Container list in stock
             int size = 10;
             PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-            Page<ContainerEntity> page = containerService.findAll(routeId, ownerId, yardId, pageRequest);
+
+            RouteEntity routeEntity = routeService.find(routeId);
+            Page<ContainerEntity> page = containerService.findAll(routeEntity.getPlanning().getOrder().getContainerSubtype().getId(),
+                    ownerId, yardId, pageRequest);
 
             model.addAttribute("ownerId", ownerId);
             model.addAttribute("owners", owners);

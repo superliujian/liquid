@@ -2,7 +2,7 @@ package liquid.service;
 
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.persistence.domain.SpType;
+import liquid.persistence.domain.SpTypeEnity;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,18 +46,18 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
     }
 
     public Iterable<ServiceProviderEntity> findByType(long typeId) {
-        SpType type = serviceProviderTypeRepository.findOne(typeId);
+        SpTypeEnity type = serviceProviderTypeRepository.findOne(typeId);
         return serviceProviderRepository.findByType(type);
     }
 
-    public Iterable<ServiceProviderEntity> findByType(SpType type) {
+    public Iterable<ServiceProviderEntity> findByType(SpTypeEnity type) {
         return serviceProviderRepository.findByType(type);
     }
 
     public Map<Long, String> getSpTypes() {
         Map<Long, String> spTypes = new TreeMap<Long, String>();
-        Iterable<SpType> iterable = serviceProviderTypeRepository.findAll();
-        for (SpType spType : iterable) {
+        Iterable<SpTypeEnity> iterable = serviceProviderTypeRepository.findAll();
+        for (SpTypeEnity spType : iterable) {
             spTypes.put(spType.getId(), spType.getName());
         }
         return spTypes;

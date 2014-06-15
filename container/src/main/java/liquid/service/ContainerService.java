@@ -34,9 +34,6 @@ public class ContainerService {
     @Autowired
     private LocationService locationService;
 
-    @Autowired
-    private RouteService routeService;
-
     public Iterable<ContainerEntity> findAll() {
         return containerRepository.findAll();
     }
@@ -49,12 +46,11 @@ public class ContainerService {
         return containerRepository.findAll(pageable);
     }
 
-    public Page<ContainerEntity> findAll(final long routeId, final long ownerId, final long yardId, final Pageable pageable) {
+    public Page<ContainerEntity> findAll(final long containerSubtypeId, final long ownerId, final long yardId, final Pageable pageable) {
         Specifications<ContainerEntity> specifications = where(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                ContainerSubtypeEntity subtype = routeService.find(routeId).getPlanning().getOrder().getContainerSubtype();
-                return builder.equal(root.get(ContainerEntity_.subtype), subtype);
+                return builder.equal(root.get(ContainerEntity_.subtype), ContainerSubtypeEntity.newInstance(ContainerSubtypeEntity.class, containerSubtypeId));
             }
         });
 
@@ -87,15 +83,10 @@ public class ContainerService {
 
     public ContainerEntity find(long id) {
         ContainerEntity containerEntity = containerRepository.findOne(id);
-        containerEntity.setYardId(containerEntity.getYard().getId());
         return containerEntity;
     }
 
     public void save(ContainerEntity containerEntity) {
-        if (null == containerEntity.getYard()) {
-            LocationEntity yard = locationService.find(containerEntity.getYardId());
-            containerEntity.setYard(yard);
-        }
         containerRepository.save(containerEntity);
     }
 

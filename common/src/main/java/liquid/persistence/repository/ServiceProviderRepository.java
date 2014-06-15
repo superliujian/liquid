@@ -1,7 +1,7 @@
 package liquid.persistence.repository;
 
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.SpType;
+import liquid.persistence.domain.SpTypeEnity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,7 +12,7 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 5:03 PM
  */
 public interface ServiceProviderRepository extends CrudRepository<ServiceProviderEntity, Long> {
-    Iterable<ServiceProviderEntity> findByType(SpType type);
+    Iterable<ServiceProviderEntity> findByType(SpTypeEnity type);
 
     @Query(value = "SELECT * FROM SERVICE_PROVIDER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
     Iterable<ServiceProviderEntity> findOrderByName();
