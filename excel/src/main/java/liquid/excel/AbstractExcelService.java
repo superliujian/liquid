@@ -50,6 +50,7 @@ public class AbstractExcelService<E> {
             private String r = "";
             private String s = "";
             boolean isDate = false;
+            boolean validatedEntity = false;
             E entity;
 
             @Override
@@ -71,7 +72,6 @@ public class AbstractExcelService<E> {
                     r = attributes.getValue("r");
                     s = attributes.getValue("s");
 
-                    System.out.print(r + " - ");
                     // Figure out if the value is an index in the SST
                     String cellType = attributes.getValue("t");
 
@@ -104,9 +104,9 @@ public class AbstractExcelService<E> {
                 if (qName.equals("v")) {
                     if (isDate) {
                         Date date = DateUtil.getJavaDate(Double.valueOf(lastContents));
-                        cellTranslator.translate(entity, r, date);
+                        validatedEntity = cellTranslator.translate(entity, r, date);
                     } else {
-                        cellTranslator.translate(entity, r, lastContents);
+                        validatedEntity = cellTranslator.translate(entity, r, lastContents);
                     }
                 }
                 if (qName.equals("c")) {
@@ -115,7 +115,9 @@ public class AbstractExcelService<E> {
                     isDate = false;
                 }
                 if (qName.equals("row")) {
-                    list.add(entity);
+                    if (validatedEntity)
+                        list.add(entity);
+                    validatedEntity = false;
                 }
             }
 

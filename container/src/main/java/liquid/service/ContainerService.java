@@ -5,6 +5,8 @@ import liquid.excel.CellTranslator;
 import liquid.metadata.ContainerStatus;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.ContainerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
  */
 @Service
 public class ContainerService {
+    private static final Logger logger = LoggerFactory.getLogger(ContainerService.class);
 
     @Autowired
     private ContainerRepository containerRepository;
@@ -130,10 +133,17 @@ public class ContainerService {
                                 case "40`HQ":
                                     containerSubtypeId = 12L;
                                     break;
+                                case "40`GP":
+                                    containerSubtypeId = 11L;
+                                    break;
+                                case "40`RH": // TODO: new
+                                    containerSubtypeId = 13L;
+                                    break;
                                 case "20`GP":
                                     containerSubtypeId = 8L;
                                     break;
                                 default:
+                                    logger.warn("No matched container subtype {}. ", string);
                                     break;
                             }
                             if (null == containerSubtypeId) return false;
@@ -145,9 +155,49 @@ public class ContainerService {
                             Long serviceProviderId = null;
                             switch (string) {
                                 case "长荣箱":
-                                    containerSubtypeId = 5L;
+                                    serviceProviderId = 5L;
+                                    break;
+                                case "新海丰":
+                                    serviceProviderId = 49L;
+                                    break;
+                                case "MSK箱":
+                                    serviceProviderId = 34L;
+                                    break;
+                                case "中远箱":
+                                    serviceProviderId = 15L;
+                                    break;
+                                case "OOCL箱":
+                                    serviceProviderId = 28L;
+                                    break;
+                                case "南青箱":
+                                    serviceProviderId = 24L;
+                                    break;
+                                case "HPL箱":
+                                    serviceProviderId = 42L;
+                                    break;
+                                case "安通箱": // TODO: new
+                                    serviceProviderId = 51L;
+                                    break;
+                                case "华联通箱": // TODO: new
+                                    serviceProviderId = 52L;
+                                    break;
+                                case "穗明达": // TODO: new
+                                    serviceProviderId = 53L;
+                                    break;
+                                case "吉达箱": // TODO: new
+                                    serviceProviderId = 54L;
+                                    break;
+                                case "轮迪箱": // TODO: new
+                                    serviceProviderId = 55L;
+                                    break;
+                                case "中海箱":
+                                    serviceProviderId = 25L;
+                                    break;
+                                case "浦东箱":
+                                    serviceProviderId = 56L;
                                     break;
                                 default:
+                                    logger.warn("No matched service provider {}. ", string);
                                     break;
                             }
                             if (null == serviceProviderId) return false;
@@ -173,7 +223,14 @@ public class ContainerService {
                                 case "阳都5号":
                                     locationId = 25L;
                                     break;
+                                case "昆明南站": // TODO: new
+                                    locationId = 26L;
+                                    break;
+                                case "南站王家营": // TODO: new
+                                    locationId = 27L;
+                                    break;
                                 default:
+                                    logger.warn("No matched yard {}. ", string);
                                     break;
                             }
                             if (null == locationId) return false;
