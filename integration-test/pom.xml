@@ -29,5 +29,17 @@
             <version>${liquid-version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>common</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>config</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

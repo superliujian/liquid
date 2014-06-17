@@ -168,5 +168,6 @@
         <module>container</module>
         <module>excel</module>
         <module>web-console</module>
-    </modules>
+    <module>config</module>
+  </modules>
 </project>

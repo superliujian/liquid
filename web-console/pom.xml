@@ -49,6 +49,16 @@
             <artifactId>container</artifactId>
             <version>${application-version}</version>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>config</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>excel</artifactId>
+            <version>${application-version}</version>
+        </dependency>
 
         <!-- spring -->
         <dependency>
@@ -64,12 +74,6 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet-version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring-version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- spring security -->

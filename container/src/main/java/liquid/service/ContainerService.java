@@ -44,13 +44,10 @@ public class ContainerService {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
     private AbstractExcelService<ContainerEntity> abstractExcelService;
 
-    public void setAbstractExcelService(AbstractExcelService<ContainerEntity> abstractExcelService) {
-        this.abstractExcelService = abstractExcelService;
-    }
-
-    public Iterable<ContainerEntity> findAll() {
+    public List<ContainerEntity> findAll() {
         return containerRepository.findAll();
     }
 
@@ -285,18 +282,25 @@ public class ContainerService {
             });
             logger.info("Total number of containers is {}.", containers.size());
 
-            try (FileOutputStream outputStream = new FileOutputStream("/tmp/container.csv")) {
-                for (ContainerEntity container : containers) {
-                    outputStream.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
-                            container.getBicCode(),
-                            container.getSubtype(),
-                            container.getOwner(),
-                            container.getYard(),
-                            container.getMoveInTime(),
-                            container.getStatus(),
-                            container.getComment()).
-                            getBytes(Charset.forName("UTF-8")));
-                }
+            List<ContainerEntity> oldOnes = findAll();
+            containers.removeAll(oldOnes);
+            containerRepository.save(containers);
+//            writeToFile(containers);
+        }
+    }
+
+    private void writeToFile(List<ContainerEntity> containers) throws IOException {
+        try (FileOutputStream outputStream = new FileOutputStream("/tmp/container.csv")) {
+            for (ContainerEntity container : containers) {
+                outputStream.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
+                        container.getBicCode(),
+                        container.getSubtype(),
+                        container.getOwner(),
+                        container.getYard(),
+                        container.getMoveInTime(),
+                        container.getStatus(),
+                        container.getComment()).
+                        getBytes(Charset.forName("UTF-8")));
             }
         }
     }

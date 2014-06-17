@@ -8,7 +8,7 @@ import liquid.service.bpm.ActivitiEngineService;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;
 import liquid.task.TaskFactory;
-import liquid.utils.DateUtils;
+import liquid.util.DateUtils;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;

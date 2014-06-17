@@ -49,6 +49,23 @@ public class ContainerEntity extends BaseUpdateEntity {
     @Column(name = "COMMENT")
     private String comment;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ContainerEntity that = (ContainerEntity) o;
+
+        if (!bicCode.equals(that.bicCode)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return bicCode.hashCode();
+    }
+
     public String getBicCode() {
         return bicCode;
     }

@@ -4,7 +4,7 @@ import liquid.metadata.DatePattern;
 import liquid.persistence.domain.Account;
 import liquid.service.AccountService;
 import liquid.service.MailNotificationService;
-import liquid.utils.DateUtils;
+import liquid.util.DateUtils;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;

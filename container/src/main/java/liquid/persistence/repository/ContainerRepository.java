@@ -7,6 +7,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 
 /**
  * TODO: Comments.
@@ -16,6 +18,8 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ContainerRepository extends CrudRepository<ContainerEntity, Long>, JpaSpecificationExecutor<ContainerEntity> {
     Iterable<ContainerEntity> findByStatusAndSubtype(int status, int type);
+
+    List<ContainerEntity> findAll();
 
     Page<ContainerEntity> findAll(Pageable pageable);
 

@@ -6,7 +6,7 @@ import liquid.persistence.domain.RouteEntity;
 import liquid.persistence.domain.ShippingContainerEntity;
 import liquid.persistence.repository.DeliveryContainerRepository;
 import liquid.persistence.repository.ShippingContainerRepository;
-import liquid.utils.DateUtils;
+import liquid.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

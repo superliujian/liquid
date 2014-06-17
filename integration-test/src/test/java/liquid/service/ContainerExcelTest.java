@@ -1,14 +1,14 @@
 package liquid.service;
 
+import liquid.config.JpaConfig;
 import liquid.excel.AbstractExcelService;
-import liquid.persistence.domain.ContainerEntity;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by redbrick9 on 6/15/14.
@@ -26,8 +26,14 @@ public class ContainerExcelTest {
 
     @Test
     public void testImportExcel() throws IOException {
-        ContainerService containerService = new ContainerService();
-        containerService.setAbstractExcelService(new AbstractExcelService<ContainerEntity>());
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(JpaConfig.class);
+        context.register(LocationService.class);
+        context.register(ContainerService.class);
+        context.register(AbstractExcelService.class);
+        context.refresh();
+
+        ContainerService containerService = context.getBean(ContainerService.class);
 
         containerService.importExcel(basedir + "/src/test/resources/container.xlsx");
     }

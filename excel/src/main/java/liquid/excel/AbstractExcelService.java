@@ -124,12 +124,10 @@ public class AbstractExcelService<E> {
             parser.setContentHandler(handler);
 
             while (sheets.hasNext()) {
-                System.out.println("Processing new sheet:\n");
                 InputStream sheet = sheets.next();
                 InputSource sheetSource = new InputSource(sheet);
                 parser.parse(sheetSource);
                 sheet.close();
-                System.out.println("");
             }
         } catch (SAXException e) {
             throw new ExcelOperationException(e);

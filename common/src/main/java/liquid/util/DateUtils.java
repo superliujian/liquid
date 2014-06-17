@@ -1,4 +1,4 @@
-package liquid.utils;
+package liquid.util;
 
 import liquid.metadata.DatePattern;
 

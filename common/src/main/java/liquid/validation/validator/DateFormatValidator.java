@@ -1,7 +1,7 @@
 package liquid.validation.validator;
 
 import liquid.metadata.DatePattern;
-import liquid.utils.DateUtils;
+import liquid.util.DateUtils;
 import liquid.validation.constraints.DateFormat;
 
 import javax.validation.ConstraintValidator;
