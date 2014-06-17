@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.excel.AbstractExcelService;
-import liquid.excel.CellTranslator;
+import liquid.excel.RowMapper;
 import liquid.metadata.ContainerStatus;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.ContainerRepository;
@@ -19,7 +19,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 
@@ -110,22 +112,20 @@ public class ContainerService {
 
     public void importExcel(String fileName) throws IOException {
         try (FileInputStream inputStream = new FileInputStream(fileName)) {
-            List<ContainerEntity> containers = abstractExcelService.extract(inputStream, ContainerEntity.class, new CellTranslator<ContainerEntity>() {
+            List<ContainerEntity> containers = abstractExcelService.extract(inputStream, ContainerEntity.class, new RowMapper<ContainerEntity>() {
                 @Override
-                public boolean translate(ContainerEntity entity, String r, Object value) {
+                public void translate(ContainerEntity entity, String r, Object value) {
                     switch (r.substring(0, 1)) {
                         case "A": // No.
-                            return true;
+                            break;
                         case "B": // biccode
-                            if (null == value) return false;
+                            if (null == value) break;
                             String string = value.toString().trim();
-                            if (string.length() == 0) return false;
-                            else {
-                                entity.setBicCode(string);
-                            }
-                            return true;
+                            if (string.length() == 0) break;
+                            entity.setBicCode(string);
+                            break;
                         case "C": // container subtype
-                            if (null == value) return false;
+                            if (null == value) break;
                             string = value.toString().trim();
                             // TODO:
                             Long containerSubtypeId = null;
@@ -146,11 +146,11 @@ public class ContainerService {
                                     logger.warn("No matched container subtype {}. ", string);
                                     break;
                             }
-                            if (null == containerSubtypeId) return false;
+                            if (null == containerSubtypeId) break;
                             entity.setSubtype(ContainerSubtypeEntity.newInstance(ContainerSubtypeEntity.class, containerSubtypeId));
-                            return true;
+                            break;
                         case "D": // owner
-                            if (null == value) return false;
+                            if (null == value) break;
                             string = value.toString().trim();
                             Long serviceProviderId = null;
                             switch (string) {
@@ -200,11 +200,11 @@ public class ContainerService {
                                     logger.warn("No matched service provider {}. ", string);
                                     break;
                             }
-                            if (null == serviceProviderId) return false;
+                            if (null == serviceProviderId) break;
                             entity.setOwner(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, serviceProviderId));
-                            return true;
+                            break;
                         case "E": // yard
-                            if (null == value) return false;
+                            if (null == value) break;
                             string = value.toString().trim();
                             Long locationId = null;
                             switch (string) {
@@ -233,47 +233,71 @@ public class ContainerService {
                                     logger.warn("No matched yard {}. ", string);
                                     break;
                             }
-                            if (null == locationId) return false;
+                            if (null == locationId) break;
                             entity.setYard(LocationEntity.newInstance(LocationEntity.class, locationId));
-                            return true;
+                            break;
                         case "F": // move in date
-                            if (null == value) return true;
+                            if (null == value) break;
                             if (value instanceof Date) entity.setMoveInTime((Date) value);
-                            return true;
+                            break;
                         case "G": // comment
-                            if (null == value) return true;
+                            if (null == value) break;
                             entity.setComment(value.toString());
-                            return true;
+                            break;
                         case "H": // is Loaded
-                            return true;
+                            break;
                         case "I": // Load Date
-                            return true;
+                            break;
                         case "J": // move out date
-                            return true;
+                            break;
                         case "K": // goods
-                            return true;
+                            break;
                         case "L": // destination
-                            return true;
+                            break;
                         case "M": // customer
-                            return true;
+                            break;
                         case "N": // consignee
-                            return true;
+                            break;
                         case "O": // days in yard
-                            return true;
+                            break;
                         case "P": // fee for move in
-                            return true;
+                            break;
                         case "Q": // self no
-                            return true;
+                            break;
                         case "R": // fee for move out
-                            return true;
+                            break;
                         case "S": // self no
-                            return true;
+                            break;
                         default:
-                            return true;
+                            break;
                     }
                 }
+
+                @Override
+                public Boolean validate(ContainerEntity entity) {
+                    if (null == entity) return Boolean.FALSE;
+                    if (null == entity.getBicCode()) return Boolean.FALSE;
+                    if (null == entity.getSubtype()) return Boolean.FALSE;
+                    if (null == entity.getOwner()) return Boolean.FALSE;
+                    if (null == entity.getYard()) return Boolean.FALSE;
+                    return Boolean.TRUE;
+                }
             });
-            System.out.println(containers.size());
+            logger.info("Total number of containers is {}.", containers.size());
+
+            try (FileOutputStream outputStream = new FileOutputStream("/tmp/container.csv")) {
+                for (ContainerEntity container : containers) {
+                    outputStream.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
+                            container.getBicCode(),
+                            container.getSubtype(),
+                            container.getOwner(),
+                            container.getYard(),
+                            container.getMoveInTime(),
+                            container.getStatus(),
+                            container.getComment()).
+                            getBytes(Charset.forName("UTF-8")));
+                }
+            }
         }
     }
 }

@@ -17,70 +17,75 @@ public class AbstractExcelServiceTest {
         try {
             inputStream = this.getClass().getClassLoader().getResourceAsStream("container.xlsx");
             service = new AbstractExcelService();
-            service.extract(inputStream, Object.class, new CellTranslator<Object>() {
+            service.extract(inputStream, Object.class, new RowMapper<Object>() {
                 @Override
-                public boolean translate(Object entity, String r, Object value) {
+                public void translate(Object entity, String r, Object value) {
                     switch (r.substring(0, 1)) {
                         case "A": // No.
                             System.out.print(value);
-                            return true;
+                            break;
                         case "B": // biccode
                             System.out.print(value);
-                            return true;
+                            break;
                         case "C":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "D":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "E":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "F":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "G":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "H":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "I":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "J":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "K":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "L":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "M":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "N":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "O":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "P":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "Q":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "R":
                             System.out.print(value);
-                            return true;
+                            break;
                         case "S":
                             System.out.print(value);
-                            return true;
+                            break;
                         default:
-                            return true;
+                            break;
                     }
+                }
+
+                @Override
+                public Boolean validate(Object entity) {
+                    return null;
                 }
             });
         } catch (IOException e) {

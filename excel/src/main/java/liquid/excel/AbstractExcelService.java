@@ -5,7 +5,6 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
-import org.apache.poi.xssf.model.StylesTable;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.springframework.stereotype.Service;
 import org.xml.sax.*;
@@ -24,20 +23,18 @@ import java.util.List;
  */
 @Service
 public class AbstractExcelService<E> {
-    public List<E> extract(InputStream inputStream, final Class<E> clazz, final CellTranslator<E> cellTranslator) throws IOException {
+    public List<E> extract(InputStream inputStream, final Class<E> clazz, final RowMapper<E> rowMapper) throws IOException {
         final List<E> list = new ArrayList<>();
 
         OPCPackage opcPackage = null;
         XSSFReader reader = null;
         final SharedStringsTable sharedStringsTable;
-        final StylesTable stylesTable;
         XMLReader parser = null;
         Iterator<InputStream> sheets = null;
         try {
             opcPackage = OPCPackage.open(inputStream);
             reader = new XSSFReader(opcPackage);
             sharedStringsTable = reader.getSharedStringsTable();
-            stylesTable = reader.getStylesTable();
             reader.getWorkbookData();
             sheets = reader.getSheetsData();
         } catch (OpenXML4JException e) {
@@ -50,7 +47,6 @@ public class AbstractExcelService<E> {
             private String r = "";
             private String s = "";
             boolean isDate = false;
-            boolean validatedEntity = false;
             E entity;
 
             @Override
@@ -80,10 +76,8 @@ public class AbstractExcelService<E> {
                     } else {
                         nextIsString = false;
                     }
-
-                    if (cellType == null) {
+                    if (null == cellType)
                         isDate = DateUtil.isInternalDateFormat(Integer.valueOf(s));
-                    }
                 }
                 // Clear contents cache
                 lastContents = "";
@@ -104,9 +98,9 @@ public class AbstractExcelService<E> {
                 if (qName.equals("v")) {
                     if (isDate) {
                         Date date = DateUtil.getJavaDate(Double.valueOf(lastContents));
-                        validatedEntity = cellTranslator.translate(entity, r, date);
+                        rowMapper.translate(entity, r, date);
                     } else {
-                        validatedEntity = cellTranslator.translate(entity, r, lastContents);
+                        rowMapper.translate(entity, r, lastContents);
                     }
                 }
                 if (qName.equals("c")) {
@@ -115,9 +109,7 @@ public class AbstractExcelService<E> {
                     isDate = false;
                 }
                 if (qName.equals("row")) {
-                    if (validatedEntity)
-                        list.add(entity);
-                    validatedEntity = false;
+                    if (rowMapper.validate(entity)) list.add(entity);
                 }
             }
 
