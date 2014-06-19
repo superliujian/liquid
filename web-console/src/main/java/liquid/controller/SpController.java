@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * TODO: Comments.
@@ -65,7 +65,7 @@ public class SpController {
 
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
-    public Set<ServiceProviderEntity> list(@RequestParam long type) {
+    public List<ServiceProviderEntity> list(@RequestParam long type) {
         logger.debug("type: {}", type);
         return serviceSubtypeService.find(type).getServiceProviders();
     }

@@ -88,7 +88,7 @@ public class AllocationController extends BaseTaskController {
             return "allocation/rail_container";
         else {
             // Owner list
-            Set<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+            List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
 
             // Yard list
             List<LocationEntity> yards = locationService.findYards();

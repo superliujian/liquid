@@ -6,6 +6,7 @@ import liquid.persistence.repository.ServiceItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ public class ServiceItemService {
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
 
-    public Set<ServiceProviderEntity> findContainerOwners() {
+    public List<ServiceProviderEntity> findContainerOwners() {
         return serviceSubtypeService.find(CONTAINER_PROVIDER_TYPE_ID).getServiceProviders();
     }
 
