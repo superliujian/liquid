@@ -66,6 +66,12 @@
             <version>${spring-version}</version>
         </dependency>
 
+        <!-- spring ldap -->
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core</artifactId>
+        </dependency>
+
         <!-- hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>

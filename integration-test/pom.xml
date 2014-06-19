@@ -12,6 +12,8 @@
         <junit-version>4.11</junit-version>
 
         <liquid-version>2.1.32-SNAPSHOT</liquid-version>
+
+        <spring-ldap-version>1.3.2.RELEASE</spring-ldap-version>
     </properties>
 
     <dependencies>
@@ -23,6 +25,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>container</artifactId>
@@ -40,6 +43,21 @@
             <artifactId>config</artifactId>
             <version>${liquid-version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- spring ldap -->
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core</artifactId>
+            <version>${spring-ldap-version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.1</version>
         </dependency>
     </dependencies>
 </project>
