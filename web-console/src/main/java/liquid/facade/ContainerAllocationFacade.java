@@ -13,7 +13,7 @@ import liquid.service.OrderService;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import liquid.utils.CollectionUtils;
-import liquid.utils.StringUtils;
+import liquid.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

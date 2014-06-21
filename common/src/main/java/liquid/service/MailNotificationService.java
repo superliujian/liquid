@@ -1,6 +1,6 @@
 package liquid.service;
 
-import liquid.utils.StringUtils;
+import liquid.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
