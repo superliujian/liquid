@@ -1,6 +1,7 @@
 package liquid.controller;
 
 import liquid.domain.Container;
+import liquid.domain.FileInfo;
 import liquid.facade.ContainerFacade;
 import liquid.metadata.ContainerCap;
 import liquid.metadata.ContainerStatus;
@@ -14,9 +15,11 @@ import liquid.service.ContainerService;
 import liquid.service.ContainerSubtypeService;
 import liquid.service.LocationService;
 import liquid.service.ServiceItemService;
+import liquid.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +31,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -46,6 +50,9 @@ import java.util.Map;
 @RequestMapping("/container")
 public class ContainerController {
     private static final Logger logger = LoggerFactory.getLogger(ContainerController.class);
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private ContainerService containerService;
@@ -61,11 +68,6 @@ public class ContainerController {
 
     @Autowired
     private ServiceItemService serviceItemService;
-
-    @ModelAttribute("containers")
-    public Iterable<ContainerEntity> populateContainers() {
-        return containerService.findAll();
-    }
 
     @ModelAttribute("container")
     public Container populateContainer() {
@@ -210,5 +212,54 @@ public class ContainerController {
             containerFacade.enter(container);
             return "redirect:/container";
         }
+    }
+
+    @RequestMapping(value = "/import", method = RequestMethod.GET)
+    public String initForm(Model model) {
+        FileInfo[] fileInfos = new FileInfo[0];
+        File uploadDir = new File(env.getProperty("upload.dir", "/opt/liquid/upload/"));
+        if (uploadDir.exists() && uploadDir.isDirectory()) {
+            File[] files = uploadDir.listFiles();
+            fileInfos = new FileInfo[files.length];
+            for (int i = 0; i < fileInfos.length; i++) {
+                fileInfos[i] = new FileInfo();
+                fileInfos[i].setName(files[i].getName());
+                fileInfos[i].setModifiedDate(DateUtils.stringOf(new Date(files[i].lastModified())));
+            }
+        }
+        model.addAttribute("fileInfos", fileInfos);
+        return "container/import";
+    }
+
+    @RequestMapping(value = "/import", method = RequestMethod.GET, params = "filename")
+    public String importFile(@RequestParam final String filename, Model model) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    containerService.importExcel(env.getProperty("upload.dir", "/opt/liquid/upload/") + filename);
+                    logger.info("{} import is done.", filename);
+                } catch (IOException e) {
+                    logger.info("{} import failed.", filename);
+                }
+            }
+        }).start();
+        return "container/import";
+    }
+
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public String upload(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+
+                try (FileOutputStream fos = new FileOutputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + file.getOriginalFilename())) {
+                    fos.write(bytes);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "redirect:/container/import";
     }
 }

@@ -52,7 +52,13 @@
                         </ul>
                     </li>
                     <li sec:authorize="hasRole('ROLE_CONTAINER')">
-                        <a href="/container?number=0" th:text="#{container}">Container</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span th:text="#{container}">Container</span><b class="caret"></b>
+                        </a>                    
+                        <ul class="dropdown-menu">
+                            <li><a href="/container?number=0" th:text="#{container}">Container</a></li>
+                            <li><a href="/container/import" th:text="#{container.import}">Container Import</a></li>
+                        </ul>
                     </li>
                     <li sec:authorize="hasRole('ROLE_COMMERCE')">
                         <a href="/charge/summary?number=0" th:text="#{charge}">Charge</a>
