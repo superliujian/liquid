@@ -244,7 +244,8 @@ public class ContainerController {
                 }
             }
         }).start();
-        return "container/import";
+
+        return "redirect:/container/import";
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
@@ -256,6 +257,10 @@ public class ContainerController {
                 try (FileOutputStream fos = new FileOutputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + file.getOriginalFilename())) {
                     fos.write(bytes);
                 }
+                FileInfo fileInfo = new FileInfo();
+                fileInfo.setName(file.getOriginalFilename());
+                fileInfo.setModifiedDate(DateUtils.stringOf(new Date()));
+                fileInfo.setState(FileInfo.State.UPLOADED);
             } catch (IOException e) {
                 e.printStackTrace();
             }
