@@ -2,10 +2,13 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by redbrick9 on 5/9/14.
@@ -26,7 +29,7 @@ public class ServiceSubtypeEntity extends BaseUpdateEntity {
     private int status;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "serviceSubtypes")
-    private Set<ServiceProviderEntity> serviceProviders = new HashSet<>();
+    private List<ServiceProviderEntity> serviceProviders = new ArrayList<>();
 
     public String getCode() {
         return code;
@@ -52,11 +55,11 @@ public class ServiceSubtypeEntity extends BaseUpdateEntity {
         this.status = status;
     }
 
-    public Set<ServiceProviderEntity> getServiceProviders() {
+    public List<ServiceProviderEntity> getServiceProviders() {
         return serviceProviders;
     }
 
-    public void setServiceProviders(Set<ServiceProviderEntity> serviceProviders) {
+    public void setServiceProviders(List<ServiceProviderEntity> serviceProviders) {
         this.serviceProviders = serviceProviders;
     }
 }

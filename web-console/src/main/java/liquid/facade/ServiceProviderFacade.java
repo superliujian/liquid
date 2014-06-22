@@ -38,7 +38,7 @@ public class ServiceProviderFacade {
 
     public List<ServiceProvider> findBySubtypeId(Long subtypeId) {
         ServiceSubtypeEntity subtypeEntity = serviceSubtypeService.find(subtypeId);
-        Set<ServiceProviderEntity> providerEntities = subtypeEntity.getServiceProviders();
+        List<ServiceProviderEntity> providerEntities = subtypeEntity.getServiceProviders();
         List<ServiceProvider> serviceProviders = new ArrayList<>();
         for (ServiceProviderEntity providerEntity : providerEntities) {
             serviceProviders.add(convert(providerEntity));

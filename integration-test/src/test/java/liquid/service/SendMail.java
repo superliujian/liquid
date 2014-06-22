@@ -1,4 +1,4 @@
-package liquid.mail;
+package liquid.service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

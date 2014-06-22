@@ -1,10 +1,8 @@
 package liquid.service;
 
-import liquid.config.JpaConfig;
 import liquid.persistence.domain.Sequence;
 import liquid.persistence.repository.SequenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,27 +31,5 @@ public class SequenceService {
             value = sequenceRepository.getValue();
         }
         return value;
-    }
-
-    public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(SequenceService.class);
-        context.register(JpaConfig.class);
-        context.refresh();
-
-        final SequenceService sequenceService = context.getBean(SequenceService.class);
-
-        int threadNumber = 10;
-
-        for (int i = 0; i < threadNumber; i++) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    long start = System.currentTimeMillis();
-                    int value = sequenceService.getNextValue("SC014");
-                    System.out.println(value + "," + (System.currentTimeMillis() - start));
-                }
-            }).start();
-        }
     }
 }

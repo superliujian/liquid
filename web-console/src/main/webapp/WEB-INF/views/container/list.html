@@ -30,6 +30,74 @@
 
 <div class="container">
     <div class="panel panel-default">
+    
+        <div class="panel-heading">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">  
+                    <span th:if="${subtypeId==0}" th:text="#{container.all.subtype}">All Subtype</span>
+                    <span th:unless="${subtypeId==0}" th:text="${subtypes.?[id == __${subtypeId}__][0].name}">Subtype</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=0' + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                            th:text="#{container.all.owners}">All Subtypes</a>
+                    </li>
+                    <li th:each="subtype : ${subtypes}">
+                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtype.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                            th:text="${subtype.name}">Subtype</a>
+                    </li>
+                </ul>
+            </div><!-- subtype -->   
+                    
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">  
+                    <span th:if="${ownerId==0}" th:text="#{container.all.owners}">All Owner</span>
+                    <span th:unless="${ownerId==0}" th:text="${owners.?[id == __${ownerId}__][0].name}">Owner</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
+                            th:text="#{container.all.owners}">All Owners</a>
+                    </li>
+                    <li th:each="owner : ${owners}">
+                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
+                            th:text="${owner.name}">Owner</a>
+                    </li>
+                </ul>
+            </div><!-- owner -->  
+            
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span th:if="${yardId==0}" th:text="#{container.all.yards}">All Yards</span>
+                    <span th:unless="${yardId==0}" th:text="${yards.?[id == __${yardId}__][0].name}">Yard</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
+                            th:text="#{container.all.yards}">All Yard</a>
+                    </li>
+                    <li th:each="yard : ${yards}">
+                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
+                            th:text="${yard.name}">Yard</a>
+                    </li>
+                </ul>
+            </div><!-- yard -->   
+            
+            <div class="col-lg-4">
+                <form action="/container" method="GET" class="form-inline">       
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="bicCode" placeholder="BIC Code" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" th:text="#{query}">Query</button>
+                        </span>
+                    </div><!-- /input-group -->  
+                </form>   
+            </div>          
+        </div><!-- panel-heading -->
+        
         <div class="panel-body" th:unless="${#lists.isEmpty(page.content)}">
             <table class="table table-striped table-hover table-condensed table-16">
                 <thead>

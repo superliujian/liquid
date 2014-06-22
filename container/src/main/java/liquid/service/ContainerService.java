@@ -59,19 +59,22 @@ public class ContainerService {
         return containerRepository.findAll(pageable);
     }
 
+    public List<ContainerEntity> findBicCode(String bicCode) {
+        return containerRepository.findByBicCode(bicCode);
+    }
+
     public Page<ContainerEntity> findAll(final long containerSubtypeId, final long ownerId, final long yardId, final Pageable pageable) {
         Specifications<ContainerEntity> specifications = where(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(ContainerEntity_.subtype), ContainerSubtypeEntity.newInstance(ContainerSubtypeEntity.class, containerSubtypeId));
+                return builder.equal(root.get(ContainerEntity_.status), ContainerStatus.IN_STOCK.getValue());
             }
         });
 
-        // status
-        specifications = specifications.and(new Specification<ContainerEntity>() {
+        if (containerSubtypeId > 0L) specifications = specifications.and(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(ContainerEntity_.status), ContainerStatus.IN_STOCK.getValue());
+                return builder.equal(root.get(ContainerEntity_.subtype), ContainerSubtypeEntity.newInstance(ContainerSubtypeEntity.class, containerSubtypeId));
             }
         });
 
