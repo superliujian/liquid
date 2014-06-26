@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.domain.ExcelFileInfo;
 import liquid.excel.AbstractExcelService;
 import liquid.excel.RowMapper;
 import liquid.metadata.ContainerStatus;
@@ -8,6 +9,7 @@ import liquid.persistence.repository.ContainerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +40,9 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @Service
 public class ContainerService {
     private static final Logger logger = LoggerFactory.getLogger(ContainerService.class);
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private ContainerRepository containerRepository;
@@ -306,5 +312,40 @@ public class ContainerService {
                         getBytes(Charset.forName("UTF-8")));
             }
         }
+    }
+
+    public void writeToFile(String fileName, byte[] bytes) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + fileName)) {
+            fos.write(bytes);
+        }
+
+        ExcelFileInfo excelFileInfo = new ExcelFileInfo();
+        excelFileInfo.setName(fileName);
+        excelFileInfo.setModifiedDate(System.currentTimeMillis());
+        excelFileInfo.setState(ExcelFileInfo.State.UPLOADED);
+        writeMetadata(excelFileInfo);
+    }
+
+    private void writeMetadata(ExcelFileInfo excelFileInfo) {
+        List<ExcelFileInfo> excelFileInfos = readMetadata();
+        boolean isExist = false;
+        for (ExcelFileInfo fileInfo : excelFileInfos) {
+            if (fileInfo.getName().equals(excelFileInfo.getName())) {
+                fileInfo.setModifiedDate(excelFileInfo.getModifiedDate());
+                fileInfo.setState(excelFileInfo.getState());
+                isExist = true;
+                break;
+            }
+        }
+        if (!isExist) excelFileInfos.add(excelFileInfo);
+
+    }
+
+    private void writeMetadata(List<ExcelFileInfo> excelFileInfos) {
+
+    }
+
+    public List<ExcelFileInfo> readMetadata() {
+        return Collections.emptyList();
     }
 }

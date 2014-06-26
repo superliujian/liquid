@@ -3,11 +3,11 @@ package liquid.domain;
 /**
  * Created by redbrick9 on 6/21/14.
  */
-public class FileInfo {
+public class ExcelFileInfo {
     public enum State {UPLOADED, IMPORTING, IMPORTED}
 
     private String name;
-    private String modifiedDate;
+    private Long modifiedDate;
     private State state;
 
     public String getName() {
@@ -18,11 +18,11 @@ public class FileInfo {
         this.name = name;
     }
 
-    public String getModifiedDate() {
+    public Long getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(String modifiedDate) {
+    public void setModifiedDate(Long modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

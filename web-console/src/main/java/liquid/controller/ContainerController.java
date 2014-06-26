@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.domain.Container;
-import liquid.domain.FileInfo;
+import liquid.domain.ExcelFileInfo;
 import liquid.facade.ContainerFacade;
 import liquid.metadata.ContainerCap;
 import liquid.metadata.ContainerStatus;
@@ -216,18 +216,18 @@ public class ContainerController {
 
     @RequestMapping(value = "/import", method = RequestMethod.GET)
     public String initForm(Model model) {
-        FileInfo[] fileInfos = new FileInfo[0];
+        ExcelFileInfo[] excelFileInfos = new ExcelFileInfo[0];
         File uploadDir = new File(env.getProperty("upload.dir", "/opt/liquid/upload/"));
         if (uploadDir.exists() && uploadDir.isDirectory()) {
             File[] files = uploadDir.listFiles();
-            fileInfos = new FileInfo[files.length];
-            for (int i = 0; i < fileInfos.length; i++) {
-                fileInfos[i] = new FileInfo();
-                fileInfos[i].setName(files[i].getName());
-                fileInfos[i].setModifiedDate(DateUtils.stringOf(new Date(files[i].lastModified())));
+            excelFileInfos = new ExcelFileInfo[files.length];
+            for (int i = 0; i < excelFileInfos.length; i++) {
+                excelFileInfos[i] = new ExcelFileInfo();
+                excelFileInfos[i].setName(files[i].getName());
+                excelFileInfos[i].setModifiedDate(files[i].lastModified());
             }
         }
-        model.addAttribute("fileInfos", fileInfos);
+        model.addAttribute("fileInfos", excelFileInfos);
         return "container/import";
     }
 
@@ -252,15 +252,7 @@ public class ContainerController {
     public String upload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
-                byte[] bytes = file.getBytes();
-
-                try (FileOutputStream fos = new FileOutputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + file.getOriginalFilename())) {
-                    fos.write(bytes);
-                }
-                FileInfo fileInfo = new FileInfo();
-                fileInfo.setName(file.getOriginalFilename());
-                fileInfo.setModifiedDate(DateUtils.stringOf(new Date()));
-                fileInfo.setState(FileInfo.State.UPLOADED);
+                containerService.writeToFile(file.getOriginalFilename(), file.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
