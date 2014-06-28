@@ -217,15 +217,10 @@ public class ContainerController {
     @RequestMapping(value = "/import", method = RequestMethod.GET)
     public String initForm(Model model) {
         ExcelFileInfo[] excelFileInfos = new ExcelFileInfo[0];
-        File uploadDir = new File(env.getProperty("upload.dir", "/opt/liquid/upload/"));
-        if (uploadDir.exists() && uploadDir.isDirectory()) {
-            File[] files = uploadDir.listFiles();
-            excelFileInfos = new ExcelFileInfo[files.length];
-            for (int i = 0; i < excelFileInfos.length; i++) {
-                excelFileInfos[i] = new ExcelFileInfo();
-                excelFileInfos[i].setName(files[i].getName());
-                excelFileInfos[i].setModifiedDate(files[i].lastModified());
-            }
+        try {
+            excelFileInfos = containerService.readMetadata();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         model.addAttribute("fileInfos", excelFileInfos);
         return "container/import";
@@ -237,7 +232,7 @@ public class ContainerController {
             @Override
             public void run() {
                 try {
-                    containerService.importExcel(env.getProperty("upload.dir", "/opt/liquid/upload/") + filename);
+                    containerService.importExcel(filename);
                     logger.info("{} import is done.", filename);
                 } catch (IOException e) {
                     logger.info("{} import failed.", filename);

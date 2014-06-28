@@ -1,11 +1,12 @@
 package liquid.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import liquid.container.persistence.repository.ContainerRepository;
 import liquid.domain.ExcelFileInfo;
 import liquid.excel.AbstractExcelService;
 import liquid.excel.RowMapper;
 import liquid.metadata.ContainerStatus;
 import liquid.persistence.domain.*;
-import liquid.persistence.repository.ContainerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -117,7 +115,7 @@ public class ContainerService {
     }
 
     public void importExcel(String fileName) throws IOException {
-        try (FileInputStream inputStream = new FileInputStream(fileName)) {
+        try (FileInputStream inputStream = new FileInputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + fileName)) {
             List<ContainerEntity> containers = abstractExcelService.extract(inputStream, ContainerEntity.class, new RowMapper<ContainerEntity>() {
                 @Override
                 public void translate(ContainerEntity entity, String r, Object value) {
@@ -294,7 +292,12 @@ public class ContainerService {
             List<ContainerEntity> oldOnes = findAll();
             containers.removeAll(oldOnes);
             containerRepository.save(containers);
-//            writeToFile(containers);
+
+            ExcelFileInfo excelFileInfo = new ExcelFileInfo();
+            excelFileInfo.setName(fileName);
+            excelFileInfo.setModifiedDate(new Date());
+            excelFileInfo.setState(ExcelFileInfo.State.IMPORTED);
+            writeMetadata(excelFileInfo);
         }
     }
 
@@ -321,13 +324,13 @@ public class ContainerService {
 
         ExcelFileInfo excelFileInfo = new ExcelFileInfo();
         excelFileInfo.setName(fileName);
-        excelFileInfo.setModifiedDate(System.currentTimeMillis());
+        excelFileInfo.setModifiedDate(new Date());
         excelFileInfo.setState(ExcelFileInfo.State.UPLOADED);
         writeMetadata(excelFileInfo);
     }
 
-    private void writeMetadata(ExcelFileInfo excelFileInfo) {
-        List<ExcelFileInfo> excelFileInfos = readMetadata();
+    private void writeMetadata(ExcelFileInfo excelFileInfo) throws IOException {
+        ExcelFileInfo[] excelFileInfos = readMetadata();
         boolean isExist = false;
         for (ExcelFileInfo fileInfo : excelFileInfos) {
             if (fileInfo.getName().equals(excelFileInfo.getName())) {
@@ -337,15 +340,33 @@ public class ContainerService {
                 break;
             }
         }
-        if (!isExist) excelFileInfos.add(excelFileInfo);
-
+        if (!isExist) {
+            ExcelFileInfo[] newOnes = new ExcelFileInfo[excelFileInfos.length + 1];
+            System.arraycopy(excelFileInfos, 0, newOnes, 0, excelFileInfos.length);
+            newOnes[excelFileInfos.length] = excelFileInfo;
+            writeMetadata(newOnes);
+        } else {
+            writeMetadata(excelFileInfos);
+        }
     }
 
-    private void writeMetadata(List<ExcelFileInfo> excelFileInfos) {
+    public void writeMetadata(ExcelFileInfo[] excelFileInfos) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
 
+        try (OutputStream out = new FileOutputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + "metadata.json")) {
+            mapper.writeValue(out, excelFileInfos);
+        }
     }
 
-    public List<ExcelFileInfo> readMetadata() {
-        return Collections.emptyList();
+    public ExcelFileInfo[] readMetadata() throws IOException {
+        File file = new File(env.getProperty("upload.dir", "/opt/liquid/upload/") + "metadata.json");
+        if (!file.exists()) return new ExcelFileInfo[0];
+
+        try (InputStream in = new FileInputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + "metadata.json")) {
+            ObjectMapper mapper = new ObjectMapper();
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            return mapper.readValue(bytes, ExcelFileInfo[].class);
+        }
     }
 }

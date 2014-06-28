@@ -1,4 +1,4 @@
-package liquid.persistence.repository;
+package liquid.container.persistence.repository;
 
 import liquid.persistence.domain.ContainerEntity;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package liquid.persistence.repository;
+package liquid.container.persistence.repository;
 
 import liquid.persistence.domain.ContainerSubtypeEntity;
 import org.springframework.data.repository.CrudRepository;

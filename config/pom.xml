@@ -32,6 +32,11 @@
             <artifactId>container</artifactId>
             <version>${application-version}</version>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>data</artifactId>
+            <version>${application-version}</version>
+        </dependency>
 
         <!-- spring -->
         <dependency>

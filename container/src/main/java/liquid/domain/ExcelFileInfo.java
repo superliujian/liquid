@@ -1,5 +1,7 @@
 package liquid.domain;
 
+import java.util.Date;
+
 /**
  * Created by redbrick9 on 6/21/14.
  */
@@ -7,7 +9,7 @@ public class ExcelFileInfo {
     public enum State {UPLOADED, IMPORTING, IMPORTED}
 
     private String name;
-    private Long modifiedDate;
+    private Date modifiedDate;
     private State state;
 
     public String getName() {
@@ -18,11 +20,11 @@ public class ExcelFileInfo {
         this.name = name;
     }
 
-    public Long getModifiedDate() {
+    public Date getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Long modifiedDate) {
+    public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

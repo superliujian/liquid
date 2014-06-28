@@ -15,6 +15,11 @@
     <version>${application-version}</version>
     <name>Container</name>
 
+    <properties>
+        <jackson-version>2.4.1</jackson-version>
+        <jackson-databind-version>2.4.1.1</jackson-databind-version>
+    </properties>
+
     <dependencies>
         <!-- liquid -->
         <dependency>
@@ -52,6 +57,18 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind-version}</version>
         </dependency>
 
         <!-- logging -->

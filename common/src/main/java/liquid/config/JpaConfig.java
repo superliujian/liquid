@@ -25,40 +25,8 @@ import java.util.Properties;
  * Time: 9:06 PM
  */
 @Configuration
-@EnableJpaRepositories(
-        basePackages = "liquid.persistence.repository",
-        includeFilters = @ComponentScan.Filter(
-                value = {
-                        CustomerRepository.class,
-                        ServiceProviderRepository.class,
-                        ServiceProviderTypeRepository.class,
-                        ServiceTypeRepository.class,
-                        ServiceSubtypeRepository.class,
-                        ServiceItemRepository.class,
-                        ContainerSubtypeRepository.class,
-                        SequenceRepository.class,
-                        LocationRepository.class,
-                        GoodsRepository.class,
-                        ContainerRepository.class,
-                        OrderRepository.class,
-                        OrderHistoryRepository.class,
-                        IncomeRepository.class,
-                        ReceivingOrderRepository.class,
-                        ReceivingContainerRepository.class,
-                        PlanningRepository.class,
-                        RouteRepository.class,
-                        LegRepository.class,
-                        ShippingContainerRepository.class,
-                        RailContainerRepository.class,
-                        BargeContainerRepository.class,
-                        VesselContainerRepository.class,
-                        DeliveryContainerRepository.class,
-                        ChargeRepository.class,
-                        ServiceItemRepository.class,
-                        ExchangeRateRepository.class,
-                        AuthorRepository.class},
-                type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
+@EnableJpaRepositories({"liquid.persistence.repository", "liquid.container.persistence.repository"})
 @Import(PropertyPlaceholderConfig.class)
 public class JpaConfig {
     @Value("${jdbc.url}")
