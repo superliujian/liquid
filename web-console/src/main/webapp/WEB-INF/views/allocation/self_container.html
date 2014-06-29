@@ -90,6 +90,7 @@
                         <span class="label label-default" th:text="${container.bicCode}">BIC Code</span>
                         <span class="label label-primary" th:text="${container.owner.name}">Owner Name</span>
                         <span class="label label-success" th:text="${container.yard.name}">Yard Name</span>
+                        <span class="label label-info" th:text="${container.subtype.name}">Subtype Name</span>
                     </li>
                     <li class="list-group-item">
                         <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-xs btn-block" th:value="#{container.allocate}"/> 
