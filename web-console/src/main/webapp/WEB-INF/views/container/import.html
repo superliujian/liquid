@@ -36,9 +36,10 @@
             <tr th:each="fileInfo : ${fileInfos}">
                 <td th:text="${fileInfo.name}">ID</td>
                 <td th:text="${#calendars.format(fileInfo.modifiedDate,'yyyy MMMM dd HH:mm:ss')}">Modified Date</td>
-                <td th:text="${fileInfo.state}">State</td>
+                <td th:text="#{${#strings.toLowerCase(fileInfo.state)}}">State</td>
                 <td>
-                    <a th:href="'/container/import?filename=' + ${fileInfo.name}"><span th:text="#{import}">Import</span></a>
+                    
+                    <a th:if="${fileInfo.state} + ''  != 'IMPORTED'" th:href="'/container/import?filename=' + ${fileInfo.name}"><span th:text="#{import}">Import</span></a>
                 </td>
             </tr>
         </tbody>
@@ -48,10 +49,10 @@
 <div class="container">
     <form method="post" action="/container/import" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="fileUpload">File</label>
-            <input type="file" id="fileUpload" name="file" />    
+            <label for="fileUpload" th:text="#{file}">File</label>
+            <input type="file" id="fileUpload" name="file"/>    
         </div>        
-        <input class="btn btn-success btn-block" type="submit" value="Upload"/>
+        <input class="btn btn-success btn-block" type="submit" th:value="#{upload}" />
     </form>
 </div>
 <!-- /.container -->

@@ -22,7 +22,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 
@@ -115,6 +114,14 @@ public class ContainerService {
     }
 
     public void importExcel(String fileName) throws IOException {
+        ExcelFileInfo excelFileInfo = find(fileName);
+        if (excelFileInfo.getState().equals(ExcelFileInfo.State.IMPORTED) || excelFileInfo.getState().equals(ExcelFileInfo.State.IMPORTING))
+            return;
+
+        excelFileInfo.setModifiedDate(new Date());
+        excelFileInfo.setState(ExcelFileInfo.State.IMPORTING);
+        writeMetadata(excelFileInfo);
+
         try (FileInputStream inputStream = new FileInputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + fileName)) {
             List<ContainerEntity> containers = abstractExcelService.extract(inputStream, ContainerEntity.class, new RowMapper<ContainerEntity>() {
                 @Override
@@ -293,27 +300,9 @@ public class ContainerService {
             containers.removeAll(oldOnes);
             containerRepository.save(containers);
 
-            ExcelFileInfo excelFileInfo = new ExcelFileInfo();
-            excelFileInfo.setName(fileName);
             excelFileInfo.setModifiedDate(new Date());
             excelFileInfo.setState(ExcelFileInfo.State.IMPORTED);
             writeMetadata(excelFileInfo);
-        }
-    }
-
-    private void writeToFile(List<ContainerEntity> containers) throws IOException {
-        try (FileOutputStream outputStream = new FileOutputStream("/tmp/container.csv")) {
-            for (ContainerEntity container : containers) {
-                outputStream.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
-                        container.getBicCode(),
-                        container.getSubtype(),
-                        container.getOwner(),
-                        container.getYard(),
-                        container.getMoveInTime(),
-                        container.getStatus(),
-                        container.getComment()).
-                        getBytes(Charset.forName("UTF-8")));
-            }
         }
     }
 
@@ -329,7 +318,7 @@ public class ContainerService {
         writeMetadata(excelFileInfo);
     }
 
-    private void writeMetadata(ExcelFileInfo excelFileInfo) throws IOException {
+    public void writeMetadata(ExcelFileInfo excelFileInfo) throws IOException {
         ExcelFileInfo[] excelFileInfos = readMetadata();
         boolean isExist = false;
         for (ExcelFileInfo fileInfo : excelFileInfos) {
@@ -368,5 +357,25 @@ public class ContainerService {
             in.read(bytes);
             return mapper.readValue(bytes, ExcelFileInfo[].class);
         }
+    }
+
+    public ExcelFileInfo find(String fileName) throws IOException {
+        File file = new File(env.getProperty("upload.dir", "/opt/liquid/upload/") + "metadata.json");
+        if (!file.exists()) return null;
+
+        try (InputStream in = new FileInputStream(env.getProperty("upload.dir", "/opt/liquid/upload/") + "metadata.json")) {
+            ObjectMapper mapper = new ObjectMapper();
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            ExcelFileInfo[] excelFileInfos = mapper.readValue(bytes, ExcelFileInfo[].class);
+            for (ExcelFileInfo excelFileInfo : excelFileInfos) {
+                if (fileName.equals(excelFileInfo.getName())) {
+                    excelFileInfo.setModifiedDate(excelFileInfo.getModifiedDate());
+                    excelFileInfo.setState(excelFileInfo.getState());
+                    return excelFileInfo;
+                }
+            }
+        }
+        return null;
     }
 }

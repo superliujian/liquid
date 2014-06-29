@@ -15,7 +15,6 @@ import liquid.service.ContainerService;
 import liquid.service.ContainerSubtypeService;
 import liquid.service.LocationService;
 import liquid.service.ServiceItemService;
-import liquid.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +33,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
