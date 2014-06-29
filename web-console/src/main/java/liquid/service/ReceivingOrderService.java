@@ -41,20 +41,25 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
     @Autowired
     private LocationService locationService;
 
-    public ReceivingOrder newOrder(List<Location> locations) {
+    public ReceivingOrder newOrder(List<LocationEntity> locationEntities) {
         ReceivingOrder order = new ReceivingOrder();
-        Location second = CollectionUtils.tryToGet2ndElement(locations);
+        LocationEntity second = CollectionUtils.tryToGet2ndElement(locationEntities);
         order.setOrigination(second.getId());
         return order;
     }
 
+    @Override
+    public void doSaveBefore(OrderEntity entity) {
+
+    }
+
     @Transactional(value = "transactionManager")
     public ReceivingOrder save(ReceivingOrder order) {
-        ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
-        Customer customer = customerService.find(order.getCustomerId());
-        Goods goods = cargoTypeService.find(order.getGoodsId());
-        Location srcLoc = locationService.find(order.getOrigination());
-        Location dstLoc = locationService.find(order.getDestination());
+        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
+        CustomerEntity customer = customerService.find(order.getCustomerId());
+        GoodsEntity goods = cargoTypeService.find(order.getGoodsId());
+        LocationEntity srcLoc = locationService.find(order.getOrigination());
+        LocationEntity dstLoc = locationService.find(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
         if (null != goods) order.setGoods(goods);

@@ -37,7 +37,7 @@
                 <dd th:text="*{order.orderNo}">Order No</dd>
 
                 <dt th:text="#{charge.type}">Charge Type</dt>
-                <dd th:text="${charge.type.name}">Charge Type</dd>
+                <dd th:text="${charge.serviceSubtype.name}">Charge Type</dd>
 
                 <dt th:text="#{sp.name}">SP Name</dt>
                 <dd th:text="*{sp} ? *{sp.name}">SP Name</dd>

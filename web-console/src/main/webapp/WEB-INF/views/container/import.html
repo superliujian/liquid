@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<div class="container">
+    <table class="table table-striped table-hover table-condensed table-16">
+        <thead>
+            <tr>
+                <th th:text="#{file.name}">File Name</th>
+                <th th:text="#{modified.date}">Modified Date</th>
+                <th th:text="#{status}">State</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="fileInfo : ${fileInfos}">
+                <td th:text="${fileInfo.name}">ID</td>
+                <td th:text="${#calendars.format(fileInfo.modifiedDate,'yyyy MMMM dd HH:mm:ss')}">Modified Date</td>
+                <td th:text="#{${#strings.toLowerCase(fileInfo.state)}}">State</td>
+                <td>
+                    
+                    <a th:if="${fileInfo.state} + ''  != 'IMPORTED'" th:href="'/container/import?filename=' + ${fileInfo.name}"><span th:text="#{import}">Import</span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div><!-- upload file list -->
+
+<div class="container">
+    <form method="post" action="/container/import" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="fileUpload" th:text="#{file}">File</label>
+            <input type="file" id="fileUpload" name="file"/>    
+        </div>        
+        <input class="btn btn-success btn-block" type="submit" th:value="#{upload}" />
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

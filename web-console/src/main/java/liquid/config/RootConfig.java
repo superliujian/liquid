@@ -1,9 +1,11 @@
 package liquid.config;
 
-import liquid.context.BusinessContext;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.context.support.SimpleThreadScope;
 
@@ -18,7 +20,7 @@ import java.util.Map;
  * Time: 11:24 PM
  */
 @Configuration
-@ComponentScan({"liquid.aop", "liquid.service", "liquid.task.handler"})
+@ComponentScan({"liquid.aop", "liquid.facade", "liquid.service", "liquid.task", "liquid.task.handler", "liquid.excel"})
 @EnableAspectJAutoProxy
 public class RootConfig {
     @Bean
@@ -34,13 +36,6 @@ public class RootConfig {
         scopes.put("thread", threadScope());
         scopeConfigurer.setScopes(scopes);
         return scopeConfigurer;
-    }
-
-    @Bean
-    @Scope(value = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public BusinessContext businessContext() {
-        BusinessContext businessContext = new BusinessContext();
-        return businessContext;
     }
 
     @Bean

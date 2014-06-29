@@ -2,7 +2,6 @@ package liquid.service;
 
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
-import liquid.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,18 +40,18 @@ public class RouteService {
     private VesselContainerService vesselContainerService;
 
     @Autowired
-    private DeliveryContainerRepository deliveryContainerRepository;
+    private DeliveryContainerService deliveryContainerService;
 
     @Autowired
     private ShippingContainerRepository scRepository;
 
-    public Collection<Route> findByTaskId(String taskId) {
+    public List<RouteEntity> findByTaskId(String taskId) {
         Planning planning = planningService.findByTaskId(taskId);
-        Collection<Route> routes = planning.getRoutes();
-        for (Route route : routes) {
+        List<RouteEntity> routes = planning.getRoutes();
+        for (RouteEntity route : routes) {
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
-            Collection<ShippingContainer> containers = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
             Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
             route.setRailContainers(railContainers);
@@ -60,28 +59,28 @@ public class RouteService {
             route.setBargeContainers(bargeContainers);
             Collection<VesselContainer> vesselContainers = vesselContainerService.findByRoute(route);
             route.setVesselContainers(vesselContainers);
-            Collection<DeliveryContainer> deliveryContainers = deliveryContainerRepository.findByRoute(route);
+            Collection<DeliveryContainer> deliveryContainers = deliveryContainerService.findByRoute(route);
             route.setDeliveryContainers(deliveryContainers);
         }
         return routes;
     }
 
-    public Collection<Route> findByPlanning(Planning planning) {
+    public Collection<RouteEntity> findByPlanning(Planning planning) {
         if (planning == null) {
             return Collections.EMPTY_LIST;
         }
-        Collection<Route> routes = planning.getRoutes();
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = planning.getRoutes();
+        for (RouteEntity route : routes) {
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
-            Collection<ShippingContainer> containers = scRepository.findByRoute(route);
+            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
         }
         return routes;
     }
 
-    public Route find(long id) {
-        Route route = routeRepository.findOne(id);
+    public RouteEntity find(long id) {
+        RouteEntity route = routeRepository.findOne(id);
         return route;
     }
 
@@ -92,11 +91,11 @@ public class RouteService {
      * @return
      */
     @Transactional("transactionManager")
-    public void save(Route formBean) {
-        Route oldOne = routeRepository.findOne(formBean.getId());
+    public void save(RouteEntity formBean) {
+        RouteEntity oldOne = routeRepository.findOne(formBean.getId());
 
         if (formBean.isBatch()) {
-            Collection<Route> routes = routeRepository.findByPlanning(oldOne.getPlanning());
+            Collection<RouteEntity> routes = routeRepository.findByPlanning(oldOne.getPlanning());
             routeRepository.save(routes);
         } else {
             routeRepository.save(oldOne);
@@ -104,9 +103,9 @@ public class RouteService {
     }
 
     @Transactional("transactionManager")
-    public Route save(Route formBean, Planning planning) {
+    public RouteEntity save(RouteEntity formBean, Planning planning) {
         formBean.setPlanning(planning);
-        Route route = routeRepository.save(formBean);
+        RouteEntity route = routeRepository.save(formBean);
         return route;
     }
 }

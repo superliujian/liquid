@@ -54,7 +54,8 @@
                     <tr th:each="container : ${route.railContainers}">
                         <td th:text="${container.leg.srcLoc.name}">Railway Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Railway Destination</td>
-                        <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ''">Container No.
+                        <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}">
+                            Container No.
                         </td>
                         <td th:text="${container.fleet} ? ${container.fleet.name} : ''">Trucker</td>
                         <td th:text="${container.plateNo}">Container No.</td>
@@ -113,7 +114,7 @@
                     <td th:text="${charge.leg.route.id}">Route ID</td>
                     <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Route ID</td>
                     <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>
-                    <td th:text="${charge.type.name}">Type</td>
+                    <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>
                     <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
                     <td th:text="${charge.unitPrice}">Unit Price</td>

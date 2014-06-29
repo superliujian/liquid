@@ -87,11 +87,10 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-lg-3" th:each="ct : ${cts}">
+                    <div class="col-lg-3" th:each="serviceSubtype : ${serviceSubtypes}">
                         <label class="checkbox-inline">
-                            <input type="checkbox" th:field="*{chargeTypeIds}" value="chargeTypeId"
-                                   th:value="${ct.key}"/>
-                            <span th:text="${ct.value}">Charge Type Name</span>
+                            <input type="checkbox" th:field="*{subtypeIds}" th:value="${serviceSubtype.id}"/>
+                            <span th:text="${serviceSubtype.name}">Servie Subtype Name</span>
                         </label>
                     </div>
                 </div>

@@ -1,7 +1,6 @@
 package liquid.controller;
 
 import liquid.metadata.ChargeWay;
-import liquid.metadata.LocationType;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
@@ -45,7 +44,7 @@ public class PlanningController extends BaseTaskController {
     private LocationRepository locationRepository;
 
     @Autowired
-    private SpRepository spRepository;
+    private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
     private RouteRepository routeRepository;
@@ -69,10 +68,10 @@ public class PlanningController extends BaseTaskController {
         if (null == planning) {
             planning = new Planning();
             model.addAttribute("planning", planning);
-            model.addAttribute("route", new Route());
+            model.addAttribute("route", new RouteEntity());
             return "planning/main";
         } else {
-            model.addAttribute("route", new Route());
+            model.addAttribute("route", new RouteEntity());
             return "redirect:/task/" + taskId + "/planning/" + planning.getId();
         }
     }
@@ -85,8 +84,8 @@ public class PlanningController extends BaseTaskController {
         logger.debug("planningId: {}", planningId);
 
         int containerUsage = 0;
-        Planning planning = planningRepository.findOne(Long.valueOf(planningId));
-        for (Route route : planning.getRoutes()) {
+        Planning planning = planningService.findOne(Long.valueOf(planningId));
+        for (RouteEntity route : planning.getRoutes()) {
             containerUsage += route.getContainerQty();
             Collection<Leg> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
@@ -94,13 +93,12 @@ public class PlanningController extends BaseTaskController {
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("planning", planning);
 
-        Route route = new Route();
+        RouteEntity route = new RouteEntity();
         route.setContainerQty(planning.getOrder().getContainerQty() - containerUsage);
         model.addAttribute("route", route);
 
-        model.addAttribute("cts", chargeService.getChargeTypes());
         model.addAttribute("chargeWays", ChargeWay.values());
-        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "planning/main";
@@ -112,7 +110,7 @@ public class PlanningController extends BaseTaskController {
                                  Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Order order = orderService.find(taskService.getOrderIdByTaskId(taskId));
+        OrderEntity order = orderService.find(taskService.getOrderIdByTaskId(taskId));
         planning.setOrder(order);
         Planning newOne = planningRepository.save(planning);
         model.addAttribute("planning", newOne);
@@ -159,17 +157,17 @@ public class PlanningController extends BaseTaskController {
     @RequestMapping(value = "/{planningId}/route", method = RequestMethod.POST)
     public String addRoute(@PathVariable String taskId,
                            @PathVariable String planningId,
-                           @Valid Route route,
+                           @Valid RouteEntity route,
                            BindingResult result, Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("planningId: {}", planningId);
         logger.debug("route: {}", route);
 
-        Planning planning = planningRepository.findOne(Long.valueOf(planningId));
+        Planning planning = planningService.findOne(Long.valueOf(planningId));
 
         int containerUsage = 0;
-        Collection<Route> routes = planning.getRoutes();
-        for (Route r : planning.getRoutes()) {
+        Collection<RouteEntity> routes = planning.getRoutes();
+        for (RouteEntity r : planning.getRoutes()) {
             containerUsage += r.getContainerQty();
             Collection<Leg> legs = legRepository.findByRoute(r);
             r.setLegs(legs);

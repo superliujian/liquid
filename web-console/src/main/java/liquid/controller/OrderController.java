@@ -1,11 +1,12 @@
 package liquid.controller;
 
-import liquid.context.BusinessContext;
+import liquid.domain.Order;
+import liquid.domain.ServiceItem;
+import liquid.facade.OrderFacade;
 import liquid.metadata.*;
-import liquid.metadata.ContainerType;
 import liquid.persistence.domain.*;
+import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.utils.RoleHelper;
 import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
@@ -20,9 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,8 +35,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/order")
-public class OrderController extends BaseChargeController {
-    private static final Logger logger = LoggerFactory.getLogger(Order.class);
+public class OrderController extends BaseController {
+    private static final Logger logger = LoggerFactory.getLogger(OrderEntity.class);
 
     @Autowired
     private OrderService orderService;
@@ -59,9 +60,6 @@ public class OrderController extends BaseChargeController {
     private RouteService routeService;
 
     @Autowired
-    private BusinessContext businessContext;
-
-    @Autowired
     private ChargeService chargeService;
 
     @Autowired
@@ -70,18 +68,24 @@ public class OrderController extends BaseChargeController {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
+
+    @Autowired
+    private OrderFacade orderFacade;
+
     @ModelAttribute("serviceTypes")
-    public Iterable<ServiceType> populateServiceTypes() {
+    public Iterable<ServiceTypeEntity> populateServiceTypes() {
         return serviceTypeService.findAll();
     }
 
     @ModelAttribute("customers")
-    public Iterable<Customer> populateCustomers() {
+    public Iterable<CustomerEntity> populateCustomers() {
         return customerService.findAll();
     }
 
     @ModelAttribute("cargos")
-    public Iterable<Goods> populateCargos() {
+    public Iterable<GoodsEntity> populateCargos() {
         return cargoTypeService.findAll();
     }
 
@@ -100,14 +104,20 @@ public class OrderController extends BaseChargeController {
         return ContainerType.toMap();
     }
 
+    @Deprecated
     @ModelAttribute("containerCaps")
     public ContainerCap[] populateContainerCaps() {
         return ContainerCap.values();
     }
 
-    @ModelAttribute("containerSubtypes")
-    public Iterable<ContainerSubtype> populateContainerSubtypes() {
-        return containerSubtypeService.findEnabled();
+    @ModelAttribute("railContainerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateRailContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.RAIL);
+    }
+
+    @ModelAttribute("selfContainerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateOwnContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.SELF);
     }
 
     @ModelAttribute("status")
@@ -115,24 +125,28 @@ public class OrderController extends BaseChargeController {
         return OrderStatus.values();
     }
 
+    @ModelAttribute("serviceSubtypes")
+    public Iterable<ServiceSubtypeEntity> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
+
+    @ModelAttribute("locations")
+    public List<LocationEntity> populateLocations() {
+        return locationService.findByType(LocationType.CITY.getType());
+    }
+
     @Deprecated
     @RequestMapping(method = RequestMethod.GET)
-    public String initFind(Model model, Principal principal) {
+    public String initFind(Model model) {
         model.addAttribute("orders", orderService.findAllOrderByDesc());
         return "order/find";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "number")
-    public String initFindPaging(@RequestParam int number,
-                                 Model model, Principal principal) {
-        int size = 20;
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        String role = RoleHelper.getRole(principal);
-        Page<Order> page = orderService.findByCreateUser(principal.getName(), pageRequest);
-        model.addAttribute("page", page);
-        return "order/page";
-    }
-
+    /**
+     * TODO: pageable
+     *
+     * @param param
+     * @param model
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
     public String findById(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
@@ -141,6 +155,13 @@ public class OrderController extends BaseChargeController {
         return "order/find";
     }
 
+    /**
+     * TODO: pageable
+     *
+     * @param param
+     * @param model
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
     public String findByCustomerName(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
@@ -149,122 +170,129 @@ public class OrderController extends BaseChargeController {
         return "order/find";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "add")
+    @RequestMapping(method = RequestMethod.GET, params = "number")
+    public String initFindPaging(@RequestParam int number, Model model) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        String username = SecurityContext.getInstance().getUsername();
+        Page<OrderEntity> page = orderService.findByCreateUser(username, pageRequest);
+
+        model.addAttribute("page", page);
+        return "order/page";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
+        Order order = orderFacade.initOrder();
 
-        Order order = orderService.newOrder(locations);
-
-        model.addAttribute("locations", locations);
         model.addAttribute("order", order);
         return "order/form";
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "save")
-    public String save(@Valid @ModelAttribute Order order,
-                       BindingResult bindingResult, Model model, Principal principal) {
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "addServiceItem")
+    public String addServiceItem(@ModelAttribute Order order) {
         logger.debug("order: {}", order);
-        order.setStatus(OrderStatus.SAVED.getValue());
+        order.getServiceItems().add(new ServiceItem());
 
+        return "order/form";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "removeServiceItem")
+    public String removeRow(@ModelAttribute Order order, HttpServletRequest request) {
+        final Integer rowId = Integer.valueOf(request.getParameter("removeServiceItem"));
+        order.getServiceItems().remove(rowId.intValue());
+        return "order/form";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+    public String save(@Valid @ModelAttribute Order order, BindingResult bindingResult, Model model) {
+        logger.debug("order: {}", order);
         FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
         }
-
         if (bindingResult.hasErrors()) {
-            List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-            model.addAttribute("locations", locations);
+            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+
+            model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
-            order.setCreateRole(RoleHelper.getRole(principal));
-            order.setCreateUser(principal.getName());
-            order.setCreateTime(new Date());
-            order.setUpdateUser(principal.getName());
-            order.setUpdateTime(new Date());
-            orderService.save(order);
+            order.setStatus(OrderStatus.SAVED.getValue());
+            orderFacade.save(order);
+
             return "redirect:/order?number=0";
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "submit")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
-                         BindingResult bindingResult, Model model, Principal principal) {
+                         BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
-
-        // TODO: add to interceptor.
-        businessContext.setUsername(principal.getName());
-
-        order.setStatus(OrderStatus.SUBMITTED.getValue());
-
         FormValidationResult result = customerService.validateCustomer(order);
         if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName0", order.getCustomerName0());
+            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
         }
-
         if (bindingResult.hasErrors()) {
-            List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-            model.addAttribute("locations", locations);
+            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+
+            model.addAttribute("locations", locationEntities);
             return "order/form";
         } else {
-            order.setCreateRole(RoleHelper.getRole(principal));
-            order.setCreateUser(principal.getName());
-            order.setCreateTime(new Date());
-            order.setUpdateUser(principal.getName());
-            order.setUpdateTime(new Date());
-            orderService.submit(order);
+            order.setStatus(OrderStatus.SUBMITTED.getValue());
+            orderFacade.submit(order);
+
             return "redirect:/order?number=0";
         }
+    }
+
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String initEdit(@PathVariable long id, Model model) {
+        logger.debug("id: {}", id);
+
+        Order order = orderFacade.find(id);
+        logger.debug("order: {}", order);
+
+        model.addAttribute("order", order);
+        return "order/form";
+    }
+
+    @RequestMapping(value = "/{id}/duplicate", method = RequestMethod.GET)
+    public String initDuplicate(@PathVariable long id, Model model) {
+        logger.debug("id: {}", id);
+
+        Order order = orderFacade.duplicate(id);
+        logger.debug("order: {}", order);
+
+        model.addAttribute("order", order);
+        return "order/form";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable long id,
-                         Model model, Principal principal) {
+    public String detail(@PathVariable long id, Model model) {
         logger.debug("id: {}", id);
 
-        Order order = orderService.find(id);
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-        model.addAttribute("locations", locations);
+        Order order = orderFacade.find(id);
+        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+        model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        Planning planning = planningService.findByOrder(order);
+        Planning planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         routeService.findByPlanning(planning);
 
+        // TODO: move to an appropriate place
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("planning", planning);
 
         return "order/detail";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")
-    public String getOrder(@PathVariable long id, @RequestParam String action,
-                           Model model, Principal principal) {
-        logger.debug("id: {}", id);
-        logger.debug("action: {}", action);
-
-        Order order = orderService.find(id);
-        logger.debug("order: {}", order);
-
-        List<Location> locations = locationService.findByType(LocationType.CITY.getType());
-
-        if ("duplicate".equals(action)) {
-            order = orderService.duplicate(order);
-            logger.debug("order: {}", order);
-        }
-
-        model.addAttribute("locations", locations);
-        model.addAttribute("order", order);
-        return "order/form";
-    }
-
     @RequestMapping(value = "/{id}/{tab}", method = RequestMethod.GET)
-    public String charge(@PathVariable long id,
-                         @PathVariable String tab,
-                         Model model, Principal principal) {
+    public String charge(@PathVariable long id, @PathVariable String tab, Model model) {
         logger.debug("id: {}", id);
         logger.debug("tab: {}", tab);
 
-        Order order = orderService.find(id);
+        Order order = orderFacade.find(id);
 
         switch (tab) {
             case "task":
@@ -274,9 +302,10 @@ public class OrderController extends BaseChargeController {
                 model.addAttribute("completedTasks", completedTasks);
                 break;
             case "charge":
-                Iterable<Charge> charges = chargeService.getChargesByOrderId(id);
+                Iterable<ChargeEntity> charges = chargeService.getChargesByOrderId(id);
 
-                model.addAttribute("cts", chargeTypesToMap());
+                Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+                model.addAttribute("serviceSubtypes", serviceSubtypes);
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
                 break;

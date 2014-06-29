@@ -1,6 +1,5 @@
 package liquid.security;
 
-import liquid.persistence.domain.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ldap.NamingException;

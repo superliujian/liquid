@@ -2,12 +2,14 @@ package liquid.controller;
 
 import liquid.metadata.ChargeWay;
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.Charge;
+import liquid.persistence.domain.ChargeEntity;
 import liquid.persistence.domain.DeliveryContainer;
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
+import liquid.service.DeliveryContainerService;
 import liquid.service.RouteService;
-import liquid.service.ShippingContainerService;
+import liquid.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class DeliveryController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(DeliveryController.class);
 
     @Autowired
-    private ShippingContainerService scService;
+    private DeliveryContainerService deliveryContainerService;
 
     @Autowired
     private RouteService routeService;
@@ -41,21 +43,25 @@ public class DeliveryController extends BaseTaskController {
     @Autowired
     private ChargeService chargeService;
 
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
 
-        model.addAttribute("containers", scService.initDeliveryContainers(taskId));
+        model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(taskId));
 
         // for charges
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("chargeWays", ChargeWay.values());
         model.addAttribute("transModes", TransMode.toMap());
-        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "delivery/main";
@@ -68,7 +74,7 @@ public class DeliveryController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        DeliveryContainer container = scService.findDeliveryContainer(containerId);
+        DeliveryContainer container = deliveryContainerService.findDeliveryContainer(containerId);
 
         logger.debug("container: {}", container);
         model.addAttribute("container", container);
@@ -83,7 +89,7 @@ public class DeliveryController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        scService.saveDeliveryContainer(containerId, formBean);
+        deliveryContainerService.saveDeliveryContainer(containerId, formBean);
 
         return "redirect:/task/" + taskId + "/delivery";
     }

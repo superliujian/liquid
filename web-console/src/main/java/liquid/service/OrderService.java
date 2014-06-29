@@ -1,13 +1,14 @@
 package liquid.service;
 
-import liquid.context.BusinessContext;
 import liquid.metadata.ContainerType;
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
+import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.OrderHistory;
+import liquid.persistence.repository.CustomerRepository;
+import liquid.persistence.repository.GoodsRepository;
+import liquid.persistence.repository.LocationRepository;
+import liquid.persistence.repository.OrderHistoryRepository;
+import liquid.security.SecurityContext;
 import liquid.service.bpm.ActivitiEngineService;
-import liquid.utils.CollectionUtils;
-import liquid.utils.DateUtils;
-import liquid.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -30,16 +32,10 @@ public class OrderService extends AbstractBaseOrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
-    BusinessContext businessContext;
-
-    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
     private GoodsRepository goodsRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
 
     @Autowired
     private OrderHistoryRepository orderHistoryRepository;
@@ -56,172 +52,60 @@ public class OrderService extends AbstractBaseOrderService {
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
-    public Order newOrder(List<Location> locations) {
-        Order order = new Order();
-        Location second = CollectionUtils.tryToGet2ndElement(locations);
-        order.setDestination(second.getId());
-        order.setLoadingEtStr(DateUtils.stringOf(new Date()));
-        return order;
-    }
+    @Autowired
+    private ServiceItemService serviceItemService;
 
-    public Order duplicate(Order oldOne) {
-        Order order = new Order();
-
-        order.setCustomer(oldOne.getCustomer());
-        order.setSrcLoc(oldOne.getSrcLoc());
-        order.setDstLoc(oldOne.getDstLoc());
-        order.setConsignee(oldOne.getConsignee());
-        order.setConsigneePhone(oldOne.getConsigneePhone());
-        order.setConsigneeAddress(oldOne.getConsigneeAddress());
-        order.setGoods(oldOne.getGoods());
-        order.setGoodsWeight(oldOne.getGoodsWeight());
-        order.setTradeType(oldOne.getTradeType());
-        order.setContainerType(oldOne.getContainerType());
-        order.setContainerCap(oldOne.getContainerCap());
-        order.setContainerQty(oldOne.getContainerQty());
-        order.setLoadingType(oldOne.getLoadingType());
-        order.setLoadingAddress(oldOne.getLoadingAddress());
-        order.setLoadingContact(oldOne.getLoadingContact());
-        order.setLoadingPhone(oldOne.getLoadingPhone());
-        order.setSalesPriceCny(oldOne.getSalesPriceCny());
-
-        order.setOrigination(oldOne.getSrcLoc().getId());
-        order.setDestination(oldOne.getDstLoc().getId());
-        order.setServiceTypeId(oldOne.getServiceType().getId());
-        order.setCustomerId(oldOne.getCustomer().getId());
-        order.setCustomerName0(oldOne.getCustomer().getName());
-        order.setGoodsId(oldOne.getGoods().getId());
-        order.setLoadingEtStr(DateUtils.stringOf(new Date()));
-        return order;
-    }
-
-    public void prepare(Order order) {
-        ServiceType serviceType = serviceTypeService.find(order.getServiceTypeId());
-        Customer customer = customerRepository.findOne(order.getCustomerId());
-        Goods goods = goodsRepository.findOne(order.getGoodsId());
-        ContainerSubtype containerSubtype = null;
-        if (order.getContainerType() == ContainerType.OWNED.getType()) {
-            containerSubtype = containerSubtypeService.find(order.getContainerSubtypeId());
-        } else {
-            containerSubtype = containerSubtypeService.find(1L);
+    @Transactional("transactionManager")
+    public void doSaveBefore(OrderEntity order) {
+        if (null != order.getId()) {
+            OrderEntity oldOrder = find(order.getId());
+            oldOrder.getServiceItems().removeAll(order.getServiceItems());
+            if (oldOrder.getServiceItems().size() > 0)
+                serviceItemService.delete(oldOrder.getServiceItems());
         }
-        Location srcLoc = locationRepository.findOne(order.getOrigination());
-        Location dstLoc = locationRepository.findOne(order.getDestination());
-        if (null != serviceType) order.setServiceType(serviceType);
-        if (null != customer) order.setCustomer(customer);
-        if (null != goods) order.setGoods(goods);
-        order.setContainerSubtype(containerSubtype);
-        if (null != srcLoc) order.setSrcLoc(srcLoc);
-        if (null != dstLoc) order.setDstLoc(dstLoc);
-        if (StringUtils.valuable(order.getLoadingEtStr()))
-            order.setLoadingEt(DateUtils.dateOf(order.getLoadingEtStr()));
-        logger.debug("Order: {}", order);
     }
 
-    public void save(Order order) {
-        prepare(order);
-        orderRepository.save(order);
-    }
-
-    public void submit(Order order) {
-        prepare(order);
-        // compute order no.
-        order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
-        logger.info("Order No: {}", order.getOrderNo());
-        orderRepository.save(order);
-        logger.debug("username: {}", businessContext.getUsername());
-
-        Map<String, Object> variableMap = new HashMap<>();
-        variableMap.put("loadingType", order.getLoadingType());
-        variableMap.put("hasDelivery", order.isHasDelivery());
-        variableMap.put("orderOwner", businessContext.getUsername());
-        bpmService.startProcess(businessContext.getUsername(), order.getId(), variableMap);
-    }
-
-    public Order findByTaskId(String taskId) {
+    public OrderEntity findByTaskId(String taskId) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         return find(orderId);
     }
 
-    public List<Order> findAllOrderByDesc() {
-        return orderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
+    public List<OrderEntity> findAllOrderByDesc() {
+        return repository.findAll(new Sort(Sort.Direction.DESC, "id"));
     }
 
-    public Page<Order> findByCreateUser(String uid, Pageable pageable) {
-        return orderRepository.findByCreateUser(uid, pageable);
+    public Page<OrderEntity> findByCreateUser(String username, Pageable pageable) {
+        return repository.findByCreateUser(username, pageable);
     }
 
-    public Page<Order> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+    public Page<OrderEntity> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
-    public Order find(long id) {
-        Order order = orderRepository.findOne(id);
+    public OrderEntity find(long id) {
+        OrderEntity order = repository.findOne(id);
 
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomer().getId());
         order.setContainerSubtypeId(order.getContainerSubtype().getId());
+        if (order.getContainerType() == ContainerType.SELF.getType()) {
+            order.setOwnContainerSubtypeId(order.getContainerSubtypeId());
+        } else {
+            order.setRailContainerSubtypeId(order.getContainerSubtypeId());
+        }
         order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
-        order.setLoadingEtStr(order.getLoadingEt() == null
-                ? DateUtils.stringOf(new Date())
-                : DateUtils.stringOf(order.getLoadingEt()));
 
         return order;
     }
 
-    public Iterable<Order> findByOrderNo(String orderNo) {
-        return orderRepository.findByOrderNoLike("%" + orderNo + "%");
+    public Iterable<OrderEntity> findByOrderNo(String orderNo) {
+        return repository.findByOrderNoLike("%" + orderNo + "%");
     }
 
-    public Iterable<Order> findByCustomerName(String customerName) {
-        return orderRepository.findByCustomerNameLike("%" + customerName + "%");
-    }
-
-    @Transactional("transactionManager")
-    public void moveToHistory(long id) {
-        Order order = find(id);
-
-        OrderHistory orderHistory = newOrderHistory(order);
-        orderHistoryRepository.save(orderHistory);
-    }
-
-    private OrderHistory newOrderHistory(Order order) {
-        OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setOrderId(order.getId());
-        orderHistory.setCustomer(order.getCustomer());
-        orderHistory.setSrcLoc(order.getSrcLoc());
-        orderHistory.setDstLoc(order.getDstLoc());
-        orderHistory.setConsignee(order.getConsignee());
-        orderHistory.setConsigneePhone(order.getConsigneePhone());
-        orderHistory.setConsigneeAddress(order.getConsigneeAddress());
-        orderHistory.setGoods(order.getGoods());
-        orderHistory.setGoodsWeight(order.getGoodsWeight());
-        orderHistory.setTradeType(order.getTradeType());
-        orderHistory.setContainerType(order.getContainerType());
-        orderHistory.setContainerCap(order.getContainerCap());
-        orderHistory.setContainerQty(order.getContainerQty());
-        orderHistory.setLoadingType(order.getLoadingType());
-        orderHistory.setLoadingAddress(order.getLoadingAddress());
-        orderHistory.setLoadingContact(order.getLoadingContact());
-        orderHistory.setLoadingEt(order.getLoadingEt());
-        orderHistory.setSalesPriceCny(order.getSalesPriceCny());
-        orderHistory.setGrandTotal(order.getGrandTotal());
-        // Calculate earning
-        orderHistory.setGrossMargin(order.getSalesPriceCny() - order.getGrandTotal());
-        orderHistory.setSalesProfit(order.getSalesPriceCny() - order.getDistyPrice());
-        orderHistory.setDistyProfit(orderHistory.getDistyPrice() - order.getGrandTotal());
-        // End
-        orderHistory.setCreateRole(order.getCreateRole());
-        orderHistory.setCreateUser(order.getCreateUser());
-        orderHistory.setCreateTime(order.getCreateTime());
-        orderHistory.setFinishTime(new Date());
-        return orderHistory;
-    }
-
-    public static void main(String[] args) {
-
+    public Iterable<OrderEntity> findByCustomerName(String customerName) {
+        return repository.findByCustomerNameLike("%" + customerName + "%");
     }
 }

@@ -5,12 +5,10 @@ import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.Charge;
-import liquid.persistence.domain.Route;
-import liquid.service.ChargeService;
-import liquid.service.RouteService;
-import liquid.service.ShippingContainerService;
-import liquid.service.SpService;
+import liquid.persistence.domain.ChargeEntity;
+import liquid.persistence.domain.RouteEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +43,10 @@ public class RailTruckController extends BaseTaskController {
     private ChargeService chargeService;
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
+
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
@@ -54,14 +55,15 @@ public class RailTruckController extends BaseTaskController {
         model.addAttribute("containers", scService.initializeRailContainers(taskId));
         model.addAttribute("rail_task", TASK_PATH);
 
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
 
         // for charges
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("chargeWays", ChargeWay.values());
         model.addAttribute("transModes", TransMode.toMap());
-        Iterable<Charge> charges = chargeService.findByTaskId(taskId);
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
         return "rail/main";
@@ -77,7 +79,7 @@ public class RailTruckController extends BaseTaskController {
         TruckDto truck = scService.findTruckDto(containerId);
         logger.debug("truck: {}", truck);
         model.addAttribute("truck", truck);
-        model.addAttribute("sps", spService.findByType(4L));
+        model.addAttribute("sps", serviceProviderService.findByType(4L));
         return TASK_PATH + "/edit";
     }
 

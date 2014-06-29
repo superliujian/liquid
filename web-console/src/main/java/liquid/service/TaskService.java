@@ -3,19 +3,20 @@ package liquid.service;
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.DatePattern;
-import liquid.persistence.domain.Order;
-import liquid.persistence.domain.Planning;
-import liquid.persistence.domain.Route;
-import liquid.persistence.domain.ShippingContainer;
+import liquid.persistence.domain.OrderEntity;
 import liquid.service.bpm.ActivitiEngineService;
-import liquid.utils.DateUtils;
+import liquid.task.AbstractTaskProxy;
+import liquid.task.NotCompletedException;
+import liquid.task.TaskFactory;
+import liquid.util.DateUtils;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -44,12 +45,15 @@ public class TaskService {
     @Autowired
     protected MessageSource messageSource;
 
+    @Autowired
+    protected TaskFactory taskFactory;
+
     public TaskDto getTask(String taskId) {
         Task task = bpmService.getTask(taskId);
         TaskDto taskDto = toTaskDto(task);
 
         long orderId = getOrderIdByTaskId(task.getId());
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
 
         taskDto.setOrderId(orderId);
         taskDto.setOrderNo(order.getOrderNo());
@@ -93,39 +97,10 @@ public class TaskService {
         return null == businessKey ? 0L : Long.valueOf(businessKey);
     }
 
-    public void complete(String taskId, String uid) throws NotCompletedException {
-        Map<String, Object> variableMap = new HashMap<String, Object>();
-        Task task = bpmService.getTask(taskId);
-
-        switch (task.getTaskDefinitionKey()) {
-            case "planRoute":
-                Map<String, Object> transTypes = planningService.getTransTypes(taskId);
-                variableMap.putAll(transTypes);
-                break;
-            case "allocateContainers":
-                long orderId = getOrderIdByTaskId(taskId);
-                Order order = orderService.find(orderId);
-                Planning planning = planningService.findByOrder(order);
-                Collection<Route> routes = routeService.findByPlanning(planning);
-                int allocatedContainerQty = 0;
-                for (Route route : routes) {
-                    Collection<ShippingContainer> scs = scService.findByRoute(route);
-                    allocatedContainerQty += scs.size();
-                }
-                if (allocatedContainerQty != order.getContainerQty()) {
-                    throw new NotCompletedException("container.allocation.is.not.completed");
-                }
-                break;
-            case "sendInvoicing":
-                orderId = getOrderIdByTaskId(taskId);
-                order = orderService.find(orderId);
-                variableMap.put("salesPrice", order.getSalesPriceCny());
-                break;
-            default:
-                break;
-        }
-
-        bpmService.complete(taskId, uid, variableMap);
+    public void complete(String taskId) throws NotCompletedException {
+        Task activitiTask = bpmService.getTask(taskId);
+        AbstractTaskProxy task = taskFactory.findTask(activitiTask.getTaskDefinitionKey());
+        task.complete(taskId);
     }
 
     public List<Task> listTasksByOrderId(long orderId) {
@@ -188,7 +163,7 @@ public class TaskService {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
             long orderId = getOrderIdByTaskId(task.getId());
-            Order order = orderService.find(orderId);
+            OrderEntity order = orderService.find(orderId);
             tasks[i].setOrderId(orderId);
             tasks[i].setOrderNo(order.getOrderNo());
         }

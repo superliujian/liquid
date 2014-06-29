@@ -1,25 +1,42 @@
 package liquid.controller;
 
+import liquid.domain.Container;
+import liquid.domain.ExcelFileInfo;
+import liquid.facade.ContainerFacade;
 import liquid.metadata.ContainerCap;
-import liquid.metadata.LocationType;
-import liquid.persistence.domain.Container;
 import liquid.metadata.ContainerStatus;
-import liquid.persistence.domain.Location;
-import liquid.persistence.repository.ContainerRepository;
+import liquid.metadata.ContainerType;
+import liquid.metadata.LocationType;
+import liquid.persistence.domain.ContainerEntity;
+import liquid.persistence.domain.ContainerSubtypeEntity;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ContainerService;
+import liquid.service.ContainerSubtypeService;
 import liquid.service.LocationService;
+import liquid.service.ServiceItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,15 +52,22 @@ public class ContainerController {
     private static final Logger logger = LoggerFactory.getLogger(ContainerController.class);
 
     @Autowired
+    private Environment env;
+
+    @Autowired
     private ContainerService containerService;
+
+    @Autowired
+    private ContainerFacade containerFacade;
 
     @Autowired
     private LocationService locationService;
 
-    @ModelAttribute("containers")
-    public Iterable<Container> populateContainers() {
-        return containerService.findAll();
-    }
+    @Autowired
+    private ContainerSubtypeService containerSubtypeService;
+
+    @Autowired
+    private ServiceItemService serviceItemService;
 
     @ModelAttribute("container")
     public Container populateContainer() {
@@ -66,12 +90,114 @@ public class ContainerController {
     }
 
     @ModelAttribute("locations")
-    public List<Location> populateLocations() {
+    public List<LocationEntity> populateLocations() {
         return locationService.findByType(LocationType.YARD.getType());
     }
 
+    @ModelAttribute("containerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.SELF);
+    }
+
+    @ModelAttribute("owners")
+    public Iterable<ServiceProviderEntity> populateOwners() {
+        return serviceItemService.findContainerOwners();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public String init(Model model, Principal principal) {
+    public String init(Model model,
+                       @RequestParam(required = false, defaultValue = "0") int number,
+                       @RequestParam(required = false, defaultValue = "0") Long subtypeId,
+                       @RequestParam(required = false, defaultValue = "0") Long ownerId,
+                       @RequestParam(required = false, defaultValue = "0") Long yardId,
+                       @RequestParam(required = false) String bicCode) {
+
+        // container subtypes
+        Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.SELF);
+
+        // Owner list
+        List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+
+        // Yard list
+        List<LocationEntity> yards = locationService.findYards();
+
+        if (null != bicCode && bicCode.trim().length() > 0) {
+            List<ContainerEntity> containers = containerService.findBicCode(bicCode);
+            if (null == containers) containers = Collections.EMPTY_LIST;
+            final List<ContainerEntity> list = containers;
+            model.addAttribute("page", new Page<ContainerEntity>() {
+                @Override
+                public int getTotalPages() { return 1; }
+
+                @Override
+                public long getTotalElements() { return list.size(); }
+
+                @Override
+                public boolean hasPreviousPage() { return false; }
+
+                @Override
+                public boolean isFirstPage() { return true; }
+
+                @Override
+                public boolean hasNextPage() { return false; }
+
+                @Override
+                public boolean isLastPage() { return true; }
+
+                @Override
+                public int getNumber() { return 0; }
+
+                @Override
+                public int getSize() { return list.size(); }
+
+                @Override
+                public int getNumberOfElements() { return 0;}
+
+                @Override
+                public List<ContainerEntity> getContent() {return list; }
+
+                @Override
+                public boolean hasContent() {return true; }
+
+                @Override
+                public Sort getSort() {return null; }
+
+                @Override
+                public boolean isFirst() {return true; }
+
+                @Override
+                public boolean isLast() { return false; }
+
+                @Override
+                public boolean hasNext() { return false; }
+
+                @Override
+                public boolean hasPrevious() { return false; }
+
+                @Override
+                public Pageable nextPageable() { return null; }
+
+                @Override
+                public Pageable previousPageable() { return null; }
+
+                @Override
+                public Iterator<ContainerEntity> iterator() { return null; }
+            });
+        } else {
+            int size = 20;
+            PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+            Page<ContainerEntity> page = containerService.findAll(subtypeId, ownerId, yardId, pageRequest);
+            model.addAttribute("page", page);
+        }
+
+        model.addAttribute("subtypeId", subtypeId);
+        model.addAttribute("subtypes", subtypes);
+
+        model.addAttribute("ownerId", ownerId);
+        model.addAttribute("owners", owners);
+
+        model.addAttribute("yardId", yardId);
+        model.addAttribute("yards", yards);
         return "container/list";
     }
 
@@ -83,9 +209,49 @@ public class ContainerController {
         if (bindingResult.hasErrors()) {
             return "container/list";
         } else {
-            container.setStatus(0);
-            containerService.save(container);
+            containerFacade.enter(container);
             return "redirect:/container";
         }
+    }
+
+    @RequestMapping(value = "/import", method = RequestMethod.GET)
+    public String initForm(Model model) {
+        ExcelFileInfo[] excelFileInfos = new ExcelFileInfo[0];
+        try {
+            excelFileInfos = containerService.readMetadata();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("fileInfos", excelFileInfos);
+        return "container/import";
+    }
+
+    @RequestMapping(value = "/import", method = RequestMethod.GET, params = "filename")
+    public String importFile(@RequestParam final String filename, Model model) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    containerService.importExcel(filename);
+                    logger.info("{} import is done.", filename);
+                } catch (IOException e) {
+                    logger.info("{} import failed.", filename);
+                }
+            }
+        }).start();
+
+        return "redirect:/container/import";
+    }
+
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public String upload(@RequestParam("file") MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                containerService.writeToFile(file.getOriginalFilename(), file.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "redirect:/container/import";
     }
 }

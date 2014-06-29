@@ -2,17 +2,14 @@ package liquid.controller;
 
 import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
-import liquid.dto.TaskDto;
 import liquid.metadata.*;
-import liquid.metadata.ContainerType;
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.ChargeRepository;
-import liquid.persistence.repository.ChargeTypeRepository;
+import liquid.persistence.domain.ChargeEntity;
+import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.OrderService;
+import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
-import liquid.service.bpm.ActivitiEngineService;
-import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -46,19 +42,14 @@ public class ChargeController {
     private OrderService orderService;
 
     @Autowired
-    private ChargeTypeRepository ctRepository;
+    private ChargeService chargeService;
 
     @Autowired
-    private ChargeService chargeService;
+    private ServiceSubtypeService serviceSubtypeService;
 
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
         return ChargeWay.values();
-    }
-
-    @ModelAttribute("cts")
-    public Map<Long, String> populateChargeTypes() {
-        return chargeService.getChargeTypes();
     }
 
     @ModelAttribute("tradeTypes")
@@ -112,7 +103,7 @@ public class ChargeController {
                           Model model, Principal principal) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<Order> page = orderService.findAll(pageRequest);
+        Page<OrderEntity> page = orderService.findAll(pageRequest);
         model.addAttribute("tab", "summary");
         model.addAttribute("page", page);
         return "/charge/summary";
@@ -123,21 +114,21 @@ public class ChargeController {
                           Model model, Principal principal) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<Order> page = orderService.findAll(pageRequest);
+        Page<OrderEntity> page = orderService.findAll(pageRequest);
         model.addAttribute("tab", "details");
         model.addAttribute("charges", chargeService.findAll());
         return "/charge/details";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String record(@Valid @ModelAttribute Charge charge,
+    public String record(@Valid @ModelAttribute ChargeEntity charge,
                          @RequestHeader(value = "referer") String referer,
                          BindingResult bindingResult, Principal principal) {
         logger.debug("charge: {}", charge);
         logger.debug("referer: {}", referer);
 
         long orderId = taskService.getOrderIdByTaskId(charge.getTaskId());
-        Order order = orderService.find(orderId);
+        OrderEntity order = orderService.find(orderId);
 
         charge.setOrder(order);
 
@@ -159,7 +150,7 @@ public class ChargeController {
     public String initDetail(@PathVariable long chargeId,
                              Model model, Principal principal) {
         logger.debug("chargeId: {}", chargeId);
-        Charge charge = chargeService.find(chargeId);
+        ChargeEntity charge = chargeService.find(chargeId);
         model.addAttribute("charge", charge);
         return "charge/detail";
     }
@@ -168,7 +159,7 @@ public class ChargeController {
     public String pay(@PathVariable long chargeId,
                       Model model, Principal principal) {
         logger.debug("chargeId: {}", chargeId);
-        Charge charge = chargeService.find(chargeId);
+        ChargeEntity charge = chargeService.find(chargeId);
         charge.setStatus(ChargeStatus.PAID.getValue());
         chargeService.save(charge);
         return "redirect:/charge";
@@ -179,13 +170,13 @@ public class ChargeController {
                         Model model, Principal principal) {
         logger.debug("orderId: {}", orderId);
 
-        Order order = orderService.find(orderId);
-
-        Iterable<Charge> charges = chargeService.findByOrderId(order.getId());
+        OrderEntity order = orderService.find(orderId);
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ChargeEntity> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
 
         model.addAttribute("chargeWays", ChargeWay.values());
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
 
         EarningDto earning = chargeService.calculateEarning(order, charges);
         model.addAttribute("earning", earning);
@@ -199,10 +190,11 @@ public class ChargeController {
         logger.debug("chargeId: {}", chargeId);
         logger.debug("referer: {}", referer);
 
-        Charge charge = chargeService.find(chargeId);
+        ChargeEntity charge = chargeService.find(chargeId);
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("charge", charge);
         model.addAttribute("chargeWays", ChargeWay.values());
-        model.addAttribute("cts", chargeService.getChargeTypes());
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("redirectTo", referer);
 
         return "charge/settlement_detail";
@@ -215,7 +207,7 @@ public class ChargeController {
         logger.debug("chargeId: {}", chargeId);
         logger.debug("redirectTo: {}", redirectTo);
 
-        Charge charge = chargeService.find(chargeId);
+        ChargeEntity charge = chargeService.find(chargeId);
         charge.setStatus(ChargeStatus.PAID.getValue());
         chargeService.save(charge);
 

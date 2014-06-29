@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br/>
+
+<div class="container">
+    <form action="/service_item" method="POST" th:object="${serviceItem}">
+        <div class="row">        
+            <div class="form-group col-lg-3">
+                <label for="code" th:text="#{code}">Code</label>
+                <input type="text" class="form-control" id="code" placeholder="Enter Code" th:field="*{code}"/>
+            </div>        
+            <div class="form-group col-lg-3">
+                <label for="name" th:text="#{name}">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter Name" th:field="*{name}" />
+            </div>
+            <div class="form-group col-lg-3">
+                <label for="serviceSubtypeId" th:text="#{service.subtype}">Service Subtype</label>
+                <select th:field="*{serviceSubtypeId}" id="serviceSubtypeId" class="form-control">
+                    <option th:each="serviceSubtype : ${serviceSubtypes}"
+                            th:value="${serviceSubtype.id}"
+                            th:text="${serviceSubtype.code} + ' ' + ${serviceSubtype.name}" />
+                </select>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="form-group col-lg-3">
+                <label for="name" th:text="#{currency}">Currency</label>
+                <select th:field="*{currency}" class="form-control">
+                    <option value="0">CNY</option>
+                    <option value="1">USD</option>
+                </select>
+            </div>         
+            <div class="form-group col-lg-3">
+                <label for="name" th:text="#{price}">Price</label>
+                <input type="text" class="form-control" id="price" placeholder="Enter Price" th:field="*{price}" />
+            </div>         
+            <div class="form-group col-lg-3">
+                <label>&nbsp;</label>
+                <button type="submit" class="form-control btn btn-default" th:text="#{service.item.create}">Add</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <table class="table table-striped table-hover table-condensed table-16">
+        <thead>
+        <tr>
+            <th th:text="#{code}">Code</th>
+            <th th:text="#{name}">Name</th>
+            <th th:text="#{currency}">Currency</th>
+            <th th:text="#{price}">Price</th>
+            <th th:text="#{status}">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="serviceItem : ${serviceItems}">
+            <td th:text="${serviceItem.code}">Code</td>
+            <td th:text="${serviceItem.name}">Name</td>
+            <td th:text="${serviceItem.currency}==0?'CNY':'USD'">Currency</td>
+            <td th:text="${serviceItem.price}">Price</td>
+            <td>
+                <i th:unless="${serviceItem.status}" class="glyphicon glyphicon-ok"/>
+                <i th:if="${serviceItem.status}" class="glyphicon glyphicon-ban-circle"/>                
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

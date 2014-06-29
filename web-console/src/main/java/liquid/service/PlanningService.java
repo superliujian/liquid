@@ -1,17 +1,23 @@
 package liquid.service;
 
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
+import liquid.persistence.domain.Leg;
+import liquid.persistence.domain.OrderEntity;
+import liquid.persistence.domain.Planning;
+import liquid.persistence.domain.RouteEntity;
+import liquid.persistence.repository.LegRepository;
+import liquid.persistence.repository.PlanningRepository;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,14 +52,24 @@ public class PlanningService {
     }
 
     @Transactional("transactionManager")
+    public Planning findOne(Long id) {
+        Planning planning = planningRepository.findOne(id);
+        if (null != planning) {
+            List<RouteEntity> routes = planning.getRoutes();
+            for (RouteEntity route : routes) { }
+        }
+        return planning;
+    }
+
+    @Transactional("transactionManager")
     public Map<String, Object> getTransTypes(String taskId) {
         Map<String, Object> transTypes = new HashMap<String, Object>();
         transTypes.put("hasRailway", false);
         transTypes.put("hasBarge", false);
         transTypes.put("hasVessel", false);
 
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
             Collection<Leg> legs = route.getLegs();
             for (Leg leg : legs) {
                 TransMode mode = TransMode.valueOf(leg.getTransMode());
@@ -78,9 +94,10 @@ public class PlanningService {
         return transTypes;
     }
 
+    @Transactional(value = "transactionManager")
     public Planning findByTaskId(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
-        return planningRepository.findByOrder(order);
+        OrderEntity order = orderService.findByTaskId(taskId);
+        return findByOrder(order);
     }
 
     public Leg findLeg(long legId) {
@@ -90,7 +107,13 @@ public class PlanningService {
         return leg;
     }
 
-    public Planning findByOrder(Order order) {
-        return planningRepository.findByOrder(order);
+    @Transactional(value = "transactionManager")
+    public Planning findByOrder(OrderEntity order) {
+        Planning planning = planningRepository.findByOrder(order);
+        if (null != planning) {
+            List<RouteEntity> routes = planning.getRoutes();
+            for (RouteEntity route : routes) { }
+        }
+        return planning;
     }
 }

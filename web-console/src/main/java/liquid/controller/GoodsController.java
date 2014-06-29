@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.Goods;
+import liquid.persistence.domain.GoodsEntity;
 import liquid.persistence.repository.GoodsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,23 +24,23 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
-    private static final Logger logger = LoggerFactory.getLogger(Goods.class);
+    private static final Logger logger = LoggerFactory.getLogger(GoodsEntity.class);
 
     @Autowired
     private GoodsRepository goodsRepository;
 
     @ModelAttribute("cargos")
-    public Iterable<Goods> populateCargos() {
+    public Iterable<GoodsEntity> populateCargos() {
         return goodsRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public void list(Model model, Principal principal) {
-        model.addAttribute("goods", new Goods());
+        model.addAttribute("goods", new GoodsEntity());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Goods goods,
+    public String create(@Valid @ModelAttribute GoodsEntity goods,
                          BindingResult bindingResult, Principal principal) {
         logger.debug("Goods: {}", goods);
 

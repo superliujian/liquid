@@ -5,12 +5,15 @@ import liquid.metadata.ContainerStatus;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
-import liquid.utils.DateUtils;
+import liquid.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -19,7 +22,7 @@ import java.util.*;
  * Time: 12:36 AM
  */
 @Service
-public class ShippingContainerService {
+public class ShippingContainerService extends AbstractService<ShippingContainerEntity, ShippingContainerRepository> {
     @Autowired
     private OrderService orderService;
 
@@ -51,18 +54,23 @@ public class ShippingContainerService {
     private LegRepository legRepository;
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
+
+    @Override
+    public void doSaveBefore(ShippingContainerEntity entity) {
+
+    }
 
     @Transactional("transactionManager")
     public void initialize(String taskId) {
         Planning planning = planningService.findByTaskId(taskId);
-        Collection<Route> routes = routeService.findByPlanning(planning);
-        for (Route route : routes) {
-            Collection<ShippingContainer> containers = route.getContainers();
+        Collection<RouteEntity> routes = routeService.findByPlanning(planning);
+        for (RouteEntity route : routes) {
+            Collection<ShippingContainerEntity> containers = route.getContainers();
             if (null == containers) containers = new ArrayList<>();
             if (containers.size() == 0) {
                 for (int i = 0; i < route.getContainerQty(); i++) {
-                    ShippingContainer container = new ShippingContainer();
+                    ShippingContainerEntity container = new ShippingContainerEntity();
                     container.setRoute(route);
                     container.setCreateTime(new Date());
                     container.setUpdateTime(new Date());
@@ -73,13 +81,13 @@ public class ShippingContainerService {
         }
     }
 
-    public ShippingContainer find(long scId) {
+    public ShippingContainerEntity find(long scId) {
         return scRepository.findOne(scId);
     }
 
     @Transactional("transactionManager")
-    public void allocate(long routeId, ShippingContainer formBean) {
-        ShippingContainer oldOne = find(formBean.getId());
+    public void allocate(long routeId, ShippingContainerEntity formBean) {
+        ShippingContainerEntity oldOne = find(formBean.getId());
         formBean.setRoute(oldOne.getRoute());
 
         if (null != oldOne.getContainer()) {
@@ -87,32 +95,32 @@ public class ShippingContainerService {
             containerService.save(oldOne.getContainer());
         }
 
-        Container container = containerService.find(formBean.getContainerId());
-        formBean.setContainer(container);
+        ContainerEntity containerEntity = containerService.find(formBean.getContainerId());
+        formBean.setContainer(containerEntity);
         scRepository.save(formBean);
 
-        container.setStatus(ContainerStatus.ALLOCATED.getValue());
-        containerService.save(container);
+        containerEntity.setStatus(ContainerStatus.ALLOCATED.getValue());
+        containerService.save(containerEntity);
     }
 
     @Transactional("transactionManager")
     public void remove(long scId) {
-        ShippingContainer sc = scRepository.findOne(scId);
-        Container container = sc.getContainer();
+        ShippingContainerEntity sc = scRepository.findOne(scId);
+        ContainerEntity containerEntity = sc.getContainer();
         scRepository.delete(scId);
 
-        if (null != container) {
-            container.setStatus(ContainerStatus.IN_STOCK.getValue());
-            containerService.save(container);
+        if (null != containerEntity) {
+            containerEntity.setStatus(ContainerStatus.IN_STOCK.getValue());
+            containerService.save(containerEntity);
         }
     }
 
-    public Collection<ShippingContainer> findByRoute(Route route) {
+    public List<ShippingContainerEntity> findByRoute(RouteEntity route) {
         return scRepository.findByRoute(route);
     }
 
     public Iterable<RailContainer> initializeRailContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<RailContainer> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
             for (RailContainer container : rcList) {
@@ -136,12 +144,12 @@ public class ShippingContainerService {
         }
 
         rcList = new ArrayList<RailContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainer sc : scList) {
+                for (ShippingContainerEntity sc : scList) {
                     RailContainer rc = new RailContainer();
                     rc.setOrder(route.getPlanning().getOrder());
                     rc.setRoute(route);
@@ -187,6 +195,8 @@ public class ShippingContainerService {
         truck.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             truck.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            truck.setBicCode(railContainer.getSc().getBicCode());
         truck.setPlateNo(railContainer.getPlateNo());
         truck.setTrucker(railContainer.getTrucker());
         if (null == railContainer.getLoadingToc()) {
@@ -202,6 +212,8 @@ public class ShippingContainerService {
         railYard.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railYard.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railYard.setBicCode(railContainer.getSc().getBicCode());
         if (null == railContainer.getStationToa()) {
             railYard.setRailYardToa(DateUtils.stringOf(new Date()));
         } else {
@@ -215,6 +227,8 @@ public class ShippingContainerService {
         railPlan.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railPlan.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railPlan.setBicCode(railContainer.getSc().getBicCode());
         railPlan.setPlanNo(railContainer.getTransPlanNo());
         if (null == railContainer.getEts()) {
             railPlan.setEts(DateUtils.dayStrOf(new Date()));
@@ -229,6 +243,8 @@ public class ShippingContainerService {
         railShipping.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railShipping.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railShipping.setBicCode(railContainer.getSc().getBicCode());
         if (null == railContainer.getAts()) {
             railShipping.setAts(DateUtils.stringOf(new Date()));
         } else {
@@ -242,6 +258,8 @@ public class ShippingContainerService {
         railArrivalDto.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railArrivalDto.setBicCode(railContainer.getSc().getContainer().getBicCode());
+        else
+            railArrivalDto.setBicCode(railContainer.getSc().getBicCode());
         if (null == railContainer.getAta()) {
             railArrivalDto.setAta(DateUtils.stringOf(new Date()));
         } else {
@@ -252,7 +270,7 @@ public class ShippingContainerService {
 
     public void saveTruck(TruckDto truck) {
         RailContainer container = rcRepository.findOne(truck.getRailContainerId());
-        ServiceProvider fleet = spService.find(truck.getFleetId());
+        ServiceProviderEntity fleet = serviceProviderService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
             Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
@@ -436,7 +454,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<BargeContainer> initBargeContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<BargeContainer> bcList = bcRepository.findByOrder(order);
         if (bcList.size() > 0) {
             for (BargeContainer container : bcList) {
@@ -448,12 +466,12 @@ public class ShippingContainerService {
         }
 
         bcList = new ArrayList<BargeContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
-                for (ShippingContainer sc : scList) {
+                for (ShippingContainerEntity sc : scList) {
                     BargeContainer bc = new BargeContainer();
                     bc.setOrder(route.getPlanning().getOrder());
                     bc.setRoute(route);
@@ -520,7 +538,7 @@ public class ShippingContainerService {
     }
 
     public Iterable<VesselContainer> initVesselContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
+        OrderEntity order = orderService.findByTaskId(taskId);
         Collection<VesselContainer> vcList = vcRepository.findByOrder(order);
         if (vcList.size() > 0) {
             for (VesselContainer container : vcList) {
@@ -532,12 +550,12 @@ public class ShippingContainerService {
         }
 
         vcList = new ArrayList<VesselContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
+            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<Leg> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainer sc : scList) {
+                for (ShippingContainerEntity sc : scList) {
                     VesselContainer vc = new VesselContainer();
                     vc.setOrder(route.getPlanning().getOrder());
                     vc.setRoute(route);
@@ -602,80 +620,4 @@ public class ShippingContainerService {
             vcRepository.save(container);
         }
     }
-
-    public Iterable<DeliveryContainer> initDeliveryContainers(String taskId) {
-        Order order = orderService.findByTaskId(taskId);
-        Collection<DeliveryContainer> dcList = dcRepository.findByOrder(order);
-        if (dcList.size() > 0) {
-            for (DeliveryContainer container : dcList) {
-                if (container.getEtd() != null) {
-                    container.setEtdStr(DateUtils.dayStrOf(container.getEtd()));
-                }
-            }
-            return dcList;
-        }
-
-        dcList = new ArrayList<DeliveryContainer>();
-        Collection<Route> routes = routeService.findByTaskId(taskId);
-        for (Route route : routes) {
-            Collection<ShippingContainer> scList = scRepository.findByRoute(route);
-            for (ShippingContainer sc : scList) {
-                DeliveryContainer dc = new DeliveryContainer();
-                dc.setOrder(route.getPlanning().getOrder());
-                dc.setRoute(route);
-                dc.setSc(sc);
-                dc.setAddress(order.getConsigneeAddress());
-                dcList.add(dc);
-            }
-        }
-
-        return dcRepository.save(dcList);
-    }
-
-    public DeliveryContainer findDeliveryContainer(long containerId) {
-        DeliveryContainer deliveryContainer = dcRepository.findOne(containerId);
-
-        if (null == deliveryContainer.getAddress()) {
-            deliveryContainer.setAddress(deliveryContainer.getOrder().getConsigneeAddress());
-        }
-
-        String defaultDayStr = DateUtils.dayStrOf(new Date());
-        if (null == deliveryContainer.getEtd())
-            deliveryContainer.setEtdStr(defaultDayStr);
-        else
-            deliveryContainer.setEtdStr(DateUtils.dayStrOf(deliveryContainer.getEtd()));
-
-        return deliveryContainer;
-    }
-
-    public void saveDeliveryContainer(long containerId, DeliveryContainer formBean) {
-        DeliveryContainer container = dcRepository.findOne(containerId);
-
-        if (formBean.isBatch()) {
-            Collection<DeliveryContainer> containers = dcRepository.findByOrder(container.getOrder());
-
-            if (formBean.getEtdStr() != null && formBean.getEtdStr().trim().length() > 0) {
-                for (DeliveryContainer dc : containers) {
-                    dc.setEtd(DateUtils.dayOf(formBean.getEtdStr()));
-                }
-            }
-
-            if (formBean.getAddress() != null && formBean.getAddress().trim().length() > 0) {
-                for (DeliveryContainer dc : containers) {
-                    dc.setAddress(formBean.getAddress());
-                }
-            }
-
-            dcRepository.save(containers);
-        } else {
-            if (formBean.getEtdStr() != null && formBean.getEtdStr().trim().length() > 0) {
-                container.setEtd(DateUtils.dayOf(formBean.getEtdStr()));
-            }
-            if (formBean.getAddress() != null && formBean.getAddress().trim().length() > 0) {
-                container.setAddress(formBean.getAddress());
-            }
-            dcRepository.save(container);
-        }
-    }
-
 }

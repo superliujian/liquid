@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceType;
+import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.service.ServiceTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +26,18 @@ public class ServiceTypeController {
     private ServiceTypeService serviceTypeService;
 
     @ModelAttribute("serviceTypes")
-    public Iterable<ServiceType> findAll() {
+    public Iterable<ServiceTypeEntity> findAll() {
         return serviceTypeService.findEnabled();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(Model model) {
-        model.addAttribute("serviceType", new ServiceType());
+        model.addAttribute("serviceType", new ServiceTypeEntity());
         return "data_dict/service_type";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("serviceType") ServiceType serviceType,
+    public String create(@Valid @ModelAttribute("serviceType") ServiceTypeEntity serviceType,
                          BindingResult bindingResult) {
         logger.debug("serviceType: {}", serviceType);
 

@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>liquid</groupId>
+    <artifactId>integration-test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Integration Test</name>
+
+    <properties>
+        <junit-version>4.11</junit-version>
+
+        <liquid-version>2.1.33-SNAPSHOT</liquid-version>
+        <spring-version>4.0.5.RELEASE</spring-version>
+        <spring-ldap-version>1.3.2.RELEASE</spring-ldap-version>
+
+        <java-version>1.7</java-version>
+        <compiler-version>3.1</compiler-version>
+    </properties>
+
+    <dependencies>
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- liquid -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>container</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>common</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>config</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>excel</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-version}</version>
+            <exclusions>
+                <!-- Exclude Commons Logging in favor of SLF4j -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- spring ldap -->
+        <dependency>
+            <groupId>org.springframework.ldap</groupId>
+            <artifactId>spring-ldap-core</artifactId>
+            <version>${spring-ldap-version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-version}</version>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

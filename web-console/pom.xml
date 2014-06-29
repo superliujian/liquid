@@ -14,106 +14,83 @@
     <name>Web Console</name>
 
     <properties>
+        <spring-version>4.0.5.RELEASE</spring-version>
+
+        <servlet-version>3.0.1</servlet-version>
+
         <thymeleaf-version>2.1.2.RELEASE</thymeleaf-version>
         <thymeleaf-extras-springsecurity3-version>2.1.1.RELEASE</thymeleaf-extras-springsecurity3-version>
-        <spring-security-version>3.2.0.RELEASE</spring-security-version>
-        <spring-ldap-version>1.3.2.RELEASE</spring-ldap-version>
-        <spring-data-version>1.4.3.RELEASE</spring-data-version>
+
         <aspectj-version>1.7.4</aspectj-version>
         <activiti-version>5.14</activiti-version>
         <mysql-version>5.1.28</mysql-version>
-        <hibernate-version>4.3.0.Final</hibernate-version>
-        <hibernate-validator-version>5.0.2.Final</hibernate-validator-version>
+
         <jackson-version>2.3.1</jackson-version>
 
         <native2ascii-version>1.0-beta-1</native2ascii-version>
-        <servlet-version>3.0.1</servlet-version>
-        <tomcat7-version>2.2</tomcat7-version>
 
+        <tomcat7-version>2.2</tomcat7-version>
         <tomcat-port>8080</tomcat-port>
 
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>springframework-milestones</id>
-            <url>http://maven.springframework.org/milestone/</url>
-        </repository>
-        <repository>
-            <id>Alfresco Maven Repository</id>
-            <url>https://maven.alfresco.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <!-- spring -->
+        <!-- liquid -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring-version}</version>
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>liquid</groupId>
+            <artifactId>common</artifactId>
+            <version>${application-version}</version>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>container</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>config</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>excel</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+
+        <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring-version}</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- servlet -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring-version}</version>
-            <scope>compile</scope>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- spring security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-ldap</artifactId>
-            <version>${spring-security-version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- spring ldap -->
-        <dependency>
-            <groupId>org.springframework.ldap</groupId>
-            <artifactId>spring-ldap-core</artifactId>
-            <version>${spring-ldap-version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- spring data -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring-data-version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- aspectj -->
@@ -172,19 +149,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator-version}</version>
-        </dependency>
-
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -192,15 +156,55 @@
             <version>${jackson-version}</version>
         </dependency>
 
+        <!-- spring -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet-version}</version>
-            <scope>provided</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- spring data -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+
+        <!-- hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -227,8 +231,20 @@
                     <port>${tomcat-port}</port>
                     <path>/</path>
                     <systemProperties>
-                        <APP_ENV>liquid_dev</APP_ENV>
                     </systemProperties>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-version}</version>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                    <compilerArguments>
+                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                    </compilerArguments>
                 </configuration>
             </plugin>
         </plugins>

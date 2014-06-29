@@ -1,11 +1,12 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceProvider;
-import liquid.persistence.domain.SpType;
-import liquid.persistence.repository.SpRepository;
-import liquid.persistence.repository.SpTypeRepository;
+import liquid.domain.ServiceProvider;
+import liquid.facade.ServiceProviderFacade;
+import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
-import liquid.service.SpService;
+import liquid.service.ServiceProviderService;
+import liquid.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,33 +32,42 @@ public class SpController {
     private static final Logger logger = LoggerFactory.getLogger(SpController.class);
 
     @Autowired
-    private SpService spService;
+    private ServiceProviderService serviceProviderService;
+
+    @Autowired
+    private ServiceProviderFacade serviceProviderFacade;
+
+    @Autowired
+    private ServiceSubtypeService serviceSubtypeService;
 
     @Autowired
     private ChargeService chargeService;
 
     @ModelAttribute("sps")
-    public Iterable<ServiceProvider> populateSps() {
-        return spService.findAll();
+    public Iterable<ServiceProviderEntity> populateSps() {
+        return serviceProviderService.findAll();
     }
 
     @ModelAttribute("spTypes")
     public Map<Long, String> populateSpTypes() {
-        return spService.getSpTypes();
+        return serviceProviderService.getSpTypes();
+    }
+
+    @ModelAttribute("serviceSubtypes")
+    public Iterable<ServiceSubtypeEntity> populateServiceSubtypes() {
+        return serviceSubtypeService.findEnabled();
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list(Model model, Principal principal) {
+    public String list() {
         return "sp/sp";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "type")
     @ResponseBody
-    public List<ServiceProvider> list(@RequestParam long type) {
+    public List<ServiceProviderEntity> list(@RequestParam long type) {
         logger.debug("type: {}", type);
-//        long spType = spService.spTypeByChargeType((int) type);
-//        return spService.findByType(spType);
-        return spService.findByChargeType(type);
+        return serviceSubtypeService.find(type).getServiceProviders();
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
@@ -67,25 +77,22 @@ public class SpController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("sp") ServiceProvider sp,
-                         BindingResult bindingResult, Model model, Principal principal) {
+    public String create(@Valid @ModelAttribute("sp") ServiceProvider sp, BindingResult bindingResult) {
         logger.debug("sp: {}", sp);
 
         if (bindingResult.hasErrors()) {
             return "sp/sp";
         } else {
-            spService.save(sp);
+            serviceProviderFacade.save(sp);
             return "redirect:/sp";
         }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String initEdit(@PathVariable long id,
-                           Model model, Principal principal) {
+    public String initEdit(@PathVariable long id, Model model) {
         logger.debug("id: {}", id);
-        ServiceProvider sp = spService.find(id);
+        ServiceProvider sp = serviceProviderFacade.find(id);
         model.addAttribute("sp", sp);
-        model.addAttribute("cts", chargeService.getChargeTypes());
         return "sp/form";
     }
 }

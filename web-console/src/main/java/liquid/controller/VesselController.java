@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.Route;
+import liquid.persistence.domain.RouteEntity;
 import liquid.persistence.domain.VesselContainer;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
@@ -40,7 +40,7 @@ public class VesselController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         scService.initVesselContainers(taskId);
-        Collection<Route> routes = routeService.findByTaskId(taskId);
+        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
         return "vessel/main";
     }

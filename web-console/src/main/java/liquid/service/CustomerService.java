@@ -1,13 +1,12 @@
 package liquid.service;
 
-import liquid.persistence.domain.Customer;
-import liquid.persistence.domain.Order;
+import liquid.domain.Order;
+import liquid.persistence.domain.CustomerEntity;
+import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.xml.bind.ValidationException;
 
 /**
  * TODO: Comments.
@@ -21,16 +20,16 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Iterable<Customer> findAll() {
+    public Iterable<CustomerEntity> findAll() {
         return customerRepository.findOrderByName();
     }
 
-    public Customer find(long id) {
+    public CustomerEntity find(long id) {
         return customerRepository.findOne(id);
     }
 
-    public Iterable<Customer> findByName(String name) {
-        Iterable<Customer> customers = customerRepository.findByNameLike("%" + name + "%");
+    public Iterable<CustomerEntity> findByName(String name) {
+        Iterable<CustomerEntity> customers = customerRepository.findByNameLike("%" + name + "%");
         return customers;
     }
 
@@ -42,10 +41,10 @@ public class CustomerService {
      */
     public FormValidationResult validateCustomer(Order order) {
         long id = order.getCustomerId();
-        String name = order.getCustomerName0();
+        String name = order.getCustomerName();
         if (id == 0L) {
             if (null != name && name.trim().length() > 0) {
-                Customer customer = customerRepository.findByName(name);
+                CustomerEntity customer = customerRepository.findByName(name);
                 if (null != customer) {
                     order.setCustomerId(customer.getId());
                     return FormValidationResult.newSuccess();
@@ -55,7 +54,7 @@ public class CustomerService {
             }
         }
 
-        Customer customer = find(id);
+        CustomerEntity customer = find(id);
         if (name == null) return FormValidationResult.newFailure("invalid.customer");
 
         if (null == customer) return FormValidationResult.newFailure("invalid.customer");
