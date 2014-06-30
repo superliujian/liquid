@@ -1,18 +1,17 @@
 package liquid.controller;
 
+import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.domain.Charge;
 import liquid.facade.ChargeFacade;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.IncomeType;
-import liquid.persistence.domain.ChargeEntity;
-import liquid.persistence.domain.Income;
+import liquid.charge.persistence.domain.Income;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.IncomeService;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
-import liquid.utils.RoleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

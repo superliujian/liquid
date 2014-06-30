@@ -1,18 +1,17 @@
 package liquid.service;
 
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.Leg;
-import liquid.persistence.domain.OrderEntity;
-import liquid.persistence.domain.Planning;
-import liquid.persistence.domain.RouteEntity;
-import liquid.persistence.repository.LegRepository;
-import liquid.persistence.repository.PlanningRepository;
+import liquid.shipping.persistence.domain.Leg;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.repository.LegRepository;
+import liquid.shipping.persistence.repository.PlanningRepository;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;

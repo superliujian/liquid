@@ -1,6 +1,6 @@
 package liquid.domain;
 
-import liquid.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.RouteEntity;
 
 /**
  * Created by redbrick9 on 5/20/14.

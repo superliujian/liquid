@@ -1,7 +1,10 @@
 package liquid.service;
 
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
+import liquid.shipping.persistence.domain.*;
+import liquid.shipping.persistence.repository.LegRepository;
+import liquid.shipping.persistence.repository.RailContainerRepository;
+import liquid.shipping.persistence.repository.RouteRepository;
+import liquid.shipping.persistence.repository.ShippingContainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

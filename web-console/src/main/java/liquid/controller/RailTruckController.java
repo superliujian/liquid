@@ -1,14 +1,14 @@
 package liquid.controller;
 
+import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.dto.TruckDto;
 import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
 import liquid.metadata.TransMode;
-import liquid.persistence.domain.ChargeEntity;
-import liquid.persistence.domain.RouteEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;
+import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

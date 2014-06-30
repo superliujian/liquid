@@ -1,8 +1,8 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceItemEntity;
+import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.service.ServiceItemService;
+import liquid.order.service.ServiceItemService;
 import liquid.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

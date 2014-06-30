@@ -1,9 +1,9 @@
 package liquid.service;
 
 import liquid.metadata.IncomeType;
-import liquid.persistence.domain.Income;
-import liquid.persistence.domain.OrderEntity;
-import liquid.persistence.repository.IncomeRepository;
+import liquid.charge.persistence.domain.Income;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.charge.persistence.repository.IncomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

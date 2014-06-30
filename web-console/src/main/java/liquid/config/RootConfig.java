@@ -20,7 +20,12 @@ import java.util.Map;
  * Time: 11:24 PM
  */
 @Configuration
-@ComponentScan({"liquid.aop", "liquid.facade", "liquid.service", "liquid.task", "liquid.task.handler", "liquid.excel"})
+@ComponentScan({"liquid.aop",
+        "liquid.facade", "liquid.service",
+        "liquid.excel",
+        "liquid.container.facade", "liquid.container.service",
+        "liquid.order.service",
+        "liquid.task", "liquid.task.handler"})
 @EnableAspectJAutoProxy
 public class RootConfig {
     @Bean

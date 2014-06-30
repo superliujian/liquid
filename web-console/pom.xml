@@ -50,6 +50,21 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>order</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>shipping</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>charge</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>config</artifactId>
             <version>${application-version}</version>
         </dependency>
@@ -232,19 +247,6 @@
                     <path>/</path>
                     <systemProperties>
                     </systemProperties>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler-version}</version>
-                <configuration>
-                    <source>${java-version}</source>
-                    <target>${java-version}</target>
-                    <compilerArguments>
-                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-                    </compilerArguments>
                 </configuration>
             </plugin>
         </plugins>

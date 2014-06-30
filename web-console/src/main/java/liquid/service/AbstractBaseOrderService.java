@@ -1,7 +1,7 @@
 package liquid.service;
 
-import liquid.persistence.domain.OrderEntity;
-import liquid.persistence.repository.OrderRepository;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.persistence.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

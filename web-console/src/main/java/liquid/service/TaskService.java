@@ -3,7 +3,7 @@ package liquid.service;
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
 import liquid.metadata.DatePattern;
-import liquid.persistence.domain.OrderEntity;
+import liquid.order.persistence.domain.OrderEntity;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;

@@ -1,6 +1,9 @@
 package liquid.task;
 
-import liquid.persistence.domain.*;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

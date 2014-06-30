@@ -2,7 +2,6 @@ package liquid.service;
 
 import liquid.domain.Order;
 import liquid.persistence.domain.CustomerEntity;
-import liquid.persistence.domain.OrderEntity;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;

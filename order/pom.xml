@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <parent>
+        <groupId>liquid</groupId>
+        <artifactId>liquid</artifactId>
+        <version>FIXED</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>liquid</groupId>
+    <artifactId>order</artifactId>
+    <packaging>jar</packaging>
+    <version>${application-version}</version>
+    <name>Order</name>
+
+    <dependencies>
+        <!-- liquid -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>common</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>container</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+    </dependencies>
+</project>

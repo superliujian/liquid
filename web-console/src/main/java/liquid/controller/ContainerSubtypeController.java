@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.metadata.ContainerType;
-import liquid.persistence.domain.ContainerSubtypeEntity;
+import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.service.ContainerSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

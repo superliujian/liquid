@@ -1,6 +1,6 @@
 package liquid.container.persistence.repository;
 
-import liquid.persistence.domain.ContainerEntity;
+import liquid.container.persistence.domain.ContainerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

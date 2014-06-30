@@ -1,8 +1,8 @@
 package liquid.service;
 
-import liquid.persistence.domain.RouteEntity;
-import liquid.persistence.domain.VesselContainer;
-import liquid.persistence.repository.VesselContainerRepository;
+import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.VesselContainer;
+import liquid.shipping.persistence.repository.VesselContainerRepository;
 import liquid.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

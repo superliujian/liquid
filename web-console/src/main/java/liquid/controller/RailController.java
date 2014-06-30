@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.RailContainer;
+import liquid.shipping.persistence.domain.RailContainer;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

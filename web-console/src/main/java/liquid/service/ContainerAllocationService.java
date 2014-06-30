@@ -1,8 +1,9 @@
 package liquid.service;
 
-import liquid.metadata.ContainerStatus;
-import liquid.persistence.domain.ContainerEntity;
-import liquid.persistence.domain.ShippingContainerEntity;
+import liquid.container.service.ContainerService;
+import liquid.container.domain.ContainerStatus;
+import liquid.container.persistence.domain.ContainerEntity;
+import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

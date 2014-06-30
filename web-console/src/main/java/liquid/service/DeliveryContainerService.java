@@ -1,11 +1,11 @@
 package liquid.service;
 
-import liquid.persistence.domain.DeliveryContainer;
-import liquid.persistence.domain.OrderEntity;
-import liquid.persistence.domain.RouteEntity;
-import liquid.persistence.domain.ShippingContainerEntity;
-import liquid.persistence.repository.DeliveryContainerRepository;
-import liquid.persistence.repository.ShippingContainerRepository;
+import liquid.shipping.persistence.domain.DeliveryContainer;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.ShippingContainerEntity;
+import liquid.shipping.persistence.repository.DeliveryContainerRepository;
+import liquid.shipping.persistence.repository.ShippingContainerRepository;
 import liquid.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package liquid.controller;
 
-import liquid.persistence.domain.BargeContainer;
-import liquid.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.BargeContainer;
+import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;

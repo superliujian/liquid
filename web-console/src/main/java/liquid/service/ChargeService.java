@@ -1,14 +1,17 @@
 package liquid.service;
 
-import liquid.domain.Order;
+import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.charge.persistence.repository.ChargeRepository;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.ChargeRepository;
+import liquid.persistence.domain.ExchangeRate;
+import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.repository.ExchangeRateRepository;
-import liquid.persistence.repository.LegRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
+import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.repository.LegRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

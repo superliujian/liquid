@@ -1,6 +1,6 @@
 package liquid.task;
 
-import liquid.persistence.domain.OrderEntity;
+import liquid.order.persistence.domain.OrderEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
