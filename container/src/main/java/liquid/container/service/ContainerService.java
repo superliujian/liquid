@@ -147,16 +147,16 @@ public class ContainerService {
                             Long containerSubtypeId = null;
                             switch (string) {
                                 case "40`HQ":
-                                    containerSubtypeId = 12L;
-                                    break;
-                                case "40`GP":
                                     containerSubtypeId = 11L;
                                     break;
+                                case "40`GP":
+                                    containerSubtypeId = 10L;
+                                    break;
                                 case "40`RH": // TODO: new
-                                    containerSubtypeId = 13L;
+                                    containerSubtypeId = 12L;
                                     break;
                                 case "20`GP":
-                                    containerSubtypeId = 8L;
+                                    containerSubtypeId = 7L;
                                     break;
                                 default:
                                     logger.warn("No matched container subtype {}. ", string);

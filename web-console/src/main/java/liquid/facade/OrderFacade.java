@@ -56,6 +56,8 @@ public class OrderFacade {
     }
 
     public OrderEntity submit(Order order) {
+        // set role
+        order.setRole(SecurityContext.getInstance().getRole());
         ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
         // compute order no.
         order.setOrderNo(orderService.computeOrderNo(order.getRole(), serviceType.getCode()));
