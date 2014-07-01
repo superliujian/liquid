@@ -2,7 +2,8 @@ package liquid.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -15,8 +16,11 @@ import javax.validation.constraints.NotNull;
 public class GoodsEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
-    @Column(name = "NAME", nullable = true)
+    @Column(name = "NAME", nullable = true, unique = true)
     private String name;
+
+    @Column(name = "STATUS")
+    private int status;
 
     public GoodsEntity() { }
 
@@ -32,11 +36,20 @@ public class GoodsEntity extends BaseUpdateEntity {
         this.name = name;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Goods{");
-        sb.append("id=").append(id);
-        sb.append(", name=").append(name);
+        final StringBuilder sb = new StringBuilder("GoodsEntity{");
+        sb.append("super=").append(super.toString());
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

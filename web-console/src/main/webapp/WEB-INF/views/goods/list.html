@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br /><br />
+
+<div class="container">
+    <table class="table table-striped table-hover table-condensed table-16">
+        <thead>
+        <tr>
+            <th th:text="#{goods.id}">ID</th>
+            <th th:text="#{goods.name}">Name</th>
+            <th th:text="#{status}">Name</th>
+            <th><a href="/goods/new"><button><i class="glyphicon glyphicon-plus"/></button></a></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="goods : ${page.content}">
+            <td th:text="${goods.id}">ID</td>
+            <td th:text="${goods.name}">Name</td>
+            <td th:text="${goods.status}">Status</td>
+            <td><a th:href="'/goods/' + ${goods.id}"><button><i class="glyphicon glyphicon-edit"/></button></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div><!-- /.container -->
+
+<div class="container">
+    <div id="pagination_bar">
+        <ul class="pagination">
+            <li><a href="/goods?number=0">&laquo;</a></li>
+            <li><a th:if="${page.hasPreviousPage()}" th:text="${page.number}"
+                   th:href="'/goods?number=' + ${page.number - 1}" /></li>
+            <li><a href="" th:text="${page.number + 1}" /></li>
+            <li><a th:if="${page.hasNextPage()}" th:text="${page.number + 2}" 
+                   th:href="'/goods?number=' + ${page.number + 1}"/></li>
+            <li><a th:href="'/goods?number=' + ${page.totalPages - 1}">&raquo;</a></li>
+        </ul>
+    </div>
+</div><!-- pagination_bar -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

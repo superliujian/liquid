@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+    
+    <style>
+        div#goodsForm.container {
+            max-width: 600px;
+        }
+    </style>    
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br /><br />
+
+<div id="goodsForm" class="container">
+    <form action="/goods" method="POST" th:object="${goods}">
+        <div class="form-group">
+             <label for="id" th:text="#{goods.id}">Id</label>
+             <input th:if="*{id}" type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
+        </div>
+    
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label for="name" th:text="#{goods.name}">Name</label>
+            
+            <input type="text" th:field="*{name}" class="form-control"/>
+
+            <div>
+                <span th:errors="*{name}">error</span>
+            </div>
+        </div>
+
+        <input type="submit" value="Add Cargo" class="btn btn-primary btn-block" th:attr="value=#{goods.add}"/>
+    </form>
+</div><!-- form -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>
