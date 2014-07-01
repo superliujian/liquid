@@ -8,7 +8,7 @@ import liquid.metadata.TransMode;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +79,7 @@ public class PurchaseController extends BaseTaskController {
             charges = chargeService.findByRouteId(routeId);
         }
 
-        Leg leg = null;
+        LegEntity leg = null;
         if (null != legId) {
             leg = planningService.findLeg(legId);
             charges = chargeService.findByLegId(legId);
@@ -118,7 +118,7 @@ public class PurchaseController extends BaseTaskController {
                 charges = chargeService.findByRouteId(charge.getRouteId());
             }
 
-            Leg leg = null;
+            LegEntity leg = null;
             if (null != charge.getLegId()) {
                 leg = planningService.findLeg(charge.getLegId());
                 charges = chargeService.findByLegId(charge.getLegId());

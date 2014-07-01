@@ -4,7 +4,7 @@ import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
-    private Leg leg;
+    private LegEntity leg;
 
     @ManyToOne
     @JoinColumn(name = "SERVICE_SUBTYPE_ID")
@@ -75,11 +75,11 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.taskId = taskId;
     }
 
-    public Leg getLeg() {
+    public LegEntity getLeg() {
         return leg;
     }
 
-    public void setLeg(Leg leg) {
+    public void setLeg(LegEntity leg) {
         this.leg = leg;
     }
 

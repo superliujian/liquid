@@ -3,7 +3,7 @@ package liquid.service;
 import liquid.shipping.persistence.domain.RailContainer;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.RailContainerRepository;
-import liquid.util.DateUtils;
+import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +21,19 @@ public class RailContainerService {
         Collection<RailContainer> railContainers = railContainerRepository.findByRoute(route);
         for (RailContainer railContainer : railContainers) {
             if (railContainer.getLoadingToc() != null) {
-                railContainer.setLoadingTocStr(DateUtils.stringOf(railContainer.getLoadingToc()));
+                railContainer.setLoadingTocStr(DateUtil.stringOf(railContainer.getLoadingToc()));
             }
             if (railContainer.getStationToa() != null) {
-                railContainer.setStationToaStr(DateUtils.stringOf(railContainer.getStationToa()));
+                railContainer.setStationToaStr(DateUtil.stringOf(railContainer.getStationToa()));
             }
             if (railContainer.getEts() != null) {
-                railContainer.setEtsStr(DateUtils.dayStrOf(railContainer.getEts()));
+                railContainer.setEtsStr(DateUtil.dayStrOf(railContainer.getEts()));
             }
             if (railContainer.getAts() != null) {
-                railContainer.setAtsStr(DateUtils.stringOf(railContainer.getAts()));
+                railContainer.setAtsStr(DateUtil.stringOf(railContainer.getAts()));
             }
             if (railContainer.getAta() != null) {
-                railContainer.setAtaStr(DateUtils.stringOf(railContainer.getAta()));
+                railContainer.setAtaStr(DateUtil.stringOf(railContainer.getAta()));
             }
         }
         return railContainers;

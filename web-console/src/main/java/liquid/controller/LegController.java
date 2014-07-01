@@ -4,7 +4,7 @@ import liquid.metadata.LocationType;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.RouteRepository;
@@ -57,7 +57,7 @@ public class LegController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
-        Leg leg = new Leg();
+        LegEntity leg = new LegEntity();
 
         switch (tab) {
             case "rail":
@@ -105,7 +105,7 @@ public class LegController extends BaseTaskController {
                          @PathVariable long planningId,
                          @PathVariable long routeId,
                          @PathVariable String tab,
-                         Leg leg,
+                         LegEntity leg,
                          Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);

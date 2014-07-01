@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.metadata.TransMode;
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.shipping.persistence.domain.Planning;
 import liquid.shipping.persistence.domain.RouteEntity;
@@ -69,8 +69,8 @@ public class PlanningService {
 
         Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
         for (RouteEntity route : routes) {
-            Collection<Leg> legs = route.getLegs();
-            for (Leg leg : legs) {
+            Collection<LegEntity> legs = route.getLegs();
+            for (LegEntity leg : legs) {
                 TransMode mode = TransMode.valueOf(leg.getTransMode());
                 switch (mode) {
                     case RAIL:
@@ -99,9 +99,9 @@ public class PlanningService {
         return findByOrder(order);
     }
 
-    public Leg findLeg(long legId) {
+    public LegEntity findLeg(long legId) {
         if (0L == legId) return null;
-        Leg leg = legRepository.findOne(legId);
+        LegEntity leg = legRepository.findOne(legId);
         if (null != leg.getSp()) leg.setSpId(leg.getSp().getId());
         return leg;
     }

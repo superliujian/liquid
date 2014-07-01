@@ -13,8 +13,8 @@ import liquid.service.LocationService;
 import liquid.service.OrderService;
 import liquid.service.ServiceTypeService;
 import liquid.service.bpm.ActivitiEngineService;
+import liquid.util.DateUtil;
 import liquid.utils.CollectionUtils;
-import liquid.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class OrderFacade {
         List<LocationEntity> locations = locationService.findByType(LocationType.CITY.getType());
         LocationEntity secondCity = CollectionUtils.tryToGet2ndElement(locations);
         order.setDestinationId(secondCity.getId());
-        order.setLoadingEstimatedTime(DateUtils.stringOf(new Date()));
+        order.setLoadingEstimatedTime(DateUtil.stringOf(new Date()));
         return order;
     }
 
@@ -116,7 +116,7 @@ public class OrderFacade {
         orderEntity.setLoadingAddress(order.getLoadingAddress());
         orderEntity.setLoadingContact(order.getLoadingContact());
         orderEntity.setLoadingPhone(order.getLoadingPhone());
-        orderEntity.setLoadingEt(DateUtils.dateOf(order.getLoadingEstimatedTime()));
+        orderEntity.setLoadingEt(DateUtil.dateOf(order.getLoadingEstimatedTime()));
         orderEntity.setContainerType(order.getContainerType());
         if (order.getContainerType() == ContainerType.RAIL.getType())
             orderEntity.setContainerSubtype(ContainerSubtypeEntity.
@@ -164,7 +164,7 @@ public class OrderFacade {
         order.setLoadingAddress(orderEntity.getLoadingAddress());
         order.setLoadingContact(orderEntity.getLoadingContact());
         order.setLoadingPhone(orderEntity.getLoadingPhone());
-        order.setLoadingEstimatedTime(DateUtils.stringOf(orderEntity.getLoadingEt()));
+        order.setLoadingEstimatedTime(DateUtil.stringOf(orderEntity.getLoadingEt()));
         order.setContainerType(orderEntity.getContainerType());
         order.setContainerType(orderEntity.getContainerType());
         if (order.getContainerType() == ContainerType.RAIL.getType())

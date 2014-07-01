@@ -3,7 +3,7 @@ package liquid.service;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.VesselContainer;
 import liquid.shipping.persistence.repository.VesselContainerRepository;
-import liquid.util.DateUtils;
+import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class VesselContainerService {
 
         for (VesselContainer vesselContainer : vesselContainers) {
             if (null != vesselContainer.getEts())
-                vesselContainer.setEtsStr(DateUtils.dayStrOf(vesselContainer.getEts()));
+                vesselContainer.setEtsStr(DateUtil.dayStrOf(vesselContainer.getEts()));
         }
         return vesselContainers;
     }

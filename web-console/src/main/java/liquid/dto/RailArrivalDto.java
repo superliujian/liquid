@@ -1,6 +1,6 @@
 package liquid.dto;
 
-import liquid.metadata.DatePattern;
+import liquid.util.DatePattern;
 import liquid.validation.constraints.DateFormat;
 
 /**

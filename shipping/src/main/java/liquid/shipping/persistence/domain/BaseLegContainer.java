@@ -26,7 +26,7 @@ public class BaseLegContainer extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
-    private Leg leg;
+    private LegEntity leg;
 
     @OneToOne
     @JoinColumn(name = "SC_ID")
@@ -48,11 +48,11 @@ public class BaseLegContainer extends BaseUpdateEntity {
         this.route = route;
     }
 
-    public Leg getLeg() {
+    public LegEntity getLeg() {
         return leg;
     }
 
-    public void setLeg(Leg leg) {
+    public void setLeg(LegEntity leg) {
         this.leg = leg;
     }
 

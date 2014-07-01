@@ -1,6 +1,6 @@
 package liquid.shipping.persistence.domain;
 
-import liquid.metadata.DatePattern;
+import liquid.util.DatePattern;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.validation.constraints.DateFormat;
 

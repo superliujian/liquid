@@ -1,7 +1,7 @@
 package liquid.validation.validator;
 
-import liquid.metadata.DatePattern;
-import liquid.util.DateUtils;
+import liquid.util.DatePattern;
+import liquid.util.DateUtil;
 import liquid.validation.constraints.DateFormat;
 
 import javax.validation.ConstraintValidator;
@@ -26,14 +26,14 @@ public class DateFormatValidator implements ConstraintValidator<DateFormat, Stri
         switch (datePattern) {
             case UNTIL_DAY:
                 try {
-                    DateUtils.dayOf(value);
+                    DateUtil.dayOf(value);
                     return true;
                 } catch (Exception e) {
                     return false;
                 }
             case UNTIL_MINUTE:
                 try {
-                    DateUtils.dateOf(value);
+                    DateUtil.dateOf(value);
                     return true;
                 } catch (Exception e) {
                     return false;

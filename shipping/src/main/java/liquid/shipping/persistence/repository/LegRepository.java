@@ -1,6 +1,6 @@
 package liquid.shipping.persistence.repository;
 
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,10 +13,10 @@ import java.util.List;
  * Date: 10/11/13
  * Time: 12:17 AM
  */
-public interface LegRepository extends CrudRepository<Leg, Long> {
-    Collection<Leg> findByRoute(RouteEntity route);
+public interface LegRepository extends CrudRepository<LegEntity, Long> {
+    Collection<LegEntity> findByRoute(RouteEntity route);
 
-    List<Leg> findByRouteAndTransMode(RouteEntity route, int transMode);
+    List<LegEntity> findByRouteAndTransMode(RouteEntity route, int transMode);
 
 
 }

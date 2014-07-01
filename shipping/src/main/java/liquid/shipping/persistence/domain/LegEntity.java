@@ -13,7 +13,7 @@ import javax.persistence.*;
  * Time: 8:18 PM
  */
 @Entity(name = "LEG")
-public class Leg extends BaseUpdateEntity {
+public class LegEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
@@ -48,7 +48,7 @@ public class Leg extends BaseUpdateEntity {
 
     @OneToOne
     @JoinColumn(name = "PREV")
-    private Leg prev;
+    private LegEntity prev;
 
     public RouteEntity getRoute() {
         return route;
@@ -122,11 +122,11 @@ public class Leg extends BaseUpdateEntity {
         this.dstLocId = dstLocId;
     }
 
-    public Leg getPrev() {
+    public LegEntity getPrev() {
         return prev;
     }
 
-    public void setPrev(Leg prev) {
+    public void setPrev(LegEntity prev) {
         this.prev = prev;
     }
 

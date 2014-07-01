@@ -9,7 +9,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             entity.setOrder(route.getPlanning().getOrder());
         }
         if (null != entity.getLeg()) {
-            Leg leg = legRepository.findOne(entity.getLeg().getId());
+            LegEntity leg = legRepository.findOne(entity.getLeg().getId());
             route = leg.getRoute();
             entity.setOrder(route.getPlanning().getOrder());
         }

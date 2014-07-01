@@ -1,10 +1,9 @@
 package liquid.dto;
 
-import liquid.metadata.DatePattern;
+import liquid.util.DatePattern;
 import liquid.validation.constraints.DateFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**

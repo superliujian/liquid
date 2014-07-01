@@ -12,8 +12,8 @@ import liquid.service.ContainerAllocationService;
 import liquid.service.OrderService;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
+import liquid.util.StringUtil;
 import liquid.utils.CollectionUtils;
-import liquid.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -119,7 +119,7 @@ public class ContainerAllocationFacade {
         for (int i = 0; i < routeContainerAllocations.length; i++) {
             ShippingContainerEntity shippingContainer = new ShippingContainerEntity();
             shippingContainer.setId(routeContainerAllocations[i].getAllocationId());
-            if (!StringUtils.valid(routeContainerAllocations[i].getBicCode())) shippingContainer.setBicCode("");
+            if (!StringUtil.valid(routeContainerAllocations[i].getBicCode())) shippingContainer.setBicCode("");
             shippingContainer.setRoute(RouteEntity.newInstance(RouteEntity.class, routeContainerAllocations[i].getRouteId()));
             shippingContainer.setBicCode(routeContainerAllocations[i].getBicCode());
 

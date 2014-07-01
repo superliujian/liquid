@@ -2,13 +2,13 @@ package liquid.service;
 
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
-import liquid.metadata.DatePattern;
+import liquid.util.DatePattern;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;
 import liquid.task.TaskFactory;
-import liquid.util.DateUtils;
+import liquid.util.DateUtil;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +176,7 @@ public class TaskService {
         dto.setName(task.getName());
         dto.setDescription(task.getDescription());
         dto.setAssignee(task.getAssignee());
-        dto.setCreateDate(DateUtils.stringOf(task.getCreateTime(), DatePattern.UNTIL_SECOND));
+        dto.setCreateDate(DateUtil.stringOf(task.getCreateTime(), DatePattern.UNTIL_SECOND));
         return dto;
     }
 

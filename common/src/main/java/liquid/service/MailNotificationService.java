@@ -1,6 +1,6 @@
 package liquid.service;
 
-import liquid.util.StringUtils;
+import liquid.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public class MailNotificationService {
 
             // Send message
             Transport.send(message);
-            logger.debug("Mail has been successfully sent to {}", StringUtils.toString(mailTo));
+            logger.debug("Mail has been successfully sent to {}", StringUtil.toString(mailTo));
         } catch (MessagingException e) {
             logger.warn(e.getMessage(), e);
         }

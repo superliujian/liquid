@@ -5,7 +5,7 @@ import liquid.domain.Charge;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
-import liquid.shipping.persistence.domain.Leg;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
         if (null != charge.getRouteId())
             entity.setRoute(RouteEntity.newInstance(RouteEntity.class, charge.getRouteId()));
         if (null != charge.getLegId())
-            entity.setLeg(Leg.newInstance(Leg.class, charge.getLegId()));
+            entity.setLeg(LegEntity.newInstance(LegEntity.class, charge.getLegId()));
         entity.setServiceSubtype(ServiceSubtypeEntity.newInstance(ServiceSubtypeEntity.class, charge.getServiceSubtypeId()));
         entity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, charge.getServiceProviderId()));
         entity.setWay(charge.getWay());

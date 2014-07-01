@@ -52,7 +52,7 @@ public class RouteService {
         Planning planning = planningService.findByTaskId(taskId);
         List<RouteEntity> routes = planning.getRoutes();
         for (RouteEntity route : routes) {
-            Collection<Leg> legs = legRepository.findByRoute(route);
+            Collection<LegEntity> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
             Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
@@ -74,7 +74,7 @@ public class RouteService {
         }
         Collection<RouteEntity> routes = planning.getRoutes();
         for (RouteEntity route : routes) {
-            Collection<Leg> legs = legRepository.findByRoute(route);
+            Collection<LegEntity> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
             Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);

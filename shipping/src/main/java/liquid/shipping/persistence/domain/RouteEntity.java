@@ -29,7 +29,7 @@ public class RouteEntity extends BaseUpdateEntity {
     private String deliveryDateStr;
 
     @Transient
-    private Collection<Leg> legs;
+    private Collection<LegEntity> legs;
 
     @Transient
     private Collection<ShippingContainerEntity> containers;
@@ -81,11 +81,11 @@ public class RouteEntity extends BaseUpdateEntity {
         this.deliveryDateStr = deliveryDateStr;
     }
 
-    public Collection<Leg> getLegs() {
+    public Collection<LegEntity> getLegs() {
         return legs;
     }
 
-    public void setLegs(Collection<Leg> legs) {
+    public void setLegs(Collection<LegEntity> legs) {
         this.legs = legs;
     }
 

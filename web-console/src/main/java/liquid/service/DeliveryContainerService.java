@@ -6,7 +6,7 @@ import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import liquid.shipping.persistence.repository.DeliveryContainerRepository;
 import liquid.shipping.persistence.repository.ShippingContainerRepository;
-import liquid.util.DateUtils;
+import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
         Collection<DeliveryContainer> deliveryContainers = deliveryContainerRepository.findByRoute(route);
         for (DeliveryContainer deliveryContainer : deliveryContainers) {
             if (deliveryContainer.getEtd() != null) {
-                deliveryContainer.setEtdStr(DateUtils.dayStrOf(deliveryContainer.getEtd()));
+                deliveryContainer.setEtdStr(DateUtil.dayStrOf(deliveryContainer.getEtd()));
             }
         }
         return deliveryContainers;
@@ -51,7 +51,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
         if (dcList.size() > 0) {
             for (DeliveryContainer container : dcList) {
                 if (container.getEtd() != null) {
-                    container.setEtdStr(DateUtils.dayStrOf(container.getEtd()));
+                    container.setEtdStr(DateUtil.dayStrOf(container.getEtd()));
                 }
             }
             return dcList;
@@ -81,11 +81,11 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
             deliveryContainer.setAddress(deliveryContainer.getOrder().getConsigneeAddress());
         }
 
-        String defaultDayStr = DateUtils.dayStrOf(new Date());
+        String defaultDayStr = DateUtil.dayStrOf(new Date());
         if (null == deliveryContainer.getEtd())
             deliveryContainer.setEtdStr(defaultDayStr);
         else
-            deliveryContainer.setEtdStr(DateUtils.dayStrOf(deliveryContainer.getEtd()));
+            deliveryContainer.setEtdStr(DateUtil.dayStrOf(deliveryContainer.getEtd()));
 
         return deliveryContainer;
     }
@@ -98,7 +98,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
 
             if (formBean.getEtdStr() != null && formBean.getEtdStr().trim().length() > 0) {
                 for (DeliveryContainer dc : containers) {
-                    dc.setEtd(DateUtils.dayOf(formBean.getEtdStr()));
+                    dc.setEtd(DateUtil.dayOf(formBean.getEtdStr()));
                 }
             }
 
@@ -111,7 +111,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
             deliveryContainerRepository.save(containers);
         } else {
             if (formBean.getEtdStr() != null && formBean.getEtdStr().trim().length() > 0) {
-                container.setEtd(DateUtils.dayOf(formBean.getEtdStr()));
+                container.setEtd(DateUtil.dayOf(formBean.getEtdStr()));
             }
             if (formBean.getAddress() != null && formBean.getAddress().trim().length() > 0) {
                 container.setAddress(formBean.getAddress());
