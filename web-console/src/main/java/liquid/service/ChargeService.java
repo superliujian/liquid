@@ -4,8 +4,9 @@ import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.charge.persistence.repository.ChargeRepository;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
-import liquid.persistence.domain.ExchangeRate;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
+import liquid.persistence.domain.ExchangeRate;
 import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
@@ -46,6 +47,9 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     private OrderService orderService;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     private RouteService routeService;
 
     // TODO: have to enhance this function.
@@ -66,7 +70,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             entity.setOrder(route.getPlanning().getOrder());
         }
         if (null == entity.getOrder()) {
-            OrderEntity order = orderService.findByTaskId(entity.getTaskId());
+            OrderEntity order = taskService.findOrderByTaskId(entity.getTaskId());
             entity.setOrder(order);
         }
 

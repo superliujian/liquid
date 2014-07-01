@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.dto.DistyDto;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.service.OrderService;
+import liquid.order.service.OrderService;
 import liquid.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

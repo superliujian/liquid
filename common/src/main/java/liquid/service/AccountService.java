@@ -1,6 +1,6 @@
 package liquid.service;
 
-import liquid.metadata.GroupType;
+import liquid.domain.GroupType;
 import liquid.persistence.domain.Account;
 import liquid.persistence.domain.Group;
 import liquid.persistence.domain.PasswordChange;

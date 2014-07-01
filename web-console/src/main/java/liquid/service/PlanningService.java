@@ -1,13 +1,14 @@
 package liquid.service;
 
 import liquid.metadata.TransMode;
-import liquid.shipping.persistence.domain.LegEntity;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
+import liquid.service.bpm.ActivitiEngineService;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.Planning;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.PlanningRepository;
-import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class PlanningService {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Autowired
     private RouteService routeService;
@@ -95,7 +99,7 @@ public class PlanningService {
 
     @Transactional(value = "transactionManager")
     public Planning findByTaskId(String taskId) {
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         return findByOrder(order);
     }
 

@@ -1,7 +1,7 @@
 package liquid.service;
 
-import liquid.shipping.persistence.domain.DeliveryContainer;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.shipping.persistence.domain.DeliveryContainer;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import liquid.shipping.persistence.repository.DeliveryContainerRepository;
@@ -27,7 +27,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
     private ShippingContainerRepository shippingContainerRepository;
 
     @Autowired
-    private OrderService orderService;
+    private TaskService taskService;
 
     @Autowired
     private RouteService routeService;
@@ -46,7 +46,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
     }
 
     public Iterable<DeliveryContainer> initDeliveryContainers(String taskId) {
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         Collection<DeliveryContainer> dcList = deliveryContainerRepository.findByOrder(order);
         if (dcList.size() > 0) {
             for (DeliveryContainer container : dcList) {

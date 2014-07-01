@@ -1,4 +1,4 @@
-package liquid.metadata;
+package liquid.domain;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -8,7 +8,6 @@ import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
-import liquid.service.OrderService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
@@ -47,9 +46,6 @@ public class TaskController extends BaseController {
 
     @Autowired
     private ChargeService chargeService;
-
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
@@ -185,7 +181,7 @@ public class TaskController extends BaseController {
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         Iterable<ChargeEntity> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
 

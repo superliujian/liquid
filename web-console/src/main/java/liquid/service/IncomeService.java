@@ -1,9 +1,9 @@
 package liquid.service;
 
-import liquid.metadata.IncomeType;
 import liquid.charge.persistence.domain.Income;
-import liquid.order.persistence.domain.OrderEntity;
 import liquid.charge.persistence.repository.IncomeRepository;
+import liquid.metadata.IncomeType;
+import liquid.order.persistence.domain.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class IncomeService {
     private IncomeRepository incomeRepository;
 
     @Autowired
-    private OrderService orderService;
+    private TaskService taskService;
 
     public List<Income> findByTaskId(String taskId) {
         return incomeRepository.findByTaskId(taskId);
@@ -47,7 +47,7 @@ public class IncomeService {
     }
 
     public Income addIncome(String taskId, Income income, String uid) {
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
 
         income.setOrder(order);
         income.setTaskId(taskId);

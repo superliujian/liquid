@@ -1,6 +1,6 @@
-package liquid.service;
+package liquid.container.service;
 
-import liquid.metadata.ContainerType;
+import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.persistence.repository.ContainerSubtypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

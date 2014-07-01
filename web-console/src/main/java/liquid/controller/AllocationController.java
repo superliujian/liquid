@@ -7,7 +7,7 @@ import liquid.domain.SelfContainerAllocation;
 import liquid.facade.ContainerAllocationFacade;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.metadata.ContainerType;
+import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;

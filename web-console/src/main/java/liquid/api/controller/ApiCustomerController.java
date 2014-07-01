@@ -36,6 +36,6 @@ public class ApiCustomerController {
     @ResponseBody
     public Iterable<CustomerEntity> listByName(@RequestParam String name) {
         logger.debug("name: {}", name);
-        return customerService.findByName(name);
+        return customerService.findByNameLike(name);
     }
 }

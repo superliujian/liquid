@@ -1,12 +1,16 @@
 package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
-import liquid.domain.Order;
+import liquid.container.service.ContainerSubtypeService;
+import liquid.domain.LocationType;
 import liquid.domain.ServiceItem;
-import liquid.facade.OrderFacade;
 import liquid.metadata.*;
+import liquid.order.domain.Order;
+import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
@@ -210,7 +214,7 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
     public String save(@Valid @ModelAttribute Order order, BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
-        FormValidationResult result = customerService.validateCustomer(order);
+        FormValidationResult result = orderFacade.validateCustomer(order);
         if (!result.isSuccessful()) {
             setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
         }
@@ -231,7 +235,7 @@ public class OrderController extends BaseController {
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
-        FormValidationResult result = customerService.validateCustomer(order);
+        FormValidationResult result = orderFacade.validateCustomer(order);
         if (!result.isSuccessful()) {
             setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
         }

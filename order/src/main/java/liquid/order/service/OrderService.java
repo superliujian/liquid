@@ -1,12 +1,12 @@
-package liquid.service;
+package liquid.order.service;
 
-import liquid.metadata.ContainerType;
+import liquid.container.domain.ContainerType;
+import liquid.container.service.ContainerSubtypeService;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.ServiceItemService;
+import liquid.order.persistence.repository.OrderHistoryRepository;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.LocationRepository;
-import liquid.order.persistence.repository.OrderHistoryRepository;
 import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +42,6 @@ public class OrderService extends AbstractBaseOrderService {
     private LocationRepository locationRepository;
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
     private ActivitiEngineService bpmService;
 
     @Autowired
@@ -61,11 +58,6 @@ public class OrderService extends AbstractBaseOrderService {
             if (oldOrder.getServiceItems().size() > 0)
                 serviceItemService.delete(oldOrder.getServiceItems());
         }
-    }
-
-    public OrderEntity findByTaskId(String taskId) {
-        long orderId = taskService.getOrderIdByTaskId(taskId);
-        return find(orderId);
     }
 
     public List<OrderEntity> findAllOrderByDesc() {

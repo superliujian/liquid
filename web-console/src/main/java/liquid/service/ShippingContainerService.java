@@ -1,12 +1,13 @@
 package liquid.service;
 
+import liquid.container.domain.ContainerStatus;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.service.ContainerService;
 import liquid.dto.*;
-import liquid.container.domain.ContainerStatus;
 import liquid.metadata.TransMode;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.persistence.domain.*;
+import liquid.order.service.OrderService;
+import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.*;
 import liquid.util.DateUtil;
@@ -29,6 +30,9 @@ import java.util.List;
 public class ShippingContainerService extends AbstractService<ShippingContainerEntity, ShippingContainerRepository> {
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Autowired
     private PlanningService planningService;
@@ -124,7 +128,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public Iterable<RailContainer> initializeRailContainers(String taskId) {
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         Collection<RailContainer> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
             for (RailContainer container : rcList) {
@@ -458,7 +462,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public Iterable<BargeContainer> initBargeContainers(String taskId) {
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         Collection<BargeContainer> bcList = bcRepository.findByOrder(order);
         if (bcList.size() > 0) {
             for (BargeContainer container : bcList) {
@@ -542,7 +546,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public Iterable<VesselContainer> initVesselContainers(String taskId) {
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         Collection<VesselContainer> vcList = vcRepository.findByOrder(order);
         if (vcList.size() > 0) {
             for (VesselContainer container : vcList) {

@@ -1,4 +1,4 @@
-package liquid.utils;
+package liquid.util;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import java.util.List;
  * Date: 10/12/13
  * Time: 9:18 PM
  */
-public class CollectionUtils {
-    private CollectionUtils() {}
+public class CollectionUtil {
+    private CollectionUtil() {}
 
     public static <T> T tryToGet2ndElement(List<T> list) {
         int size = list.size();

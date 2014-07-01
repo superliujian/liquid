@@ -1,20 +1,22 @@
-package liquid.facade;
+package liquid.order.facade;
 
+import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
-import liquid.domain.Order;
+import liquid.domain.LocationType;
 import liquid.domain.ServiceItem;
-import liquid.metadata.ContainerType;
-import liquid.metadata.LocationType;
+import liquid.order.domain.Order;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
+import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
+import liquid.service.CustomerService;
 import liquid.service.LocationService;
-import liquid.service.OrderService;
 import liquid.service.ServiceTypeService;
 import liquid.service.bpm.ActivitiEngineService;
+import liquid.util.CollectionUtil;
 import liquid.util.DateUtil;
-import liquid.utils.CollectionUtils;
+import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ import java.util.*;
 public class OrderFacade {
     @Autowired
     private Environment env;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private LocationService locationService;
@@ -44,7 +49,7 @@ public class OrderFacade {
     public Order initOrder() {
         Order order = new Order();
         List<LocationEntity> locations = locationService.findByType(LocationType.CITY.getType());
-        LocationEntity secondCity = CollectionUtils.tryToGet2ndElement(locations);
+        LocationEntity secondCity = CollectionUtil.tryToGet2ndElement(locations);
         order.setDestinationId(secondCity.getId());
         order.setLoadingEstimatedTime(DateUtil.stringOf(new Date()));
         return order;
@@ -192,5 +197,35 @@ public class OrderFacade {
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
         return order;
+    }
+
+    /**
+     * If customer name is exactly equals to the one in database, the customer id is set.
+     *
+     * @param order
+     * @return
+     */
+    public FormValidationResult validateCustomer(Order order) {
+        long id = order.getCustomerId();
+        String name = order.getCustomerName();
+        if (id == 0L) {
+            if (null != name && name.trim().length() > 0) {
+                CustomerEntity customer = customerService.findByName(name);
+                if (null != customer) {
+                    order.setCustomerId(customer.getId());
+                    return FormValidationResult.newSuccess();
+                }
+            } else {
+                return FormValidationResult.newFailure("invalid.customer");
+            }
+        }
+
+        CustomerEntity customer = customerService.find(id);
+        if (name == null) return FormValidationResult.newFailure("invalid.customer");
+
+        if (null == customer) return FormValidationResult.newFailure("invalid.customer");
+
+        if (name.equals(customer.getName())) return FormValidationResult.newSuccess();
+        else return FormValidationResult.newFailure("invalid.customer");
     }
 }

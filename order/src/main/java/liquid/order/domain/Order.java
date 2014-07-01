@@ -1,5 +1,7 @@
-package liquid.domain;
+package liquid.order.domain;
 
+import liquid.domain.BaseIdObject;
+import liquid.domain.ServiceItem;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;

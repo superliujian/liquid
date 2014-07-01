@@ -1,8 +1,8 @@
 package liquid.controller;
 
 import liquid.metadata.ContainerCap;
-import liquid.metadata.ContainerType;
-import liquid.metadata.LocationType;
+import liquid.container.domain.ContainerType;
+import liquid.domain.LocationType;
 import liquid.metadata.OrderStatus;
 import liquid.order.persistence.domain.ReceivingOrder;
 import liquid.persistence.domain.*;

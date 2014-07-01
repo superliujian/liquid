@@ -1,9 +1,9 @@
 package liquid.service.bpm;
 
-import liquid.util.DatePattern;
 import liquid.persistence.domain.Account;
 import liquid.service.AccountService;
 import liquid.service.MailNotificationService;
+import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -33,9 +32,6 @@ public class ActivitiEngineService {
 
     @Autowired
     private ProcessEngine processEngine;
-
-    @Autowired
-    private SimpleDriverDataSource dataSource;
 
     @Autowired
     private AccountService accountService;

@@ -1,8 +1,8 @@
 package liquid.controller;
 
-import liquid.metadata.ContainerType;
+import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
-import liquid.service.ContainerSubtypeService;
+import liquid.container.service.ContainerSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

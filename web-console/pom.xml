@@ -17,13 +17,10 @@
         <spring-version>4.0.5.RELEASE</spring-version>
 
         <servlet-version>3.0.1</servlet-version>
-
         <thymeleaf-version>2.1.2.RELEASE</thymeleaf-version>
         <thymeleaf-extras-springsecurity3-version>2.1.1.RELEASE</thymeleaf-extras-springsecurity3-version>
 
         <aspectj-version>1.7.4</aspectj-version>
-        <activiti-version>5.14</activiti-version>
-        <mysql-version>5.1.28</mysql-version>
 
         <jackson-version>2.3.1</jackson-version>
 
@@ -38,6 +35,11 @@
 
     <dependencies>
         <!-- liquid -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>util</artifactId>
+            <version>${application-version}</version>
+        </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>common</artifactId>
@@ -74,20 +76,25 @@
             <version>${application-version}</version>
         </dependency>
 
-        <!-- spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring-version}</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet-version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- spring security -->
@@ -129,72 +136,11 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- activiti -->
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-engine</artifactId>
-            <version>${activiti-version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-spring</artifactId>
-            <version>${activiti-version}</version>
-            <scope>compile</scope>
-            <exclusions>
-                <!-- Exclude Commons Logging in favor of logback -->
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-ldap</artifactId>
-            <version>${activiti-version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-version}</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-version}</version>
-        </dependency>
-
-        <!-- spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
-        <!-- spring data -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-        </dependency>
-
-        <!-- hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!-- logging -->

@@ -7,7 +7,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.service.ChargeService;
-import liquid.service.OrderService;
+import liquid.order.service.OrderService;
 import liquid.service.PlanningService;
 import liquid.service.RouteService;
 import liquid.shipping.persistence.domain.LegEntity;

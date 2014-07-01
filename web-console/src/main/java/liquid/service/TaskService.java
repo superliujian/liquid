@@ -2,12 +2,13 @@ package liquid.service;
 
 import liquid.dto.TaskBadgeDto;
 import liquid.dto.TaskDto;
-import liquid.util.DatePattern;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;
 import liquid.task.TaskFactory;
+import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
@@ -60,6 +61,11 @@ public class TaskService {
         taskDto.setPrompt(messageSource.getMessage("task.complete.prompt." + task.getTaskDefinitionKey(),
                 new Object[0], "", Locale.CHINA));
         return taskDto;
+    }
+
+    public OrderEntity findOrderByTaskId(String taskId) {
+        long orderId = getOrderIdByTaskId(taskId);
+        return orderService.find(orderId);
     }
 
     public List<HistoricTaskInstance> listCompltedTasks(long orderId) {

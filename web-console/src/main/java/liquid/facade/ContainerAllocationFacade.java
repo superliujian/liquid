@@ -3,17 +3,14 @@ package liquid.facade;
 import liquid.domain.ContainerAllocation;
 import liquid.domain.RouteContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
-import liquid.metadata.ContainerType;
+import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.service.*;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
-import liquid.service.ContainerAllocationService;
-import liquid.service.OrderService;
-import liquid.service.RouteService;
-import liquid.service.ShippingContainerService;
 import liquid.util.StringUtil;
-import liquid.utils.CollectionUtils;
+import liquid.util.CollectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,7 @@ public class ContainerAllocationFacade {
     private ShippingContainerService shippingContainerService;
 
     @Autowired
-    private OrderService orderService;
+    private TaskService taskService;
 
     @Autowired
     private RouteService routeService;
@@ -41,7 +38,7 @@ public class ContainerAllocationFacade {
     public ContainerAllocation computeContainerAllocation(String taskId) {
         ContainerAllocation containerAllocation = new ContainerAllocation();
 
-        OrderEntity order = orderService.findByTaskId(taskId);
+        OrderEntity order = taskService.findOrderByTaskId(taskId);
         int type = order.getContainerType();
         String subtypeName = order.getContainerSubtype().getName();
 
@@ -134,7 +131,7 @@ public class ContainerAllocationFacade {
 
         List<ShippingContainerEntity> shippingContainers = shippingContainerService.
                 findByRoute(RouteEntity.newInstance(RouteEntity.class, selfContainerAllocation.getRouteId()));
-        if (CollectionUtils.isEmpty(shippingContainers))
+        if (CollectionUtil.isEmpty(shippingContainers))
             shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (int i = shippingContainers.size(); i < route.getContainerQty(); i++) {
             ShippingContainerEntity shippingContainer = new ShippingContainerEntity();

@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.metadata.LocationType;
+import liquid.domain.LocationType;
 import liquid.metadata.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
