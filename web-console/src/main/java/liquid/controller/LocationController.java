@@ -1,17 +1,18 @@
 package liquid.controller;
 
-import liquid.persistence.domain.LocationEntity;
 import liquid.domain.LocationType;
-import liquid.persistence.repository.LocationRepository;
+import liquid.persistence.domain.LocationEntity;
+import liquid.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -28,17 +29,7 @@ public class LocationController {
     private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 
     @Autowired
-    private LocationRepository locationRepository;
-
-    @ModelAttribute("locations")
-    public Iterable<LocationEntity> populateLocations() {
-        return locationRepository.findAll();
-    }
-
-    @ModelAttribute("location")
-    public LocationEntity populateLocation() {
-        return new LocationEntity();
-    }
+    private LocationService locationService;
 
     @ModelAttribute("locationTypes")
     public LocationType[] populateLocationTypes() {
@@ -46,8 +37,29 @@ public class LocationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String init(Model model, Principal principal) {
-        return "location";
+    public String list(@RequestParam(required = false, defaultValue = "0") int number,
+                       Model model) {
+        int size = 10;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<LocationEntity> page = locationService.findAll(pageRequest);
+
+        model.addAttribute("page", page);
+        model.addAttribute("location", new LocationEntity());
+        return "location/list";
+    }
+
+    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    public String initNew(Model model) {
+        model.addAttribute("location", new LocationEntity());
+        return "location/form";
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String initEdit(@PathVariable Long id, Model model) {
+        logger.debug("id: {}", id);
+
+        model.addAttribute("location", locationService.find(id));
+        return "location/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -58,7 +70,7 @@ public class LocationController {
         if (bindingResult.hasErrors()) {
             return "location";
         } else {
-            locationRepository.save(locationEntity);
+            locationService.save(locationEntity);
             return "redirect:/location";
         }
     }

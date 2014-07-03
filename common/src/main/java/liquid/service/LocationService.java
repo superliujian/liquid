@@ -1,10 +1,12 @@
 package liquid.service;
 
+import liquid.persistence.domain.GoodsEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,15 +23,23 @@ public class LocationService {
     @Autowired
     private LocationRepository locationRepository;
 
-    public List<LocationEntity> findByType(int type) {
-        return locationRepository.findByType(type);
+    public Page<LocationEntity> findAll(Pageable pageable) {
+        return locationRepository.findAll(pageable);
     }
 
-    public LocationEntity find(long id) {
+    public LocationEntity save(LocationEntity goods) {
+        return locationRepository.save(goods);
+    }
+
+    public LocationEntity find(Long id) {
         return locationRepository.findOne(id);
     }
 
     public List<LocationEntity> findYards() {
         return findByType(LOCATION_YARD_TYPE);
+    }
+
+    public List<LocationEntity> findByType(int type) {
+        return locationRepository.findByType(type);
     }
 }

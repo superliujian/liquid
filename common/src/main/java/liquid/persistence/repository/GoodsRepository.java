@@ -1,9 +1,9 @@
 package liquid.persistence.repository;
 
+import liquid.persistence.PageRepository;
 import liquid.persistence.domain.GoodsEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
 
 /**
  * TODO: Comments.
@@ -12,6 +12,6 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 3:31 PM
  */
 
-public interface GoodsRepository extends CrudRepository<GoodsEntity, Long> {
+public interface GoodsRepository extends PageRepository<GoodsEntity> {
     Page<GoodsEntity> findAll(Pageable pageable);
 }

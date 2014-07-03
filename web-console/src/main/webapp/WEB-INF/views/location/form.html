@@ -15,7 +15,7 @@
     <![endif]-->
     
     <style>
-        div#goodsForm.container {
+        div#locationForm.container {
             max-width: 600px;
         }
     </style>    
@@ -28,10 +28,10 @@
 
 <br /><br />
 
-<div id="goodsForm" class="container">
-    <form action="/goods" method="POST" th:object="${goods}">
-        <div class="form-group" th:if="*{id}">
-             <label for="id" th:text="#{goods.id}">Id</label>
+<div id="locationForm" class="container">
+    <form action="/location" method="POST" th:object="${location}">
+        <div class="form-group" th:if="*{id}" >
+             <label for="id" th:text="#{location.id}">Id</label>
              <input type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
         </div>
     
@@ -44,8 +44,18 @@
                 <span th:errors="*{name}">error</span>
             </div>
         </div>
+        
+        <div class="form-group">
+            <label for="type" th:text="#{location.type}">Location Type</label>
 
-        <input type="submit" value="Add Cargo" class="btn btn-primary btn-block" th:attr="value=#{goods.add}"/>
+            <select th:field="*{type}" class="form-control">
+                <option th:each="locationType : ${locationTypes}"
+                    th:value="${locationType.type}" th:text="#{${locationType.i18nKey}}">Location Type
+                </option>
+            </select>
+        </div>        
+
+        <input type="submit" value="Add Location" class="btn btn-primary btn-block" name="add" th:value="#{location.add}"/>
     </form>
 </div><!-- form -->
 
