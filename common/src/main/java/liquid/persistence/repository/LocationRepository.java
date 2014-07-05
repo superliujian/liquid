@@ -2,6 +2,8 @@ package liquid.persistence.repository;
 
 import liquid.persistence.PageRepository;
 import liquid.persistence.domain.LocationEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,4 +15,6 @@ import java.util.List;
  */
 public interface LocationRepository extends PageRepository<LocationEntity> {
     List<LocationEntity> findByType(int type);
+
+    Page<LocationEntity> findByType(final Integer type, Pageable pageable);
 }

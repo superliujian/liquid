@@ -1,6 +1,5 @@
 package liquid.service;
 
-import liquid.persistence.domain.GoodsEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,10 @@ public class LocationService {
 
     public Page<LocationEntity> findAll(Pageable pageable) {
         return locationRepository.findAll(pageable);
+    }
+
+    public Page<LocationEntity> findAll(final Integer type, Pageable pageable) {
+        return locationRepository.findByType(type, pageable);
     }
 
     public LocationEntity save(LocationEntity goods) {
