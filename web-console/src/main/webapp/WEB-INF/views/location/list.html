@@ -35,7 +35,7 @@
         </button>
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=-1'" th:text="#{container.all.owners}">All Owners</a>
+                <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=-1'" th:text="#{location.type.all}">All Owners</a>
             </li>        
             <li th:each="locationType : ${locationTypes}">
                 <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=' + ${locationType.type}" th:text="#{${locationTypes[__${locationType.type}__].i18nKey}}">Location Type</a>
