@@ -1,4 +1,4 @@
-package liquid.service;
+package liquid.shipping.service;
 
 import liquid.shipping.persistence.domain.BargeContainer;
 import liquid.shipping.persistence.domain.RouteEntity;

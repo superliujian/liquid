@@ -1,11 +1,11 @@
 package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
-import liquid.dto.TruckDto;
+import liquid.shipping.domain.TruckDto;
 import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
-import liquid.metadata.TransMode;
+import liquid.shipping.domain.TransMode;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;
 import liquid.shipping.persistence.domain.RouteEntity;

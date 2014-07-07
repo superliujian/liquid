@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.dto.RailShippingDto;
+import liquid.shipping.domain.RailShippingDto;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;

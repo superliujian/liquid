@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.metadata.ChargeWay;
-import liquid.metadata.TransMode;
+import liquid.shipping.domain.TransMode;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.DeliveryContainerService;

@@ -32,48 +32,38 @@
             <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
         -->
         <li class="active" th:class="${tab} == 'container' ? 'active'">
-            <a th:href="'/order/' + ${order.id} + '/container'" th:text="#{container}">Container</a></li>         
+            <a th:href="'/order/' + ${order.id} + '/container'" th:text="#{container}">Container</a></li>        
     </ul>
-</div>
-<!-- /.container -->
+</div><!-- tab bar -->
 
 <br/>
 
 <div class="container">
-    <div class="panel panel-default">
+    <div class="panel panel-default" th:each="route : ${routes}">
+        <div class="panel-heading">
+            <span th:text="#{route} + ${route.id}">Route ID</span>
+            <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+        </div>
+
         <div class="panel-body">
-            <table class="table table-striped table-hover table-condensed table-16"
-                   sth:unless="${#lists.isEmpty(completedTasks)}">
+            <table class="table table-striped table-hover table-condensed table-16">
                 <thead>
                 <tr>
-                    <th th:text="#{task.id}">Task ID</th>
-                    <th th:text="#{task.name}">Task Name</th>
-                    <th th:text="#{task.description}">Task Description</th>
-                    <th th:text="#{task.owner}">Task Owner</th>
-                    <th th:text="#{task.start.time}">Start Time</th>
-                    <th th:text="#{task.claim.time}">Claim Time</th>
-                    <th th:text="#{task.end.time}">End Time</th>
+                    <th th:text="#{container.no}">Container No.</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="task : ${completedTasks}">
-                    <td th:text="${task.id}">Task ID</td>
-                    <td th:text="${task.name}"/>
-                    <td th:text="${task.description}">Task Description</td>
-                    <td th:text="${task.assignee}">Task Owner</td>
-                    <td th:text="${#dates.format(task.startTime, 'yyyy-MM-dd HH:mm')}">Start Time</td>
-                    <td th:text="${task.claimTime} ? ${#dates.format(task.claimTime, 'yyyy-MM-dd HH:mm')} : ''">Claim
-                        Time
-                    </td>
-                    <td th:text="${task.endTime} ? ${#dates.format(task.endTime, 'yyyy-MM-dd HH:mm')} : ''">End Time
+                <tr th:each="container : ${route.containers}">
+                    <td th:text="${container.container} ? ${container.container.bicCode} : ${container.bicCode}">
+                        Container No.
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-</div>
-<!-- /.container -->
+
+</div><!-- container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>

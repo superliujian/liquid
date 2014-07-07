@@ -5,6 +5,9 @@ import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.RailContainerRepository;
 import liquid.shipping.persistence.repository.RouteRepository;
 import liquid.shipping.persistence.repository.ShippingContainerRepository;
+import liquid.shipping.service.BargeContainerService;
+import liquid.shipping.service.RailContainerService;
+import liquid.shipping.service.VesselContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +52,7 @@ public class RouteService {
     private ShippingContainerRepository scRepository;
 
     public List<RouteEntity> findByTaskId(String taskId) {
-        Planning planning = planningService.findByTaskId(taskId);
+        PlanningEntity planning = planningService.findByTaskId(taskId);
         List<RouteEntity> routes = planning.getRoutes();
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = legRepository.findByRoute(route);
@@ -68,7 +71,7 @@ public class RouteService {
         return routes;
     }
 
-    public Collection<RouteEntity> findByPlanning(Planning planning) {
+    public Collection<RouteEntity> findByPlanning(PlanningEntity planning) {
         if (planning == null) {
             return Collections.EMPTY_LIST;
         }
@@ -106,7 +109,7 @@ public class RouteService {
     }
 
     @Transactional("transactionManager")
-    public RouteEntity save(RouteEntity formBean, Planning planning) {
+    public RouteEntity save(RouteEntity formBean, PlanningEntity planning) {
         formBean.setPlanning(planning);
         RouteEntity route = routeRepository.save(formBean);
         return route;

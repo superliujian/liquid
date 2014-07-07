@@ -2,8 +2,8 @@ package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.dto.EarningDto;
-import liquid.dto.TaskBadgeDto;
-import liquid.dto.TaskDto;
+import liquid.shipping.domain.TaskBadgeDto;
+import liquid.shipping.domain.TaskDto;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;

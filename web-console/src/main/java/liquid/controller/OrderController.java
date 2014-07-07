@@ -14,7 +14,9 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.domain.TransMode;
+import liquid.shipping.persistence.domain.PlanningEntity;
+import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +80,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
+
+    @Autowired
+    private ShippingContainerService shippingContainerService;
 
     @Autowired
     private OrderFacade orderFacade;
@@ -284,7 +290,7 @@ public class OrderController extends BaseController {
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        Planning planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
+        PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         routeService.findByPlanning(planning);
 
         // TODO: move to an appropriate place
@@ -315,6 +321,10 @@ public class OrderController extends BaseController {
                 model.addAttribute("serviceSubtypes", serviceSubtypes);
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
+                break;
+            case "container":
+                Collection<RouteEntity> routes = shippingContainerService.findByOrderId(id);
+                model.addAttribute("routes", routes);
                 break;
             default:
                 tab = "detail";

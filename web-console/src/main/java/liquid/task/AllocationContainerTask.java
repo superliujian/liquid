@@ -1,7 +1,7 @@
 package liquid.task;
 
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class AllocationContainerTask extends AbstractTaskProxy {
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Planning planning = planningService.findByOrder(order);
+        PlanningEntity planning = planningService.findByOrder(order);
         Collection<RouteEntity> routes = routeService.findByPlanning(planning);
         int allocatedContainerQty = 0;
 

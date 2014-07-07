@@ -1,4 +1,4 @@
-package liquid.dto;
+package liquid.shipping.domain;
 
 import liquid.util.DatePattern;
 import liquid.validation.constraints.DateFormat;
