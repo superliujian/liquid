@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.domain.LocationType;
-import liquid.metadata.TransMode;
+import liquid.shipping.domain.TransMode;
 import liquid.persistence.domain.*;
 import liquid.persistence.repository.*;
 import liquid.shipping.persistence.domain.LegEntity;

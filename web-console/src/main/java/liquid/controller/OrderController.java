@@ -14,6 +14,7 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
+import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.Planning;
 import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -315,6 +316,10 @@ public class OrderController extends BaseController {
                 model.addAttribute("serviceSubtypes", serviceSubtypes);
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
+                break;
+            case "container":
+
+
                 break;
             default:
                 tab = "detail";

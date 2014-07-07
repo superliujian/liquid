@@ -4,7 +4,7 @@ import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.domain.Charge;
 import liquid.facade.ChargeFacade;
 import liquid.metadata.ChargeWay;
-import liquid.metadata.TransMode;
+import liquid.shipping.domain.TransMode;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;

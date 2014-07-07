@@ -1,9 +1,7 @@
 package liquid.controller;
 
-import liquid.dto.TaskDto;
+import liquid.shipping.domain.TaskDto;
 import liquid.service.TaskService;
-import liquid.service.bpm.ActivitiEngineService;
-import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;

@@ -31,6 +31,8 @@
         <li class="active" th:class="${tab} == 'charge' ? 'active'">
             <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
         -->
+        <li class="active" th:class="${tab} == 'container' ? 'active'">
+            <a th:href="'/order/' + ${order.id} + '/container'" th:text="#{container}">Container</a></li>         
     </ul>
 </div>
 <!-- /.container -->

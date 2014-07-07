@@ -1,7 +1,7 @@
 package liquid.service;
 
-import liquid.dto.TaskBadgeDto;
-import liquid.dto.TaskDto;
+import liquid.shipping.domain.TaskBadgeDto;
+import liquid.shipping.domain.TaskDto;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.bpm.ActivitiEngineService;
@@ -33,15 +33,6 @@ public class TaskService {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private PlanningService planningService;
-
-    @Autowired
-    private RouteService routeService;
-
-    @Autowired
-    private ShippingContainerService scService;
 
     @Autowired
     protected MessageSource messageSource;

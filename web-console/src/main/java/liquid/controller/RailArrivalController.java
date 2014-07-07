@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.dto.RailArrivalDto;
+import liquid.shipping.domain.RailArrivalDto;
 import liquid.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
