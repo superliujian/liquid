@@ -29,9 +29,9 @@
 <br />
 
 <div class="container">
-    <div class="alert alert-danger" role="alert">
+    <div th:if="${alert}" class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <span>Alert</span>
+        <span th:text="${alert}">Alert</span>
     </div>
 </div>
 

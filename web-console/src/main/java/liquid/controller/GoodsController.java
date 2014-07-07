@@ -57,14 +57,20 @@ public class GoodsController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute("goods") GoodsEntity goods,
-                         BindingResult bindingResult) {
+                         BindingResult bindingResult, Model model) {
         logger.debug("Goods: {}", goods);
 
         if (bindingResult.hasErrors()) {
             return "goods/form";
         } else {
-            goodsService.save(goods);
-            return "redirect:/goods";
+            try {
+                goodsService.save(goods);
+                return "redirect:/goods";
+            } catch (Exception e) {
+                logger.warn(e.getMessage(), e);
+                model.addAttribute("alert", "duplicated key");
+                return "goods/form";
+            }
         }
     }
 }
