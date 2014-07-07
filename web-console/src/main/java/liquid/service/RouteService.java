@@ -52,7 +52,7 @@ public class RouteService {
     private ShippingContainerRepository scRepository;
 
     public List<RouteEntity> findByTaskId(String taskId) {
-        Planning planning = planningService.findByTaskId(taskId);
+        PlanningEntity planning = planningService.findByTaskId(taskId);
         List<RouteEntity> routes = planning.getRoutes();
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = legRepository.findByRoute(route);
@@ -71,7 +71,7 @@ public class RouteService {
         return routes;
     }
 
-    public Collection<RouteEntity> findByPlanning(Planning planning) {
+    public Collection<RouteEntity> findByPlanning(PlanningEntity planning) {
         if (planning == null) {
             return Collections.EMPTY_LIST;
         }
@@ -109,7 +109,7 @@ public class RouteService {
     }
 
     @Transactional("transactionManager")
-    public RouteEntity save(RouteEntity formBean, Planning planning) {
+    public RouteEntity save(RouteEntity formBean, PlanningEntity planning) {
         formBean.setPlanning(planning);
         RouteEntity route = routeRepository.save(formBean);
         return route;

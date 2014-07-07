@@ -16,7 +16,7 @@ import java.util.Collection;
 public class RouteEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "PLANNING_ID")
-    private Planning planning;
+    private PlanningEntity planning;
 
     @Transient
     private int containerQtyMax;
@@ -49,11 +49,11 @@ public class RouteEntity extends BaseUpdateEntity {
     @Transient
     private boolean batch;
 
-    public Planning getPlanning() {
+    public PlanningEntity getPlanning() {
         return planning;
     }
 
-    public void setPlanning(Planning planning) {
+    public void setPlanning(PlanningEntity planning) {
         this.planning = planning;
     }
 

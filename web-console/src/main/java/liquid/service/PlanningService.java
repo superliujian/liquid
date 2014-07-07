@@ -5,7 +5,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.bpm.ActivitiEngineService;
 import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.PlanningRepository;
@@ -49,14 +49,14 @@ public class PlanningService {
     private LegRepository legRepository;
 
     public void editPlanning(String taskId, long planningId, boolean sameRoute) {
-        Planning oldOne = planningRepository.findOne(planningId);
+        PlanningEntity oldOne = planningRepository.findOne(planningId);
         oldOne.setSameRoute(sameRoute);
         planningRepository.save(oldOne);
     }
 
     @Transactional("transactionManager")
-    public Planning findOne(Long id) {
-        Planning planning = planningRepository.findOne(id);
+    public PlanningEntity findOne(Long id) {
+        PlanningEntity planning = planningRepository.findOne(id);
         if (null != planning) {
             List<RouteEntity> routes = planning.getRoutes();
             for (RouteEntity route : routes) { }
@@ -98,7 +98,7 @@ public class PlanningService {
     }
 
     @Transactional(value = "transactionManager")
-    public Planning findByTaskId(String taskId) {
+    public PlanningEntity findByTaskId(String taskId) {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
         return findByOrder(order);
     }
@@ -111,8 +111,8 @@ public class PlanningService {
     }
 
     @Transactional(value = "transactionManager")
-    public Planning findByOrder(OrderEntity order) {
-        Planning planning = planningRepository.findByOrder(order);
+    public PlanningEntity findByOrder(OrderEntity order) {
+        PlanningEntity planning = planningRepository.findByOrder(order);
         if (null != planning) {
             List<RouteEntity> routes = planning.getRoutes();
             for (RouteEntity route : routes) { }

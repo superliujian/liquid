@@ -3,7 +3,6 @@ package liquid.service;
 import liquid.container.domain.ContainerStatus;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.service.ContainerService;
-import liquid.shipping.domain.TransMode;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceProviderEntity;
@@ -69,9 +68,14 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     }
 
+    public Collection<RouteEntity> findByOrderId(Long orderId) {
+        PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
+        return routeService.findByPlanning(planning);
+    }
+
     @Transactional("transactionManager")
     public void initialize(String taskId) {
-        Planning planning = planningService.findByTaskId(taskId);
+        PlanningEntity planning = planningService.findByTaskId(taskId);
         Collection<RouteEntity> routes = routeService.findByPlanning(planning);
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> containers = route.getContainers();

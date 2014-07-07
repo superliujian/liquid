@@ -11,7 +11,7 @@ import liquid.order.service.OrderService;
 import liquid.service.PlanningService;
 import liquid.service.RouteService;
 import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.PlanningRepository;
@@ -77,10 +77,10 @@ public class PlanningController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Planning planning = planningService.findByTaskId(taskId);
+        PlanningEntity planning = planningService.findByTaskId(taskId);
 
         if (null == planning) {
-            planning = new Planning();
+            planning = new PlanningEntity();
             model.addAttribute("planning", planning);
             model.addAttribute("route", new RouteEntity());
             return "planning/main";
@@ -98,7 +98,7 @@ public class PlanningController extends BaseTaskController {
         logger.debug("planningId: {}", planningId);
 
         int containerUsage = 0;
-        Planning planning = planningService.findOne(Long.valueOf(planningId));
+        PlanningEntity planning = planningService.findOne(Long.valueOf(planningId));
         for (RouteEntity route : planning.getRoutes()) {
             containerUsage += route.getContainerQty();
             Collection<LegEntity> legs = legRepository.findByRoute(route);
@@ -120,13 +120,13 @@ public class PlanningController extends BaseTaskController {
 
     @RequestMapping(method = RequestMethod.POST, params = "createPlanning")
     public String createPlanning(@PathVariable String taskId,
-                                 @ModelAttribute("planning") Planning planning,
+                                 @ModelAttribute("planning") PlanningEntity planning,
                                  Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
         OrderEntity order = orderService.find(taskService.getOrderIdByTaskId(taskId));
         planning.setOrder(order);
-        Planning newOne = planningRepository.save(planning);
+        PlanningEntity newOne = planningRepository.save(planning);
         model.addAttribute("planning", newOne);
         return "redirect:/task/" + taskId + "/planning/" + newOne.getId();
     }
@@ -177,7 +177,7 @@ public class PlanningController extends BaseTaskController {
         logger.debug("planningId: {}", planningId);
         logger.debug("route: {}", route);
 
-        Planning planning = planningService.findOne(Long.valueOf(planningId));
+        PlanningEntity planning = planningService.findOne(Long.valueOf(planningId));
 
         int containerUsage = 0;
         Collection<RouteEntity> routes = planning.getRoutes();

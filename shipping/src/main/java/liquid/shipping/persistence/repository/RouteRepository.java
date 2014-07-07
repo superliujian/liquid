@@ -1,6 +1,6 @@
 package liquid.shipping.persistence.repository;
 
-import liquid.shipping.persistence.domain.Planning;
+import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,5 +13,5 @@ import java.util.Collection;
  * Time: 12:18 AM
  */
 public interface RouteRepository extends CrudRepository<RouteEntity, Long> {
-    Collection<RouteEntity> findByPlanning(Planning planning);
+    Collection<RouteEntity> findByPlanning(PlanningEntity planning);
 }

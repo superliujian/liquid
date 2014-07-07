@@ -13,7 +13,7 @@ import java.util.List;
  * Time: 11:53 AM
  */
 @Entity(name = "PLANNING")
-public class Planning extends BaseUpdateEntity {
+public class PlanningEntity extends BaseUpdateEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;
@@ -24,7 +24,7 @@ public class Planning extends BaseUpdateEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "planning")
     private List<RouteEntity> routes;
 
-    public Planning() {
+    public PlanningEntity() {
     }
 
     public OrderEntity getOrder() {
