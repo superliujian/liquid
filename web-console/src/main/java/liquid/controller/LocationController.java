@@ -1,6 +1,8 @@
 package liquid.controller;
 
+import liquid.domain.Location;
 import liquid.domain.LocationType;
+import liquid.facade.LocationFacade;
 import liquid.persistence.domain.LocationEntity;
 import liquid.service.LocationService;
 import org.slf4j.Logger;
@@ -15,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 /**
  * TODO: Comments.
@@ -30,6 +31,9 @@ public class LocationController {
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private LocationFacade locationFacade;
 
     @ModelAttribute("locationTypes")
     public LocationType[] populateLocationTypes() {
@@ -57,8 +61,27 @@ public class LocationController {
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String initNew(Model model) {
-        model.addAttribute("location", new LocationEntity());
+        model.addAttribute("location", new Location());
         return "location/form";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String add(@Valid @ModelAttribute Location location,
+                      BindingResult bindingResult, Model model) {
+        logger.debug("location: {}", location);
+
+        if (bindingResult.hasErrors()) {
+            return "location/form";
+        } else {
+            try {
+                locationFacade.save(location);
+                return "redirect:/location";
+            } catch (Exception e) {
+                logger.warn(e.getMessage(), e);
+                model.addAttribute("alert", "duplicated key");
+                return "location/form";
+            }
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -66,18 +89,18 @@ public class LocationController {
         logger.debug("id: {}", id);
 
         model.addAttribute("location", locationService.find(id));
-        return "location/form";
+        return "location/edit";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String add(@Valid @ModelAttribute LocationEntity locationEntity,
-                      BindingResult bindingResult, Principal principal) {
-        logger.debug("location: {}", locationEntity);
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String edit(@Valid @ModelAttribute LocationEntity location,
+                       BindingResult bindingResult) {
+        logger.debug("location: {}", location);
 
         if (bindingResult.hasErrors()) {
-            return "location";
+            return "location/edit";
         } else {
-            locationService.save(locationEntity);
+            locationService.save(location);
             return "redirect:/location";
         }
     }

@@ -1,10 +1,9 @@
 package liquid.persistence.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * TODO: Comments.
@@ -13,15 +12,21 @@ import javax.validation.constraints.NotNull;
  * Time: 10:33 AM
  */
 @Entity(name = "LOCATION")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME", "TYPE"})})
 public class LocationEntity extends BaseUpdateEntity {
 
-    @NotNull
-    @NotEmpty
     @Column(name = "NAME")
     private String name;
 
     @Column(name = "TYPE")
     private int type;
+
+    public LocationEntity() { }
+
+    public LocationEntity(String name, int type) {
+        this.name = name;
+        this.type = type;
+    }
 
     public String getName() {
         return name;
@@ -41,9 +46,9 @@ public class LocationEntity extends BaseUpdateEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Location{");
-        sb.append("name='").append(name).append('\'');
+        final StringBuilder sb = new StringBuilder("LocationEntity{");
+        sb.append("super=").append(super.toString());
+        sb.append(", name='").append(name).append('\'');
         sb.append(", type=").append(type);
         sb.append('}');
         return sb.toString();

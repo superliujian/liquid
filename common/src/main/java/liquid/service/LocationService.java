@@ -16,7 +16,7 @@ import java.util.List;
  * Time: 4:59 PM
  */
 @Service
-public class LocationService {
+public class LocationService extends AbstractService<LocationEntity, LocationRepository> {
     private static final int LOCATION_YARD_TYPE = 3;
 
     @Autowired
@@ -30,9 +30,8 @@ public class LocationService {
         return locationRepository.findByType(type, pageable);
     }
 
-    public LocationEntity save(LocationEntity goods) {
-        return locationRepository.save(goods);
-    }
+    @Override
+    public void doSaveBefore(LocationEntity entity) { }
 
     public LocationEntity find(Long id) {
         return locationRepository.findOne(id);
