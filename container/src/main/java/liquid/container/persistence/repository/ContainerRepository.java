@@ -26,4 +26,6 @@ public interface ContainerRepository extends CrudRepository<ContainerEntity, Lon
     Page<ContainerEntity> findAll(Pageable pageable);
 
     Page<ContainerEntity> findAll(Specification<ContainerEntity> specification, Pageable pageable);
+
+    Iterable<ContainerEntity> findByBicCodeLike(String name);
 }

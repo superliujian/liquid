@@ -161,7 +161,9 @@ public class OrderFacade {
         order.setCustomerName(orderEntity.getCustomer().getName());
         order.setTradeType(orderEntity.getTradeType());
         order.setOriginId(orderEntity.getSrcLoc().getId());
+        order.setOrigination(orderEntity.getSrcLoc().getName());
         order.setDestinationId(orderEntity.getDstLoc().getId());
+        order.setDestination(orderEntity.getDstLoc().getName());
         order.setConsignee(orderEntity.getConsignee());
         order.setConsigneePhone(orderEntity.getConsigneePhone());
         order.setConsigneeAddress(orderEntity.getConsigneeAddress());

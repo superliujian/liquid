@@ -9,6 +9,9 @@ import liquid.container.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by redbrick9 on 5/24/14.
  */
@@ -31,4 +34,18 @@ public class ContainerFacade {
     }
 
     public void leave(Container container) {}
+
+    public List<Container> findByBicCodeLike(String bicCode) {
+        List<Container> containers = new ArrayList<Container>();
+
+        Iterable<ContainerEntity> entities = containerService.findByBicCodeLike(bicCode);
+        for (ContainerEntity entity : entities) {
+            Container container = new Container();
+            container.setId(entity.getId());
+            container.setBicCode(entity.getBicCode());
+            containers.add(container);
+        }
+
+        return containers;
+    }
 }

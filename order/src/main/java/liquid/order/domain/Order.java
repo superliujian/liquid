@@ -22,7 +22,15 @@ public class Order extends BaseIdObject {
     private String customerName;
     private int tradeType;
     private long originId;
+
+    @NotNull
+    @NotEmpty
+    private String origination;
     private long destinationId;
+
+    @NotNull
+    @NotEmpty
+    private String destination;
     private String consignee;
     private String consigneePhone;
     private String consigneeAddress;
@@ -102,8 +110,24 @@ public class Order extends BaseIdObject {
         this.originId = originId;
     }
 
+    public String getOrigination() {
+        return origination;
+    }
+
+    public void setOrigination(String origination) {
+        this.origination = origination;
+    }
+
     public long getDestinationId() {
         return destinationId;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     public void setDestinationId(long destinationId) {
@@ -272,7 +296,9 @@ public class Order extends BaseIdObject {
         sb.append(", customerName='").append(customerName).append('\'');
         sb.append(", tradeType=").append(tradeType);
         sb.append(", originId=").append(originId);
+        sb.append(", origination='").append(origination).append('\'');
         sb.append(", destinationId=").append(destinationId);
+        sb.append(", destination='").append(destination).append('\'');
         sb.append(", consignee='").append(consignee).append('\'');
         sb.append(", consigneePhone='").append(consigneePhone).append('\'');
         sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');

@@ -1,14 +1,14 @@
 package liquid.container.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import liquid.container.domain.ContainerStatus;
+import liquid.container.domain.ExcelFileInfo;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.persistence.domain.ContainerEntity_;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.persistence.repository.ContainerRepository;
-import liquid.container.domain.ExcelFileInfo;
 import liquid.excel.AbstractExcelService;
 import liquid.excel.RowMapper;
-import liquid.container.domain.ContainerStatus;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -382,5 +383,11 @@ public class ContainerService {
             }
         }
         return null;
+    }
+
+    @Transactional("transactionManager")
+    public Iterable<ContainerEntity> findByBicCodeLike(String bicCode) {
+        Iterable<ContainerEntity> containers = containerRepository.findByBicCodeLike("%" + bicCode + "%");
+        return containers;
     }
 }
