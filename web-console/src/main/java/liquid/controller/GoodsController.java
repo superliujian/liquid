@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -23,7 +24,7 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping("/goods")
-public class GoodsController {
+public class GoodsController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(GoodsEntity.class);
 
     @Autowired
@@ -68,7 +69,7 @@ public class GoodsController {
                 return "redirect:/goods";
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
-                model.addAttribute("alert", "duplicated key");
+                model.addAttribute("alert", messageSource.getMessage("duplicated.key", new String[]{}, Locale.CHINA));
                 return "goods/form";
             }
         }

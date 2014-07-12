@@ -28,6 +28,13 @@
 
 <br /><br />
 
+<div class="container">
+    <div th:if="${alert}" class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <span th:text="${alert}">Alert</span>
+    </div>
+</div>
+
 <div id="locationForm" class="container">
     <form th:action="'/location/' + ${location.id}" method="POST" th:object="${location}">        
         <div class="form-group">

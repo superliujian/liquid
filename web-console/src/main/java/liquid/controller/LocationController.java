@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -26,7 +27,7 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping("/location")
-public class LocationController {
+public class LocationController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 
     @Autowired
@@ -78,7 +79,7 @@ public class LocationController {
                 return "redirect:/location";
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
-                model.addAttribute("alert", "duplicated key");
+                model.addAttribute("alert", messageSource.getMessage("duplicated.key", new String[]{}, Locale.CHINA));
                 return "location/form";
             }
         }
@@ -93,15 +94,21 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String edit(@Valid @ModelAttribute LocationEntity location,
-                       BindingResult bindingResult) {
+    public String edit(@Valid @ModelAttribute("location") LocationEntity location,
+                       BindingResult bindingResult, Model model) {
         logger.debug("location: {}", location);
 
         if (bindingResult.hasErrors()) {
             return "location/edit";
         } else {
-            locationService.save(location);
-            return "redirect:/location";
+            try {
+                locationService.save(location);
+                return "redirect:/location";
+            } catch (Exception e) {
+                logger.warn(e.getMessage(), e);
+                model.addAttribute("alert", messageSource.getMessage("duplicated.key", new String[]{}, Locale.CHINA));
+                return "location/edit";
+            }
         }
     }
 }
