@@ -80,7 +80,7 @@
                         <a href="/sp" th:text="#{sp}">SP</a>
                     </li>
                     <li class="dropdown"
-                        sec:authorize="hasAnyRole('ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_COMMERCE')">
+                        sec:authorize="hasAnyRole('ROLE_MARKETING', 'ROLE_CONTAINER', 'ROLE_OPERATING', 'ROLE_COMMERCE')">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span th:text="#{data.dict}">Data Dict</span><b class="caret"></b>
                         </a>
