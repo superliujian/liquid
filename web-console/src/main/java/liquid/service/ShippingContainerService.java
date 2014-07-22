@@ -64,9 +64,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     private ServiceProviderService serviceProviderService;
 
     @Override
-    public void doSaveBefore(ShippingContainerEntity entity) {
-
-    }
+    public void doSaveBefore(ShippingContainerEntity entity) { }
 
     public Collection<RouteEntity> findByOrderId(Long orderId) {
         PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, orderId));

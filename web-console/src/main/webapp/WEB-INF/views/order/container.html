@@ -50,6 +50,9 @@
                 <thead>
                 <tr>
                     <th th:text="#{container.no}">Container No.</th>
+                    <th th:text="#{container.type}"></th>
+                    <th th:text="#{container.subtype}">Subtype</th>
+                    <th th:text="#{container.owner}">Owner</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,6 +60,9 @@
                     <td th:text="${container.container} ? ${container.container.bicCode} : ${container.bicCode}">
                         Container No.
                     </td>
+                    <td th:text="#{${containerTypeMap[order.containerType]}}"></td>
+                    <td th:text="${container.container} ? ${container.container.subtype.name} : ${container.bicCode}"></td>
+                    <td th:text="${container.container} ? ${container.container.owner.name} : ''"></td>
                 </tr>
                 </tbody>
             </table>
