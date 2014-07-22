@@ -10,5 +10,6 @@ import java.util.Map;
 @Service
 public class CommonTask extends AbstractTaskProxy {
     @Override
-    public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {}
+    public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
+    }
 }

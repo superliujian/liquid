@@ -17,23 +17,28 @@ import java.util.Map;
 @DefinitionKey("allocateContainers")
 @Service
 public class AllocationContainerTask extends AbstractTaskProxy {
-
     @Override
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
         PlanningEntity planning = planningService.findByOrder(order);
         Collection<RouteEntity> routes = routeService.findByPlanning(planning);
-        int allocatedContainerQty = 0;
+        int shippingContainerQuantity = 0;
+        int allocatedContainerQuantity = 0;
 
         // TODO: This is temp solution for dual-allocated containers.
         List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scs = shippingContainerService.findByRoute(route);
-            allocatedContainerQty += scs.size();
+            shippingContainerQuantity += scs.size();
+            for (ShippingContainerEntity shippingContainer : scs) {
+                if (null != shippingContainer.getContainer() || null != shippingContainer.getBicCode()) {
+                    allocatedContainerQuantity++;
+                }
+            }
 
             // TODO: This is temp solution for dual-allocated containers.
-            for (int i = 0; i < route.getContainerQty() - scs.size(); i++) {
+            for (int i = 0; i < route.getContainerQty() - shippingContainerQuantity; i++) {
                 ShippingContainerEntity shippingContainer = new ShippingContainerEntity();
                 shippingContainer.setRoute(route);
                 shippingContainers.add(shippingContainer);
@@ -41,8 +46,9 @@ public class AllocationContainerTask extends AbstractTaskProxy {
         }
         // TODO: This is temp solution for dual-allocated containers.
         shippingContainerService.save(shippingContainers);
-//        if (allocatedContainerQty != order.getContainerQty()) {
-//            throw new NotCompletedException("container.allocation.is.not.completed");
-//        }
+
+        if (allocatedContainerQuantity != order.getContainerQty()) {
+            throw new NotCompletedException("container.allocation.is.not.completed");
+        }
     }
 }
