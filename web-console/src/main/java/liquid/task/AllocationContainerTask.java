@@ -24,18 +24,12 @@ public class AllocationContainerTask extends AbstractTaskProxy {
         PlanningEntity planning = planningService.findByOrder(order);
         Collection<RouteEntity> routes = routeService.findByPlanning(planning);
         int shippingContainerQuantity = 0;
-        int allocatedContainerQuantity = 0;
 
         // TODO: This is temp solution for dual-allocated containers.
         List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scs = shippingContainerService.findByRoute(route);
             shippingContainerQuantity += scs.size();
-            for (ShippingContainerEntity shippingContainer : scs) {
-                if (null != shippingContainer.getContainer() || null != shippingContainer.getBicCode()) {
-                    allocatedContainerQuantity++;
-                }
-            }
 
             // TODO: This is temp solution for dual-allocated containers.
             for (int i = 0; i < route.getContainerQty() - shippingContainerQuantity; i++) {
@@ -46,9 +40,5 @@ public class AllocationContainerTask extends AbstractTaskProxy {
         }
         // TODO: This is temp solution for dual-allocated containers.
         shippingContainerService.save(shippingContainers);
-
-        if (allocatedContainerQuantity != order.getContainerQty()) {
-            throw new NotCompletedException("container.allocation.is.not.completed");
-        }
     }
 }

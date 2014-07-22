@@ -40,7 +40,7 @@
 <div id="order" class="container">
 <form id="orderForm" action="/order" method="POST" th:object="${order}" class="center">
 <div class="panel panel-default">
-<div class="panel-heading" th:text="#{order.basic.info}">Order Basic Info</div>
+<div class="panel-heading" th:text="#{order.basic.info} + '[' + *{orderNo} + ']'">Order Basic Info</div>
 <div class="panel-body">
 
 <div class="row">
