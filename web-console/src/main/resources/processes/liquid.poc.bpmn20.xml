@@ -101,7 +101,7 @@
 
         <parallelGateway id="loadByTruckAndRailwayPlanFork" name="外拖同时申报铁路计划"/>
         <sequenceFlow id="flow110" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="applyRailwayPlan"/>
-        <sequenceFlow id="flow120" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="sendingTruckDecision"/>
+        <sequenceFlow id="flow120" sourceRef="loadByTruckAndRailwayPlanFork" targetRef="sendTruck"/>
 
         <userTask id="loadOnYard" name="场装作业">
             <documentation>
@@ -115,6 +115,20 @@
         </userTask>
         <sequenceFlow id="flow130" sourceRef="loadOnYard" targetRef="recordTory"/>
 
+        <userTask id="sendTruck" name="派车">
+            <documentation>
+                ${employeeName}已经在${endTime}发布外托指令。您需要派车。
+            </documentation>
+
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>${orderOwner}</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <sequenceFlow id="flow140" sourceRef="sendTruck" targetRef="loadByTruck"/>
+
+        <!--
         <exclusiveGateway id="sendingTruckDecision" name="派车决策"/>
         <sequenceFlow id="flow140" sourceRef="sendingTruckDecision" targetRef="salesSendingTruck">
             <conditionExpression xsi:type="tFormalExpression">${truckingRole == 'SALES'}</conditionExpression>
@@ -122,6 +136,7 @@
         <sequenceFlow id="flow150" sourceRef="sendingTruckDecision" targetRef="marketingSendingTruck">
             <conditionExpression xsi:type="tFormalExpression">${truckingRole == 'MARKETING'}</conditionExpression>
         </sequenceFlow>
+
 
         <userTask id="salesSendingTruck" name="销售派车">
             <documentation>
@@ -142,6 +157,7 @@
             </extensionElements>
         </userTask>
         <sequenceFlow id="flow170" sourceRef="marketingSendingTruck" targetRef="loadByTruck"/>
+        -->
 
         <userTask id="loadByTruck" name="外拖作业">
             <documentation>

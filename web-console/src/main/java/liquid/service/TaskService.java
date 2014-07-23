@@ -122,6 +122,7 @@ public class TaskService {
                 return "/task/" + task.getId() + "/rail_plan";
             case "loadOnYard":
             case "loadByTruck":
+            case "sendTruck":
             case "salesSendingTruck":
             case "marketingSendingTruck":
                 return "/task/" + task.getId() + "/rail_truck";
