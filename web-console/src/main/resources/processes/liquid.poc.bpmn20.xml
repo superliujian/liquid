@@ -339,11 +339,18 @@
             <documentation>
                 您需要催收款。
             </documentation>
+            <!--
             <potentialOwner>
                 <resourceAssignmentExpression>
                     <formalExpression>ROLE_SALES</formalExpression>
                 </resourceAssignmentExpression>
             </potentialOwner>
+            -->
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>${orderOwner}</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
         </userTask>
         <sequenceFlow id="flow440" sourceRef="return" targetRef="confirmIncomeSettlement"/>
 
