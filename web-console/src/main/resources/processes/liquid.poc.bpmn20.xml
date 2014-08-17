@@ -37,11 +37,20 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow20" sourceRef="planRoute" targetRef="planLoading"/>
+        <sequenceFlow id="flow20" sourceRef="planRoute" targetRef="bookingShippingSpaceDecision"/>
 
-        <userTask id="planLoading" name="制定装载方案">
+        <exclusiveGateway id="bookingShippingSpaceDecision" name="订舱操作决策"/>
+        <sequenceFlow id="flow24" sourceRef="bookingShippingSpaceDecision" targetRef="allocateContainers">
+            <conditionExpression xsi:type="tFormalExpression">${hasWaterTransport == false}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow26" sourceRef="bookingShippingSpaceDecision" targetRef="bookingShippingSpace">
+            <conditionExpression xsi:type="tFormalExpression">${hasWaterTransport == true}</conditionExpression>
+        </sequenceFlow>
+
+        <!-- planLoading -->
+        <userTask id="bookingShippingSpace" name="订舱操作">
             <documentation>
-                ${employeeName}已经在${endTime}制定运输路线方案。您需要制定装载方案。
+                ${employeeName}已经在${endTime}制定运输路线方案。您需要订舱操作。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>
@@ -49,11 +58,11 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow30" sourceRef="planLoading" targetRef="allocateContainers"/>
+        <sequenceFlow id="flow30" sourceRef="bookingShippingSpace" targetRef="allocateContainers"/>
 
         <userTask id="allocateContainers" name="分配集装箱">
             <documentation>
-                ${employeeName}已经在${endTime}制定制定装载方案。您需要分配集装箱。
+                您需要分配集装箱。
             </documentation>
             <potentialOwner>
                 <resourceAssignmentExpression>

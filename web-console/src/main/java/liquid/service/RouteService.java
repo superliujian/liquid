@@ -1,5 +1,6 @@
 package liquid.service;
 
+import liquid.order.persistence.domain.OrderEntity;
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.RailContainerRepository;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -53,6 +56,26 @@ public class RouteService {
 
     public List<RouteEntity> findByTaskId(String taskId) {
         PlanningEntity planning = planningService.findByTaskId(taskId);
+        List<RouteEntity> routes = planning.getRoutes();
+        for (RouteEntity route : routes) {
+            Collection<LegEntity> legs = legRepository.findByRoute(route);
+            route.setLegs(legs);
+            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
+            route.setContainers(containers);
+            Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
+            route.setRailContainers(railContainers);
+            Collection<BargeContainer> bargeContainers = bargeContainerService.findByRoute(route);
+            route.setBargeContainers(bargeContainers);
+            Collection<VesselContainer> vesselContainers = vesselContainerService.findByRoute(route);
+            route.setVesselContainers(vesselContainers);
+            Collection<DeliveryContainer> deliveryContainers = deliveryContainerService.findByRoute(route);
+            route.setDeliveryContainers(deliveryContainers);
+        }
+        return routes;
+    }
+
+    public List<RouteEntity> findByOrderId(Long orderId) {
+        PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
         List<RouteEntity> routes = planning.getRoutes();
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = legRepository.findByRoute(route);

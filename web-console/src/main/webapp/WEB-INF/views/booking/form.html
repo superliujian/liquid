@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<br/>
+
+<div class="container">
+    <div th:if="${alert}" class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <span th:text="${alert}">Alert</span>
+    </div>
+</div>
+
+<div class="container" th:if="${task.assignee}">    
+    <form method="POST" th:object="${booking}" th:action="'/task/' + ${taskId} + '/booking'">
+          
+        <table class="table table-striped table-hover table-condensed table-16">
+            <thead>
+            <tr>
+                <th></th>
+                <th th:text="#{destination}">Destination</th>
+                <th th:text="#{container.quantity}">Container Quantity</th>
+                <th th:text="#{shipowner}">Shiponwer</th>
+                <th th:text="#{booking.no}">Booking No.</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="bookingItem, rowStat : *{bookingItems}">
+                <td>
+                    <input type="hidden" th:field="*{bookingItems[__${rowStat.index}__].id}" />
+                    <input type="hidden" th:field="*{bookingItems[__${rowStat.index}__].legId}" />                    
+                </td>
+                <td th:text="*{bookingItems[__${rowStat.index}__].source} + '-' + *{bookingItems[__${rowStat.index}__].destination}" />
+                <td th:text="*{bookingItems[__${rowStat.index}__].containerQuantity}" />
+                <td>
+                    <select th:field="*{bookingItems[__${rowStat.index}__].shipownerId}" class="form-control">
+                        <option th:each="shipowner : ${shipowners}"
+                                th:value="${shipowner.id}"
+                                th:text="${shipowner.name}">Shipowner Name
+                        </option>
+                    </select>                    
+                </td>
+                <td>
+                    <input type="text" th:field="*{bookingItems[__${rowStat.index}__].bookingNo}" class="form-control"/>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            </tbody>
+        </table>
+        <!--
+        <div class="form-group" th:classappend="${#fields.hasErrors('bookingNo')} ? 'has-error'">
+            <label class="col-lg-3 control-label" th:text="#{booking.no}">Booking No.</label>
+
+            <div class="col-lg-6">
+                <input type="text" th:field="*{bookingNo}" class="form-control"/>
+                <span th:errors="*{bookingNo}">error</span>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <select th:field="*{shipownerId}" class="form-control">
+                <option th:each="shipowner : ${shipowners}"
+                        th:value="${shipowner.id}"
+                        th:text="${shipowner.name}">Shipowner Name
+                </option>
+            </select>
+        </div>        
+        -->
+        <div class="pull-right">
+            <input type="submit" name="save" value="Save" class="btn btn-success" th:value="#{save}"/>
+        </div>
+    </form>    
+</div><!-- /.container -->
+
+<br/>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

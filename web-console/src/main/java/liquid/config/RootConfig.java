@@ -25,7 +25,7 @@ import java.util.Map;
         "liquid.excel",
         "liquid.container.facade", "liquid.container.service",
         "liquid.order.facade", "liquid.order.service",
-        "liquid.shipping.service",
+        "liquid.shipping.facade", "liquid.shipping.service",
         "liquid.task", "liquid.task.handler"})
 @EnableAspectJAutoProxy
 public class RootConfig {
