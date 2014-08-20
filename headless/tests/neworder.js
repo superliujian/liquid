@@ -40,7 +40,7 @@ casper.waitForSelector('input[id="serviceItems2.id"]', function() {
       'tradeType' : 1,
       'originId' : 1,
       'origination' : '昆明市',
-      'destinationId' : 7,
+      'destinationId' : 480,
       'destination' : '卡拉奇',
       'goodsId' : 3,
       'goodsWeight' : 8,
