@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.dto.DistyDto;
+import liquid.domain.Disty;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.TaskService;
@@ -9,10 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -32,35 +38,39 @@ public class OrderDistyController extends BaseTaskController {
     private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String init(@PathVariable String taskId,
-                       @RequestParam(required = false) boolean done,
-                       Model model, Principal principal) {
+    public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
         long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        DistyDto disty = new DistyDto();
-        disty.setDistyPrice(order.getDistyPrice());
-        model.addAttribute("done", done);
+        Disty disty = new Disty();
+        disty.setDistyCny(order.getDistyPrice());
+        disty.setDistyUsd(order.getDistyUsd());
         model.addAttribute("disty", disty);
         return "order/disty_price";
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public String feed(@PathVariable String taskId,
-                       @ModelAttribute("disty") DistyDto disty,
+                       @Valid @ModelAttribute("disty") Disty disty,
+                       BindingResult bindingResult,
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        //TODO: Validate distributor price data.
+        if (bindingResult.hasErrors()) {
+            return "order/disty_price";
+        }
 
         long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        order.setDistyPrice(disty.getDistyPrice());
+        order.setDistyPrice(disty.getDistyCny());
+        order.setDistyUsd(disty.getDistyUsd());
         order.setUpdateUser(principal.getName());
         order.setUpdateTime(new Date());
         orderService.save(order);
-        model.addAttribute("done", true);
-        return "redirect:/task/" + taskId + "/disty";
+
+        model.addAttribute("disty", disty);
+        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+        return "order/disty_price";
     }
 }

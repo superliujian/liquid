@@ -106,6 +106,9 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
+    @Column(name = "DISTY_USD")
+    private Long distyUsd;
+
     @Column(name = "GRAND_TOTAL")
     private long grandTotal;
 
@@ -312,6 +315,14 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setDistyPrice(long distyPrice) {
         this.distyPrice = distyPrice;
+    }
+
+    public Long getDistyUsd() {
+        return distyUsd;
+    }
+
+    public void setDistyUsd(Long distyUsd) {
+        this.distyUsd = distyUsd;
     }
 
     public long getGrandTotal() {
