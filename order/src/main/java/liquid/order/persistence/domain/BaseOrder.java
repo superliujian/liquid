@@ -79,6 +79,9 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "WEIGHT")
     private int goodsWeight;
 
+    @Column(name = "DIMENSION")
+    private String goodsDimension;
+
     @Column(name = "CONTAINER_TYPE")
     private int containerType;
 
@@ -251,6 +254,14 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setGoodsWeight(int goodsWeight) {
         this.goodsWeight = goodsWeight;
+    }
+
+    public String getGoodsDimension() {
+        return goodsDimension;
+    }
+
+    public void setGoodsDimension(String goodsDimension) {
+        this.goodsDimension = goodsDimension;
     }
 
     public int getContainerType() {

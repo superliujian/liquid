@@ -38,6 +38,7 @@ public class Order extends BaseIdObject {
 
     @Min(1)
     private int goodsWeight;
+    private String goodsDimension;
     private int loadingType;
     private String loadingAddress;
     private String loadingContact;
@@ -49,6 +50,18 @@ public class Order extends BaseIdObject {
 
     @Min(1)
     private int containerQuantity;
+
+    private Long railwayId;
+    private String planReportTime;
+    private Long railwayPlanTypeId;
+    private String programNo;
+    private Long railSourceId;
+    private String railSource;
+    private Long railDestinationId;
+    private String railDestination;
+    private String comment;
+    private Boolean sameDay;
+
     private List<ServiceItem> serviceItems;
 
     @Min(1)
@@ -174,6 +187,14 @@ public class Order extends BaseIdObject {
         this.goodsWeight = goodsWeight;
     }
 
+    public String getGoodsDimension() {
+        return goodsDimension;
+    }
+
+    public void setGoodsDimension(String goodsDimension) {
+        this.goodsDimension = goodsDimension;
+    }
+
     public int getLoadingType() {
         return loadingType;
     }
@@ -246,6 +267,86 @@ public class Order extends BaseIdObject {
         this.containerQuantity = containerQuantity;
     }
 
+    public Long getRailwayId() {
+        return railwayId;
+    }
+
+    public void setRailwayId(Long railwayId) {
+        this.railwayId = railwayId;
+    }
+
+    public String getPlanReportTime() {
+        return planReportTime;
+    }
+
+    public void setPlanReportTime(String planReportTime) {
+        this.planReportTime = planReportTime;
+    }
+
+    public Long getRailwayPlanTypeId() {
+        return railwayPlanTypeId;
+    }
+
+    public void setRailwayPlanTypeId(Long railwayPlanTypeId) {
+        this.railwayPlanTypeId = railwayPlanTypeId;
+    }
+
+    public String getProgramNo() {
+        return programNo;
+    }
+
+    public void setProgramNo(String programNo) {
+        this.programNo = programNo;
+    }
+
+    public Long getRailSourceId() {
+        return railSourceId;
+    }
+
+    public void setRailSourceId(Long railSourceId) {
+        this.railSourceId = railSourceId;
+    }
+
+    public String getRailSource() {
+        return railSource;
+    }
+
+    public void setRailSource(String railSource) {
+        this.railSource = railSource;
+    }
+
+    public Long getRailDestinationId() {
+        return railDestinationId;
+    }
+
+    public void setRailDestinationId(Long railDestinationId) {
+        this.railDestinationId = railDestinationId;
+    }
+
+    public String getRailDestination() {
+        return railDestination;
+    }
+
+    public void setRailDestination(String railDestination) {
+        this.railDestination = railDestination;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Boolean getSameDay() {
+        return sameDay;
+    }
+
+    public void setSameDay(Boolean sameDay) {
+        this.sameDay = sameDay;
+    }
+
     public List<ServiceItem> getServiceItems() {
         return serviceItems;
     }
@@ -288,9 +389,8 @@ public class Order extends BaseIdObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("super=").append(super.toString());
-        sb.append(", orderNo='").append(orderNo).append('\'');
+        final StringBuffer sb = new StringBuffer("Order{");
+        sb.append("orderNo='").append(orderNo).append('\'');
         sb.append(", serviceTypeId=").append(serviceTypeId);
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName='").append(customerName).append('\'');
@@ -304,6 +404,7 @@ public class Order extends BaseIdObject {
         sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
         sb.append(", goodsId=").append(goodsId);
         sb.append(", goodsWeight=").append(goodsWeight);
+        sb.append(", goodsDimension='").append(goodsDimension).append('\'');
         sb.append(", loadingType=").append(loadingType);
         sb.append(", loadingAddress='").append(loadingAddress).append('\'');
         sb.append(", loadingContact='").append(loadingContact).append('\'');
@@ -313,6 +414,14 @@ public class Order extends BaseIdObject {
         sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
         sb.append(", selfContainerSubtypeId=").append(selfContainerSubtypeId);
         sb.append(", containerQuantity=").append(containerQuantity);
+        sb.append(", railwayId=").append(railwayId);
+        sb.append(", planReportTime='").append(planReportTime).append('\'');
+        sb.append(", railwayPlanTypeId=").append(railwayPlanTypeId);
+        sb.append(", programNo='").append(programNo).append('\'');
+        sb.append(", railSourceId=").append(railSourceId);
+        sb.append(", railDestinationId=").append(railDestinationId);
+        sb.append(", comment='").append(comment).append('\'');
+        sb.append(", sameDay=").append(sameDay);
         sb.append(", serviceItems=").append(serviceItems);
         sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", usdTotal=").append(usdTotal);

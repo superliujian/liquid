@@ -89,7 +89,8 @@
                             <li><a href="/goods" th:text="#{goods}">Cargo</a></li>
                             <li><a href="/location" th:text="#{location}">Location</a></li>
                             <li><a href="/sp_type" th:text="#{sp.type}">Sp Type</a></li>
-                            <li><a href="/service_type" th:text="#{service.type}">Sp Type</a></li>                            
+                            <li><a href="/service_type" th:text="#{service.type}">Sp Type</a></li>
+                            <li><a href="/railway_plan_type" th:text="#{railway.plan.type}">Railway Plan Type</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">

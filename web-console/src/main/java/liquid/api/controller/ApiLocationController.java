@@ -22,10 +22,10 @@ public class ApiLocationController {
     @Autowired
     private LocationService locationService;
 
-    @RequestMapping(method = RequestMethod.GET, params = "name")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<LocationEntity> listByName(@RequestParam String name) {
+    public Iterable<LocationEntity> listByName(@RequestParam Integer type, @RequestParam String name) {
         logger.debug("name: {}", name);
-        return locationService.findByTypeAndNameLike(0, name);
+        return locationService.findByTypeAndNameLike(type, name);
     }
 }

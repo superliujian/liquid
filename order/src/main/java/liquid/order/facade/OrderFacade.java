@@ -6,8 +6,10 @@ import liquid.domain.LocationType;
 import liquid.domain.ServiceItem;
 import liquid.order.domain.Order;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.persistence.domain.RailwayEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.service.OrderService;
+import liquid.order.service.RailwayService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.CustomerService;
@@ -46,18 +48,29 @@ public class OrderFacade {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private RailwayService railwayService;
+
     public Order initOrder() {
         Order order = new Order();
         List<LocationEntity> locations = locationService.findByType(LocationType.CITY.getType());
         LocationEntity secondCity = CollectionUtil.tryToGet2ndElement(locations);
         order.setDestinationId(secondCity.getId());
         order.setLoadingEstimatedTime(DateUtil.stringOf(new Date()));
+
+        order.setPlanReportTime(DateUtil.stringOf(new Date()));
         return order;
     }
 
     public OrderEntity save(Order order) {
         OrderEntity orderEntity = convert(order);
-        return orderService.save(orderEntity);
+        orderEntity = orderService.save(orderEntity);
+
+        order.setId(orderEntity.getId());
+        RailwayEntity railwayEntity = convertRailway(order);
+        railwayService.save(railwayEntity);
+
+        return orderEntity;
     }
 
     public OrderEntity submit(Order order) {
@@ -87,13 +100,15 @@ public class OrderFacade {
 
     public Order find(long id) {
         OrderEntity orderEntity = orderService.find(id);
-        Order order = convert(orderEntity);
+        RailwayEntity railwayEntity = railwayService.findByOrderId(id);
+        Order order = convert(orderEntity, railwayEntity);
         return order;
     }
 
     public Order duplicate(long id) {
         OrderEntity orderEntity = orderService.find(id);
-        Order order = convert(orderEntity);
+        RailwayEntity railwayEntity = railwayService.findByOrderId(id);
+        Order order = convert(orderEntity, railwayEntity);
         order.setId(null);
         order.setOrderNo(null);
 
@@ -119,6 +134,7 @@ public class OrderFacade {
         orderEntity.setConsigneeAddress(order.getConsigneeAddress());
         orderEntity.setGoods(GoodsEntity.newInstance(GoodsEntity.class, order.getGoodsId()));
         orderEntity.setGoodsWeight(order.getGoodsWeight());
+        orderEntity.setGoodsDimension(order.getGoodsDimension());
         orderEntity.setLoadingType(order.getLoadingType());
         orderEntity.setLoadingAddress(order.getLoadingAddress());
         orderEntity.setLoadingContact(order.getLoadingContact());
@@ -152,7 +168,8 @@ public class OrderFacade {
         return orderEntity;
     }
 
-    private Order convert(OrderEntity orderEntity) {
+    // TODO: Should enhance it in one to one way.
+    private Order convert(OrderEntity orderEntity, RailwayEntity railwayEntity) {
         Order order = new Order();
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
@@ -169,6 +186,7 @@ public class OrderFacade {
         order.setConsigneeAddress(orderEntity.getConsigneeAddress());
         order.setGoodsId(orderEntity.getGoodsId());
         order.setGoodsWeight(orderEntity.getGoodsWeight());
+        order.setGoodsDimension(orderEntity.getGoodsDimension());
         order.setLoadingType(orderEntity.getLoadingType());
         order.setLoadingAddress(orderEntity.getLoadingAddress());
         order.setLoadingContact(orderEntity.getLoadingContact());
@@ -181,7 +199,21 @@ public class OrderFacade {
         else
             order.setRailContainerSubtypeId(orderEntity.getContainerSubtype().getId());
         order.setContainerQuantity(orderEntity.getContainerQty());
-        order.setContainerQuantity(orderEntity.getContainerQty());
+
+        order.setRailwayId(railwayEntity.getId());
+        order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
+        order.setRailwayPlanTypeId(railwayEntity.getPlanType().getId());
+        order.setProgramNo(railwayEntity.getProgramNo());
+        if (null != railwayEntity.getSource()) {
+            order.setRailSourceId(railwayEntity.getSource().getId());
+            order.setRailSource(railwayEntity.getSource().getName());
+        }
+        if (null != railwayEntity.getDestination()) {
+            order.setRailDestinationId(railwayEntity.getDestination().getId());
+            order.setRailDestination(railwayEntity.getDestination().getName());
+        }
+        order.setComment(railwayEntity.getComment());
+        order.setSameDay(railwayEntity.getSameDay());
 
         Set<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
         for (ServiceItemEntity serviceItemEntity : serviceItemEntities) {
@@ -199,6 +231,20 @@ public class OrderFacade {
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
         return order;
+    }
+
+    private RailwayEntity convertRailway(Order order) {
+        RailwayEntity railwayEntity = new RailwayEntity();
+        railwayEntity.setId(order.getRailwayId());
+        railwayEntity.setOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
+        railwayEntity.setPlanReportTime(DateUtil.dateOf(order.getPlanReportTime()));
+        railwayEntity.setPlanType(RailwayPlanTypeEntity.newInstance(RailwayPlanTypeEntity.class, order.getRailwayPlanTypeId()));
+        railwayEntity.setSource(LocationEntity.newInstance(LocationEntity.class, order.getRailSourceId()));
+        railwayEntity.setDestination(LocationEntity.newInstance(LocationEntity.class, order.getDestinationId()));
+        railwayEntity.setProgramNo(order.getProgramNo());
+        railwayEntity.setComment(order.getComment());
+        railwayEntity.setSameDay(order.getSameDay());
+        return railwayEntity;
     }
 
     /**

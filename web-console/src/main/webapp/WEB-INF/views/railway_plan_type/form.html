@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+    
+    <style>
+        div#f.container {
+            max-width: 600px;
+        }
+    </style>    
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<br />
+
+<div class="container">
+    <div th:if="${alert}" class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <span th:text="${alert}">Alert</span>
+    </div>
+</div>
+
+<div id="f" class="container">
+    <form action="/railway_plan_type" method="POST" th:object="${railwayPlanType}">
+        <div class="form-group" th:if="*{id}">
+             <label for="id" th:text="#{id}">Id</label>
+             <input type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
+        </div>
+    
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label for="name" th:text="#{name}">Name</label>
+            
+            <input type="text" th:field="*{name}" class="form-control"/>
+
+            <div>
+                <span th:errors="*{name}">error</span>
+            </div>
+        </div>
+
+        <input type="submit" value="Add Railway Plan Type" class="btn btn-success btn-block" th:value="#{add}"/>
+    </form>
+</div><!-- form -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

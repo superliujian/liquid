@@ -25,7 +25,7 @@ import java.util.Locale;
 @Controller
 @RequestMapping("/goods")
 public class GoodsController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(GoodsEntity.class);
+    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @Autowired
     private GoodsService goodsService;

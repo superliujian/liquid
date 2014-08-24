@@ -87,6 +87,9 @@ public class OrderController extends BaseController {
     @Autowired
     private OrderFacade orderFacade;
 
+    @Autowired
+    private RailwayPlanTypeService railwayPlanTypeService;
+
     @ModelAttribute("serviceTypes")
     public Iterable<ServiceTypeEntity> populateServiceTypes() {
         return serviceTypeService.findAll();
@@ -144,6 +147,11 @@ public class OrderController extends BaseController {
     @ModelAttribute("locations")
     public List<LocationEntity> populateLocations() {
         return locationService.findByType(LocationType.CITY.getType());
+    }
+
+    @ModelAttribute("railwayPlanTypes")
+    public Iterable<RailwayPlanTypeEntity> populateRailwayPlanTypes() {
+        return railwayPlanTypeService.findAll();
     }
 
     @Deprecated
