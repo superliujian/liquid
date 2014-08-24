@@ -295,7 +295,7 @@
     <input type="hidden" th:field="*{railwayId}"/>
     <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('planReportTime')} ? 'has-error'">
-            <label th:text="#{railway.plan.report.time}">Railway Plan Report Date</label>
+            <label th:text="#{railway.plan.report.time} + ' *'">Railway Plan Report Date</label>
             <input type="text" th:field="*{planReportTime}" class="form-control"/>
 
             <span th:errors="*{planReportTime}">error</span>
