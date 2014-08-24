@@ -106,6 +106,9 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
+    @Column(name = "CONTAINER_ATTR")
+    private String containerAttribute;
+
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
@@ -318,6 +321,14 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setContainerQty(int containerQty) {
         this.containerQty = containerQty;
+    }
+
+    public String getContainerAttribute() {
+        return containerAttribute;
+    }
+
+    public void setContainerAttribute(String containerAttribute) {
+        this.containerAttribute = containerAttribute;
     }
 
     public long getDistyPrice() {

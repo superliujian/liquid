@@ -277,13 +277,9 @@
     
     <div class="col-lg-3">
         <div class="form-group">
-            <label>Container Attr</label>
-            <select th:field="*{serviceTypeId}" class="form-control">
-                <option th:each="serviceType : ${serviceTypes}"
-                        th:value="${serviceType.id}"
-                        th:text="'(' + ${serviceType.code} + ')' + ${serviceType.name}">Service Type Name
-                </option>
-            </select>
+            <label th:text="#{container.attribute}">Container Attr</label>
+            <input type="text" th:field="*{containerAttribute}" class="form-control"/>
+            <span th:errors="*{containerAttribute}">error</span>
         </div>
     </div>       
 </div>

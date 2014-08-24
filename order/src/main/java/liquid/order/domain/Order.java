@@ -50,6 +50,7 @@ public class Order extends BaseIdObject {
 
     @Min(1)
     private int containerQuantity;
+    private String containerAttribute;
 
     private Long railwayId;
     private String planReportTime;
@@ -267,6 +268,14 @@ public class Order extends BaseIdObject {
         this.containerQuantity = containerQuantity;
     }
 
+    public String getContainerAttribute() {
+        return containerAttribute;
+    }
+
+    public void setContainerAttribute(String containerAttribute) {
+        this.containerAttribute = containerAttribute;
+    }
+
     public Long getRailwayId() {
         return railwayId;
     }
@@ -414,12 +423,15 @@ public class Order extends BaseIdObject {
         sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
         sb.append(", selfContainerSubtypeId=").append(selfContainerSubtypeId);
         sb.append(", containerQuantity=").append(containerQuantity);
+        sb.append(", containerAttribute='").append(containerAttribute).append('\'');
         sb.append(", railwayId=").append(railwayId);
         sb.append(", planReportTime='").append(planReportTime).append('\'');
         sb.append(", railwayPlanTypeId=").append(railwayPlanTypeId);
         sb.append(", programNo='").append(programNo).append('\'');
         sb.append(", railSourceId=").append(railSourceId);
+        sb.append(", railSource='").append(railSource).append('\'');
         sb.append(", railDestinationId=").append(railDestinationId);
+        sb.append(", railDestination='").append(railDestination).append('\'');
         sb.append(", comment='").append(comment).append('\'');
         sb.append(", sameDay=").append(sameDay);
         sb.append(", serviceItems=").append(serviceItems);

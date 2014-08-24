@@ -148,6 +148,7 @@ public class OrderFacade {
             orderEntity.setContainerSubtype(ContainerSubtypeEntity.
                     newInstance(ContainerSubtypeEntity.class, order.getSelfContainerSubtypeId()));
         orderEntity.setContainerQty(order.getContainerQuantity());
+        orderEntity.setContainerAttribute(order.getContainerAttribute());
 
         for (ServiceItem serviceItem : order.getServiceItems()) {
             ServiceItemEntity serviceItemEntity = new ServiceItemEntity();
@@ -199,21 +200,24 @@ public class OrderFacade {
         else
             order.setRailContainerSubtypeId(orderEntity.getContainerSubtype().getId());
         order.setContainerQuantity(orderEntity.getContainerQty());
+        order.setContainerAttribute(orderEntity.getContainerAttribute());
 
-        order.setRailwayId(railwayEntity.getId());
-        order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
-        order.setRailwayPlanTypeId(railwayEntity.getPlanType().getId());
-        order.setProgramNo(railwayEntity.getProgramNo());
-        if (null != railwayEntity.getSource()) {
-            order.setRailSourceId(railwayEntity.getSource().getId());
-            order.setRailSource(railwayEntity.getSource().getName());
+        if (null != railwayEntity) {
+            order.setRailwayId(railwayEntity.getId());
+            order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
+            order.setRailwayPlanTypeId(railwayEntity.getPlanType().getId());
+            order.setProgramNo(railwayEntity.getProgramNo());
+            if (null != railwayEntity.getSource()) {
+                order.setRailSourceId(railwayEntity.getSource().getId());
+                order.setRailSource(railwayEntity.getSource().getName());
+            }
+            if (null != railwayEntity.getDestination()) {
+                order.setRailDestinationId(railwayEntity.getDestination().getId());
+                order.setRailDestination(railwayEntity.getDestination().getName());
+            }
+            order.setComment(railwayEntity.getComment());
+            order.setSameDay(railwayEntity.getSameDay());
         }
-        if (null != railwayEntity.getDestination()) {
-            order.setRailDestinationId(railwayEntity.getDestination().getId());
-            order.setRailDestination(railwayEntity.getDestination().getName());
-        }
-        order.setComment(railwayEntity.getComment());
-        order.setSameDay(railwayEntity.getSameDay());
 
         Set<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
         for (ServiceItemEntity serviceItemEntity : serviceItemEntities) {
