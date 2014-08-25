@@ -109,6 +109,10 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "CONTAINER_ATTR")
     private String containerAttribute;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "RAILWAY_ID")
+    private RailwayEntity railway;
+
     @Column(name = "DISTY_PRICE")
     private long distyPrice;
 
@@ -329,6 +333,14 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setContainerAttribute(String containerAttribute) {
         this.containerAttribute = containerAttribute;
+    }
+
+    public RailwayEntity getRailway() {
+        return railway;
+    }
+
+    public void setRailway(RailwayEntity railway) {
+        this.railway = railway;
     }
 
     public long getDistyPrice() {

@@ -1,6 +1,6 @@
 package liquid.order.persistence.domain;
 
-import liquid.persistence.domain.BaseUpdateEntity;
+import liquid.persistence.domain.BaseIdEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.RailwayPlanTypeEntity;
 
@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by redbrick9 on 8/22/14.
  */
 @Entity(name = "RAILWAY")
-public class RailwayEntity extends BaseUpdateEntity {
+public class RailwayEntity extends BaseIdEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

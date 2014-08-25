@@ -22,6 +22,7 @@ import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -62,14 +63,13 @@ public class OrderFacade {
         return order;
     }
 
+    @Transactional("transactionManager")
     public OrderEntity save(Order order) {
         OrderEntity orderEntity = convert(order);
-        orderEntity = orderService.save(orderEntity);
-
-        order.setId(orderEntity.getId());
         RailwayEntity railwayEntity = convertRailway(order);
-        railwayService.save(railwayEntity);
-
+        railwayEntity.setOrder(orderEntity);
+        orderEntity.setRailway(railwayEntity);
+        orderEntity = orderService.save(orderEntity);
         return orderEntity;
     }
 
@@ -100,16 +100,15 @@ public class OrderFacade {
 
     public Order find(long id) {
         OrderEntity orderEntity = orderService.find(id);
-        RailwayEntity railwayEntity = railwayService.findByOrderId(id);
-        Order order = convert(orderEntity, railwayEntity);
+        Order order = convert(orderEntity);
         return order;
     }
 
     public Order duplicate(long id) {
         OrderEntity orderEntity = orderService.find(id);
-        RailwayEntity railwayEntity = railwayService.findByOrderId(id);
-        Order order = convert(orderEntity, railwayEntity);
+        Order order = convert(orderEntity);
         order.setId(null);
+        order.setRailwayId(null);
         order.setOrderNo(null);
 
         List<ServiceItem> serviceItems = order.getServiceItems();
@@ -170,7 +169,7 @@ public class OrderFacade {
     }
 
     // TODO: Should enhance it in one to one way.
-    private Order convert(OrderEntity orderEntity, RailwayEntity railwayEntity) {
+    private Order convert(OrderEntity orderEntity) {
         Order order = new Order();
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
@@ -202,6 +201,7 @@ public class OrderFacade {
         order.setContainerQuantity(orderEntity.getContainerQty());
         order.setContainerAttribute(orderEntity.getContainerAttribute());
 
+        RailwayEntity railwayEntity = orderEntity.getRailway();
         if (null != railwayEntity) {
             order.setRailwayId(railwayEntity.getId());
             order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
@@ -240,7 +240,7 @@ public class OrderFacade {
     private RailwayEntity convertRailway(Order order) {
         RailwayEntity railwayEntity = new RailwayEntity();
         railwayEntity.setId(order.getRailwayId());
-        railwayEntity.setOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
+//        railwayEntity.setOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         railwayEntity.setPlanReportTime(DateUtil.dateOf(order.getPlanReportTime()));
         railwayEntity.setPlanType(RailwayPlanTypeEntity.newInstance(RailwayPlanTypeEntity.class, order.getRailwayPlanTypeId()));
         railwayEntity.setSource(LocationEntity.newInstance(LocationEntity.class, order.getRailSourceId()));
