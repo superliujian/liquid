@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:fragment="tab">
+    <div class="container">
+        <br/>
+        <ul class="nav nav-tabs">
+            <li class="active" th:class="${tab} == 'detail' ? 'active'">
+                <a th:href="'/order/' + ${order.id} + '/detail'" th:text="#{order.detail}">Order Detail</a></li>
+            <li class="active" th:class="${tab} == 'task' ? 'active'">
+                <a th:href="'/order/' + ${order.id} + '/task'" th:text="#{task}">Task</a></li>
+            <li class="active" th:class="${tab} == 'railway' ? 'active'">
+                <a th:href="'/order/' + ${order.id} + '/railway'" th:text="#{railway.info}">Railway</a></li>            
+            <li class="active" th:class="${tab} == 'container' ? 'active'">
+                <a th:href="'/order/' + ${order.id} + '/container'" th:text="#{container}">Container</a></li>
+            <!--
+            <li class="active" th:class="${tab} == 'charge' ? 'active'">
+                <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
+            -->            
+        </ul>
+    </div><!-- /.container -->
+</div>
+
+</body>
+
+</html>

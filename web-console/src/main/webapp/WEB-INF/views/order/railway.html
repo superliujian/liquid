@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"/>
+<!-- {!end layout} -->
+
+<div th:include="order_template :: tab"></div>
+
+<br/>
+
+<div class="container">
+    <label th:text="#{railway.plan.report.time} + ': '">Plan Report Time:</label><span th:text="${order.planReportTime}"></span><br/>
+    <label th:text="#{railway.plan.type} + ': '">Plan Type:</label><span th:text="${order.railwayPlanTypeId}"></span><br/>
+    <label th:text="#{customer} + ': '">Customer:</label><span th:text="${order.customerName}"></span><br/>
+    <label th:text="#{container.quantity} + ': '">Container Quantity:</label><span th:text="${order.containerQuantity}"></span><br/>
+    <label th:text="#{container.type} + ': '">Container Type:</label><span th:text="#{${containerTypeMap[order.containerType]}}"></span><br/>
+    <label th:text="#{container.attribute} + ': '">Container Attribute:</label><span th:text="${order.containerAttribute}"></span><br/>
+    <label th:text="#{goods} + ': '">Goods Name:</label><span th:text="${order.goodsName}"></span><br/>
+    <label th:text="#{goods.dimension} + ': '">Goods Dimension:</label><span th:text="${order.goodsDimension}"></span><br/>
+    <label th:text="#{railway.program.no} + ': '">Program No.:</label><span th:text="${order.programNo}"></span><br/>
+    <label th:text="#{railway.destination.station} + ': '">Destination Station:</label><span th:text="${order.railDestination}"></span><br/>
+    <label th:text="#{consignee} + ': '">Consignee:</label><span th:text="${order.consignee}"></span><br/>
+    <label th:text="#{comment} + ': '">Comment:</label><span th:text="${order.comment}"></span><br/>
+    <label th:text="#{railway.same.day} + ': '">Same Day:</label><span th:text="${order.sameDay} == true ? #{true} : ''"></span><br/>
+</div><!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>

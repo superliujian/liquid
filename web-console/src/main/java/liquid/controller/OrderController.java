@@ -322,6 +322,13 @@ public class OrderController extends BaseController {
                 model.addAttribute("tasks", tasks);
                 model.addAttribute("completedTasks", completedTasks);
                 break;
+            case "railway":
+                OrderEntity orderEntity = orderService.find(id);
+                break;
+            case "container":
+                Collection<RouteEntity> routes = shippingContainerService.findByOrderId(id);
+                model.addAttribute("routes", routes);
+                break;
             case "charge":
                 Iterable<ChargeEntity> charges = chargeService.getChargesByOrderId(id);
 
@@ -329,10 +336,6 @@ public class OrderController extends BaseController {
                 model.addAttribute("serviceSubtypes", serviceSubtypes);
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
-                break;
-            case "container":
-                Collection<RouteEntity> routes = shippingContainerService.findByOrderId(id);
-                model.addAttribute("routes", routes);
                 break;
             default:
                 tab = "detail";

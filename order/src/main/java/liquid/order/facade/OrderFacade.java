@@ -185,6 +185,7 @@ public class OrderFacade {
         order.setConsigneePhone(orderEntity.getConsigneePhone());
         order.setConsigneeAddress(orderEntity.getConsigneeAddress());
         order.setGoodsId(orderEntity.getGoodsId());
+        order.setGoodsName(orderEntity.getGoods().getName());
         order.setGoodsWeight(orderEntity.getGoodsWeight());
         order.setGoodsDimension(orderEntity.getGoodsDimension());
         order.setLoadingType(orderEntity.getLoadingType());

@@ -35,6 +35,7 @@ public class Order extends BaseIdObject {
     private String consigneePhone;
     private String consigneeAddress;
     private long goodsId;
+    private String goodsName;
 
     @Min(1)
     private int goodsWeight;
@@ -178,6 +179,14 @@ public class Order extends BaseIdObject {
 
     public void setGoodsId(long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     public int getGoodsWeight() {
@@ -412,6 +421,7 @@ public class Order extends BaseIdObject {
         sb.append(", consigneePhone='").append(consigneePhone).append('\'');
         sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
         sb.append(", goodsId=").append(goodsId);
+        sb.append(", goodsName='").append(goodsName).append('\'');
         sb.append(", goodsWeight=").append(goodsWeight);
         sb.append(", goodsDimension='").append(goodsDimension).append('\'');
         sb.append(", loadingType=").append(loadingType);
