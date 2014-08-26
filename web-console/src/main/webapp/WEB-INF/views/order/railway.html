@@ -26,7 +26,7 @@
 
 <div class="container">
     <label th:text="#{railway.plan.report.time} + ': '">Plan Report Time:</label><span th:text="${order.planReportTime}"></span><br/>
-    <label th:text="#{railway.plan.type} + ': '">Plan Type:</label><span th:text="${order.railwayPlanTypeId}"></span><br/>
+    <label th:text="#{railway.plan.type} + ': '">Plan Type:</label><span th:text="${order.railwayPlanType}"></span><br/>
     <label th:text="#{customer} + ': '">Customer:</label><span th:text="${order.customerName}"></span><br/>
     <label th:text="#{container.quantity} + ': '">Container Quantity:</label><span th:text="${order.containerQuantity}"></span><br/>
     <label th:text="#{container.type} + ': '">Container Type:</label><span th:text="#{${containerTypeMap[order.containerType]}}"></span><br/>

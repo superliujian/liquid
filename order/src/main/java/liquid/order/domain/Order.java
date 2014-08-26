@@ -56,6 +56,7 @@ public class Order extends BaseIdObject {
     private Long railwayId;
     private String planReportTime;
     private Long railwayPlanTypeId;
+    private String railwayPlanType;
     private String programNo;
     private Long railSourceId;
     private String railSource;
@@ -307,6 +308,14 @@ public class Order extends BaseIdObject {
 
     public void setRailwayPlanTypeId(Long railwayPlanTypeId) {
         this.railwayPlanTypeId = railwayPlanTypeId;
+    }
+
+    public String getRailwayPlanType() {
+        return railwayPlanType;
+    }
+
+    public void setRailwayPlanType(String railwayPlanType) {
+        this.railwayPlanType = railwayPlanType;
     }
 
     public String getProgramNo() {

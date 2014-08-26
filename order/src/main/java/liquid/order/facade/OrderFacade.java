@@ -207,6 +207,7 @@ public class OrderFacade {
             order.setRailwayId(railwayEntity.getId());
             order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
             order.setRailwayPlanTypeId(railwayEntity.getPlanType().getId());
+            order.setRailwayPlanType(railwayEntity.getPlanType().getName());
             order.setProgramNo(railwayEntity.getProgramNo());
             if (null != railwayEntity.getSource()) {
                 order.setRailSourceId(railwayEntity.getSource().getId());
