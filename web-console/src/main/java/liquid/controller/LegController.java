@@ -1,9 +1,14 @@
 package liquid.controller;
 
 import liquid.domain.LocationType;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.persistence.domain.SpTypeEnity;
+import liquid.persistence.repository.LocationRepository;
+import liquid.persistence.repository.ServiceProviderRepository;
+import liquid.persistence.repository.ServiceProviderTypeRepository;
+import liquid.shipping.domain.Leg;
 import liquid.shipping.domain.TransMode;
-import liquid.persistence.domain.*;
-import liquid.persistence.repository.*;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
@@ -57,19 +62,19 @@ public class LegController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
-        LegEntity leg = new LegEntity();
+        Leg leg = new Leg();
 
         switch (tab) {
             case "rail":
                 List<LocationEntity> stationLocs = locationRepository.findByType(LocationType.STATION.getType());
                 long defaultDstLocId = computeDefaultDstLocId(stationLocs);
-                leg.setDstLocId(defaultDstLocId);
+                leg.setDestinationId(defaultDstLocId);
                 model.addAttribute("locations", stationLocs);
                 break;
             case "barge":
                 List<LocationEntity> portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
-                leg.setDstLocId(defaultDstLocId);
+                leg.setDestinationId(defaultDstLocId);
                 SpTypeEnity bargeType = stRepository.findOne(2L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(bargeType));
                 model.addAttribute("locations", portLocs);
@@ -77,7 +82,7 @@ public class LegController extends BaseTaskController {
             case "vessel":
                 portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
-                leg.setDstLocId(defaultDstLocId);
+                leg.setDestinationId(defaultDstLocId);
                 SpTypeEnity vesselType = stRepository.findOne(3L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(vesselType));
                 model.addAttribute("locations", portLocs);
@@ -85,7 +90,7 @@ public class LegController extends BaseTaskController {
             case "road":
                 List<LocationEntity> cityLocs = locationRepository.findByType(LocationType.CITY.getType());
                 defaultDstLocId = computeDefaultDstLocId(cityLocs);
-                leg.setDstLocId(defaultDstLocId);
+                leg.setDestinationId(defaultDstLocId);
                 SpTypeEnity roadType = stRepository.findOne(4L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(roadType));
                 model.addAttribute("locations", cityLocs);
@@ -105,25 +110,22 @@ public class LegController extends BaseTaskController {
                          @PathVariable long planningId,
                          @PathVariable long routeId,
                          @PathVariable String tab,
-                         LegEntity leg,
-                         Model model, Principal principal) {
+                         Leg leg) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
-        RouteEntity route = routeRepository.findOne(routeId);
-        LocationEntity srcLoc = locationRepository.findOne(leg.getSrcLocId());
-        LocationEntity dstLoc = locationRepository.findOne(leg.getDstLocId());
+        RouteEntity route = RouteEntity.newInstance(RouteEntity.class, routeId);
+        LocationEntity srcLoc = LocationEntity.newInstance(LocationEntity.class, leg.getSourceId());
+        LocationEntity dstLoc = LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId());
 
-        leg.setRoute(route);
-        leg.setTransMode(TransMode.valueOf(tab.toUpperCase()).getType());
-        if (leg.getSpId() > 0) {
-            ServiceProviderEntity sp = serviceProviderRepository.findOne(leg.getSpId());
-            leg.setSp(sp);
-        }
-        leg.setSrcLoc(srcLoc);
-        leg.setDstLoc(dstLoc);
-        legRepository.save(leg);
+        LegEntity legEntity = new LegEntity();
+        legEntity.setRoute(route);
+        legEntity.setTransMode(TransMode.valueOf(tab.toUpperCase()).getType());
+        legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
+        legEntity.setSrcLoc(srcLoc);
+        legEntity.setDstLoc(dstLoc);
+        legRepository.save(legEntity);
         return "redirect:/task/" + taskId + "/planning/" + planningId;
     }
 
