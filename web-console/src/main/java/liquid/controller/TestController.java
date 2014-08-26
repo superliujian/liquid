@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
-
 /**
  * TODO: Comments.
  * User: tao
@@ -29,10 +27,10 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    @RequestMapping(value = "/{template}", method = RequestMethod.GET, params = "msg")
+    @RequestMapping(value = "/{template}", method = RequestMethod.GET)
     public String combobox(@PathVariable String template,
                            @RequestParam(required = false) String msg,
-                           Model model, Principal principal) {
+                           Model model) {
         model.addAttribute("msg", msg);
         return "test/" + template;
     }
