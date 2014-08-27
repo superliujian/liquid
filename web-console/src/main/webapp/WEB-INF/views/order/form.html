@@ -467,87 +467,16 @@
 <script>
 /*<![CDATA[*/
     $(document).ready(function() {
-        var customer = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,  
-          limit: 10,
-          remote: '/api/customer?name=%QUERY'
-        });
+        var customers = initCustomerAc();
+        $('#customerName').acWithTemplate(customers, 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
 
-        customer.initialize();
+        var cities = initCitiesAc();
+        $('#origination').autoComplete(cities, 'originId');
+        $('#destination').autoComplete(cities, 'destinationId');
 
-        $('#customerName').typeahead(null, {
-          name: 'customer',
-          displayKey: 'name',
-          source: customer.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong> – {{code}}</p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#customerId').val(datum.id);
-        });
-        
-        var cities = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,  
-          limit: 10,
-          remote: '/api/location?type=0&name=%QUERY'
-        });
-
-        cities.initialize();
-
-        $('#origination').typeahead(null, {
-          name: 'origination',
-          displayKey: 'name',
-          source: cities.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#originId').val(datum.id);
-        });
-        
-        $('#destination').typeahead(null, {
-          name: 'destination',
-          displayKey: 'name',
-          source: cities.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#destinationId').val(datum.id);
-        });                    
-
-        var stations = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,  
-          limit: 10,
-          remote: '/api/location?type=1&name=%QUERY'
-        });
-
-        stations.initialize();
-        
-        $('#railSource').typeahead(null, {
-          name: 'railSource',
-          displayKey: 'name',
-          source: stations.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#railSourceId').val(datum.id);
-        }); 
-        
-        $('#railDestination').typeahead(null, {
-          name: 'railDestination',
-          displayKey: 'name',
-          source: stations.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#railDestinationId').val(datum.id);
-        });                           
+        var stations = initStationsAc();
+        $('#railSource').autoComplete(stations, 'railSourceId');
+        $('#railDestination').autoComplete(stations, 'railDestinationId');                           
 
         if($('input[name=loadingType]:checked', '#orderForm').val() == 0) {
             $("#loadingAddressSec").hide();
