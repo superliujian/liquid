@@ -191,42 +191,31 @@ roadId,
 <div th:fragment="task-bar">
     <div class="jumbotron">
         <div class="container">
+            <h4>
+                <span th:text="${task.name}">Task Name</span>
+                [<a target="_blank" th:href="'/order/' + ${task.orderId}" th:text="${task.orderNo}">Order Link</a>]
+                <span th:text="'[' + ${task.assignee} + ']'" th:if="${task.assignee}"/>          
+            </h4>
             <div class="row">
-                <div class="col-lg-8">
-                    <span th:text="${task.name}">Task Name</span>
-                    [<a href="/order/{id}" target="_blank" th:href="'/order/' + ${task.orderId}"
-                        th:text="${task.orderNo}">Order Link</a>]
-                    <span th:text="'[' + ${task.assignee} + ']'" th:if="${task.assignee}"/>
-                </div>
-                <div class="pull-right">
+                <div class="col-lg-2">
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
 
-                        <button type="submit" name="claim" value="Claim" class="btn btn-default"
-                                th:unless="${task.assignee}">
+                        <button type="submit" name="claim" value="Claim" class="btn btn-sm btn-warning btn-block" th:unless="${task.assignee}">
                             <span th:text="#{task.claim}"/>
-                        </button>
-
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#completeTask"
-                                th:if="${task.assignee}" th:disabled="${#authentication.name} != ${task.assignee}">
-                            <span th:text="#{task.complete}"/>
-                        </button>
+                        </button>                                        
                     </form>
+                    <button class="btn btn-sm btn-success btn-block" data-toggle="modal" data-target="#completeTask"
+                            th:if="${task.assignee}" th:disabled="${#authentication.name} != ${task.assignee}">
+                        <span th:text="#{task.complete}"/>
+                    </button>    
                 </div>
-            </div>
-            <div class="row">
-                <blockquote class="col-lg-offset-1">
-                    <p th:text="${task.description}"></p>
-                </blockquote>
-            </div>
-            <div class="alert alert-danger" th:if="${task_error}">
-                <span th:text="${task_error}">Task Error</span>
-            </div>
-        </div>
-        <!-- /.container -->
-    </div>
-    <!-- /.jumbotron -->
-
+                <div class="col-lg-10">
+                    <h5 th:text="${task.description}"></h5>
+                </div>
+            </div><!-- row -->
+        </div><!-- container -->
+    </div><!-- jumbotron -->
     <!-- Modal -->
     <div class="modal" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
          style="overflow-y: hidden;">
@@ -256,12 +245,9 @@ roadId,
                         </button>
                     </form>
                 </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal --> 
 </div>
 
 
