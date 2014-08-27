@@ -58,28 +58,6 @@
             <input type="text" th:field="*{destination}" class="form-control" th:placeholder="#{destination}"/>
             <span th:errors="*{destination}">error</span>      
         </div>
-        
-        <!--
-        <div class="form-group">
-            <label for="origination" th:text="#{origination} + ' *'">Origination</label>
-            <select th:field="*{srcLocId}" class="form-control">
-                <option th:each="location : ${locations}"
-                        th:value="${location.id}"
-                        th:text="${location.name}">Location Name
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="destination" th:text="#{destination} + ' *'">Destination</label>
-            <select th:field="*{dstLocId}" class="form-control">
-                <option th:each="location : ${locations}"
-                        th:value="${location.id}"
-                        th:text="${location.name}">Location Name
-                </option>
-            </select>
-        </div>
-        -->
 
         <!--
         <div class="form-group">

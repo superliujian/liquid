@@ -13,6 +13,11 @@
     <script src="/resources/assets/js/html5shiv.js"></script>
     <script src="/resources/assets/js/respond.min.js"></script>
     <![endif]-->
+    <style>
+        div#f.container {
+            max-width: 400px;
+        }
+    </style>    
 </head>
 
 <body>
@@ -26,34 +31,22 @@
 <div th:include="layout :: leg-tab"></div>
 <!-- {!end layout} -->
 
-<div class="container">
-    <form action="/task/{taskId}/planning/{tab}" method="POST" class="form-horizontal center"
+<div id="f" class="container">
+    <form action="/task/{taskId}/planning/{tab}" method="POST"
           th:object="${leg}" th:action="@{${#httpServletRequest.servletPath}}">
 
-        <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{origination} + ' *'">Origination</label>
-
-            <div class="col-lg-9">
-                <select th:field="*{srcLocId}" class="form-control">
-                    <option th:each="location : ${locations}"
-                            th:value="${location.id}"
-                            th:text="${location.name}">Location Name
-                    </option>
-                </select>
-            </div>
+        <input type="hidden" th:field="*{sourceId}"/>
+        <div class="form-group" th:classappend="${#fields.hasErrors('source')} ? 'has-error'">
+            <label th:text="#{origination} + ' *'">Source</label>
+            <input type="text" th:field="*{source}" class="form-control" th:placeholder="#{origination}"/>
+            <span th:errors="*{source}">error</span>            
         </div>
 
-        <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{destination} + ' *'">Destination</label>
-
-            <div class="col-lg-9">
-                <select th:field="*{dstLocId}" class="form-control">
-                    <option th:each="location : ${locations}"
-                            th:value="${location.id}"
-                            th:text="${location.name}">Location Name
-                    </option>
-                </select>
-            </div>
+        <input type="hidden" th:field="*{destinationId}"/>
+        <div class="form-group" th:classappend="${#fields.hasErrors('destinationId')} ? 'has-error'">
+            <label th:text="#{destination} + ' *'">Destination</label>
+            <input type="text" th:field="*{destination}" class="form-control" th:placeholder="#{destination}"/>
+            <span th:errors="*{destination}">error</span>      
         </div>
 
         <!--
@@ -68,12 +61,7 @@
         </div>
         -->
 
-        <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-9">
-                <input type="submit" name="addLeg" value="Add Leg" class="btn btn-default"
-                       th:value="#{leg.add}"/>
-            </div>
-        </div>
+        <input type="submit" name="addLeg" value="Add Leg" class="btn btn-success btn-block" th:value="#{leg.add}"/>
 
     </form>
 </div>
@@ -86,6 +74,17 @@
 <!-- {!begin layout} -->
 <div th:include="layout :: js"></div>
 <!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        var ports = initStationsAc();        
+        $('#source').autoComplete(ports, 'sourceId');
+        $('#destination').autoComplete(ports, 'destinationId');
+        $(".tt-hint").addClass("form-control"); 
+    }); // ready end
+/*]]>*/
+</script>
 </body>
 
 </html>

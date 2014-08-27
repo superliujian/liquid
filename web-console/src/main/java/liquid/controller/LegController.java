@@ -122,7 +122,8 @@ public class LegController extends BaseTaskController {
         LegEntity legEntity = new LegEntity();
         legEntity.setRoute(route);
         legEntity.setTransMode(TransMode.valueOf(tab.toUpperCase()).getType());
-        legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
+        if(null != leg.getServiceProviderId())
+            legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
         legEntity.setSrcLoc(srcLoc);
         legEntity.setDstLoc(dstLoc);
         legRepository.save(legEntity);
