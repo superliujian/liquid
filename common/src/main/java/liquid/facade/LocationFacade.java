@@ -3,6 +3,7 @@ package liquid.facade;
 import liquid.domain.Location;
 import liquid.persistence.domain.LocationEntity;
 import liquid.service.LocationService;
+import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,13 @@ public class LocationFacade {
             entities.add(new LocationEntity(location.getName(), type));
         }
         return locationService.save(entities);
+    }
+
+    public FormValidationResult validateLocation(Long id, String name, Integer type) {
+        if (null == id) {
+            LocationEntity location = locationService.findByTypeAndName(type, name);
+            if (null == location) return FormValidationResult.newFailure("invalid.location");
+        }
+        return FormValidationResult.newSuccess();
     }
 }

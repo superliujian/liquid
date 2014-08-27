@@ -109,36 +109,10 @@
 <script>
 /*<![CDATA[*/
     $(document).ready(function() {
-        var ports = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,  
-          limit: 10,
-          remote: '/api/location?type=2&name=%QUERY'
-        });
-
-        ports.initialize();
-
-        $('#source').typeahead(null, {
-          name: 'source',
-          displayKey: 'name',
-          source: ports.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#sourceId').val(datum.id);
-        });
-        
-        $('#destination').typeahead(null, {
-          name: 'destination',
-          displayKey: 'name',
-          source: ports.ttAdapter(),
-          templates: {
-            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
-          }  
-        }).on('typeahead:selected', function (obj, datum) {
-            $('#destinationId').val(datum.id);
-        });      
+        var ports = initPortsAc();        
+        $('#source').autoComplete(ports, 'sourceId');
+        $('#destination').autoComplete(ports, 'destinationId');
+        $(".tt-hint").addClass("form-control"); 
     }); // ready end
 /*]]>*/
 </script>

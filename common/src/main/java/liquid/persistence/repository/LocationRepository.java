@@ -21,4 +21,6 @@ public interface LocationRepository extends PageRepository<LocationEntity> {
     Iterable<LocationEntity> findByNameLike(String name);
 
     Iterable<LocationEntity> findByTypeAndNameLike(Integer type, String name);
+
+    LocationEntity findByTypeAndName(Integer type, String name);
 }
