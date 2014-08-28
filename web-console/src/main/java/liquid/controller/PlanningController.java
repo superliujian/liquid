@@ -2,14 +2,14 @@ package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.metadata.ChargeWay;
-import liquid.shipping.domain.TransMode;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.service.ChargeService;
-import liquid.order.service.OrderService;
 import liquid.service.PlanningService;
 import liquid.service.RouteService;
+import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
@@ -200,5 +200,14 @@ public class PlanningController extends BaseTaskController {
             String redirect = "redirect:/task/" + taskId + "/planning/" + planningId;
             return redirect;
         }
+    }
+
+    @RequestMapping(value = "/route/{routeId}", method = RequestMethod.POST, params = "delete")
+    public String deleteRoute(@PathVariable String taskId,
+                              @PathVariable Long routeId) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("routeId: {}", routeId);
+        routeRepository.delete(routeId);
+        return "redirect:/task/" + taskId + "/planning";
     }
 }

@@ -1,10 +1,10 @@
 package liquid.service;
 
-import liquid.shipping.domain.TaskBadgeDto;
-import liquid.shipping.domain.TaskDto;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.bpm.ActivitiEngineService;
+import liquid.shipping.domain.TaskBadgeDto;
+import liquid.shipping.domain.TaskDto;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;
 import liquid.task.TaskFactory;
@@ -59,6 +59,10 @@ public class TaskService {
         return orderService.find(orderId);
     }
 
+    public Long findOrderId(String taskId) {
+        return getOrderIdByTaskId(taskId);
+    }
+
     public List<HistoricTaskInstance> listCompltedTasks(long orderId) {
         return bpmService.listCompltedTasks(String.valueOf(orderId));
     }
@@ -89,9 +93,9 @@ public class TaskService {
         return taskBadge;
     }
 
-    public long getOrderIdByTaskId(String taskId) {
+    public Long getOrderIdByTaskId(String taskId) {
         String businessKey = bpmService.getBusinessKeyByTaskId(taskId);
-        return null == businessKey ? 0L : Long.valueOf(businessKey);
+        return null == businessKey ? null : Long.valueOf(businessKey);
     }
 
     public void complete(String taskId) throws NotCompletedException {

@@ -129,22 +129,4 @@ public class LegEntity extends BaseUpdateEntity {
     public void setPrev(LegEntity prev) {
         this.prev = prev;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Leg{");
-        sb.append("route=").append(route);
-        sb.append(", head=").append(head);
-        sb.append(", transMode=").append(transMode);
-        sb.append(", sp=").append(sp);
-        sb.append(", spId=").append(spId);
-        sb.append(", srcLoc=").append(srcLoc);
-        sb.append(", dstLoc=").append(dstLoc);
-        sb.append(", srcLocId=").append(srcLocId);
-        sb.append(", dstLocId=").append(dstLocId);
-        sb.append(", prev=").append(prev);
-        sb.append('}');
-        return sb.toString();
-    }
 }

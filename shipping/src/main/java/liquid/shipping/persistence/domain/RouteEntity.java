@@ -25,11 +25,11 @@ public class RouteEntity extends BaseUpdateEntity {
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
-    @Transient
-    private String deliveryDateStr;
+    @OneToMany(mappedBy="route", cascade = CascadeType.ALL)
+    public Collection<LegEntity> legs;
 
     @Transient
-    private Collection<LegEntity> legs;
+    private String deliveryDateStr;
 
     @Transient
     private Collection<ShippingContainerEntity> containers;
@@ -135,19 +135,5 @@ public class RouteEntity extends BaseUpdateEntity {
 
     public void setBatch(boolean batch) {
         this.batch = batch;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Route{");
-//        sb.append("planning=").append(planning);
-        sb.append(", containerQtyMax=").append(containerQtyMax);
-        sb.append(", containerQty=").append(containerQty);
-        sb.append(", deliveryDateStr='").append(deliveryDateStr).append('\'');
-        sb.append(", legs=").append(legs);
-        sb.append(", batch=").append(batch);
-        sb.append('}');
-        return sb.toString();
     }
 }
