@@ -96,7 +96,7 @@ public class ChargeController {
         logger.debug("param: {}", param);
 
         model.addAttribute("charges", chargeService.findBySpName(param));
-        return "/charge/details";
+        return "charge/details";
     }
 
     @RequestMapping(value = "/summary", method = RequestMethod.GET, params = "number")
@@ -107,7 +107,7 @@ public class ChargeController {
         Page<OrderEntity> page = orderService.findAll(pageRequest);
         model.addAttribute("tab", "summary");
         model.addAttribute("page", page);
-        return "/charge/summary";
+        return "charge/summary";
     }
 
     @RequestMapping(value = "/details", method = RequestMethod.GET, params = "number")
@@ -118,7 +118,29 @@ public class ChargeController {
         Page<OrderEntity> page = orderService.findAll(pageRequest);
         model.addAttribute("tab", "details");
         model.addAttribute("charges", chargeService.findAll());
-        return "/charge/details";
+        return "charge/details";
+    }
+
+    @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = "number")
+    public String receivable(@RequestParam int number,
+                             Model model, Principal principal) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<OrderEntity> page = orderService.findAll(pageRequest);
+        model.addAttribute("tab", "summary");
+        model.addAttribute("page", page);
+        return "charge/receivable";
+    }
+
+    @RequestMapping(value = "/payable", method = RequestMethod.GET, params = "number")
+    public String payable(@RequestParam int number,
+                          Model model, Principal principal) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<OrderEntity> page = orderService.findAll(pageRequest);
+        model.addAttribute("tab", "summary");
+        model.addAttribute("page", page);
+        return "charge/payable";
     }
 
     @RequestMapping(method = RequestMethod.POST)

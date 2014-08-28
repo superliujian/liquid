@@ -252,7 +252,7 @@ roadId,
 
 
 <div th:fragment="charge-tab">
-    <div class="container">
+
         <ul class="nav nav-tabs">
             <li class="active" th:class="${tab} == 'summary' ? 'active'">
                 <a href="/charge/summary?number=0" th:text="#{charge.summary}">Summary</a>
@@ -260,8 +260,14 @@ roadId,
             <li class="active" th:class="${tab} == 'details' ? 'active'">
                 <a href="/charge/details?number=0" th:text="#{charge.details}">Details</a>
             </li>
+            <li class="active" th:class="${tab} == 'receivable' ? 'active'">
+                <a href="/charge/receivable?number=0" th:text="#{charge.receivable}">Details</a>
+            </li>
+            <li class="active" th:class="${tab} == 'details' ? 'active'">
+                <a href="/charge/payable?number=0" th:text="#{charge.payable}">Details</a>
+            </li>                        
         </ul>
-    </div>
+
 </div>
 
 <!-- footer -->
