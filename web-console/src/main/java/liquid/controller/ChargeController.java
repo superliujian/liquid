@@ -127,7 +127,7 @@ public class ChargeController {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<OrderEntity> page = orderService.findAll(pageRequest);
-        model.addAttribute("tab", "summary");
+        model.addAttribute("tab", "receivable");
         model.addAttribute("page", page);
         return "charge/receivable";
     }
@@ -138,8 +138,8 @@ public class ChargeController {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<OrderEntity> page = orderService.findAll(pageRequest);
-        model.addAttribute("tab", "summary");
-        model.addAttribute("page", page);
+        model.addAttribute("tab", "payable");
+        model.addAttribute("charges", chargeService.findAll());
         return "charge/payable";
     }
 

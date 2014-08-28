@@ -23,6 +23,10 @@
 <br/>
 
 
+<div class="container">
+
+</div>
+<!-- /.container -->
 
 <br/>
 
@@ -30,66 +34,71 @@
     <div class="panel-body">
         <!-- {!begin layout} -->
         <div th:include="layout :: charge-tab"></div>
-        <!-- {!end layout} -->
+        <!-- {!end layout} -->    
+        
+        <form action="/charge" method="GET" class="form-inline">
+            <div class="form-group">
+                <label class="sr-only" for="param" th:text="#{charge.id}"/>
+                <input type="text" class="form-control" id="param" name="param"
+                       placeholder="Order NO"/>
+            </div>
 
-        <table class="table table-striped table-hover table-condensed table-16">
+            <div class="form-group">
+                <input type="submit" name="findByOrderNo" value="Find Charges By Order No" class="btn btn-default"
+                       th:value="#{charge.find.by.order.no}"/>
+                <input type="submit" name="findBySpName" value="Find Charges By Sp Name" class="btn btn-default"
+                       th:value="#{charge.find.by.sp.name}"/>
+            </div>
+        </form>
+        
+        <table class="table table-striped table-hover table-condensed table-16"
+               th:unless="${#lists.isEmpty(charges)}">
             <thead>
             <tr>
+                <th th:text="#{charge.id}">ID</th>
                 <th th:text="#{order.no}">Order No.</th>
-                <th th:text="#{customer.name}">Customer Name</th>
-                <th th:text="#{origination}">Origin</th>
-                <th th:text="#{destination}">Destination</th>
-                <th th:text="#{goods.name}">Cargo Name</th>
-                <th th:text="#{trade.type}">Trade Type</th>
+                <th th:text="#{create.time}">Create Time</th>
+                <th th:text="#{bol.no}">BOL No.</th>
                 <th th:text="#{container.quantity}">Container Quantity</th>
-                <th th:text="#{sales.price}">Sales Price</th>
-                <th th:text="#{disty.price}">Disty Price</th>
-                <th th:text="#{grand.total}">Grand Total</th>
-                <th th:text="#{gross.margin}">Gross Margin</th>
-                <th th:text="#{sales.profit}">Sales Profit</th>
-                <th th:text="#{disty.profit}">Disty Profit</th>
+                <th th:text="#{container.no}">Container Quantity</th>                
+                <th th:text="#{charge.type}">Type</th>
+                <th th:text="#{sp.name}">SP Name</th>
+                <th th:text="#{charge.way}">Way</th>
+                <th th:text="#{charge.unit.price} + '(CNY)'">Unit Price</th>
+                <th th:text="#{charge.unit.price} + '(USD)'">Unit Price</th>
+                <th th:text="#{finance.payable.sum}">Payable SUM</th>
+                <th th:text="#{finance.payable.balance}">Payable Balance</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="order : ${page.content}">
+            <tr th:each="charge : ${charges}">
+                <td th:text="${charge.id}">ID</td>
+                <td th:text="${charge.order.orderNo}">Order No.</td>
+                <td th:text="${charge.order.createTime}"></td>
+                <td></td>
+                <td th:text="${charge.order.containerQty}">Container Quantity</td>
+                <td></td>
+                <td th:text="${charge.serviceSubtype.name}">Type</td>
+                <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
+                <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
+                <td th:text="${charge.unitPrice}">Unit Price</td>
+                <td></td>
+                <td th:text="${charge.totalPrice}">Total Price</td>
+                <td></td>
                 <td>
-                    <a href="/charge/order/{orderId}" th:href="'/charge/order/' + ${order.id}"
-                       th:text="${order.orderNo}"/>
+                    <a href="/charge/id" class="btn btn-default btn-xs"
+                       th:href="'/charge/' + ${charge.id}" th:if="${charge.status} == 0">
+                        <i class="glyphicon glyphicon-credit-card"/>
+                    </a>
+                    <button class="btn btn-default btn-xs" th:if="${charge.status} == 1">
+                        <i class="glyphicon glyphicon-check"/>
+                    </button>
                 </td>
-                <td th:text="${order.customer.name}">Customer Name</td>
-                <td th:text="${order.srcLoc.name}">Origin</td>
-                <td th:text="${order.dstLoc.name}">Destination</td>
-                <td th:text="${order.goods.name}"></td>
-                <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
-                <td th:text="${order.containerQty}">Container Quantity</td>
-                <td th:text="${order.cnyTotal} + '+' + ${order.usdTotal} + '$'">Sales Price</td>
-                <td th:text="${order.distyPrice}">Disty Price</td>
-                <td th:text="${order.grandTotal}">Grand Total</td>
-                <td th:text="${order.cnyTotal + order.usdTotal * 6 - order.grandTotal}">Gross Margin</td>
-                <td th:text="${order.cnyTotal + order.usdTotal * 6 - order.distyPrice}">Sales Profit</td>
-                <td th:text="${order.distyPrice - order.grandTotal}">Disty Profit</td>
             </tr>
             </tbody>
         </table>
     </div>
-</div>
-
-<div id="pagination_bar">
-    <ul class="pagination">
-        <li>
-            <a href="/charge/summary?number=0">&laquo;</a>
-        </li>
-        <li><a href="/charge/summary?nubmer=1" th:if="${page.hasPreviousPage()}"
-               th:href="'/charge/summary?number=' + ${page.number - 1}"
-               th:text="${page.number}">1</a></li>
-        <li><a href="" th:text="${page.number + 1}">2</a></li>
-        <li><a href="#" th:if="${page.hasNextPage()}"
-               th:href="'/charge/summary?number=' + ${page.number + 1}"
-               th:text="${page.number + 2}">3</a></li>
-        <li><a href="/charge/summary?number={totalPages}"
-               th:href="'/charge/summary?number=' + ${page.totalPages - 1}">&raquo;</a>
-        </li>
-    </ul>
 </div>
 
 <!-- {!begin layout} -->

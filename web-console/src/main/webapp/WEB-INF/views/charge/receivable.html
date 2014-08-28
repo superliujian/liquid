@@ -36,18 +36,23 @@
             <thead>
             <tr>
                 <th th:text="#{order.no}">Order No.</th>
+                <th th:text="#{create.time}">Create Time</th>
                 <th th:text="#{customer.name}">Customer Name</th>
                 <th th:text="#{origination}">Origin</th>
                 <th th:text="#{destination}">Destination</th>
+                <th th:text="#{rail.destination}">Destination Station</th>
                 <th th:text="#{goods.name}">Cargo Name</th>
                 <th th:text="#{trade.type}">Trade Type</th>
+                <th th:text="#{bol.no}">BOL No.</th>
                 <th th:text="#{container.quantity}">Container Quantity</th>
-                <th th:text="#{sales.price}">Sales Price</th>
-                <th th:text="#{disty.price}">Disty Price</th>
-                <th th:text="#{grand.total}">Grand Total</th>
-                <th th:text="#{gross.margin}">Gross Margin</th>
-                <th th:text="#{sales.profit}">Sales Profit</th>
-                <th th:text="#{disty.profit}">Disty Profit</th>
+                <th th:text="#{container.no}">Container Quantity</th>
+                <th th:text="#{finance.receivable} + '(CNY)'">Receivable CNY</th>
+                <th th:text="#{finance.receivable} + '(USD)'">Receivable USD</th>
+                <th th:text="#{finance.receivable.sum}">Receivable SUM</th>
+                <th th:text="#{finance.received.in.advance.time}">Received in advance time</th>
+                <th th:text="#{finance.receivable.balance}">Receivable Balance</th>
+                <th th:text="#{finance.invoice.balance.cny}">Invoice Balance CNY</th>
+                <th th:text="#{finance.invoice.balance.usd}">Invoice Balance USD</th>
             </tr>
             </thead>
             <tbody>
@@ -56,18 +61,23 @@
                     <a href="/charge/order/{orderId}" th:href="'/charge/order/' + ${order.id}"
                        th:text="${order.orderNo}"/>
                 </td>
+                <td th:text="${order.createTime}"></td>
                 <td th:text="${order.customer.name}">Customer Name</td>
                 <td th:text="${order.srcLoc.name}">Origin</td>
                 <td th:text="${order.dstLoc.name}">Destination</td>
+                <td></td>
                 <td th:text="${order.goods.name}"></td>
                 <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
+                <td></td>
                 <td th:text="${order.containerQty}">Container Quantity</td>
-                <td th:text="${order.cnyTotal} + '+' + ${order.usdTotal} + '$'">Sales Price</td>
-                <td th:text="${order.distyPrice}">Disty Price</td>
-                <td th:text="${order.grandTotal}">Grand Total</td>
-                <td th:text="${order.cnyTotal + order.usdTotal * 6 - order.grandTotal}">Gross Margin</td>
-                <td th:text="${order.cnyTotal + order.usdTotal * 6 - order.distyPrice}">Sales Profit</td>
-                <td th:text="${order.distyPrice - order.grandTotal}">Disty Profit</td>
+                <td></td>
+                <td th:text="${order.cnyTotal}">Receivable CNY</td>
+                <td th:text="${order.usdTotal}">Receivable USD</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             </tbody>
         </table>
