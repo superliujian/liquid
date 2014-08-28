@@ -114,19 +114,19 @@ public class BaseOrder extends BaseUpdateEntity {
     private RailwayEntity railway;
 
     @Column(name = "DISTY_PRICE")
-    private long distyPrice;
+    private Long distyPrice;
 
     @Column(name = "DISTY_USD")
     private Long distyUsd;
 
     @Column(name = "GRAND_TOTAL")
-    private long grandTotal;
+    private Long grandTotal;
 
     @Column(name = "USD_TOTAL")
-    private long usdTotal;
+    private Long usdTotal;
 
     @Column(name = "CNY_TOTAL")
-    private long cnyTotal;
+    private Long cnyTotal;
 
     @Column(name = "CREATE_ROLE")
     private String createRole;
@@ -343,11 +343,11 @@ public class BaseOrder extends BaseUpdateEntity {
         this.railway = railway;
     }
 
-    public long getDistyPrice() {
+    public Long getDistyPrice() {
         return distyPrice;
     }
 
-    public void setDistyPrice(long distyPrice) {
+    public void setDistyPrice(Long distyPrice) {
         this.distyPrice = distyPrice;
     }
 
@@ -359,11 +359,11 @@ public class BaseOrder extends BaseUpdateEntity {
         this.distyUsd = distyUsd;
     }
 
-    public long getGrandTotal() {
+    public Long getGrandTotal() {
         return grandTotal;
     }
 
-    public void setGrandTotal(long grandTotal) {
+    public void setGrandTotal(Long grandTotal) {
         this.grandTotal = grandTotal;
     }
 
@@ -375,19 +375,19 @@ public class BaseOrder extends BaseUpdateEntity {
         this.createRole = createRole;
     }
 
-    public long getUsdTotal() {
+    public Long getUsdTotal() {
         return usdTotal;
     }
 
-    public void setUsdTotal(long usdTotal) {
+    public void setUsdTotal(Long usdTotal) {
         this.usdTotal = usdTotal;
     }
 
-    public long getCnyTotal() {
+    public Long getCnyTotal() {
         return cnyTotal;
     }
 
-    public void setCnyTotal(long cnyTotal) {
+    public void setCnyTotal(Long cnyTotal) {
         this.cnyTotal = cnyTotal;
     }
 

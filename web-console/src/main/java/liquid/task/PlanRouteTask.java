@@ -53,7 +53,9 @@ public class PlanRouteTask extends AbstractTaskProxy {
         transTypes.put("hasBarge", false);
         transTypes.put("hasVessel", false);
 
-        Iterable<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Long orderId = taskService.findOrderId(taskId);
+
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {

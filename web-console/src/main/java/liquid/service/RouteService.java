@@ -21,10 +21,6 @@ import java.util.Collection;
  */
 @Service
 public class RouteService extends AbstractService<RouteEntity, RouteRepository> {
-
-    @Autowired
-    private TaskService taskService;
-
     @Autowired
     private RouteRepository routeRepository;
 
@@ -49,26 +45,6 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
 
     @Autowired
     private ShippingContainerRepository scRepository;
-
-    public Iterable<RouteEntity> findByTaskId(String taskId) {
-        Long orderId = taskService.findOrderId(taskId);
-        Iterable<RouteEntity> routes = routeRepository.findByOrderId(orderId);
-        for (RouteEntity route : routes) {
-            Collection<LegEntity> legs = legRepository.findByRoute(route);
-            route.setLegs(legs);
-            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
-            route.setContainers(containers);
-            Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
-            route.setRailContainers(railContainers);
-            Collection<BargeContainer> bargeContainers = bargeContainerService.findByRoute(route);
-            route.setBargeContainers(bargeContainers);
-            Collection<VesselContainer> vesselContainers = vesselContainerService.findByRoute(route);
-            route.setVesselContainers(vesselContainers);
-            Collection<DeliveryContainer> deliveryContainers = deliveryContainerService.findByRoute(route);
-            route.setDeliveryContainers(deliveryContainers);
-        }
-        return routes;
-    }
 
     public Iterable<RouteEntity> findByOrderId(Long orderId) {
         Iterable<RouteEntity> routes = routeRepository.findByOrderId(orderId);

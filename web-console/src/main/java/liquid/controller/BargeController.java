@@ -39,7 +39,8 @@ public class BargeController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         scService.initBargeContainers(taskId);
-        Iterable<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "barge/main";
     }
