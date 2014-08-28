@@ -2,7 +2,9 @@ package liquid.task;
 
 import liquid.order.service.OrderService;
 import liquid.security.SecurityContext;
-import liquid.service.*;
+import liquid.service.RouteService;
+import liquid.service.ShippingContainerService;
+import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,6 @@ public abstract class AbstractTaskProxy {
 
     @Autowired
     protected OrderService orderService;
-
-    @Autowired
-    protected PlanningService planningService;
 
     @Autowired
     protected RouteService routeService;

@@ -42,7 +42,8 @@ public class RailShippingController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("rail_task", TASK_PATH);
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

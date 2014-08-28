@@ -58,12 +58,12 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainer,
         }
 
         dcList = new ArrayList<DeliveryContainer>();
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scList = shippingContainerRepository.findByRoute(route);
             for (ShippingContainerEntity sc : scList) {
                 DeliveryContainer dc = new DeliveryContainer();
-                dc.setOrder(route.getPlanning().getOrder());
+                dc.setOrder(route.getOrder());
                 dc.setRoute(route);
                 dc.setSc(sc);
                 dc.setAddress(order.getConsigneeAddress());

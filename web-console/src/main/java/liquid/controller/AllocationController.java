@@ -1,18 +1,21 @@
 package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.container.domain.ContainerType;
+import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.service.ContainerService;
 import liquid.domain.ContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
 import liquid.facade.ContainerAllocationFacade;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.container.domain.ContainerType;
-import liquid.container.persistence.domain.ContainerEntity;
 import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.service.*;
+import liquid.service.ChargeService;
+import liquid.service.LocationService;
+import liquid.service.RouteService;
+import liquid.service.ShippingContainerService;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import org.slf4j.Logger;
@@ -67,7 +70,8 @@ public class AllocationController extends BaseTaskController {
 
     public String init(@PathVariable String taskId, Model model) {
         scService.initialize(taskId);
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
 
@@ -88,7 +92,7 @@ public class AllocationController extends BaseTaskController {
 
         ContainerAllocation containerAllocation = containerAllocationFacade.computeContainerAllocation(taskId);
         model.addAttribute("containerAllocation", containerAllocation);
-        if (routeId == 0) routeId = containerAllocation.getRoutes()[0].getId();
+        if (routeId == 0) routeId = containerAllocation.getRoutes().iterator().next().getId();
 
         if (ContainerType.RAIL.getType() == containerAllocation.getType())
             return "allocation/rail_container";
@@ -104,7 +108,7 @@ public class AllocationController extends BaseTaskController {
             PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
 
             RouteEntity routeEntity = routeService.find(routeId);
-            Page<ContainerEntity> page = containerService.findAll(routeEntity.getPlanning().getOrder().getContainerSubtype().getId(),
+            Page<ContainerEntity> page = containerService.findAll(routeEntity.getOrder().getContainerSubtype().getId(),
                     ownerId, yardId, pageRequest);
 
             model.addAttribute("ownerId", ownerId);
@@ -169,7 +173,7 @@ public class AllocationController extends BaseTaskController {
 
         model.addAttribute("sc", sc);
         model.addAttribute("routeId", routeId);
-        model.addAttribute("containers", containerService.findAllInStock(route.getPlanning().getOrder().getContainerType()));
+        model.addAttribute("containers", containerService.findAllInStock(route.getOrder().getContainerType()));
         return "allocation/allocating";
     }
 
@@ -187,7 +191,8 @@ public class AllocationController extends BaseTaskController {
 
         scService.allocate(routeId, sc);
 
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "redirect:/task/" + taskId + "/allocation";
     }

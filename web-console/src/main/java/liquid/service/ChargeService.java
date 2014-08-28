@@ -62,12 +62,12 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         RouteEntity route = null;
         if (null != entity.getRoute()) {
             route = routeService.find(entity.getRoute().getId());
-            entity.setOrder(route.getPlanning().getOrder());
+            entity.setOrder(route.getOrder());
         }
         if (null != entity.getLeg()) {
             LegEntity leg = legRepository.findOne(entity.getLeg().getId());
             route = leg.getRoute();
-            entity.setOrder(route.getPlanning().getOrder());
+            entity.setOrder(route.getOrder());
         }
         if (null == entity.getOrder()) {
             OrderEntity order = taskService.findOrderByTaskId(entity.getTaskId());

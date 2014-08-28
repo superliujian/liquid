@@ -1,9 +1,9 @@
 package liquid.controller;
 
-import liquid.shipping.persistence.domain.BargeContainer;
-import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
+import liquid.shipping.persistence.domain.BargeContainer;
+import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
-import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -40,7 +39,7 @@ public class BargeController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         scService.initBargeContainers(taskId);
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByTaskId(taskId);
         model.addAttribute("routes", routes);
         return "barge/main";
     }

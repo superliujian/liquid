@@ -1,16 +1,19 @@
 package liquid.facade;
 
+import liquid.container.domain.ContainerType;
+import liquid.container.persistence.domain.ContainerEntity;
 import liquid.domain.ContainerAllocation;
 import liquid.domain.RouteContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
-import liquid.container.domain.ContainerType;
-import liquid.container.persistence.domain.ContainerEntity;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.service.*;
+import liquid.service.ContainerAllocationService;
+import liquid.service.RouteService;
+import liquid.service.ShippingContainerService;
+import liquid.service.TaskService;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
-import liquid.util.StringUtil;
 import liquid.util.CollectionUtil;
+import liquid.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +45,7 @@ public class ContainerAllocationFacade {
         int type = order.getContainerType();
         String subtypeName = order.getContainerSubtype().getName();
 
-        List<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
 
         List<RouteContainerAllocation> routeContainerAllocations = null;
         if (ContainerType.RAIL.getType() == type)
@@ -50,16 +53,15 @@ public class ContainerAllocationFacade {
         else
             routeContainerAllocations = computeSelfContainerAllocations(type, subtypeName, routes);
 
-        containerAllocation.setRoutes(routes.toArray(new RouteEntity[0]));
+        containerAllocation.setRoutes(routes);
         containerAllocation.setType(type);
         containerAllocation.setRouteContainerAllocations(routeContainerAllocations.toArray(new RouteContainerAllocation[0]));
         return containerAllocation;
     }
 
-    private List<RouteContainerAllocation> computeSelfContainerAllocations(int type, String subtypeName, List<RouteEntity> routes) {
+    private List<RouteContainerAllocation> computeSelfContainerAllocations(int type, String subtypeName, Iterable<RouteEntity> routes) {
         List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
-        for (int i = 0; i < routes.size(); i++) {
-            RouteEntity route = routes.get(i);
+        for (RouteEntity route : routes) {
             List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRoute(route);
             int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
             for (int j = 0; j < allocatedQuantity; j++) {
@@ -82,10 +84,9 @@ public class ContainerAllocationFacade {
         return routeContainerAllocations;
     }
 
-    private List<RouteContainerAllocation> computeRailContainerAllocations(int type, String subtypeName, List<RouteEntity> routes) {
+    private List<RouteContainerAllocation> computeRailContainerAllocations(int type, String subtypeName, Iterable<RouteEntity> routes) {
         List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
-        for (int i = 0; i < routes.size(); i++) {
-            RouteEntity route = routes.get(i);
+        for (RouteEntity route : routes) {
             List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRoute(route);
             int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
             for (int j = 0; j < allocatedQuantity; j++) {

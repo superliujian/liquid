@@ -34,8 +34,7 @@ public class BookingFacade {
         Booking booking = new Booking();
 
         Iterable<BookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
-
-        List<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {

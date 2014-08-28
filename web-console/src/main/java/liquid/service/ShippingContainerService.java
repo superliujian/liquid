@@ -34,9 +34,6 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     private TaskService taskService;
 
     @Autowired
-    private PlanningService planningService;
-
-    @Autowired
     private RouteService routeService;
 
     @Autowired
@@ -66,15 +63,14 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     @Override
     public void doSaveBefore(ShippingContainerEntity entity) { }
 
-    public Collection<RouteEntity> findByOrderId(Long orderId) {
-        PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
-        return routeService.findByPlanning(planning);
+    public Iterable<RouteEntity> findByOrderId(Long orderId) {
+        return routeService.findByOrderId(orderId);
     }
 
     @Transactional("transactionManager")
     public void initialize(String taskId) {
-        PlanningEntity planning = planningService.findByTaskId(taskId);
-        Collection<RouteEntity> routes = routeService.findByPlanning(planning);
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> containers = route.getContainers();
             if (null == containers) containers = new ArrayList<>();
@@ -154,14 +150,14 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         rcList = new ArrayList<RailContainer>();
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
                 for (ShippingContainerEntity sc : scList) {
                     RailContainer rc = new RailContainer();
-                    rc.setOrder(route.getPlanning().getOrder());
+                    rc.setOrder(route.getOrder());
                     rc.setRoute(route);
                     rc.setLeg(legList.get(0));
                     rc.setSc(sc);
@@ -476,14 +472,14 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         bcList = new ArrayList<BargeContainer>();
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
                 for (ShippingContainerEntity sc : scList) {
                     BargeContainer bc = new BargeContainer();
-                    bc.setOrder(route.getPlanning().getOrder());
+                    bc.setOrder(route.getOrder());
                     bc.setRoute(route);
                     bc.setLeg(legList.get(0));
                     bc.setSc(sc);
@@ -560,14 +556,14 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         vcList = new ArrayList<VesselContainer>();
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
                 for (ShippingContainerEntity sc : scList) {
                     VesselContainer vc = new VesselContainer();
-                    vc.setOrder(route.getPlanning().getOrder());
+                    vc.setOrder(route.getOrder());
                     vc.setRoute(route);
                     vc.setLeg(legList.get(0));
                     vc.setSc(sc);

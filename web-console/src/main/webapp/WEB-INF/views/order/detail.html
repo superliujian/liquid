@@ -317,9 +317,9 @@
 </div>
 <!-- /#order .container -->
 
-<div th:if="${planning}">
-    <div id="shipping_plan" class="container" th:unless="${#lists.isEmpty(planning.routes)}">
-        <div class="panel panel-default" th:each="route : ${planning.routes}">
+<div>
+    <div id="shipping_plan" class="container" th:unless="${#lists.isEmpty(routes)}">
+        <div class="panel panel-default" th:each="route : ${routes}">
             <div class="panel-heading">
                 <span th:text="#{route} + ${route.id}">Route ID</span>
                 <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>

@@ -2,12 +2,12 @@ package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.metadata.ChargeWay;
-import liquid.shipping.domain.TransMode;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.DeliveryContainerService;
 import liquid.service.RouteService;
 import liquid.service.ServiceSubtypeService;
+import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.DeliveryContainer;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
-import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -51,7 +50,8 @@ public class DeliveryController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Collection<RouteEntity> routes = routeService.findByTaskId(taskId);
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
 
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(taskId));

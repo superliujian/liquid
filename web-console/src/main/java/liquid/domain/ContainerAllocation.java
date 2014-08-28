@@ -8,7 +8,7 @@ import liquid.shipping.persistence.domain.RouteEntity;
 public class ContainerAllocation {
     private int type;
 
-    private RouteEntity[] routes;
+    private Iterable<RouteEntity> routes;
 
     private RouteContainerAllocation[] routeContainerAllocations;
 
@@ -20,11 +20,11 @@ public class ContainerAllocation {
         this.type = type;
     }
 
-    public RouteEntity[] getRoutes() {
+    public Iterable<RouteEntity> getRoutes() {
         return routes;
     }
 
-    public void setRoutes(RouteEntity[] routes) {
+    public void setRoutes(Iterable<RouteEntity> routes) {
         this.routes = routes;
     }
 

@@ -1,5 +1,6 @@
 package liquid.shipping.persistence.domain;
 
+import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
 
 import javax.persistence.*;
@@ -15,18 +16,18 @@ import java.util.Collection;
 @Entity(name = "ROUTE")
 public class RouteEntity extends BaseUpdateEntity {
     @ManyToOne
-    @JoinColumn(name = "PLANNING_ID")
-    private PlanningEntity planning;
-
-    @Transient
-    private int containerQtyMax;
+    @JoinColumn(name = "ORDER_ID")
+    private OrderEntity order;
 
     @Min(1)
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
-    @OneToMany(mappedBy="route", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
     public Collection<LegEntity> legs;
+
+    @Transient
+    private int containerQtyMax;
 
     @Transient
     private String deliveryDateStr;
@@ -49,12 +50,12 @@ public class RouteEntity extends BaseUpdateEntity {
     @Transient
     private boolean batch;
 
-    public PlanningEntity getPlanning() {
-        return planning;
+    public OrderEntity getOrder() {
+        return order;
     }
 
-    public void setPlanning(PlanningEntity planning) {
-        this.planning = planning;
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
 
     public int getContainerQtyMax() {

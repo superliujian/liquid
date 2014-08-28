@@ -1,13 +1,15 @@
 package liquid.task;
 
-import liquid.order.persistence.domain.OrderEntity;
 import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,15 +18,15 @@ import java.util.Map;
 @DefinitionKey("planRoute")
 @Service
 public class PlanRouteTask extends AbstractTaskProxy {
+    private static final Logger logger = LoggerFactory.getLogger(PlanRouteTask.class);
+
     @Override
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
-        Map<String, Object> transTypes = planningService.getTransTypes(taskId);
+        Map<String, Object> transTypes = getTransTypes(taskId);
         variableMap.putAll(transTypes);
 
-        long orderId = taskService.getOrderIdByTaskId(taskId);
-        OrderEntity order = orderService.find(orderId);
-        PlanningEntity planning = planningService.findByOrder(order);
-        Collection<RouteEntity> routes = routeService.findByPlanning(planning);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         boolean hasWaterTransport = false;
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
@@ -42,5 +44,38 @@ public class PlanRouteTask extends AbstractTaskProxy {
             if (hasWaterTransport) break;
         }
         variableMap.put("hasWaterTransport", hasWaterTransport);
+    }
+
+    @Transactional("transactionManager")
+    public Map<String, Object> getTransTypes(String taskId) {
+        Map<String, Object> transTypes = new HashMap<String, Object>();
+        transTypes.put("hasRailway", false);
+        transTypes.put("hasBarge", false);
+        transTypes.put("hasVessel", false);
+
+        Iterable<RouteEntity> routes = routeService.findByTaskId(taskId);
+        for (RouteEntity route : routes) {
+            Collection<LegEntity> legs = route.getLegs();
+            for (LegEntity leg : legs) {
+                TransMode mode = TransMode.valueOf(leg.getTransMode());
+                switch (mode) {
+                    case RAIL:
+                        transTypes.put("hasRailway", true);
+                        break;
+                    case BARGE:
+                        transTypes.put("hasBarge", true);
+                        break;
+                    case VESSEL:
+                        transTypes.put("hasVessel", true);
+                        break;
+                    default:
+                        logger.warn("{} transportation mode is illegal.");
+                        break;
+                }
+            }
+        }
+
+        logger.debug("The order has the transportation {}.", transTypes);
+        return transTypes;
     }
 }

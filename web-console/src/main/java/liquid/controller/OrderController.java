@@ -15,7 +15,6 @@ import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
 import liquid.shipping.domain.TransMode;
-import liquid.shipping.persistence.domain.PlanningEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.validation.FormValidationResult;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +57,6 @@ public class OrderController extends BaseController {
 
     @Autowired
     private CargoTypeService cargoTypeService;
-
-    @Autowired
-    private PlanningService planningService;
 
     @Autowired
     private TaskService taskService;
@@ -289,7 +284,7 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable long id, Model model) {
+    public String detail(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);
 
         Order order = orderFacade.find(id);
@@ -298,12 +293,10 @@ public class OrderController extends BaseController {
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
-        routeService.findByPlanning(planning);
-
+        Iterable<RouteEntity> routes = routeService.findByOrderId(id);
         // TODO: move to an appropriate place
         model.addAttribute("transModes", TransMode.toMap());
-        model.addAttribute("planning", planning);
+        model.addAttribute("routes", routes);
 
         return "order/detail";
     }
@@ -326,7 +319,7 @@ public class OrderController extends BaseController {
                 OrderEntity orderEntity = orderService.find(id);
                 break;
             case "container":
-                Collection<RouteEntity> routes = shippingContainerService.findByOrderId(id);
+                Iterable<RouteEntity> routes = shippingContainerService.findByOrderId(id);
                 model.addAttribute("routes", routes);
                 break;
             case "charge":

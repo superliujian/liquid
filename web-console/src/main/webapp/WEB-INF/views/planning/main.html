@@ -25,45 +25,23 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-
     <div class="btn-toolbar">
-        <form action="/task/${taskId}/planning" method="POST" class="form-inline"
-              th:object="${planning}" th:action="@{${#httpServletRequest.servletPath}}">
-
-            <input type="submit" name="createPlanning" value="Create Planning" class="btn btn-default"
-                   th:value="#{trans.add.planning}" th:if="${planning['new']}"/>
-
-            <div class="btn-group" th:unless="${planning['new']}">
-                <button type="submit" name="applyMulti" value="Apply Multiple Routes" class="btn btn-default"
-                        th:text="#{trans.same.route}" th:if="${planning['sameRoute']}"/>
-
-                <button type="submit" name="applySame" value="Apply Same Route" class="btn btn-default"
-                        th:text="#{trans.multi.routes}" th:unless="${planning['sameRoute']}"/>
-
-                <button type="submit" name="deletePlanning" value="Delete Planning Settings" class="btn btn-default"
-                        th:text="#{trans.delete.planning}"/>
-            </div>
-        </form>
-
-        <form action="/task/${taskId}/planning/{planningId}/route" method="POST"
-              th:object="${route}" th:action="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route'">
-            <div th:unless="${planning['new']}">
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <span class="input-group-addon"
-                              th:text="#{container.quantity} + '(' + ${planning.order.containerQty} + ')'">Container QTY</span>
-                        <input class="form-control" type="text" th:field="*{containerQty}"
-                               th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'"/>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit" name="addRoute" value="Add Route"
-                                    th:text="#{route.add}">Add Route
-                            </button>
-                        </span>
-                        <input type="hidden" name="containerQtyMax" th:value="${planning.order.containerQty}"/>
-                    </div>
+        <form method="POST" th:action="'/task/' + ${taskId} + '/planning/route'" th:object="${route}" >
+            <div class="col-lg-3">
+                <div class="input-group">
+                    <span class="input-group-addon"
+                          th:text="#{container.quantity} + '(' + ${order.containerQty} + ')'">Container QTY</span>
+                    <input class="form-control" type="text" th:field="*{containerQty}"
+                           th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" name="addRoute" value="Add Route"
+                                th:text="#{route.add}">Add Route
+                        </button>
+                    </span>
+                    <input type="hidden" name="containerQtyMax" th:value="${order.containerQty}"/>
                 </div>
-                <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>
             </div>
+            <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>
         </form>
     </div>
 </div>
@@ -71,8 +49,8 @@
 
 <br/>
 
-<div class="container" th:unless="${#lists.isEmpty(planning.routes)}">
-    <div class="panel panel-default" th:each="route : ${planning.routes}">
+<div class="container" th:unless="${#lists.isEmpty(routes)}">
+    <div class="panel panel-default" th:each="route : ${routes}">
         <div class="panel-heading">
             <span th:text="#{route} + ${route.id}">Route ID</span>
             <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>            
@@ -95,7 +73,7 @@
                     <th th:text="#{origination}">Origination</th>
                     <th th:text="#{destination}">Destination</th>
                     <th>
-                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${route.id} + '/rail'">
+                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/rail'">
                             <i class="glyphicon glyphicon-plus"/>
                         </a>
                     </th>
@@ -109,13 +87,10 @@
                     <td th:text="${leg.srcLoc.name}">Origination</td>
                     <td th:text="${leg.dstLoc.name}">Destination</td>
                     <td>
-                        <a href="/task/{taskId}/planning/{planningId}/route/{routeId}/leg/{legId}"
-                           class="btn btn-default btn-xs"
-                           th:href="'/task/' + ${taskId} + '/planning/' + ${planningId} + '/route/' + ${route.id} + '/leg/' + ${leg.id}">
+                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/leg/' + ${leg.id}">
                             <i class="glyphicon glyphicon-minus"/>
                         </a>
-                        <a href="/task/{taskId}/charge?legId={legId}" class="btn btn-default btn-xs"
-                           th:href="'/task/' + ${taskId} + '/charge?legId=' + ${leg.id}">
+                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/charge?legId=' + ${leg.id}">
                             <i class="glyphicon glyphicon-shopping-cart"/>
                         </a>
                     </td>

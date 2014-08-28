@@ -1,6 +1,5 @@
 package liquid.service;
 
-import liquid.order.persistence.domain.OrderEntity;
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.RailContainerRepository;
@@ -11,11 +10,8 @@ import liquid.shipping.service.RailContainerService;
 import liquid.shipping.service.VesselContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * TODO: Comments.
@@ -24,10 +20,10 @@ import java.util.List;
  * Time: 12:26 AM
  */
 @Service
-public class RouteService {
+public class RouteService extends AbstractService<RouteEntity, RouteRepository> {
 
     @Autowired
-    private PlanningService planningService;
+    private TaskService taskService;
 
     @Autowired
     private RouteRepository routeRepository;
@@ -54,9 +50,9 @@ public class RouteService {
     @Autowired
     private ShippingContainerRepository scRepository;
 
-    public List<RouteEntity> findByTaskId(String taskId) {
-        PlanningEntity planning = planningService.findByTaskId(taskId);
-        List<RouteEntity> routes = planning.getRoutes();
+    public Iterable<RouteEntity> findByTaskId(String taskId) {
+        Long orderId = taskService.findOrderId(taskId);
+        Iterable<RouteEntity> routes = routeRepository.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
@@ -74,9 +70,8 @@ public class RouteService {
         return routes;
     }
 
-    public List<RouteEntity> findByOrderId(Long orderId) {
-        PlanningEntity planning = planningService.findByOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
-        List<RouteEntity> routes = planning.getRoutes();
+    public Iterable<RouteEntity> findByOrderId(Long orderId) {
+        Iterable<RouteEntity> routes = routeRepository.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = legRepository.findByRoute(route);
             route.setLegs(legs);
@@ -94,18 +89,8 @@ public class RouteService {
         return routes;
     }
 
-    public Collection<RouteEntity> findByPlanning(PlanningEntity planning) {
-        if (planning == null) {
-            return Collections.EMPTY_LIST;
-        }
-        Collection<RouteEntity> routes = planning.getRoutes();
-        for (RouteEntity route : routes) {
-            Collection<LegEntity> legs = legRepository.findByRoute(route);
-            route.setLegs(legs);
-            Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
-            route.setContainers(containers);
-        }
-        return routes;
+    public Iterable<RouteEntity> findByOrderId0(Long orderId) {
+        return routeRepository.findByOrderId(orderId);
     }
 
     public RouteEntity find(long id) {
@@ -113,28 +98,7 @@ public class RouteService {
         return route;
     }
 
-    /**
-     * Update for delivery date.
-     *
-     * @param formBean
-     * @return
-     */
-    @Transactional("transactionManager")
-    public void save(RouteEntity formBean) {
-        RouteEntity oldOne = routeRepository.findOne(formBean.getId());
-
-        if (formBean.isBatch()) {
-            Collection<RouteEntity> routes = routeRepository.findByPlanning(oldOne.getPlanning());
-            routeRepository.save(routes);
-        } else {
-            routeRepository.save(oldOne);
-        }
-    }
-
-    @Transactional("transactionManager")
-    public RouteEntity save(RouteEntity formBean, PlanningEntity planning) {
-        formBean.setPlanning(planning);
-        RouteEntity route = routeRepository.save(formBean);
-        return route;
+    @Override
+    public void doSaveBefore(RouteEntity routeEntity) {
     }
 }

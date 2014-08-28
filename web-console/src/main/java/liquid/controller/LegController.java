@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -32,7 +31,7 @@ import java.util.List;
  * Time: 9:54 PM
  */
 @Controller
-@RequestMapping("/task/{taskId}/planning/{planningId}/route/{routeId}")
+@RequestMapping("/task/{taskId}/planning/route/{routeId}")
 public class LegController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(LegController.class);
 
@@ -53,12 +52,10 @@ public class LegController extends BaseTaskController {
 
     @RequestMapping(value = "/{tab}", method = RequestMethod.GET)
     public String initLeg(@PathVariable String taskId,
-                          @PathVariable long planningId,
                           @PathVariable long routeId,
                           @PathVariable String tab,
-                          Model model, Principal principal) {
+                          Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("planningId: {}", planningId);
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
@@ -107,7 +104,6 @@ public class LegController extends BaseTaskController {
 
     @RequestMapping(value = "/{tab}", method = RequestMethod.POST)
     public String addLeg(@PathVariable String taskId,
-                         @PathVariable long planningId,
                          @PathVariable long routeId,
                          @PathVariable String tab,
                          Leg leg) {
@@ -122,28 +118,25 @@ public class LegController extends BaseTaskController {
         LegEntity legEntity = new LegEntity();
         legEntity.setRoute(route);
         legEntity.setTransMode(TransMode.valueOf(tab.toUpperCase()).getType());
-        if(null != leg.getServiceProviderId())
+        if (null != leg.getServiceProviderId())
             legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
         legEntity.setSrcLoc(srcLoc);
         legEntity.setDstLoc(dstLoc);
         legRepository.save(legEntity);
-        return "redirect:/task/" + taskId + "/planning/" + planningId;
+        return "redirect:/task/" + taskId + "/planning";
     }
 
     @RequestMapping(value = "/leg/{legId}", method = RequestMethod.GET)
     public String deleteLeg(@PathVariable String taskId,
-                            @PathVariable long planningId,
                             @PathVariable long routeId,
-                            @PathVariable long legId,
-                            Model model, Principal principal) {
+                            @PathVariable long legId) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("planningId: {}", planningId);
         logger.debug("routeId: {}", routeId);
         logger.debug("legId: {}", legId);
 
         legRepository.delete(legId);
 
-        return "redirect:/task/" + taskId + "/planning/" + planningId;
+        return "redirect:/task/" + taskId + "/planning";
     }
 
     private long computeDefaultDstLocId(List<LocationEntity> locationEntities) {

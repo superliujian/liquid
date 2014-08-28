@@ -4,12 +4,16 @@ import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.domain.Charge;
 import liquid.facade.ChargeFacade;
 import liquid.metadata.ChargeWay;
-import liquid.shipping.domain.TransMode;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.service.*;
+import liquid.service.ChargeService;
+import liquid.service.RouteService;
+import liquid.service.ServiceProviderService;
+import liquid.service.ServiceSubtypeService;
+import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.repository.LegRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +42,10 @@ public class PurchaseController extends BaseTaskController {
     private ChargeFacade chargeFacade;
 
     @Autowired
-    private PlanningService planningService;
+    private RouteService routeService;
 
     @Autowired
-    private RouteService routeService;
+    private LegRepository legRepository;
 
     @Autowired
     private ServiceProviderService serviceProviderService;
@@ -81,7 +85,7 @@ public class PurchaseController extends BaseTaskController {
 
         LegEntity leg = null;
         if (null != legId) {
-            leg = planningService.findLeg(legId);
+            leg = legRepository.findOne(legId);
             charges = chargeService.findByLegId(legId);
         }
 
@@ -120,7 +124,7 @@ public class PurchaseController extends BaseTaskController {
 
             LegEntity leg = null;
             if (null != charge.getLegId()) {
-                leg = planningService.findLeg(charge.getLegId());
+                leg = legRepository.findOne(charge.getLegId());
                 charges = chargeService.findByLegId(charge.getLegId());
             }
 
