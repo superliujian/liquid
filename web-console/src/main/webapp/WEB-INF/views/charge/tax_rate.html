@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Liquid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
+    <link href="/resources/css/liquid.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/resources/assets/js/html5shiv.js"></script>
+    <script src="/resources/assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        div#f.container {
+        margin-top:20px;
+        max-width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    <div th:if="${alert}" class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <span th:text="${alert}">Alert</span>
+    </div>
+</div>
+
+<div id="f" class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading" th:text="#{tax.rate}">Pay</div>
+
+        <div class="panel-body">
+        <form action="/tax_rate" method="POST" th:object="${taxRates}" class="center">
+        <table class="table table-striped table-hover table-condensed table-16">
+            <thead>
+            <tr>                
+                <th th:text="#{name}">Name</th>
+                <th th:text="#{value} + '%'">Value</th>                
+                <th>
+                    <button type="submit" class="btn btn-default btn-xs pull-right" name="addTaxRate">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="taxRate, rowStat : *{list}">
+                <input type="hidden" th:field="*{list[__${rowStat.index}__].id}" />
+                <td>
+                    <input type="text" class="form-control input-sm" th:field="*{list[__${rowStat.index}__].name}" />
+                </td>
+                <td>
+                    <input type="text" class="form-control input-sm" th:field="*{list[__${rowStat.index}__].value}" />
+                </td>        
+                <td>
+                    <button type="submit" name="removeTaxRate" class="btn btn-default btn-xs pull-right" th:value="${rowStat.index}" >
+                        <i class="glyphicon glyphicon-minus"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="submit" name="add" class="btn btn-success btn-block form-control" th:value="#{save}"/>
+        </form>
+        </div>
+    </div>
+</div><!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>
