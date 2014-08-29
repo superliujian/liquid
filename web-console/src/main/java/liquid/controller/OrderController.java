@@ -44,7 +44,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(OrderEntity.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderService orderService;

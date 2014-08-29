@@ -32,6 +32,10 @@ public class DateUtil {
         }
     }
 
+    public static String dayStrOf() {
+        return dayStrOf(new Date());
+    }
+
     public static String dayStrOf(Date date) {
         SimpleDateFormat format = new SimpleDateFormat(DatePattern.UNTIL_DAY.getPattern());
         return format.format(date);

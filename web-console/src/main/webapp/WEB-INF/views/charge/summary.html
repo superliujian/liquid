@@ -76,7 +76,7 @@
                 <td></td>
                 <td th:text="${order.receivableSummary} ? ${order.receivableSummary.cny} : ''">Receivable CNY</td>
                 <td th:text="${order.receivableSummary} ? ${order.receivableSummary.usd} : ''">Receivable USD</td>
-                <td th:text="${order.receivableSummary} ? ${order.receivableSummary.cny + order.receivableSummary.cny * exchangeRate} : ''">Receivable SUM</td>
+                <td th:text="${order.receivableSummary} ? ${order.receivableSummary.cny + order.receivableSummary.usd * exchangeRate} : ''">Receivable SUM</td>
                 <td th:text="${order.distyPrice}">Disty Price</td>
                 <td th:text="${order.grandTotal}">Grand Total</td>
                 <td th:text="${order.receivableSummary.cny + order.receivableSummary.usd * 6 - order.grandTotal}">Gross Margin</td>

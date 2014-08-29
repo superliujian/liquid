@@ -49,6 +49,7 @@
                 <th th:text="#{finance.receivable.balance}">Receivable Balance</th>
                 <th th:text="#{finance.invoice.balance.cny}">Invoice Balance CNY</th>
                 <th th:text="#{finance.invoice.balance.usd}">Invoice Balance USD</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -74,6 +75,11 @@
                 <td></td>
                 <td th:text="${order.receivableSummary} ? ${order.receivableSummary.remainingBalanceCny} : ''">Invoice Balance CNY</td>
                 <td th:text="${order.receivableSummary} ? ${order.receivableSummary.remainingBalanceUsd} : ''">Invoice Balance USD</td>
+                <td>
+                    <a class="btn btn-default btn-xs" th:href="'/receivable/' + ${order.id}">
+                        <i class="glyphicon glyphicon-usd"/>
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>
