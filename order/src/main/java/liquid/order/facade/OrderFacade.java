@@ -7,6 +7,7 @@ import liquid.domain.ServiceItem;
 import liquid.order.domain.Order;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.RailwayEntity;
+import liquid.order.persistence.domain.ReceivableSummaryEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
@@ -119,7 +120,7 @@ public class OrderFacade {
         return order;
     }
 
-    private OrderEntity convert(Order order) {
+    public OrderEntity convert(Order order) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(order.getId());
         orderEntity.setOrderNo(order.getOrderNo());
@@ -159,9 +160,15 @@ public class OrderFacade {
             serviceItemEntity.setQuotation(serviceItem.getQuotation());
             orderEntity.getServiceItems().add(serviceItemEntity);
         }
+        ReceivableSummaryEntity receivableSummaryEntity = new ReceivableSummaryEntity();
+        receivableSummaryEntity.setId(order.getReceivableSummaryId());
+        receivableSummaryEntity.setOrder(orderEntity);
+        receivableSummaryEntity.setCny(order.getCnyTotal());
+        receivableSummaryEntity.setUsd(order.getUsdTotal());
+        receivableSummaryEntity.setRemainingBalanceCny(order.getCnyTotal());
+        receivableSummaryEntity.setRemainingBalanceUsd(order.getUsdTotal());
+        orderEntity.setReceivableSummary(receivableSummaryEntity);
 
-        orderEntity.setCnyTotal(order.getCnyTotal());
-        orderEntity.setUsdTotal(order.getUsdTotal());
         orderEntity.setCreateRole(SecurityContext.getInstance().getRole());
         orderEntity.setStatus(order.getStatus());
 
@@ -169,7 +176,7 @@ public class OrderFacade {
     }
 
     // TODO: Should enhance it in one to one way.
-    private Order convert(OrderEntity orderEntity) {
+    public Order convert(OrderEntity orderEntity) {
         Order order = new Order();
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
@@ -231,9 +238,10 @@ public class OrderFacade {
             serviceItem.setComment(serviceItemEntity.getComment());
             order.getServiceItems().add(serviceItem);
         }
+        order.setReceivableSummaryId(orderEntity.getReceivableSummary().getId());
 
-        order.setUsdTotal(orderEntity.getUsdTotal());
-        order.setCnyTotal(orderEntity.getCnyTotal());
+        order.setUsdTotal(orderEntity.getReceivableSummary().getUsd());
+        order.setCnyTotal(orderEntity.getReceivableSummary().getCny());
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
         return order;
@@ -242,7 +250,6 @@ public class OrderFacade {
     private RailwayEntity convertRailway(Order order) {
         RailwayEntity railwayEntity = new RailwayEntity();
         railwayEntity.setId(order.getRailwayId());
-//        railwayEntity.setOrder(OrderEntity.newInstance(OrderEntity.class, order.getId()));
         railwayEntity.setPlanReportTime(DateUtil.dateOf(order.getPlanReportTime()));
         railwayEntity.setPlanType(RailwayPlanTypeEntity.newInstance(RailwayPlanTypeEntity.class, order.getRailwayPlanTypeId()));
         railwayEntity.setSource(LocationEntity.newInstance(LocationEntity.class, order.getRailSourceId()));

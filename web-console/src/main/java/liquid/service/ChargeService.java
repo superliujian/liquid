@@ -172,12 +172,12 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
         double exchangeRate = getExchangeRate();
 
-        earning.setSalesPriceCny(order.getCnyTotal());
-        earning.setSalesPriceUsd(order.getUsdTotal());
+        earning.setSalesPriceCny(order.getReceivableSummary().getCny());
+        earning.setSalesPriceUsd(order.getReceivableSummary().getUsd());
         earning.setDistyPrice(order.getDistyPrice());
         earning.setGrandTotal(order.getGrandTotal());
         earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getGrandTotal());
-        earning.setSalesProfit(order.getCnyTotal() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
+        earning.setSalesProfit(order.getReceivableSummary().getCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
         earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
         return earning;
     }

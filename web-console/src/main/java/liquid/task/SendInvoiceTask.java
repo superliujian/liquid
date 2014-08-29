@@ -15,6 +15,6 @@ public class SendInvoiceTask extends AbstractTaskProxy {
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        variableMap.put("salesPrice", "CNY: " + order.getCnyTotal() + "; USD: " + order.getUsdTotal());
+        variableMap.put("salesPrice", "CNY: " + order.getReceivableSummary().getCny() + "; USD: " + order.getReceivableSummary().getUsd());
     }
 }

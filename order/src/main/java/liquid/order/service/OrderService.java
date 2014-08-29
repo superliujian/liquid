@@ -72,6 +72,10 @@ public class OrderService extends AbstractBaseOrderService {
         return repository.findAll(pageable);
     }
 
+    public Page<OrderEntity> findByStatus(Integer status, Pageable pageable) {
+        return repository.findByStatus(status, pageable);
+    }
+
     public OrderEntity find(long id) {
         OrderEntity order = repository.findOne(id);
 

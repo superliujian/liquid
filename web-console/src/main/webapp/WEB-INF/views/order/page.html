@@ -96,8 +96,8 @@
                     <td th:text="#{${containerTypeMap[order.containerType]}}">Container Type</td>
                     <td th:text="${order.containerSubtype.name}">Container Subtype</td>
                     <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.cnyTotal}">CNY Price</td>
-                    <td th:text="${order.usdTotal}">USD Price</td>
+                    <td th:text="${order.receivableSummary.cny}">CNY Price</td>
+                    <td th:text="${order.receivableSummary.usd}">USD Price</td>
                     <td th:text="${order.updateTime}">Create Time</td>
                     <td>
                         <a href="#edit" class="btn btn-default btn-xs"

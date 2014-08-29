@@ -1,6 +1,5 @@
-package liquid.charge.persistence.domain;
+package liquid.order.persistence.domain;
 
-import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseIdEntity;
 
 import javax.persistence.Column;
@@ -12,7 +11,7 @@ import java.util.Date;
 /**
  * Created by redbrick9 on 8/28/14.
  */
-@Entity(name = "REC_SUM")
+@Entity(name = "RECEIVABLE_SUMMARY")
 public class ReceivableSummaryEntity extends BaseIdEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
@@ -24,14 +23,8 @@ public class ReceivableSummaryEntity extends BaseIdEntity {
     @Column(name = "USD")
     private Long usd;
 
-    @Column(name = "SUM_CNY")
-    private Long sumCny;
-
     @Column(name = "PREPAID_TIME")
     private Date prepaidTime;
-
-    @Column(name = "REM_BAL_SUM_CNY")
-    private Long remainingBalanceSumCny;
 
     @Column(name = "REM_BAL_CNY")
     private Long remainingBalanceCny;
@@ -63,28 +56,12 @@ public class ReceivableSummaryEntity extends BaseIdEntity {
         this.usd = usd;
     }
 
-    public Long getSumCny() {
-        return sumCny;
-    }
-
-    public void setSumCny(Long sumCny) {
-        this.sumCny = sumCny;
-    }
-
     public Date getPrepaidTime() {
         return prepaidTime;
     }
 
     public void setPrepaidTime(Date prepaidTime) {
         this.prepaidTime = prepaidTime;
-    }
-
-    public Long getRemainingBalanceSumCny() {
-        return remainingBalanceSumCny;
-    }
-
-    public void setRemainingBalanceSumCny(Long remainingBalanceSumCny) {
-        this.remainingBalanceSumCny = remainingBalanceSumCny;
     }
 
     public Long getRemainingBalanceCny() {

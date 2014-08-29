@@ -1,6 +1,6 @@
-package liquid.charge.persistence.repository;
+package liquid.order.persistence.repository;
 
-import liquid.charge.persistence.domain.ReceivableSummaryEntity;
+import liquid.order.persistence.domain.ReceivableSummaryEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

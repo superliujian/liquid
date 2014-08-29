@@ -114,19 +114,13 @@ public class BaseOrder extends BaseUpdateEntity {
     private RailwayEntity railway;
 
     @Column(name = "DISTY_PRICE")
-    private Long distyPrice;
+    private Long distyPrice = 0L;
 
     @Column(name = "DISTY_USD")
-    private Long distyUsd;
+    private Long distyUsd = 0L;
 
     @Column(name = "GRAND_TOTAL")
-    private Long grandTotal;
-
-    @Column(name = "USD_TOTAL")
-    private Long usdTotal;
-
-    @Column(name = "CNY_TOTAL")
-    private Long cnyTotal;
+    private Long grandTotal = 0L;
 
     @Column(name = "CREATE_ROLE")
     private String createRole;
@@ -375,22 +369,6 @@ public class BaseOrder extends BaseUpdateEntity {
         this.createRole = createRole;
     }
 
-    public Long getUsdTotal() {
-        return usdTotal;
-    }
-
-    public void setUsdTotal(Long usdTotal) {
-        this.usdTotal = usdTotal;
-    }
-
-    public Long getCnyTotal() {
-        return cnyTotal;
-    }
-
-    public void setCnyTotal(Long cnyTotal) {
-        this.cnyTotal = cnyTotal;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -398,5 +376,4 @@ public class BaseOrder extends BaseUpdateEntity {
     public void setStatus(int status) {
         this.status = status;
     }
-
 }

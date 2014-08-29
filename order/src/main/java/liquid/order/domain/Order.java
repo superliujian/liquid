@@ -14,19 +14,19 @@ import java.util.List;
  */
 public class Order extends BaseIdObject {
     private String orderNo;
-    private long serviceTypeId;
-    private long customerId;
+    private Long serviceTypeId;
+    private Long customerId;
 
     @NotNull
     @NotEmpty
     private String customerName;
-    private int tradeType;
-    private long originId;
+    private Integer tradeType = 0;
+    private Long originId;
 
     @NotNull
     @NotEmpty
     private String origination;
-    private long destinationId;
+    private Long destinationId;
 
     @NotNull
     @NotEmpty
@@ -34,23 +34,25 @@ public class Order extends BaseIdObject {
     private String consignee;
     private String consigneePhone;
     private String consigneeAddress;
-    private long goodsId;
+    private Long goodsId;
     private String goodsName;
 
     @Min(1)
-    private int goodsWeight;
+    @NotNull
+    private Integer goodsWeight;
     private String goodsDimension;
-    private int loadingType;
+    private Integer loadingType = 0;
     private String loadingAddress;
     private String loadingContact;
     private String loadingPhone;
     private String loadingEstimatedTime;
-    private int containerType;
-    private long railContainerSubtypeId;
-    private long selfContainerSubtypeId;
+    private Integer containerType = 0;
+    private Long railContainerSubtypeId;
+    private Long selfContainerSubtypeId;
 
     @Min(1)
-    private int containerQuantity;
+    @NotNull
+    private Integer containerQuantity;
     private String containerAttribute;
 
     private Long railwayId;
@@ -67,12 +69,14 @@ public class Order extends BaseIdObject {
 
     private List<ServiceItem> serviceItems;
 
+    private Long receivableSummaryId;
+
     @Min(1)
-    private long cnyTotal;
-    private long usdTotal;
+    private Long cnyTotal;
+    private Long usdTotal;
 
     private String role;
-    private int status;
+    private Integer status;
 
     public Order() {
         serviceItems = new ArrayList<>();
@@ -86,19 +90,19 @@ public class Order extends BaseIdObject {
         this.orderNo = orderNo;
     }
 
-    public long getServiceTypeId() {
+    public Long getServiceTypeId() {
         return serviceTypeId;
     }
 
-    public void setServiceTypeId(long serviceTypeId) {
+    public void setServiceTypeId(Long serviceTypeId) {
         this.serviceTypeId = serviceTypeId;
     }
 
-    public long getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(long customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -110,19 +114,19 @@ public class Order extends BaseIdObject {
         this.customerName = customerName;
     }
 
-    public int getTradeType() {
+    public Integer getTradeType() {
         return tradeType;
     }
 
-    public void setTradeType(int tradeType) {
+    public void setTradeType(Integer tradeType) {
         this.tradeType = tradeType;
     }
 
-    public long getOriginId() {
+    public Long getOriginId() {
         return originId;
     }
 
-    public void setOriginId(long originId) {
+    public void setOriginId(Long originId) {
         this.originId = originId;
     }
 
@@ -134,8 +138,12 @@ public class Order extends BaseIdObject {
         this.origination = origination;
     }
 
-    public long getDestinationId() {
+    public Long getDestinationId() {
         return destinationId;
+    }
+
+    public void setDestinationId(Long destinationId) {
+        this.destinationId = destinationId;
     }
 
     public String getDestination() {
@@ -144,10 +152,6 @@ public class Order extends BaseIdObject {
 
     public void setDestination(String destination) {
         this.destination = destination;
-    }
-
-    public void setDestinationId(long destinationId) {
-        this.destinationId = destinationId;
     }
 
     public String getConsignee() {
@@ -174,11 +178,11 @@ public class Order extends BaseIdObject {
         this.consigneeAddress = consigneeAddress;
     }
 
-    public long getGoodsId() {
+    public Long getGoodsId() {
         return goodsId;
     }
 
-    public void setGoodsId(long goodsId) {
+    public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
     }
 
@@ -190,11 +194,11 @@ public class Order extends BaseIdObject {
         this.goodsName = goodsName;
     }
 
-    public int getGoodsWeight() {
+    public Integer getGoodsWeight() {
         return goodsWeight;
     }
 
-    public void setGoodsWeight(int goodsWeight) {
+    public void setGoodsWeight(Integer goodsWeight) {
         this.goodsWeight = goodsWeight;
     }
 
@@ -206,11 +210,11 @@ public class Order extends BaseIdObject {
         this.goodsDimension = goodsDimension;
     }
 
-    public int getLoadingType() {
+    public Integer getLoadingType() {
         return loadingType;
     }
 
-    public void setLoadingType(int loadingType) {
+    public void setLoadingType(Integer loadingType) {
         this.loadingType = loadingType;
     }
 
@@ -246,35 +250,35 @@ public class Order extends BaseIdObject {
         this.loadingEstimatedTime = loadingEstimatedTime;
     }
 
-    public int getContainerType() {
+    public Integer getContainerType() {
         return containerType;
     }
 
-    public void setContainerType(int containerType) {
+    public void setContainerType(Integer containerType) {
         this.containerType = containerType;
     }
 
-    public long getRailContainerSubtypeId() {
+    public Long getRailContainerSubtypeId() {
         return railContainerSubtypeId;
     }
 
-    public void setRailContainerSubtypeId(long railContainerSubtypeId) {
+    public void setRailContainerSubtypeId(Long railContainerSubtypeId) {
         this.railContainerSubtypeId = railContainerSubtypeId;
     }
 
-    public long getSelfContainerSubtypeId() {
+    public Long getSelfContainerSubtypeId() {
         return selfContainerSubtypeId;
     }
 
-    public void setSelfContainerSubtypeId(long selfContainerSubtypeId) {
+    public void setSelfContainerSubtypeId(Long selfContainerSubtypeId) {
         this.selfContainerSubtypeId = selfContainerSubtypeId;
     }
 
-    public int getContainerQuantity() {
+    public Integer getContainerQuantity() {
         return containerQuantity;
     }
 
-    public void setContainerQuantity(int containerQuantity) {
+    public void setContainerQuantity(Integer containerQuantity) {
         this.containerQuantity = containerQuantity;
     }
 
@@ -382,20 +386,28 @@ public class Order extends BaseIdObject {
         this.serviceItems = serviceItems;
     }
 
-    public long getUsdTotal() {
-        return usdTotal;
+    public Long getReceivableSummaryId() {
+        return receivableSummaryId;
     }
 
-    public void setUsdTotal(long usdTotal) {
-        this.usdTotal = usdTotal;
+    public void setReceivableSummaryId(Long receivableSummaryId) {
+        this.receivableSummaryId = receivableSummaryId;
     }
 
-    public long getCnyTotal() {
+    public Long getCnyTotal() {
         return cnyTotal;
     }
 
-    public void setCnyTotal(long cnyTotal) {
+    public void setCnyTotal(Long cnyTotal) {
         this.cnyTotal = cnyTotal;
+    }
+
+    public Long getUsdTotal() {
+        return usdTotal;
+    }
+
+    public void setUsdTotal(Long usdTotal) {
+        this.usdTotal = usdTotal;
     }
 
     public String getRole() {
@@ -406,11 +418,11 @@ public class Order extends BaseIdObject {
         this.role = role;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -446,6 +458,7 @@ public class Order extends BaseIdObject {
         sb.append(", railwayId=").append(railwayId);
         sb.append(", planReportTime='").append(planReportTime).append('\'');
         sb.append(", railwayPlanTypeId=").append(railwayPlanTypeId);
+        sb.append(", railwayPlanType='").append(railwayPlanType).append('\'');
         sb.append(", programNo='").append(programNo).append('\'');
         sb.append(", railSourceId=").append(railSourceId);
         sb.append(", railSource='").append(railSource).append('\'');
@@ -454,6 +467,7 @@ public class Order extends BaseIdObject {
         sb.append(", comment='").append(comment).append('\'');
         sb.append(", sameDay=").append(sameDay);
         sb.append(", serviceItems=").append(serviceItems);
+        sb.append(", receivableSummaryId=").append(receivableSummaryId);
         sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", usdTotal=").append(usdTotal);
         sb.append(", role='").append(role).append('\'');

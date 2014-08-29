@@ -1,4 +1,4 @@
-package liquid.charge.persistence.domain;
+package liquid.purchasing.persistence.domain;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseIdEntity;

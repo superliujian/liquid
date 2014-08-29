@@ -235,7 +235,6 @@ public class OrderController extends BaseController {
         } else {
             order.setStatus(OrderStatus.SAVED.getValue());
             orderFacade.save(order);
-
             return "redirect:/order?number=0";
         }
     }

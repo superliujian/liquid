@@ -41,7 +41,7 @@ public class IncomeService {
         Income income = new Income();
         income.setOrder(order);
         income.setType(IncomeType.ORDER.getType());
-        income.setAmount(order.getCnyTotal());
+        income.setAmount(order.getReceivableSummary().getCny());
         income.setComment("Order");
         return addIncome(income, uid);
     }

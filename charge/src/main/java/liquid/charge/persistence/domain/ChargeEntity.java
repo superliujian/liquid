@@ -1,13 +1,16 @@
 package liquid.charge.persistence.domain;
 
-import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * TODO: Comments.

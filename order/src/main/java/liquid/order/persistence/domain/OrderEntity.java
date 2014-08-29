@@ -1,7 +1,9 @@
 package liquid.order.persistence.domain;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * TODO: Comments.
@@ -40,6 +42,9 @@ public class OrderEntity extends BaseOrder {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
     private Set<ServiceItemEntity> serviceItems = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+    private ReceivableSummaryEntity receivableSummary;
 
     public int getTradeType() {
         return tradeType;
@@ -103,5 +108,13 @@ public class OrderEntity extends BaseOrder {
 
     public void setServiceItems(Set<ServiceItemEntity> serviceItems) {
         this.serviceItems = serviceItems;
+    }
+
+    public ReceivableSummaryEntity getReceivableSummary() {
+        return receivableSummary;
+    }
+
+    public void setReceivableSummary(ReceivableSummaryEntity receivableSummary) {
+        this.receivableSummary = receivableSummary;
     }
 }

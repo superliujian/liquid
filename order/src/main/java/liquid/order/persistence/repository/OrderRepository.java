@@ -18,4 +18,6 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaR
     Iterable<OrderEntity> findByOrderNoLike(String orderNo);
 
     Iterable<OrderEntity> findByCustomerNameLike(String cumtomerName);
+
+    Page<OrderEntity> findByStatus(Integer status, Pageable pageable);
 }

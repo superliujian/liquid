@@ -6,9 +6,9 @@ import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
 import liquid.metadata.*;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
-import liquid.order.service.OrderService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
 import org.slf4j.Logger;
@@ -78,6 +78,11 @@ public class ChargeController {
         return OrderStatus.values();
     }
 
+    @ModelAttribute("exchangeRate")
+    public Double populateExchangeRate() {
+        return chargeService.getExchangeRate();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public void init() {
         logger.debug("init");
@@ -104,7 +109,7 @@ public class ChargeController {
                           Model model, Principal principal) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findAll(pageRequest);
+        Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
         model.addAttribute("tab", "summary");
         model.addAttribute("page", page);
         return "charge/summary";
@@ -122,11 +127,10 @@ public class ChargeController {
     }
 
     @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = "number")
-    public String receivable(@RequestParam int number,
-                             Model model, Principal principal) {
+    public String receivable(@RequestParam int number, Model model) {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findAll(pageRequest);
+        Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
         model.addAttribute("tab", "receivable");
         model.addAttribute("page", page);
         return "charge/receivable";

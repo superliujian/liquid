@@ -381,7 +381,7 @@
         <th th:text="#{price}">Unit Price</th>
         <th th:text="#{comment}">Comment</th>
         <th>
-            <button type="submit" class="btn btn-default pull-right" name="addServiceItem">
+            <button type="submit" class="btn btn-default btn-xs pull-right" name="addServiceItem">
                 <i class="glyphicon glyphicon-plus"></i>
             </button>
         </th>
@@ -408,7 +408,7 @@
             <input type="text" class="form-control input-sm" th:field="*{serviceItems[__${rowStat.index}__].comment}" />
         </td>        
         <td>
-            <button type="submit" name="removeServiceItem" class="btn btn-default pull-right" th:value="${rowStat.index}" >
+            <button type="submit" name="removeServiceItem" class="btn btn-default btn-xs pull-right" th:value="${rowStat.index}" >
                 <i class="glyphicon glyphicon-minus"></i>
             </button>
         </td>
@@ -420,17 +420,18 @@
 <ul class="list-group">
     <li class="list-group-item">
         <div class="row">
+            <input type="hidden" th:field="*{receivableSummaryId}" />
             <div class="col-lg-3">
                 <div class="form-group">
                     <label th:text="#{usd.total} + ' *'">USD Total</label>
-                    <input type="text" th:field="*{usdTotal}" class="form-control" readonly="readonly"/>
+                    <input type="text" th:field="*{usdTotal}" class="form-control input-sm" readonly="readonly"/>
                     <span th:errors="*{usdTotal}">error</span>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-group">
                     <label th:text="#{cny.total} + ' *'">CNY Total</label>
-                    <input type="text" th:field="*{cnyTotal}" class="form-control" readonly="readonly"/>
+                    <input type="text" th:field="*{cnyTotal}" class="form-control input-sm" readonly="readonly"/>
                     <span th:errors="*{cnyTotal}">error</span>
                 </div>
             </div>
