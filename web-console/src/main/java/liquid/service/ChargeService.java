@@ -16,6 +16,8 @@ import liquid.shipping.persistence.repository.LegRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -147,6 +149,10 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         return chargeRepository.findByOrderId(orderId);
     }
 
+    public Page<ChargeEntity> findByOrderId(long orderId, Pageable pageable) {
+        return chargeRepository.findByOrderId(orderId, pageable);
+    }
+
     public Iterable<ChargeEntity> findByOrderNo(String orderNo) {
         return chargeRepository.findByOrderOrderNoLike("%" + orderNo + "%");
     }
@@ -161,6 +167,10 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
     public Iterable<ChargeEntity> findAll() {
         return chargeRepository.findAll();
+    }
+
+    public Page<ChargeEntity> findAll(Pageable pageable) {
+        return chargeRepository.findAll(pageable);
     }
 
     public Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole) {

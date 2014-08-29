@@ -52,7 +52,7 @@
         </form>
         
         <table class="table table-striped table-hover table-condensed table-16"
-               th:unless="${#lists.isEmpty(charges)}">
+               th:unless="${#lists.isEmpty(page.content)}">
             <thead>
             <tr>
                 <th th:text="#{charge.id}">ID</th>
@@ -72,7 +72,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="charge : ${charges}">
+            <tr th:each="charge : ${page.content}">
                 <td th:text="${charge.id}">ID</td>
                 <td th:text="${charge.order.orderNo}">Order No.</td>
                 <td th:text="${charge.order.createTime}"></td>
@@ -99,6 +99,23 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div id="pagination_bar" class="text-center">
+    <ul class="pagination">
+        <li>
+            <a href="/charge/payable?number=0">&laquo;</a>
+        </li>
+        <li><a th:if="${page.hasPreviousPage()}"
+               th:href="'/charge/payable?number=' + ${page.number - 1}"
+               th:text="${page.number}">1</a></li>
+        <li><a href="" th:text="${page.number + 1}">2</a></li>
+        <li><a th:if="${page.hasNextPage()}"
+               th:href="'/charge/payable?number=' + ${page.number + 1}"
+               th:text="${page.number + 2}">3</a></li>
+        <li><a th:href="'/charge/payable?number=' + ${page.totalPages - 1}">&raquo;</a>
+        </li>
+    </ul>
 </div>
 
 <!-- {!begin layout} -->

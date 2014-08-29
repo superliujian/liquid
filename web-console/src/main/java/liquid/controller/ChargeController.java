@@ -36,6 +36,8 @@ import java.security.Principal;
 public class ChargeController {
     private static final Logger logger = LoggerFactory.getLogger(ChargeController.class);
 
+    private static final int size = 20;
+
     @Autowired
     private TaskService taskService;
 
@@ -89,25 +91,32 @@ public class ChargeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
-    public String findByOrderNo(@RequestParam String param, Model model, Principal principal) {
+    public String findByOrderNo(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
-
         model.addAttribute("charges", chargeService.findByOrderNo(param));
         return "/charge/details";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findBySpName")
-    public String findBySpName(@RequestParam String param, Model model, Principal principal) {
+    public String findBySpName(@RequestParam String param, Model model) {
         logger.debug("param: {}", param);
-
         model.addAttribute("charges", chargeService.findBySpName(param));
+        model.addAttribute("tab", "details");
+        return "charge/details";
+    }
+
+    @RequestMapping(value = "/details", method = RequestMethod.GET, params = "number")
+    public String details(@RequestParam int number, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<ChargeEntity> page = chargeService.findAll(pageRequest);
+        model.addAttribute("tab", "details");
+        model.addAttribute("page", page);
+        model.addAttribute("charges", page.getContent());
         return "charge/details";
     }
 
     @RequestMapping(value = "/summary", method = RequestMethod.GET, params = "number")
-    public String summary(@RequestParam int number,
-                          Model model, Principal principal) {
-        int size = 20;
+    public String summary(@RequestParam int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
         model.addAttribute("tab", "summary");
@@ -115,20 +124,8 @@ public class ChargeController {
         return "charge/summary";
     }
 
-    @RequestMapping(value = "/details", method = RequestMethod.GET, params = "number")
-    public String details(@RequestParam int number,
-                          Model model, Principal principal) {
-        int size = 20;
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findAll(pageRequest);
-        model.addAttribute("tab", "details");
-        model.addAttribute("charges", chargeService.findAll());
-        return "charge/details";
-    }
-
     @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = "number")
     public String receivable(@RequestParam int number, Model model) {
-        int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
         model.addAttribute("tab", "receivable");
@@ -137,13 +134,11 @@ public class ChargeController {
     }
 
     @RequestMapping(value = "/payable", method = RequestMethod.GET, params = "number")
-    public String payable(@RequestParam int number,
-                          Model model, Principal principal) {
-        int size = 20;
+    public String payable(@RequestParam int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findAll(pageRequest);
+        Page<ChargeEntity> page = chargeService.findAll(pageRequest);
         model.addAttribute("tab", "payable");
-        model.addAttribute("charges", chargeService.findAll());
+        model.addAttribute("page", page);
         return "charge/payable";
     }
 
