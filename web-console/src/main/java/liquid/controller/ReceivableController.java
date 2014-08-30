@@ -36,9 +36,9 @@ public class ReceivableController {
         OrderEntity order = orderService.find(orderId);
 
         ReceivableSettlement formBean = new ReceivableSettlement();
+
         Long cnyOfInvoice = order.getReceivableSummary().getCny();
         Long usdOfInvoice = order.getReceivableSummary().getUsd();
-
         Iterable<ReceivableSettlementEntity> records = receivableSettlementService.findByOrderId(orderId);
         for (ReceivableSettlementEntity record : records) {
             cnyOfInvoice -= record.getCny();
@@ -74,7 +74,8 @@ public class ReceivableController {
         entity.setCny(formBean.getCny());
         entity.setUsd(formBean.getUsd());
         entity.setDateOfReceivable(DateUtil.dayOf(formBean.getDateOfReceivable()));
-        receivableSettlementService.save(entity);
+
+        receivableSettlementService.addSettlement(orderId, entity);
         return "redirect:/receivable/" + orderId;
     }
 }
