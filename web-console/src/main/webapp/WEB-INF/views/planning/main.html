@@ -56,7 +56,7 @@
             <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>            
             <div class="pull-right">
                 <form method="POST" th:action="'/task/' + ${taskId} + '/planning/route/' + ${route.id}">
-                    <button type="submit" name="delete">
+                    <button type="submit" name="delete" class="btn btn-danger btn-xs">
                         <i class="glyphicon glyphicon-minus"/>
                     </button>
                 </form>
