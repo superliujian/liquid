@@ -117,6 +117,8 @@ public class OrderFacade {
             serviceItem.setId(null);
         }
 
+        order.setReceivableSummaryId(null);
+
         return order;
     }
 
