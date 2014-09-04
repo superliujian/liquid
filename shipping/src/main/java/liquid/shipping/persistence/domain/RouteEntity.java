@@ -35,8 +35,8 @@ public class RouteEntity extends BaseUpdateEntity {
     @Transient
     private Collection<ShippingContainerEntity> containers;
 
-    @Transient
-    private Collection<RailContainer> railContainers;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
+    private Collection<RailContainerEntity> railContainers;
 
     @Transient
     private Collection<BargeContainer> bargeContainers;
@@ -98,11 +98,11 @@ public class RouteEntity extends BaseUpdateEntity {
         this.containers = containers;
     }
 
-    public Collection<RailContainer> getRailContainers() {
+    public Collection<RailContainerEntity> getRailContainers() {
         return railContainers;
     }
 
-    public void setRailContainers(Collection<RailContainer> railContainers) {
+    public void setRailContainers(Collection<RailContainerEntity> railContainers) {
         this.railContainers = railContainers;
     }
 

@@ -1,7 +1,7 @@
 package liquid.controller;
 
-import liquid.shipping.persistence.domain.RailContainer;
 import liquid.service.ShippingContainerService;
+import liquid.shipping.persistence.domain.RailContainerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class RailController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailContainer railContainer = scService.findRailContainer(containerId);
+        RailContainerEntity railContainer = scService.findRailContainer(containerId);
         logger.debug("railContainer: {}", railContainer);
         model.addAttribute("container", railContainer);
         return "rail/edit";
@@ -56,8 +56,8 @@ public class RailController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailContainer railContainer,
-                         BindingResult bindingResult, Principal principal) {
+                         @Valid @ModelAttribute("container") RailContainerEntity railContainer,
+                         BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
         logger.debug("railContainer: {}", railContainer);

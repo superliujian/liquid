@@ -125,14 +125,14 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return scRepository.findByRoute(route);
     }
 
-    public Iterable<RailContainer> initializeRailContainers(String taskId) {
+    public Iterable<RailContainerEntity> initializeRailContainers(String taskId) {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
-        Collection<RailContainer> rcList = rcRepository.findByOrder(order);
+        Collection<RailContainerEntity> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
-            for (RailContainer container : rcList) {
-                if (container.getLoadingToc() != null) {
-                    container.setLoadingTocStr(DateUtil.stringOf(container.getLoadingToc()));
-                }
+            for (RailContainerEntity container : rcList) {
+//                if (container.getLoadingToc() != null) {
+//                    container.setLoadingTocStr(DateUtil.stringOf(container.getLoadingToc()));
+//                }
                 if (container.getStationToa() != null) {
                     container.setStationToaStr(DateUtil.stringOf(container.getStationToa()));
                 }
@@ -142,21 +142,21 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
                 if (container.getAts() != null) {
                     container.setAtsStr(DateUtil.stringOf(container.getAts()));
                 }
-                if (container.getAta() != null) {
-                    container.setAtaStr(DateUtil.stringOf(container.getAta()));
-                }
+//                if (container.getAta() != null) {
+//                    container.setAtaStr(DateUtil.stringOf(container.getAta()));
+//                }
             }
             return rcList;
         }
 
-        rcList = new ArrayList<RailContainer>();
+        rcList = new ArrayList<RailContainerEntity>();
         Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
                 for (ShippingContainerEntity sc : scList) {
-                    RailContainer rc = new RailContainer();
+                    RailContainerEntity rc = new RailContainerEntity();
                     rc.setOrder(route.getOrder());
                     rc.setRoute(route);
                     rc.setLeg(legList.get(0));
@@ -170,31 +170,31 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public TruckDto findTruckDto(long railContainerId) {
-        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toTruckDto(railContainer);
     }
 
     public RailYardDto findRailYardDto(long railContainerId) {
-        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailYardDto(railContainer);
     }
 
     public RailPlanDto findRailPlanDto(long railContainerId) {
-        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailPlanDto(railContainer);
     }
 
     public RailShippingDto findRailShippingDto(long railContainerId) {
-        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailShippingDto(railContainer);
     }
 
     public RailArrivalDto findRailArrivalDto(long railContainerId) {
-        RailContainer railContainer = rcRepository.findOne(railContainerId);
+        RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailArrivalDto(railContainer);
     }
 
-    private TruckDto toTruckDto(RailContainer railContainer) {
+    private TruckDto toTruckDto(RailContainerEntity railContainer) {
         TruckDto truck = new TruckDto();
         if (null != railContainer.getFleet())
             truck.setFleetId(railContainer.getFleet().getId());
@@ -213,7 +213,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return truck;
     }
 
-    private RailYardDto toRailYardDto(RailContainer railContainer) {
+    private RailYardDto toRailYardDto(RailContainerEntity railContainer) {
         RailYardDto railYard = new RailYardDto();
         railYard.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
@@ -228,7 +228,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railYard;
     }
 
-    private RailPlanDto toRailPlanDto(RailContainer railContainer) {
+    private RailPlanDto toRailPlanDto(RailContainerEntity railContainer) {
         RailPlanDto railPlan = new RailPlanDto();
         railPlan.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
@@ -244,7 +244,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railPlan;
     }
 
-    private RailShippingDto toRailShippingDto(RailContainer railContainer) {
+    private RailShippingDto toRailShippingDto(RailContainerEntity railContainer) {
         RailShippingDto railShipping = new RailShippingDto();
         railShipping.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
@@ -259,7 +259,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railShipping;
     }
 
-    private RailArrivalDto toRailArrivalDto(RailContainer railContainer) {
+    private RailArrivalDto toRailArrivalDto(RailContainerEntity railContainer) {
         RailArrivalDto railArrivalDto = new RailArrivalDto();
         railArrivalDto.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
@@ -275,12 +275,12 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public void saveTruck(TruckDto truck) {
-        RailContainer container = rcRepository.findOne(truck.getRailContainerId());
+        RailContainerEntity container = rcRepository.findOne(truck.getRailContainerId());
         ServiceProviderEntity fleet = serviceProviderService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
-            for (RailContainer railContainer : containers) {
+            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            for (RailContainerEntity railContainer : containers) {
                 railContainer.setFleet(fleet);
                 railContainer.setPlateNo(truck.getPlateNo());
                 railContainer.setTrucker(truck.getTrucker());
@@ -298,11 +298,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public void saveRailYard(RailYardDto railYard) {
-        RailContainer container = rcRepository.findOne(railYard.getRailContainerId());
+        RailContainerEntity container = rcRepository.findOne(railYard.getRailContainerId());
 
         if (railYard.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
-            for (RailContainer railContainer : containers) {
+            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            for (RailContainerEntity railContainer : containers) {
                 railContainer.setStationToa(DateUtil.dateOf(railYard.getRailYardToa()));
             }
 
@@ -314,11 +314,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public void saveRailPlan(RailPlanDto railPlan) {
-        RailContainer container = rcRepository.findOne(railPlan.getRailContainerId());
+        RailContainerEntity container = rcRepository.findOne(railPlan.getRailContainerId());
 
         if (railPlan.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
-            for (RailContainer railContainer : containers) {
+            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            for (RailContainerEntity railContainer : containers) {
                 railContainer.setTransPlanNo(railPlan.getPlanNo());
                 railContainer.setEts(DateUtil.dayOf(railPlan.getEts()));
             }
@@ -332,11 +332,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public void saveRailShipping(RailShippingDto railShipping) {
-        RailContainer container = rcRepository.findOne(railShipping.getRailContainerId());
+        RailContainerEntity container = rcRepository.findOne(railShipping.getRailContainerId());
 
         if (railShipping.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
-            for (RailContainer railContainer : containers) {
+            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            for (RailContainerEntity railContainer : containers) {
                 railContainer.setAts(DateUtil.dateOf(railShipping.getAts()));
             }
 
@@ -348,11 +348,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     public void saveRailArrival(RailArrivalDto railArrival) {
-        RailContainer container = rcRepository.findOne(railArrival.getRailContainerId());
+        RailContainerEntity container = rcRepository.findOne(railArrival.getRailContainerId());
 
         if (railArrival.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
-            for (RailContainer railContainer : containers) {
+            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            for (RailContainerEntity railContainer : containers) {
                 railContainer.setAta(DateUtil.dateOf(railArrival.getAta()));
             }
 
@@ -363,13 +363,13 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public RailContainer findRailContainer(long containerId) {
-        RailContainer railContainer = rcRepository.findOne(containerId);
+    public RailContainerEntity findRailContainer(long containerId) {
+        RailContainerEntity railContainer = rcRepository.findOne(containerId);
         String defaultDateStr = DateUtil.stringOf(new Date());
-        if (null == railContainer.getLoadingToc())
-            railContainer.setLoadingTocStr(defaultDateStr);
-        else
-            railContainer.setLoadingTocStr(DateUtil.stringOf(railContainer.getLoadingToc()));
+//        if (null == railContainer.getLoadingToc())
+//            railContainer.setLoadingTocStr(defaultDateStr);
+//        else
+//            railContainer.setLoadingTocStr(DateUtil.stringOf(railContainer.getLoadingToc()));
 
         if (null == railContainer.getStationToa())
             railContainer.setStationToaStr(defaultDateStr);
@@ -387,59 +387,59 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         else
             railContainer.setAtsStr(DateUtil.stringOf(railContainer.getAts()));
 
-        if (null == railContainer.getAta())
-            railContainer.setAtaStr(defaultDateStr);
-        else
-            railContainer.setAtaStr(DateUtil.stringOf(railContainer.getAta()));
+//        if (null == railContainer.getAta())
+//            railContainer.setAtaStr(defaultDateStr);
+//        else
+//            railContainer.setAtaStr(DateUtil.stringOf(railContainer.getAta()));
         return railContainer;
     }
 
-    public void saveRailContainer(long containerId, RailContainer formBean) {
-        RailContainer container = rcRepository.findOne(containerId);
+    public void saveRailContainer(long containerId, RailContainerEntity formBean) {
+        RailContainerEntity container = rcRepository.findOne(containerId);
 
         if (formBean.isBatch()) {
-            Collection<RailContainer> containers = rcRepository.findByRoute(container.getRoute());
-            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
-                for (RailContainer rc : containers) {
-                    rc.setLoadingToc(DateUtil.dateOf(formBean.getLoadingTocStr()));
-                }
-            }
+            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+//            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
+//                for (RailContainerEntity rc : containers) {
+//                    rc.setLoadingToc(DateUtil.dateOf(formBean.getLoadingTocStr()));
+//                }
+//            }
 
             if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
-                for (RailContainer rc : containers) {
+                for (RailContainerEntity rc : containers) {
                     rc.setStationToa(DateUtil.dateOf(formBean.getStationToaStr()));
                 }
             }
 
             if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
-                for (RailContainer rc : containers) {
+                for (RailContainerEntity rc : containers) {
                     rc.setTransPlanNo(formBean.getTransPlanNo());
                 }
             }
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
-                for (RailContainer rc : containers) {
+                for (RailContainerEntity rc : containers) {
                     rc.setEts(DateUtil.dayOf(formBean.getEtsStr()));
                 }
             }
 
             if (formBean.getAtsStr() != null && formBean.getAtsStr().trim().length() > 0) {
-                for (RailContainer rc : containers) {
+                for (RailContainerEntity rc : containers) {
                     rc.setAts(DateUtil.dateOf(formBean.getAtsStr()));
                 }
             }
 
-            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
-                for (RailContainer rc : containers) {
-                    rc.setAta(DateUtil.dateOf(formBean.getAtaStr()));
-                }
-            }
+//            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
+//                for (RailContainerEntity rc : containers) {
+//                    rc.setAta(DateUtil.dateOf(formBean.getAtaStr()));
+//                }
+//            }
 
             rcRepository.save(containers);
         } else {
-            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
-                container.setLoadingToc(DateUtil.dateOf(formBean.getLoadingTocStr()));
-            }
+//            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
+//                container.setLoadingToc(DateUtil.dateOf(formBean.getLoadingTocStr()));
+//            }
             if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
                 container.setStationToa(DateUtil.dateOf(formBean.getStationToaStr()));
             }
@@ -452,9 +452,9 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
             if (formBean.getAtsStr() != null && formBean.getAtsStr().trim().length() > 0) {
                 container.setAts(DateUtil.dateOf(formBean.getAtsStr()));
             }
-            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
-                container.setAta(DateUtil.dateOf(formBean.getAtaStr()));
-            }
+//            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
+//                container.setAta(DateUtil.dateOf(formBean.getAtaStr()));
+//            }
             rcRepository.save(container);
         }
     }

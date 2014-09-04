@@ -1,6 +1,6 @@
 package liquid.shipping.service;
 
-import liquid.shipping.persistence.domain.RailContainer;
+import liquid.shipping.persistence.domain.RailContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.RailContainerRepository;
 import liquid.util.DateUtil;
@@ -17,12 +17,9 @@ public class RailContainerService {
     @Autowired
     private RailContainerRepository railContainerRepository;
 
-    public Collection<RailContainer> findByRoute(RouteEntity route) {
-        Collection<RailContainer> railContainers = railContainerRepository.findByRoute(route);
-        for (RailContainer railContainer : railContainers) {
-            if (railContainer.getLoadingToc() != null) {
-                railContainer.setLoadingTocStr(DateUtil.stringOf(railContainer.getLoadingToc()));
-            }
+    public Collection<RailContainerEntity> findByRoute(RouteEntity route) {
+        Collection<RailContainerEntity> railContainers = railContainerRepository.findByRoute(route);
+        for (RailContainerEntity railContainer : railContainers) {
             if (railContainer.getStationToa() != null) {
                 railContainer.setStationToaStr(DateUtil.stringOf(railContainer.getStationToa()));
             }
@@ -31,9 +28,6 @@ public class RailContainerService {
             }
             if (railContainer.getAts() != null) {
                 railContainer.setAtsStr(DateUtil.stringOf(railContainer.getAts()));
-            }
-            if (railContainer.getAta() != null) {
-                railContainer.setAtaStr(DateUtil.stringOf(railContainer.getAta()));
             }
         }
         return railContainers;

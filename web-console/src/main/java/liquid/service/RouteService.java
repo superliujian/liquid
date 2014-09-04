@@ -2,11 +2,9 @@ package liquid.service;
 
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.LegRepository;
-import liquid.shipping.persistence.repository.RailContainerRepository;
 import liquid.shipping.persistence.repository.RouteRepository;
 import liquid.shipping.persistence.repository.ShippingContainerRepository;
 import liquid.shipping.service.BargeContainerService;
-import liquid.shipping.service.RailContainerService;
 import liquid.shipping.service.VesselContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +25,6 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
     @Autowired
     private LegRepository legRepository;
 
-    @Deprecated
-    @Autowired
-    private RailContainerRepository railContainerRepository;
-
-    @Autowired
-    private RailContainerService railContainerService;
-
     @Autowired
     private BargeContainerService bargeContainerService;
 
@@ -53,8 +44,6 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
             route.setLegs(legs);
             Collection<ShippingContainerEntity> containers = scRepository.findByRoute(route);
             route.setContainers(containers);
-            Collection<RailContainer> railContainers = railContainerService.findByRoute(route);
-            route.setRailContainers(railContainers);
             Collection<BargeContainer> bargeContainers = bargeContainerService.findByRoute(route);
             route.setBargeContainers(bargeContainers);
             Collection<VesselContainer> vesselContainers = vesselContainerService.findByRoute(route);
@@ -75,6 +64,5 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
     }
 
     @Override
-    public void doSaveBefore(RouteEntity routeEntity) {
-    }
+    public void doSaveBefore(RouteEntity routeEntity) { }
 }
