@@ -129,23 +129,6 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         OrderEntity order = taskService.findOrderByTaskId(taskId);
         Collection<RailContainerEntity> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
-            for (RailContainerEntity container : rcList) {
-//                if (container.getLoadingToc() != null) {
-//                    container.setLoadingTocStr(DateUtil.stringOf(container.getLoadingToc()));
-//                }
-                if (container.getStationToa() != null) {
-                    container.setStationToaStr(DateUtil.stringOf(container.getStationToa()));
-                }
-                if (container.getEts() != null) {
-                    container.setEtsStr(DateUtil.dayStrOf(container.getEts()));
-                }
-                if (container.getAts() != null) {
-                    container.setAtsStr(DateUtil.stringOf(container.getAts()));
-                }
-//                if (container.getAta() != null) {
-//                    container.setAtaStr(DateUtil.stringOf(container.getAta()));
-//                }
-            }
             return rcList;
         }
 
@@ -359,102 +342,6 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
             rcRepository.save(containers);
         } else {
             container.setAta(DateUtil.dateOf(railArrival.getAta()));
-            rcRepository.save(container);
-        }
-    }
-
-    public RailContainerEntity findRailContainer(long containerId) {
-        RailContainerEntity railContainer = rcRepository.findOne(containerId);
-        String defaultDateStr = DateUtil.stringOf(new Date());
-//        if (null == railContainer.getLoadingToc())
-//            railContainer.setLoadingTocStr(defaultDateStr);
-//        else
-//            railContainer.setLoadingTocStr(DateUtil.stringOf(railContainer.getLoadingToc()));
-
-        if (null == railContainer.getStationToa())
-            railContainer.setStationToaStr(defaultDateStr);
-        else
-            railContainer.setStationToaStr(DateUtil.stringOf(railContainer.getStationToa()));
-
-        String defaultDayStr = DateUtil.dayStrOf(new Date());
-        if (null == railContainer.getEts())
-            railContainer.setEtsStr(defaultDayStr);
-        else
-            railContainer.setEtsStr(DateUtil.dayStrOf(railContainer.getEts()));
-
-        if (null == railContainer.getAts())
-            railContainer.setAtsStr(defaultDateStr);
-        else
-            railContainer.setAtsStr(DateUtil.stringOf(railContainer.getAts()));
-
-//        if (null == railContainer.getAta())
-//            railContainer.setAtaStr(defaultDateStr);
-//        else
-//            railContainer.setAtaStr(DateUtil.stringOf(railContainer.getAta()));
-        return railContainer;
-    }
-
-    public void saveRailContainer(long containerId, RailContainerEntity formBean) {
-        RailContainerEntity container = rcRepository.findOne(containerId);
-
-        if (formBean.isBatch()) {
-            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
-//            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
-//                for (RailContainerEntity rc : containers) {
-//                    rc.setLoadingToc(DateUtil.dateOf(formBean.getLoadingTocStr()));
-//                }
-//            }
-
-            if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
-                for (RailContainerEntity rc : containers) {
-                    rc.setStationToa(DateUtil.dateOf(formBean.getStationToaStr()));
-                }
-            }
-
-            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
-                for (RailContainerEntity rc : containers) {
-                    rc.setTransPlanNo(formBean.getTransPlanNo());
-                }
-            }
-
-            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
-                for (RailContainerEntity rc : containers) {
-                    rc.setEts(DateUtil.dayOf(formBean.getEtsStr()));
-                }
-            }
-
-            if (formBean.getAtsStr() != null && formBean.getAtsStr().trim().length() > 0) {
-                for (RailContainerEntity rc : containers) {
-                    rc.setAts(DateUtil.dateOf(formBean.getAtsStr()));
-                }
-            }
-
-//            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
-//                for (RailContainerEntity rc : containers) {
-//                    rc.setAta(DateUtil.dateOf(formBean.getAtaStr()));
-//                }
-//            }
-
-            rcRepository.save(containers);
-        } else {
-//            if (formBean.getLoadingTocStr() != null && formBean.getLoadingTocStr().trim().length() > 0) {
-//                container.setLoadingToc(DateUtil.dateOf(formBean.getLoadingTocStr()));
-//            }
-            if (formBean.getStationToaStr() != null && formBean.getStationToaStr().trim().length() > 0) {
-                container.setStationToa(DateUtil.dateOf(formBean.getStationToaStr()));
-            }
-            if (formBean.getTransPlanNo() != null && formBean.getTransPlanNo().trim().length() > 0) {
-                container.setTransPlanNo(formBean.getTransPlanNo());
-            }
-            if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
-                container.setEts(DateUtil.dayOf(formBean.getEtsStr()));
-            }
-            if (formBean.getAtsStr() != null && formBean.getAtsStr().trim().length() > 0) {
-                container.setAts(DateUtil.dateOf(formBean.getAtsStr()));
-            }
-//            if (formBean.getAtaStr() != null && formBean.getAtaStr().trim().length() > 0) {
-//                container.setAta(DateUtil.dateOf(formBean.getAtaStr()));
-//            }
             rcRepository.save(container);
         }
     }

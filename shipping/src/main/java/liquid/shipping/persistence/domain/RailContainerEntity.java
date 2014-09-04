@@ -1,8 +1,6 @@
 package liquid.shipping.persistence.domain;
 
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.util.DatePattern;
-import liquid.validation.constraints.DateFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -32,10 +30,6 @@ public class RailContainerEntity extends BaseLegContainer {
     @Column(name = "LOADING_TOC")
     private Date loadingToc;
 
-    @DateFormat(DatePattern.UNTIL_MINUTE)
-    @Transient
-    private String stationToaStr;
-
     /**
      * Time of Arrival at rail yard.
      */
@@ -53,20 +47,12 @@ public class RailContainerEntity extends BaseLegContainer {
     @Column(name = "ETS")
     private Date ets;
 
-    @DateFormat(DatePattern.UNTIL_DAY)
-    @Transient
-    private String etsStr;
-
     /**
      * Actual time of shipping
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ATS")
     private Date ats;
-
-    @DateFormat(DatePattern.UNTIL_MINUTE)
-    @Transient
-    private String atsStr;
 
     /**
      * Actual time of arrival
@@ -110,14 +96,6 @@ public class RailContainerEntity extends BaseLegContainer {
         this.loadingToc = loadingToc;
     }
 
-    public String getStationToaStr() {
-        return stationToaStr;
-    }
-
-    public void setStationToaStr(String stationToaStr) {
-        this.stationToaStr = stationToaStr;
-    }
-
     public Date getStationToa() {
         return stationToa;
     }
@@ -142,29 +120,12 @@ public class RailContainerEntity extends BaseLegContainer {
         this.ets = ets;
     }
 
-    public String getEtsStr() {
-        return etsStr;
-    }
-
-    public void setEtsStr(String etsStr) {
-        this.etsStr = etsStr;
-    }
-
     public Date getAts() {
-
         return ats;
     }
 
     public void setAts(Date ats) {
         this.ats = ats;
-    }
-
-    public String getAtsStr() {
-        return atsStr;
-    }
-
-    public void setAtsStr(String atsStr) {
-        this.atsStr = atsStr;
     }
 
     public Date getAta() {
