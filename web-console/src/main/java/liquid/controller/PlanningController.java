@@ -7,7 +7,7 @@ import liquid.order.service.OrderService;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.service.ChargeService;
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
@@ -72,7 +72,7 @@ public class PlanningController extends BaseTaskController {
         int containerUsage = 0;
         for (RouteEntity route : routes) {
             containerUsage += route.getContainerQty();
-            Collection<LegEntity> legs = legRepository.findByRoute(route);
+            Collection<LegEntity> legs = route.getLegs();
             route.setLegs(legs);
         }
         RouteEntity route = new RouteEntity();
@@ -101,10 +101,10 @@ public class PlanningController extends BaseTaskController {
         OrderEntity order = orderService.find(orderId);
 
         int containerUsage = 0;
-        Iterable<RouteEntity> routes = routeService.findByOrderId0(orderId);
+        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity r : routes) {
             containerUsage += r.getContainerQty();
-            Collection<LegEntity> legs = legRepository.findByRoute(r);
+            Collection<LegEntity> legs = route.getLegs();
             r.setLegs(legs);
         }
 

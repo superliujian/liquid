@@ -9,8 +9,8 @@ import java.util.Date;
  * Date: 10/12/13
  * Time: 2:42 PM
  */
-@Entity(name = "BARGE_CONTAINER")
-public class BargeContainer extends BaseLegContainer {
+@MappedSuperclass
+public class WaterContainerEntity extends BaseLegContainer {
     /**
      * Bill of Lading No.
      */

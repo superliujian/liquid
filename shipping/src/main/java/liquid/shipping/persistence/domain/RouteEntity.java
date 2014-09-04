@@ -6,6 +6,7 @@ import liquid.persistence.domain.BaseUpdateEntity;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -23,32 +24,23 @@ public class RouteEntity extends BaseUpdateEntity {
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
-    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
     public Collection<LegEntity> legs;
 
-    @Transient
-    private int containerQtyMax;
-
-    @Transient
-    private String deliveryDateStr;
-
-    @Transient
-    private Collection<ShippingContainerEntity> containers;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
+    private List<ShippingContainerEntity> containers;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
     private Collection<RailContainerEntity> railContainers;
 
-    @Transient
-    private Collection<BargeContainer> bargeContainers;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
+    private Collection<BargeContainerEntity> bargeContainers;
 
-    @Transient
-    private Collection<VesselContainer> vesselContainers;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
+    private Collection<VesselContainerEntity> vesselContainers;
 
-    @Transient
-    private Collection<DeliveryContainer> deliveryContainers;
-
-    @Transient
-    private boolean batch;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
+    private Collection<DeliveryContainerEntity> deliveryContainers;
 
     public OrderEntity getOrder() {
         return order;
@@ -56,14 +48,6 @@ public class RouteEntity extends BaseUpdateEntity {
 
     public void setOrder(OrderEntity order) {
         this.order = order;
-    }
-
-    public int getContainerQtyMax() {
-        return containerQtyMax;
-    }
-
-    public void setContainerQtyMax(int containerQtyMax) {
-        this.containerQtyMax = containerQtyMax;
     }
 
     public int getContainerQty() {
@@ -74,14 +58,6 @@ public class RouteEntity extends BaseUpdateEntity {
         this.containerQty = containerQty;
     }
 
-    public String getDeliveryDateStr() {
-        return deliveryDateStr;
-    }
-
-    public void setDeliveryDateStr(String deliveryDateStr) {
-        this.deliveryDateStr = deliveryDateStr;
-    }
-
     public Collection<LegEntity> getLegs() {
         return legs;
     }
@@ -90,11 +66,11 @@ public class RouteEntity extends BaseUpdateEntity {
         this.legs = legs;
     }
 
-    public Collection<ShippingContainerEntity> getContainers() {
+    public List<ShippingContainerEntity> getContainers() {
         return containers;
     }
 
-    public void setContainers(Collection<ShippingContainerEntity> containers) {
+    public void setContainers(List<ShippingContainerEntity> containers) {
         this.containers = containers;
     }
 
@@ -106,35 +82,27 @@ public class RouteEntity extends BaseUpdateEntity {
         this.railContainers = railContainers;
     }
 
-    public Collection<BargeContainer> getBargeContainers() {
+    public Collection<BargeContainerEntity> getBargeContainers() {
         return bargeContainers;
     }
 
-    public void setBargeContainers(Collection<BargeContainer> bargeContainers) {
+    public void setBargeContainers(Collection<BargeContainerEntity> bargeContainers) {
         this.bargeContainers = bargeContainers;
     }
 
-    public Collection<VesselContainer> getVesselContainers() {
+    public Collection<VesselContainerEntity> getVesselContainers() {
         return vesselContainers;
     }
 
-    public void setVesselContainers(Collection<VesselContainer> vesselContainers) {
+    public void setVesselContainers(Collection<VesselContainerEntity> vesselContainers) {
         this.vesselContainers = vesselContainers;
     }
 
-    public Collection<DeliveryContainer> getDeliveryContainers() {
+    public Collection<DeliveryContainerEntity> getDeliveryContainers() {
         return deliveryContainers;
     }
 
-    public void setDeliveryContainers(Collection<DeliveryContainer> deliveryContainers) {
+    public void setDeliveryContainers(Collection<DeliveryContainerEntity> deliveryContainers) {
         this.deliveryContainers = deliveryContainers;
-    }
-
-    public boolean isBatch() {
-        return batch;
-    }
-
-    public void setBatch(boolean batch) {
-        this.batch = batch;
     }
 }

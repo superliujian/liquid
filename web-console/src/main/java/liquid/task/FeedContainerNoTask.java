@@ -5,9 +5,7 @@ import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,9 +22,8 @@ public class FeedContainerNoTask extends AbstractTaskProxy {
 
         int allocatedContainerQuantity = 0;
 
-        List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> scs = shippingContainerService.findByRoute(route);
+            Collection<ShippingContainerEntity> scs = route.getContainers();
             for (ShippingContainerEntity shippingContainer : scs) {
                 if (null != shippingContainer.getContainer() || null != shippingContainer.getBicCode()) {
                     allocatedContainerQuantity++;

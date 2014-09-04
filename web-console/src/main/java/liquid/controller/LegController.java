@@ -11,8 +11,8 @@ import liquid.shipping.domain.Leg;
 import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.repository.LegRepository;
 import liquid.shipping.persistence.repository.RouteRepository;
+import liquid.shipping.service.LegService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class LegController extends BaseTaskController {
     private LocationRepository locationRepository;
 
     @Autowired
-    private LegRepository legRepository;
+    private LegService legService;
 
     @Autowired
     private ServiceProviderRepository serviceProviderRepository;
@@ -122,7 +122,7 @@ public class LegController extends BaseTaskController {
             legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
         legEntity.setSrcLoc(srcLoc);
         legEntity.setDstLoc(dstLoc);
-        legRepository.save(legEntity);
+        legService.save(legEntity);
         return "redirect:/task/" + taskId + "/planning";
     }
 
@@ -134,7 +134,7 @@ public class LegController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
         logger.debug("legId: {}", legId);
 
-        legRepository.delete(legId);
+        legService.delete(legId);
 
         return "redirect:/task/" + taskId + "/planning";
     }

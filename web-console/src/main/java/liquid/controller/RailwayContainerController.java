@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

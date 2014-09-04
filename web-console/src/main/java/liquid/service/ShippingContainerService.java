@@ -9,6 +9,7 @@ import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.shipping.domain.*;
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.*;
+import liquid.shipping.service.RouteService;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,10 +122,6 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public List<ShippingContainerEntity> findByRoute(RouteEntity route) {
-        return scRepository.findByRoute(route);
-    }
-
     public Iterable<RailContainerEntity> initializeRailContainers(String taskId) {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
         Collection<RailContainerEntity> rcList = rcRepository.findByOrder(order);
@@ -135,10 +132,9 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         rcList = new ArrayList<RailContainerEntity>();
         Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainerEntity sc : scList) {
+                for (ShippingContainerEntity sc : route.getContainers()) {
                     RailContainerEntity rc = new RailContainerEntity();
                     rc.setOrder(route.getOrder());
                     rc.setRoute(route);
@@ -346,11 +342,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public Iterable<BargeContainer> initBargeContainers(String taskId) {
+    public Iterable<BargeContainerEntity> initBargeContainers(String taskId) {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
-        Collection<BargeContainer> bcList = bcRepository.findByOrder(order);
+        Collection<BargeContainerEntity> bcList = bcRepository.findByOrder(order);
         if (bcList.size() > 0) {
-            for (BargeContainer container : bcList) {
+            for (WaterContainerEntity container : bcList) {
                 if (container.getEts() != null) {
                     container.setEtsStr(DateUtil.dayStrOf(container.getEts()));
                 }
@@ -358,14 +354,13 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
             return bcList;
         }
 
-        bcList = new ArrayList<BargeContainer>();
+        bcList = new ArrayList<BargeContainerEntity>();
         Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
-                for (ShippingContainerEntity sc : scList) {
-                    BargeContainer bc = new BargeContainer();
+                for (ShippingContainerEntity sc : route.getContainers()) {
+                    BargeContainerEntity bc = new BargeContainerEntity();
                     bc.setOrder(route.getOrder());
                     bc.setRoute(route);
                     bc.setLeg(legList.get(0));
@@ -378,8 +373,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return bcRepository.save(bcList);
     }
 
-    public BargeContainer findBargeContainer(long containerId) {
-        BargeContainer bargeContainer = bcRepository.findOne(containerId);
+    public BargeContainerEntity findBargeContainer(long containerId) {
+        BargeContainerEntity bargeContainer = bcRepository.findOne(containerId);
 
         String defaultDayStr = DateUtil.dayStrOf(new Date());
         if (null == bargeContainer.getEts())
@@ -390,26 +385,27 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return bargeContainer;
     }
 
-    public void saveBargeContainer(long containerId, BargeContainer formBean) {
-        BargeContainer container = bcRepository.findOne(containerId);
+    public void saveBargeContainer(long containerId, BargeContainerEntity formBean) {
+        BargeContainerEntity container = bcRepository.findOne(containerId);
+        RouteEntity route = routeService.find(container.getRoute().getId());
 
         if (formBean.isBatch()) {
-            Collection<BargeContainer> containers = bcRepository.findByRoute(container.getRoute());
+            Collection<BargeContainerEntity> containers = route.getBargeContainers();
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
-                for (BargeContainer rc : containers) {
+                for (WaterContainerEntity rc : containers) {
                     rc.setEts(DateUtil.dayOf(formBean.getEtsStr()));
                 }
             }
 
             if (formBean.getBolNo() != null && formBean.getBolNo().trim().length() > 0) {
-                for (BargeContainer rc : containers) {
+                for (WaterContainerEntity rc : containers) {
                     rc.setBolNo(formBean.getBolNo());
                 }
             }
 
             if (formBean.getSlot() != null && formBean.getSlot().trim().length() > 0) {
-                for (BargeContainer rc : containers) {
+                for (WaterContainerEntity rc : containers) {
                     rc.setSlot(formBean.getSlot());
                 }
             }
@@ -430,11 +426,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public Iterable<VesselContainer> initVesselContainers(String taskId) {
+    public Iterable<VesselContainerEntity> initVesselContainers(String taskId) {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
-        Collection<VesselContainer> vcList = vcRepository.findByOrder(order);
+        Collection<VesselContainerEntity> vcList = vcRepository.findByOrder(order);
         if (vcList.size() > 0) {
-            for (VesselContainer container : vcList) {
+            for (VesselContainerEntity container : vcList) {
                 if (container.getEts() != null) {
                     container.setEtsStr(DateUtil.dayStrOf(container.getEts()));
                 }
@@ -442,14 +438,13 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
             return vcList;
         }
 
-        vcList = new ArrayList<VesselContainer>();
+        vcList = new ArrayList<VesselContainerEntity>();
         Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> scList = scRepository.findByRoute(route);
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainerEntity sc : scList) {
-                    VesselContainer vc = new VesselContainer();
+                for (ShippingContainerEntity sc : route.getContainers()) {
+                    VesselContainerEntity vc = new VesselContainerEntity();
                     vc.setOrder(route.getOrder());
                     vc.setRoute(route);
                     vc.setLeg(legList.get(0));
@@ -459,11 +454,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
             }
         }
 
-        return bcRepository.save(vcList);
+        return vcRepository.save(vcList);
     }
 
-    public VesselContainer findVesselContainer(long containerId) {
-        VesselContainer vesselContainer = vcRepository.findOne(containerId);
+    public VesselContainerEntity findVesselContainer(long containerId) {
+        VesselContainerEntity vesselContainer = vcRepository.findOne(containerId);
 
         String defaultDayStr = DateUtil.dayStrOf(new Date());
         if (null == vesselContainer.getEts())
@@ -474,26 +469,27 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return vesselContainer;
     }
 
-    public void saveVesselContainer(long containerId, VesselContainer formBean) {
-        VesselContainer container = vcRepository.findOne(containerId);
+    public void saveVesselContainer(long containerId, VesselContainerEntity formBean) {
+        VesselContainerEntity container = vcRepository.findOne(containerId);
+        RouteEntity route = routeService.find(container.getRoute().getId());
 
         if (formBean.isBatch()) {
-            Collection<VesselContainer> containers = vcRepository.findByRoute(container.getRoute());
+            Collection<VesselContainerEntity> containers = route.getVesselContainers();
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
-                for (VesselContainer rc : containers) {
+                for (VesselContainerEntity rc : containers) {
                     rc.setEts(DateUtil.dayOf(formBean.getEtsStr()));
                 }
             }
 
             if (formBean.getBolNo() != null && formBean.getBolNo().trim().length() > 0) {
-                for (VesselContainer rc : containers) {
+                for (VesselContainerEntity rc : containers) {
                     rc.setBolNo(formBean.getBolNo());
                 }
             }
 
             if (formBean.getSlot() != null && formBean.getSlot().trim().length() > 0) {
-                for (VesselContainer rc : containers) {
+                for (VesselContainerEntity rc : containers) {
                     rc.setSlot(formBean.getSlot());
                 }
             }

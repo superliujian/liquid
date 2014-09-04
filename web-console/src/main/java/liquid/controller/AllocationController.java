@@ -14,7 +14,7 @@ import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ChargeService;
 import liquid.service.LocationService;
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.service.ShippingContainerService;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
@@ -164,7 +164,7 @@ public class AllocationController extends BaseTaskController {
 
         // Set up pickup contact and his phone by default
         RouteEntity route = routeService.find(routeId);
-        Collection<ShippingContainerEntity> scs = scService.findByRoute(route);
+        Collection<ShippingContainerEntity> scs = route.getContainers();
         if (scs.iterator().hasNext()) {
             ShippingContainerEntity firstOne = scs.iterator().next();
             sc.setPickupContact(firstOne.getPickupContact());

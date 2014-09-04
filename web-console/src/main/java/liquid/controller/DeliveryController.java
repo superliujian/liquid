@@ -5,10 +5,10 @@ import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.DeliveryContainerService;
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.service.ServiceSubtypeService;
 import liquid.shipping.domain.TransMode;
-import liquid.shipping.persistence.domain.DeliveryContainer;
+import liquid.shipping.persistence.domain.DeliveryContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public class DeliveryController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        DeliveryContainer container = deliveryContainerService.findDeliveryContainer(containerId);
+        DeliveryContainerEntity container = deliveryContainerService.findDeliveryContainer(containerId);
 
         logger.debug("container: {}", container);
         model.addAttribute("container", container);
@@ -84,7 +84,7 @@ public class DeliveryController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String save(@PathVariable String taskId,
                        @PathVariable long containerId,
-                       @ModelAttribute("container") DeliveryContainer formBean,
+                       @ModelAttribute("container") DeliveryContainerEntity formBean,
                        Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

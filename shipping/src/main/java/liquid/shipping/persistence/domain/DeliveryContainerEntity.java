@@ -10,7 +10,7 @@ import java.util.Date;
  * Time: 10:52 PM
  */
 @Entity(name = "DELIVERY_CONTAINER")
-public class DeliveryContainer extends BaseLegContainer {
+public class DeliveryContainerEntity extends BaseLegContainer {
     @Column(name = "ADDRESS")
     private String address;
 
@@ -26,7 +26,7 @@ public class DeliveryContainer extends BaseLegContainer {
     @Transient
     private boolean batch;
 
-    public DeliveryContainer() {
+    public DeliveryContainerEntity() {
     }
 
     public String getAddress() {

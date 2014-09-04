@@ -19,6 +19,11 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>util</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>common</artifactId>
             <version>${application-version}</version>
         </dependency>

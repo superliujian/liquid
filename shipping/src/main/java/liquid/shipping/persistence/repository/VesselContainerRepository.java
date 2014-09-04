@@ -1,8 +1,7 @@
 package liquid.shipping.persistence.repository;
 
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.domain.VesselContainer;
+import liquid.shipping.persistence.domain.VesselContainerEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
@@ -13,8 +12,6 @@ import java.util.Collection;
  * Date: 10/12/13
  * Time: 4:27 PM
  */
-public interface VesselContainerRepository extends CrudRepository<VesselContainer, Long> {
-    Collection<VesselContainer> findByOrder(OrderEntity order);
-
-    Collection<VesselContainer> findByRoute(RouteEntity route);
+public interface VesselContainerRepository extends CrudRepository<VesselContainerEntity, Long> {
+    Collection<VesselContainerEntity> findByOrder(OrderEntity order);
 }

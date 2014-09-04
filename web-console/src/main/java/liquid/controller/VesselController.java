@@ -1,9 +1,9 @@
 package liquid.controller;
 
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.service.ShippingContainerService;
 import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.domain.VesselContainer;
+import liquid.shipping.persistence.domain.VesselContainerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class VesselController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        VesselContainer vesselContainer = scService.findVesselContainer(containerId);
+        VesselContainerEntity vesselContainer = scService.findVesselContainer(containerId);
         logger.debug("vesselContainer: {}", vesselContainer);
         model.addAttribute("container", vesselContainer);
         return "vessel/edit";
@@ -61,7 +61,7 @@ public class VesselController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @ModelAttribute("container") VesselContainer formBean,
+                         @ModelAttribute("container") VesselContainerEntity formBean,
                          BindingResult bindingResult, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

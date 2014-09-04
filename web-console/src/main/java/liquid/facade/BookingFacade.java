@@ -2,7 +2,7 @@ package liquid.facade;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.shipping.domain.Booking;
 import liquid.shipping.domain.BookingItem;
 import liquid.shipping.domain.TransMode;

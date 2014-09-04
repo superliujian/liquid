@@ -1,9 +1,10 @@
 package liquid.controller;
 
-import liquid.service.RouteService;
 import liquid.service.ShippingContainerService;
-import liquid.shipping.persistence.domain.BargeContainer;
+import liquid.shipping.persistence.domain.BargeContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.WaterContainerEntity;
+import liquid.shipping.service.RouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class BargeController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        BargeContainer bargeContainer = scService.findBargeContainer(containerId);
+        BargeContainerEntity bargeContainer = scService.findBargeContainer(containerId);
         logger.debug("bargeContainer: {}", bargeContainer);
         model.addAttribute("container", bargeContainer);
         return "barge/edit";
@@ -61,8 +62,8 @@ public class BargeController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @ModelAttribute("container") BargeContainer formBean,
-                         BindingResult bindingResult, Principal principal) {
+                         @ModelAttribute("container") BargeContainerEntity formBean,
+                         BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 

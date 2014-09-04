@@ -7,7 +7,7 @@ import liquid.domain.RouteContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.service.ContainerAllocationService;
-import liquid.service.RouteService;
+import liquid.shipping.service.RouteService;
 import liquid.service.ShippingContainerService;
 import liquid.service.TaskService;
 import liquid.shipping.persistence.domain.RouteEntity;
@@ -62,7 +62,7 @@ public class ContainerAllocationFacade {
     private List<RouteContainerAllocation> computeSelfContainerAllocations(int type, String subtypeName, Iterable<RouteEntity> routes) {
         List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
         for (RouteEntity route : routes) {
-            List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRoute(route);
+            List<ShippingContainerEntity> shippingContainers = route.getContainers();
             int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
             for (int j = 0; j < allocatedQuantity; j++) {
                 RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
@@ -87,7 +87,7 @@ public class ContainerAllocationFacade {
     private List<RouteContainerAllocation> computeRailContainerAllocations(int type, String subtypeName, Iterable<RouteEntity> routes) {
         List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
         for (RouteEntity route : routes) {
-            List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRoute(route);
+            List<ShippingContainerEntity> shippingContainers = route.getContainers();
             int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
             for (int j = 0; j < allocatedQuantity; j++) {
                 RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
@@ -130,8 +130,7 @@ public class ContainerAllocationFacade {
     public void allocate(SelfContainerAllocation selfContainerAllocation) {
         RouteEntity route = routeService.find(selfContainerAllocation.getRouteId());
 
-        List<ShippingContainerEntity> shippingContainers = shippingContainerService.
-                findByRoute(RouteEntity.newInstance(RouteEntity.class, selfContainerAllocation.getRouteId()));
+        List<ShippingContainerEntity> shippingContainers = route.getContainers();
         if (CollectionUtil.isEmpty(shippingContainers))
             shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (int i = shippingContainers.size(); i < route.getContainerQty(); i++) {
