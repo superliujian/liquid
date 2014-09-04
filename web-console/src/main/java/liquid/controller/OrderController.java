@@ -191,7 +191,18 @@ public class OrderController extends BaseController {
         int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String username = SecurityContext.getInstance().getUsername();
-        Page<OrderEntity> page = orderService.findByCreateUser(username, pageRequest);
+
+        Page<OrderEntity> page;
+
+        switch (SecurityContext.getInstance().getRole()) {
+            case "ROLE_SALES":
+            case "ROLE_MARKETING":
+                page = orderService.findByCreateUser(username, pageRequest);
+                break;
+            default:
+                page = orderService.findAll(pageRequest);
+                break;
+        }
 
         model.addAttribute("page", page);
         return "order/page";

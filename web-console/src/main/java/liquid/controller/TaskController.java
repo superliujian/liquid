@@ -5,6 +5,7 @@ import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.security.SecurityContext;
 import liquid.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
@@ -12,7 +13,6 @@ import liquid.service.bpm.ActivitiEngineService;
 import liquid.shipping.domain.TaskBadgeDto;
 import liquid.shipping.domain.TaskDto;
 import liquid.task.NotCompletedException;
-import liquid.utils.RoleHelper;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.util.Locale;
 
 /**
@@ -51,10 +49,11 @@ public class TaskController extends BaseController {
     private ServiceSubtypeService serviceSubtypeService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String tasks(Model model, Principal principal) {
-        logger.debug("Role: {}", RoleHelper.getRole(principal));
-        TaskDto[] tasks = taskService.listTasks(RoleHelper.getRole(principal));
-        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(RoleHelper.getRole(principal), principal.getName());
+    public String tasks(Model model) {
+        logger.debug("Role: {}", SecurityContext.getInstance().getRole());
+        TaskDto[] tasks = taskService.listTasks(SecurityContext.getInstance().getRole());
+        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(SecurityContext.getInstance().getRole(),
+                SecurityContext.getInstance().getUsername());
         model.addAttribute("tasks", tasks);
         model.addAttribute("taskBadge", taskBadge);
         model.addAttribute("title", "task.queue");
@@ -66,9 +65,10 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping(value = "/my", method = RequestMethod.GET)
-    public String myTasks(Model model, Principal principal) {
-        TaskDto[] tasks = taskService.listMyTasks(principal.getName());
-        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(RoleHelper.getRole(principal), principal.getName());
+    public String myTasks(Model model) {
+        TaskDto[] tasks = taskService.listMyTasks(SecurityContext.getInstance().getUsername());
+        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(SecurityContext.getInstance().getRole(),
+                SecurityContext.getInstance().getUsername());
         model.addAttribute("tasks", tasks);
         model.addAttribute("taskBadge", taskBadge);
         model.addAttribute("title", "task.my");
@@ -80,9 +80,10 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping(value = "/warning", method = RequestMethod.GET)
-    public String warningTasks(Model model, Principal principal) {
+    public String warningTasks(Model model) {
         TaskDto[] tasks = taskService.listWarningTasks();
-        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(RoleHelper.getRole(principal), principal.getName());
+        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(SecurityContext.getInstance().getRole(),
+                SecurityContext.getInstance().getUsername());
         model.addAttribute("tasks", tasks);
         model.addAttribute("taskBadge", taskBadge);
         model.addAttribute("title", "task.my");
@@ -98,12 +99,10 @@ public class TaskController extends BaseController {
      *
      * @param taskId
      * @param model
-     * @param principal
      * @return
      */
     @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
-    public String toCommon(@PathVariable String taskId,
-                           Model model, Principal principal) {
+    public String toCommon(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
@@ -111,8 +110,7 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
-    public String toRealTask(@PathVariable String taskId,
-                             Model model, Principal principal) {
+    public String toRealTask(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
         TaskDto task = taskService.getTask(taskId);
         logger.debug("task: {}", task);
@@ -122,11 +120,10 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")
-    public String claim(@RequestParam String taskId,
-                        Model model, Principal principal, HttpServletRequest request, HttpServletResponse response) {
+    public String claim(@RequestParam String taskId, HttpServletRequest request) {
         logger.debug("taskId: {}", taskId);
         try {
-            bpmService.claimTask(taskId, principal.getName());
+            bpmService.claimTask(taskId, SecurityContext.getInstance().getUsername());
         } catch (ActivitiTaskAlreadyClaimedException e) {
             request.getSession().setAttribute("message",
                     messageSource.getMessage("task.claimed.by.someone.else", new String[]{}, Locale.CHINA));
@@ -155,17 +152,17 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping(value = "/{taskId}/check_amount", method = RequestMethod.GET)
-    public String checkAmount(@PathVariable String taskId,
-                              Model model, Principal principal) {
+    public String checkAmount(@PathVariable String taskId, Model model) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
-        if ("ROLE_COMMERCE".equals(RoleHelper.getRole(principal))) {
+        if ("ROLE_COMMERCE".equals(SecurityContext.getInstance().getRole())) {
             Iterable<ChargeEntity> charges = chargeService.findByOrderId(orderId);
             model.addAttribute("charges", charges);
         } else {
-            Iterable<ChargeEntity> charges = chargeService.findByOrderIdAndCreateRole(orderId, RoleHelper.getRole(principal));
+            Iterable<ChargeEntity> charges = chargeService.findByOrderIdAndCreateRole(orderId,
+                    SecurityContext.getInstance().getRole());
             model.addAttribute("charges", charges);
         }
 
@@ -176,8 +173,7 @@ public class TaskController extends BaseController {
     }
 
     @RequestMapping(value = "/{taskId}/settlement", method = RequestMethod.GET)
-    public String settle(@PathVariable String taskId,
-                         Model model, Principal principal) {
+    public String settle(@PathVariable String taskId, Model model) {
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 

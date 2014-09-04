@@ -44,7 +44,7 @@
             </form>
         </div>
         
-        <div class="col-lg-4">
+        <div class="col-lg-4" sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')">
             <a href="/order/edit" class="btn btn-success btn-block" role="button" th:text="#{order.create}">New Order</a>
         </div>        
     </div>
@@ -98,8 +98,10 @@
                     <td th:text="${order.receivableSummary.usd}">USD Price</td>
                     <td th:text="${order.updateTime}">Create Time</td>
                     <td>
-                        <a href="#edit" class="btn btn-default btn-xs"
-                           th:href="'/order/' + ${order.id} + '/edit'" th:if="${order.status} != 2">
+                        <a class="btn btn-default btn-xs"
+                           sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
+                           th:if="${order.status} != 2" 
+                           th:href="'/order/' + ${order.id} + '/edit'">
                             <i class="glyphicon glyphicon-edit"/>
                         </a>
                     </td>
