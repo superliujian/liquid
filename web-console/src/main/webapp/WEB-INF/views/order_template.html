@@ -16,7 +16,11 @@
             <li class="active" th:class="${tab} == 'container' ? 'active'">
                 <a th:href="'/order/' + ${order.id} + '/container'" th:text="#{container}">Container</a></li>
             <li class="active" th:class="${tab} == 'rc' ? 'active'">
-                <a th:href="'/rc?o=' + ${order.id}" th:text="#{railway.container.info}">Railway Container Info</a></li>                
+                <a th:href="'/rc?o=' + ${order.id}" th:text="#{railway.container.info}">Railway Container Info</a></li>
+            <li class="active" th:class="${tab} == 'bc' ? 'active'">
+                <a th:href="'/bc?o=' + ${order.id}" th:text="#{barge}">Barge Container Info</a></li>
+            <li class="active" th:class="${tab} == 'vc' ? 'active'">
+                <a th:href="'/vc?o=' + ${order.id}" th:text="#{vessel}">Vessel Container Info</a></li>
             <!--
             <li class="active" th:class="${tab} == 'charge' ? 'active'">
                 <a th:href="'/order/' + ${order.id} + '/charge'" th:text="#{charge}">Charge</a></li>
