@@ -37,7 +37,7 @@
 </div>
 
 <div id="f" class="container" th:if="${task.assignee}">
-    <form method="POST" th:object="${disty}" th:action="'/task/' + ${taskId} + '/disty'" class="form">
+    <form method="POST" th:object="${disty}" th:action="'/dp?t=' + ${task.id}" class="form">
         <h3 class="form-heading" th:text="#{disty.price}">Disty Price</h3>
         
         <div class="form-group" th:classappend="${#fields.hasErrors('distyCny')} ? 'has-error'">

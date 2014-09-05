@@ -11,9 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -27,8 +27,8 @@ import java.util.Locale;
  * Time: 9:47 PM
  */
 @Controller
-@RequestMapping("/task/{taskId}/disty")
-public class OrderDistyController extends BaseTaskController {
+@RequestMapping("/dp")
+public class OrderDistyController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderDistyController.class);
 
     @Autowired
@@ -38,7 +38,7 @@ public class OrderDistyController extends BaseTaskController {
     private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String init(@PathVariable String taskId, Model model) {
+    public String init(@RequestParam(value = "t") String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
 
         long orderId = taskService.getOrderIdByTaskId(taskId);
@@ -47,11 +47,12 @@ public class OrderDistyController extends BaseTaskController {
         disty.setDistyCny(order.getDistyPrice());
         disty.setDistyUsd(order.getDistyUsd());
         model.addAttribute("disty", disty);
+        model.addAttribute("task", taskService.getTask(taskId));
         return "order/disty_price";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String feed(@PathVariable String taskId,
+    public String feed(@RequestParam(value = "t") String taskId,
                        @Valid @ModelAttribute("disty") Disty disty,
                        BindingResult bindingResult,
                        Model model, Principal principal) {
@@ -70,6 +71,7 @@ public class OrderDistyController extends BaseTaskController {
         orderService.save(order);
 
         model.addAttribute("disty", disty);
+        model.addAttribute("task", taskService.getTask(taskId));
         model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
         return "order/disty_price";
     }
