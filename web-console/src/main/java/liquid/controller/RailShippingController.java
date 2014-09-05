@@ -3,7 +3,7 @@ package liquid.controller;
 import liquid.shipping.domain.RailShippingDto;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
-import liquid.service.ShippingContainerService;
+import liquid.shipping.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

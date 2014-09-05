@@ -1,9 +1,8 @@
 package liquid.controller;
 
-import liquid.service.ShippingContainerService;
+import liquid.shipping.service.ShippingContainerService;
 import liquid.shipping.persistence.domain.BargeContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.domain.WaterContainerEntity;
 import liquid.shipping.service.RouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +35,11 @@ public class BargeController extends BaseTaskController {
     private RouteService routeService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String init(@PathVariable String taskId,
-                       Model model, Principal principal) {
+    public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        scService.initBargeContainers(taskId);
         Long orderId = taskService.findOrderId(taskId);
+        scService.initBargeContainers(orderId);
+
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "barge/main";

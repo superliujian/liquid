@@ -4,12 +4,12 @@ import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.metadata.ChargeWay;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
-import liquid.service.DeliveryContainerService;
-import liquid.shipping.service.RouteService;
+import liquid.shipping.service.DeliveryContainerService;
 import liquid.service.ServiceSubtypeService;
 import liquid.shipping.domain.TransMode;
 import liquid.shipping.persistence.domain.DeliveryContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.service.RouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +53,7 @@ public class DeliveryController extends BaseTaskController {
         Long orderId = taskService.findOrderId(taskId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
-
-        model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(taskId));
+        model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));
 
         // for charges
         Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();

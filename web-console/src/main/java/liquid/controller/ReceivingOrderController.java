@@ -5,6 +5,7 @@ import liquid.container.domain.ContainerType;
 import liquid.domain.LocationType;
 import liquid.metadata.OrderStatus;
 import liquid.order.persistence.domain.ReceivingOrder;
+import liquid.order.service.ReceivingOrderService;
 import liquid.persistence.domain.*;
 import liquid.service.*;
 import org.slf4j.Logger;

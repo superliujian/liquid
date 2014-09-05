@@ -1,4 +1,4 @@
-package liquid.service;
+package liquid.shipping.service;
 
 import liquid.container.domain.ContainerStatus;
 import liquid.container.persistence.domain.ContainerEntity;
@@ -6,10 +6,11 @@ import liquid.container.service.ContainerService;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.service.AbstractService;
+import liquid.service.ServiceProviderService;
 import liquid.shipping.domain.*;
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.*;
-import liquid.shipping.service.RouteService;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,6 @@ import java.util.List;
 public class ShippingContainerService extends AbstractService<ShippingContainerEntity, ShippingContainerRepository> {
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private TaskService taskService;
 
     @Autowired
     private RouteService routeService;
@@ -69,8 +67,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     @Transactional("transactionManager")
-    public void initialize(String taskId) {
-        Long orderId = taskService.findOrderId(taskId);
+    public void initialize(Long orderId) {
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<ShippingContainerEntity> containers = route.getContainers();
@@ -122,8 +119,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public Iterable<RailContainerEntity> initializeRailContainers(String taskId) {
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+    public Iterable<RailContainerEntity> initializeRailContainers(Long orderId) {
+        OrderEntity order = orderService.find(orderId);
         Collection<RailContainerEntity> rcList = rcRepository.findByOrder(order);
         if (rcList.size() > 0) {
             return rcList;
@@ -342,8 +339,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public Iterable<BargeContainerEntity> initBargeContainers(String taskId) {
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+    public Iterable<BargeContainerEntity> initBargeContainers(Long orderId) {
+        OrderEntity order = orderService.find(orderId);
         Collection<BargeContainerEntity> bcList = bcRepository.findByOrder(order);
         if (bcList.size() > 0) {
             for (WaterContainerEntity container : bcList) {
@@ -426,8 +423,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public Iterable<VesselContainerEntity> initVesselContainers(String taskId) {
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+    public Iterable<VesselContainerEntity> initVesselContainers(Long orderId) {
+        OrderEntity order = orderService.find(orderId);
         Collection<VesselContainerEntity> vcList = vcRepository.findByOrder(order);
         if (vcList.size() > 0) {
             for (VesselContainerEntity container : vcList) {

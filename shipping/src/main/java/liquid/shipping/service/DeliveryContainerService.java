@@ -1,11 +1,12 @@
-package liquid.service;
+package liquid.shipping.service;
 
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
+import liquid.service.AbstractService;
 import liquid.shipping.persistence.domain.DeliveryContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import liquid.shipping.persistence.repository.DeliveryContainerRepository;
-import liquid.shipping.service.RouteService;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
     private DeliveryContainerRepository deliveryContainerRepository;
 
     @Autowired
-    private TaskService taskService;
+    private OrderService orderService;
 
     @Autowired
     private RouteService routeService;
@@ -32,8 +33,8 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
     @Override
     public void doSaveBefore(DeliveryContainerEntity entity) {}
 
-    public Iterable<DeliveryContainerEntity> initDeliveryContainers(String taskId) {
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+    public Iterable<DeliveryContainerEntity> initDeliveryContainers(Long orderId) {
+        OrderEntity order = orderService.find(orderId);
         Collection<DeliveryContainerEntity> dcList = deliveryContainerRepository.findByOrder(order);
         if (dcList.size() > 0) {
             for (DeliveryContainerEntity container : dcList) {

@@ -29,8 +29,6 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<br/>
-
 <div class="container">
     <div th:if="${alert}" class="alert alert-success" role="alert">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -39,7 +37,7 @@
 </div>
 
 <div id="f" class="container" th:if="${task.assignee}">
-    <form method="POST" th:object="${disty}" th:action="'/task/' + ${taskId} + '/disty'">
+    <form method="POST" th:object="${disty}" th:action="'/task/' + ${taskId} + '/disty'" class="form">
         <h3 class="form-heading" th:text="#{disty.price}">Disty Price</h3>
         
         <div class="form-group" th:classappend="${#fields.hasErrors('distyCny')} ? 'has-error'">

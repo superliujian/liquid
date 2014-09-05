@@ -3,7 +3,7 @@ package liquid.task;
 import liquid.order.service.OrderService;
 import liquid.security.SecurityContext;
 import liquid.shipping.service.RouteService;
-import liquid.service.ShippingContainerService;
+import liquid.shipping.service.ShippingContainerService;
 import liquid.service.TaskService;
 import liquid.service.bpm.ActivitiEngineService;
 import org.springframework.beans.factory.annotation.Autowired;

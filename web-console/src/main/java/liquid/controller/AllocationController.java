@@ -14,10 +14,10 @@ import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ChargeService;
 import liquid.service.LocationService;
-import liquid.service.ShippingContainerService;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import liquid.shipping.service.RouteService;
+import liquid.shipping.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +70,8 @@ public class AllocationController extends BaseTaskController {
     private ContainerAllocationFacade containerAllocationFacade;
 
     public String init(@PathVariable String taskId, Model model) {
-        scService.initialize(taskId);
         Long orderId = taskService.findOrderId(taskId);
+        scService.initialize(orderId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
         model.addAttribute("routes", routes);
@@ -134,7 +134,7 @@ public class AllocationController extends BaseTaskController {
         logger.debug("containerAllocation: {}", containerAllocation);
         containerAllocationFacade.allocate(containerAllocation);
         if (ContainerType.RAIL.getType() == containerAllocation.getType()) {
-            model.addAttribute("containerAllocation",containerAllocationFacade.computeContainerAllocation(taskId));
+            model.addAttribute("containerAllocation", containerAllocationFacade.computeContainerAllocation(taskId));
             model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
             return "allocation/rail_container";
         } else {

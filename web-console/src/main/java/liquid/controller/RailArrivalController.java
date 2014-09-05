@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.shipping.domain.RailArrivalDto;
-import liquid.service.ShippingContainerService;
+import liquid.shipping.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class RailArrivalController extends BaseTaskController {
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-
-        model.addAttribute("containers", scService.initializeRailContainers(taskId));
+        Long orderId = taskService.findOrderId(taskId);
+        model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
         return "rail/main";
     }
