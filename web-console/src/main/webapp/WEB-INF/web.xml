@@ -22,7 +22,6 @@
         <param-value>
             liquid.config.BpmConfig,
             liquid.config.LdapConfig,
-            liquid.container.config.JpaConfig,
             liquid.config.JpaConfig,
             liquid.config.RootConfig,
             liquid.config.SecurityConfig,

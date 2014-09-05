@@ -34,7 +34,7 @@
 
 <div class="container">
 <div class="row">
-<div class="col-lg-7">
+<div class="col-lg-8">
     <!-- charges for this route -->
     <div class="panel panel-default" th:if="${route}">
         <div class="panel-heading">
@@ -133,48 +133,41 @@
     <!-- /.panel -->
 </div>
 
-<div class="col-lg-5">
+<div class="col-lg-4">
     <div class="panel panel-default">
         <div class="panel-heading" th:text="#{charge.add}">Add Charge</div>
         <div class="panel-body">
-            <form action="/task/{taskId}/leg/{legId}/charge" method="POST" class="form-horizontal"
-                  th:object="${charge}" th:action="@{${#httpServletRequest.servletPath}}">
+            <form method="POST" th:object="${charge}" th:action="@{${#httpServletRequest.servletPath}}">
 
                 <input type="hidden" th:field="*{routeId}"/>
                 <input type="hidden" th:field="*{legId}"/>
 
                 <div class="form-group">
-                    <label th:text="#{charge.type}" class="col-lg-3 control-label">Charge Type</label>
-
-                    <div class="col-lg-9">
-                        <select th:field="*{serviceSubtypeId}" class="form-control">
+                    <label th:text="#{charge.type}">Charge Type</label>
+                        <select th:field="*{serviceSubtypeId}" class="form-control input-sm">
                             <option th:each="serviceSubtype : ${serviceSubtypes}"
                                     th:value="${serviceSubtype.id}"
                                     th:text="${serviceSubtype.name}">Service Subtype
                             </option>
                         </select>
-                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label" th:text="#{sp}">SP</label>
+                    <label th:text="#{sp}">SP</label>
 
-                    <div class="col-lg-9">
-                        <select th:field="*{serviceProviderId}" class="form-control">
+                        <select th:field="*{serviceProviderId}" class="form-control input-sm">
                             <option th:each="sp : ${sps}"
                                     th:value="${sp.id}"
                                     th:text="${sp.name}">SP Name
                             </option>
                         </select>
-                        <span th:errors="*{serviceProviderId}">error</span>
-                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label th:text="#{price}" class="col-lg-3 control-label">Price</label>
-
-                    <div class="col-lg-3">
-                        <select th:field="*{way}" class="form-control">
+                    <label th:text="#{price}">Price</label>
+                    <div class="row">
+                    <div class="col-lg-4">
+                        <select th:field="*{way}" class="form-control input-sm">
                             <option th:each="chargeWay : ${chargeWays}"
                                     th:value="${chargeWay.value}"
                                     th:text="#{${chargeWay.i18nKey}}">
@@ -184,29 +177,25 @@
                     </div>
                     <!-- /.col-lg-3 -->
 
-                    <div class="col-lg-3">
-                        <input type="text" th:field="*{unitPrice}" class="form-control"/>
+                    <div class="col-lg-4">
+                        <input type="text" th:field="*{unitPrice}" class="form-control input-sm"/>
                         <span th:errors="*{unitPrice}">error</span>
                     </div>
                     <!-- /.col-lg-6 -->
 
-                    <div class="col-lg-3">
-                        <select th:field="*{currency}" class="form-control">
+                    <div class="col-lg-4">
+                        <select th:field="*{currency}" class="form-control input-sm">
                             <option value="0">CNY</option>
                             <option value="1">USD</option>
                         </select>
-                    </div>
-                    <!-- /.col-lg-3 -->
+                    </div><!-- /.col-lg-3 -->
+                    </div><!-- row -->
                 </div>
 
                 <input type="hidden" name="taskId" th:value="${task.id}"/>
 
-                <div class="form-group">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <input type="submit" value="Record" class="btn btn-default"
+                        <input type="submit" value="Record" class="btn btn-success btn-block btn-sm"
                                th:attr="value=#{charge.record}"/>
-                    </div>
-                </div>
             </form>
         </div>
     </div>

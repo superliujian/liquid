@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 10/10/13
  * Time: 9:15 PM
  */
-@Entity(name = "ROUTE")
+@Entity(name = "SHP_ROUTE")
 public class RouteEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")

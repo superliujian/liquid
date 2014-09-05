@@ -20,69 +20,46 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<!-- {!begin task bar} -->
-<div th:include="layout :: task-bar"/>
-<!-- {!end task bar} -->
+<br/>
 
-<div class="container">
-    <form action="/task/{taskId}/vessel/{containerId}" method="POST" class="form-horizontal center"
-          th:object="${container}" th:action="'/task/' + ${taskId} + '/vessel/' + ${container.id}">
+<div id="f" class="container">
+    <form method="POST" th:object="${container}" th:action="'/task/' + ${taskId} + '/vessel/' + ${container.id}">
 
         <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{container.no}">BIC Code</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:value="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}" class="form-control" readonly="readonly"/>
-            </div>
+            <label th:text="#{container.no}">BIC Code</label>
+            <input type="text" th:value="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}" class="form-control" readonly="readonly"/>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('bolNo')} ? 'has-error'"
              sec:authorize="hasRole('ROLE_OPERATING')">
-            <label class="col-lg-3 control-label" th:text="#{bol.no}">BOL No.</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{bolNo}" class="form-control"/>
-            </div>
-
+            <label th:text="#{bol.no}">BOL No.</label>
+            <input type="text" th:field="*{bolNo}" class="form-control input-sm"/>
             <span th:errors="*{bolNo}">error</span>
         </div>
 
         <div class="form-group" sec:authorize="hasRole('ROLE_OPERATING')">
-            <label class="col-lg-3 control-label" th:text="#{slot}">BOL No.</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{slot}" class="form-control"/>
-            </div>
+            <label th:text="#{slot}">BOL No.</label>
+            <input type="text" th:field="*{slot}" class="form-control"/>
         </div>
 
         <div class="form-group" sec:authorize="hasRole('ROLE_OPERATING')">
-            <label class="col-lg-offset-3 col-lg-9" th:text="#{day.pattern}"/>
+            <label th:text="#{day.pattern}"/>
         </div>
 
         <div class="form-group" sec:authorize="hasRole('ROLE_OPERATING')">
-            <label class="col-lg-3 control-label" th:text="#{shipping.ets}">Barge ETS</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{etsStr}" class="form-control"/>
-            </div>
+            <label th:text="#{shipping.ets}">Barge ETS</label>
+            <input type="text" th:field="*{etsStr}" class="form-control"/>
         </div>
 
         <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-9">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" th:field="*{batch}"/> <span th:text="#{batch}">Batch</span>
-                    </label>
-                </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" th:field="*{batch}"/> <span th:text="#{batch}">Batch</span>
+                </label>
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-9">
-                <input type="submit" name="save" value="Save Time" class="btn btn-default"
-                       th:value="#{save}"/>
-            </div>
-        </div>
+        
+        <input type="submit" name="save" value="Save Time" class="btn btn-success btn-block btn-sm" th:value="#{save}"/>
     </form>
 </div>
 <!-- /.container -->

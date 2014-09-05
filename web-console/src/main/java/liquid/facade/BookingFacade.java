@@ -6,7 +6,7 @@ import liquid.shipping.service.RouteService;
 import liquid.shipping.domain.Booking;
 import liquid.shipping.domain.BookingItem;
 import liquid.shipping.domain.TransMode;
-import liquid.shipping.persistence.domain.BookingEntity;
+import liquid.shipping.persistence.domain.SpaceBookingEntity;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.BookingService;
@@ -33,7 +33,7 @@ public class BookingFacade {
     public Booking computeBooking(Long orderId) {
         Booking booking = new Booking();
 
-        Iterable<BookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
+        Iterable<SpaceBookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
@@ -47,7 +47,7 @@ public class BookingFacade {
                         bookingItem.setDestination(leg.getDstLoc().getName());
                         bookingItem.setContainerQuantity(route.getContainerQty());
 
-                        for (BookingEntity bookingEntity : bookingEntities) {
+                        for (SpaceBookingEntity bookingEntity : bookingEntities) {
                             if (bookingEntity.getLeg().getId().equals(leg.getId())) {
                                 bookingItem.setId(bookingEntity.getId());
                                 bookingItem.setShipownerId(bookingEntity.getShipowner().getId());
@@ -64,10 +64,10 @@ public class BookingFacade {
     }
 
     public void save(Long orderId, Booking booking) {
-        List<BookingEntity> bookingEntities = new ArrayList<>();
+        List<SpaceBookingEntity> bookingEntities = new ArrayList<>();
 
         for (BookingItem bookingItem : booking.getBookingItems()) {
-            BookingEntity bookingEntity = new BookingEntity();
+            SpaceBookingEntity bookingEntity = new SpaceBookingEntity();
             bookingEntity.setId(bookingItem.getId());
             bookingEntity.setOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
             bookingEntity.setLeg(LegEntity.newInstance(LegEntity.class, bookingItem.getLegId()));

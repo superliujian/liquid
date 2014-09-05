@@ -94,7 +94,7 @@
                         <span class="label label-info" th:text="${container.subtype.name}">Subtype Name</span>
                     </li>
                     
-                    <div id="pagination_bar">
+                    <div id="pagination_bar" class="text-center">
                         <ul class="pagination pagination-sm">
                             <li>
                                 <a th:href="'/task/' + ${taskId} + '/allocation?number=0' + '&amp;routeId=' + ${routeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}">&laquo;</a>
@@ -120,7 +120,8 @@
                         </ul>
                     </div><!-- pagination_bar -->                     
                     <li class="list-group-item">
-                        <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-xs btn-block" th:value="#{container.allocate}"/> 
+                        
+                        <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-sm" th:value="#{container.allocate}"/> 
                         <span th:text="#{container.no.matched}"></span>               
                     </li>
                 </ul><!-- container -->
@@ -136,7 +137,7 @@
                         <label th:text="#{container.no}">BIC Code</label>
                         <input type="text" id="bicCode" class="typeahead form-control" th:placeholder="#{container.no}"/>          
                     </div>
-                    <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-xs btn-block" th:value="#{container.allocate}"/>
+                    <input type="submit" name="self" value="Allocate Container" class="btn btn-success btn-sm" th:value="#{container.allocate}"/>
                 </form>
             </div><!-- panel-body -->
         </div><!-- panel -->

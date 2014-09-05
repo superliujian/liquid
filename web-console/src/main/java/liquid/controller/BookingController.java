@@ -29,7 +29,7 @@ public class BookingController extends BaseTaskController {
     private ServiceProviderService serviceProviderService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String booking(@PathVariable String taskId, @RequestParam(value = "alert_key", required = false) String alertKey, Model model) {
+    public String booking(@PathVariable String taskId, Model model) {
         TaskDto task = taskService.getTask(taskId);
         model.addAttribute("task", task);
         OrderEntity order = taskService.findOrderByTaskId(taskId);
@@ -39,16 +39,21 @@ public class BookingController extends BaseTaskController {
 
         Iterable<ServiceProviderEntity> shipowners = serviceProviderService.findByType(3);
         model.addAttribute("shipowners", shipowners);
-
-        if (null != alertKey)
-            model.addAttribute("alert", messageSource.getMessage(alertKey, new String[]{}, Locale.CHINA));
         return "booking/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String booking(@PathVariable String taskId, Booking booking) {
+    public String booking(@PathVariable String taskId, Booking booking, Model model) {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
         bookingFacade.save(order.getId(), booking);
-        return "redirect:/task/" + taskId + " /booking?alert_key=save.success";
+
+        TaskDto task = taskService.getTask(taskId);
+        model.addAttribute("task", task);
+        booking = bookingFacade.computeBooking(order.getId());
+        model.addAttribute("booking", booking);
+        Iterable<ServiceProviderEntity> shipowners = serviceProviderService.findByType(3);
+        model.addAttribute("shipowners", shipowners);
+        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+        return "booking/form";
     }
 }

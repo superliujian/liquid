@@ -7,17 +7,6 @@
     <!-- Bootstrap -->
     <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/resources/assets/js/html5shiv.js"></script>
-    <script src="/resources/assets/js/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        div#f.container {
-            max-width: 300px;
-        }
-    </style>    
 </head>
 
 <body>
@@ -52,7 +41,7 @@
             <span th:errors="*{distyUsd}">error</span>
         </div>        
 
-        <input type="submit" name="save" value="Save Order" class="btn btn-success btn-block" th:attr="value=#{order.save}"/>
+        <input type="submit" name="save" value="Save Order" class="btn btn-success btn-block" th:value="#{save}"/>
         <span th:if="${done}" class="glyphicon glyphicon-ok"/>
     </form>
 </div>

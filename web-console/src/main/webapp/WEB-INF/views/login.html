@@ -8,11 +8,11 @@
     <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/resources/assets/js/html5shiv.js"></script>
-    <script src="/resources/assets/js/respond.min.js"></script>
-    <![endif]-->
+    <style>
+        div#f.container {
+            max-width: 300px;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,9 +20,9 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div class="container">
+<div id="f" class="container">
 
-    <form name='f' action="/login" method='POST' class="form">
+    <form action="/login" method='POST'>
         <h3 class="form-heading" th:text="#{login}">Login</h3>
 
         <div th:if="${param.error}">
@@ -41,11 +41,10 @@
             <input type="password" name="password" class="form-control"/>
         </div>
 
-        <input type="submit" value='Login' class="btn btn-success btn-block" th:value="#{login}"/>
+        <input type="submit" value='Login' class="btn btn-success btn-block btn-sm" th:value="#{login}"/>
     </form>
 
-</div>
-<!-- /.container -->
+</div><!-- container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
