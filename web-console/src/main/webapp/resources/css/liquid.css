@@ -157,6 +157,10 @@ thead {
   font-size: 12px;
 }
 
+tr, td {
+  font-size: 12px;
+}
+
 /* Customize typeahead for bootstrap form input */
 .twitter-typeahead {
     width: 100%;

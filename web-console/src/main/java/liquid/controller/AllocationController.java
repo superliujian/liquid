@@ -14,10 +14,10 @@ import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ChargeService;
 import liquid.service.LocationService;
-import liquid.shipping.service.RouteService;
 import liquid.service.ShippingContainerService;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.domain.ShippingContainerEntity;
+import liquid.shipping.service.RouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Container allocation controller.
@@ -132,7 +133,13 @@ public class AllocationController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerAllocation: {}", containerAllocation);
         containerAllocationFacade.allocate(containerAllocation);
-        return "redirect:/task/" + taskId + "/allocation";
+        if (ContainerType.RAIL.getType() == containerAllocation.getType()) {
+            model.addAttribute("containerAllocation",containerAllocationFacade.computeContainerAllocation(taskId));
+            model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+            return "allocation/rail_container";
+        } else {
+            return "redirect:/task/" + taskId + "/allocation";
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "self")
