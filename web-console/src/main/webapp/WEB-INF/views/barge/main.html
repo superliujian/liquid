@@ -57,7 +57,7 @@
                             </td>
                             <td th:text="${container.bolNo}">BOL No.</td>
                             <td th:text="${container.slot}">Slot</td>
-                            <td th:text="${container.etsStr}">Barge ETS</td>
+                            <td th:text="${container.ets} ? ${#calendars.format(container.ets,'yyyy/MM/dd')} : ''">Barge ETS</td>
                             <td>
                                 <a href="/task/{taskId}/barge/{containerId}" class="btn btn-default btn-xs"
                                    th:href="'/task/' + ${task.id} + '/barge/' + ${container.id}">
