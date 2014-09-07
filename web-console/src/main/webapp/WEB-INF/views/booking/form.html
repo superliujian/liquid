@@ -55,7 +55,7 @@
                 <td th:text="*{bookingItems[__${rowStat.index}__].source} + '-' + *{bookingItems[__${rowStat.index}__].destination}" />
                 <td th:text="*{bookingItems[__${rowStat.index}__].containerQuantity}" />
                 <td>
-                    <select th:field="*{bookingItems[__${rowStat.index}__].shipownerId}" class="form-control">
+                    <select th:field="*{bookingItems[__${rowStat.index}__].shipownerId}" class="form-control input-sm">
                         <option th:each="shipowner : ${shipowners}"
                                 th:value="${shipowner.id}"
                                 th:text="${shipowner.name}">Shipowner Name
@@ -63,7 +63,7 @@
                     </select>                    
                 </td>
                 <td>
-                    <input type="text" th:field="*{bookingItems[__${rowStat.index}__].bookingNo}" class="form-control"/>
+                    <input type="text" th:field="*{bookingItems[__${rowStat.index}__].bookingNo}" class="form-control input-sm"/>
                 </td>
             </tr>
             <tr>
