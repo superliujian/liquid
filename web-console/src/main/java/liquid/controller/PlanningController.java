@@ -65,7 +65,7 @@ public class PlanningController extends BaseTaskController {
     public String init(@PathVariable String taskId,
                        Model model) {
         logger.debug("taskId: {}", taskId);
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
 
@@ -97,7 +97,7 @@ public class PlanningController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("route: {}", route);
 
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
 
         int containerUsage = 0;

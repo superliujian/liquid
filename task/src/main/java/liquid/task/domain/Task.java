@@ -1,4 +1,4 @@
-package liquid.shipping.domain;
+package liquid.task.domain;
 
 import java.io.Serializable;
 
@@ -8,10 +8,10 @@ import java.io.Serializable;
  * Date: 10/18/13
  * Time: 10:24 PM
  */
-public class TaskDto implements Serializable {
+public class Task implements Serializable {
     private String id;
 
-    private long orderId;
+    private Long orderId;
 
     private String orderNo;
 
@@ -33,11 +33,11 @@ public class TaskDto implements Serializable {
         this.id = id;
     }
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

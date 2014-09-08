@@ -7,7 +7,6 @@ import liquid.order.persistence.repository.OrderHistoryRepository;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.LocationRepository;
-import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +39,6 @@ public class OrderService extends AbstractBaseOrderService {
 
     @Autowired
     private LocationRepository locationRepository;
-
-    @Autowired
-    private ActivitiEngineService bpmService;
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;

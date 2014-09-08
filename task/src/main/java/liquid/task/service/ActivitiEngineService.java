@@ -1,4 +1,4 @@
-package liquid.service.bpm;
+package liquid.task.service;
 
 import liquid.persistence.domain.Account;
 import liquid.service.AccountService;
@@ -42,7 +42,7 @@ public class ActivitiEngineService {
     @Autowired
     private MessageSource messageSource;
 
-    public void startProcess(String uid, long orderId, Map<String, Object> variableMap) {
+    public void startProcess(String uid, Long orderId, Map<String, Object> variableMap) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         repositoryService.createDeployment().addClasspathResource("processes/liquid.poc.bpmn20.xml").deploy();
@@ -56,41 +56,6 @@ public class ActivitiEngineService {
 //        mailNotificationService.send(messageSource.getMessage("process.start", null, Locale.CHINA),
 //                messageSource.getMessage("process.start.content", new String[]{uid}, Locale.CHINA),
 //                account.getEmail());
-    }
-
-    public List<HistoricTaskInstance> listCompltedTasks(String businessKey) {
-        HistoryService historyService = processEngine.getHistoryService();
-        HistoricTaskInstance instance = null;
-        return historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey).list();
-    }
-
-    public List<Task> listTasks(String candidateGid) {
-        TaskService taskService = processEngine.getTaskService();
-        List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskCandidateGroup(candidateGid).list();
-        if (logger.isDebugEnabled()) {
-            for (Task task : taskList) {
-                logger.debug("task: {}; owner: {}", task, task.getOwner());
-            }
-        }
-
-        return taskList;
-    }
-
-    public List<Task> listMyTasks(String uid) {
-        TaskService taskService = processEngine.getTaskService();
-        List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskAssignee(uid).list();
-        if (logger.isDebugEnabled()) {
-            for (Task task : taskList) {
-                logger.debug("task: {}; owner: {}", task, task.getOwner());
-            }
-        }
-
-        return taskList;
-    }
-
-    public Task getTask(String taskId) {
-        TaskService taskService = processEngine.getTaskService();
-        return taskService.createTaskQuery().taskId(taskId).singleResult();
     }
 
     public void claimTask(String taskId, String uid) {
@@ -113,6 +78,53 @@ public class ActivitiEngineService {
         mailNotificationService.send(messageSource.getMessage("complete.task", null, Locale.CHINA),
                 messageSource.getMessage("complete.task.content", new String[]{uid}, Locale.CHINA),
                 account.getEmail());
+    }
+
+    public List<Task> listTasks(String candidateGid) {
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskCandidateGroup(candidateGid).list();
+        if (logger.isDebugEnabled()) {
+            for (Task task : taskList) {
+                logger.debug("task: {}; owner: {}", task, task.getOwner());
+            }
+        }
+
+        return taskList;
+    }
+
+    public List<Task> listWarningTasks() {
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> taskList = taskService.createTaskQuery().taskDefinitionKey("recordTod").list();
+        Iterator<Task> iterator = taskList.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            Date now = new Date();
+            Date created = task.getCreateTime();
+            if ((now.getTime() - created.getTime()) < 2 * 24 * 60 * 60 * 1000) iterator.remove();
+        }
+        return taskList;
+    }
+
+    public List<Task> listMyTasks(String uid) {
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskAssignee(uid).list();
+        if (logger.isDebugEnabled()) {
+            for (Task task : taskList) {
+                logger.debug("task: {}; owner: {}", task, task.getOwner());
+            }
+        }
+
+        return taskList;
+    }
+
+    public List<HistoricTaskInstance> listCompltedTasks(String businessKey) {
+        HistoryService historyService = processEngine.getHistoryService();
+        return historyService.createHistoricTaskInstanceQuery().processInstanceBusinessKey(businessKey).list();
+    }
+
+    public Task getTask(String taskId) {
+        TaskService taskService = processEngine.getTaskService();
+        return taskService.createTaskQuery().taskId(taskId).singleResult();
     }
 
     public String getBusinessKeyByTaskId(String taskId) {
@@ -144,22 +156,5 @@ public class ActivitiEngineService {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         processEngine.getRuntimeService().setVariable(task.getProcessInstanceId(), variableName, value);
-    }
-
-    public List<Task> listWarningTasks() {
-        TaskService taskService = processEngine.getTaskService();
-        List<Task> taskList = taskService.createTaskQuery().taskDefinitionKey("recordTod").list();
-        Iterator<Task> iterator = taskList.iterator();
-        while (iterator.hasNext()) {
-            Task task = iterator.next();
-            Date now = new Date();
-            Date created = task.getCreateTime();
-            if ((now.getTime() - created.getTime()) < 2 * 24 * 60 * 60 * 1000) iterator.remove();
-        }
-        return taskList;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(DateUtil.stringOf(Calendar.getInstance().getTime(), DatePattern.UNTIL_SECOND));
     }
 }

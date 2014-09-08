@@ -37,7 +37,7 @@ public class BargeController extends BaseTaskController {
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initBargeContainers(orderId);
 
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);

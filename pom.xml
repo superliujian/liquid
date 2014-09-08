@@ -180,7 +180,8 @@
         <module>order</module>
         <module>shipping</module>
         <module>charge</module>
+        <module>task</module>
         <module>config</module>
         <module>web-console</module>
-    </modules>
+  </modules>
 </project>

@@ -20,15 +20,16 @@
 <div class="container">
     <div class="row row-offcanvas row-offcanvas-right">
 
-        <div th:include="layout :: left-side"/>
+        <div th:include="task_template :: left-side"/>
 
         <div class="col-xs-12 col-sm-9">
-            <p th:text="#{warning}">Task Title</p>
+            <h3 th:text="#{${taskBar.title}}" class="text-warning">Task Title</h3>
 
             <table class="table table-striped table-hover table-condensed table-16"
                    sth:unless="${#lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
+                    <th th:text="#{task.id}">Task ID</th>
                     <th th:text="#{task.name}">Task Name</th>
                     <th th:text="#{order.no}">Order No</th>
                     <th th:text="#{task.description}">Task Description</th>
@@ -37,8 +38,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}">
+                    <td>
+                        <a th:href="'/task/' + ${task.id}" th:text="${task.id}">Task ID</a>
+                    </td>                
                     <td th:text="${task.name}">Task Name</td>
-                    <td th:text="${task.orderNo}">Order No</td>
+                    <td>
+                        <a target="_blank" th:href="'/order/' + ${task.orderId}" th:text="${task.orderNo}">Order No</a>
+                    </td>
                     <td th:text="${task.description}">Task Description</td>
                     <td th:text="${task.assignee}">Task Assignee</td>
                 </tr>

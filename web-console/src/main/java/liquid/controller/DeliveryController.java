@@ -50,7 +50,7 @@ public class DeliveryController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));

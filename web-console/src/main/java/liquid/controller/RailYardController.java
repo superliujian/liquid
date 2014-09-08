@@ -39,7 +39,7 @@ public class RailYardController extends BaseTaskController {
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
 

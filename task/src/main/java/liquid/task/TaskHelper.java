@@ -1,4 +1,4 @@
-package liquid.service.bpm;
+package liquid.task;
 
 import org.activiti.engine.task.Task;
 
