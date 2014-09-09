@@ -16,7 +16,7 @@
     <name>Task</name>
 
     <properties>
-        <activiti-version>5.14</activiti-version>
+        <activiti-version>5.16</activiti-version>
     </properties>
 
     <dependencies>

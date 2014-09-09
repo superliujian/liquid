@@ -1,6 +1,7 @@
 package liquid.config;
 
-import org.activiti.engine.impl.cfg.ProcessEngineConfigurator;
+
+import org.activiti.engine.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
