@@ -1,8 +1,8 @@
 package liquid.task.service;
 
-import liquid.persistence.domain.Account;
-import liquid.service.AccountService;
 import liquid.service.MailNotificationService;
+import liquid.user.persistence.domain.Account;
+import liquid.user.service.AccountService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.*;

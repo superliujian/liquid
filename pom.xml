@@ -176,6 +176,7 @@
         <module>util</module>
         <module>common</module>
         <module>excel</module>
+        <module>user</module>
         <module>container</module>
         <module>order</module>
         <module>shipping</module>
@@ -183,5 +184,5 @@
         <module>task</module>
         <module>config</module>
         <module>web-console</module>
-  </modules>
+    </modules>
 </project>

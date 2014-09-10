@@ -1,14 +1,13 @@
-package liquid.service;
+package liquid.user.service;
 
-import liquid.domain.GroupType;
-import liquid.persistence.domain.Account;
-import liquid.persistence.domain.Group;
-import liquid.persistence.domain.PasswordChange;
-import liquid.persistence.domain.PasswordPolicy;
+import liquid.user.persistence.domain.GroupType;
+import liquid.user.persistence.domain.Account;
+import liquid.user.persistence.domain.Group;
+import liquid.user.persistence.domain.PasswordChange;
+import liquid.user.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.ldap.core.*;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -40,11 +39,11 @@ public class AccountService {
     @Autowired
     private LdapOperations ldapOperations;
 
-    @Autowired
-    private MailNotificationService mailNotificationService;
+//    @Autowired
+//    private MailNotificationService mailNotificationService;
 
-    @Autowired
-    private MessageSource messageSource;
+//    @Autowired
+//    private MessageSource messageSource;
 
     public void register(Account account) {
         // throw NameAlreadyBoundException
@@ -63,14 +62,14 @@ public class AccountService {
         }
         logger.debug("The mail list of the administrator role is {}.", mailTo);
 
-        mailNotificationService.send(messageSource.getMessage("mail.registration", null, Locale.CHINA),
-                messageSource.getMessage("mail.registration.content",
-                        new String[]{account.getSurname() + account.getGivenName()},
-                        Locale.CHINA), mailTo
-        );
-        mailNotificationService.send(messageSource.getMessage("mail.registration", null, Locale.CHINA),
-                messageSource.getMessage("mail.registration.content.for.account", null, Locale.CHINA),
-                account.getEmail());
+//        mailNotificationService.send(messageSource.getMessage("mail.registration", null, Locale.CHINA),
+//                messageSource.getMessage("mail.registration.content",
+//                        new String[]{account.getSurname() + account.getGivenName()},
+//                        Locale.CHINA), mailTo
+//        );
+//        mailNotificationService.send(messageSource.getMessage("mail.registration", null, Locale.CHINA),
+//                messageSource.getMessage("mail.registration.content.for.account", null, Locale.CHINA),
+//                account.getEmail());
     }
 
     public void createPerson(Account account) {
@@ -288,9 +287,9 @@ public class AccountService {
         ModificationItem item = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
         ldapOperations.modifyAttributes(dn, new ModificationItem[]{item});
 
-        mailNotificationService.send(messageSource.getMessage("mail.account.unlock", null, Locale.CHINA),
-                messageSource.getMessage("mail.account.unlock.content", null, Locale.CHINA),
-                account.getEmail());
+//        mailNotificationService.send(messageSource.getMessage("mail.account.unlock", null, Locale.CHINA),
+//                messageSource.getMessage("mail.account.unlock.content", null, Locale.CHINA),
+//                account.getEmail());
     }
 
     public void lock(String uid) {
@@ -300,9 +299,9 @@ public class AccountService {
         ModificationItem item = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
         ldapOperations.modifyAttributes(dn, new ModificationItem[]{item});
 
-        mailNotificationService.send(messageSource.getMessage("mail.account.lock", null, Locale.CHINA),
-                messageSource.getMessage("mail.account.lock.content", null, Locale.CHINA),
-                account.getEmail());
+//        mailNotificationService.send(messageSource.getMessage("mail.account.lock", null, Locale.CHINA),
+//                messageSource.getMessage("mail.account.lock.content", null, Locale.CHINA),
+//                account.getEmail());
     }
 
     public void edit(Account newOne) {

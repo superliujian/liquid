@@ -17,7 +17,6 @@
 
     <properties>
         <mail-version>1.4.1</mail-version>
-        <spring-ldap-version>1.3.2.RELEASE</spring-ldap-version>
         <mysql-version>5.1.28</mysql-version>
         <activiti-version>5.14</activiti-version>
     </properties>
@@ -51,14 +50,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-        </dependency>
-
-        <!-- spring ldap -->
-        <dependency>
-            <groupId>org.springframework.ldap</groupId>
-            <artifactId>spring-ldap-core</artifactId>
-            <version>${spring-ldap-version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- hibernate -->

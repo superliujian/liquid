@@ -1,4 +1,4 @@
-package liquid.persistence.domain;
+package liquid.user.persistence.domain;
 
 /**
  * Created by redbrick9 on 5/1/14.

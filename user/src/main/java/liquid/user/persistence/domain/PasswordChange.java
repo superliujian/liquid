@@ -1,4 +1,4 @@
-package liquid.persistence.domain;
+package liquid.user.persistence.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
