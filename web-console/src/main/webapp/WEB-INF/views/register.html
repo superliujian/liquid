@@ -7,12 +7,7 @@
     <!-- Bootstrap -->
     <link href="/resources/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen"/>
     <link href="/resources/css/liquid.css" rel="stylesheet"/>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="/resources/assets/js/html5shiv.js"></script>
-    <script src="/resources/assets/js/respond.min.js"></script>
-    <![endif]-->
+    <link rel="icon" href="/resources/favicon.ico"/>
 </head>
 
 <body>
@@ -20,101 +15,59 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div class="container">
-    <form action="/account/register" method="POST" class="form-horizontal center"
-          th:object="${account}">
+<br/>
+
+<div id="f" class="container">
+    <form action="/account/register" method="POST" th:object="${account}">
 
         <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{account.uid}">Account UID</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{uid}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{uid}">error</span>
-            </div>
+            <label th:text="#{account.uid}">Account UID</label>
+            <input type="text" th:field="*{uid}" class="form-control input-sm"/>
+            <span th:errors="*{uid}">error</span>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{password}">Account Password</label>
-
-            <div class="col-lg-9">
-                <input type="password" th:field="*{password}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{password}">error</span>
-            </div>
+            <label th:text="#{password}">Account Password</label>
+            <input type="password" th:field="*{password}" class="form-control input-sm"/>
+            <span th:errors="*{password}">error</span>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('password2')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{password2}">Account Password 2</label>
-
-            <div class="col-lg-9">
-                <input type="password" th:field="*{password2}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{password2}">error</span>
-            </div>
+            <label th:text="#{password2}">Account Password 2</label>
+            <input type="password" th:field="*{password2}" class="form-control input-sm"/>
+            <span th:errors="*{password2}">error</span>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('surname')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{surname}">Surnmae</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{surname}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{surname}">error</span>
-            </div>
+            <label th:text="#{surname}">Surnmae</label>
+            <input type="text" th:field="*{surname}" class="form-control input-sm"/>
+            <span th:errors="*{surname}">error</span>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('givenName')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{given.name}">Given Name</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{givenName}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{givenName}">error</span>
-            </div>
+            <label th:text="#{given.name}">Given Name</label>
+            <input type="text" th:field="*{givenName}" class="form-control input-sm"/>
+            <span th:errors="*{givenName}">error</span>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{email}">Email</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{email}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{email}">error</span>
-            </div>
+            <label th:text="#{email}">Email</label>
+            <input type="text" th:field="*{email}" class="form-control input-sm"/>
+            <span th:errors="*{email}">error</span>
         </div>
 
         <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{group}">Group</label>
+            <label th:text="#{group}">Group</label>
 
-            <div class="col-lg-9">
-                <select th:field="*{group}" class="form-control">
-                    <option th:each="groupType : ${groupTypes}"
-                            th:value="${groupType.type}"
-                            th:text="#{${groupType.i18nKey}}">Department Name
-                    </option>
-                </select>
-            </div>
+            <select th:field="*{group}" class="form-control input-sm">
+                <option th:each="groupType : ${groupTypes}"
+                        th:value="${groupType.type}"
+                        th:text="#{${groupType.i18nKey}}">Department Name
+                </option>
+            </select>
         </div>
 
-        <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-9">
-                <input type="submit" name="register" value="Register" class="btn btn-default"
-                       th:value="#{account.register}"/>
-            </div>
-        </div>
+        <input type="submit" name="register" value="Register" class="btn btn-success btn-block btn-sm" th:value="#{account.register}"/>
     </form>
 </div>
 <!-- /.container -->

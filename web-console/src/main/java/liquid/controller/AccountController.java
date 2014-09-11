@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -27,7 +28,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/account")
-public class AccountController {
+public class AccountController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
     @Autowired
@@ -142,7 +143,7 @@ public class AccountController {
         } else {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
                 accountService.resetPassword(uid, passwordChange);
-                model.addAttribute("done", true);
+                model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
                 return "account/password_change";
             } else {
                 ObjectError objectError = new ObjectError("newPassword", "passwords are not same.");
@@ -167,7 +168,6 @@ public class AccountController {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
                 if (accountService.authenticate(userDn, passwordChange.getOldPassword())) {
                     accountService.resetPassword(uid, passwordChange);
-                    model.addAttribute("done", true);
                     return "account/password_change";
                 } else {
                     ObjectError objectError = new ObjectError("oldPassword", "old passwords are not correct.");

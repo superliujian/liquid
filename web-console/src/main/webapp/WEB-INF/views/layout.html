@@ -31,7 +31,7 @@
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER', 'ROLE_FIELD', 'ROLE_COMMERCE')">
                         <a href="/task" th:text="#{task}">Task</a>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown" sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING', 'ROLE_OPERATING', 'ROLE_CONTAINER')">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span th:text="#{order}">Order</span><b class="caret"></b>
                         </a>

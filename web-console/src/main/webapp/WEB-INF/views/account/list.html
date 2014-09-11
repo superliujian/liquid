@@ -20,6 +20,8 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
+<br />
+
 <div class="container">
     <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(accounts)}">
         <thead>
@@ -63,8 +65,7 @@
         </tr>
         </tbody>
     </table>
-</div>
-<!-- /.container -->
+</div><!-- container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
