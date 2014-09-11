@@ -14,7 +14,7 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.shipping.domain.TransMode;
+import liquid.shipping.web.domain.TransMode;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.service.ShippingContainerService;

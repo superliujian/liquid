@@ -1,4 +1,4 @@
-package liquid.shipping.domain;
+package liquid.shipping.web.domain;
 
 import liquid.util.DatePattern;
 import liquid.validation.constraints.DateFormat;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date: 10/19/13
  * Time: 2:21 PM
  */
-public class RailPlanDto extends RailContainerDto {
+public class RailPlan extends RailContainer {
     @NotNull
     @NotEmpty
     private String planNo;

@@ -1,4 +1,4 @@
-package liquid.shipping.domain;
+package liquid.shipping.web.domain;
 
 /**
  * TODO: Comments.
@@ -6,7 +6,7 @@ package liquid.shipping.domain;
  * Date: 10/19/13
  * Time: 2:21 PM
  */
-public class RailContainerDto {
+public class RailContainer {
     private long railContainerId;
 
     private String bicCode;

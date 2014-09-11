@@ -1,4 +1,4 @@
-package liquid.shipping.domain;
+package liquid.shipping.web.domain;
 
 import liquid.util.DatePattern;
 import liquid.validation.constraints.DateFormat;
@@ -9,7 +9,7 @@ import liquid.validation.constraints.DateFormat;
  * Date: 10/19/13
  * Time: 1:07 PM
  */
-public class RailYardDto extends RailContainerDto {
+public class RailYard extends RailContainer {
     @DateFormat(DatePattern.UNTIL_MINUTE)
     private String railYardToa;
 

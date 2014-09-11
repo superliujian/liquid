@@ -1,4 +1,4 @@
-package liquid.shipping.domain;
+package liquid.shipping.web.domain;
 
 /**
  * Created by redbrick9 on 8/16/14.

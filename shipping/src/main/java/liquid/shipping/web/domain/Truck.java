@@ -1,4 +1,4 @@
-package liquid.shipping.domain;
+package liquid.shipping.web.domain;
 
 import liquid.util.DatePattern;
 import liquid.validation.constraints.DateFormat;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date: 10/18/13
  * Time: 11:53 PM
  */
-public class TruckDto {
+public class Truck {
 
     private long railContainerId;
 

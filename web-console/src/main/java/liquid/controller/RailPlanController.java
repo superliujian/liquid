@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.shipping.domain.RailPlanDto;
+import liquid.shipping.web.domain.RailPlan;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.service.ShippingContainerService;
@@ -54,7 +54,7 @@ public class RailPlanController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailPlanDto railPlan = scService.findRailPlanDto(containerId);
+        RailPlan railPlan = scService.findRailPlanDto(containerId);
         logger.debug("railPlan: {}", railPlan);
         model.addAttribute("container", railPlan);
         return TASK_PATH + "/edit";
@@ -63,7 +63,7 @@ public class RailPlanController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailPlanDto railPlan,
+                         @Valid @ModelAttribute("container") RailPlan railPlan,
                          BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

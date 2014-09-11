@@ -10,7 +10,7 @@ import liquid.service.ChargeService;
 import liquid.shipping.service.RouteService;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
-import liquid.shipping.domain.TransMode;
+import liquid.shipping.web.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;

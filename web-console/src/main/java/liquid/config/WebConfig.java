@@ -31,7 +31,10 @@ import java.util.Locale;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"liquid.controller", "liquid.api.controller"})
+@ComponentScan(basePackages = {
+        "liquid.controller",
+        "liquid.api.controller",
+        "liquid.shipping.web.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

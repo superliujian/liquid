@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.shipping.domain.RailArrivalDto;
+import liquid.shipping.web.domain.RailArrival;
 import liquid.shipping.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class RailArrivalController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailArrivalDto railArrival = scService.findRailArrivalDto(containerId);
+        RailArrival railArrival = scService.findRailArrivalDto(containerId);
         logger.debug("railArrival: {}", railArrival);
         model.addAttribute("container", railArrival);
         return TASK_PATH + "/edit";
@@ -56,7 +56,7 @@ public class RailArrivalController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailArrivalDto railArrival,
+                         @Valid @ModelAttribute("container") RailArrival railArrival,
                          BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

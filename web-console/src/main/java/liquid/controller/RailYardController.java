@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.shipping.service.RouteService;
 import liquid.shipping.service.ShippingContainerService;
-import liquid.shipping.domain.RailYardDto;
+import liquid.shipping.web.domain.RailYard;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,7 @@ public class RailYardController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailYardDto railYard = scService.findRailYardDto(containerId);
+        RailYard railYard = scService.findRailYardDto(containerId);
         logger.debug("railYard: {}", railYard);
         model.addAttribute("container", railYard);
         return TASK_PATH + "/edit";
@@ -64,7 +64,7 @@ public class RailYardController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailYardDto railYard,
+                         @Valid @ModelAttribute("container") RailYard railYard,
                          BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

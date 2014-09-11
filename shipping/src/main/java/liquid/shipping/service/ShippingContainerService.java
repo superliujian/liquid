@@ -8,9 +8,9 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.AbstractService;
 import liquid.service.ServiceProviderService;
-import liquid.shipping.domain.*;
 import liquid.shipping.persistence.domain.*;
 import liquid.shipping.persistence.repository.*;
+import liquid.shipping.web.domain.*;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,33 +145,33 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return rcRepository.save(rcList);
     }
 
-    public TruckDto findTruckDto(long railContainerId) {
+    public Truck findTruckDto(long railContainerId) {
         RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toTruckDto(railContainer);
     }
 
-    public RailYardDto findRailYardDto(long railContainerId) {
+    public RailYard findRailYardDto(long railContainerId) {
         RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailYardDto(railContainer);
     }
 
-    public RailPlanDto findRailPlanDto(long railContainerId) {
+    public RailPlan findRailPlanDto(long railContainerId) {
         RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailPlanDto(railContainer);
     }
 
-    public RailShippingDto findRailShippingDto(long railContainerId) {
+    public RailShipping findRailShippingDto(long railContainerId) {
         RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailShippingDto(railContainer);
     }
 
-    public RailArrivalDto findRailArrivalDto(long railContainerId) {
+    public RailArrival findRailArrivalDto(long railContainerId) {
         RailContainerEntity railContainer = rcRepository.findOne(railContainerId);
         return toRailArrivalDto(railContainer);
     }
 
-    private TruckDto toTruckDto(RailContainerEntity railContainer) {
-        TruckDto truck = new TruckDto();
+    private Truck toTruckDto(RailContainerEntity railContainer) {
+        Truck truck = new Truck();
         if (null != railContainer.getFleet())
             truck.setFleetId(railContainer.getFleet().getId());
         truck.setRailContainerId(railContainer.getId());
@@ -189,8 +189,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return truck;
     }
 
-    private RailYardDto toRailYardDto(RailContainerEntity railContainer) {
-        RailYardDto railYard = new RailYardDto();
+    private RailYard toRailYardDto(RailContainerEntity railContainer) {
+        RailYard railYard = new RailYard();
         railYard.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railYard.setBicCode(railContainer.getSc().getContainer().getBicCode());
@@ -204,8 +204,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railYard;
     }
 
-    private RailPlanDto toRailPlanDto(RailContainerEntity railContainer) {
-        RailPlanDto railPlan = new RailPlanDto();
+    private RailPlan toRailPlanDto(RailContainerEntity railContainer) {
+        RailPlan railPlan = new RailPlan();
         railPlan.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railPlan.setBicCode(railContainer.getSc().getContainer().getBicCode());
@@ -220,8 +220,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railPlan;
     }
 
-    private RailShippingDto toRailShippingDto(RailContainerEntity railContainer) {
-        RailShippingDto railShipping = new RailShippingDto();
+    private RailShipping toRailShippingDto(RailContainerEntity railContainer) {
+        RailShipping railShipping = new RailShipping();
         railShipping.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railShipping.setBicCode(railContainer.getSc().getContainer().getBicCode());
@@ -235,8 +235,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railShipping;
     }
 
-    private RailArrivalDto toRailArrivalDto(RailContainerEntity railContainer) {
-        RailArrivalDto railArrivalDto = new RailArrivalDto();
+    private RailArrival toRailArrivalDto(RailContainerEntity railContainer) {
+        RailArrival railArrivalDto = new RailArrival();
         railArrivalDto.setRailContainerId(railContainer.getId());
         if (null != railContainer.getSc().getContainer())
             railArrivalDto.setBicCode(railContainer.getSc().getContainer().getBicCode());
@@ -250,7 +250,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return railArrivalDto;
     }
 
-    public void saveTruck(TruckDto truck) {
+    public void saveTruck(Truck truck) {
         RailContainerEntity container = rcRepository.findOne(truck.getRailContainerId());
         ServiceProviderEntity fleet = serviceProviderService.find(truck.getFleetId());
 
@@ -273,7 +273,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public void saveRailYard(RailYardDto railYard) {
+    public void saveRailYard(RailYard railYard) {
         RailContainerEntity container = rcRepository.findOne(railYard.getRailContainerId());
 
         if (railYard.isBatch()) {
@@ -289,7 +289,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public void saveRailPlan(RailPlanDto railPlan) {
+    public void saveRailPlan(RailPlan railPlan) {
         RailContainerEntity container = rcRepository.findOne(railPlan.getRailContainerId());
 
         if (railPlan.isBatch()) {
@@ -307,7 +307,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public void saveRailShipping(RailShippingDto railShipping) {
+    public void saveRailShipping(RailShipping railShipping) {
         RailContainerEntity container = rcRepository.findOne(railShipping.getRailContainerId());
 
         if (railShipping.isBatch()) {
@@ -323,7 +323,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
     }
 
-    public void saveRailArrival(RailArrivalDto railArrival) {
+    public void saveRailArrival(RailArrival railArrival) {
         RailContainerEntity container = rcRepository.findOne(railArrival.getRailContainerId());
 
         if (railArrival.isBatch()) {
