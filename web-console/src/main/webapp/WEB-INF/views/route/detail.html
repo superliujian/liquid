@@ -19,6 +19,14 @@
 <div th:include="order_template :: tab"/>
 <!-- {!end task bar} -->
 
+<!--
+<div class="container">
+    <a th:href="'/route?o=' + ${order.id} + '&amp;action=edit'" class="btn btn-default">
+        <i class="glyphicon glyphicon-edit"></i>
+    </a>
+</div>
+--><!-- container -->
+
 <div class="container" th:unless="${#lists.isEmpty(routes)}">
     <div class="panel panel-default" th:each="route : ${routes}">
         <div class="panel-heading">
