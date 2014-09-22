@@ -32,10 +32,6 @@
             <id>springframework-milestones</id>
             <url>http://maven.springframework.org/milestone/</url>
         </repository>
-        <repository>
-            <id>Alfresco Maven Repository</id>
-            <url>https://maven.alfresco.com/nexus/content/groups/public/</url>
-        </repository>
     </repositories>
 
     <dependencyManagement>
