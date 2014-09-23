@@ -61,8 +61,14 @@ public class Order extends BaseIdObject {
     private String railwayPlanType;
     private String programNo;
     private Long railSourceId;
+
+    @NotNull
+    @NotEmpty
     private String railSource;
     private Long railDestinationId;
+
+    @NotNull
+    @NotEmpty
     private String railDestination;
     private String comment;
     private Boolean sameDay;
