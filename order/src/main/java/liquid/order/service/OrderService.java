@@ -72,6 +72,7 @@ public class OrderService extends AbstractBaseOrderService {
         return repository.findByStatus(status, pageable);
     }
 
+    @Transactional("transactionManager")
     public OrderEntity find(long id) {
         OrderEntity order = repository.findOne(id);
 
@@ -87,6 +88,8 @@ public class OrderService extends AbstractBaseOrderService {
         }
         order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
+        // Initialize one to many children
+        order.getServiceItems().size();
 
         return order;
     }

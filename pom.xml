@@ -176,6 +176,7 @@
         <module>container</module>
         <module>order</module>
         <module>shipping</module>
+        <module>finance-api</module>
         <module>charge</module>
         <module>task</module>
         <module>config</module>

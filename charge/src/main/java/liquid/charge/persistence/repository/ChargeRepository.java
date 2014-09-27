@@ -34,4 +34,6 @@ public interface ChargeRepository extends CrudRepository<ChargeEntity, Long>, Jp
     Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole);
 
     Page<ChargeEntity> findAll(Pageable pageable);
+
+    void deleteByLegId(Long legId);
 }

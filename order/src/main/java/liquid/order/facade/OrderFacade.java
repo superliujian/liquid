@@ -25,7 +25,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by redbrick9 on 5/28/14.
@@ -230,7 +233,7 @@ public class OrderFacade {
             order.setSameDay(railwayEntity.getSameDay());
         }
 
-        Set<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
+        List<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
         for (ServiceItemEntity serviceItemEntity : serviceItemEntities) {
             ServiceItem serviceItem = new ServiceItem();
             serviceItem.setId(serviceItemEntity.getId());

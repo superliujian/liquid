@@ -24,7 +24,7 @@ public class RouteEntity extends BaseUpdateEntity {
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route", orphanRemoval = true)
     public Collection<LegEntity> legs;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")

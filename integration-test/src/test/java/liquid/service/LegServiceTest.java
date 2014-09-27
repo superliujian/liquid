@@ -1,6 +1,7 @@
 package liquid.service;
 
 import liquid.config.JpaConfig;
+import liquid.shipping.persistence.repository.RouteRepository;
 import liquid.shipping.service.LegService;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -13,6 +14,7 @@ public class LegServiceTest {
     public void deleteLeg() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(LegService.class);
+        context.register(RouteRepository.class);
         context.register(JpaConfig.class);
         context.refresh();
 
