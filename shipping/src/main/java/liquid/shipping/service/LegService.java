@@ -4,7 +4,6 @@ import liquid.service.AbstractService;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.LegRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +13,14 @@ import java.util.List;
  */
 @Service
 public class LegService extends AbstractService<LegEntity, LegRepository> {
-    @Autowired
-    private LegRepository legRepository;
-
     @Override
     public void doSaveBefore(LegEntity legEntity) {}
 
     public List<LegEntity> findByRouteAndTransMode(RouteEntity route, int transMode) {
-        return legRepository.findByRouteAndTransMode(route, transMode);
+        return repository.findByRouteAndTransMode(route, transMode);
     }
 
     public void delete(Long id) {
-        legRepository.delete(id);
+        repository.delete(id);
     }
 }

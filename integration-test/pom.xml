@@ -11,7 +11,7 @@
     <properties>
         <junit-version>4.11</junit-version>
 
-        <liquid-version>2.1.33-SNAPSHOT</liquid-version>
+        <liquid-version>2.1.41-SNAPSHOT</liquid-version>
         <spring-version>4.0.5.RELEASE</spring-version>
         <spring-ldap-version>1.3.2.RELEASE</spring-ldap-version>
 
@@ -50,6 +50,18 @@
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>excel</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>order</artifactId>
+            <version>${liquid-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>user</artifactId>
             <version>${liquid-version}</version>
             <scope>test</scope>
         </dependency>

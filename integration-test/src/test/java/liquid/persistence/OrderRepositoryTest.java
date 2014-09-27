@@ -1,9 +1,9 @@
 package liquid.persistence;
 
 import liquid.config.JpaConfig;
-import liquid.persistence.domain.OrderEntity;
-import liquid.persistence.domain.ServiceItemEntity;
-import liquid.persistence.repository.OrderRepository;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.persistence.domain.ServiceItemEntity;
+import liquid.order.persistence.repository.OrderRepository;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -19,7 +19,6 @@ public class OrderRepositoryTest {
 
         OrderRepository orderRepository = context.getBean(OrderRepository.class);
         OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setCnyTotal(1000L);
 
         ServiceItemEntity serviceItemEntity = new ServiceItemEntity();
         serviceItemEntity.setOrder(orderEntity);

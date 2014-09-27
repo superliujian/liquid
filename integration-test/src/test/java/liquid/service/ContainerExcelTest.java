@@ -1,6 +1,7 @@
 package liquid.service;
 
 import liquid.config.JpaConfig;
+import liquid.container.service.ContainerService;
 import liquid.excel.AbstractExcelService;
 import org.junit.BeforeClass;
 import org.junit.Test;
