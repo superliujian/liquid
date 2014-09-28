@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.shipping.domain.RailShippingDto;
+import liquid.shipping.web.domain.RailShipping;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.service.ShippingContainerService;
@@ -41,7 +41,7 @@ public class RailShippingController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("rail_task", TASK_PATH);
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
@@ -54,7 +54,7 @@ public class RailShippingController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        RailShippingDto railShipping = scService.findRailShippingDto(containerId);
+        RailShipping railShipping = scService.findRailShippingDto(containerId);
         logger.debug("railPlan: {}", railShipping);
         model.addAttribute("container", railShipping);
         return TASK_PATH + "/edit";
@@ -63,7 +63,7 @@ public class RailShippingController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("container") RailShippingDto railShipping,
+                         @Valid @ModelAttribute("container") RailShipping railShipping,
                          BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

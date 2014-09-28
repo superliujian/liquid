@@ -2,12 +2,11 @@ package liquid.service;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.service.bpm.ActivitiEngineService;
-import liquid.shipping.domain.TaskBadgeDto;
-import liquid.shipping.domain.TaskDto;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;
 import liquid.task.TaskFactory;
+import liquid.task.domain.TaskBar;
+import liquid.task.service.ActivitiEngineService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -40,9 +39,9 @@ public class TaskService {
     @Autowired
     protected TaskFactory taskFactory;
 
-    public TaskDto getTask(String taskId) {
+    public liquid.task.domain.Task getTask(String taskId) {
         Task task = bpmService.getTask(taskId);
-        TaskDto taskDto = toTaskDto(task);
+        liquid.task.domain.Task taskDto = toTaskDto(task);
 
         long orderId = getOrderIdByTaskId(task.getId());
         OrderEntity order = orderService.find(orderId);
@@ -59,37 +58,33 @@ public class TaskService {
         return orderService.find(orderId);
     }
 
-    public Long findOrderId(String taskId) {
-        return getOrderIdByTaskId(taskId);
-    }
-
     public List<HistoricTaskInstance> listCompltedTasks(long orderId) {
         return bpmService.listCompltedTasks(String.valueOf(orderId));
     }
 
-    public TaskDto[] listTasks(String candidateGid) {
+    public liquid.task.domain.Task[] listTasks(String candidateGid) {
         List<Task> list = bpmService.listTasks(candidateGid);
         return toTaskDtoArray(list);
     }
 
-    public TaskDto[] listMyTasks(String uid) {
+    public liquid.task.domain.Task[] listMyTasks(String uid) {
         List<Task> list = bpmService.listMyTasks(uid);
         return toTaskDtoArray(list);
     }
 
-    public TaskDto[] listWarningTasks() {
+    public liquid.task.domain.Task[] listWarningTasks() {
         List<Task> list = bpmService.listWarningTasks();
         return toTaskDtoArray(list);
     }
 
-    public TaskBadgeDto calculateTaskBadge(String candidateGid, String uid) {
-        TaskBadgeDto taskBadge = new TaskBadgeDto();
-        TaskDto[] queue = listTasks(candidateGid);
-        TaskDto[] myTasks = listMyTasks(uid);
-        TaskDto[] warnings = listWarningTasks();
-        taskBadge.setQueueSize(queue.length);
-        taskBadge.setMyTasksQty(myTasks.length);
-        taskBadge.setWarningQty(warnings.length);
+    public TaskBar calculateTaskBar(String candidateGid, String uid) {
+        TaskBar taskBadge = new TaskBar();
+        liquid.task.domain.Task[] queue = listTasks(candidateGid);
+        liquid.task.domain.Task[] myTasks = listMyTasks(uid);
+        liquid.task.domain.Task[] warnings = listWarningTasks();
+        taskBadge.setTaskQueueSize(queue.length);
+        taskBadge.setMyTasksSize(myTasks.length);
+        taskBadge.setWarningsSize(warnings.length);
         return taskBadge;
     }
 
@@ -160,8 +155,8 @@ public class TaskService {
         }
     }
 
-    private TaskDto[] toTaskDtoArray(List<Task> list) {
-        TaskDto[] tasks = new TaskDto[list.size()];
+    private liquid.task.domain.Task[] toTaskDtoArray(List<Task> list) {
+        liquid.task.domain.Task[] tasks = new liquid.task.domain.Task[list.size()];
         for (int i = 0; i < tasks.length; i++) {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
@@ -173,8 +168,8 @@ public class TaskService {
         return tasks;
     }
 
-    private TaskDto toTaskDto(Task task) {
-        TaskDto dto = new TaskDto();
+    private liquid.task.domain.Task toTaskDto(Task task) {
+        liquid.task.domain.Task dto = new liquid.task.domain.Task();
         dto.setId(task.getId());
         dto.setName(task.getName());
         dto.setDescription(task.getDescription());

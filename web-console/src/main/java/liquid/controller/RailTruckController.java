@@ -1,11 +1,11 @@
 package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
-import liquid.shipping.domain.TruckDto;
+import liquid.shipping.web.domain.Truck;
 import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
-import liquid.shipping.domain.TransMode;
+import liquid.shipping.web.domain.TransMode;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;
 import liquid.shipping.persistence.domain.RouteEntity;
@@ -52,7 +52,7 @@ public class RailTruckController extends BaseTaskController {
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
@@ -76,7 +76,7 @@ public class RailTruckController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);
 
-        TruckDto truck = scService.findTruckDto(containerId);
+        Truck truck = scService.findTruckDto(containerId);
         logger.debug("truck: {}", truck);
         model.addAttribute("truck", truck);
         model.addAttribute("sps", serviceProviderService.findByType(4L));
@@ -86,7 +86,7 @@ public class RailTruckController extends BaseTaskController {
     @RequestMapping(value = "/{containerId}", method = RequestMethod.POST)
     public String record(@PathVariable String taskId,
                          @PathVariable long containerId,
-                         @Valid @ModelAttribute("truck") TruckDto truck,
+                         @Valid @ModelAttribute("truck") Truck truck,
                          BindingResult bindingResult) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerId: {}", containerId);

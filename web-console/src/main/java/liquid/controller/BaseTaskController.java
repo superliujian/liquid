@@ -1,7 +1,7 @@
 package liquid.controller;
 
-import liquid.shipping.domain.TaskDto;
 import liquid.service.TaskService;
+import liquid.task.domain.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +20,7 @@ public abstract class BaseTaskController extends BaseController {
     protected TaskService taskService;
 
     @ModelAttribute("task")
-    public TaskDto populateTask(@PathVariable String taskId) {
+    public Task populateTask(@PathVariable String taskId) {
         return taskService.getTask(taskId);
     }
 

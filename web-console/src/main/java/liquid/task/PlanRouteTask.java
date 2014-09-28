@@ -1,6 +1,6 @@
 package liquid.task;
 
-import liquid.shipping.domain.TransMode;
+import liquid.shipping.web.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public class PlanRouteTask extends AbstractTaskProxy {
         transTypes.put("hasBarge", false);
         transTypes.put("hasVessel", false);
 
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
 
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {

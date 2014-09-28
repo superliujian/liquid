@@ -1,7 +1,7 @@
 package liquid.config;
 
-import liquid.persistence.domain.Account;
-import liquid.persistence.domain.Group;
+import liquid.user.persistence.domain.Account;
+import liquid.user.persistence.domain.Group;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -15,7 +15,7 @@ import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
-import java.text.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**

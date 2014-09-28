@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by redbrick9 on 5/24/14.
@@ -35,7 +34,7 @@ public class ServiceItemService {
         return serviceItemRepository.findOne(id);
     }
 
-    public void delete(Set<ServiceItemEntity> serviceItems) {
+    public void delete(Iterable<ServiceItemEntity> serviceItems) {
         serviceItemRepository.delete(serviceItems);
     }
 }

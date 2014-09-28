@@ -4,15 +4,14 @@ import liquid.facade.BookingFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ServiceProviderService;
-import liquid.shipping.domain.Booking;
-import liquid.shipping.domain.TaskDto;
+import liquid.shipping.web.domain.Booking;
+import liquid.task.domain.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Locale;
 
@@ -30,7 +29,8 @@ public class BookingController extends BaseTaskController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String booking(@PathVariable String taskId, Model model) {
-        TaskDto task = taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
+        task = taskService.getTask(taskId);
         model.addAttribute("task", task);
         OrderEntity order = taskService.findOrderByTaskId(taskId);
 
@@ -47,7 +47,7 @@ public class BookingController extends BaseTaskController {
         OrderEntity order = taskService.findOrderByTaskId(taskId);
         bookingFacade.save(order.getId(), booking);
 
-        TaskDto task = taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
         model.addAttribute("task", task);
         booking = bookingFacade.computeBooking(order.getId());
         model.addAttribute("booking", booking);

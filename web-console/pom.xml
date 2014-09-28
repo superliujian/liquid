@@ -14,8 +14,6 @@
     <name>Web Console</name>
 
     <properties>
-        <spring-version>4.0.5.RELEASE</spring-version>
-
         <servlet-version>3.0.1</servlet-version>
         <thymeleaf-version>2.1.2.RELEASE</thymeleaf-version>
         <thymeleaf-extras-springsecurity3-version>2.1.1.RELEASE</thymeleaf-extras-springsecurity3-version>
@@ -47,12 +45,22 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>user</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>container</artifactId>
             <version>${application-version}</version>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>order</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>task</artifactId>
             <version>${application-version}</version>
         </dependency>
         <dependency>

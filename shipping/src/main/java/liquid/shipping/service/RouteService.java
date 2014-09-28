@@ -1,10 +1,15 @@
 package liquid.shipping.service;
 
+import liquid.finance.service.PurchaseService;
 import liquid.service.AbstractService;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -14,18 +19,32 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RouteService extends AbstractService<RouteEntity, RouteRepository> {
+
     @Autowired
-    private RouteRepository routeRepository;
+    private LegService legService;
 
-    public Iterable<RouteEntity> findByOrderId(Long orderId) {
-        return routeRepository.findByOrderId(orderId);
-    }
-
-    public RouteEntity find(long id) {
-        RouteEntity route = routeRepository.findOne(id);
-        return route;
-    }
+    @Autowired
+    private PurchaseService purchaseService;
 
     @Override
     public void doSaveBefore(RouteEntity routeEntity) { }
+
+    public Iterable<RouteEntity> findByOrderId(Long orderId) {
+        return repository.findByOrderId(orderId);
+    }
+
+    public RouteEntity find(Long id) {
+        RouteEntity route = repository.findOne(id);
+        return route;
+    }
+
+    @Transactional("transactionManager")
+    public void delete(Long id) {
+        RouteEntity route = repository.findOne(id);
+        Collection<LegEntity> legs = route.getLegs();
+        for (LegEntity leg : legs) {
+            purchaseService.deleteByLegId(leg.getId());
+        }
+        repository.delete(id);
+    }
 }

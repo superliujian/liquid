@@ -9,10 +9,10 @@ import liquid.security.SecurityContext;
 import liquid.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
-import liquid.service.bpm.ActivitiEngineService;
-import liquid.shipping.domain.TaskBadgeDto;
-import liquid.shipping.domain.TaskDto;
 import liquid.task.NotCompletedException;
+import liquid.task.domain.Task;
+import liquid.task.domain.TaskBar;
+import liquid.task.service.ActivitiEngineService;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,48 +50,34 @@ public class TaskController extends BaseController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String tasks(Model model) {
-        logger.debug("Role: {}", SecurityContext.getInstance().getRole());
-        TaskDto[] tasks = taskService.listTasks(SecurityContext.getInstance().getRole());
-        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(SecurityContext.getInstance().getRole(),
-                SecurityContext.getInstance().getUsername());
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("taskBadge", taskBadge);
-        model.addAttribute("title", "task.queue");
-        //TODO: Using js to implement the function
-        model.addAttribute("queueActive", "active");
-        model.addAttribute("myActive", "");
-        model.addAttribute("warningActive", "");
-        return "task/list";
+        return "redirect:/task?q=all";
     }
 
-    @RequestMapping(value = "/my", method = RequestMethod.GET)
-    public String myTasks(Model model) {
-        TaskDto[] tasks = taskService.listMyTasks(SecurityContext.getInstance().getUsername());
-        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(SecurityContext.getInstance().getRole(),
-                SecurityContext.getInstance().getUsername());
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("taskBadge", taskBadge);
-        model.addAttribute("title", "task.my");
-        //TODO: Using js to implement the function
-        model.addAttribute("queueActive", "");
-        model.addAttribute("myActive", "active");
-        model.addAttribute("warningActive", "");
-        return "task/list";
-    }
+    @RequestMapping(method = RequestMethod.GET, params = "q")
+    public String list(@RequestParam("q") String tab, Model model) {
+        Task[] tasks;
 
-    @RequestMapping(value = "/warning", method = RequestMethod.GET)
-    public String warningTasks(Model model) {
-        TaskDto[] tasks = taskService.listWarningTasks();
-        TaskBadgeDto taskBadge = taskService.calculateTaskBadge(SecurityContext.getInstance().getRole(),
+        switch (tab) {
+            case "all":
+                tasks = taskService.listTasks(SecurityContext.getInstance().getRole());
+                break;
+            case "my":
+                tasks = taskService.listMyTasks(SecurityContext.getInstance().getUsername());
+                break;
+            case "warning":
+                tasks = taskService.listWarningTasks();
+                break;
+            default:
+                tasks = new Task[0];
+                break;
+        }
+        TaskBar taskBar = taskService.calculateTaskBar(SecurityContext.getInstance().getRole(),
                 SecurityContext.getInstance().getUsername());
+        taskBar.setTitle("task." + tab);
+        model.addAttribute("taskBar", taskBar);
+        model.addAttribute("tab", tab);
         model.addAttribute("tasks", tasks);
-        model.addAttribute("taskBadge", taskBadge);
-        model.addAttribute("title", "task.my");
-        //TODO: Using js to implement the function
-        model.addAttribute("queueActive", "");
-        model.addAttribute("myActive", "");
-        model.addAttribute("warningActive", "active");
-        return "task/warning";
+        return "task/list";
     }
 
     /**
@@ -104,15 +90,15 @@ public class TaskController extends BaseController {
     @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
     public String toCommon(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        TaskDto task = taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
         model.addAttribute("task", task);
         return "task/common";
     }
 
     @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
-    public String toRealTask(@PathVariable String taskId, Model model) {
+    public String redirect(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        TaskDto task = taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
         logger.debug("task: {}", task);
         model.addAttribute("task", task);
 
@@ -154,7 +140,7 @@ public class TaskController extends BaseController {
     @RequestMapping(value = "/{taskId}/check_amount", method = RequestMethod.GET)
     public String checkAmount(@PathVariable String taskId, Model model) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
-        TaskDto task = taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
         if ("ROLE_COMMERCE".equals(SecurityContext.getInstance().getRole())) {
@@ -174,7 +160,7 @@ public class TaskController extends BaseController {
 
     @RequestMapping(value = "/{taskId}/settlement", method = RequestMethod.GET)
     public String settle(@PathVariable String taskId, Model model) {
-        TaskDto task = taskService.getTask(taskId);
+        Task task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
         OrderEntity order = taskService.findOrderByTaskId(taskId);

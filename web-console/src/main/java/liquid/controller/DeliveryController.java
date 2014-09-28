@@ -6,7 +6,7 @@ import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.shipping.service.DeliveryContainerService;
 import liquid.service.ServiceSubtypeService;
-import liquid.shipping.domain.TransMode;
+import liquid.shipping.web.domain.TransMode;
 import liquid.shipping.persistence.domain.DeliveryContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
@@ -50,7 +50,7 @@ public class DeliveryController extends BaseTaskController {
                        Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
 
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));

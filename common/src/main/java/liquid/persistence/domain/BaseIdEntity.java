@@ -20,7 +20,7 @@ public class BaseIdEntity {
         this.id = id;
     }
 
-    public static <E extends BaseIdEntity> E newInstance(Class<E> clazz, long id) {
+    public static <E extends BaseIdEntity> E newInstance(Class<E> clazz, Long id) {
         try {
             E entity = clazz.newInstance();
             entity.setId(id);

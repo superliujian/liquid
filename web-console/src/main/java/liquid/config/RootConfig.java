@@ -23,6 +23,8 @@ import java.util.Map;
 @ComponentScan({"liquid.aop",
         "liquid.facade", "liquid.service",
         "liquid.excel",
+        "liquid.finance.service",
+        "liquid.user.service",
         "liquid.container.facade", "liquid.container.service",
         "liquid.order.facade", "liquid.order.service",
         "liquid.shipping.facade", "liquid.shipping.service",

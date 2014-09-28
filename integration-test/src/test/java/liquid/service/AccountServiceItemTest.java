@@ -1,9 +1,9 @@
 package liquid.service;
 
 import liquid.config.LdapConfig;
+import liquid.user.service.AccountService;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**

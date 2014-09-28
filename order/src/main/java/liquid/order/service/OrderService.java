@@ -7,7 +7,6 @@ import liquid.order.persistence.repository.OrderHistoryRepository;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.LocationRepository;
-import liquid.service.bpm.ActivitiEngineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,6 @@ public class OrderService extends AbstractBaseOrderService {
     private LocationRepository locationRepository;
 
     @Autowired
-    private ActivitiEngineService bpmService;
-
-    @Autowired
     private ContainerSubtypeService containerSubtypeService;
 
     @Autowired
@@ -76,6 +72,7 @@ public class OrderService extends AbstractBaseOrderService {
         return repository.findByStatus(status, pageable);
     }
 
+    @Transactional("transactionManager")
     public OrderEntity find(long id) {
         OrderEntity order = repository.findOne(id);
 
@@ -91,6 +88,8 @@ public class OrderService extends AbstractBaseOrderService {
         }
         order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoods().getId());
+        // Initialize one to many children
+        order.getServiceItems().size();
 
         return order;
     }

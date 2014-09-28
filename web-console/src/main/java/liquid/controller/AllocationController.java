@@ -70,7 +70,7 @@ public class AllocationController extends BaseTaskController {
     private ContainerAllocationFacade containerAllocationFacade;
 
     public String init(@PathVariable String taskId, Model model) {
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initialize(orderId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("containerTypeMap", ContainerCap.toMap());
@@ -198,7 +198,7 @@ public class AllocationController extends BaseTaskController {
 
         scService.allocate(routeId, sc);
 
-        Long orderId = taskService.findOrderId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "redirect:/task/" + taskId + "/allocation";

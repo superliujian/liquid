@@ -16,7 +16,7 @@ import liquid.security.SecurityContext;
 import liquid.service.CustomerService;
 import liquid.service.LocationService;
 import liquid.service.ServiceTypeService;
-import liquid.service.bpm.ActivitiEngineService;
+import liquid.task.service.ActivitiEngineService;
 import liquid.util.CollectionUtil;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
@@ -25,7 +25,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by redbrick9 on 5/28/14.
@@ -228,9 +231,11 @@ public class OrderFacade {
             }
             order.setComment(railwayEntity.getComment());
             order.setSameDay(railwayEntity.getSameDay());
+        } else {
+            order.setPlanReportTime(DateUtil.stringOf(new Date()));
         }
 
-        Set<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
+        List<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
         for (ServiceItemEntity serviceItemEntity : serviceItemEntities) {
             ServiceItem serviceItem = new ServiceItem();
             serviceItem.setId(serviceItemEntity.getId());
