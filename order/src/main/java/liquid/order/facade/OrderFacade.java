@@ -231,6 +231,8 @@ public class OrderFacade {
             }
             order.setComment(railwayEntity.getComment());
             order.setSameDay(railwayEntity.getSameDay());
+        } else {
+            order.setPlanReportTime(DateUtil.stringOf(new Date()));
         }
 
         List<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();

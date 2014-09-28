@@ -1,9 +1,15 @@
 package liquid.shipping.service;
 
+import liquid.finance.service.PurchaseService;
 import liquid.service.AbstractService;
+import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.persistence.repository.RouteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 /**
  * TODO: Comments.
@@ -14,6 +20,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class RouteService extends AbstractService<RouteEntity, RouteRepository> {
 
+    @Autowired
+    private LegService legService;
+
+    @Autowired
+    private PurchaseService purchaseService;
+
     @Override
     public void doSaveBefore(RouteEntity routeEntity) { }
 
@@ -21,8 +33,18 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
         return repository.findByOrderId(orderId);
     }
 
-    public RouteEntity find(long id) {
+    public RouteEntity find(Long id) {
         RouteEntity route = repository.findOne(id);
         return route;
+    }
+
+    @Transactional("transactionManager")
+    public void delete(Long id) {
+        RouteEntity route = repository.findOne(id);
+        Collection<LegEntity> legs = route.getLegs();
+        for (LegEntity leg : legs) {
+            purchaseService.deleteByLegId(leg.getId());
+        }
+        repository.delete(id);
     }
 }

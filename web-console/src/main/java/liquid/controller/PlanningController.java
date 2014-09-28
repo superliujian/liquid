@@ -4,15 +4,11 @@ import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.persistence.repository.LocationRepository;
-import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.service.ChargeService;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.web.domain.TransMode;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.repository.LegRepository;
-import liquid.shipping.persistence.repository.RouteRepository;
+import liquid.shipping.service.RouteService;
+import liquid.shipping.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +38,6 @@ public class PlanningController extends BaseTaskController {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
-    private ServiceProviderRepository serviceProviderRepository;
-
-    @Autowired
-    private RouteRepository routeRepository;
-
-    @Autowired
-    private LegRepository legRepository;
 
     @Autowired
     private ChargeService chargeService;
@@ -126,7 +110,7 @@ public class PlanningController extends BaseTaskController {
                               @PathVariable Long routeId) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
-        routeRepository.delete(routeId);
+        routeService.delete(routeId);
         return "redirect:/task/" + taskId + "/planning";
     }
 }
