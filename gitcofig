@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "[user]" >> .git/config
+echo "        name = redbrick9" >> .git/config
+echo "        email = redbrick9@gmail.com" >> .git/config
