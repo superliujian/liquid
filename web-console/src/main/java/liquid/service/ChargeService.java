@@ -22,8 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
  * TODO: Comments.
  * User: tao
@@ -100,10 +98,6 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
     public Iterable<ChargeEntity> getChargesByOrderId(long orderId) {
         return chargeRepository.findByOrderId(orderId);
-    }
-
-    public List<ChargeEntity> getChargesByTaskId(String taskId) {
-        return chargeRepository.findByTaskId(taskId);
     }
 
     @Transactional("transactionManager")

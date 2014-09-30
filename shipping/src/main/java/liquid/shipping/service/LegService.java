@@ -27,6 +27,10 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
     @Override
     public void doSaveBefore(LegEntity legEntity) {}
 
+    public LegEntity find(Long id) {
+        return repository.findOne(id);
+    }
+
     public List<LegEntity> findByRouteAndTransMode(RouteEntity route, int transMode) {
         return repository.findByRouteAndTransMode(route, transMode);
     }
