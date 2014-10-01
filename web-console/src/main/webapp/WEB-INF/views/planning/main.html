@@ -109,7 +109,7 @@
                         <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/leg/' + ${leg.id}">
                             <i class="glyphicon glyphicon-minus"/>
                         </a>
-                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/charge?legId=' + ${leg.id}">
+                        <a class="btn btn-default btn-xs" th:href="'/charge/console?taskId=' + ${taskId} + '&amp;legId=' + ${leg.id}">
                             <i class="glyphicon glyphicon-shopping-cart"/>
                         </a>
                     </td>

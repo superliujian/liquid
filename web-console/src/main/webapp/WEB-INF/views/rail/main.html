@@ -60,9 +60,8 @@
                                th:href="'/task/' + ${task.id} + '/'+ ${rail_task} +'/' + ${container.id}">
                                 <i class="glyphicon glyphicon-edit"/>
                             </a>
-                            <a href="/task/{taskId}/charge" class="btn btn-default btn-xs"
-                               sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
-                               th:href="'/task/' + ${taskId} + '/charge?legId=' + ${container.leg.id}">
+                            <a sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')" class="btn btn-default btn-xs"                               
+                               th:href="'/charge/console?taskId=' + ${taskId} + '&amp;legId=' + ${container.leg.id}">
                                 <i class="glyphicon glyphicon-shopping-cart"/>
                             </a>
                         </td>

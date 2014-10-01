@@ -2,15 +2,21 @@ package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.container.domain.ContainerType;
+import liquid.domain.Charge;
 import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
+import liquid.facade.ChargeFacade;
 import liquid.metadata.*;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
+import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
+import liquid.shipping.persistence.domain.LegEntity;
+import liquid.shipping.service.LegService;
+import liquid.shipping.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -48,7 +55,18 @@ public class ChargeController {
     private ChargeService chargeService;
 
     @Autowired
+    private ChargeFacade chargeFacade;
+
+    @Autowired
+    private LegService legService;
+
+    @Autowired
     private ServiceSubtypeService serviceSubtypeService;
+
+    @ModelAttribute("transModes")
+    public Map<Integer, String> populateTransModes() {
+        return TransMode.toMap();
+    }
 
     @ModelAttribute("chargeWays")
     public ChargeWay[] populateChargeWays() {
@@ -88,6 +106,83 @@ public class ChargeController {
     @RequestMapping(method = RequestMethod.GET)
     public void init() {
         logger.debug("init");
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String addCharge(@Valid @ModelAttribute Charge charge, BindingResult bindingResult, Model model) {
+        logger.debug("charge: {}", charge);
+        LegEntity leg = legService.find(charge.getLegId());
+
+        if (bindingResult.hasErrors()) {
+            Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+            Iterable<ServiceProviderEntity> sps = serviceSubtypeService.find(charge.getServiceSubtypeId()).getServiceProviders();
+
+            Iterable<ChargeEntity> charges = chargeService.findByLegId(charge.getLegId());
+
+            charge.setRouteId(charge.getRouteId());
+            charge.setLegId(charge.getLegId());
+
+            model.addAttribute("serviceSubtypes", serviceSubtypes);
+            model.addAttribute("sps", sps);
+            model.addAttribute("charge", charge);
+            model.addAttribute("route", leg.getRoute());
+            model.addAttribute("leg", leg);
+            model.addAttribute("charges", charges);
+            model.addAttribute("backToTask", taskService.computeTaskMainPath(charge.getTaskId()));
+            return "charge/console";
+        } else {
+            charge.setRouteId(leg.getRoute().getId());
+            chargeFacade.save(charge);
+            String redirect = "/charge/console?taskId=" + charge.getTaskId() + "&legId=" + charge.getLegId();
+            return "redirect:" + redirect;
+        }
+    }
+
+    @RequestMapping(value = "/console", method = RequestMethod.GET, params = "legId")
+    public String console(@RequestParam(value = "taskId", required = false) String taskId,
+                          @RequestParam(value = "legId") Long legId,
+                          Model model) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("legId: {}", legId);
+
+        LegEntity leg = legService.find(legId);
+        Iterable<ChargeEntity> charges = chargeService.findByLegId(legId);
+
+        Charge charge = new Charge();
+        charge.setRouteId(leg.getRoute().getId());
+        charge.setLegId(legId);
+        charge.setWay(ChargeWay.PER_CONTAINER.getValue());
+        if (null != leg.getSp()) charge.setServiceProviderId(leg.getSp().getId());
+
+        Long defaultServiceSubtypeId = 1L;
+        switch (TransMode.valueOf(leg.getTransMode())) {
+            case RAIL:
+                defaultServiceSubtypeId = 2L;
+                break;
+            case BARGE:
+                defaultServiceSubtypeId = 4L;
+                break;
+            case VESSEL:
+                defaultServiceSubtypeId = 3L;
+                break;
+            case ROAD:
+                defaultServiceSubtypeId = 5L;
+                break;
+        }
+        charge.setServiceSubtypeId(defaultServiceSubtypeId);
+
+        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceProviderEntity> sps = serviceSubtypeService.find(defaultServiceSubtypeId).getServiceProviders();
+        charge.setTaskId(taskId);
+
+        model.addAttribute("serviceSubtypes", serviceSubtypes);
+        model.addAttribute("sps", sps);
+        model.addAttribute("charge", charge);
+        model.addAttribute("route", leg.getRoute());
+        model.addAttribute("leg", leg);
+        model.addAttribute("charges", charges);
+        model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));
+        return "charge/console";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
@@ -142,31 +237,31 @@ public class ChargeController {
         return "charge/payable";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String record(@Valid @ModelAttribute ChargeEntity charge,
-                         @RequestHeader(value = "referer") String referer,
-                         BindingResult bindingResult, Principal principal) {
-        logger.debug("charge: {}", charge);
-        logger.debug("referer: {}", referer);
-
-        long orderId = taskService.getOrderIdByTaskId(charge.getTaskId());
-        OrderEntity order = orderService.find(orderId);
-
-        charge.setOrder(order);
-
-        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
-            charge.setUnitPrice(0L);
-        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
-            charge.setTotalPrice(charge.getUnitPrice() * order.getContainerQty());
-        } else {
-            logger.warn("{} is out of charge way range.", charge.getWay());
-        }
-
-        chargeService.save(charge);
-
-        String redirect = "redirect:" + referer;
-        return redirect;
-    }
+//    @RequestMapping(method = RequestMethod.POST)
+//    public String record(@Valid @ModelAttribute ChargeEntity charge,
+//                         @RequestHeader(value = "referer") String referer,
+//                         BindingResult bindingResult, Principal principal) {
+//        logger.debug("charge: {}", charge);
+//        logger.debug("referer: {}", referer);
+//
+//        long orderId = taskService.getOrderIdByTaskId(charge.getTaskId());
+//        OrderEntity order = orderService.find(orderId);
+//
+//        charge.setOrder(order);
+//
+//        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
+//            charge.setUnitPrice(0L);
+//        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
+//            charge.setTotalPrice(charge.getUnitPrice() * order.getContainerQty());
+//        } else {
+//            logger.warn("{} is out of charge way range.", charge.getWay());
+//        }
+//
+//        chargeService.save(charge);
+//
+//        String redirect = "redirect:" + referer;
+//        return redirect;
+//    }
 
     @RequestMapping(value = "/{chargeId}", method = RequestMethod.GET)
     public String initDetail(@PathVariable long chargeId,
@@ -185,6 +280,14 @@ public class ChargeController {
         charge.setStatus(ChargeStatus.PAID.getValue());
         chargeService.save(charge);
         return "redirect:/charge";
+    }
+
+    @RequestMapping(value = "/{chargeId}", method = RequestMethod.POST, params = "delete")
+    public String delete(@RequestHeader(value = "referer", required = false) final String referer,
+                         @PathVariable Long chargeId) {
+        logger.debug("chargeId: {}", chargeId);
+        chargeService.removeCharge(chargeId);
+        return "redirect:" + referer;
     }
 
     @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)

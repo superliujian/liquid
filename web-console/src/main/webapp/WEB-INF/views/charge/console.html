@@ -23,8 +23,8 @@
 <div class="container">
 <div class="row">
 <div class="col-lg-8">
-    <!-- charges for this route -->
-    <div class="panel panel-default" th:if="${route}">
+    <!-- charges for this route ${route}-->
+    <div class="panel panel-default" th:if="false">
         <div class="panel-heading">
             <strong th:text="#{route} + ${route.id}">Route No.</strong>
 
@@ -56,19 +56,17 @@
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>
                     <td>
-                        <a href="/task/{taskId}/charge/{chargeId}"
-                           class="btn btn-default btn-xs pull-right"
-                           th:href="'/task/' + ${taskId} + '/charge/' + ${charge.id} ">
-                            <i class="glyphicon glyphicon-minus"/>
-                        </a>
+                        <form method="POST" th:action="'/charge/' + ${charge.id}">
+                            <button type="submit" class="btn btn-default btn-xs" name="delete">
+                                <i class="glyphicon glyphicon-minus"/>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
             </table>
-        </div>
-        <!-- /.panel-body -->
-    </div>
-    <!-- /.panel -->
+        </div><!-- /.panel-body -->
+    </div><!-- /.panel -->
 
     <!-- charges for this leg -->
     <div class="panel panel-default" th:if="${leg}">
@@ -106,11 +104,11 @@
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>
                     <td>
-                        <a href="/task/{taskId}/charge/{chargeId}"
-                           class="btn btn-default btn-xs pull-right"
-                           th:href="'/task/' + ${taskId} + '/charge/' + ${charge.id} ">
-                            <i class="glyphicon glyphicon-minus"/>
-                        </a>
+                        <form method="POST" th:action="'/charge/' + ${charge.id}">
+                            <button type="submit" class="btn btn-default btn-xs" name="delete">
+                                <i class="glyphicon glyphicon-minus"/>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
@@ -125,9 +123,9 @@
     <div class="panel panel-default">
         <div class="panel-heading" th:text="#{charge.add}">Add Charge</div>
         <div class="panel-body">
-            <form method="POST" th:object="${charge}" th:action="@{${#httpServletRequest.servletPath}}">
+            <form method="POST" action="/charge" th:object="${charge}">
 
-                <input type="hidden" th:field="*{routeId}"/>
+                <input type="hidden" th:field="*{taskId}"/>
                 <input type="hidden" th:field="*{legId}"/>
 
                 <div class="form-group">
@@ -179,11 +177,8 @@
                     </div><!-- /.col-lg-3 -->
                     </div><!-- row -->
                 </div>
-
-                <input type="hidden" name="taskId" th:value="${task.id}"/>
-
-                        <input type="submit" value="Record" class="btn btn-success btn-block btn-sm"
-                               th:attr="value=#{charge.record}"/>
+                
+                <input type="submit" value="Record" class="btn btn-success btn-block btn-sm" th:value="#{charge.record}"/>
             </form>
         </div>
     </div>
