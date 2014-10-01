@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#f.container {
-        margin-top:20px;
-        max-width: 800px;
-        }
-    </style>    
+    <div th:include="layout :: head"></div>   
 </head>
 
 <body>
@@ -22,19 +16,20 @@
     </div>
 </div>
 
-<div id="f" class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading" th:text="#{tax.rate}">Pay</div>
+<div id="t" class="container">
 
-        <div class="panel-body">
-        <form action="/tax_rate" method="POST" th:object="${taxRates}" class="center">
+    <h3><span th:text="#{tax.rate}"></span></h3>
+    
+    <hr />
+
+    <form action="/tax_rate" method="POST" th:object="${taxRates}" class="center">
         <table class="table table-striped table-hover table-condensed table-16">
             <thead>
             <tr>                
                 <th th:text="#{name}">Name</th>
                 <th th:text="#{value} + '%'">Value</th>                
                 <th>
-                    <button type="submit" class="btn btn-default btn-xs pull-right" name="addTaxRate">
+                    <button type="submit" class="btn btn-success btn-xs pull-right" name="addTaxRate">
                         <i class="glyphicon glyphicon-plus"></i>
                     </button>
                 </th>
@@ -57,10 +52,15 @@
             </tr>
             </tbody>
         </table>
-        <input type="submit" name="add" class="btn btn-success btn-block form-control" th:value="#{save}"/>
-        </form>
-        </div>
-    </div>
+    
+        <hr />
+        
+        <div class="row">
+            <div class="col-xs-3 pull-right">
+                <input type="submit" name="add" class="btn btn-success btn-block form-control" th:value="#{save}"/>
+            </div>
+        </div>    
+    </form>
 </div><!-- /.container -->
 
 <!-- {!begin layout} -->
@@ -73,3 +73,4 @@
 </body>
 
 </html>
+

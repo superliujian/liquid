@@ -257,6 +257,25 @@ roadId,
 
 </div>
 
+<div th:fragment="pagination_bar">
+    <div class="text-center">
+        <ul class="pagination">
+            <li>
+                <a th:href="${contextPath} + '?number=0'">&laquo;</a>
+            </li>
+            <li><a th:if="${page.hasPreviousPage()}"
+                   th:href="${contextPath} + '?number=' + ${page.number - 1}"
+                   th:text="${page.number}">1</a></li>
+            <li><a href="" th:text="${page.number + 1}">2</a></li>
+            <li><a th:if="${page.hasNextPage()}"
+                   th:href="${contextPath} + '?number=' + ${page.number + 1}"
+                   th:text="${page.number + 2}">3</a></li>
+            <li><a th:href="${contextPath} + '?number=' + ${page.totalPages - 1}">&raquo;</a>
+            </li>
+        </ul>
+    </div> 
+</div>
+
 <!-- footer -->
 <div th:fragment="footer">
     <hr/>

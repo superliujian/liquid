@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#goodsForm.container {
-            max-width: 600px;
-        }
-    </style>    
+    <div th:include="layout :: head"></div>    
 </head>
 
 <body>
 <!-- {!begin layout} -->
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
-
-<br />
 
 <div class="container">
     <div th:if="${alert}" class="alert alert-danger" role="alert">
@@ -23,7 +16,11 @@
     </div>
 </div>
 
-<div id="goodsForm" class="container">
+<div id="f" class="container">
+    <h3><span th:text="#{goods}"></span></h3>
+    
+    <hr />
+    
     <form action="/goods" method="POST" th:object="${goods}">
         <div class="form-group" th:if="*{id}">
              <label for="id" th:text="#{goods.id}">Id</label>
@@ -40,7 +37,7 @@
             </div>
         </div>
 
-        <input type="submit" value="Add Cargo" class="btn btn-primary btn-block" th:attr="value=#{goods.add}"/>
+        <input type="submit" value="Add Cargo" class="btn btn-success btn-block" th:attr="value=#{goods.add}"/>
     </form>
 </div><!-- form -->
 

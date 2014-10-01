@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#f.container {
-            max-width: 600px;
-        }
-    </style>    
+    <div th:include="layout :: head"></div>  
 </head>
 
 <body>
@@ -24,12 +19,13 @@
 </div>
 
 <div id="f" class="container">
-    <form action="/railway_plan_type" method="POST" th:object="${railwayPlanType}">
-        <div class="form-group" th:if="*{id}">
-             <label for="id" th:text="#{id}">Id</label>
-             <input type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
-        </div>
+    <h3><span th:text="#{railway.plan.type}"></span></h3>
     
+    <hr />
+
+    <form action="/railway_plan_type" method="POST" th:object="${railwayPlanType}">
+        <input type="hidden" th:field="*{id}" class="form-control" readonly="readonly"/>
+             
         <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
             <label for="name" th:text="#{name}">Name</label>
             

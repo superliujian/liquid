@@ -85,6 +85,10 @@ div#f.container {
   max-width: 300px;
 }
 
+div#t.container {
+  max-width: 800px;
+}
+
 /* Customize typeahead for bootstrap form input */
 .twitter-typeahead {
     width: 100%;

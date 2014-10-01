@@ -1,6 +1,8 @@
 package liquid.persistence.repository;
 
 import liquid.persistence.domain.CustomerEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -17,4 +19,6 @@ public interface CustomerRepository extends CrudRepository<CustomerEntity, Long>
     CustomerEntity findByName(String name);
 
     Iterable<CustomerEntity> findByNameLike(String name);
+
+    Page<CustomerEntity> findAll(Pageable pageable);
 }

@@ -45,7 +45,7 @@ public class LocationController extends BaseController {
     public String list(@RequestParam(required = false, defaultValue = "0") int number,
                        @RequestParam(required = false, defaultValue = "-1") int type,
                        Model model) {
-        int size = 10;
+        int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
 
         Page<LocationEntity> page;
@@ -57,6 +57,7 @@ public class LocationController extends BaseController {
         model.addAttribute("page", page);
         model.addAttribute("type", type);
         model.addAttribute("location", new LocationEntity());
+        model.addAttribute("contextPath", "/location");
         return "location/list";
     }
 

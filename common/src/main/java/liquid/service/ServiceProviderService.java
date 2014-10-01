@@ -6,6 +6,8 @@ import liquid.persistence.domain.SpTypeEnity;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,10 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
 
     @Override
     public void doSaveBefore(ServiceProviderEntity serviceProvider) { }
+
+    public Page<ServiceProviderEntity> findAll(Pageable pageable) {
+        return serviceProviderRepository.findAll(pageable);
+    }
 
     public Iterable<ServiceProviderEntity> findAll() {
         return serviceProviderRepository.findOrderByName();

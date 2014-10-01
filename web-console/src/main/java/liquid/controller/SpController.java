@@ -10,6 +10,9 @@ import liquid.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,11 +46,6 @@ public class SpController {
     @Autowired
     private ChargeService chargeService;
 
-    @ModelAttribute("sps")
-    public Iterable<ServiceProviderEntity> populateSps() {
-        return serviceProviderService.findAll();
-    }
-
     @ModelAttribute("spTypes")
     public Map<Long, String> populateSpTypes() {
         return serviceProviderService.getSpTypes();
@@ -59,7 +57,12 @@ public class SpController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list() {
+    public String list(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
+        int size = 20;
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<ServiceProviderEntity> page = serviceProviderService.findAll(pageRequest);
+        model.addAttribute("page", page);
+        model.addAttribute("contextPath", "/sp");
         return "sp/sp";
     }
 
@@ -89,7 +92,7 @@ public class SpController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String initEdit(@PathVariable long id, Model model) {
+    public String initEdit(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);
         ServiceProvider sp = serviceProviderFacade.find(id);
         model.addAttribute("sp", sp);

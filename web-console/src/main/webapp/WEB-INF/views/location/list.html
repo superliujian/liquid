@@ -2,11 +2,6 @@
 <html>
 <head>
     <div th:include="layout :: head"></div>
-    <style>
-        div#location.container {
-        max-width: 800px;
-        }
-    </style>
 </head>
 
 <body>
@@ -14,34 +9,33 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br />
+<div id="t" class="container">
+    
+    <h3><span th:text="#{location}"></span></h3>
+    
+    <hr />
 
-<div class="container">
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            <span th:text="#{location.type}">Location Type</span><span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li>
-                <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=-1'" th:text="#{location.type.all}">All Owners</a>
-            </li>        
-            <li th:each="locationType : ${locationTypes}">
-                <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=' + ${locationType.type}" th:text="#{${locationTypes[__${locationType.type}__].i18nKey}}">Location Type</a>
-            </li>
-        </ul>
-    </div><!-- route -->
-</div><!-- search bar -->
-
-<br />
-
-<div class="container">
     <table class="table table-striped table-hover table-condensed table-16">
         <thead>
         <tr>
             <th th:text="#{location.id}">ID</th>
             <th th:text="#{location.name}">Name</th>
-            <th th:text="#{location.type}">Type</th>
-            <th><a href="/location/new"><button><i class="glyphicon glyphicon-plus"/></button></a></th>
+            <th>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                        <span th:text="#{location.type}">Location Type</span><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=-1'" th:text="#{location.type.all}">All Owners</a>
+                        </li>        
+                        <li th:each="locationType : ${locationTypes}">
+                            <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=' + ${locationType.type}" th:text="#{${locationTypes[__${locationType.type}__].i18nKey}}">Location Type</a>
+                        </li>
+                    </ul>
+                </div>
+            </th>
+            <th><a href="/location/new"><button class="btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"/></button></a></th>
         </tr>
         </thead>
         <tbody>
@@ -49,25 +43,13 @@
             <td th:text="${location.id}">ID</td>
             <td th:text="${location.name}">Name</td>
             <td th:text="#{${locationTypes[__${location.type}__].i18nKey}}">Type</td>
-            <td><a th:href="'/location/' + ${location.id}"><button><i class="glyphicon glyphicon-edit"/></button></a></td>
+            <td><a th:href="'/location/' + ${location.id}"><button class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"/></button></a></td>
         </tr>
         </tbody>
     </table>
+    
+    <div th:include="layout :: pagination_bar"></div>
 </div><!-- table -->
-
-<div class="container">
-    <div id="pagination_bar">
-        <ul class="pagination">
-            <li><a th:href="'/location?number=0&amp;type=' + ${type}">&laquo;</a></li>
-            <li><a th:if="${page.hasPreviousPage()}" th:text="${page.number}"
-                   th:href="'/location?number=' + ${page.number - 1} + '&amp;type=' + ${type}" /></li>
-            <li><a href="" th:text="${page.number + 1}" /></li>
-            <li><a th:if="${page.hasNextPage()}" th:text="${page.number + 2}" 
-                   th:href="'/location?number=' + ${page.number + 1} + '&amp;type=' + ${type}"/></li>
-            <li><a th:href="'/location?number=' + ${page.totalPages - 1} + '&amp;type=' + ${type}">&raquo;</a></li>
-        </ul>
-    </div>
-</div><!-- pagination_bar -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
