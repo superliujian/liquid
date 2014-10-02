@@ -35,7 +35,7 @@ public class CustomerController {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<CustomerEntity> page = customerRepository.findAll(pageRequest);
         model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/customer");
+        model.addAttribute("contextPath", "/customer?");
         model.addAttribute("customer", new CustomerEntity());
         return "customer/page";
     }

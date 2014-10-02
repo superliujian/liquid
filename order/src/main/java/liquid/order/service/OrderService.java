@@ -3,7 +3,9 @@ package liquid.order.service;
 import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.persistence.repository.OrderHistoryRepository;
+import liquid.persistence.domain.CustomerEntity_;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.LocationRepository;
@@ -13,10 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * TODO: Comments.
@@ -92,6 +103,49 @@ public class OrderService extends AbstractBaseOrderService {
         order.getServiceItems().size();
 
         return order;
+    }
+
+    public Page<OrderEntity> findAll(final String orderNo, final String customerName, final String username, final Pageable pageable) {
+        List<Specification<OrderEntity>> specList = new ArrayList<>();
+
+        if (null != orderNo) {
+            Specification<OrderEntity> orderNoSpec = new Specification<OrderEntity>() {
+                @Override
+                public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+                    return builder.like(root.get(OrderEntity_.orderNo), "%" + orderNo + "%");
+                }
+            };
+            specList.add(orderNoSpec);
+        }
+
+        if (null != customerName) {
+            Specification<OrderEntity> customerNameSpec = new Specification<OrderEntity>() {
+                @Override
+                public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+                    return builder.like(root.get(OrderEntity_.customer).get(CustomerEntity_.name), "%" + customerName + "%");
+                }
+            };
+            specList.add(customerNameSpec);
+        }
+
+        if (null != username) {
+            Specification<OrderEntity> usernameSpec = new Specification<OrderEntity>() {
+                @Override
+                public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+                    return builder.equal(root.get(OrderEntity_.createUser.getName()), username);
+                }
+            };
+        }
+
+        if (specList.size() > 0) {
+            Specifications<OrderEntity> specifications = where(specList.get(0));
+            for (int i = 1; i < specList.size(); i++) {
+                specifications.and(specList.get(i));
+            }
+            return repository.findAll(specifications, pageable);
+        }
+
+        return repository.findAll(pageable);
     }
 
     public Iterable<OrderEntity> findByOrderNo(String orderNo) {

@@ -3,6 +3,7 @@ package liquid.order.persistence.repository;
 import liquid.order.persistence.domain.OrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -20,4 +21,6 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaR
     Iterable<OrderEntity> findByCustomerNameLike(String cumtomerName);
 
     Page<OrderEntity> findByStatus(Integer status, Pageable pageable);
+
+    Page<OrderEntity> findAll(Specification<OrderEntity> specification, Pageable pageable);
 }

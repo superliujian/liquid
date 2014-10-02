@@ -26,7 +26,7 @@
             <div class="col-xs-4">
                 <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
                     <label th:text="#{sp.code} + '*'" class="control-label">Name</label>
-                    <input type="text" th:field="*{code}" class="form-control"/>
+                    <input type="text" th:field="*{code}" class="form-control input-sm"/>
                     <span th:errors="*{code}">error</span>
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="col-xs-4">
                 <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
                     <label th:text="#{sp.name} + '*'" class="control-label">Name</label>
-                    <input type="text" th:field="*{name}" class="form-control"/>
+                    <input type="text" th:field="*{name}" class="form-control input-sm"/>
                     <span th:errors="*{name}">error</span>
                 </div>
             </div>
@@ -42,7 +42,7 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label th:text="#{sp.type}" class="control-label">SP Type</label>
-                    <select th:field="*{typeId}" class="form-control">
+                    <select th:field="*{typeId}" class="form-control input-sm">
                         <option th:each="spType : ${spTypes}"
                                 th:value="${spType.key}"
                                 th:text="${spType.value}">SP Type
@@ -56,7 +56,7 @@
             <div class="col-xs-8">
                 <div class="form-group" th:classappend="${#fields.hasErrors('address')} ? 'has-error'">
                     <label th:text="#{address}" class="control-label">Address</label>
-                    <input type="text" th:field="*{address}" class="form-control"/>
+                    <input type="text" th:field="*{address}" class="form-control input-sm"/>
                     <span th:errors="*{address}">error</span>
                 </div>
             </div>
@@ -64,7 +64,7 @@
             <div class="col-xs-4">
                 <div class="form-group" th:classappend="${#fields.hasErrors('postcode')} ? 'has-error'">
                     <label th:text="#{postcode}" class="control-label">Postcode</label>
-                    <input type="text" th:field="*{postcode}" class="form-control"/>
+                    <input type="text" th:field="*{postcode}" class="form-control input-sm"/>
                     <span th:errors="*{postcode}">error</span>
                 </div>
             </div>
@@ -74,7 +74,7 @@
             <div class="col-xs-4">
                 <div class="form-group" th:classappend="${#fields.hasErrors('contact')} ? 'has-error'">
                     <label th:text="#{contact}" class="control-label">Contact</label>
-                    <input type="text" th:field="*{contact}" class="form-control"/>
+                    <input type="text" th:field="*{contact}" class="form-control input-sm"/>
                     <span th:errors="*{contact}">error</span>
                 </div>
             </div>
@@ -82,7 +82,7 @@
             <div class="col-xs-4">
                 <div class="form-group" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
                     <label th:text="#{phone}" class="control-label">Phone</label>
-                    <input type="text" th:field="*{phone}" class="form-control"/>
+                    <input type="text" th:field="*{phone}" class="form-control input-sm"/>
                     <span th:errors="*{phone}">error</span>
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <div class="col-xs-4">
                 <div class="form-group" th:classappend="${#fields.hasErrors('cell')} ? 'has-error'">
                     <label th:text="#{cell}" class="control-label">Cell</label>
-                    <input type="text" th:field="*{cell}" class="form-control"/>
+                    <input type="text" th:field="*{cell}" class="form-control input-sm"/>
                     <span th:errors="*{cell}">error</span>
                 </div>
             </div>
@@ -111,7 +111,7 @@
 
         <div class="row">
             <div class="col-xs-3 pull-right">
-                <input type="submit" value="Add SP" class="btn btn-success btn-block" th:value="#{save}"/>
+                <input type="submit" value="Add SP" class="btn btn-success btn-block btn-sm" th:value="#{save}"/>
             </div>
         </div>
     </form>    

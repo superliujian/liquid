@@ -3,6 +3,7 @@ package liquid.charge.persistence.repository;
 import liquid.charge.persistence.domain.ChargeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -34,6 +35,8 @@ public interface ChargeRepository extends CrudRepository<ChargeEntity, Long>, Jp
     Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole);
 
     Page<ChargeEntity> findAll(Pageable pageable);
+
+    Page<ChargeEntity> findAll(Specification<ChargeEntity> specification, Pageable pageable);
 
     void deleteByLegId(Long legId);
 }

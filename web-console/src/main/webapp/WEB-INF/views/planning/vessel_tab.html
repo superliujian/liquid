@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#f.container {
-            max-width: 400px;
-        }
-    </style>     
+    <div th:include="layout :: head"></div>   
 </head>
 
 <body>
@@ -17,7 +12,7 @@
 <br/>
 
 <!-- {!begin layout} -->
-<div th:include="layout :: leg-tab"></div>
+<div th:include="planning/template :: leg-tab"></div>
 <!-- {!end layout} -->
 
 <div id="f" class="container">
@@ -26,7 +21,7 @@
           
         <div class="form-group">
             <label for="serviceProvider" th:text="#{sp}">Service Provider</label>       
-            <select th:field="*{serviceProviderId}" class="form-control">
+            <select th:field="*{serviceProviderId}" class="form-control input-sm">
                 <option th:each="sp : ${sps}"
                         th:value="${sp.id}"
                         th:text="${sp.name}">SP Name
@@ -37,14 +32,14 @@
         <input type="hidden" th:field="*{sourceId}"/>
         <div class="form-group" th:classappend="${#fields.hasErrors('source')} ? 'has-error'">
             <label th:text="#{origination} + ' *'">Source</label>
-            <input type="text" th:field="*{source}" class="form-control" th:placeholder="#{origination}"/>
+            <input type="text" th:field="*{source}" class="form-control input-sm" th:placeholder="#{origination}"/>
             <span th:errors="*{source}">error</span>            
         </div>
 
         <input type="hidden" th:field="*{destinationId}"/>
         <div class="form-group" th:classappend="${#fields.hasErrors('destinationId')} ? 'has-error'">
             <label th:text="#{destination} + ' *'">Destination</label>
-            <input type="text" th:field="*{destination}" class="form-control" th:placeholder="#{destination}"/>
+            <input type="text" th:field="*{destination}" class="form-control input-sm" th:placeholder="#{destination}"/>
             <span th:errors="*{destination}">error</span>      
         </div>          
 
@@ -60,7 +55,7 @@
         </div>
         -->
         
-        <input type="submit" name="addLeg" value="Add Leg" class="btn btn-success btn-block" th:value="#{leg.add}"/>
+        <input type="submit" name="addLeg" value="Add Leg" class="btn btn-success btn-block btn-sm" th:value="#{leg.add}"/>
 
     </form>
 </div>

@@ -9,15 +9,27 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-1">
+            <h3><span th:text="#{charge.receivable}"></span></h3>
+        </div>  
+            
+        <div class="col-xs-3 pull-right">     
+            <div th:include="layout :: search-bar" />
+        </div>
+    </div><!-- row -->
+</div><!-- /.container -->
 
-<div class="panel panel-default">
-    <div class="panel-body">
+<hr />
+
+<div class="container-fluid">
+
         <!-- {!begin layout} -->
         <div th:include="layout :: charge-tab"></div>
         <!-- {!end layout} -->
 
-        <table class="table table-striped table-hover table-condensed table-16">
+        <table class="table table-striped table-hover table-condensed table-bordered table-16">
             <thead>
             <tr>
                 <th th:text="#{order.no}">Order No.</th>
@@ -65,31 +77,12 @@
                 <td th:text="${order.receivableSummary} ? ${order.receivableSummary.remainingBalanceCny} : ''">Invoice Balance CNY</td>
                 <td th:text="${order.receivableSummary} ? ${order.receivableSummary.remainingBalanceUsd} : ''">Invoice Balance USD</td>
                 <td>
-                    <a class="btn btn-default btn-xs" th:href="'/receivable/' + ${order.id}">
-                        <i class="glyphicon glyphicon-usd"/>
-                    </a>
+                    <a th:href="'/receivable/' + ${order.id}"><i class="glyphicon glyphicon-briefcase text-success"/></a>
                 </td>
             </tr>
             </tbody>
         </table>
-    </div>
-</div>
-
-<div id="pagination_bar" class="text-center">
-    <ul class="pagination">
-        <li>
-            <a href="/charge/receivable?number=0">&laquo;</a>
-        </li>
-        <li><a th:if="${page.hasPreviousPage()}"
-               th:href="'/charge/receivable?number=' + ${page.number - 1}"
-               th:text="${page.number}">1</a></li>
-        <li><a href="" th:text="${page.number + 1}">2</a></li>
-        <li><a th:if="${page.hasNextPage()}"
-               th:href="'/charge/receivable?number=' + ${page.number + 1}"
-               th:text="${page.number + 2}">3</a></li>
-        <li><a th:href="'/charge/receivable?number=' + ${page.totalPages - 1}">&raquo;</a>
-        </li>
-    </ul>
+    <div th:include="layout :: pagination_bar"></div>        
 </div>
 
 <!-- {!begin layout} -->

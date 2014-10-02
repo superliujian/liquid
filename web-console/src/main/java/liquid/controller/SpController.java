@@ -62,7 +62,7 @@ public class SpController {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<ServiceProviderEntity> page = serviceProviderService.findAll(pageRequest);
         model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/sp");
+        model.addAttribute("contextPath", "/sp?");
         return "sp/sp";
     }
 

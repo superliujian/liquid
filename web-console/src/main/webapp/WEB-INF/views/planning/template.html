@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>  
+</head>
+
+<body>
+<!--
+- Varables:
+- tab,
+- taskId,
+- roadId
+-->
+<div th:fragment="leg-tab">
+    <div id="m" class="container">
+        <ul class="nav nav-tabs">
+            <li class="active" th:class="${tab} == 'rail' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/rail'"
+                   th:text="#{rail}">Rail</a>
+            </li>
+            <li class="active" th:class="${tab} == 'barge' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/barge'"
+                   th:text="#{barge}">Barge</a>
+            </li>
+            <li class="active" th:class="${tab} == 'vessel' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/vessel'"
+                   th:text="#{vessel}">Vessel</a>
+            </li>
+            <li class="active" th:class="${tab} == 'road' ? 'active'">
+                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/road'"
+                   th:text="#{road}">Road</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>

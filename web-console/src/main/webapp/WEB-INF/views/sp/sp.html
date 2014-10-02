@@ -25,7 +25,7 @@
             <th th:text="#{contact}">Contact</th>
             <th th:text="#{phone}">Phone</th>
             <th th:text="#{cell}">Cell</th>
-            <th><a th:href="'/sp/form'" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"/></a></th>
+            <th><a th:href="'/sp/form'"><i class="glyphicon glyphicon-plus text-success"/></a></th>
         </tr>
         </thead>
         <tbody>
@@ -38,7 +38,7 @@
             <td th:text="${sp.contact}">Contact</td>
             <td th:text="${sp.phone}">Phone</td>
             <td th:text="${sp.cell}">Cell</td>
-            <td><a th:href="'/sp/' + ${sp.id}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"/></a></td>
+            <td><a th:href="'/sp/' + ${sp.id}"><i class="glyphicon glyphicon-edit text-primary"/></a></td>
         </tr>
         </tbody>
     </table>

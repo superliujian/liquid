@@ -57,7 +57,7 @@ public class LocationController extends BaseController {
         model.addAttribute("page", page);
         model.addAttribute("type", type);
         model.addAttribute("location", new LocationEntity());
-        model.addAttribute("contextPath", "/location");
+        model.addAttribute("contextPath", "/location?");
         return "location/list";
     }
 

@@ -17,6 +17,7 @@ import liquid.service.TaskService;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.service.LegService;
 import liquid.shipping.web.domain.TransMode;
+import liquid.web.domain.Criterion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,21 +186,6 @@ public class ChargeController {
         return "charge/console";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
-    public String findByOrderNo(@RequestParam String param, Model model) {
-        logger.debug("param: {}", param);
-        model.addAttribute("charges", chargeService.findByOrderNo(param));
-        return "/charge/details";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "findBySpName")
-    public String findBySpName(@RequestParam String param, Model model) {
-        logger.debug("param: {}", param);
-        model.addAttribute("charges", chargeService.findBySpName(param));
-        model.addAttribute("tab", "details");
-        return "charge/details";
-    }
-
     @RequestMapping(value = "/details", method = RequestMethod.GET, params = "number")
     public String details(@RequestParam int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
@@ -210,30 +196,89 @@ public class ChargeController {
         return "charge/details";
     }
 
-    @RequestMapping(value = "/summary", method = RequestMethod.GET, params = "number")
-    public String summary(@RequestParam int number, Model model) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
-        model.addAttribute("tab", "summary");
-        model.addAttribute("page", page);
+    @RequestMapping(value = "/summary", method = RequestMethod.GET)
+    public String summary(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
+        list(number, model);
+
+        model.addAttribute("contextPath", "/charge/summary?");
+        model.addAttribute("action", "/charge/summary");
         return "charge/summary";
     }
 
-    @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = "number")
-    public String receivable(@RequestParam int number, Model model) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
-        model.addAttribute("tab", "receivable");
-        model.addAttribute("page", page);
+    @RequestMapping(value = "/summary", method = RequestMethod.GET, params = {"type", "content"})
+    public String summarySearch(@RequestParam(defaultValue = "0", required = false) int number, Criterion criterion, Model model) {
+        search(number, criterion, model);
+
+        model.addAttribute("contextPath", "/charge/summary?type=" + criterion.getType() + "&content=" + criterion.getContent() + "&");
+        model.addAttribute("action", "/charge/summary");
+        return "charge/summary";
+    }
+
+    @RequestMapping(value = "/receivable", method = RequestMethod.GET)
+    public String receivable(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
+        list(number, model);
+
+        model.addAttribute("contextPath", "/charge/receivable?");
+        model.addAttribute("action", "/charge/receivable");
         return "charge/receivable";
     }
 
-    @RequestMapping(value = "/payable", method = RequestMethod.GET, params = "number")
-    public String payable(@RequestParam int number, Model model) {
+    @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = {"type", "content"})
+    public String receivableSearch(@RequestParam(defaultValue = "0", required = false) int number, Criterion criterion, Model model) {
+        search(number, criterion, model);
+
+        model.addAttribute("contextPath", "/charge/receivable?type=" + criterion.getType() + "&content=" + criterion.getContent() + "&");
+        model.addAttribute("action", "/charge/receivable");
+        return "charge/receivable";
+    }
+
+    private void list(int number, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
+        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("criterion", new Criterion());
+        model.addAttribute("page", page);
+    }
+
+    private void search(int number, Criterion criterion, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+
+        String orderNo = "orderNo".equals(criterion.getType()) ? criterion.getContent() : null;
+        String customerName = "customerName".equals(criterion.getType()) ? criterion.getContent() : null;
+
+        Page<OrderEntity> page = orderService.findAll(orderNo, customerName, null, pageRequest);
+
+        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("criterion", criterion);
+        model.addAttribute("page", page);
+    }
+
+    @RequestMapping(value = "/payable", method = RequestMethod.GET)
+    public String payable(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<ChargeEntity> page = chargeService.findAll(pageRequest);
-        model.addAttribute("tab", "payable");
         model.addAttribute("page", page);
+
+        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"spName", "sp.name"}});
+        model.addAttribute("criterion", new Criterion());
+        return "charge/payable";
+    }
+
+    @RequestMapping(value = "/payable", method = RequestMethod.GET, params = {"type", "content"})
+    public String payableSearch(@RequestParam(defaultValue = "0", required = false) int number, Criterion criterion, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+
+        String orderNo = "orderNo".equals(criterion.getType()) ? criterion.getContent() : null;
+        String spName = "spName".equals(criterion.getType()) ? criterion.getContent() : null;
+
+        Page<ChargeEntity> page = chargeService.findAll(orderNo, spName, pageRequest);
+
+        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"spName", "sp.name"}});
+        model.addAttribute("criterion", criterion);
+        model.addAttribute("page", page);
+
+        model.addAttribute("contextPath", "/charge/payable?type=" + criterion.getType() + "&content=" + criterion.getContent() + "&");
+        model.addAttribute("action", "/charge/payable");
         return "charge/payable";
     }
 

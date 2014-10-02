@@ -81,13 +81,21 @@ tr, td {
   font-size: 12px;
 }
 
+/* f - form */
 div#f.container {
   max-width: 300px;
 }
 
+/* t - table */
 div#t.container {
   max-width: 800px;
 }
+
+/* m - middle */
+div#m.container {
+  max-width: 600px;
+}
+
 
 /* Customize typeahead for bootstrap form input */
 .twitter-typeahead {

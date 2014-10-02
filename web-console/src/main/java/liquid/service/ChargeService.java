@@ -1,12 +1,16 @@
 package liquid.service;
 
 import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.charge.persistence.domain.ChargeEntity_;
 import liquid.charge.persistence.repository.ChargeRepository;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ExchangeRate;
+import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.persistence.domain.ServiceProviderEntity_;
 import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
@@ -19,8 +23,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
  * TODO: Comments.
@@ -166,6 +181,41 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
     public Page<ChargeEntity> findAll(Pageable pageable) {
         return chargeRepository.findAll(pageable);
+    }
+
+    public Page<ChargeEntity> findAll(final String orderNo, final String spName, final Pageable pageable) {
+        List<Specification<ChargeEntity>> specList = new ArrayList<>();
+
+        if (null != orderNo) {
+            Specification<ChargeEntity> orderNoSpec = new Specification<ChargeEntity>() {
+                @Override
+                public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+                    return builder.like(root.get(ChargeEntity_.order).get(OrderEntity_.orderNo), "%" + orderNo + "%");
+                }
+            };
+            specList.add(orderNoSpec);
+        }
+
+
+        if (null != spName) {
+            Specification<ChargeEntity> spNameSpec = new Specification<ChargeEntity>() {
+                @Override
+                public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+                    return builder.like(root.get(ChargeEntity_.sp).get(ServiceProviderEntity_.name), "%" + spName + "%");
+                }
+            };
+            specList.add(spNameSpec);
+        }
+
+        if (specList.size() > 0) {
+            Specifications<ChargeEntity> specifications = where(specList.get(0));
+            for (int i = 1; i < specList.size(); i++) {
+                specifications.and(specList.get(i));
+            }
+            return repository.findAll(specifications, pageable);
+        }
+
+        return repository.findAll(pageable);
     }
 
     public Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole) {

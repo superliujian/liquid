@@ -51,12 +51,12 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="/order?number=0" th:text="#{order.shipping}">
+                                <a href="/order" th:text="#{order.shipping}">
                                     Shipping Order<b class="caret"></b>
                                 </a>
                             </li>
                             <!--
-                            <li><a href="/recv_order" th:text="#{order.receiving}">Receiving Order</a></li>
+                            <li><a href="/recv_order" th:text="#{order.receiving}">Receiving cOrder</a></li>
                             -->
                         </ul>
                     </li>
@@ -71,7 +71,14 @@
                         </ul>
                     </li>
                     <li sec:authorize="hasRole('ROLE_COMMERCE')">
-                        <a href="/charge/summary?number=0" th:text="#{charge}">Charge</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span th:text="#{charge}">Financial Service</span><b class="caret"></b>
+                        </a>                        
+                        <ul class="dropdown-menu">
+                            <li><a href="/charge/summary" th:text="#{charge.summary}">Financial Summary</a></li>
+                            <li><a href="/charge/receivable" th:text="#{charge.receivable}">Account Receivable</a></li>
+                            <li><a href="/charge/payable" th:text="#{charge.payable}">Account Payable</a></li>                            
+                        </ul>                        
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -136,42 +143,37 @@
                     </li>
                     <li><a href="/account/register" th:text="#{register}">Register</a></li>
                 </ul>
-            </div>
-            <!--/.nav-collapse -->
+            </div><!--/.nav-collapse -->
         </div>
     </div>
-</div>
-<!--/header -->
+</div><!--/header -->
 
 <!--
-Leg tab
-varable:
-tab,
-taskId,
-planningId,
-roadId,
+- Variables
+- action:
+- criterion: 
+-     type:
+-     content: 
+- types:
 -->
-<div th:fragment="leg-tab">
-    <div id="middle" class="container">
-        <ul class="nav nav-tabs">
-            <li class="active" th:class="${tab} == 'rail' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/rail'"
-                   th:text="#{rail}">Rail</a>
-            </li>
-            <li class="active" th:class="${tab} == 'barge' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/barge'"
-                   th:text="#{barge}">Barge</a>
-            </li>
-            <li class="active" th:class="${tab} == 'vessel' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/vessel'"
-                   th:text="#{vessel}">Vessel</a>
-            </li>
-            <li class="active" th:class="${tab} == 'road' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/road'"
-                   th:text="#{road}">Road</a>
-            </li>
-        </ul>
-    </div>
+<div th:fragment="search-bar">
+    <br />
+    <form method="GET" class="form-inline pull-right" role="form" th:action="${action}" th:object="${criterion}">
+        <select name="type" class="form-control input-sm" th:field="*{type}">
+            <option th:each="t : ${types}"
+                    th:value="${t[0]}"
+                    th:text="#{${t[1]}}">Railway Plan Type Name
+            </option>
+        </select>
+                            
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" th:field="*{content}" />
+            
+            <span class="input-group-btn">                    
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
+            </span>
+        </div>             
+    </form>
 </div>
 
 <!-- TaskDto Bar -->
@@ -206,7 +208,7 @@ roadId,
     <!-- Modal -->
     <div class="modal" id="completeTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
          style="overflow-y: hidden;">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -217,17 +219,17 @@ roadId,
                 </div>
                 <div class="modal-body">
                     <h4>
-                        <span class="glyphicon glyphicon-info-sign" />
+                        <span class="glyphicon glyphicon-warning-sign text-danger" />
                         <span th:text="${task.prompt}" />
                     </h4>
                 </div>
                 <div class="modal-footer">
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
                             <span th:text="#{modal.close}"/>
                         </button>
-                        <button type="submit" name="complete" value="Complete" class="btn btn-primary">
+                        <button type="submit" name="complete" value="Complete" class="btn btn-success btn-sm">
                             <span th:text="#{task.complete}"/>
                         </button>
                     </form>
@@ -237,40 +239,25 @@ roadId,
     </div><!-- /.modal --> 
 </div>
 
-
-<div th:fragment="charge-tab">
-
-        <ul class="nav nav-tabs">
-            <li class="active" th:class="${tab} == 'summary' ? 'active'">
-                <a href="/charge/summary?number=0" th:text="#{charge.summary}">Summary</a>
-            </li>
-            <li class="active" th:class="${tab} == 'details' ? 'active'">
-                <a href="/charge/details?number=0" th:text="#{charge.details}">Details</a>
-            </li>
-            <li class="active" th:class="${tab} == 'receivable' ? 'active'">
-                <a href="/charge/receivable?number=0" th:text="#{charge.receivable}">Details</a>
-            </li>
-            <li class="active" th:class="${tab} == 'payable' ? 'active'">
-                <a href="/charge/payable?number=0" th:text="#{charge.payable}">Details</a>
-            </li>                        
-        </ul>
-
-</div>
-
+<!--
+- Variables
+- contextPath: The context path except number, e.g. /order? or /order?type=abc&.
+- page:
+-->
 <div th:fragment="pagination_bar">
     <div class="text-center">
-        <ul class="pagination">
+        <ul class="pagination pagination-sm">
             <li>
-                <a th:href="${contextPath} + '?number=0'">&laquo;</a>
+                <a th:href="${contextPath} + 'number=0'">&laquo;</a>
             </li>
             <li><a th:if="${page.hasPreviousPage()}"
-                   th:href="${contextPath} + '?number=' + ${page.number - 1}"
+                   th:href="${contextPath} + 'number=' + ${page.number - 1}"
                    th:text="${page.number}">1</a></li>
             <li><a href="" th:text="${page.number + 1}">2</a></li>
             <li><a th:if="${page.hasNextPage()}"
-                   th:href="${contextPath} + '?number=' + ${page.number + 1}"
+                   th:href="${contextPath} + 'number=' + ${page.number + 1}"
                    th:text="${page.number + 2}">3</a></li>
-            <li><a th:href="${contextPath} + '?number=' + ${page.totalPages - 1}">&raquo;</a>
+            <li><a th:href="${contextPath} + 'number=' + ${page.totalPages - 1}">&raquo;</a>
             </li>
         </ul>
     </div> 

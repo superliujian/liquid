@@ -47,7 +47,7 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
     public ServiceProviderEntity find(long id) {
         ServiceProviderEntity entity = serviceProviderRepository.findOne(id);
         Set<ServiceSubtypeEntity> serviceSubtypeEntitySet = entity.getServiceSubtypes();
-        for (ServiceSubtypeEntity serviceSubtypeEntity : serviceSubtypeEntitySet) { }
+        serviceSubtypeEntitySet.size();
         return entity;
     }
 

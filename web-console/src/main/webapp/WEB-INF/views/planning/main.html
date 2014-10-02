@@ -14,29 +14,27 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <div class="btn-toolbar">
-        <form method="POST" th:action="'/task/' + ${taskId} + '/planning/route'" th:object="${route}" >
-            <div class="col-lg-3">
-                <div class="input-group">
-                    <span class="input-group-addon"
-                          th:text="#{container.quantity} + '(' + ${order.containerQty} + ')'">Container QTY</span>
-                    <input class="form-control" type="text" th:field="*{containerQty}"
-                           th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'"/>
+    <form method="POST" th:action="'/task/' + ${taskId} + '/planning/route'" th:object="${route}" >
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="input-group input-group-sm">        
+                    <span class="input-group-addon" th:text="#{container.quantity} + '(' + ${containerTotality} + ')'">Container QTY</span>
+
+                    <input class="form-control" type="text" th:field="*{containerQty}" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'"/>                                
+                    
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit" name="addRoute" value="Add Route"
-                                th:text="#{route.add}">Add Route
-                        </button>
+                        <button class="btn btn-success" type="submit" name="addRoute" value="Add Route"><i class="glyphicon glyphicon-plus"/></button>
                     </span>
-                    <input type="hidden" name="containerQtyMax" th:value="${order.containerQty}"/>
                 </div>
             </div>
-            <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>
-        </form>
-    </div>
-</div>
-<!-- /.container -->
-
-<br/>
+            <div class="col-xs-9">
+                <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>
+            </div>
+        </div>        
+    </form>
+        
+    <hr />
+</div><!-- /.container -->
 
 <div class="container" th:unless="${#lists.isEmpty(routes)}">
     <div class="panel panel-default" th:each="route : ${routes}">
@@ -44,13 +42,49 @@
             <span th:text="#{route} + ${route.id}">Route ID</span>
             <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>            
             <div class="pull-right">
-                <button type="submit" name="delete" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#m">
-                    <i class="glyphicon glyphicon-minus"/>
-                </button>
-            </div>
+                <a data-toggle="modal" data-target="#m">
+                    <i class="glyphicon glyphicon-remove-circle text-danger"/>
+                </a>
+            </div>           
+        </div><!-- panel-heading -->
 
-            <div class="modal" id="m" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-                 style="overflow-y: hidden;">
+        <div class="panel-body">
+            <table class="table table-striped table-hover table-condensed table-16">
+                <thead>
+                <tr>
+                    <th th:text="#{leg.id}">Leg ID</th>
+                    <th th:text="#{trans.mode}">Trans Mode</th>
+                    <th th:text="#{sp.name}">SP Name</th>
+                    <th th:text="#{origination}">Origination</th>
+                    <th th:text="#{destination}">Destination</th>
+                    <th>
+                        <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/rail'">
+                            <i class="glyphicon glyphicon-plus-sign text-success"/>
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody th:unless="${#lists.isEmpty(route.legs)}">
+                <tr th:each="leg : ${route.legs}">
+                    <td th:text="${leg.id}">Leg ID</td>
+                    <td th:text="#{${transModes[leg.transMode]}}">Trans Mode</td>
+                    <td th:text="${leg.sp} ? ${leg.sp.name} : ''">SP Name</td>
+                    <td th:text="${leg.srcLoc.name}">Origination</td>
+                    <td th:text="${leg.dstLoc.name}">Destination</td>
+                    <td>
+                        <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/leg/' + ${leg.id}">
+                            <i class="glyphicon glyphicon-remove-circle text-danger"/>
+                        </a>
+                        &nbsp;
+                        <a th:href="'/charge/console?taskId=' + ${taskId} + '&amp;legId=' + ${leg.id}">
+                            <i class="glyphicon glyphicon-shopping-cart text-success"/>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="modal" id="m" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y: hidden;">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -60,7 +94,7 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-xs-1">
-                                    <span class="glyphicon glyphicon-remove-circle" style="font-size:18px; color: red;"/>
+                                    <span class="glyphicon glyphicon-warning-sign text-danger"/>
                                 </div>
                                 <div class="col-xs-9">
                                     <span th:text="#{route.delete.confirm}">Are you sure to delete route?</span>
@@ -79,47 +113,10 @@
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->            
-        </div><!-- panel-heading -->
-
-        <div class="panel-body">
-            <table class="table table-striped table-hover table-condensed table-16">
-                <thead>
-                <tr>
-                    <th th:text="#{leg.id}">Leg ID</th>
-                    <th th:text="#{trans.mode}">Trans Mode</th>
-                    <th th:text="#{sp.name}">SP Name</th>
-                    <th th:text="#{origination}">Origination</th>
-                    <th th:text="#{destination}">Destination</th>
-                    <th>
-                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/rail'">
-                            <i class="glyphicon glyphicon-plus"/>
-                        </a>
-                    </th>
-                </tr>
-                </thead>
-                <tbody th:unless="${#lists.isEmpty(route.legs)}">
-                <tr th:each="leg : ${route.legs}">
-                    <td th:text="${leg.id}">Leg ID</td>
-                    <td th:text="#{${transModes[leg.transMode]}}">Trans Mode</td>
-                    <td th:text="${leg.sp} ? ${leg.sp.name} : ''">SP Name</td>
-                    <td th:text="${leg.srcLoc.name}">Origination</td>
-                    <td th:text="${leg.dstLoc.name}">Destination</td>
-                    <td>
-                        <a class="btn btn-default btn-xs" th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/leg/' + ${leg.id}">
-                            <i class="glyphicon glyphicon-minus"/>
-                        </a>
-                        <a class="btn btn-default btn-xs" th:href="'/charge/console?taskId=' + ${taskId} + '&amp;legId=' + ${leg.id}">
-                            <i class="glyphicon glyphicon-shopping-cart"/>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+            </div><!-- /.modal -->             
+        </div>        
     </div>
-</div>
-<!-- /.container -->
+</div><!-- /.container -->
 
 <div class="container" th:unless="${#lists.isEmpty(charges)}">
     <div class="panel panel-default">
@@ -163,8 +160,7 @@
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
-</div>
-<!-- /.container -->
+</div><!-- /.container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>

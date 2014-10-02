@@ -14,12 +14,12 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.shipping.web.domain.TransMode;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.service.ShippingContainerService;
-import liquid.service.TaskService;
+import liquid.shipping.web.domain.TransMode;
 import liquid.validation.FormValidationResult;
+import liquid.web.domain.Criterion;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -48,6 +48,8 @@ import java.util.Map;
 @RequestMapping("/order")
 public class OrderController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+
+    private static final int size = 20;
 
     @Autowired
     private OrderService orderService;
@@ -152,46 +154,8 @@ public class OrderController extends BaseController {
         return railwayPlanTypeService.findAll();
     }
 
-    @Deprecated
     @RequestMapping(method = RequestMethod.GET)
-    public String initFind(Model model) {
-        model.addAttribute("orders", orderService.findAllOrderByDesc());
-        return "order/find";
-    }
-
-    /**
-     * TODO: pageable
-     *
-     * @param param
-     * @param model
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
-    public String findById(@RequestParam String param, Model model) {
-        logger.debug("param: {}", param);
-
-        model.addAttribute("orders", orderService.findByOrderNo(param));
-        return "order/find";
-    }
-
-    /**
-     * TODO: pageable
-     *
-     * @param param
-     * @param model
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
-    public String findByCustomerName(@RequestParam String param, Model model) {
-        logger.debug("param: {}", param);
-
-        model.addAttribute("orders", orderService.findByCustomerName(param));
-        return "order/find";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "number")
-    public String initFindPaging(@RequestParam int number, Model model) {
-        int size = 20;
+    public String initFindPaging(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String username = SecurityContext.getInstance().getUsername();
 
@@ -208,6 +172,39 @@ public class OrderController extends BaseController {
         }
 
         model.addAttribute("page", page);
+        model.addAttribute("contextPath", "/order?");
+
+        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("criterion", new Criterion());
+        model.addAttribute("action", "/order");
+        return "order/page";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"type", "content"})
+    public String search(@RequestParam(defaultValue = "0", required = false) int number, Criterion criterion, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        String orderNo = "orderNo".equals(criterion.getType()) ? criterion.getContent() : null;
+        String customerName = "customerName".equals(criterion.getType()) ? criterion.getContent() : null;
+        String username = SecurityContext.getInstance().getUsername();
+
+        Page<OrderEntity> page;
+
+        switch (SecurityContext.getInstance().getRole()) {
+            case "ROLE_SALES":
+            case "ROLE_MARKETING":
+                page = orderService.findAll(orderNo, customerName, username, pageRequest);
+                break;
+            default:
+                page = orderService.findAll(orderNo, customerName, null, pageRequest);
+                break;
+        }
+
+        model.addAttribute("page", page);
+        model.addAttribute("contextPath", "/order?type=" + criterion.getType() + "&content=" + criterion.getContent() + "&");
+
+        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("criterion", criterion);
+        model.addAttribute("action", "/order");
         return "order/page";
     }
 

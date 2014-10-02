@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,12 +43,8 @@ public class PlanningController extends BaseTaskController {
     @Autowired
     private ChargeService chargeService;
 
-    public PlanningController() {
-    }
-
     @RequestMapping(method = RequestMethod.GET)
-    public String init(@PathVariable String taskId,
-                       Model model) {
+    public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
@@ -56,17 +53,21 @@ public class PlanningController extends BaseTaskController {
         int containerUsage = 0;
         for (RouteEntity route : routes) {
             containerUsage += route.getContainerQty();
-            Collection<LegEntity> legs = route.getLegs();
-            route.setLegs(legs);
         }
+
         RouteEntity route = new RouteEntity();
+        // set remaining container quantity as the default value for the next route planning.
         route.setContainerQty(order.getContainerQty() - containerUsage);
 
-        model.addAttribute("transModes", TransMode.toMap());
-        model.addAttribute("order", order);
+        // route planning bar
         model.addAttribute("route", route);
-        model.addAttribute("routes", routes);
+        model.addAttribute("containerTotality", order.getContainerQty());
 
+        // route table
+        model.addAttribute("routes", routes);
+        model.addAttribute("transModes", TransMode.toMap());
+
+        // charge table
         model.addAttribute("chargeWays", ChargeWay.values());
         Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
@@ -75,8 +76,7 @@ public class PlanningController extends BaseTaskController {
     }
 
     @RequestMapping(value = "/route", method = RequestMethod.POST)
-    public String addRoute(@PathVariable String taskId,
-                           @Valid RouteEntity route,
+    public String addRoute(@PathVariable String taskId, @Valid @ModelAttribute(value = "route") RouteEntity route,
                            BindingResult result, Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("route: {}", route);
@@ -88,15 +88,33 @@ public class PlanningController extends BaseTaskController {
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity r : routes) {
             containerUsage += r.getContainerQty();
-            Collection<LegEntity> legs = route.getLegs();
-            r.setLegs(legs);
         }
 
         if (result.hasErrors()) {
+            model.addAttribute("containerTotality", order.getContainerQty());
+
+            model.addAttribute("routes", routes);
+            model.addAttribute("transModes", TransMode.toMap());
+
+            // charge table
+            model.addAttribute("chargeWays", ChargeWay.values());
+            Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
+            model.addAttribute("charges", charges);
+            model.addAttribute("total", chargeService.total(charges));
             return "planning/main";
         } else if (route.getContainerQty() > (order.getContainerQty() - containerUsage)) {
             setFieldError(result, "route", "containerQty", route.getContainerQty(), (order.getContainerQty() - containerUsage));
+
+            model.addAttribute("containerTotality", order.getContainerQty());
+
+            model.addAttribute("routes", routes);
             model.addAttribute("transModes", TransMode.toMap());
+
+            // charge table
+            model.addAttribute("chargeWays", ChargeWay.values());
+            Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
+            model.addAttribute("charges", charges);
+            model.addAttribute("total", chargeService.total(charges));
             return "planning/main";
         } else {
             route.setOrder(order);

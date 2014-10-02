@@ -39,7 +39,7 @@ public class GoodsController extends BaseController {
 
         model.addAttribute("page", page);
         model.addAttribute("goods", new GoodsEntity());
-        model.addAttribute("contextPath", "/goods");
+        model.addAttribute("contextPath", "/goods?");
         return "goods/list";
     }
 
