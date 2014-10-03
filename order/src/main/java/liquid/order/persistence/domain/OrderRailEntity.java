@@ -10,8 +10,8 @@ import java.util.Date;
 /**
  * Created by redbrick9 on 8/22/14.
  */
-@Entity(name = "RAILWAY")
-public class RailwayEntity extends BaseIdEntity {
+@Entity(name = "FIN_ORDER_RAIL")
+public class OrderRailEntity extends BaseIdEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

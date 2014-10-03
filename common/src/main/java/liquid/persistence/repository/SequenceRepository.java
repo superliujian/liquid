@@ -15,7 +15,7 @@ public interface SequenceRepository extends CrudRepository<Sequence, Long> {
 
     @Transactional(value = "transactionManager", propagation = Propagation.REQUIRED)
     @Modifying
-    @Query("UPDATE SEQUENCE s SET s.value = LAST_INSERT_ID(s.value + 1) WHERE s.name= ?")
+    @Query("UPDATE SYS_SEQUENCE s SET s.value = LAST_INSERT_ID(s.value + 1) WHERE s.name= ?")
     void increment(String name);
 
     @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)

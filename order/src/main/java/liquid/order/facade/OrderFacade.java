@@ -6,7 +6,7 @@ import liquid.domain.LocationType;
 import liquid.domain.ServiceItem;
 import liquid.order.domain.Order;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.persistence.domain.RailwayEntity;
+import liquid.order.persistence.domain.OrderRailEntity;
 import liquid.order.persistence.domain.ReceivableSummaryEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.service.OrderService;
@@ -70,7 +70,7 @@ public class OrderFacade {
     @Transactional("transactionManager")
     public OrderEntity save(Order order) {
         OrderEntity orderEntity = convert(order);
-        RailwayEntity railwayEntity = convertRailway(order);
+        OrderRailEntity railwayEntity = convertRailway(order);
         railwayEntity.setOrder(orderEntity);
         orderEntity.setRailway(railwayEntity);
         orderEntity = orderService.save(orderEntity);
@@ -214,7 +214,7 @@ public class OrderFacade {
         order.setContainerQuantity(orderEntity.getContainerQty());
         order.setContainerAttribute(orderEntity.getContainerAttribute());
 
-        RailwayEntity railwayEntity = orderEntity.getRailway();
+        OrderRailEntity railwayEntity = orderEntity.getRailway();
         if (null != railwayEntity) {
             order.setRailwayId(railwayEntity.getId());
             order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
@@ -254,8 +254,8 @@ public class OrderFacade {
         return order;
     }
 
-    private RailwayEntity convertRailway(Order order) {
-        RailwayEntity railwayEntity = new RailwayEntity();
+    private OrderRailEntity convertRailway(Order order) {
+        OrderRailEntity railwayEntity = new OrderRailEntity();
         railwayEntity.setId(order.getRailwayId());
         railwayEntity.setPlanReportTime(DateUtil.dateOf(order.getPlanReportTime()));
         railwayEntity.setPlanType(RailPlanTypeEntity.newInstance(RailPlanTypeEntity.class, order.getRailwayPlanTypeId()));

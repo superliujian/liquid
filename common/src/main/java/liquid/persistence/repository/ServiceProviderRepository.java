@@ -16,7 +16,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface ServiceProviderRepository extends CrudRepository<ServiceProviderEntity, Long> {
     Iterable<ServiceProviderEntity> findByType(ServiceProviderTypeEnity type);
 
-    @Query(value = "SELECT * FROM SERVICE_PROVIDER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
+    @Query(value = "SELECT * FROM OPS_SERVICE_PROVIDER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
     Iterable<ServiceProviderEntity> findOrderByName();
 
     Page<ServiceProviderEntity> findAll(Pageable pageable);

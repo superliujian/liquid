@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
  * Date: 10/2/13
  * Time: 7:43 PM
  */
-@Entity(name = "CHARGE")
+@Entity(name = "FIN_CHARGE")
 public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne

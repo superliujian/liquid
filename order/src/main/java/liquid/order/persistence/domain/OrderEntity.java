@@ -11,7 +11,7 @@ import java.util.List;
  * Date: 9/28/13
  * Time: 2:59 PM
  */
-@Entity(name = "ORDER_BASE")
+@Entity(name = "FIN_ORDER")
 public class OrderEntity extends BaseOrder {
     // 0: domestic; 1: foreign
     @Column(name = "TRADE_TYPE")

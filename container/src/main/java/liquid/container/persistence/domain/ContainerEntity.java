@@ -15,7 +15,7 @@ import java.util.Date;
  * Date: 10/1/13
  * Time: 2:36 PM
  */
-@Entity(name = "CONTAINER")
+@Entity(name = "UNT_CONTAINER")
 public class ContainerEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty

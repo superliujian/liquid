@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by redbrick9 on 4/26/14.
  */
-@Entity(name = "SEQUENCE")
+@Entity(name = "SYS_SEQUENCE")
 public class Sequence extends BaseUpdateEntity {
     @NotNull
     @NotEmpty

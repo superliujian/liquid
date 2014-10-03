@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Created by redbrick9 on 8/29/14.
  */
-@Entity(name = "RECEIVABLE_SETTLE")
+@Entity(name = "FIN_RECEIVABLE_SETTLE")
 public class ReceivableSettlementEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")

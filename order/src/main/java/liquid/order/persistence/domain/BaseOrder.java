@@ -111,7 +111,7 @@ public class BaseOrder extends BaseUpdateEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "RAILWAY_ID")
-    private RailwayEntity railway;
+    private OrderRailEntity railway;
 
     @Column(name = "DISTY_PRICE")
     private Long distyPrice = 0L;
@@ -329,11 +329,11 @@ public class BaseOrder extends BaseUpdateEntity {
         this.containerAttribute = containerAttribute;
     }
 
-    public RailwayEntity getRailway() {
+    public OrderRailEntity getRailway() {
         return railway;
     }
 
-    public void setRailway(RailwayEntity railway) {
+    public void setRailway(OrderRailEntity railway) {
         this.railway = railway;
     }
 

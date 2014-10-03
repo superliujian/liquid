@@ -13,7 +13,7 @@ import java.util.Date;
  * Date: 11/12/13
  * Time: 10:59 PM
  */
-@Entity(name = "ORDER_HISTORY")
+@Entity(name = "FIN_ORDER_HISTORY")
 public class OrderHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
