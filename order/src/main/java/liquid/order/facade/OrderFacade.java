@@ -2,8 +2,7 @@ package liquid.order.facade;
 
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
-import liquid.domain.LocationType;
-import liquid.domain.ServiceItem;
+import liquid.domain.*;
 import liquid.order.domain.Order;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderRailEntity;
@@ -186,9 +185,11 @@ public class OrderFacade {
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
         order.setServiceTypeId(orderEntity.getServiceType().getId());
+        order.setServiceType(orderEntity.getServiceType().getName());
         order.setCustomerId(orderEntity.getCustomer().getId());
         order.setCustomerName(orderEntity.getCustomer().getName());
         order.setTradeType(orderEntity.getTradeType());
+        order.setTradeTypeName(TradeType.valueOf(orderEntity.getTradeType()).getI18nKey());
         order.setOriginId(orderEntity.getSrcLoc().getId());
         order.setOrigination(orderEntity.getSrcLoc().getName());
         order.setDestinationId(orderEntity.getDstLoc().getId());
@@ -201,16 +202,18 @@ public class OrderFacade {
         order.setGoodsWeight(orderEntity.getGoodsWeight());
         order.setGoodsDimension(orderEntity.getGoodsDimension());
         order.setLoadingType(orderEntity.getLoadingType());
+        order.setLoadingTypeName(LoadingType.valueOf(orderEntity.getLoadingType()).getI18nKey());
         order.setLoadingAddress(orderEntity.getLoadingAddress());
         order.setLoadingContact(orderEntity.getLoadingContact());
         order.setLoadingPhone(orderEntity.getLoadingPhone());
         order.setLoadingEstimatedTime(DateUtil.stringOf(orderEntity.getLoadingEt()));
         order.setContainerType(orderEntity.getContainerType());
-        order.setContainerType(orderEntity.getContainerType());
+        order.setContainerTypeName(ContainerType.valueOf(orderEntity.getContainerType()).getI18nKey());
         if (order.getContainerType() == ContainerType.RAIL.getType())
             order.setRailContainerSubtypeId(orderEntity.getContainerSubtype().getId());
         else
-            order.setRailContainerSubtypeId(orderEntity.getContainerSubtype().getId());
+            order.setSelfContainerSubtypeId(orderEntity.getContainerSubtype().getId());
+        order.setContainerSubtype(orderEntity.getContainerSubtype().getName());
         order.setContainerQuantity(orderEntity.getContainerQty());
         order.setContainerAttribute(orderEntity.getContainerAttribute());
 
@@ -240,7 +243,9 @@ public class OrderFacade {
             ServiceItem serviceItem = new ServiceItem();
             serviceItem.setId(serviceItemEntity.getId());
             serviceItem.setServiceSubtypeId(serviceItemEntity.getServiceSubtype().getId());
+            serviceItem.setServiceSubtype(serviceItemEntity.getServiceSubtype().getName());
             serviceItem.setCurrency(serviceItemEntity.getCurrency());
+            serviceItem.setCurrencyText(Currency.valueOf(serviceItemEntity.getCurrency()).toString());
             serviceItem.setQuotation(serviceItemEntity.getQuotation());
             serviceItem.setComment(serviceItemEntity.getComment());
             order.getServiceItems().add(serviceItem);

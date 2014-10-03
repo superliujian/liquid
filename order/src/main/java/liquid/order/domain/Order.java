@@ -15,12 +15,14 @@ import java.util.List;
 public class Order extends BaseIdObject {
     private String orderNo;
     private Long serviceTypeId;
+    private String serviceType;
     private Long customerId;
 
     @NotNull
     @NotEmpty
     private String customerName;
     private Integer tradeType = 0;
+    private String tradeTypeName;
     private Long originId;
 
     @NotNull
@@ -42,13 +44,16 @@ public class Order extends BaseIdObject {
     private Integer goodsWeight;
     private String goodsDimension;
     private Integer loadingType = 0;
+    private String loadingTypeName;
     private String loadingAddress;
     private String loadingContact;
     private String loadingPhone;
     private String loadingEstimatedTime;
     private Integer containerType = 0;
+    private String containerTypeName;
     private Long railContainerSubtypeId;
     private Long selfContainerSubtypeId;
+    private String containerSubtype;
 
     @Min(1)
     @NotNull
@@ -104,6 +109,14 @@ public class Order extends BaseIdObject {
         this.serviceTypeId = serviceTypeId;
     }
 
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -126,6 +139,14 @@ public class Order extends BaseIdObject {
 
     public void setTradeType(Integer tradeType) {
         this.tradeType = tradeType;
+    }
+
+    public String getTradeTypeName() {
+        return tradeTypeName;
+    }
+
+    public void setTradeTypeName(String tradeTypeName) {
+        this.tradeTypeName = tradeTypeName;
     }
 
     public Long getOriginId() {
@@ -224,6 +245,14 @@ public class Order extends BaseIdObject {
         this.loadingType = loadingType;
     }
 
+    public String getLoadingTypeName() {
+        return loadingTypeName;
+    }
+
+    public void setLoadingTypeName(String loadingTypeName) {
+        this.loadingTypeName = loadingTypeName;
+    }
+
     public String getLoadingAddress() {
         return loadingAddress;
     }
@@ -264,6 +293,14 @@ public class Order extends BaseIdObject {
         this.containerType = containerType;
     }
 
+    public String getContainerTypeName() {
+        return containerTypeName;
+    }
+
+    public void setContainerTypeName(String containerTypeName) {
+        this.containerTypeName = containerTypeName;
+    }
+
     public Long getRailContainerSubtypeId() {
         return railContainerSubtypeId;
     }
@@ -278,6 +315,14 @@ public class Order extends BaseIdObject {
 
     public void setSelfContainerSubtypeId(Long selfContainerSubtypeId) {
         this.selfContainerSubtypeId = selfContainerSubtypeId;
+    }
+
+    public String getContainerSubtype() {
+        return containerSubtype;
+    }
+
+    public void setContainerSubtype(String containerSubtype) {
+        this.containerSubtype = containerSubtype;
     }
 
     public Integer getContainerQuantity() {
@@ -434,12 +479,14 @@ public class Order extends BaseIdObject {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Order{");
+        final StringBuilder sb = new StringBuilder("Order{");
         sb.append("orderNo='").append(orderNo).append('\'');
         sb.append(", serviceTypeId=").append(serviceTypeId);
+        sb.append(", serviceType='").append(serviceType).append('\'');
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName='").append(customerName).append('\'');
         sb.append(", tradeType=").append(tradeType);
+        sb.append(", tradeTypeName='").append(tradeTypeName).append('\'');
         sb.append(", originId=").append(originId);
         sb.append(", origination='").append(origination).append('\'');
         sb.append(", destinationId=").append(destinationId);
@@ -452,13 +499,16 @@ public class Order extends BaseIdObject {
         sb.append(", goodsWeight=").append(goodsWeight);
         sb.append(", goodsDimension='").append(goodsDimension).append('\'');
         sb.append(", loadingType=").append(loadingType);
+        sb.append(", loadingTypeName='").append(loadingTypeName).append('\'');
         sb.append(", loadingAddress='").append(loadingAddress).append('\'');
         sb.append(", loadingContact='").append(loadingContact).append('\'');
         sb.append(", loadingPhone='").append(loadingPhone).append('\'');
         sb.append(", loadingEstimatedTime='").append(loadingEstimatedTime).append('\'');
         sb.append(", containerType=").append(containerType);
+        sb.append(", containerTypeName='").append(containerTypeName).append('\'');
         sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
         sb.append(", selfContainerSubtypeId=").append(selfContainerSubtypeId);
+        sb.append(", containerSubtype='").append(containerSubtype).append('\'');
         sb.append(", containerQuantity=").append(containerQuantity);
         sb.append(", containerAttribute='").append(containerAttribute).append('\'');
         sb.append(", railwayId=").append(railwayId);

@@ -96,6 +96,13 @@ div#m.container {
   max-width: 600px;
 }
 
+/* tc - tab content */
+div#tc.container {
+  padding-top: 10px;
+  padding-right: 30px;
+  padding-left: 30px;
+  font-size: 12px;
+}
 
 /* Customize typeahead for bootstrap form input */
 .twitter-typeahead {

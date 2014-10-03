@@ -1,4 +1,4 @@
-package liquid.metadata;
+package liquid.domain;
 
 /**
  * TODO: Comments.
@@ -25,6 +25,17 @@ public enum TradeType {
 
     public String getI18nKey() {
         return i18nKey;
+    }
+
+    public static TradeType valueOf(int type) {
+        switch (type) {
+            case 0:
+                return DOMESTIC;
+            case 1:
+                return FOREIGN;
+            default:
+                throw new IllegalArgumentException(String.format("%s should be from %s and %s.", type, 0, 1));
+        }
     }
 
     @Override

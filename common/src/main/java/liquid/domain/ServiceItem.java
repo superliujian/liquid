@@ -5,7 +5,9 @@ package liquid.domain;
  */
 public class ServiceItem extends BaseIdObject {
     private long serviceSubtypeId;
-    private String currency;
+    private String serviceSubtype;
+    private Integer currency = 0;
+    private String currencyText;
     private long quotation;
     private String comment;
 
@@ -17,12 +19,28 @@ public class ServiceItem extends BaseIdObject {
         this.serviceSubtypeId = serviceSubtypeId;
     }
 
-    public String getCurrency() {
+    public String getServiceSubtype() {
+        return serviceSubtype;
+    }
+
+    public void setServiceSubtype(String serviceSubtype) {
+        this.serviceSubtype = serviceSubtype;
+    }
+
+    public Integer getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Integer currency) {
         this.currency = currency;
+    }
+
+    public String getCurrencyText() {
+        return currencyText;
+    }
+
+    public void setCurrencyText(String currencyText) {
+        this.currencyText = currencyText;
     }
 
     public long getQuotation() {
@@ -44,9 +62,10 @@ public class ServiceItem extends BaseIdObject {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ServiceItem{");
-        sb.append("super=").append(super.toString());
-        sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
-        sb.append(", currency='").append(currency).append('\'');
+        sb.append("serviceSubtypeId=").append(serviceSubtypeId);
+        sb.append(", serviceSubtype='").append(serviceSubtype).append('\'');
+        sb.append(", currency=").append(currency);
+        sb.append(", currencyText='").append(currencyText).append('\'');
         sb.append(", quotation=").append(quotation);
         sb.append(", comment='").append(comment).append('\'');
         sb.append('}');

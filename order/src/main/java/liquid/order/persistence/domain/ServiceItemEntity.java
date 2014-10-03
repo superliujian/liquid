@@ -26,7 +26,7 @@ public class ServiceItemEntity extends BaseIdEntity {
     private ServiceSubtypeEntity serviceSubtype;
 
     @Column(name = "CURRENCY")
-    private String currency;
+    private Integer currency;
 
     @Column(name = "QUOTATION")
     private long quotation;
@@ -79,11 +79,11 @@ public class ServiceItemEntity extends BaseIdEntity {
         this.serviceSubtype = serviceSubtype;
     }
 
-    public String getCurrency() {
+    public Integer getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Integer currency) {
         this.currency = currency;
     }
 

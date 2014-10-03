@@ -40,6 +40,17 @@ public enum ContainerType {
         return i18nKey;
     }
 
+    public static ContainerType valueOf(int type) {
+        switch (type) {
+            case 0:
+                return RAIL;
+            case 2:
+                return SELF;
+            default:
+                throw new IllegalArgumentException(String.format("%s should be from %s and %s.", type, 0, 2));
+        }
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder(super.toString());

@@ -3,6 +3,8 @@ package liquid.controller;
 import liquid.charge.persistence.domain.ChargeEntity;
 import liquid.container.domain.ContainerType;
 import liquid.domain.Charge;
+import liquid.domain.LoadingType;
+import liquid.domain.TradeType;
 import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
 import liquid.facade.ChargeFacade;

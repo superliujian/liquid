@@ -10,27 +10,20 @@
 <!-- {!end layout} -->
 
 <!-- {!begin task bar} -->
-<div th:include="order_template :: tab"/>
+<div th:include="order/template :: tab"/>
 <!-- {!end task bar} -->
 
-<!--
-<div class="container">
-    <a th:href="'/route?o=' + ${order.id} + '&amp;action=edit'" class="btn btn-default">
-        <i class="glyphicon glyphicon-edit"></i>
-    </a>
-</div>
---><!-- container -->
-
-<div class="container" th:unless="${#lists.isEmpty(routes)}">
-    <div class="panel panel-default" th:each="route : ${routes}">
-        <div class="panel-heading">
-            <span th:text="#{route} + ${route.id}">Route ID</span>
-            <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
-        </div>
-
-        <div class="panel-body">
-            <table class="table table-striped table-hover table-condensed table-16">
-                <caption th:text="#{rail}"></caption>
+<div id="tc" class="container" th:unless="${#lists.isEmpty(routes)}">
+    <div th:each="route : ${routes}">
+    <h4>
+        <span th:text="#{route} + ${route.id}">Route ID</span>
+        <small th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</small>
+    </h4>
+    
+    <hr />
+    
+            <table th:unless="${#lists.isEmpty(route.railContainers)}" class="table table-striped table-hover table-condensed table-16">
+                <h4 th:text="#{rail}"></h4>
                 <thead>
                 <tr>
                     <th th:text="#{rail.origination}">Railway Origination</th>
@@ -65,10 +58,9 @@
                 </tbody>
             </table>
             
-            <br/>
             
-            <table class="table table-striped table-hover table-condensed table-16">
-                <caption th:text="#{barge}"></caption>
+            <table th:unless="${#lists.isEmpty(route.bargeContainers)}" class="table table-striped table-hover table-condensed table-16">
+                <h4 th:text="#{barge}"></h4>
                 <thead>
                 <tr>
                     <th th:text="#{shipping.origination}">Barge Origination</th>
@@ -97,8 +89,8 @@
             
             <br/>
   
-            <table class="table table-striped table-hover table-condensed table-16">
-                <caption th:text="#{vessel}"></caption>
+            <table th:unless="${#lists.isEmpty(route.vesselContainers)}" class="table table-striped table-hover table-condensed table-16">
+                <h4 th:text="#{vessel}"></h4>
                 <thead>
                 <tr>
                     <th th:text="#{shipping.origination}">Vessel Origination</th>
@@ -124,8 +116,7 @@
                 </tr>
                 </tbody>            
             </table>
-        </div><!-- panel-body -->
-    </div><!-- panel -->
+    </div>
 </div><!-- container -->
 
 

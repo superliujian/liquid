@@ -9,13 +9,9 @@
 <div th:include="layout :: header"/>
 <!-- {!end layout} -->
 
-<div th:include="order_template :: tab"></div>
+<div th:include="order/template :: tab"></div>
 
-<br/>
-
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-body">
+<div id="tc" class="container">
             <table class="table table-striped table-hover table-condensed table-16"
                    sth:unless="${#lists.isEmpty(completedTasks)}">
                 <thead>
@@ -44,10 +40,7 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
-</div>
-<!-- /.container -->
+</div><!-- /.container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
