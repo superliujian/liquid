@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 /**
  * Created by redbrick9 on 8/29/14.
  */
-@Entity(name = "TAX_RATE")
+@Entity(name = "OPS_TAX_RATE")
 public class TaxRateEntity extends BaseUpdateEntity {
     @Column(name = "NAME")
     private String name;

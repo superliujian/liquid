@@ -3,7 +3,7 @@ package liquid.controller;
 import liquid.domain.LocationType;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.SpTypeEnity;
+import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
@@ -72,7 +72,7 @@ public class LegController extends BaseTaskController {
                 List<LocationEntity> portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDestinationId(defaultDstLocId);
-                SpTypeEnity bargeType = stRepository.findOne(2L);
+                ServiceProviderTypeEnity bargeType = stRepository.findOne(2L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(bargeType));
                 model.addAttribute("locations", portLocs);
                 break;
@@ -80,7 +80,7 @@ public class LegController extends BaseTaskController {
                 portLocs = locationRepository.findByType(LocationType.PORT.getType());
                 defaultDstLocId = computeDefaultDstLocId(portLocs);
                 leg.setDestinationId(defaultDstLocId);
-                SpTypeEnity vesselType = stRepository.findOne(3L);
+                ServiceProviderTypeEnity vesselType = stRepository.findOne(3L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(vesselType));
                 model.addAttribute("locations", portLocs);
                 break;
@@ -88,7 +88,7 @@ public class LegController extends BaseTaskController {
                 List<LocationEntity> cityLocs = locationRepository.findByType(LocationType.CITY.getType());
                 defaultDstLocId = computeDefaultDstLocId(cityLocs);
                 leg.setDestinationId(defaultDstLocId);
-                SpTypeEnity roadType = stRepository.findOne(4L);
+                ServiceProviderTypeEnity roadType = stRepository.findOne(4L);
                 model.addAttribute("sps", serviceProviderRepository.findByType(roadType));
                 model.addAttribute("locations", cityLocs);
                 break;

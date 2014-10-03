@@ -2,7 +2,7 @@ package liquid.order.persistence.domain;
 
 import liquid.persistence.domain.BaseIdEntity;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.RailwayPlanTypeEntity;
+import liquid.persistence.domain.RailPlanTypeEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,7 +21,7 @@ public class RailwayEntity extends BaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name = "PLAN_TYPE")
-    private RailwayPlanTypeEntity planType;
+    private RailPlanTypeEntity planType;
 
     @Column(name = "PROGRAM_NO")
     private String programNo;
@@ -56,11 +56,11 @@ public class RailwayEntity extends BaseIdEntity {
         this.planReportTime = planReportTime;
     }
 
-    public RailwayPlanTypeEntity getPlanType() {
+    public RailPlanTypeEntity getPlanType() {
         return planType;
     }
 
-    public void setPlanType(RailwayPlanTypeEntity planType) {
+    public void setPlanType(RailPlanTypeEntity planType) {
         this.planType = planType;
     }
 

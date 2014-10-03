@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.persistence.domain.SpTypeEnity;
+import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +30,18 @@ public class SpTypeController {
     private ServiceProviderTypeRepository serviceProviderTypeRepository;
 
     @ModelAttribute("spTypes")
-    public Iterable<SpTypeEnity> populateCts() {
+    public Iterable<ServiceProviderTypeEnity> populateCts() {
         return serviceProviderTypeRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(Model model, Principal principal) {
-        model.addAttribute("spType", new SpTypeEnity());
+        model.addAttribute("spType", new ServiceProviderTypeEnity());
         return "data_dict/sp_type";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("spType") SpTypeEnity spType,
+    public String create(@Valid @ModelAttribute("spType") ServiceProviderTypeEnity spType,
                          BindingResult bindingResult, Model model, Principal principal) {
         logger.debug("spType: {}", spType);
 

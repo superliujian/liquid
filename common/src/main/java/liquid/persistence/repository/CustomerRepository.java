@@ -13,7 +13,7 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 11:14 PM
  */
 public interface CustomerRepository extends CrudRepository<CustomerEntity, Long> {
-    @Query(value = "SELECT * FROM CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
+    @Query(value = "SELECT * FROM OPS_CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
     Iterable<CustomerEntity> findOrderByName();
 
     CustomerEntity findByName(String name);

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by redbrick9 on 4/26/14.
  */
-@Entity(name = "SERVICE_TYPE")
+@Entity(name = "OPS_SERVICE_TYPE")
 public class ServiceTypeEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty

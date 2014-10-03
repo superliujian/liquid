@@ -11,7 +11,7 @@ import javax.persistence.UniqueConstraint;
  * Date: 10/5/13
  * Time: 10:33 AM
  */
-@Entity(name = "LOCATION")
+@Entity(name = "OPS_LOCATION")
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME", "TYPE"})})
 public class LocationEntity extends BaseUpdateEntity {
 

@@ -13,7 +13,7 @@ import java.util.Set;
  * Date: 10/2/13
  * Time: 4:38 PM
  */
-@Entity(name = "SERVICE_PROVIDER")
+@Entity(name = "OPS_SERVICE_PROVIDER")
 public class ServiceProviderEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
@@ -27,7 +27,7 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "TYPE_ID")
-    private SpTypeEnity type;
+    private ServiceProviderTypeEnity type;
 
     @Column(name = "ADDRESS")
     private String address;
@@ -51,7 +51,7 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
     private int status;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinTable(name = "SERVICE_PROVIDER_SUBTYPE",
+    @JoinTable(name = "OPS_SERVICE_PROVIDER_SUBTYPE",
             joinColumns = @JoinColumn(name = "SERVICE_PROVIDER_ID"),
             inverseJoinColumns = @JoinColumn(name = "SERVICE_SUBTYPE_ID"))
     private Set<ServiceSubtypeEntity> serviceSubtypes = new HashSet<>();
@@ -72,11 +72,11 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
         this.name = name;
     }
 
-    public SpTypeEnity getType() {
+    public ServiceProviderTypeEnity getType() {
         return type;
     }
 
-    public void setType(SpTypeEnity type) {
+    public void setType(ServiceProviderTypeEnity type) {
         this.type = type;
     }
 

@@ -95,11 +95,6 @@ public class OrderController extends BaseController {
         return serviceTypeService.findAll();
     }
 
-    @ModelAttribute("customers")
-    public Iterable<CustomerEntity> populateCustomers() {
-        return customerService.findAll();
-    }
-
     @ModelAttribute("cargos")
     public Iterable<GoodsEntity> populateCargos() {
         return cargoTypeService.findAll();
@@ -150,7 +145,7 @@ public class OrderController extends BaseController {
     }
 
     @ModelAttribute("railwayPlanTypes")
-    public Iterable<RailwayPlanTypeEntity> populateRailwayPlanTypes() {
+    public Iterable<RailPlanTypeEntity> populateRailwayPlanTypes() {
         return railwayPlanTypeService.findAll();
     }
 

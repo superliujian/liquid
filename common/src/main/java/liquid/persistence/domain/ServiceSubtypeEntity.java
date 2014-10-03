@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by redbrick9 on 5/9/14.
  */
-@Entity(name = "SERVICE_SUBTYPE")
+@Entity(name = "OPS_SERVICE_SUBTYPE")
 public class ServiceSubtypeEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty

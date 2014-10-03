@@ -3,7 +3,7 @@ package liquid.facade;
 import liquid.domain.ServiceProvider;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.persistence.domain.SpTypeEnity;
+import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class ServiceProviderFacade {
         entity.setId(serviceProvider.getId());
         entity.setCode(serviceProvider.getCode());
         entity.setName(serviceProvider.getName());
-        entity.setType(SpTypeEnity.newInstance(SpTypeEnity.class, serviceProvider.getTypeId()));
+        entity.setType(ServiceProviderTypeEnity.newInstance(ServiceProviderTypeEnity.class, serviceProvider.getTypeId()));
         entity.setAddress(serviceProvider.getAddress());
         entity.setPostcode(serviceProvider.getPostcode());
         entity.setContact(serviceProvider.getContact());

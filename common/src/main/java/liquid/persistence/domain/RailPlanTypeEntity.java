@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 /**
  * Created by redbrick9 on 8/23/14.
  */
-@Entity(name = "RAILWAY_PLAN_TYPE")
-public class RailwayPlanTypeEntity extends BaseUpdateEntity {
+@Entity(name = "OPS_RAIL_PLAN_TYPE")
+public class RailPlanTypeEntity extends BaseUpdateEntity {
     @Column(name = "NAME")
     private String name;
 

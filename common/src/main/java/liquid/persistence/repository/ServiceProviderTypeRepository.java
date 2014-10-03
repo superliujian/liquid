@@ -1,6 +1,6 @@
 package liquid.persistence.repository;
 
-import liquid.persistence.domain.SpTypeEnity;
+import liquid.persistence.domain.ServiceProviderTypeEnity;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 10/25/13
  * Time: 7:33 PM
  */
-public interface ServiceProviderTypeRepository extends CrudRepository<SpTypeEnity, Long> {
+public interface ServiceProviderTypeRepository extends CrudRepository<ServiceProviderTypeEnity, Long> {
 }

@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
  * Date: 10/25/13
  * Time: 7:31 PM
  */
-@Entity(name = "SP_TYPE")
-public class SpTypeEnity extends BaseUpdateEntity {
+@Entity(name = "OPS_SERVICE_PROVIDER_TYPE")
+public class ServiceProviderTypeEnity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "NAME")

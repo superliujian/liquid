@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date: 9/28/13
  * Time: 3:27 PM
  */
-@Entity(name = "GOODS")
+@Entity(name = "OPS_GOODS")
 public class GoodsEntity extends BaseUpdateEntity {
     @NotNull
     @NotEmpty

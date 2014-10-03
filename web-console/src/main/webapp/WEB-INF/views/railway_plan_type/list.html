@@ -20,7 +20,7 @@
             <th>ID</th>
             <th th:text="#{name}">Name</th>
             <th th:text="#{status}">Status</th>
-            <th><a href="/railway_plan_type/new"><button class="btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"/></button></a></th>
+            <th><a href="/railway_plan_type/new"><i class="glyphicon glyphicon-plus text-success" /></a></th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@
             <td th:text="${railwayPlanType.id}">ID</td>
             <td th:text="${railwayPlanType.name}">Name</td>
             <td th:text="${railwayPlanType.status}">Status</td>
-            <td><a th:href="'/railway_plan_type/' + ${railwayPlanType.id}"><button class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"/></button></a></td>
+            <td><a th:href="'/railway_plan_type/' + ${railwayPlanType.id}"><i class="glyphicon glyphicon-edit text-success" /></a></td>
         </tr>
         </tbody>
     </table>
