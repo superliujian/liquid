@@ -16,6 +16,8 @@ import java.util.Locale;
  */
 @Component
 public abstract class BaseController {
+    protected static final int size = 20;
+
     @Autowired
     protected MessageSource messageSource;
 

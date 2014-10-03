@@ -105,6 +105,15 @@ public class OrderService extends AbstractBaseOrderService {
         return order;
     }
 
+    /**
+     * Criteria Query for order.
+     *
+     * @param orderNo
+     * @param customerName
+     * @param username
+     * @param pageable
+     * @return
+     */
     public Page<OrderEntity> findAll(final String orderNo, final String customerName, final String username, final Pageable pageable) {
         List<Specification<OrderEntity>> specList = new ArrayList<>();
 
@@ -146,13 +155,5 @@ public class OrderService extends AbstractBaseOrderService {
         }
 
         return repository.findAll(pageable);
-    }
-
-    public Iterable<OrderEntity> findByOrderNo(String orderNo) {
-        return repository.findByOrderNoLike("%" + orderNo + "%");
-    }
-
-    public Iterable<OrderEntity> findByCustomerName(String customerName) {
-        return repository.findByCustomerNameLike("%" + customerName + "%");
     }
 }

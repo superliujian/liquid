@@ -13,16 +13,13 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<br/>
-
-<div class="container">
+<div id="t" class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
             <span th:text="#{income}"></span>
             <span class="pull-right">
-                <a href="/task/{taskId}/ajustement/income" class="btn btn-default btn-xs"
-                   th:href="'/task/' + ${taskId} + '/ajustement/income'">
-                    <i class="glyphicon glyphicon-plus"/>
+                <a th:href="'/task/' + ${taskId} + '/ajustement/income'">
+                    <i class="glyphicon glyphicon-plus text-success" />
                 </a>
             </span>
         </div>
@@ -46,9 +43,8 @@
                     <td th:text="${income.amount}">Amount</td>
                     <td th:text="${income.comment}">Comment</td>
                     <th>
-                        <a class="btn btn-default btn-xs"
-                           th:href="'/task/' + ${taskId} + '/ajustement/income/' + ${income.id}">
-                            <i class="glyphicon glyphicon-minus"/>
+                        <a th:href="'/task/' + ${taskId} + '/ajustement/income/' + ${income.id}">
+                            <i class="glyphicon glyphicon-remove text-danger" />
                         </a>
                     </th>
                 </tr>
@@ -59,21 +55,20 @@
         <div class="panel-footer">
             <span th:text="#{total} + ':' + ${incomesTotal}"></span>
         </div>
-    </div>
-    <!-- /.panel -->
-</div>
-<!-- /.container -->
+    </div><!-- /.panel -->
+    
+    <hr />
+</div><!-- /.container -->
 
-<br/>
 
-<div class="container">
+
+<div id="t" class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
             <span th:text="#{charge}"></span>
             <span class="pull-right">
-                <a href="/task/{taskId}/ajustement/income" class="btn btn-default btn-xs"
-                   th:href="'/task/' + ${taskId} + '/ajustement/charge'">
-                    <i class="glyphicon glyphicon-plus"/>
+                <a th:href="'/task/' + ${taskId} + '/ajustement/charge'">
+                    <i class="glyphicon glyphicon-plus text-success"/>
                 </a>
             </span>
         </div>
@@ -99,9 +94,8 @@
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>
                     <th>
-                        <a class="btn btn-default btn-xs"
-                           th:href="'/task/' + ${taskId} + '/ajustement/charge/' + ${charge.id}">
-                            <i class="glyphicon glyphicon-minus"/>
+                        <a th:href="'/task/' + ${taskId} + '/ajustement/charge/' + ${charge.id}">
+                            <i class="glyphicon glyphicon-remove text-danger"/>
                         </a>
                     </th>
                 </tr>

@@ -33,7 +33,6 @@ public class GoodsController extends BaseController {
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(required = false, defaultValue = "0") int number,
                        Model model) {
-        int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<GoodsEntity> page = goodsService.findAll(pageRequest);
 

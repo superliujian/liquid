@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/sp")
-public class SpController {
+public class SpController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(SpController.class);
 
     @Autowired
@@ -58,7 +58,6 @@ public class SpController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
-        int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<ServiceProviderEntity> page = serviceProviderService.findAll(pageRequest);
         model.addAttribute("page", page);

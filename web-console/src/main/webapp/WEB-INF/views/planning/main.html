@@ -43,7 +43,7 @@
             <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>            
             <div class="pull-right">
                 <a data-toggle="modal" data-target="#m">
-                    <i class="glyphicon glyphicon-remove-circle text-danger"/>
+                    <i class="glyphicon glyphicon-remove text-danger"/>
                 </a>
             </div>           
         </div><!-- panel-heading -->
@@ -59,7 +59,7 @@
                     <th th:text="#{destination}">Destination</th>
                     <th>
                         <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/rail'">
-                            <i class="glyphicon glyphicon-plus-sign text-success"/>
+                            <i class="glyphicon glyphicon-plus text-success"/>
                         </a>
                     </th>
                 </tr>
@@ -73,7 +73,7 @@
                     <td th:text="${leg.dstLoc.name}">Destination</td>
                     <td>
                         <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/leg/' + ${leg.id}">
-                            <i class="glyphicon glyphicon-remove-circle text-danger"/>
+                            <i class="glyphicon glyphicon-remove text-danger"/>
                         </a>
                         &nbsp;
                         <a th:href="'/charge/console?taskId=' + ${taskId} + '&amp;legId=' + ${leg.id}">

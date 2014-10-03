@@ -49,8 +49,6 @@ import java.util.Map;
 public class OrderController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    private static final int size = 20;
-
     @Autowired
     private OrderService orderService;
 

@@ -45,7 +45,6 @@ public class LocationController extends BaseController {
     public String list(@RequestParam(required = false, defaultValue = "0") int number,
                        @RequestParam(required = false, defaultValue = "-1") int type,
                        Model model) {
-        int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
 
         Page<LocationEntity> page;

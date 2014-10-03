@@ -14,13 +14,36 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 5:19 PM
  */
 public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaRepository<OrderEntity, Long> {
+    /**
+     * Criteria Query
+     *
+     * @param specification
+     * @param pageable
+     * @return
+     */
+    Page<OrderEntity> findAll(Specification<OrderEntity> specification, Pageable pageable);
+
+    /**
+     * TODO: Low Efficiency
+     *
+     * @param uid
+     * @param pageable
+     * @return
+     */
     Page<OrderEntity> findByCreateUser(String uid, Pageable pageable);
 
-    Iterable<OrderEntity> findByOrderNoLike(String orderNo);
-
-    Iterable<OrderEntity> findByCustomerNameLike(String cumtomerName);
-
+    /**
+     * TODO: Low Efficiency
+     *
+     * @param status
+     * @param pageable
+     * @return
+     */
     Page<OrderEntity> findByStatus(Integer status, Pageable pageable);
 
-    Page<OrderEntity> findAll(Specification<OrderEntity> specification, Pageable pageable);
+    @Deprecated
+    Iterable<OrderEntity> findByOrderNoLike(String orderNo);
+
+    @Deprecated
+    Iterable<OrderEntity> findByCustomerNameLike(String cumtomerName);
 }

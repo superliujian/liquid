@@ -9,7 +9,7 @@
     <process id="liquidPoc" name="Liquid POC">
 
         <extensionElements>
-            <activiti:executionListener event="end" class="liquid.task.handler.ProcessEndHandler"/>
+            <activiti:executionListener delegateExpression="${processEndHandler}" event="end"/>
         </extensionElements>
 
         <startEvent id="placeOrder" activiti:initiator="employeeName"/>
@@ -511,8 +511,8 @@
         </userTask>
         <sequenceFlow id="flow580" sourceRef="comfirmData" targetRef="theEnd1"/>
 
-        <endEvent id="theEnd1"/>
-
+        <endEvent id="theEnd1">
+        </endEvent>
     </process>
 
 </definitions>

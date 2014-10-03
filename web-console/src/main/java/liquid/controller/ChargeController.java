@@ -41,10 +41,8 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/charge")
-public class ChargeController {
+public class ChargeController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ChargeController.class);
-
-    private static final int size = 20;
 
     @Autowired
     private TaskService taskService;

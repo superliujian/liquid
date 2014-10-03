@@ -1,6 +1,7 @@
 package liquid.config;
 
 
+import liquid.task.handler.ProcessEndHandler;
 import org.activiti.engine.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;
 import org.activiti.spring.ProcessEngineFactoryBean;
@@ -15,7 +16,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -89,6 +92,10 @@ public class BpmConfig {
         configurators.add(configurator);
         processEngineConfiguration.setConfigurators(configurators);
 
+        Map<Object, Object> beans = new HashMap<>();
+        beans.put("processEndHandler", processEndHandler());
+        processEngineConfiguration.setBeans(beans);
+
         return processEngineConfiguration;
     }
 
@@ -97,5 +104,10 @@ public class BpmConfig {
         ProcessEngineFactoryBean processEngineFactory = new ProcessEngineFactoryBean();
         processEngineFactory.setProcessEngineConfiguration(processEngineConfiguration());
         return processEngineFactory;
+    }
+
+    @Bean
+    public ProcessEndHandler processEndHandler() {
+        return new ProcessEndHandler();
     }
 }

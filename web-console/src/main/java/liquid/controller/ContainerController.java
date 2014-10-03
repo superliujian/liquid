@@ -1,20 +1,20 @@
 package liquid.controller;
 
 import liquid.container.domain.Container;
-import liquid.container.domain.ExcelFileInfo;
-import liquid.container.facade.ContainerFacade;
-import liquid.metadata.ContainerCap;
 import liquid.container.domain.ContainerStatus;
 import liquid.container.domain.ContainerType;
-import liquid.domain.LocationType;
+import liquid.container.domain.ExcelFileInfo;
+import liquid.container.facade.ContainerFacade;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
-import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.container.service.ContainerService;
 import liquid.container.service.ContainerSubtypeService;
-import liquid.service.LocationService;
+import liquid.domain.LocationType;
+import liquid.metadata.ContainerCap;
 import liquid.order.service.ServiceItemService;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/container")
-public class ContainerController {
+public class ContainerController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ContainerController.class);
 
     @Autowired
@@ -184,7 +184,6 @@ public class ContainerController {
                 public Iterator<ContainerEntity> iterator() { return null; }
             });
         } else {
-            int size = 20;
             PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
             Page<ContainerEntity> page = containerService.findAll(subtypeId, ownerId, yardId, pageRequest);
             model.addAttribute("page", page);

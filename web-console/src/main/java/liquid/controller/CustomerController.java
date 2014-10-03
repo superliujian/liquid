@@ -23,7 +23,7 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping("/customer")
-public class CustomerController {
+public class CustomerController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
@@ -31,7 +31,6 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
-        int size = 20;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<CustomerEntity> page = customerRepository.findAll(pageRequest);
         model.addAttribute("page", page);

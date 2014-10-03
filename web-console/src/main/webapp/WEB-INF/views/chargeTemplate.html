@@ -68,13 +68,12 @@
                         <td th:text="${charge.totalPrice}">Total Price</td>
                         <td th:text="${charge.currency} ? 'USD' : 'CNY'">Total Price</td>
                         <td>
-                            <a href="/charge/{chargeId}/settle" class="btn btn-default btn-xs"
-                               th:href="'/charge/' + ${charge.id} + '/settle'"
+                            <a th:href="'/charge/' + ${charge.id} + '/settle'"
                                th:if="${charge.status} == 0">
-                                <i class="glyphicon glyphicon-credit-card"/>
+                                <i class="glyphicon glyphicon-credit-card text-success"/>
                             </a>
-                            <button class="btn btn-default btn-xs" th:if="${charge.status} == 1">
-                                <i class="glyphicon glyphicon-check"/>
+                            <button th:if="${charge.status} == 1">
+                                <i class="glyphicon glyphicon-check text-success"/>
                             </button>
                         </td>
                     </tr>

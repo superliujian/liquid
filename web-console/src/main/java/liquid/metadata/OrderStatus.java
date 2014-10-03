@@ -9,7 +9,8 @@ package liquid.metadata;
 public enum OrderStatus {
     NULL(0, ""),
     SAVED(1, "order.status.saved"),
-    SUBMITTED(2, "order.status.submitted");
+    SUBMITTED(2, "order.status.submitted"),
+    COMPLETED(8, "order.status.completed");
 
     private final int value;
 

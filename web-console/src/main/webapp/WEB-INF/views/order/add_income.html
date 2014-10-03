@@ -9,54 +9,39 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br/>
+<div id="f" class="container">
 
-<div class="container">
-    <form action="/task/{taskId}/ajustement/income" method="POST" class="form-horizontal center"
-          th:object="${income}" th:action="'/task/' + ${taskId} + '/ajustement/income'">
+    <h3><span th:text="#{income}"></span></h3>
+    
+    <hr />
+
+    <form method="POST" th:action="'/task/' + ${taskId} + '/ajustement/income'" th:object="${income}" >
 
         <div class="form-group">
-            <label class="col-lg-4 control-label" th:text="#{income.type}">Income Type</label>
-
-            <div class="col-lg-8">
-                <select class="form-control" th:field="*{type}">
-                    <option th:each="incomeType : ${incomeTypes}"
-                            th:value="${incomeType.key}"
-                            th:text="#{${incomeType.value}}">Income Type Name
-                    </option>
-                </select>
-            </div>
+            <label class="control-label" th:text="#{income.type}">Income Type</label>
+            <select class="form-control input-sm" th:field="*{type}">
+                <option th:each="incomeType : ${incomeTypes}"
+                        th:value="${incomeType.key}"
+                        th:text="#{${incomeType.value}}">Income Type Nam
+                </option>
+            </select>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('amount')} ? 'has-error'">
-            <label class="col-lg-4 control-label" th:text="#{amount}">Amount</label>
-
-            <div class="col-lg-8">
-                <input type="text" th:field="*{amount}" class="form-control"/>
-                <span th:errors="*{amount}">error</span>
-            </div>
+            <label class="control-label" th:text="#{amount}">Amount</label>
+            <input class="form-control input-sm" type="text" th:field="*{amount}"/>
+            <span th:errors="*{amount}">error</span>
         </div>
 
         <div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
-            <label class="col-lg-4 control-label" th:text="#{comment}">Comment</label>
-
-            <div class="col-lg-8">
-                <input type="text" th:field="*{comment}" class="form-control"/>
-                <span th:errors="*{comment}">error</span>
-            </div>
+            <label class="control-label" th:text="#{comment}">Comment</label>
+            <input class="form-control input-sm" type="text" th:field="*{comment}"/>
+            <span th:errors="*{comment}">error</span>
         </div>
 
-        <div class="form-group">
-            <div class="col-lg-offset-4 col-lg-8">
-                <input type="submit" name="save" value="Save Order" class="btn btn-default"
-                       th:attr="value=#{order.save}"/>
-                <span th:if="${done}" class="glyphicon glyphicon-ok"/>
-            </div>
-        </div>
-
+        <input class="btn btn-success btn-block btn-sm" type="submit" name="save" th:value="#{order.save}"/>
     </form>
-</div>
-<!-- /.container -->
+</div><!-- /.container -->
 
 <br/>
 
