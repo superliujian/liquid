@@ -1,7 +1,9 @@
 package liquid.controller;
 
 import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.container.domain.Container;
 import liquid.container.domain.ContainerType;
+import liquid.container.domain.Containers;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.service.ContainerService;
 import liquid.domain.ContainerAllocation;
@@ -119,7 +121,16 @@ public class AllocationController extends BaseTaskController {
             model.addAttribute("yards", yards);
 
             model.addAttribute("routeId", routeId);
+
+            Containers containers = new Containers();
+            for (int i = 0; i < 10; i++) {
+                containers.getList().add(new Container());
+            }
+
+            model.addAttribute("containers", containers);
+
             model.addAttribute("page", page);
+            model.addAttribute("contextPath", "/task/" + taskId + "/allocation?" + "routeId=" + routeId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
 
             SelfContainerAllocation selfContainerAllocation = new SelfContainerAllocation();
             selfContainerAllocation.setRouteId(routeId);

@@ -65,7 +65,7 @@
                             <span th:text="#{container}">Container</span><b class="caret"></b>
                         </a>                    
                         <ul class="dropdown-menu">
-                            <li><a href="/container?number=0" th:text="#{container}">Container</a></li>
+                            <li><a href="/container" th:text="#{container}">Container</a></li>
                             <li><a href="/data_dict/container_subtype" th:text="#{container.subtype}">Sp Type</a></li>
                             <li><a href="/container/import" th:text="#{container.import}">Container Import</a></li>
                         </ul>
@@ -148,45 +148,21 @@
     </div>
 </div><!--/header -->
 
-<!--
-- Variables
-- action:
-- criterion: 
--     type:
--     content: 
-- types:
--->
-<div th:fragment="search-bar">
-    <br />
-    <form method="GET" class="form-inline pull-right" role="form" th:action="${action}" th:object="${criterion}">
-        <select name="type" class="form-control input-sm" th:field="*{type}">
-            <option th:each="t : ${types}"
-                    th:value="${t[0]}"
-                    th:text="#{${t[1]}}">Railway Plan Type Name
-            </option>
-        </select>
-                            
-        <div class="input-group input-group-sm">
-            <input type="text" class="form-control" th:field="*{content}" />
-            
-            <span class="input-group-btn">                    
-                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
-            </span>
-        </div>             
-    </form>
-</div>
-
 <!-- TaskDto Bar -->
 <div th:fragment="task-bar">
     <div class="jumbotron">
         <div class="container">
-            <h4>
-                <span th:text="${task.name}">Task Name</span>
-                [<a target="_blank" th:href="'/order/' + ${task.orderId}" th:text="${task.orderNo}">Order Link</a>]
-                <span th:text="'[' + ${task.assignee} + ']'" th:if="${task.assignee}"/>          
-            </h4>
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-xs-10">
+                    <h4>
+                        <span th:text="${task.name}">Task Name</span>
+                        [<a target="_blank" th:href="'/order/' + ${task.orderId}" th:text="${task.orderNo}">Order Link</a>]
+                        <span th:text="'[' + ${task.assignee} + ']'" th:if="${task.assignee}"/>
+                        <small th:text="${task.description}"></small>
+                    </h4>
+                </div>
+            
+                <div class="col-xs-2">
                     <form action="/task" method="POST">
                         <input type="hidden" name="taskId" value="taskId" th:value="${task.id}"/>
 
@@ -198,9 +174,6 @@
                             th:if="${task.assignee}" th:disabled="${#authentication.name} != ${task.assignee}">
                         <span th:text="#{task.complete}"/>
                     </button>    
-                </div>
-                <div class="col-lg-10">
-                    <h5 th:text="${task.description}"></h5>
                 </div>
             </div><!-- row -->
         </div><!-- container -->
@@ -237,6 +210,34 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal --> 
+</div>
+
+<!--
+- Variables
+- action:
+- criterion: 
+-     type:
+-     content: 
+- types:
+-->
+<div th:fragment="search-bar">
+    <br />
+    <form method="GET" class="form-inline pull-right" role="form" th:action="${action}" th:object="${criterion}">
+        <select th:unless="${#lists.isEmpty(types)}" name="type" class="form-control input-sm" th:field="*{type}">
+            <option th:each="t : ${types}"
+                    th:value="${t[0]}"
+                    th:text="#{${t[1]}}">Railway Plan Type Name
+            </option>
+        </select>
+                            
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" th:field="*{content}" />
+            
+            <span class="input-group-btn">                    
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
+            </span>
+        </div>             
+    </form>
 </div>
 
 <!--

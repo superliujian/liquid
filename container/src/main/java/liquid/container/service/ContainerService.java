@@ -390,4 +390,10 @@ public class ContainerService {
         Iterable<ContainerEntity> containers = containerRepository.findByBicCodeLike("%" + bicCode + "%");
         return containers;
     }
+
+    public Page<ContainerEntity> findByBicCodeLike(String bicCode, Pageable pageable) {
+        Page<ContainerEntity> containers = containerRepository.findByBicCodeLike("%" + bicCode + "%", pageable);
+        return containers;
+    }
+
 }

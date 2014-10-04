@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+
+<body>
+
+<div th:fragment="form">
+    <form action="/container" method="POST" class="form-horizontal center" th:object="${containers}">
+        <table class="table table-striped table-hover table-condensed table-16">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>BIC Code *</th>
+                    <th><span th:text="#{container.owner}" /></th>
+                    <th><span th:text="#{container.subtype}" /></th>
+                    <th><span th:text="#{container.yard}" /></th>
+                </tr> 
+            </thead>
+            
+            <tbody>
+                <tr th:each="container, rowStat : *{list}">
+                    <td><span th:text="${rowStat.count}" /><input type="hidden" th:field="*{list[__${rowStat.index}__].id}" /></td>
+                    <td><input type="text" th:field="*{list[__${rowStat.index}__].bicCode}" class="form-control input-sm"/></td>
+                    <td>
+                        <select th:field="*{list[__${rowStat.index}__].ownerId}" class="form-control input-sm">
+                            <option th:each="owner : ${owners}"
+                                    th:value="${owner.id}"
+                                    th:text="${owner.name}">Owner Name
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select th:field="*{list[__${rowStat.index}__].subtypeId}" class="form-control input-sm">
+                            <option th:each="subtype : ${containerSubtypes}"
+                                    th:value="${subtype.id}"
+                                    th:text="${subtype.name}">Container Subtype Name
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select th:field="*{list[__${rowStat.index}__].yardId}" class="form-control input-sm">
+                            <option th:each="location : ${locations}"
+                                    th:value="${location.id}"
+                                    th:text="${location.name}">Location Name
+                            </option>
+                        </select>
+                    </td>
+                </tr>         
+            </tbody>    
+        </table>  
+        
+        <div class="row">
+            <div class="col-xs-3 pull-right">
+                <input type="submit" name="add" value="Add Container" class="btn btn-success btn-block btn-sm" th:value="#{container.add}"/>
+            </div>
+        </div>        
+    </form>
+</div>
+</body>
+</html>

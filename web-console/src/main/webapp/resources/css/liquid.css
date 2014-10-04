@@ -31,6 +31,7 @@ footer {
 
 .jumbotron {
   padding: 0px;
+  padding-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -46,6 +47,7 @@ footer {
 
 .panel-body {
   padding: 6px;
+  font-size: 12px;
 }
 
 .panel-footer {
@@ -102,6 +104,14 @@ div#tc.container {
   padding-right: 30px;
   padding-left: 30px;
   font-size: 12px;
+}
+
+.dropdown-menu {
+  font-size: 12px;
+}
+
+.pagination {
+  margin: 0px 10px;
 }
 
 /* Customize typeahead for bootstrap form input */

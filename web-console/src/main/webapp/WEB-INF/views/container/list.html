@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#container.container {
-        max-width: 640px;
-        }
-    </style>    
+    <div th:include="layout :: head"></div> 
 </head>
 
 <body>
@@ -14,66 +9,20 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br/>
-
 <div class="container">
-    <div class="panel panel-default">
+    <div class="row">
+        <div class="col-xs-2">
+            <h3><span th:text="#{container}"></span></h3>
+        </div>
     
-        <div class="panel-heading">
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">  
-                    <span th:if="${subtypeId==0}" th:text="#{container.all.subtype}">All Subtype</span>
-                    <span th:unless="${subtypeId==0}" th:text="${subtypes.?[id == __${subtypeId}__][0].name}">Subtype</span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=0' + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
-                            th:text="#{container.all.owners}">All Subtypes</a>
-                    </li>
-                    <li th:each="subtype : ${subtypes}">
-                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtype.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
-                            th:text="${subtype.name}">Subtype</a>
-                    </li>
-                </ul>
-            </div><!-- subtype -->   
-                    
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">  
-                    <span th:if="${ownerId==0}" th:text="#{container.all.owners}">All Owner</span>
-                    <span th:unless="${ownerId==0}" th:text="${owners.?[id == __${ownerId}__][0].name}">Owner</span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
-                            th:text="#{container.all.owners}">All Owners</a>
-                    </li>
-                    <li th:each="owner : ${owners}">
-                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
-                            th:text="${owner.name}">Owner</a>
-                    </li>
-                </ul>
-            </div><!-- owner -->  
-            
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span th:if="${yardId==0}" th:text="#{container.all.yards}">All Yards</span>
-                    <span th:unless="${yardId==0}" th:text="${yards.?[id == __${yardId}__][0].name}">Yard</span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
-                            th:text="#{container.all.yards}">All Yard</a>
-                    </li>
-                    <li th:each="yard : ${yards}">
-                        <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
-                            th:text="${yard.name}">Yard</a>
-                    </li>
-                </ul>
-            </div><!-- yard -->   
-            
+        <div class="col-xs-3 pull-right">
+            <div th:include="layout :: search-bar" />
+        </div>
+    </div><!-- row -->   
+    
+    <hr />
+    
+            <!-- 
             <div class="col-lg-4">
                 <form action="/container" method="GET" class="form-inline">       
                     <div class="input-group">
@@ -81,138 +30,96 @@
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit" th:text="#{query}">Query</button>
                         </span>
-                    </div><!-- /input-group -->  
+                    </div>
                 </form>   
-            </div>          
-        </div><!-- panel-heading -->
+            </div>     panel-heading -->     
         
-        <div class="panel-body" th:unless="${#lists.isEmpty(page.content)}">
-            <table class="table table-striped table-hover table-condensed table-16">
-                <thead>
-                <tr>
-                    <th th:text="#{container.id}">ID</th>
-                    <th>BIC Code</th>
-                    <th th:text="#{container.subtype}">Subtype</th>
-                    <th th:text="#{container.owner}">Owner</th>
-                    <th th:text="#{container.yard}">Yard</th>
-                    <th th:text="#{status}">Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="container : ${page.content}">
-                    <td th:text="${container.id}">ID</td>
-                    <td th:text="${container.bicCode}">BIC Code</td>
-                    <td th:text="${container.subtype.name}">Type</td>
-                    <td th:text="${container.owner.name}">Owner</td>
-                    <td th:text="${container.yard.name}">Yard</td>
-                    <td th:text="#{${statusArray[__${container.status}__].i18nKey}}">Status</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <table class="table table-striped table-hover table-condensed table-16">
+        <thead>
+            <tr>
+                <th th:text="#{container.id}">ID</th>
+                <th>BIC Code</th>
+                <th>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">  
+                            <span th:if="${subtypeId==0}" th:text="#{container.all.subtype}">All Subtype</span>
+                            <span th:unless="${subtypeId==0}" th:text="${subtypes.?[id == __${subtypeId}__][0].name}">Subtype</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=0' + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                                    th:text="#{container.all.subtype}">All Subtypes</a>
+                            </li>
+                            <li th:each="subtype : ${subtypes}">
+                                <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtype.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yardId}"
+                                    th:text="${subtype.name}">Subtype</a>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
+                
+                <th>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">  
+                            <span th:if="${ownerId==0}" th:text="#{container.all.owners}">All Owner</span>
+                            <span th:unless="${ownerId==0}" th:text="${owners.?[id == __${ownerId}__][0].name}">Owner</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
+                                    th:text="#{container.all.owners}">All Owners</a>
+                            </li>
+                            <li th:each="owner : ${owners}">
+                                <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
+                                    th:text="${owner.name}">Owner</a>
+                            </li>
+                        </ul>
+                    </div><!-- owner -->                     
+                </th>
+                
+                <th>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            <span th:if="${yardId==0}" th:text="#{container.all.yards}">All Yards</span>
+                            <span th:unless="${yardId==0}" th:text="${yards.?[id == __${yardId}__][0].name}">Yard</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
+                                    th:text="#{container.all.yards}">All Yard</a>
+                            </li>
+                            <li th:each="yard : ${yards}">
+                                <a href="#" th:href="'/container?number=' + ${page.number} + '&amp;subtypeId=' + ${subtypeId} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
+                                    th:text="${yard.name}">Yard</a>
+                            </li>
+                        </ul>
+                    </div><!-- yard -->                    
+                </th>
+                
+                <th th:text="#{status}">Status</th>
+                <th><a href="/container/form"><i class="glyphicon glyphicon-plus text-success" /></a></th>
+            </tr>
+        </thead>
+        
+        
+        <tbody th:unless="${#lists.isEmpty(page.content)}">
+            <tr th:each="container : ${page.content}">
+                <td th:text="${container.id}">ID</td>
+                <td th:text="${container.bicCode}">BIC Code</td>
+                <td th:text="${container.subtype.name}">Type</td>
+                <td th:text="${container.owner.name}">Owner</td>
+                <td th:text="${container.yard.name}">Yard</td>
+                <td th:text="#{${statusArray[__${container.status}__].i18nKey}}">Status</td>
+                <td><a th:href="'/container/' + ${container.id}"><i class="glyphicon glyphicon-edit text-info" /></a></td>
+            </tr>
+        </tbody>
+    </table>
     
-    <div id="pagination_bar" class="col-md-offset-1">
-        <ul class="pagination">
-            <li>
-                <a href="/container?number=0">&laquo;</a>
-            </li>
-            <li><a href="/container?nubmer=1" th:if="${page.hasPreviousPage()}"
-                   th:href="'/container?number=' + ${page.number - 1}"
-                   th:text="${page.number}">1</a></li>
-            <li><a href="" th:text="${page.number + 1}">2</a></li>
-            <li><a href="#" th:if="${page.hasNextPage()}"
-                   th:href="'/container?number=' + ${page.number + 1}"
-                   th:text="${page.number + 2}">3</a></li>
-            <li><a href="/container?number={totalPages}" th:href="'/container?number=' + ${page.totalPages - 1}">&raquo;</a>
-            </li>
-        </ul>
-    </div>
-</div>
-<!-- /.container -->
-
-<div id="container" class="container">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <form action="/container" method="POST" class="form-horizontal center" th:object="${container}">
-
-                <div class="form-group" th:classappend="${#fields.hasErrors('bicCode')} ? 'has-error'">
-                    <label class="col-lg-3 control-label">BIC Code *</label>
-
-                    <div class="col-lg-9">
-                        <input type="text" th:field="*{bicCode}" class="form-control"/>
-                    </div>
-
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <span class="help-inline" th:errors="*{bicCode}">error</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-lg-3 control-label" th:text="#{container.owner} + ' *'">Owner</label>
-
-                    <div class="col-lg-9">
-                        <select th:field="*{ownerId}" class="form-control">
-                            <option th:each="owner : ${owners}"
-                                    th:value="${owner.id}"
-                                    th:text="${owner.name}">Owner Name
-                            </option>
-                        </select>
-                    </div>
-                </div><!-- Owner -->
-
-                <!--
-                <div class="form-group">
-                    <label class="col-lg-3 control-label" th:text="#{container.type}">Owner</label>
-
-                    <div class="col-lg-9">
-                        <select th:field="*{type}" class="form-control">
-                            <option th:each="containerType : ${containerTypes}"
-                                    th:value="${containerType.type}"
-                                    th:text="${containerType.name}">Type
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                -->
-
-                <div class="form-group">
-                    <label class="col-lg-3 control-label" th:text="#{container.subtype}">Container Subtype</label>
-                    
-                    <div class="col-lg-9">
-                        <select th:field="*{subtypeId}" class="form-control">
-                            <option th:each="subtype : ${containerSubtypes}"
-                                    th:value="${subtype.id}"
-                                    th:text="${subtype.name}">Container Subtype Name
-                            </option>
-                        </select>
-                    </div>
-                </div>
-        
-                <div class="form-group">
-                    <label class="col-lg-3 control-label" th:text="#{container.yard}">Owner</label>
-
-                    <div class="col-lg-9">
-                        <select th:field="*{yardId}" class="form-control">
-                            <option th:each="location : ${locations}"
-                                    th:value="${location.id}"
-                                    th:text="${location.name}">Location Name
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <input type="submit" name="add" value="Add Container" class="btn btn-default"
-                               th:value="#{container.add}"/>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- /.container -->
+    <div th:include="layout :: pagination_bar"></div>
+</div><!-- /.container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
