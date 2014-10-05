@@ -6,12 +6,12 @@ import liquid.domain.ContainerAllocation;
 import liquid.domain.RouteContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
+import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import liquid.shipping.service.ContainerAllocationService;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.service.ShippingContainerService;
-import liquid.service.TaskService;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.domain.ShippingContainerEntity;
 import liquid.util.CollectionUtil;
 import liquid.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ContainerAllocationFacade {
     private ShippingContainerService shippingContainerService;
 
     @Autowired
-    private TaskService taskService;
+    private OrderService orderService;
 
     @Autowired
     private RouteService routeService;
@@ -38,88 +38,95 @@ public class ContainerAllocationFacade {
     @Autowired
     private ContainerAllocationService containerAllocationService;
 
-    public ContainerAllocation computeContainerAllocation(String taskId) {
-        ContainerAllocation containerAllocation = new ContainerAllocation();
+    public List<RouteContainerAllocation> computeContainerAllocation(Long orderId) {
+        OrderEntity order = orderService.find(orderId);
+        return computeContainerAllocation(order);
+    }
 
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+    public List<RouteContainerAllocation> computeContainerAllocation(OrderEntity order) {
+        List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
+
         int type = order.getContainerType();
         String subtypeName = order.getContainerSubtype().getName();
 
         Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
-
-        List<RouteContainerAllocation> routeContainerAllocations = null;
-        if (ContainerType.RAIL.getType() == type)
-            routeContainerAllocations = computeRailContainerAllocations(type, subtypeName, routes);
-        else
-            routeContainerAllocations = computeSelfContainerAllocations(type, subtypeName, routes);
-
-        containerAllocation.setRoutes(routes);
-        containerAllocation.setType(type);
-        containerAllocation.setRouteContainerAllocations(routeContainerAllocations.toArray(new RouteContainerAllocation[0]));
-        return containerAllocation;
-    }
-
-    private List<RouteContainerAllocation> computeSelfContainerAllocations(int type, String subtypeName, Iterable<RouteEntity> routes) {
-        List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
         for (RouteEntity route : routes) {
-            List<ShippingContainerEntity> shippingContainers = route.getContainers();
-            int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
-            for (int j = 0; j < allocatedQuantity; j++) {
-                RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-                ShippingContainerEntity shippingContainer = shippingContainers.get(j);
-                if (null != shippingContainer.getContainer()) {
-                    routeContainerAllocation.setAllocationId(shippingContainer.getId());
-                    routeContainerAllocation.setRouteId(route.getId());
-                    routeContainerAllocation.setTypeNameKey(ContainerType.toMap().get(type));
-                    routeContainerAllocation.setSubtypeName(subtypeName);
-
-                    routeContainerAllocation.setContainerId(shippingContainers.get(j).getContainer().getId());
-                    routeContainerAllocation.setBicCode(shippingContainers.get(j).getContainer().getBicCode());
-                    routeContainerAllocation.setOwner(shippingContainers.get(j).getContainer().getOwner().getName());
-                    routeContainerAllocation.setYard(shippingContainers.get(j).getContainer().getYard().getName());
-                    routeContainerAllocations.add(routeContainerAllocation);
-                }
+            RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
+            routeContainerAllocation.setRoute(route);
+            routeContainerAllocation.setType(type);
+            List<ContainerAllocation> containerAllocations = null;
+            if (ContainerType.RAIL.getType() == type) {
+                containerAllocations = computeRailContainerAllocations(subtypeName, route);
+            } else {
+                containerAllocations = computeSelfContainerAllocations(subtypeName, route);
             }
+            routeContainerAllocation.setContainerAllocations(containerAllocations);
+            routeContainerAllocations.add(routeContainerAllocation);
         }
+
         return routeContainerAllocations;
     }
 
-    private List<RouteContainerAllocation> computeRailContainerAllocations(int type, String subtypeName, Iterable<RouteEntity> routes) {
-        List<RouteContainerAllocation> routeContainerAllocations = new ArrayList<>();
-        for (RouteEntity route : routes) {
-            List<ShippingContainerEntity> shippingContainers = route.getContainers();
-            int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
-            for (int j = 0; j < allocatedQuantity; j++) {
-                RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-                routeContainerAllocation.setAllocationId(shippingContainers.get(j).getId());
-                routeContainerAllocation.setRouteId(route.getId());
-                routeContainerAllocation.setTypeNameKey(ContainerType.toMap().get(type));
-                routeContainerAllocation.setSubtypeName(subtypeName);
-                routeContainerAllocation.setBicCode(shippingContainers.get(j).getBicCode());
-                routeContainerAllocations.add(routeContainerAllocation);
-            }
-            for (int j = allocatedQuantity; j < route.getContainerQty(); j++) {
-                RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-                routeContainerAllocation.setRouteId(route.getId());
-                routeContainerAllocation.setTypeNameKey(ContainerType.toMap().get(type));
-                routeContainerAllocation.setSubtypeName(subtypeName);
-                routeContainerAllocation.setBicCode("");
-                routeContainerAllocations.add(routeContainerAllocation);
+    public List<ContainerAllocation> computeSelfContainerAllocations(String subtypeName, RouteEntity route) {
+        List<ContainerAllocation> containerAllocations = new ArrayList<>();
+
+        List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
+        int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
+        for (int j = 0; j < allocatedQuantity; j++) {
+            ContainerAllocation containerAllocation = new ContainerAllocation();
+            ShippingContainerEntity shippingContainer = shippingContainers.get(j);
+            if (null != shippingContainer.getContainer()) {
+                containerAllocation.setAllocationId(shippingContainer.getId());
+                containerAllocation.setRouteId(route.getId());
+                containerAllocation.setTypeNameKey(ContainerType.SELF.getI18nKey());
+                containerAllocation.setSubtypeName(subtypeName);
+
+                containerAllocation.setContainerId(shippingContainers.get(j).getContainer().getId());
+                containerAllocation.setBicCode(shippingContainers.get(j).getContainer().getBicCode());
+                containerAllocation.setOwner(shippingContainers.get(j).getContainer().getOwner().getName());
+                containerAllocation.setYard(shippingContainers.get(j).getContainer().getYard().getName());
+                containerAllocations.add(containerAllocation);
             }
         }
-        return routeContainerAllocations;
+
+        return containerAllocations;
     }
 
-    public void allocate(ContainerAllocation containerAllocation) {
-        RouteContainerAllocation[] routeContainerAllocations = containerAllocation.getRouteContainerAllocations();
+    private List<ContainerAllocation> computeRailContainerAllocations(String subtypeName, RouteEntity route) {
+        List<ContainerAllocation> containerAllocations = new ArrayList<>();
+        List<ShippingContainerEntity> shippingContainers = route.getContainers();
+        int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
+        for (int j = 0; j < allocatedQuantity; j++) {
+            ContainerAllocation containerAllocation = new ContainerAllocation();
+            containerAllocation.setAllocationId(shippingContainers.get(j).getId());
+            containerAllocation.setRouteId(route.getId());
+            containerAllocation.setTypeNameKey(ContainerType.RAIL.getI18nKey());
+            containerAllocation.setSubtypeName(subtypeName);
+            containerAllocation.setBicCode(shippingContainers.get(j).getBicCode());
+            containerAllocations.add(containerAllocation);
+        }
+        for (int j = allocatedQuantity; j < route.getContainerQty(); j++) {
+            ContainerAllocation containerAllocation = new ContainerAllocation();
+            containerAllocation.setRouteId(route.getId());
+            containerAllocation.setTypeNameKey(ContainerType.RAIL.getI18nKey());
+            containerAllocation.setSubtypeName(subtypeName);
+            containerAllocation.setBicCode("");
+            containerAllocations.add(containerAllocation);
+        }
+        return containerAllocations;
+    }
+
+    public void allocate(RouteContainerAllocation routeContainerAllocation) {
+        List<ContainerAllocation> containerAllocations = routeContainerAllocation.getContainerAllocations();
 
         List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
-        for (int i = 0; i < routeContainerAllocations.length; i++) {
+        for (int i = 0; i < containerAllocations.size(); i++) {
+            ContainerAllocation containerAllocation = containerAllocations.get(i);
             ShippingContainerEntity shippingContainer = new ShippingContainerEntity();
-            shippingContainer.setId(routeContainerAllocations[i].getAllocationId());
-            if (!StringUtil.valid(routeContainerAllocations[i].getBicCode())) shippingContainer.setBicCode("");
-            shippingContainer.setRoute(RouteEntity.newInstance(RouteEntity.class, routeContainerAllocations[i].getRouteId()));
-            shippingContainer.setBicCode(routeContainerAllocations[i].getBicCode());
+            shippingContainer.setId(containerAllocation.getAllocationId());
+            if (!StringUtil.valid(containerAllocation.getBicCode())) shippingContainer.setBicCode("");
+            shippingContainer.setRoute(RouteEntity.newInstance(RouteEntity.class, containerAllocation.getRouteId()));
+            shippingContainer.setBicCode(containerAllocation.getBicCode());
 
             shippingContainers.add(shippingContainer);
         }
@@ -130,9 +137,10 @@ public class ContainerAllocationFacade {
     public void allocate(SelfContainerAllocation selfContainerAllocation) {
         RouteEntity route = routeService.find(selfContainerAllocation.getRouteId());
 
-        List<ShippingContainerEntity> shippingContainers = route.getContainers();
+        List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(selfContainerAllocation.getRouteId());
         if (CollectionUtil.isEmpty(shippingContainers))
             shippingContainers = new ArrayList<ShippingContainerEntity>();
+
         for (int i = shippingContainers.size(); i < route.getContainerQty(); i++) {
             ShippingContainerEntity shippingContainer = new ShippingContainerEntity();
             shippingContainer.setRoute(route);

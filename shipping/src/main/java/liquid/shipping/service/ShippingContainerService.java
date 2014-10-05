@@ -39,9 +39,6 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     private ContainerService containerService;
 
     @Autowired
-    private ShippingContainerRepository scRepository;
-
-    @Autowired
     private RailContainerRepository rcRepository;
 
     @Autowired
@@ -66,6 +63,10 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         return routeService.findByOrderId(orderId);
     }
 
+    public List<ShippingContainerEntity> findByRouteId(Long routeId) {
+        return repository.findByRouteId(routeId);
+    }
+
     @Transactional("transactionManager")
     public void initialize(Long orderId) {
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
@@ -80,13 +81,13 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
                     container.setUpdateTime(new Date());
                     containers.add(container);
                 }
-                scRepository.save(containers);
+                repository.save(containers);
             }
         }
     }
 
     public ShippingContainerEntity find(long scId) {
-        return scRepository.findOne(scId);
+        return repository.findOne(scId);
     }
 
     @Transactional("transactionManager")
@@ -101,7 +102,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
         ContainerEntity containerEntity = containerService.find(formBean.getContainerId());
         formBean.setContainer(containerEntity);
-        scRepository.save(formBean);
+        repository.save(formBean);
 
         containerEntity.setStatus(ContainerStatus.ALLOCATED.getValue());
         containerService.save(containerEntity);
@@ -109,9 +110,9 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     @Transactional("transactionManager")
     public void remove(long scId) {
-        ShippingContainerEntity sc = scRepository.findOne(scId);
+        ShippingContainerEntity sc = repository.findOne(scId);
         ContainerEntity containerEntity = sc.getContainer();
-        scRepository.delete(scId);
+        repository.delete(scId);
 
         if (null != containerEntity) {
             containerEntity.setStatus(ContainerStatus.IN_STOCK.getValue());

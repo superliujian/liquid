@@ -1,94 +1,41 @@
 package liquid.domain;
 
+import liquid.shipping.persistence.domain.RouteEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by redbrick9 on 5/20/14.
  */
 public class RouteContainerAllocation {
-    private Long allocationId;
+    private int type;
 
-    private long routeId;
+    private RouteEntity route;
 
-    private String typeNameKey;
+    protected List<ContainerAllocation> containerAllocations = new ArrayList<>();
 
-    private String subtypeName;
-
-    /**
-     * For the rail container.
-     */
-    private String bicCode;
-
-    /**
-     * For the non rail container.
-     */
-    private Long containerId;
-
-    private String owner;
-
-    private String yard;
-
-    public RouteContainerAllocation() {}
-
-    public Long getAllocationId() {
-        return allocationId;
+    public int getType() {
+        return type;
     }
 
-    public void setAllocationId(Long allocationId) {
-        this.allocationId = allocationId;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public long getRouteId() {
-        return routeId;
+    public RouteEntity getRoute() {
+        return route;
     }
 
-    public void setRouteId(long routeId) {
-        this.routeId = routeId;
+    public void setRoute(RouteEntity route) {
+        this.route = route;
     }
 
-    public String getTypeNameKey() {
-        return typeNameKey;
+    public List<ContainerAllocation> getContainerAllocations() {
+        return containerAllocations;
     }
 
-    public void setTypeNameKey(String typeNameKey) {
-        this.typeNameKey = typeNameKey;
-    }
-
-    public String getSubtypeName() {
-        return subtypeName;
-    }
-
-    public void setSubtypeName(String subtypeName) {
-        this.subtypeName = subtypeName;
-    }
-
-    public String getBicCode() {
-        return bicCode;
-    }
-
-    public void setBicCode(String bicCode) {
-        this.bicCode = bicCode;
-    }
-
-    public Long getContainerId() {
-        return containerId;
-    }
-
-    public void setContainerId(Long containerId) {
-        this.containerId = containerId;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getYard() {
-        return yard;
-    }
-
-    public void setYard(String yard) {
-        this.yard = yard;
+    public void setContainerAllocations(List<ContainerAllocation> containerAllocations) {
+        this.containerAllocations = containerAllocations;
     }
 }

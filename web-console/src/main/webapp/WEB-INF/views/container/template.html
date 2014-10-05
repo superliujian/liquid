@@ -4,8 +4,7 @@
 
 <body>
 
-<div th:fragment="form">
-    <form action="/container" method="POST" class="form-horizontal center" th:object="${containers}">
+<div th:fragment="table-input">
         <table class="table table-striped table-hover table-condensed table-16">
             <thead>
                 <tr>
@@ -47,7 +46,12 @@
                     </td>
                 </tr>         
             </tbody>    
-        </table>  
+        </table> 
+</div>
+
+<div th:fragment="form">
+    <form action="/container" method="POST" class="form-horizontal center" th:object="${containers}">
+        <div th:include=":: table-input" />
         
         <div class="row">
             <div class="col-xs-3 pull-right">

@@ -8,11 +8,17 @@ public class Container {
 
     private String bicCode;
 
-    private long ownerId;
+    private Long ownerId;
 
-    private long subtypeId;
+    private String owner;
 
-    private long yardId;
+    private Long subtypeId;
+
+    private String subtype;
+
+    private Long yardId;
+
+    private String yard;
 
     public Long getId() {
         return id;
@@ -30,39 +36,65 @@ public class Container {
         this.bicCode = bicCode;
     }
 
-    public long getOwnerId() {
+    public Long getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(long ownerId) {
+    public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
     }
 
-    public long getSubtypeId() {
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public Long getSubtypeId() {
         return subtypeId;
     }
 
-    public void setSubtypeId(long subtypeId) {
+    public void setSubtypeId(Long subtypeId) {
         this.subtypeId = subtypeId;
     }
 
-    public long getYardId() {
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
+
+    public Long getYardId() {
         return yardId;
     }
 
-    public void setYardId(long yardId) {
+    public void setYardId(Long yardId) {
         this.yardId = yardId;
+    }
+
+    public String getYard() {
+        return yard;
+    }
+
+    public void setYard(String yard) {
+        this.yard = yard;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Container{");
-        sb.append("super=").append(super.toString());
-        sb.append(", id=").append(id);
+        sb.append("id=").append(id);
         sb.append(", bicCode='").append(bicCode).append('\'');
         sb.append(", ownerId=").append(ownerId);
+        sb.append(", owner='").append(owner).append('\'');
         sb.append(", subtypeId=").append(subtypeId);
+        sb.append(", subtype='").append(subtype).append('\'');
         sb.append(", yardId=").append(yardId);
+        sb.append(", yard='").append(yard).append('\'');
         sb.append('}');
         return sb.toString();
     }

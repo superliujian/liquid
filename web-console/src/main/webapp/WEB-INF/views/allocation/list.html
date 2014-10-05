@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div th:include="layout :: head"></div>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div th:include="allocation/template :: console-header"></div>
+
+<div class="container" id="t">
+    <span th:text="#{container.list}">Container List</span>
+    
+    <div class="pull-right">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                <span th:if="${ownerId==0}" th:text="#{container.all.owners}">All Owner</span>
+                <span th:unless="${ownerId==0}" th:text="${owners.?[id == __${ownerId}__][0].name}">Owner</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
+                        th:text="#{container.all.owners}">All Owners</a>
+                </li>
+                <li th:each="owner : ${owners}">
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
+                        th:text="${owner.name}">Owner</a>
+                </li>
+            </ul>
+        </div><!-- owner -->
+        
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                <span th:if="${yardId==0}" th:text="#{container.all.yards}">All Yards</span>
+                <span th:unless="${yardId==0}" th:text="${yards.?[id == __${yardId}__][0].name}">Yard</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
+                        th:text="#{container.all.yards}">All Yard</a>
+                </li>
+                <li th:each="yard : ${yards}">
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
+                        th:text="${yard.name}">Yard</a>
+                </li>
+            </ul>
+        </div><!-- yard -->
+    </div>         
+
+
+    <form method="post" th:action="'/task/' + ${taskId} + '/allocation'" th:object="${selfContainerAllocation}">
+        <input type="hidden" th:field="*{routeId}"/>
+        <table class="table table-striped table-hover table-condensed table-16">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>BIC Code</th>
+                    <th th:text="#{container.owner}">Owner</th>
+                    <th th:text="#{container.yard}">Yard</th>
+                    <th th:text="#{container.subtype}">Subtype</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="container, rowStat: ${page.content}">
+                    <td><input type="checkbox" th:value="${container.id}" th:field="*{containerIds}"/></td>
+                    <td><b><span th:text="${container.bicCode}">BIC Code</span></b></td>
+                    <td><span th:text="${container.owner.name}">Owner Name</span></td>
+                    <td><span th:text="${container.yard.name}">Yard Name</span></td>
+                    <td><span th:text="${container.subtype.name}">Subtype Name</span></td>                        
+                </tr>                    
+            </tbody>
+        </table>
+        
+        <div th:include="layout :: pagination_bar"></div>
+        
+        <div class="row">
+            <div class="col-xs-10">
+                <b class="text-danger"><i class="glyphicon glyphicon-warning-sign"/>&nbsp;<span th:text="#{container.no.matched}"></span></b>
+            </div>
+
+            <div class="col-xs-2 pull-right">
+                <button type="submit" name="self" value="Allocate Container" class="btn btn-success btn-block btn-sm" th:value="#{container.allocate}">
+                    <i class="glyphicon glyphicon-arrow-down"/>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:include="allocation/template :: console-separator"></div>
+
+<div th:include="allocation/template :: console-result"></div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>       
+
+</html>

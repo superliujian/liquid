@@ -4,9 +4,9 @@ import liquid.container.domain.Container;
 import liquid.container.domain.Containers;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
+import liquid.container.service.ContainerService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.container.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class ContainerFacade {
     @Autowired
     private ContainerService containerService;
 
-    public void enter(Containers containers) {
+    public Iterable<ContainerEntity> enter(Containers containers) {
         List<ContainerEntity> entities = new ArrayList<>();
 
         for (int i = 0; i < containers.getList().size(); i++) {
@@ -39,7 +39,7 @@ public class ContainerFacade {
             entities.add(containerEntity);
         }
 
-        containerService.save(entities);
+        return containerService.save(entities);
     }
 
     public void leave(Container container) {}
@@ -52,6 +52,12 @@ public class ContainerFacade {
             Container container = new Container();
             container.setId(entity.getId());
             container.setBicCode(entity.getBicCode());
+            container.setOwnerId(entity.getOwner().getId());
+            container.setOwner(entity.getOwner().getName());
+            container.setSubtypeId(entity.getSubtype().getId());
+            container.setSubtype(entity.getSubtype().getName());
+            container.setYardId(entity.getYard().getId());
+            container.setYard(entity.getYard().getName());
             containers.add(container);
         }
 

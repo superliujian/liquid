@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -32,15 +33,23 @@ public class ContainerSubtypeController {
         return ContainerType.toMap();
     }
 
-    @ModelAttribute("containerSubtypes")
-    public Iterable<ContainerSubtypeEntity> findAll() {
-        return containerSubtypeService.findEnabled();
-    }
-
     @RequestMapping(method = RequestMethod.GET)
     public String init(Model model) {
-        model.addAttribute("containerSubtype", new ContainerSubtypeEntity());
+        model.addAttribute("containerSubtypes", containerSubtypeService.findEnabled());
         return "data_dict/container_subtype";
+    }
+
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    public String initForm(Model model) {
+        model.addAttribute("containerSubtype", new ContainerSubtypeEntity());
+        return "data_dict/container_subtype_form";
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String initEdit(@PathVariable Long id, Model model) {
+        ContainerSubtypeEntity containerSubtype = containerSubtypeService.find(id);
+        model.addAttribute("containerSubtype", containerSubtype);
+        return "data_dict/container_subtype_form";
     }
 
     @RequestMapping(method = RequestMethod.POST)

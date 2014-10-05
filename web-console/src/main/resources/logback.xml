@@ -45,6 +45,21 @@
         </encoder>
     </appender>
 
+    <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>log/sql.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="ACTIVITI" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>log/activiti.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -91,6 +106,10 @@
 
     <logger name="org.hibernate" level="DEBUG" additivity="false">
         <appender-ref ref="HIBERNATE"/>
+    </logger>
+
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL"/>
     </logger>
 
     <logger name="org.activiti" level="DEBUG" additivity="false">

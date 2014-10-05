@@ -24,7 +24,7 @@
             <th th:text="#{contact}">Contact</th>
             <th th:text="#{phone}">Phone</th>
             <th th:text="#{cell}">Cell</th>
-            <th><a href="/customer/form"><i class="glyphicon glyphicon-plus text-success" /></a></th>            
+            <th><a href="/customer/form"><i class="glyphicon glyphicon-plus text-success" /></a></th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
             <td th:text="${customer.contact}">Contact</td>
             <td th:text="${customer.phone}">Phone</td>
             <td th:text="${customer.cell}">Cell</td>
-            <td><a th:href="'/customer/' + ${customer.id}"><i class="glyphicon glyphicon-edit text-primary"/></a></td>            
+            <td><a th:href="'/customer/' + ${customer.id}"><i class="glyphicon glyphicon-edit text-primary"/></a></td>
         </tr>
         </tbody>
     </table>

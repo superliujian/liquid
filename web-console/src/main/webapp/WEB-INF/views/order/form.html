@@ -445,7 +445,7 @@
 /*<![CDATA[*/
     $(document).ready(function() {
         var customers = initCustomerAc();
-        $('#customerName').acWithTemplate(customers, 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
+        $('#customerName').acWithTemplate(customers, 'name', 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
 
         var cities = initCitiesAc();
         $('#origination').autoComplete(cities, 'originId');

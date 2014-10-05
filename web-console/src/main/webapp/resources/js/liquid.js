@@ -10,6 +10,7 @@ function initAcEngine(uri) {
     return dataset;
 }
 
+// ac stands for auto completion
 function initCustomerAc() {
     return initAcEngine('/api/customer?name=%QUERY');
 }
@@ -30,14 +31,20 @@ function initPortsAc() {
     return initAcEngine('/api/location?type=2&name=%QUERY');
 }
 
+function initContainersAc() {
+    return initAcEngine('/api/container?bicCode=%QUERY');
+}
+
+
 $.fn.extend({
+    // hiddenId is mached by name and used to build the real input.
     autoComplete: function(dataset, hiddenId) {
-        this.acWithTemplate(dataset, hiddenId, '<p><strong>{{name}}</strong></p>');
+        this.acWithTemplate(dataset, "name", hiddenId, '<p><strong>{{name}}</strong></p>');
     },
-    acWithTemplate: function(dataset, hiddenId, template) {
+    acWithTemplate: function(dataset, displayKey, hiddenId, template) {
         this.typeahead(null, {
           name: this.attr('id'),
-          displayKey: 'name',
+          displayKey: displayKey,
           source: dataset.ttAdapter(),
           templates: {
             suggestion: Handlebars.compile(template)

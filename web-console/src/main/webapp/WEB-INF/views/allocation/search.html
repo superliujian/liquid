@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div th:include="layout :: head"></div>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div th:include="allocation/template :: console-header"></div>
+
+<div class="container" id="t">
+    <form method="post" th:action="'/task/' + ${taskId} + '/allocation/search'" th:object="${searchContainerAllocForm}">                
+        <input type="hidden" th:field="*{routeId}"/>
+        <input type="hidden" th:field="*{containerId}"/> 
+        <div class="row">
+            <div class="col-xs-10">
+                <div class="form-group">
+                <input type="text" th:field="*{bicCode}" class="form-control input-sm" />
+                </div>
+            </div>
+            
+            <div class="col-xs-2 pull-right">
+                <button class="btn btn-success btn-block btn-sm" type="submit" name="self"><i class="glyphicon glyphicon-arrow-down"/></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:include="allocation/template :: console-separator"></div>
+
+<div th:include="allocation/template :: console-result"></div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body> 
+
+<script>
+    $(document).ready(function() {    
+        var containers = initContainersAc();
+        $('#bicCode').acWithTemplate(containers, 'bicCode', 'containerId', '<p><strong>{{bicCode}}</strong> <span class="label label-success">{{owner}}</span> <strong>{{subtype}}</strong> <span>{{yard}}</span></p>');      
+    }); // ready end
+    
+    $(".tt-hint").addClass("form-control"); 
+</script>
+
+</html>
+

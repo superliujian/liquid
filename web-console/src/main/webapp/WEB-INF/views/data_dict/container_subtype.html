@@ -9,9 +9,11 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br/>
-
-<div class="container">
+<div id="t" class="container">
+    <h3><span th:text="#{container.subtype}"></span></h3>
+    
+    <hr />
+    
     <table class="table table-striped table-hover table-condensed table-16" th:unless="${#lists.isEmpty(containerSubtypes)}">
         <thead>
         <tr>
@@ -22,10 +24,11 @@
             <th th:text="#{container.subtype.code}">Code</th>
             <th th:text="#{container.subtype.name}">Name</th>
             <th th:text="#{status}">State</th>
+            <th><a href="/data_dict/container_subtype/form"><i class="glyphicon glyphicon-plus text-success" /></a></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="containerSubtype : ${containerSubtypes}">
+        <tr th:each="containerSubtype: ${containerSubtypes}">
             <!--
             <td th:text="${serviceType.id}">ID</td>
             -->
@@ -36,60 +39,15 @@
                 <i th:unless="${containerSubtype.state}" class="glyphicon glyphicon-ok"/>
                 <i th:if="${containerSubtype.state}" class="glyphicon glyphicon-ban-circle"/>                
             </td>
+            <td>
+                <a th:href="'/data_dict/container_subtype/' + ${containerSubtype.id}">
+                    <i class="glyphicon glyphicon-edit text-primary"/>
+                </a>           
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
-
-<div class="container">
-    <form action="/data_dict/container_subtype" method="POST" th:object="${containerSubtype}" class="form-horizontal center">
-        <div class="form-group">
-            <label class="col-lg-3 control-label" th:text="#{container.type}">Container Type</label>
-            
-            <div class="col-lg-9">
-                <ul class="list-inline">
-                    <li th:each="containerType : ${containerTypeMap}">
-                        <input type="radio" th:field="*{containerType}" th:value="${containerType.key}"/>
-                        <label th:for="${#ids.prev('containerType')}"
-                               th:text="#{${containerType.value}}">Container Type</label>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="form-group" th:classappend="${#fields.hasErrors('code')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{container.subtype.code}">Code</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{code}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{name}">error</span>
-            </div>
-        </div>
-
-        <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
-            <label class="col-lg-3 control-label" th:text="#{container.subtype.name}">Name</label>
-
-            <div class="col-lg-9">
-                <input type="text" th:field="*{name}" class="form-control"/>
-            </div>
-
-            <div class="col-lg-offset-3 col-lg-9">
-                <span th:errors="*{name}">error</span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-lg-offset-3 col-lg-9">
-                <input type="submit" value="Add Container Subtype" class="btn btn-default"
-                       th:value="#{container.subtype.add}"/>
-            </div>
-        </div>
-    </form>
-</div>
-<!-- /.container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>

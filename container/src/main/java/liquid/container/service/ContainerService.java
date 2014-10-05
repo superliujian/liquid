@@ -1,6 +1,7 @@
 package liquid.container.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import liquid.container.domain.Container;
 import liquid.container.domain.ContainerStatus;
 import liquid.container.domain.ExcelFileInfo;
 import liquid.container.persistence.domain.ContainerEntity;
@@ -115,8 +116,8 @@ public class ContainerService {
         containerRepository.save(containerEntity);
     }
 
-    public void save(List<ContainerEntity> containers) {
-        containerRepository.save(containers);
+    public Iterable<ContainerEntity> save(List<ContainerEntity> containers) {
+        return containerRepository.save(containers);
     }
 
     public void importExcel(String fileName) throws IOException {

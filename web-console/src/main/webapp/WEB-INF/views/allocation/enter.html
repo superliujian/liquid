@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div th:include="layout :: head"></div>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div th:include="allocation/template :: console-header"></div>
+
+<div class="container" id="t">
+    <form th:action="'/task/' + ${taskId} + '/allocation/enter'" method="POST" class="form-horizontal center" th:object="${containers}">
+        <div th:include="container/template :: table-input" />
+        
+        <div class="row">
+            <div class="col-xs-3 pull-right">
+                <input type="hidden" th:field="*{routeId}" />
+                <button class="btn btn-success btn-block btn-sm" type="submit" name="self"><i class="glyphicon glyphicon-arrow-down"/></button>
+            </div>
+        </div>        
+    </form>
+</div>
+
+<div th:include="allocation/template :: console-separator"></div>
+
+<div th:include="allocation/template :: console-result"></div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+</body>
+
+</html>
+
