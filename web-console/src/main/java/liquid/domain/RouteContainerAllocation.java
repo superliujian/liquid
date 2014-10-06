@@ -11,6 +11,8 @@ import java.util.List;
 public class RouteContainerAllocation {
     private int type;
 
+    private Long routeId;
+
     private RouteEntity route;
 
     protected List<ContainerAllocation> containerAllocations = new ArrayList<>();
@@ -21,6 +23,14 @@ public class RouteContainerAllocation {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Long getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
     }
 
     public RouteEntity getRoute() {

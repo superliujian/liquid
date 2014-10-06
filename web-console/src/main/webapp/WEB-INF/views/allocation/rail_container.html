@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#f.container {
-            max-width: 800px;
-        }
-    </style>    
+    <div th:include="layout :: head"></div>   
 </head>
 
 <body>
@@ -18,62 +13,11 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<div class="container">
-    <div th:if="${alert}" class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <span th:text="${alert}">Alert</span>
-    </div>
+<div th:if="${task.assignee}" th:each="routeContainerAllocation : ${routeContainerAllocations}">
+    <div th:include="allocation/template :: rail-console-header"></div>
+    
+    <div th:include="allocation/template :: rail-allocated-table"></div>
 </div>
-
-<div id="f" class="container" th:if="${task.assignee}">
-    <div th:unless="${#lists.isEmpty(containerAllocation.routeContainerAllocations)}">
-        <form method="post" action="#" 
-              th:action="'/task/' + ${taskId} + '/allocation'" 
-              th:object="${containerAllocation}" > 
-        <div class="panel panel-default">   
-            <div class="panel-heading" th:text="#{container.list}">Container List</div>
-               
-            <div class="panel-body">
-                <table class="table table-striped table-hover table-condensed table-16">
-                    <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th th:text="#{route}">Route</th>
-                        <th th:text="#{container.type}">Container Type</th>
-                        <th th:text="#{container.subtype}">Container Subtype</th>
-                        <th>BIC Code</th>                        
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="routeContainerAllocation, rowStat: *{routeContainerAllocations}">
-                        <input type="hidden" th:field="*{routeContainerAllocations[__${rowStat.index}__].allocationId}" />
-                        <input type="hidden" th:field="*{routeContainerAllocations[__${rowStat.index}__].routeId}" /> 
-                        <td th:text="${rowStat.index + 1}">Seq</td>
-                        <td th:text="${routeContainerAllocation.routeId}">Route ID</td>
-                        <td th:text="#{${routeContainerAllocation.typeNameKey}}">Type Name</td>
-                        <td th:text="${routeContainerAllocation.subtypeName}">Subtype Name</td>
-                        <td>
-                            <input type="text" th:field="*{routeContainerAllocations[__${rowStat.index}__].bicCode}" class="form-control input-sm" />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>                             
-            </div>   
-               
-            <div class="panel-footer">
-                <div class="row">
-                <div class="col-lg-3">
-                <input type="submit" name="allocate" value="Allocate Container" class="btn btn-success btn-block btn-sm"
-                       th:value="#{container.allocate}"/>
-                </div>
-                </div>
-            </div>      
-        </div>
-        <!-- /.panel --> 
-        </form>  
-    </div>   
-</div>
-<!-- /.container -->
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
