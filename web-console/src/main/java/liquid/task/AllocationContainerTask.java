@@ -24,7 +24,7 @@ public class AllocationContainerTask extends AbstractTaskProxy {
         // TODO: This is temp solution for dual-allocated containers.
         List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> scs = route.getContainers();
+            Collection<ShippingContainerEntity> scs = shippingContainerService.findByRouteId(route.getId());
             shippingContainerQuantity += scs.size();
 
             // TODO: This is temp solution for dual-allocated containers.

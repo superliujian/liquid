@@ -23,7 +23,7 @@ public class FeedContainerNoTask extends AbstractTaskProxy {
         int allocatedContainerQuantity = 0;
 
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> scs = route.getContainers();
+            Collection<ShippingContainerEntity> scs = shippingContainerService.findByRouteId(route.getId());
             for (ShippingContainerEntity shippingContainer : scs) {
                 if (null != shippingContainer.getContainer() || null != shippingContainer.getBicCode()) {
                     allocatedContainerQuantity++;

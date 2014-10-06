@@ -74,6 +74,9 @@ public class AllocationController extends BaseTaskController {
     @Autowired
     private ContainerAllocationFacade containerAllocationFacade;
 
+    @Autowired
+    private ShippingContainerService shippingContainerService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
@@ -297,9 +300,10 @@ public class AllocationController extends BaseTaskController {
 
         // Set up pickup contact and his phone by default
         RouteEntity route = routeService.find(routeId);
-        Collection<ShippingContainerEntity> scs = route.getContainers();
-        if (scs.iterator().hasNext()) {
-            ShippingContainerEntity firstOne = scs.iterator().next();
+        List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
+
+        if (shippingContainers.iterator().hasNext()) {
+            ShippingContainerEntity firstOne = shippingContainers.iterator().next();
             sc.setPickupContact(firstOne.getPickupContact());
             sc.setContactPhone(firstOne.getContactPhone());
         }

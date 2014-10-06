@@ -59,10 +59,6 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     @Override
     public void doSaveBefore(ShippingContainerEntity entity) { }
 
-    public Iterable<RouteEntity> findByOrderId(Long orderId) {
-        return routeService.findByOrderId(orderId);
-    }
-
     public List<ShippingContainerEntity> findByRouteId(Long routeId) {
         return repository.findByRouteId(routeId);
     }
@@ -71,7 +67,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     public void initialize(Long orderId) {
         Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
         for (RouteEntity route : routes) {
-            Collection<ShippingContainerEntity> containers = route.getContainers();
+            Collection<ShippingContainerEntity> containers = findByRouteId(route.getId());
             if (null == containers) containers = new ArrayList<>();
             if (containers.size() == 0) {
                 for (int i = 0; i < route.getContainerQty(); i++) {
@@ -132,7 +128,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         for (RouteEntity route : routes) {
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainerEntity sc : route.getContainers()) {
+                List<ShippingContainerEntity> shippingContainers = findByRouteId(route.getId());
+                for (ShippingContainerEntity sc : shippingContainers) {
                     RailContainerEntity rc = new RailContainerEntity();
                     rc.setOrder(route.getOrder());
                     rc.setRoute(route);
@@ -357,7 +354,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         for (RouteEntity route : routes) {
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
-                for (ShippingContainerEntity sc : route.getContainers()) {
+                List<ShippingContainerEntity> shippingContainers = route.getContainers();
+                for (ShippingContainerEntity sc : shippingContainers) {
                     BargeContainerEntity bc = new BargeContainerEntity();
                     bc.setOrder(route.getOrder());
                     bc.setRoute(route);
@@ -441,7 +439,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         for (RouteEntity route : routes) {
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
-                for (ShippingContainerEntity sc : route.getContainers()) {
+                List<ShippingContainerEntity> shippingContainers = findByRouteId(route.getId());
+                for (ShippingContainerEntity sc : shippingContainers) {
                     VesselContainerEntity vc = new VesselContainerEntity();
                     vc.setOrder(route.getOrder());
                     vc.setRoute(route);

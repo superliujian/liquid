@@ -29,8 +29,17 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
     @Override
     public void doSaveBefore(RouteEntity routeEntity) { }
 
+    @Transactional("transactionManager")
     public Iterable<RouteEntity> findByOrderId(Long orderId) {
-        return repository.findByOrderId(orderId);
+        Iterable<RouteEntity> routes = repository.findByOrderId(orderId);
+        for (RouteEntity route : routes) {
+            route.getContainers().size();
+            route.getRailContainers().size();
+            route.getBargeContainers().size();
+            route.getVesselContainers().size();
+            route.getDeliveryContainers();
+        }
+        return routes;
     }
 
     public RouteEntity find(Long id) {

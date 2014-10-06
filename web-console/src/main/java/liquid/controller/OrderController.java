@@ -8,7 +8,9 @@ import liquid.domain.LoadingType;
 import liquid.domain.LocationType;
 import liquid.domain.ServiceItem;
 import liquid.domain.TradeType;
-import liquid.metadata.*;
+import liquid.metadata.ChargeWay;
+import liquid.metadata.ContainerCap;
+import liquid.metadata.OrderStatus;
 import liquid.order.domain.Order;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
@@ -18,7 +20,6 @@ import liquid.security.SecurityContext;
 import liquid.service.*;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
-import liquid.shipping.service.ShippingContainerService;
 import liquid.shipping.web.domain.TransMode;
 import liquid.validation.FormValidationResult;
 import liquid.web.domain.Criterion;
@@ -80,9 +81,6 @@ public class OrderController extends BaseController {
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
-
-    @Autowired
-    private ShippingContainerService shippingContainerService;
 
     @Autowired
     private OrderFacade orderFacade;
@@ -324,7 +322,7 @@ public class OrderController extends BaseController {
                 OrderEntity orderEntity = orderService.find(id);
                 break;
             case "container":
-                Iterable<RouteEntity> routes = shippingContainerService.findByOrderId(id);
+                Iterable<RouteEntity> routes = routeService.findByOrderId(id);
                 model.addAttribute("routes", routes);
                 break;
             case "charge":

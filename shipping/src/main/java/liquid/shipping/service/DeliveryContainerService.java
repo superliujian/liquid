@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by redbrick9 on 6/10/14.
@@ -29,6 +30,9 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
 
     @Autowired
     private RouteService routeService;
+
+    @Autowired
+    private ShippingContainerService shippingContainerService;
 
     @Override
     public void doSaveBefore(DeliveryContainerEntity entity) {}
@@ -48,7 +52,8 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
         dcList = new ArrayList<DeliveryContainerEntity>();
         Iterable<RouteEntity> routes = routeService.findByOrderId(order.getId());
         for (RouteEntity route : routes) {
-            for (ShippingContainerEntity sc : route.getContainers()) {
+            List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
+            for (ShippingContainerEntity sc : shippingContainers) {
                 DeliveryContainerEntity dc = new DeliveryContainerEntity();
                 dc.setOrder(route.getOrder());
                 dc.setRoute(route);
