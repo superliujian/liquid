@@ -23,11 +23,11 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                 <li>
-                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation/list?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=0' + '&amp;yardId=' + ${yardId}"
                         th:text="#{container.all.owners}">All Owners</a>
                 </li>
                 <li th:each="owner : ${owners}">
-                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation/list?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${owner.id} + '&amp;yardId=' + ${yardId}"
                         th:text="${owner.name}">Owner</a>
                 </li>
             </ul>
@@ -41,11 +41,11 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                 <li>
-                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation/list?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=0'"
                         th:text="#{container.all.yards}">All Yard</a>
                 </li>
                 <li th:each="yard : ${yards}">
-                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
+                    <a href="#" th:href="'/task/' + ${taskId} + '/allocation/list?number=' + ${page.number} + '&amp;routeId=' + ${routeContainerAllocation.route.id} + '&amp;ownerId=' + ${ownerId} + '&amp;yardId=' + ${yard.id}"
                         th:text="${yard.name}">Yard</a>
                 </li>
             </ul>

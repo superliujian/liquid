@@ -2,8 +2,8 @@ var config = require('../config');
 var user = require('../user');
 
 user.login(config.username, config.password, function() {
-  casper.thenOpen(config.baseUrl + '/order?number=0', function() {
-    this.test.assertTextExists("发货订单 (订单号, 客户名称)", "find bar is found");
+  casper.thenOpen(config.baseUrl + '/order', function() {
+    this.test.assertTextExists("订单", "heading is found");
   });
 }); 
   
@@ -73,7 +73,7 @@ casper.waitForSelector('input[id="serviceItems2.id"]', function() {
 });
 
 casper.waitForSelector('form[action="/order"]', function() {
-  this.test.assertTextExists("发货订单 (订单号, 客户名称)", "find bar is found");
+  this.test.assertTextExists("订单", "heading is found");
 });
 
 casper.run(function() {
