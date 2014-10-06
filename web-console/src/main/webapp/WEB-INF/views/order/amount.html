@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div th:include="layout :: head"></div>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div th:include="order/template :: tab"></div>
+
+<div id="t" class="container">
+    <h4><span th:text="#{order.price.info}"></span></h4>
+    
+    <hr />
+
+    <table class="table table-striped table-hover table-condensed table-16">
+        <thead>
+        <tr>
+            <th th:text="#{service.item}">Service Item</th>
+            <th th:text="#{currency}">Unit Price</th>
+            <th th:text="#{price}">Unit Price</th>
+            <th th:text="#{comment}">Comment</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="serviceItem, rowStat : ${order.serviceItems}">
+            <td th:text="${serviceItem.serviceSubtype}"></td>
+            <td th:text="${serviceItem.currencyText}"></td>
+            <td th:text="${serviceItem.quotation}"></td>
+            <td th:text="${serviceItem.comment}"></td>
+        </tr>
+        </tbody>
+    </table>
+    
+    <hr />
+    
+    <div class="col-xs-6">
+        <label th:text="#{usd.total}">USD Total</label>
+        <span>:</span>
+        <span th:text="${order.usdTotal}"/>                   
+    </div>
+
+    <div class="col-xs-6">
+        <label th:text="#{cny.total}">CNY Total</label>
+        <span>:</span>
+        <span th:text="${order.cnyTotal}"/>
+    </div>
+</div>
+
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+
+</body>
+
+</html>

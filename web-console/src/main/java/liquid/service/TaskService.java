@@ -9,6 +9,7 @@ import liquid.task.domain.TaskBar;
 import liquid.task.service.ActivitiEngineService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
+import liquid.util.StringUtil;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,10 @@ public class TaskService {
 
         taskDto.setOrderId(orderId);
         taskDto.setOrderNo(order.getOrderNo());
-        taskDto.setPrompt(messageSource.getMessage("task.complete.prompt." + task.getTaskDefinitionKey(),
-                new Object[0], "", Locale.CHINA));
+        String prompt = messageSource.getMessage("task.complete.prompt." + task.getTaskDefinitionKey(), new Object[0], "", Locale.CHINA);
+        if (!StringUtil.valid(prompt))
+            prompt = messageSource.getMessage("task.complete.prompt.default", new Object[0], "", Locale.CHINA);
+        taskDto.setPrompt(prompt);
         return taskDto;
     }
 

@@ -333,6 +333,9 @@ public class OrderController extends BaseController {
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);
                 break;
+            case "amount":
+                tab = "amount";
+                break;
             default:
                 tab = "detail";
                 break;
