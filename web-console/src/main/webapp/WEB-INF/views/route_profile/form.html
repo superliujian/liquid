@@ -81,18 +81,23 @@
 /*<![CDATA[*/
     $(document).ready(function() {
         function initDataSet() {
-            return initAcEngine_('/api/location', function(url, query) {
-              var transportType = $('#transMode option:selected').val();
-              if(transportType == 3) 
-                return url + '?name=' + encodeURIComponent(query);
+            return initAcEngine({
+                url: '/api/location', 
+                replace: function(url, query) {
+                    // That is why we need to implement remote object in here.                
+                    var transportType = $('#transMode option:selected').val();
+                    
+                    if(transportType == 3) 
+                        return url + '?name=' + encodeURIComponent(query);
               
-              var locationType = 0;
-              if(transportType == 0)
-                locationType = 1;
-              else 
-                locationType = 2;              
+                    var locationType = 0;
+                    if(transportType == 0)
+                        locationType = 1;
+                    else 
+                        locationType = 2;              
               
-              return url + '?type=' + locationType + '&name=' + encodeURIComponent(query);
+                    return url + '?type=' + locationType + '&name=' + encodeURIComponent(query);
+                }
             });
         }
 

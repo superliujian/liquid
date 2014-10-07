@@ -62,7 +62,7 @@
 <script>
 /*<![CDATA[*/
     $(document).ready(function() {
-        var ports = initStationsAc();        
+        var stations = initLocationsAc(1);        
         $('#source').autoComplete(ports, 'sourceId');
         $('#destination').autoComplete(ports, 'destinationId');
         $(".tt-hint").addClass("form-control"); 

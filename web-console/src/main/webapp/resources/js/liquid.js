@@ -1,24 +1,9 @@
-function initAcEngine(uri) {  
+function initAcEngine(r) {  
     var dataset = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,  
         limit: 10,
-        remote: uri
-    });
-    
-    dataset.initialize();
-    return dataset;
-}
-
-function initAcEngine_(_url, _replace) {  
-    var dataset = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,  
-        limit: 10,
-        remote: {
-            url: _url,
-            replace: _replace
-        }
+        remote: r
     });
     
     dataset.initialize();
@@ -27,27 +12,20 @@ function initAcEngine_(_url, _replace) {
 
 // ac stands for auto completion
 function initCustomerAc() {
-    return initAcEngine('/api/customer?name=%QUERY');
+    return initAcEngine({url: '/api/customer?name=%QUERY'});
 }
 
-function initCitiesAc() {
-    return initAcEngine('/api/location?type=0&name=%QUERY');
-}
-
-function initStationsAc() {
-    return initAcEngine('/api/location?type=1&name=%QUERY');
-}
-
-function initPortsAc() {
-    return initAcEngine('/api/location?type=2&name=%QUERY');
-}
-
-function initPortsAc() {
-    return initAcEngine('/api/location?type=2&name=%QUERY');
+function initLocationsAc(type) {
+    return initAcEngine({ 
+        url: '/api/location',
+        replace: function(url, query) {
+            return url + '?type=' + type + '&name=' + encodeURIComponent(query);
+        }        
+    });
 }
 
 function initContainersAc() {
-    return initAcEngine('/api/container?bicCode=%QUERY');
+    return initAcEngine({url: '/api/container?bicCode=%QUERY'});
 }
 
 $.fn.extend({
