@@ -26,7 +26,7 @@ public class CustomerService {
     }
 
     public Iterable<CustomerEntity> findByNameLike(String name) {
-        Iterable<CustomerEntity> customers = customerRepository.findByNameLike("%" + name + "%");
+        Iterable<CustomerEntity> customers = customerRepository.findByQueryNameLike("%" + name + "%");
         return customers;
     }
 

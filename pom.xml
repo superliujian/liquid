@@ -170,6 +170,7 @@
 
     <modules>
         <module>util</module>
+        <module>pinyin4j</module>
         <module>common</module>
         <module>excel</module>
         <module>user</module>
@@ -181,5 +182,6 @@
         <module>task</module>
         <module>config</module>
         <module>web-console</module>
+        <module>ops-tools</module>
     </modules>
 </project>

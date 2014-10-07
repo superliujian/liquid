@@ -24,12 +24,7 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
-            <version>${application-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>shipping</artifactId>
+            <artifactId>common</artifactId>
             <version>${application-version}</version>
         </dependency>
 

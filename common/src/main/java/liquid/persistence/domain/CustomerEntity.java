@@ -23,6 +23,9 @@ public class CustomerEntity extends BaseUpdateEntity {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "Q_NAME")
+    private String queryName;
+
     @Column(name = "ADDRESS")
     private String address;
 
@@ -52,6 +55,14 @@ public class CustomerEntity extends BaseUpdateEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
     }
 
     public String getAddress() {

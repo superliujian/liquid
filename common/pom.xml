@@ -29,6 +29,12 @@
             <version>${application-version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>${application-version}</version>
+        </dependency>
+
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>

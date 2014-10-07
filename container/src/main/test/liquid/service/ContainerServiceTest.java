@@ -1,13 +1,14 @@
 package liquid.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import liquid.container.service.ContainerService;
 import liquid.container.domain.ExcelFileInfo;
+import liquid.container.service.ContainerService;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by redbrick9 on 6/27/14.
@@ -25,13 +26,13 @@ public class ContainerServiceTest {
         ExcelFileInfo[] excelFileInfos = new ExcelFileInfo[2];
         ExcelFileInfo excelFileInfo = new ExcelFileInfo();
         excelFileInfo.setName("Test1.xlsx");
-        excelFileInfo.setModifiedDate(System.currentTimeMillis());
+        excelFileInfo.setModifiedDate(new Date());
         excelFileInfo.setState(ExcelFileInfo.State.UPLOADED);
         excelFileInfos[0] = excelFileInfo;
 
         excelFileInfo = new ExcelFileInfo();
         excelFileInfo.setName("Test2.xlsx");
-        excelFileInfo.setModifiedDate(System.currentTimeMillis());
+        excelFileInfo.setModifiedDate(new Date());
         excelFileInfo.setState(ExcelFileInfo.State.IMPORTED);
         excelFileInfos[1] = excelFileInfo;
         containerService.writeMetadata(excelFileInfos);

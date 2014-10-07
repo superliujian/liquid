@@ -18,7 +18,7 @@ public interface CustomerRepository extends CrudRepository<CustomerEntity, Long>
 
     CustomerEntity findByName(String name);
 
-    Iterable<CustomerEntity> findByNameLike(String name);
+    Iterable<CustomerEntity> findByQueryNameLike(String queryName);
 
     Page<CustomerEntity> findAll(Pageable pageable);
 }

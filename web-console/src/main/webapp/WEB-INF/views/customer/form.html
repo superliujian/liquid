@@ -82,6 +82,11 @@
                 </div>
             </div>
         </div>
+        
+        <div th:if="*{id}" class="form-group">
+            <label class="control-label"><span th:text="#{query.name}" /></label>
+            <textarea class="form-control input-sm" th:field="*{queryName}" rows="3"></textarea>
+        </div>
 
         <hr />
 

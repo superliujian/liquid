@@ -2,6 +2,7 @@ package liquid.controller;
 
 import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.repository.CustomerRepository;
+import liquid.pinyin4j.PinyinHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,10 @@ public class CustomerController extends BaseController {
         if (bindingResult.hasErrors()) {
             return "customer/form";
         } else {
+            if (null == customer.getId()) {
+                String queryName = PinyinHelper.converterToFirstSpell(customer.getName()) + ";" + customer.getName();
+                customer.setQueryName(queryName);
+            }
             customerRepository.save(customer);
             return "redirect:/customer";
         }
