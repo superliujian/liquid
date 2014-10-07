@@ -10,6 +10,8 @@ public class Leg {
     private String source;
     private Long destinationId;
     private String destination;
+    private Boolean head;
+    private Long prevId;
 
     public int getTransMode() {
         return transMode;
@@ -59,15 +61,33 @@ public class Leg {
         this.destination = destination;
     }
 
+    public Boolean getHead() {
+        return head;
+    }
+
+    public void setHead(Boolean head) {
+        this.head = head;
+    }
+
+    public Long getPrevId() {
+        return prevId;
+    }
+
+    public void setPrevId(Long prevId) {
+        this.prevId = prevId;
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Leg{");
+        final StringBuilder sb = new StringBuilder("Leg{");
         sb.append("transMode=").append(transMode);
         sb.append(", serviceProviderId=").append(serviceProviderId);
         sb.append(", sourceId=").append(sourceId);
         sb.append(", source='").append(source).append('\'');
         sb.append(", destinationId=").append(destinationId);
         sb.append(", destination='").append(destination).append('\'');
+        sb.append(", head=").append(head);
+        sb.append(", prevId=").append(prevId);
         sb.append('}');
         return sb.toString();
     }

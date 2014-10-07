@@ -10,6 +10,21 @@ function initAcEngine(uri) {
     return dataset;
 }
 
+function initAcEngine_(_url, _replace) {  
+    var dataset = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,  
+        limit: 10,
+        remote: {
+            url: _url,
+            replace: _replace
+        }
+    });
+    
+    dataset.initialize();
+    return dataset;
+}
+
 // ac stands for auto completion
 function initCustomerAc() {
     return initAcEngine('/api/customer?name=%QUERY');
@@ -34,7 +49,6 @@ function initPortsAc() {
 function initContainersAc() {
     return initAcEngine('/api/container?bicCode=%QUERY');
 }
-
 
 $.fn.extend({
     // hiddenId is mached by name and used to build the real input.

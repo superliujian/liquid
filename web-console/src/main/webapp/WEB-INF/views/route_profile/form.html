@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div th:include="layout :: head"></div>
+</head>
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+            <table class="table table-striped table-hover table-condensed table-16">
+                <thead>
+                <tr>
+                    <th><span>HEAD</span></th>
+                    <th><span th:text="#{leg.id}" /></th>
+                    <th><span th:text="#{trans.mode}" /></th>
+                    <th><span th:text="#{origination}" /></th>
+                    <th><span th:text="#{destination}" /></th>                    
+                    <th><span>PREV</span></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody >
+                <tr th:unless="${#lists.isEmpty(route.legs)}" th:each="leg : ${route.legs}">
+                    <td><span><i th:if="${leg.head}" class="glyphicon glyphicon-flag" /></span></td>                    
+                    <td><span th:text="${leg.id}" /></td>
+                    <td><span th:text="${leg.transMode}" /></td>                    
+                    <td><span th:text="${leg.srcLoc.name}" /></td>
+                    <td><span th:text="${leg.dstLoc.name}" /></td>
+                    <td><span th:text="${leg.prev} ? ${leg.prev.id} : ''" /></td>
+                    <td></td>
+                </tr>
+                
+                <tr>
+                <form method="POST" th:action="'/route_profile/' + ${route.id}" th:object="${leg}">  
+                    <td>
+                    <input type="hidden" th:field="*{head}" />
+                    <i th:if="*{head}" class="glyphicon glyphicon-flag" />
+                    </td>
+                    <td><span /></td>
+                    <td>
+            <select th:field="*{transMode}" class="form-control input-sm">
+                <option th:each="option : ${transportOptions}"
+                        th:value="${option.type}" th:text="#{${option.i18nKey}}">Transport
+                </option>
+            </select>                        
+                    </td>
+                    <td>
+                    <input type="hidden" th:field="*{sourceId}" />
+                    <input type="text" class="form-control input-sm" th:field="*{source}" />
+                    </td>
+                    <td>
+                    <input type="hidden" th:field="*{destinationId}" />
+                    <input type="text" class="form-control input-sm" th:field="*{destination}" />
+                    </td>                    
+                    <td>
+            <select th:unless="*{head}" class="form-control input-sm" th:field="*{prevId}">
+                <option th:each="option : ${route.legs}"
+                        th:value="${option.id}" th:text="${option.id}">Prev Id
+                </option>
+            </select>                    
+                    </td>
+                    <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus text-success"/></button></td>
+                </form>
+                </tr>              
+                </tbody>
+            </table>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: js"></div>
+<!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        function initDataSet() {
+            return initAcEngine_('/api/location', function(url, query) {
+              var transportType = $('#transMode option:selected').val();
+              if(transportType == 3) 
+                return url + '?name=' + encodeURIComponent(query);
+              
+              var locationType = 0;
+              if(transportType == 0)
+                locationType = 1;
+              else 
+                locationType = 2;              
+              
+              return url + '?type=' + locationType + '&name=' + encodeURIComponent(query);
+            });
+        }
+
+        $('#source').autoComplete(initDataSet(), 'sourceId');
+        $('#destination').autoComplete(initDataSet(), 'destinationId');
+        $(".tt-hint").addClass("form-control");
+    }); // ready end
+/*]]>*/
+</script>
+</body>
+
+</html>

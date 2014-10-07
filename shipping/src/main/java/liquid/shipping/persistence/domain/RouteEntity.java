@@ -25,7 +25,7 @@ public class RouteEntity extends BaseUpdateEntity {
     private int containerQty;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route", orphanRemoval = true)
-    public Collection<LegEntity> legs;
+    public List<LegEntity> legs;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "route")
     private List<ShippingContainerEntity> containers;
@@ -58,11 +58,11 @@ public class RouteEntity extends BaseUpdateEntity {
         this.containerQty = containerQty;
     }
 
-    public Collection<LegEntity> getLegs() {
+    public List<LegEntity> getLegs() {
         return legs;
     }
 
-    public void setLegs(Collection<LegEntity> legs) {
+    public void setLegs(List<LegEntity> legs) {
         this.legs = legs;
     }
 

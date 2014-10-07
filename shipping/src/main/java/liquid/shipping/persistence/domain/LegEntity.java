@@ -20,7 +20,7 @@ public class LegEntity extends BaseUpdateEntity {
     private RouteEntity route;
 
     @Column(name = "IS_HEAD")
-    private boolean head;
+    private Boolean head;
 
     @Column(name = "TRANS_MODE")
     private int transMode;
@@ -58,11 +58,11 @@ public class LegEntity extends BaseUpdateEntity {
         this.route = route;
     }
 
-    public boolean isHead() {
+    public Boolean isHead() {
         return head;
     }
 
-    public void setHead(boolean head) {
+    public void setHead(Boolean head) {
         this.head = head;
     }
 
