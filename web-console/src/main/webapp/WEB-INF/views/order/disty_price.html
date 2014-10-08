@@ -13,14 +13,9 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<div class="container">
-    <div th:if="${alert}" class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <span th:text="${alert}">Alert</span>
-    </div>
-</div>
-
 <div id="f" class="container" th:if="${task.assignee}">
+    <div th:include="layout :: alert"/>
+    
     <form method="POST" th:object="${disty}" th:action="'/dp?t=' + ${task.id}" class="form">
         <h3 class="form-heading" th:text="#{disty.price}">Disty Price</h3>
         

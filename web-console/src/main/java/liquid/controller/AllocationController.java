@@ -182,11 +182,13 @@ public class AllocationController extends BaseTaskController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "self")
-    public String allocateInList(@PathVariable String taskId, SelfContainerAllocation selfContainerAllocation) {
+    public String allocateInList(@PathVariable String taskId, SelfContainerAllocation selfContainerAllocation,
+                                 @RequestHeader(value = "referer", required = false) final String referer) {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerAllocation: {}", selfContainerAllocation);
         containerAllocationFacade.allocate(selfContainerAllocation);
-        return "redirect:/task/" + taskId + "/allocation/list?routeId=" + selfContainerAllocation.getRouteId();
+//        return "redirect:/task/" + taskId + "/allocation/list?routeId=" + selfContainerAllocation.getRouteId();
+        return "redirect:" + referer;
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, params = "routeId")
