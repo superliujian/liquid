@@ -19,7 +19,7 @@
         <thead>
         <tr>
             <th th:text="#{location.id}">ID</th>
-            <th th:text="#{location.name}">Name</th>
+            <th th:text="#{location.name}">Name</th>            
             <th>
                 <div class="btn-group">
                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -35,6 +35,7 @@
                     </ul>
                 </div>
             </th>
+            <th><span th:text="#{query.name}" /></th>
             <th><a href="/location/new"><button class="btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"/></button></a></th>
         </tr>
         </thead>
@@ -43,6 +44,7 @@
             <td th:text="${location.id}">ID</td>
             <td th:text="${location.name}">Name</td>
             <td th:text="#{${locationTypes[__${location.type}__].i18nKey}}">Type</td>
+            <td><span th:text="${#strings.length(location.queryName) > 64} ? ${#strings.substring(location.queryName, 0, 64)} : ${location.queryName}" /></td>
             <td><a th:href="'/location/' + ${location.id}"><button class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"/></button></a></td>
         </tr>
         </tbody>

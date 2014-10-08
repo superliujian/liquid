@@ -4,6 +4,7 @@ import liquid.domain.Location;
 import liquid.domain.LocationType;
 import liquid.facade.LocationFacade;
 import liquid.persistence.domain.LocationEntity;
+import liquid.pinyin4j.PinyinHelper;
 import liquid.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

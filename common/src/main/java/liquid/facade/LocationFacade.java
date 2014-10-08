@@ -2,6 +2,7 @@ package liquid.facade;
 
 import liquid.domain.Location;
 import liquid.persistence.domain.LocationEntity;
+import liquid.pinyin4j.PinyinHelper;
 import liquid.service.LocationService;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,10 @@ public class LocationFacade {
     public Iterable<LocationEntity> save(Location location) {
         List<LocationEntity> entities = new ArrayList<>();
         for (Integer type : location.getTypes()) {
-            entities.add(new LocationEntity(location.getName(), type));
+            LocationEntity entity = new LocationEntity(location.getName(), type);
+            String queryName = PinyinHelper.converterToFirstSpell(location.getName()) + ";" + location.getName();
+            entity.setQueryName(queryName);
+            entities.add(entity);
         }
         return locationService.save(entities);
     }

@@ -24,7 +24,7 @@
                 </thead>
                 <tbody >
                 <tr th:unless="${#lists.isEmpty(route.legs)}" th:each="leg : ${route.legs}">
-                    <td><span><i th:if="${leg.head}" class="glyphicon glyphicon-flag" /></span></td>                    
+                    <td><span><i th:if="${leg.head}" class="glyphicon glyphicon-check" /></span></td>                    
                     <td><span th:text="${leg.id}" /></td>
                     <td><span th:text="${leg.transMode}" /></td>                    
                     <td><span th:text="${leg.srcLoc.name}" /></td>

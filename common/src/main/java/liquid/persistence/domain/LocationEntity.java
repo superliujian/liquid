@@ -21,6 +21,9 @@ public class LocationEntity extends BaseUpdateEntity {
     @Column(name = "TYPE")
     private int type;
 
+    @Column(name = "Q_NAME")
+    private String queryName;
+
     public LocationEntity() { }
 
     public LocationEntity(String name, int type) {
@@ -44,13 +47,11 @@ public class LocationEntity extends BaseUpdateEntity {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("LocationEntity{");
-        sb.append("super=").append(super.toString());
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", type=").append(type);
-        sb.append('}');
-        return sb.toString();
+    public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
     }
 }

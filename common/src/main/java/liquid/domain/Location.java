@@ -17,6 +17,8 @@ public class Location {
     @Size(min = 1, max = 4)
     private Integer[] types;
 
+    private String queryName;
+
     public String getName() {
         return name;
     }
@@ -33,12 +35,20 @@ public class Location {
         this.types = types;
     }
 
+    public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Location{");
-        sb.append("super=").append(super.toString());
-        sb.append(", name='").append(name).append('\'');
+        sb.append("name='").append(name).append('\'');
         sb.append(", types=").append(Arrays.toString(types));
+        sb.append(", queryName='").append(queryName).append('\'');
         sb.append('}');
         return sb.toString();
     }

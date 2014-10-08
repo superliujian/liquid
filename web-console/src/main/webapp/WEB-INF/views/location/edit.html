@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <div th:include="layout :: head"></div>
-    <style>
-        div#locationForm.container {
-            max-width: 600px;
-        }
-    </style>     
+    <div th:include="layout :: head"></div>   
 </head>
 
 <body>
@@ -14,26 +9,23 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br /><br />
+<div id="f" class="container">
+    <div th:include="layout :: alert"/>
 
-<div class="container">
-    <div th:if="${alert}" class="alert alert-danger" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <span th:text="${alert}">Alert</span>
-    </div>
-</div>
+    <h3><span th:text="#{location}"></span></h3>
+    
+    <hr />
 
-<div id="locationForm" class="container">
     <form th:action="'/location/' + ${location.id}" method="POST" th:object="${location}">        
         <div class="form-group">
              <label for="id" th:text="#{location.id}">Id</label>
-             <input type="text" th:field="*{id}" class="form-control" readonly="readonly"/>
+             <input type="text" th:field="*{id}" class="form-control input-sm" readonly="readonly"/>
         </div>
     
         <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
             <label for="name" th:text="#{location.name}">Name</label>
             
-            <input type="text" th:field="*{name}" class="form-control"/>
+            <input type="text" th:field="*{name}" class="form-control input-sm"/>
 
             <div>
                 <span th:errors="*{name}">error</span>
@@ -43,14 +35,19 @@
         <div class="form-group">
             <label for="type" th:text="#{location.type}">Location Type</label>
 
-            <select th:field="*{type}" class="form-control">
+            <select th:field="*{type}" class="form-control input-sm">
                 <option th:each="locationType : ${locationTypes}"
                     th:value="${locationType.type}" th:text="#{${locationType.i18nKey}}">Location Type
                 </option>
             </select>
         </div>
         
-        <input type="submit" value="Add Location" class="btn btn-primary btn-block" name="add" th:value="#{update}"/>
+        <div th:if="*{id}" class="form-group">
+            <label class="control-label"><span th:text="#{query.name}" /></label>
+            <textarea class="form-control input-sm" th:field="*{queryName}" rows="3"></textarea>
+        </div>
+                
+        <input type="submit" value="Add Location" class="btn btn-success btn-block btn-sm" name="add" th:value="#{update}"/>
     </form>
 </div><!-- form -->
 
