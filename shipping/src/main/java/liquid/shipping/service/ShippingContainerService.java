@@ -386,7 +386,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         RouteEntity route = routeService.find(container.getRoute().getId());
 
         if (formBean.isBatch()) {
-            Collection<BargeContainerEntity> containers = route.getBargeContainers();
+
+            Collection<BargeContainerEntity> containers = bcRepository.findByRouteId(route.getId());
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (WaterContainerEntity rc : containers) {
@@ -471,7 +472,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         RouteEntity route = routeService.find(container.getRoute().getId());
 
         if (formBean.isBatch()) {
-            Collection<VesselContainerEntity> containers = route.getVesselContainers();
+            Collection<VesselContainerEntity> containers = vcRepository.findByRouteId(route.getId());
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (VesselContainerEntity rc : containers) {

@@ -1,9 +1,11 @@
 package liquid.shipping.web.domain;
 
+import liquid.shipping.persistence.domain.RailContainerEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ public class Route {
         Route route = new Route();
         route.setId(entity.getId());
         route.setContainerQuantity(entity.getContainerQty());
+        // TODO: BUG
         route.setRailTransport(RailTransport.valueOf(entity.getRailContainers()));
         return route;
     }

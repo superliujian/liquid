@@ -14,4 +14,6 @@ import java.util.Collection;
  */
 public interface VesselContainerRepository extends CrudRepository<VesselContainerEntity, Long> {
     Collection<VesselContainerEntity> findByOrder(OrderEntity order);
+
+    Collection<VesselContainerEntity> findByRouteId(Long routeId);
 }
