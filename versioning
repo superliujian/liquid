@@ -1,4 +1,6 @@
 #!/bin/sh
-find . -name "pom.xml" -exec grep -H $1 '{}';
+echo "====== Before versioning ======"
+find . -name "pom.xml" -exec grep -H $1 '{}' \;
 find . -name "pom.xml" -exec sed -i "s/$1/$2/g" '{}' \;
-
+echo "====== After versioning ======"
+find . -name "pom.xml" -exec grep -H $2 '{}' \;
