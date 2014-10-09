@@ -9,6 +9,7 @@
 
     <properties>
         <java-version>1.8</java-version>
+        <resources-version>2.7</resources-version>
         <compiler-version>3.1</compiler-version>
         <junit-version>4.11</junit-version>
 
@@ -23,6 +24,8 @@
         <hibernate-version>4.3.5.Final</hibernate-version>
         <hibernate-jpamodelgen.version>4.3.5.Final</hibernate-jpamodelgen.version>
         <hibernate-validator-version>5.1.1.Final</hibernate-validator-version>
+
+        <encoding>UTF-8</encoding>
     </properties>
 
     <repositories>
@@ -38,62 +41,62 @@
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>util</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>pinyin4j</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>finance-api</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>common</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>user</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>container</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>order</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>task</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>shipping</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>charge</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>config</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>excel</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
 
@@ -210,11 +213,20 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${resources-version}</version>
+                <configuration>
+                    <encoding>${encoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-version}</version>
                 <configuration>
                     <source>${java-version}</source>
                     <target>${java-version}</target>
+                    <encoding>${encoding}</encoding>
                 </configuration>
             </plugin>
 

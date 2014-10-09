@@ -22,14 +22,14 @@
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>config</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- pinyin4j -->
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>pinyin4j</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- spring -->

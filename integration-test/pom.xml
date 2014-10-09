@@ -31,37 +31,37 @@
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>container</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>common</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>config</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>excel</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>order</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>user</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
