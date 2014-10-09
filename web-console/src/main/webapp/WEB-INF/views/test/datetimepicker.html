@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <div th:include="layout :: head"></div>
+<head th:include="layout :: head">
+    
 </head>
 
 <body>
@@ -15,18 +15,17 @@ Hi datetimepicker!
 
 <div class="container">
     <div class="row">
-        <div class='col-sm-6'>
+        <div class="col-xs-6">
             <div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control input-sm" />
+                <div class='input-group input-group-sm date' id='datetimepicker1'>
+                    <input type='text' data-date-format="YYYY-MM-DD HH:mm:ss" class="form-control input-sm" />
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                     </span>
                 </div>
             </div>
         </div>
     </div>
-</div><!-- container -->
-
+</div>
 
 <!-- {!begin layout} -->
 <div th:include="layout :: footer"></div>
@@ -37,7 +36,7 @@ Hi datetimepicker!
 <!-- {!end layout} -->
 
     <script src="/resources/moment/moment-with-locales.js"></script>
-    <script src="/resources/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="/resources/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
         $(function () {
           $('#datetimepicker1').datetimepicker({

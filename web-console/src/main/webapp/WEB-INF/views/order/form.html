@@ -269,9 +269,13 @@
     <div class="col-lg-3">
         <div class="form-group" th:classappend="${#fields.hasErrors('planReportTime')} ? 'has-error'">
             <label th:text="#{railway.plan.report.time} + ' *'">Railway Plan Report Date</label>
-            <input type="text" th:field="*{planReportTime}" class="form-control input-sm"/>
-
-            <span th:errors="*{planReportTime}">error</span>
+            
+            <div class='input-group input-group-sm date' id='planReportTimePicker'>                    
+                <input type='text' data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{planReportTime}" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>        
         </div>
     </div>
     
@@ -519,6 +523,10 @@
         }
         
         $(".tt-hint").addClass("form-control"); 
+        
+        $('#planReportTimePicker').datetimepicker({
+            language: 'zh-cn'
+        });        
     }); // ready end
 /*]]>*/
 </script>
