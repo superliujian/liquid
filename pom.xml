@@ -4,12 +4,10 @@
     <groupId>liquid</groupId>
     <artifactId>liquid</artifactId>
     <packaging>pom</packaging>
-    <version>FIXED</version>
+    <version>2.1.43-SNAPSHOT</version>
     <name>Liquid</name>
 
     <properties>
-        <application-version>2.1.43-SNAPSHOT</application-version>
-
         <java-version>1.8</java-version>
         <compiler-version>3.1</compiler-version>
         <junit-version>4.11</junit-version>
@@ -36,6 +34,69 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- liquid -->
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>util</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>finance-api</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>common</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>user</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>container</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>order</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>task</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>shipping</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>charge</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>config</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>excel</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+
             <!-- spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -182,6 +243,5 @@
         <module>task</module>
         <module>config</module>
         <module>web-console</module>
-        <module>ops-tools</module>
     </modules>
 </project>
