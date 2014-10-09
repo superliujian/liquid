@@ -287,15 +287,18 @@
 </div>
 <!--/footer -->
 
-<div th:fragment="js">
-    <script src="/resources/jquery/jquery.js"></script>
-    <script src="/resources/bootstrap/js/bootstrap.js"></script>
-    <script src="/resources/typeahead/typeahead.bundle.js"></script>
-    <script src="/resources/handlebars/handlebars.js"></script>
-    <script src="/resources/moment/moment-with-locales.js"></script>
-    <script src="/resources/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>      
-    <script src="/resources/js/liquid.js"></script>  
-</div>
+<th:block th:fragment="js">
+
+<script src="/resources/jquery/jquery.js"></script>
+<script src="/resources/bootstrap/js/bootstrap.js"></script>
+<script src="/resources/typeahead/typeahead.bundle.js"></script>
+<script src="/resources/handlebars/handlebars.js"></script>
+<script src="/resources/moment/moment-with-locales.js"></script>
+<script src="/resources/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>      
+<script src="/resources/js/liquid.js"></script>
+  
+</th:block>
+
 </body>
 
 </html>
