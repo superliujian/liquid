@@ -252,11 +252,11 @@
             <li>
                 <a th:href="${contextPath} + 'number=0'">&laquo;</a>
             </li>
-            <li><a th:if="${page.hasPreviousPage()}"
+            <li><a th:if="${page.hasPrevious()}"
                    th:href="${contextPath} + 'number=' + ${page.number - 1}"
                    th:text="${page.number}">1</a></li>
             <li><a href="" th:text="${page.number + 1}">2</a></li>
-            <li><a th:if="${page.hasNextPage()}"
+            <li><a th:if="${page.hasNext()}"
                    th:href="${contextPath} + 'number=' + ${page.number + 1}"
                    th:text="${page.number + 2}">3</a></li>
             <li><a th:href="${contextPath} + 'number=' + ${page.totalPages - 1}">&raquo;</a>

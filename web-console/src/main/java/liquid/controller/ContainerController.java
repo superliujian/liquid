@@ -29,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -117,7 +114,7 @@ public class ContainerController extends BaseController {
 
         if (null != bicCode && bicCode.trim().length() > 0) {
             List<ContainerEntity> containers = containerService.findBicCode(bicCode);
-            if (null == containers) containers = Collections.EMPTY_LIST;
+            if (null == containers) containers = new ArrayList<>();
             final List<ContainerEntity> list = containers;
             model.addAttribute("page", new Page<ContainerEntity>() {
                 @Override

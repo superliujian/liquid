@@ -1,10 +1,6 @@
 package liquid.user.service;
 
-import liquid.user.persistence.domain.GroupType;
-import liquid.user.persistence.domain.Account;
-import liquid.user.persistence.domain.Group;
-import liquid.user.persistence.domain.PasswordChange;
-import liquid.user.persistence.domain.PasswordPolicy;
+import liquid.user.persistence.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +12,13 @@ import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.support.LdapUtils;
 import org.springframework.stereotype.Service;
 
+import javax.naming.InvalidNameException;
 import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -76,11 +75,16 @@ public class AccountService {
         ldapOperations.bind(buildAccountDn(account), setAccountAttributes(new DirContextAdapter(), account), null);
     }
 
-    private DistinguishedName buildAccountDn(Account account) {
-        DistinguishedName dn = new DistinguishedName();
-        dn.add("ou", "people");
-        dn.add("uid", account.getUid());
-        return dn;
+    private LdapName buildAccountDn(Account account) {
+        try {
+            List<Rdn> rdns = new ArrayList<>();
+            rdns.add(new Rdn("ou", "people"));
+            rdns.add(new Rdn("uid", account.getUid()));
+            LdapName dn = new LdapName(rdns);
+            return dn;
+        } catch (InvalidNameException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Account> findAll() {
@@ -91,8 +95,8 @@ public class AccountService {
 
         List<Account> accounts = ldapOperations.search(
                 "", "(objectclass=person)", searchControls,
-                new AttributesMapper() {
-                    public Object mapFromAttributes(Attributes attrs)
+                new AttributesMapper<Account>() {
+                    public Account mapFromAttributes(Attributes attrs)
                             throws NamingException {
                         Account account = new Account();
                         account.setUid(attr2Str(attrs.get("uid")));
@@ -122,8 +126,8 @@ public class AccountService {
 
         List<Account> accounts = ldapOperations.search(
                 "", filter.encode(), searchControls,
-                new AttributesMapper() {
-                    public Object mapFromAttributes(Attributes attrs)
+                new AttributesMapper<Account>() {
+                    public Account mapFromAttributes(Attributes attrs)
                             throws NamingException {
                         Account account = new Account();
                         account.setUid(attr2Str(attrs.get("uid")));
@@ -159,8 +163,8 @@ public class AccountService {
 
         List<PasswordPolicy> policies = ldapOperations.search(
                 "", filter.encode(), searchControls,
-                new AttributesMapper() {
-                    public Object mapFromAttributes(Attributes attrs)
+                new AttributesMapper<PasswordPolicy>() {
+                    public PasswordPolicy mapFromAttributes(Attributes attrs)
                             throws NamingException {
                         PasswordPolicy policy = new PasswordPolicy();
                         policy.setPwdMaxFailure(attr2Int(attrs.get("pwdMaxFailure")));
@@ -254,8 +258,8 @@ public class AccountService {
     private List<Group> filterGroups(SearchControls searchControls, AndFilter filter) {
         return ldapOperations.search(
                 "", filter.encode(), searchControls,
-                new AttributesMapper() {
-                    public Object mapFromAttributes(Attributes attrs)
+                new AttributesMapper<Group>() {
+                    public Group mapFromAttributes(Attributes attrs)
                             throws NamingException {
                         Group group = new Group();
                         group.setName((String) attrs.get("cn").get());
@@ -361,18 +365,25 @@ public class AccountService {
     }
 
     public Group findGroupByName(String groupName) {
-        DistinguishedName dn = new DistinguishedName("ou=groups");
-        dn.add("cn", groupName);
-        return (Group) ldapOperations.lookup(dn, new ContextMapper() {
+        LdapName dn = null;
+        try {
+            List<Rdn> rdns = new ArrayList<>();
+            rdns.add(new Rdn("ou", "groups"));
+            rdns.add(new Rdn("cn", groupName));
+            dn = new LdapName(rdns);
+        } catch (InvalidNameException e) {
+            throw new RuntimeException(e);
+        }
+        return ldapOperations.lookup(dn, new ContextMapper<Group>() {
             @Override
-            public Object mapFromContext(Object ctx) {
+            public Group mapFromContext(Object ctx) {
                 DirContextOperations dirContext = (DirContextOperations) ctx;
                 Group group = new Group();
                 group.setName(dirContext.getStringAttribute("cn"));
                 String[] membersArray = dirContext.getStringAttributes("uniqueMember");
                 if (membersArray != null) {
-                    List list = Arrays.asList(membersArray);
-                    group.setUniqueMembers(new TreeSet(list));
+                    List<String> list = Arrays.asList(membersArray);
+                    group.setUniqueMembers(new TreeSet<String>(list));
                 }
                 return group;
             }
@@ -380,18 +391,23 @@ public class AccountService {
     }
 
     public void updateGroup(Group group) {
-        DistinguishedName dn = buildGroupDn(group);
+        LdapName dn = buildGroupDn(group);
         DirContextOperations adapter = (DirContextOperations) ldapOperations
                 .lookup(dn);
         adapter = setGroupAttributes(adapter, group);
         ldapOperations.modifyAttributes(dn, adapter.getModificationItems());
     }
 
-    private DistinguishedName buildGroupDn(Group group) {
-        DistinguishedName dn = new DistinguishedName();
-        dn.add("ou", "groups");
-        dn.add("cn", group.getName());
-        return dn;
+    private LdapName buildGroupDn(Group group) {
+        try {
+            List<Rdn> rdns = new ArrayList<>();
+            rdns.add(new Rdn("ou", "groups"));
+            rdns.add(new Rdn("cn", group.getName()));
+            LdapName dn = new LdapName(rdns);
+            return dn;
+        } catch (InvalidNameException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     DirContextOperations setGroupAttributes(DirContextOperations adapter, Group group) {

@@ -258,6 +258,7 @@ public class ChargeController extends BaseController {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         Page<ChargeEntity> page = chargeService.findAll(pageRequest);
         model.addAttribute("page", page);
+        model.addAttribute("contextPath", "/charge/payable?");
 
         model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"spName", "sp.name"}});
         model.addAttribute("criterion", new Criterion());

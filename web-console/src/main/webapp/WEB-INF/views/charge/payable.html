@@ -65,23 +65,8 @@
         </tr>
         </tbody>
     </table>
-</div>
-
-<div id="pagination_bar" class="text-center">
-    <ul class="pagination">
-        <li>
-            <a href="/charge/payable?number=0">&laquo;</a>
-        </li>
-        <li><a th:if="${page.hasPreviousPage()}"
-               th:href="'/charge/payable?number=' + ${page.number - 1}"
-               th:text="${page.number}">1</a></li>
-        <li><a href="" th:text="${page.number + 1}">2</a></li>
-        <li><a th:if="${page.hasNextPage()}"
-               th:href="'/charge/payable?number=' + ${page.number + 1}"
-               th:text="${page.number + 2}">3</a></li>
-        <li><a th:href="'/charge/payable?number=' + ${page.totalPages - 1}">&raquo;</a>
-        </li>
-    </ul>
+    
+    <div th:include="layout :: pagination_bar"></div>
 </div>
 
 <!-- {!begin layout} -->

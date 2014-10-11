@@ -241,6 +241,7 @@
                     <source>${java-version}</source>
                     <target>${java-version}</target>
                     <encoding>${encoding}</encoding>
+                    <compilerArgument>-Xlint:unchecked</compilerArgument>
                 </configuration>
             </plugin>
 

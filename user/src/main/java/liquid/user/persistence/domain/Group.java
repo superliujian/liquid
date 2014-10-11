@@ -12,7 +12,7 @@ import java.util.TreeSet;
 public class Group {
     private String name;
 
-    private Set uniqueMembers = new TreeSet();
+    private Set<String> uniqueMembers = new TreeSet<>();
 
     public String getName() {
         return name;
@@ -22,11 +22,11 @@ public class Group {
         this.name = name;
     }
 
-    public Set getUniqueMembers() {
+    public Set<String> getUniqueMembers() {
         return uniqueMembers;
     }
 
-    public void setUniqueMembers(Set uniqueMembers) {
+    public void setUniqueMembers(Set<String> uniqueMembers) {
         this.uniqueMembers = uniqueMembers;
     }
 
