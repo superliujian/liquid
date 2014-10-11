@@ -7,10 +7,7 @@ import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  * TODO: Comments.
@@ -19,6 +16,7 @@ import javax.persistence.ManyToOne;
  * Time: 7:43 PM
  */
 @Entity(name = "FIN_CHARGE")
+@EntityListeners(liquid.audit.AuditListener.class)
 public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne
@@ -156,5 +154,34 @@ public class ChargeEntity extends BaseUpdateEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    /**
+     * For auditing.
+     *
+     * @return
+     */
+    public String toAudit() {
+        final StringBuilder sb = new StringBuilder("ChargeEntity{");
+        sb.append("id=").append(id);
+        sb.append(", orderId=").append(order == null ? null : order.getId());
+        sb.append(", taskId='").append(taskId).append('\'');
+        sb.append(", routeId=").append(route == null ? null : route.getId());
+        sb.append(", legId=").append(leg == null ? null : leg.getId());
+        sb.append(", serviceSubtypeId=").append(serviceSubtype == null ? null : serviceSubtype.getId());
+        sb.append(", spId=").append(sp == null ? null : sp.getId());
+        sb.append(", way=").append(way);
+        sb.append(", unitPrice=").append(unitPrice);
+        sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", currency=").append(currency);
+        sb.append(", createRole='").append(createRole).append('\'');
+        sb.append(", status=").append(status);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toAudit();
     }
 }

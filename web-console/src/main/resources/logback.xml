@@ -90,6 +90,21 @@
         </encoder>
     </appender>
 
+    <appender name="AUDITING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/liquid-auditing.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>log/liquid-auditing.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
@@ -118,6 +133,10 @@
 
     <logger name="liquid" level="DEBUG" additivity="false">
         <appender-ref ref="LIQUID"/>
+    </logger>
+
+    <logger name="auditing" level="INFO" additivity="false">
+        <appender-ref ref="AUDITING"/>
     </logger>
 
     <root level="WARN">

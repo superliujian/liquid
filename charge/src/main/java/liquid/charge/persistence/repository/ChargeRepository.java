@@ -4,7 +4,6 @@ import liquid.charge.persistence.domain.ChargeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  * Date: 10/2/13
  * Time: 8:37 PM
  */
-public interface ChargeRepository extends CrudRepository<ChargeEntity, Long>, JpaRepository<ChargeEntity, Long> {
+public interface ChargeRepository extends CrudRepository<ChargeEntity, Long>  {
     List<ChargeEntity> findByTaskId(String taskId);
 
     Iterable<ChargeEntity> findByOrderId(long orderId);

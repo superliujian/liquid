@@ -17,9 +17,11 @@
         <logback-version>1.0.13</logback-version>
 
         <spring-version>4.1.0.RELEASE</spring-version>
-        <spring-data-jpa-version>1.6.4.RELEASE</spring-data-jpa-version>
+        <spring-data-jpa-version>1.7.0.RELEASE</spring-data-jpa-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
         <spring-ldap-version>2.0.2.RELEASE</spring-ldap-version>
+
+        <aspectj-version>1.8.2</aspectj-version>
 
         <hibernate-version>4.3.6.Final</hibernate-version>
         <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
@@ -46,6 +48,11 @@
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>pinyin4j</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>audit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -163,6 +170,13 @@
                 <scope>compile</scope>
             </dependency>
 
+            <!-- aspectj -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj-version}</version>
+            </dependency>
+
             <!-- logging -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -244,6 +258,7 @@
     <modules>
         <module>util</module>
         <module>pinyin4j</module>
+        <module>audit</module>
         <module>common</module>
         <module>excel</module>
         <module>user</module>

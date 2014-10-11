@@ -9,7 +9,6 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ExchangeRate;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceProviderEntity_;
 import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;

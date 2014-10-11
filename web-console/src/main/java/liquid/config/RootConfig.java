@@ -21,6 +21,7 @@ import java.util.Map;
  */
 @Configuration
 @ComponentScan({"liquid.aop",
+        "liquid.audit",
         "liquid.facade", "liquid.service",
         "liquid.excel",
         "liquid.finance.service",

@@ -16,8 +16,6 @@
         <thymeleaf-version>2.1.2.RELEASE</thymeleaf-version>
         <thymeleaf-extras-springsecurity3-version>2.1.1.RELEASE</thymeleaf-extras-springsecurity3-version>
 
-        <aspectj-version>1.7.4</aspectj-version>
-
         <jackson-version>2.3.1</jackson-version>
 
         <native2ascii-version>1.0-beta-1</native2ascii-version>
@@ -38,6 +36,10 @@
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>audit</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
@@ -118,7 +120,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
-            <version>${aspectj-version}</version>
         </dependency>
 
         <!-- thymeleaf -->

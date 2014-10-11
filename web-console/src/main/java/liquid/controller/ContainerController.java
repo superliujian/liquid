@@ -127,18 +127,6 @@ public class ContainerController extends BaseController {
                 public long getTotalElements() { return list.size(); }
 
                 @Override
-                public boolean hasPreviousPage() { return false; }
-
-                @Override
-                public boolean isFirstPage() { return true; }
-
-                @Override
-                public boolean hasNextPage() { return false; }
-
-                @Override
-                public boolean isLastPage() { return true; }
-
-                @Override
                 public int getNumber() { return 0; }
 
                 @Override
