@@ -351,7 +351,7 @@
 <div class="panel panel-default">
 <div class="panel-heading" th:text="#{order.price.info}">Price Info</div>
 <div class="panel-body">
-<table class="table table-striped table-hover table-condensed table-16">
+<table id="price" class="table table-striped table-hover table-condensed table-16">
     <thead>
     <tr>
         <th th:text="#{service.item}">Service Item</th>
@@ -509,7 +509,7 @@
                 
         function caculateTotal() {
             var usd = 0, cny = 0;
-            $('table > tbody > tr').each(function() {
+            $("table[id='price'] > tbody > tr").each(function() {
                 var subtype = $('td:eq(0) select option:selected', this).val();
                 var currency = $('td:eq(1) select option:selected', this).val();
                 var price = $('td:eq(2) input', this).val();
