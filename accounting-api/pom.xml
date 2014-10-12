@@ -8,9 +8,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>finance-api</artifactId>
+    <artifactId>accounting-api</artifactId>
     <packaging>jar</packaging>
-    <name>Finance API</name>
+    <name>Accounting API</name>
 
     <dependencies>
         <!-- spring -->

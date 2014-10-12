@@ -15,6 +15,21 @@
         </encoder>
     </appender>
 
+    <appender name="SECURITY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>log/security.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>log/security.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="THYMELEAF" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>log/thymeleaf.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -94,7 +109,7 @@
         <file>log/liquid-auditing.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/liquid-auditing.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>log/auditing.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -113,6 +128,10 @@
 
     <logger name="org.springframework" level="DEBUG" additivity="false">
         <appender-ref ref="SPRING"/>
+    </logger>
+
+    <logger name="org.springframework.security" level="DEBUG" additivity="false">
+        <appender-ref ref="SECURITY"/>
     </logger>
 
     <logger name="org.thymeleaf" level="DEBUG" additivity="false">

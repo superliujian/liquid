@@ -63,7 +63,7 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>charge</artifactId>
+            <artifactId>accounting</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>

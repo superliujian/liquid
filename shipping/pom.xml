@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>finance-api</artifactId>
+            <artifactId>accounting-api</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
