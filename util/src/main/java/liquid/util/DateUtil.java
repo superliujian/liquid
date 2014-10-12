@@ -29,6 +29,7 @@ public class DateUtil {
     public static Date dateOf(String dateStr) {
         try {
             SimpleDateFormat format = new SimpleDateFormat(DatePattern.UNTIL_MINUTE.getPattern());
+            format.setTimeZone(TimeZone.getTimeZone(ZoneId.of("CTT", ZoneId.SHORT_IDS)));
             return format.parse(dateStr);
         } catch (ParseException e) {
             throw new RuntimeException(dateStr + " format is illegal.");
