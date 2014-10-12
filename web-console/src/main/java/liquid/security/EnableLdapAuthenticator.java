@@ -22,7 +22,10 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 
 /**
- * Created by redbrick9 on 1/31/14.
+ * Customization of LDAP Authenticator.
+ *
+ * @author Tao Ma
+ * @since 2.0
  */
 public class EnableLdapAuthenticator extends AbstractLdapAuthenticator {
     private static final Logger logger = LoggerFactory.getLogger(EnableLdapAuthenticator.class);
