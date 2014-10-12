@@ -2,7 +2,9 @@ package liquid.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * TODO: Comments.
@@ -20,6 +22,7 @@ public class DateUtil {
 
     public static String stringOf(Date date) {
         SimpleDateFormat format = new SimpleDateFormat(DatePattern.UNTIL_MINUTE.getPattern());
+        format.setTimeZone(TimeZone.getTimeZone(ZoneId.of("CTT", ZoneId.SHORT_IDS)));
         return format.format(date);
     }
 

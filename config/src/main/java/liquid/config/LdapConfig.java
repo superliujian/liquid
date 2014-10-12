@@ -32,5 +32,4 @@ public class LdapConfig {
     public LdapTemplate ldapTemplate() {
         return new LdapTemplate(contextSource());
     }
-
 }
