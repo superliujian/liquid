@@ -1,10 +1,10 @@
 <configuration>
 
     <appender name="SPRING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/spring.log</file>
+        <file>logs/spring.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/spring.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/spring.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -16,10 +16,10 @@
     </appender>
 
     <appender name="SECURITY" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/security.log</file>
+        <file>logs/security.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/security.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/security.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -31,10 +31,10 @@
     </appender>
 
     <appender name="THYMELEAF" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/thymeleaf.log</file>
+        <file>logs/thymeleaf.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/thymeleaf.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/thymeleaf.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -46,10 +46,10 @@
     </appender>
 
     <appender name="HIBERNATE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/hibernate.log</file>
+        <file>logs/hibernate.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/hibernate.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/hibernate.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -61,10 +61,10 @@
     </appender>
 
     <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/sql.log</file>
+        <file>logs/sql.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/sql.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/sql.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -76,10 +76,10 @@
     </appender>
 
     <appender name="ACTIVITI" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/activiti.log</file>
+        <file>logs/activiti.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/activiti.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/activiti.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -91,10 +91,10 @@
     </appender>
 
     <appender name="LIQUID" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/liquid.log</file>
+        <file>logs/liquid.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/liquid.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/liquid.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
@@ -106,10 +106,10 @@
     </appender>
 
     <appender name="AUDITING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/liquid-auditing.log</file>
+        <file>logs/auditing.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>log/auditing.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/auditing.%d{yyyy-MM-dd}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
