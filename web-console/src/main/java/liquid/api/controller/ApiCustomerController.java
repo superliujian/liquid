@@ -26,12 +26,6 @@ public class ApiCustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
-    public Iterable<CustomerEntity> list() {
-        return customerService.findAll();
-    }
-
     @RequestMapping(method = RequestMethod.GET, params = "name")
     @ResponseBody
     public Iterable<CustomerEntity> listByName(@RequestParam String name) {

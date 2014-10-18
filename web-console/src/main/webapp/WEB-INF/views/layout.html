@@ -223,19 +223,19 @@
 -->
 <div th:fragment="search-bar">
     <br />
-    <form method="GET" class="form-inline pull-right" role="form" th:action="${action}" th:object="${criterion}">
-        <select th:unless="${#lists.isEmpty(types)}" name="type" class="form-control input-sm" th:field="*{type}">
-            <option th:each="t : ${types}"
+    <form method="GET" class="form-inline pull-right" role="form" th:action="${searchBarForm.action}" th:object="${searchBarForm}">
+        <select th:unless="${#lists.isEmpty(searchBarForm.types)}" name="type" class="form-control input-sm" th:field="*{type}">
+            <option th:each="t : ${searchBarForm.types}"
                     th:value="${t[0]}"
                     th:text="#{${t[1]}}">
             </option>
         </select>
                             
         <div class="input-group input-group-sm">
-            <input type="text" class="form-control" th:field="*{content}" />
+            <input type="text" class="form-control" th:field="*{text}" />
             
             <span class="input-group-btn">                    
-                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
+                <button type="submit" name="search" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
             </span>
         </div>             
     </form>

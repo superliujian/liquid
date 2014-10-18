@@ -22,7 +22,7 @@ import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.web.domain.TransMode;
 import liquid.validation.FormValidationResult;
-import liquid.web.domain.Criterion;
+import liquid.web.domain.SearchBarForm;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -167,17 +167,18 @@ public class OrderController extends BaseController {
         model.addAttribute("page", page);
         model.addAttribute("contextPath", "/order?");
 
-        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
-        model.addAttribute("criterion", new Criterion());
-        model.addAttribute("action", "/order");
+        SearchBarForm searchBarForm = new SearchBarForm();
+        searchBarForm.setAction("/order");
+        searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("searchBarForm", searchBarForm);
         return "order/page";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = {"type", "content"})
-    public String search(@RequestParam(defaultValue = "0", required = false) int number, Criterion criterion, Model model) {
+    @RequestMapping(method = RequestMethod.GET, params = {"type", "text"})
+    public String search(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        String orderNo = "orderNo".equals(criterion.getType()) ? criterion.getContent() : null;
-        String customerName = "customerName".equals(criterion.getType()) ? criterion.getContent() : null;
+        String orderNo = "orderNo".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
+        String customerName = "customerName".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
         String username = SecurityContext.getInstance().getUsername();
 
         Page<OrderEntity> page;
@@ -193,11 +194,11 @@ public class OrderController extends BaseController {
         }
 
         model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/order?type=" + criterion.getType() + "&content=" + criterion.getContent() + "&");
+        model.addAttribute("contextPath", "/order?type=" + searchBarForm.getType() + "&text=" + searchBarForm.getText() + "&");
 
-        model.addAttribute("types", new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
-        model.addAttribute("criterion", criterion);
-        model.addAttribute("action", "/order");
+        searchBarForm.setAction("/order");
+        searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("searchBarForm", searchBarForm);
         return "order/page";
     }
 

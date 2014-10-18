@@ -3,7 +3,6 @@ package liquid.persistence.repository;
 import liquid.persistence.domain.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,12 +12,11 @@ import org.springframework.data.repository.CrudRepository;
  * Time: 11:14 PM
  */
 public interface CustomerRepository extends CrudRepository<CustomerEntity, Long> {
-    @Query(value = "SELECT * FROM OPS_CUSTOMER ORDER BY CONVERT(NAME USING GBK)", nativeQuery = true)
-    Iterable<CustomerEntity> findOrderByName();
+    Page<CustomerEntity> findAll(Pageable pageable);
 
     CustomerEntity findByName(String name);
 
     Iterable<CustomerEntity> findByQueryNameLike(String queryName);
 
-    Page<CustomerEntity> findAll(Pageable pageable);
+    Page<CustomerEntity> findByQueryNameLike(String queryName, Pageable pageable);
 }

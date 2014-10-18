@@ -1,8 +1,9 @@
 package liquid.controller;
 
 import liquid.persistence.domain.CustomerEntity;
-import liquid.persistence.repository.CustomerRepository;
 import liquid.pinyin4j.PinyinHelper;
+import liquid.service.CustomerService;
+import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,32 @@ public class CustomerController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<CustomerEntity> page = customerRepository.findAll(pageRequest);
+        Page<CustomerEntity> page = customerService.findAll(pageRequest);
         model.addAttribute("page", page);
         model.addAttribute("contextPath", "/customer?");
-        model.addAttribute("customer", new CustomerEntity());
+
+        SearchBarForm searchBarForm = new SearchBarForm();
+        searchBarForm.setAction("/customer");
+        searchBarForm.setTypes(new String[][]{{"name", "customer.name"}});
+        model.addAttribute("searchBarForm", searchBarForm);
+        return "customer/page";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"search"})
+    public String search(@RequestParam(defaultValue = "0", required = false) int number, @ModelAttribute SearchBarForm searchBarForm, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<CustomerEntity> page = customerService.findByQueryNameLike(searchBarForm.getText(), pageRequest);
+        model.addAttribute("page", page);
+        model.addAttribute("contextPath", "/customer?");
+
+        searchBarForm.setAction("/customer");
+        searchBarForm.setTypes(new String[][]{{"name", "customer.name"}});
+        model.addAttribute("searchBarForm", searchBarForm);
         return "customer/page";
     }
 
@@ -57,7 +75,7 @@ public class CustomerController extends BaseController {
                 String queryName = PinyinHelper.converterToFirstSpell(customer.getName()) + ";" + customer.getName();
                 customer.setQueryName(queryName);
             }
-            customerRepository.save(customer);
+            customerService.save(customer);
             return "redirect:/customer";
         }
     }
@@ -65,7 +83,7 @@ public class CustomerController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String initEdit(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);
-        CustomerEntity customer = customerRepository.findOne(id);
+        CustomerEntity customer = customerService.find(id);
         model.addAttribute("customer", customer);
         return "customer/form";
     }

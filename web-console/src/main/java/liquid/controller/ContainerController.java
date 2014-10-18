@@ -12,7 +12,7 @@ import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
-import liquid.web.domain.Criterion;
+import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -178,19 +181,20 @@ public class ContainerController extends BaseController {
         model.addAttribute("yardId", yardId);
         model.addAttribute("yards", yards);
 
-        model.addAttribute("criterion", new Criterion());
-        model.addAttribute("action", "/container/search");
+        SearchBarForm searchBarForm = new SearchBarForm();
+        searchBarForm.setAction("/container");
+        model.addAttribute("searchBarForm", searchBarForm);
         return "container/list";
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(Criterion criterion, Model model,
+    @RequestMapping(method = RequestMethod.GET, params = {"search"})
+    public String search(SearchBarForm searchBarForm, Model model,
                          @RequestParam(required = false, defaultValue = "0") int number,
                          @RequestParam(required = false, defaultValue = "0") Long subtypeId,
                          @RequestParam(required = false, defaultValue = "0") Long ownerId,
                          @RequestParam(required = false, defaultValue = "0") Long yardId) {
         PageRequest request = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<ContainerEntity> page = containerService.findByBicCodeLike(criterion.getContent(), request);
+        Page<ContainerEntity> page = containerService.findByBicCodeLike(searchBarForm.getText(), request);
 
         model.addAttribute("page", page);
         model.addAttribute("contextPath", "/container?subtypeId=" + subtypeId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
@@ -213,8 +217,8 @@ public class ContainerController extends BaseController {
         model.addAttribute("yardId", yardId);
         model.addAttribute("yards", yards);
 
-        model.addAttribute("criterion", criterion);
-        model.addAttribute("action", "/container/search");
+        searchBarForm.setAction("/container");
+        model.addAttribute("searchBarForm", searchBarForm);
         return "container/list";
     }
 

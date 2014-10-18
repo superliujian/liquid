@@ -9,7 +9,10 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <h3><span th:text="#{customer}"></span></h3>
+    <div class="row">
+        <div class="col-xs-2"><h3><span th:text="#{customer}"></span></h3></div>
+        <div class="col-xs-4 pull-right"><div th:include="layout :: search-bar" /></div>        
+    </div><!-- row -->
     
     <hr />
 
