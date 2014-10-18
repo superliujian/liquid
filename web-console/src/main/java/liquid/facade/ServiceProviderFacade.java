@@ -2,8 +2,8 @@ package liquid.facade;
 
 import liquid.domain.ServiceProvider;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.domain.ServiceProviderTypeEnity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +46,12 @@ public class ServiceProviderFacade {
         return serviceProviders;
     }
 
+    public void changeStatus(Long id, Integer status) {
+        ServiceProviderEntity entity = serviceProviderService.find(id);
+        entity.setStatus(status);
+        serviceProviderService.save(entity);
+    }
+
     private ServiceProviderEntity convert(ServiceProvider serviceProvider) {
         ServiceProviderEntity entity = new ServiceProviderEntity();
         entity.setId(serviceProvider.getId());
@@ -86,6 +92,7 @@ public class ServiceProviderFacade {
             i++;
         }
         serviceProvider.setSubtypeIds(subtypeIds);
+        serviceProvider.setStatus(entity.getStatus());
         return serviceProvider;
     }
 }

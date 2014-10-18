@@ -83,7 +83,7 @@
                 <a sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
                    th:if="${order.status} == 1"
                    th:href="'/order/' + ${order.id} + '/edit'">
-                    <i class="glyphicon glyphicon-edit text-info"/>
+                    <i class="glyphicon glyphicon-pencil text-info"/>
                 </a>
             </td>
         </tr>

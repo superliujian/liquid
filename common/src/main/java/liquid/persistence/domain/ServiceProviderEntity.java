@@ -14,7 +14,7 @@ import java.util.Set;
  * Time: 4:38 PM
  */
 @Entity(name = "OPS_SERVICE_PROVIDER")
-public class ServiceProviderEntity extends BaseUpdateEntity {
+public class ServiceProviderEntity extends StatefulEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -43,12 +43,6 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
 
     @Column(name = "CELL")
     private String cell;
-
-    /**
-     * enabled or disabled
-     */
-    @Column(name = "STATUS")
-    private int status;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "OPS_SERVICE_PROVIDER_SUBTYPE",
@@ -118,14 +112,6 @@ public class ServiceProviderEntity extends BaseUpdateEntity {
 
     public void setCell(String cell) {
         this.cell = cell;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public Set<ServiceSubtypeEntity> getServiceSubtypes() {

@@ -44,7 +44,7 @@
             <td th:text="${location.name}">Name</td>
             <td th:text="#{${locationTypes[__${location.type}__].i18nKey}}">Type</td>
             <td><span th:text="${#strings.length(location.queryName) > 64} ? ${#strings.substring(location.queryName, 0, 64)} : ${location.queryName}" /></td>
-            <td><a th:href="'/location/' + ${location.id}"><button class="btn btn-default btn-xs"><i class="glyphicon glyphicon-edit"/></button></a></td>
+            <td><a th:href="'/location/' + ${location.id}"><button class="btn btn-default btn-xs"><i class="glyphicon glyphicon-pencil"/></button></a></td>
         </tr>
         </tbody>
     </table>

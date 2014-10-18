@@ -112,7 +112,7 @@
                 <td th:text="${container.owner.name}">Owner</td>
                 <td th:text="${container.yard.name}">Yard</td>
                 <td th:text="#{${statusArray[__${container.status}__].i18nKey}}">Status</td>
-                <td><a th:href="'/container/' + ${container.id}"><i class="glyphicon glyphicon-edit text-info" /></a></td>
+                <td><a th:href="'/container/' + ${container.id}"><i class="glyphicon glyphicon-pencil text-info" /></a></td>
             </tr>
         </tbody>
     </table>

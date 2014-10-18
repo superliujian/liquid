@@ -8,7 +8,7 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div id="f" class="container">
+<div id="t" class="container">
     <h3><span th:text="#{sp}"></span></h3>
     
     <hr />
@@ -104,9 +104,17 @@
         <hr />
 
         <div class="row">
-            <div class="col-xs-3 pull-right">
-                <input type="submit" value="Add SP" class="btn btn-success btn-block btn-sm" th:value="#{save}"/>
+            <div class="col-xs-2 col-xs-offset-8">
+                <button th:if="*{id} and *{status} == 0" type="submit" th:name="disable" class="btn btn-danger btn-block btn-sm">
+                    <i class="glyphicon glyphicon-ban-circle" />&nbsp;<span th:text="#{disable}" />
+                </button>
+                <button th:if="*{id} and *{status} == 1" type="submit" th:name="enable" class="btn btn-success btn-block btn-sm">
+                    <i class="glyphicon glyphicon-ok" />&nbsp;<span th:text="#{enable}" />
+                </button>
             </div>
+            <div class="col-xs-2">
+                <button type="submit" value="Add SP" class="btn btn-success btn-block btn-sm"><i class="glyphicon glyphicon-floppy-save" />&nbsp;<span th:text="#{save}" /></button>
+            </div>            
         </div>
     </form>    
 </div><!-- /.container -->

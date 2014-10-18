@@ -42,7 +42,7 @@
                         <td>
                             <a href="/task/{taskId}/route/{routeId}" class="btn btn-default btn-xs"
                                th:href="'/task/' + ${task.id} + '/delivery/' + ${container.id}">
-                                <i class="glyphicon glyphicon-edit"/>
+                                <i class="glyphicon glyphicon-pencil"/>
                             </a>
                             <a sec:authorize="hasRole('ROLE_OPERATING')" class="btn btn-default btn-xs"                               
                                th:href="'/charge/console?taskId=' + ${taskId} + '&amp;legId=' + ${container.leg.id}">
@@ -51,7 +51,7 @@
                             <!-- Button trigger modal -->
                             <!--
                             <a data-toggle="modal" href="#myModal" class="btn btn-default btn-xs">
-                                <i class="glyphicon glyphicon-edit"/>
+                                <i class="glyphicon glyphicon-pencil"/>
                             </a>
                             -->
                         </td>

@@ -37,7 +37,7 @@
             <td th:text="${customer.phone}">Phone</td>
             <td th:text="${customer.cell}">Cell</td>
             <td><span th:text="${#strings.length(customer.queryName) > 64} ? ${#strings.substring(customer.queryName, 0, 64)} : ${customer.queryName}" /></td>
-            <td><a th:href="'/customer/' + ${customer.id}"><i class="glyphicon glyphicon-edit text-primary"/></a></td>
+            <td><a th:href="'/customer/' + ${customer.id}"><i class="glyphicon glyphicon-pencil text-primary"/></a></td>
         </tr>
         </tbody>
     </table>

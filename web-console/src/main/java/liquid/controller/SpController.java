@@ -90,6 +90,20 @@ public class SpController extends BaseController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.POST, params = "disable")
+    public String disble(@ModelAttribute("sp") ServiceProvider sp) {
+        logger.debug("sp: {}", sp);
+        serviceProviderFacade.changeStatus(sp.getId(), 1);
+        return "redirect:/sp";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "enable")
+    public String enable(@ModelAttribute("sp") ServiceProvider sp) {
+        logger.debug("sp: {}", sp);
+        serviceProviderFacade.changeStatus(sp.getId(), 0);
+        return "redirect:/sp";
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String initEdit(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);

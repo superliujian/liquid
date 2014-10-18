@@ -15,6 +15,7 @@ public class ServiceProvider extends BaseIdObject {
     private String phone;
     private String cell;
     private Long[] subtypeIds;
+    private Integer status = 0;
 
     public String getCode() {
         return code;
@@ -88,11 +89,18 @@ public class ServiceProvider extends BaseIdObject {
         this.subtypeIds = subtypeIds;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ServiceProvider{");
-        sb.append("super=").append(super.toString());
-        sb.append(", code='").append(code).append('\'');
+        sb.append("code='").append(code).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", typeId=").append(typeId);
         sb.append(", address='").append(address).append('\'');
@@ -101,6 +109,7 @@ public class ServiceProvider extends BaseIdObject {
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", cell='").append(cell).append('\'');
         sb.append(", subtypeIds=").append(Arrays.toString(subtypeIds));
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

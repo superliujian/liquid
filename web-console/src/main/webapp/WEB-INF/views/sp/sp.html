@@ -8,7 +8,7 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div id="t" class="container">
+<div class="container">
     <h3><span th:text="#{sp}"></span></h3>
     
     <hr />
@@ -24,6 +24,7 @@
             <th th:text="#{contact}">Contact</th>
             <th th:text="#{phone}">Phone</th>
             <th th:text="#{cell}">Cell</th>
+            <th th:text="#{status}">Status</th>
             <th><a th:href="'/sp/form'"><i class="glyphicon glyphicon-plus text-success"/></a></th>
         </tr>
         </thead>
@@ -37,7 +38,11 @@
             <td th:text="${sp.contact}">Contact</td>
             <td th:text="${sp.phone}">Phone</td>
             <td th:text="${sp.cell}">Cell</td>
-            <td><a th:href="'/sp/' + ${sp.id}"><i class="glyphicon glyphicon-edit text-primary"/></a></td>
+            <td>
+                <i th:if="${sp.status} == 0" class="glyphicon glyphicon-ok text-success"/>
+                <i th:if="${sp.status} == 1" class="glyphicon glyphicon-ban-circle text-danger"/>
+            </td>
+            <td><a th:href="'/sp/' + ${sp.id}"><i class="glyphicon glyphicon-pencil"/></a></td>
         </tr>
         </tbody>
     </table>
