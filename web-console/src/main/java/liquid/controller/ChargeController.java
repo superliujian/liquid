@@ -204,7 +204,6 @@ public class ChargeController extends BaseController {
         list(number, model, "/charge/summary");
 
         model.addAttribute("contextPath", "/charge/summary?");
-        model.addAttribute("action", "/charge/summary");
         return "charge/summary";
     }
 
@@ -214,7 +213,6 @@ public class ChargeController extends BaseController {
         search(number, searchBarForm, model);
 
         model.addAttribute("contextPath", "/charge/summary?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
-        model.addAttribute("action", "/charge/summary");
         return "charge/summary";
     }
 
@@ -223,7 +221,6 @@ public class ChargeController extends BaseController {
         list(number, model, "/charge/receivable");
 
         model.addAttribute("contextPath", "/charge/receivable?");
-        model.addAttribute("action", "/charge/receivable");
         return "charge/receivable";
     }
 
@@ -233,7 +230,6 @@ public class ChargeController extends BaseController {
         search(number, searchBarForm, model);
 
         model.addAttribute("contextPath", "/charge/receivable?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
-        model.addAttribute("action", "/charge/receivable");
         return "charge/receivable";
     }
 
@@ -290,7 +286,6 @@ public class ChargeController extends BaseController {
         model.addAttribute("page", page);
 
         model.addAttribute("contextPath", "/charge/payable?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
-        model.addAttribute("action", "/charge/payable");
         return "charge/payable";
     }
 
