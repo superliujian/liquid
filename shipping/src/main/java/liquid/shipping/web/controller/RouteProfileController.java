@@ -39,7 +39,7 @@ public class RouteProfileController {
         route = routeRepository.save(route);
         List<Leg> legs = new ArrayList<>();
         for (int i = 0; i < 5; i++) legs.add(new Leg());
-        model.addAttribute("route", new RouteProfile());
+        model.addAttribute("route", route);
         model.addAttribute("legs", legs);
         return "route_profile/form";
     }

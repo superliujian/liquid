@@ -130,7 +130,7 @@ public class TaskController extends BaseController {
             model.addAttribute("task_error", getMessage(e.getCode()));
             return "redirect:" + referer;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(String.format("Complete taskId '%s' and referer '%s'.", taskId, referer), e);
             return "redirect:" + referer;
         }
 

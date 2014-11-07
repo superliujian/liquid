@@ -57,7 +57,7 @@
                     <td>
             <select th:unless="*{head}" class="form-control input-sm" th:field="*{prevId}">
                 <option th:each="option : ${route.legs}"
-                        th:value="${option.id}" th:text="${option.id}">Prev Id
+                        th:value="${option.id}" th:text="'(' + ${option.id} + ') ' + ${option.srcLoc.name} + ' - ' + ${option.dstLoc.name}">Prev Id
                 </option>
             </select>                    
                     </td>

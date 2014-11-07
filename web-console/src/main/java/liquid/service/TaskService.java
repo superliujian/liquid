@@ -12,6 +12,8 @@ import liquid.util.DateUtil;
 import liquid.util.StringUtil;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ import java.util.Locale;
  */
 @Service
 public class TaskService {
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     @Autowired
     private ActivitiEngineService bpmService;
@@ -98,6 +101,10 @@ public class TaskService {
 
     public void complete(String taskId) throws NotCompletedException {
         Task activitiTask = bpmService.getTask(taskId);
+        if (null == activitiTask) {
+            logger.warn("The taskId '{}' is null.", taskId);
+            return;
+        }
         AbstractTaskProxy task = taskFactory.findTask(activitiTask.getTaskDefinitionKey());
         task.complete(taskId);
     }
