@@ -44,5 +44,10 @@ $.fn.extend({
         }).on('typeahead:selected', function (obj, datum) {
             $('#' + hiddenId).val(datum.id);
         });
-    }       
+    },
+    dtPicker: function() {
+        this.datetimepicker({
+            language: 'zh-cn'
+        });    
+    }      
 });
