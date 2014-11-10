@@ -22,7 +22,13 @@
 
         <div class="form-group" th:classappend="${#fields.hasErrors('railYardToa')} ? 'has-error'">
             <label th:text="#{station.toa}">Station TOA</label>
-            <input type="text" th:field="*{railYardToa}" class="form-control"/>
+
+            <div class='input-group input-group-sm date' id='timePicker'>
+                <input type='text' data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{railYardToa}" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         </div>
 
         <div class="form-group">
@@ -45,6 +51,14 @@
 <!-- {!begin layout} -->
 <div th:replace="layout :: js" />
 <!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        $('#timePicker').dtPicker();
+    }); // ready end
+/*]]>*/
+</script>
 </body>
 
 </html>

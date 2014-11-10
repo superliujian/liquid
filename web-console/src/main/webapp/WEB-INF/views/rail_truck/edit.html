@@ -44,7 +44,13 @@
 
         <div class="form-group" th:classappend="${#fields.hasErrors('loadingToc')} ? 'has-error'">
             <label th:text="#{loading.toc}">Loading TOC</label>
-            <input type="text" th:field="*{loadingToc}" class="form-control input-sm"/>
+            <div class='input-group input-group-sm date' id='timePicker'>
+                <input type='text' data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{loadingToc}" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+
             <span th:errors="*{loadingToc}">error</span>
         </div>
 
@@ -68,6 +74,14 @@
 <!-- {!begin layout} -->
 <div th:replace="layout :: js" />
 <!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        $('#timePicker').dtPicker();
+    }); // ready end
+/*]]>*/
+</script>
 </body>
 
 </html>
