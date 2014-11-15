@@ -4,6 +4,7 @@ import liquid.domain.ServiceProvider;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.pinyin4j.PinyinHelper;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class ServiceProviderFacade {
         entity.setId(serviceProvider.getId());
         entity.setCode(serviceProvider.getCode());
         entity.setName(serviceProvider.getName());
+        String queryName = PinyinHelper.converterToFirstSpell(serviceProvider.getName()) + ";" + serviceProvider.getName();
+        entity.setQueryName(queryName);
         entity.setType(ServiceProviderTypeEnity.newInstance(ServiceProviderTypeEnity.class, serviceProvider.getTypeId()));
         entity.setAddress(serviceProvider.getAddress());
         entity.setPostcode(serviceProvider.getPostcode());
