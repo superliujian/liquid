@@ -189,16 +189,6 @@ public class ChargeController extends BaseController {
         return "charge/console";
     }
 
-    @RequestMapping(value = "/details", method = RequestMethod.GET, params = "number")
-    public String details(@RequestParam int number, Model model) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<ChargeEntity> page = chargeService.findAll(pageRequest);
-        model.addAttribute("tab", "details");
-        model.addAttribute("page", page);
-        model.addAttribute("charges", page.getContent());
-        return "charge/details";
-    }
-
     @RequestMapping(value = "/summary", method = RequestMethod.GET)
     public String summary(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
         list(number, model, "/charge/summary");
@@ -287,41 +277,6 @@ public class ChargeController extends BaseController {
 
         model.addAttribute("contextPath", "/charge/payable?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
         return "charge/payable";
-    }
-
-//    @RequestMapping(method = RequestMethod.POST)
-//    public String record(@Valid @ModelAttribute ChargeEntity charge,
-//                         @RequestHeader(value = "referer") String referer,
-//                         BindingResult bindingResult, Principal principal) {
-//        logger.debug("charge: {}", charge);
-//        logger.debug("referer: {}", referer);
-//
-//        long orderId = taskService.getOrderIdByTaskId(charge.getTaskId());
-//        OrderEntity order = orderService.find(orderId);
-//
-//        charge.setOrder(order);
-//
-//        if (ChargeWay.PER_ORDER.getValue() == charge.getWay()) {
-//            charge.setUnitPrice(0L);
-//        } else if (ChargeWay.PER_CONTAINER.getValue() == charge.getWay()) {
-//            charge.setTotalPrice(charge.getUnitPrice() * order.getContainerQty());
-//        } else {
-//            logger.warn("{} is out of charge way range.", charge.getWay());
-//        }
-//
-//        chargeService.save(charge);
-//
-//        String redirect = "redirect:" + referer;
-//        return redirect;
-//    }
-
-    @RequestMapping(value = "/{chargeId}", method = RequestMethod.GET)
-    public String initDetail(@PathVariable long chargeId,
-                             Model model, Principal principal) {
-        logger.debug("chargeId: {}", chargeId);
-        ChargeEntity charge = chargeService.find(chargeId);
-        model.addAttribute("charge", charge);
-        return "charge/detail";
     }
 
     @RequestMapping(value = "/{chargeId}", method = RequestMethod.POST)

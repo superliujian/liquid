@@ -101,7 +101,22 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="INTERCEPTOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/interceptor.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/interceptor.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -152,6 +167,10 @@
 
     <logger name="liquid" level="DEBUG" additivity="false">
         <appender-ref ref="LIQUID"/>
+    </logger>
+
+    <logger name="liquid.interceptor" level="DEBUG" additivity="false">
+        <appender-ref ref="INTERCEPTOR"/>
     </logger>
 
     <logger name="auditing" level="INFO" additivity="false">
