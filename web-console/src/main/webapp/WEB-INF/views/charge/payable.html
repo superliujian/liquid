@@ -59,7 +59,7 @@
             <td th:text="${charge.totalPrice}">Total Price</td>
             <td></td>
             <td>
-                <a th:if="${charge.status} == 0" th:href="'/charge/' + ${charge.id}"><i class="glyphicon glyphicon-credit-card text-success"/></a>
+                <a th:if="${charge.status} == 0" th:href="'/payable/' + ${charge.order.id}"><i class="glyphicon glyphicon-credit-card text-success"/></a>
                 <span th:if="${charge.status} == 1"><i class="glyphicon glyphicon-check"/></span>
             </td>
         </tr>

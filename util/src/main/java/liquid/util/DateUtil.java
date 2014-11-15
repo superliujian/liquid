@@ -26,6 +26,10 @@ public class DateUtil {
         return format.format(date);
     }
 
+    public static String stringOf() {
+        return stringOf(new Date());
+    }
+
     public static Date dateOf(String dateStr) {
         try {
             SimpleDateFormat format = new SimpleDateFormat(DatePattern.UNTIL_MINUTE.getPattern());

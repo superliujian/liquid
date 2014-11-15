@@ -29,6 +29,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories({"liquid.persistence.repository",
         "liquid.container.persistence.repository",
+        "liquid.accounting.persistence.repository",
         "liquid.order.persistence.repository",
         "liquid.shipping.persistence.repository",
         "liquid.charge.persistence.repository",
@@ -68,6 +69,7 @@ public class JpaConfig {
                 "liquid.order.persistence.domain",
                 "liquid.shipping.persistence.domain",
                 "liquid.charge.persistence.domain",
+                "liquid.accounting.persistence.domain",
                 "liquid.purchasing.persistence.domain");
         factory.setDataSource(dataSource());
         factory.setJpaProperties(jpaProperties);

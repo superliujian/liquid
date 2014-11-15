@@ -20,4 +20,6 @@ public interface ServiceProviderRepository extends CrudRepository<ServiceProvide
     Iterable<ServiceProviderEntity> findOrderByName();
 
     Page<ServiceProviderEntity> findAll(Pageable pageable);
+
+    Iterable<ServiceProviderEntity> findByQueryNameLike(String queryName);
 }

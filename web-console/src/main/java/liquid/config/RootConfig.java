@@ -25,6 +25,7 @@ import java.util.Map;
         "liquid.facade", "liquid.service",
         "liquid.excel",
         "liquid.finance.service",
+        "liquid.accounting.service", "liquid.accounting.facade",
         "liquid.user.service",
         "liquid.container.facade", "liquid.container.service",
         "liquid.order.facade", "liquid.order.service",

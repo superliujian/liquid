@@ -269,7 +269,7 @@
         <div class="form-group" th:classappend="${#fields.hasErrors('planReportTime')} ? 'has-error'">
             <label th:text="#{railway.plan.report.time} + ' *'">Railway Plan Report Date</label>
             
-            <div class='input-group input-group-sm date' id='planReportTimePicker'>                    
+            <div class='input-group input-group-sm date' id='planReportTimePicker'>
                 <input type='text' data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{planReportTime}" />
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
@@ -523,7 +523,7 @@
         
         $(".tt-hint").addClass("form-control"); 
         
-        $('#planReportTimePicker').dtPicker();        
+        $('#planReportTimePicker').dtPicker();
     }); // ready end
 /*]]>*/
 </script>

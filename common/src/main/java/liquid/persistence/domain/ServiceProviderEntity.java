@@ -25,6 +25,9 @@ public class ServiceProviderEntity extends StatefulEntity {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "Q_NAME")
+    private String queryName;
+
     @ManyToOne
     @JoinColumn(name = "TYPE_ID")
     private ServiceProviderTypeEnity type;
@@ -64,6 +67,14 @@ public class ServiceProviderEntity extends StatefulEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
     }
 
     public ServiceProviderTypeEnity getType() {

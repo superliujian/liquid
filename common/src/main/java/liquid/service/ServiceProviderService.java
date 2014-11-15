@@ -1,8 +1,8 @@
 package liquid.service;
 
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.domain.ServiceProviderTypeEnity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,6 @@ import java.util.TreeMap;
  */
 @Service
 public class ServiceProviderService extends AbstractService<ServiceProviderEntity, ServiceProviderRepository> {
-    @Autowired
-    private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
@@ -36,16 +34,16 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
     public void doSaveBefore(ServiceProviderEntity serviceProvider) { }
 
     public Page<ServiceProviderEntity> findAll(Pageable pageable) {
-        return serviceProviderRepository.findAll(pageable);
+        return repository.findAll(pageable);
     }
 
     public Iterable<ServiceProviderEntity> findAll() {
-        return serviceProviderRepository.findOrderByName();
+        return repository.findOrderByName();
     }
 
     @Transactional("transactionManager")
     public ServiceProviderEntity find(long id) {
-        ServiceProviderEntity entity = serviceProviderRepository.findOne(id);
+        ServiceProviderEntity entity = repository.findOne(id);
         Set<ServiceSubtypeEntity> serviceSubtypeEntitySet = entity.getServiceSubtypes();
         serviceSubtypeEntitySet.size();
         return entity;
@@ -53,11 +51,11 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
 
     public Iterable<ServiceProviderEntity> findByType(long typeId) {
         ServiceProviderTypeEnity type = serviceProviderTypeRepository.findOne(typeId);
-        return serviceProviderRepository.findByType(type);
+        return repository.findByType(type);
     }
 
     public Iterable<ServiceProviderEntity> findByType(ServiceProviderTypeEnity type) {
-        return serviceProviderRepository.findByType(type);
+        return repository.findByType(type);
     }
 
     public Map<Long, String> getSpTypes() {
@@ -67,5 +65,9 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
             spTypes.put(spType.getId(), spType.getName());
         }
         return spTypes;
+    }
+
+    public Iterable<ServiceProviderEntity> findByQueryNameLike(String name) {
+        return repository.findByQueryNameLike("%" + name + "%");
     }
 }

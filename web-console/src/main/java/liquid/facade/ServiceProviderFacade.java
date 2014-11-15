@@ -8,6 +8,7 @@ import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,16 @@ public class ServiceProviderFacade {
             serviceProviders.add(convert(providerEntity));
         }
         return serviceProviders;
+    }
+
+    @Transactional("transactionManager")
+    public List<ServiceProvider> findByQueryNameLike(String name) {
+        List<ServiceProvider> list = new ArrayList<>();
+        Iterable<ServiceProviderEntity> entities = serviceProviderService.findByQueryNameLike(name);
+        for (ServiceProviderEntity entity : entities) {
+            list.add(convert(entity));
+        }
+        return list;
     }
 
     public void changeStatus(Long id, Integer status) {

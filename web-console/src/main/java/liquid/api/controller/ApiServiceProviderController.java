@@ -29,4 +29,11 @@ public class ApiServiceProviderController {
     public List<ServiceProvider> list(@RequestParam Long subtypeId) {
         return serviceProviderFacade.findBySubtypeId(subtypeId);
     }
+
+    @RequestMapping(method = RequestMethod.GET, params = "name")
+    @ResponseBody
+    public Iterable<ServiceProvider> listByName(@RequestParam String name) {
+        logger.debug("name: {}", name);
+        return serviceProviderFacade.findByQueryNameLike(name);
+    }
 }

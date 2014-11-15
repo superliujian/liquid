@@ -3,6 +3,7 @@ package liquid.ops;
 import liquid.config.JpaConfig;
 import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.LocationRepository;
+import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.pinyin4j.PinyinHelper;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.repository.CrudRepository;
@@ -22,9 +23,11 @@ public class QueryNameGenerator {
         context.refresh();
         CustomerRepository customerRepository = (CustomerRepository) context.getBean(CustomerRepository.class);
         LocationRepository locationRepository = (LocationRepository) context.getBean(LocationRepository.class);
+        ServiceProviderRepository serviceProviderRepository = (ServiceProviderRepository) context.getBean(ServiceProviderRepository.class);
 
         generate(customerRepository, "/tmp/customer_qname.sql", "OPS_CUSTOMER");
         generate(locationRepository, "/tmp/location_qname.sql", "OPS_LOCATION");
+        generate(serviceProviderRepository, "/tmp/service_provider_qname.sql", "OPS_SERVICE_PROVIDER");
     }
 
     public <T extends CrudRepository> void generate(T repository, String fileName, String tableName) throws IOException {
