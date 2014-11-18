@@ -1,11 +1,10 @@
 package liquid.controller;
 
-import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.ChargeService;
-import liquid.shipping.persistence.domain.LegEntity;
 import liquid.shipping.persistence.domain.RouteEntity;
 import liquid.shipping.service.RouteService;
 import liquid.shipping.web.domain.TransMode;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.util.Collection;
 
 /**
  * TODO: Comments.

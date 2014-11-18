@@ -1,4 +1,4 @@
-package liquid.charge.persistence.domain;
+package liquid.accounting.persistence.domain;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
@@ -59,6 +59,9 @@ public class ChargeEntity extends BaseUpdateEntity {
 
     @Column(name = "STATUS")
     private int status;
+
+    @Column(name = "COMMENT")
+    private String comment;
 
     public OrderEntity getOrder() {
         return order;
@@ -156,6 +159,14 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.status = status;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     /**
      * For auditing.
      *
@@ -176,6 +187,7 @@ public class ChargeEntity extends BaseUpdateEntity {
         sb.append(", currency=").append(currency);
         sb.append(", createRole='").append(createRole).append('\'');
         sb.append(", status=").append(status);
+        sb.append(", comment=").append(comment);
         sb.append('}');
         return sb.toString();
     }

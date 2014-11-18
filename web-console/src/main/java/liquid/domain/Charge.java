@@ -18,6 +18,7 @@ public class Charge extends BaseIdObject {
     @NotNull
     private Long unitPrice;
     private String taskId;
+    private String comment;
 
     public Long getRouteId() {
         return routeId;
@@ -83,10 +84,17 @@ public class Charge extends BaseIdObject {
         this.taskId = taskId;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Charge{");
-        sb.append("super=").append(super.toString());
+        final StringBuilder sb = new StringBuilder("{Class=Charge");
         sb.append(", routeId=").append(routeId);
         sb.append(", legId=").append(legId);
         sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
@@ -95,6 +103,8 @@ public class Charge extends BaseIdObject {
         sb.append(", currency=").append(currency);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", taskId='").append(taskId).append('\'');
+        sb.append(", comment='").append(comment).append('\'');
+        sb.append(", ").append(super.toString());
         sb.append('}');
         return sb.toString();
     }

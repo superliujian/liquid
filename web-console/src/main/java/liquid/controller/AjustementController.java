@@ -1,11 +1,11 @@
 package liquid.controller;
 
-import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.accounting.persistence.domain.IncomeEntity;
 import liquid.domain.Charge;
 import liquid.facade.ChargeFacade;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.IncomeType;
-import liquid.charge.persistence.domain.Income;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
@@ -75,7 +75,7 @@ public class AjustementController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         // for incomes
-        List<Income> incomes = incomeService.findByTaskId(taskId);
+        List<IncomeEntity> incomes = incomeService.findByTaskId(taskId);
         model.addAttribute("incomes", incomes);
         model.addAttribute("incomesTotal", incomeService.total(incomes));
 
@@ -95,13 +95,13 @@ public class AjustementController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         model.addAttribute("incomeTypes", IncomeType.toMap());
-        model.addAttribute("income", new Income());
+        model.addAttribute("income", new IncomeEntity());
         return "order/add_income";
     }
 
     @RequestMapping(value = "/income", method = RequestMethod.POST)
     public String addIncome(@PathVariable String taskId,
-                            @Valid Income income,
+                            @Valid IncomeEntity income,
                             BindingResult result, Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
         logger.debug("income: {}", income);

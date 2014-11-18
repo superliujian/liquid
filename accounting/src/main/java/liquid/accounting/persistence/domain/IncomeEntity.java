@@ -1,4 +1,4 @@
-package liquid.charge.persistence.domain;
+package liquid.accounting.persistence.domain;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
  * Time: 12:55 PM
  */
 @Entity(name = "FIN_INCOME")
-public class Income extends BaseUpdateEntity {
+public class IncomeEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

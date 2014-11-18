@@ -1,8 +1,8 @@
 package liquid.service;
 
-import liquid.charge.persistence.domain.ChargeEntity;
-import liquid.charge.persistence.domain.ChargeEntity_;
-import liquid.charge.persistence.repository.ChargeRepository;
+import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.accounting.persistence.domain.ChargeEntity_;
+import liquid.accounting.persistence.repository.ChargeRepository;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;

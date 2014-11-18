@@ -1,6 +1,6 @@
 package liquid.facade;
 
-import liquid.charge.persistence.domain.ChargeEntity;
+import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.domain.Charge;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
@@ -38,6 +38,7 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
         entity.setCurrency(charge.getCurrency());
         entity.setUnitPrice(charge.getUnitPrice());
         entity.setTaskId(charge.getTaskId());
+        entity.setComment(charge.getComment());
         return entity;
     }
 

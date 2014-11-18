@@ -153,3 +153,6 @@ div#tc.container {
   margin: 0;
 } 
 
+.vertical-line {
+    border-left: 1px solid #eee;
+}

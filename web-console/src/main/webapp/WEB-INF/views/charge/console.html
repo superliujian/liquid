@@ -66,9 +66,8 @@
             <span th:text="${leg.srcLoc.name} + '-' + ${leg.dstLoc.name}"></span>
             <span th:text="#{container.quantity} + '(' + ${leg.route.containerQty}+ ')'"></span>
 
-            <a href="/task/{taskId}" class="btn btn-default btn-xs pull-right"
-               th:href="${backToTask}">
-                <i class="glyphicon glyphicon-arrow-left"/>
+            <a href="/task/{taskId}" class="pull-right" th:href="${backToTask}">
+                <i class="glyphicon glyphicon-arrow-left text-success"/>
             </a>
         </div>
 
@@ -109,10 +108,11 @@
     <!-- /.panel -->
 </div>
 
-<div class="col-lg-4">
-    <div class="panel panel-default">
-        <div class="panel-heading" th:text="#{charge.add}">Add Charge</div>
-        <div class="panel-body">
+<div class="col-lg-4 vertical-line">
+            <h3><span th:text="#{charge.add}">Add Charge</span></h3>
+            
+            <hr />
+            
             <form method="POST" action="/charge" th:object="${charge}">
 
                 <input type="hidden" th:field="*{taskId}"/>
@@ -166,10 +166,18 @@
                     </div><!-- row -->
                 </div>
                 
+                <div class="form-group">
+                    <label th:text="#{comment}">Comment</label>
+                    <input type="text" th:field="*{comment}" class="form-control"/>
+                </div>                
+                
+                <div class="row">
+                <div class="col-xs-6 pull-right">
                 <input type="submit" value="Record" class="btn btn-success btn-block btn-sm" th:value="#{charge.record}"/>
+                </div>
+                </div>
             </form>
-        </div>
-    </div>
+
 </div>
 </div>
 </div>
