@@ -136,8 +136,9 @@
                     <th th:text="#{sp.name}">SP Name</th>
                     <th th:text="#{charge.way}">Way</th>
                     <th th:text="#{charge.unit.price}">Unit Price</th>
-                    <th th:text="#{charge.total.price}">Total Price</th>
+                    <th th:text="#{charge.total.price}">Total Price</th>                    
                     <th></th>
+                    <th th:text="#{comment}">Comment</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -152,6 +153,7 @@
                     <td th:text="${charge.unitPrice}">Unit Price</td>
                     <td th:text="${charge.totalPrice}">Total Price</td>
                     <td th:text="${charge.currency} ? 'USD' : 'CNY'">Total Price</td>
+                    <td th:text="${charge.comment}">Comment</td>
                 </tr>
                 </tbody>
             </table>
