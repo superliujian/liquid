@@ -3,7 +3,7 @@ package liquid.order.service;
 import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.persistence.repository.ServiceItemRepository;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.service.ServiceSubtypeService;
+import liquid.service.ServiceProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +14,16 @@ import java.util.List;
  */
 @Service
 public class ServiceItemService {
-    private static final int CONTAINER_PROVIDER_TYPE_ID = 1;
+    private static final Long CONTAINER_PROVIDER_TYPE_ID = 1L;
 
     @Autowired
     private ServiceItemRepository serviceItemRepository;
 
     @Autowired
-    private ServiceSubtypeService serviceSubtypeService;
+    private ServiceProviderService serviceProviderService;
 
     public List<ServiceProviderEntity> findContainerOwners() {
-        return serviceSubtypeService.find(CONTAINER_PROVIDER_TYPE_ID).getServiceProviders();
+        return serviceProviderService.findByServiceSubtypeId(CONTAINER_PROVIDER_TYPE_ID);
     }
 
     public Iterable<ServiceItemEntity> findEnabled() {

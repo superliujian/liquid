@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,13 +62,6 @@ public class SpController extends BaseController {
         model.addAttribute("page", page);
         model.addAttribute("contextPath", "/sp?");
         return "sp/sp";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "type")
-    @ResponseBody
-    public List<ServiceProviderEntity> list(@RequestParam long type) {
-        logger.debug("type: {}", type);
-        return serviceSubtypeService.find(type).getServiceProviders();
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)

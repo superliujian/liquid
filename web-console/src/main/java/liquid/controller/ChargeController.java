@@ -4,17 +4,18 @@ import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.container.domain.ContainerType;
 import liquid.domain.Charge;
 import liquid.domain.LoadingType;
+import liquid.domain.ServiceProvider;
 import liquid.domain.TradeType;
 import liquid.dto.EarningDto;
 import liquid.dto.ExchangeRateDto;
 import liquid.facade.ChargeFacade;
+import liquid.facade.ServiceProviderFacade;
 import liquid.metadata.ChargeStatus;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
 import liquid.metadata.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +68,9 @@ public class ChargeController extends BaseController {
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
+
+    @Autowired
+    private ServiceProviderFacade serviceProviderFacade;
 
     @ModelAttribute("transModes")
     public Map<Integer, String> populateTransModes() {
@@ -119,7 +124,7 @@ public class ChargeController extends BaseController {
 
         if (bindingResult.hasErrors()) {
             Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
-            Iterable<ServiceProviderEntity> sps = serviceSubtypeService.find(charge.getServiceSubtypeId()).getServiceProviders();
+            List<ServiceProvider> sps = serviceProviderFacade.findBySubtypeId(charge.getServiceSubtypeId());
 
             Iterable<ChargeEntity> charges = chargeService.findByLegId(charge.getLegId());
 
@@ -176,7 +181,7 @@ public class ChargeController extends BaseController {
         charge.setServiceSubtypeId(defaultServiceSubtypeId);
 
         Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
-        Iterable<ServiceProviderEntity> sps = serviceSubtypeService.find(defaultServiceSubtypeId).getServiceProviders();
+        List<ServiceProvider> sps = serviceProviderFacade.findBySubtypeId(defaultServiceSubtypeId);
         charge.setTaskId(taskId);
 
         model.addAttribute("serviceSubtypes", serviceSubtypes);

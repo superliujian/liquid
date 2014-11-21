@@ -39,11 +39,10 @@ public class ServiceProviderFacade {
     }
 
     public List<ServiceProvider> findBySubtypeId(Long subtypeId) {
-        ServiceSubtypeEntity subtypeEntity = serviceSubtypeService.find(subtypeId);
-        List<ServiceProviderEntity> providerEntities = subtypeEntity.getServiceProviders();
+        List<ServiceProviderEntity> providerEntities = serviceProviderService.findByServiceSubtypeId(subtypeId);
         List<ServiceProvider> serviceProviders = new ArrayList<>();
         for (ServiceProviderEntity providerEntity : providerEntities) {
-            serviceProviders.add(convert(providerEntity));
+            serviceProviders.add(simplyConvert(providerEntity));
         }
         return serviceProviders;
     }
@@ -79,14 +78,38 @@ public class ServiceProviderFacade {
         entity.setCell(serviceProvider.getCell());
 
         for (Long subtypeId : serviceProvider.getSubtypeIds()) {
-            ServiceSubtypeEntity serviceSubtypeEntity = serviceSubtypeService.find(subtypeId);
-            serviceSubtypeEntity.getServiceProviders().add(entity);
+            ServiceSubtypeEntity serviceSubtypeEntity = ServiceSubtypeEntity.newInstance(ServiceSubtypeEntity.class, subtypeId);
             entity.getServiceSubtypes().add(serviceSubtypeEntity);
         }
         return entity;
     }
 
+    /**
+     * For single service provider
+     *
+     * @param entity
+     * @return
+     */
     private ServiceProvider convert(ServiceProviderEntity entity) {
+        ServiceProvider serviceProvider = simplyConvert(entity);
+        Set<ServiceSubtypeEntity> serviceSubtypeEntities = entity.getServiceSubtypes();
+        Long[] subtypeIds = new Long[serviceSubtypeEntities.size()];
+        int i = 0;
+        for (ServiceSubtypeEntity serviceSubtypeEntity : serviceSubtypeEntities) {
+            subtypeIds[i] = serviceSubtypeEntity.getId();
+            i++;
+        }
+        serviceProvider.setSubtypeIds(subtypeIds);
+        return serviceProvider;
+    }
+
+    /**
+     * For service provider set.
+     *
+     * @param entity
+     * @return
+     */
+    private ServiceProvider simplyConvert(ServiceProviderEntity entity) {
         ServiceProvider serviceProvider = new ServiceProvider();
         serviceProvider.setId(entity.getId());
         serviceProvider.setCode(entity.getCode());
@@ -97,15 +120,6 @@ public class ServiceProviderFacade {
         serviceProvider.setContact(entity.getContact());
         serviceProvider.setPhone(entity.getPhone());
         serviceProvider.setCell(entity.getCell());
-
-        Set<ServiceSubtypeEntity> serviceSubtypeEntities = entity.getServiceSubtypes();
-        Long[] subtypeIds = new Long[serviceSubtypeEntities.size()];
-        int i = 0;
-        for (ServiceSubtypeEntity serviceSubtypeEntity : serviceSubtypeEntities) {
-            subtypeIds[i] = serviceSubtypeEntity.getId();
-            i++;
-        }
-        serviceProvider.setSubtypeIds(subtypeIds);
         serviceProvider.setStatus(entity.getStatus());
         return serviceProvider;
     }

@@ -11,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * TODO: Comments.
@@ -69,5 +67,11 @@ public class ServiceProviderService extends AbstractService<ServiceProviderEntit
 
     public Iterable<ServiceProviderEntity> findByQueryNameLike(String name) {
         return repository.findByQueryNameLike("%" + name + "%");
+    }
+
+    public List<ServiceProviderEntity> findByServiceSubtypeId(Long serviceSubtypeId) {
+        HashSet<ServiceSubtypeEntity> serviceSubtypes = new HashSet<>();
+        serviceSubtypes.add(ServiceSubtypeEntity.newInstance(ServiceSubtypeEntity.class, serviceSubtypeId));
+        return repository.findByServiceSubtypes(serviceSubtypes);
     }
 }
