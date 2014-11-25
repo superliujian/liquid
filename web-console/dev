@@ -9,5 +9,5 @@ if [ -z $MAVEN_OPTS ]
     export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
 fi
 
-mvn -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run
+mvn -Dmaven.tomcat.uriEncoding=UTF-8 -Denv.target=dev tomcat7:run
 # mvn -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run > log/console.log 2>&1 &

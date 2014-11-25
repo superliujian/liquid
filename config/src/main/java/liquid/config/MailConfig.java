@@ -4,6 +4,7 @@ import liquid.service.MailNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
@@ -13,7 +14,7 @@ import java.util.Properties;
  * Created by redbrick9 on 2/18/14.
  */
 @Configuration
-@PropertySource("classpath:liquid.properties")
+@Import(PropertyPlaceholderConfig.class)
 public class MailConfig {
     @Autowired
     private Environment env;

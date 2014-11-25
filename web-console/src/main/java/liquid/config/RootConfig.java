@@ -24,13 +24,12 @@ import java.util.Map;
         "liquid.audit",
         "liquid.facade", "liquid.service",
         "liquid.excel",
-        "liquid.finance.service",
-        "liquid.accounting.service", "liquid.accounting.facade",
+        "liquid.accounting.facade", "liquid.accounting.service",
         "liquid.user.service",
         "liquid.container.facade", "liquid.container.service",
         "liquid.order.facade", "liquid.order.service",
         "liquid.shipping.facade", "liquid.shipping.service",
-        "liquid.task", "liquid.task.handler"})
+        "liquid.task.service", "liquid.task.handler"})
 @EnableAspectJAutoProxy
 public class RootConfig {
     @Bean
