@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by mat on 11/15/14.
  */
-@Entity(name = "ACC_PAYABLE_SETTLE")
+@Entity(name = "ACT_PAYABLE_SETTLE")
 public class PayableSettlementEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")

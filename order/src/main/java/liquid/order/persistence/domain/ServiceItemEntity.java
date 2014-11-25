@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Created by redbrick9 on 5/7/14.
  */
-@Entity(name = "FIN_SERVICE_ITEM")
+@Entity(name = "ORD_SERVICE_ITEM")
 public class ServiceItemEntity extends BaseIdEntity {
     @Column
     private String uuid;

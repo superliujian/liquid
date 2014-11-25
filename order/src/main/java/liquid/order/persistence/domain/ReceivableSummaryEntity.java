@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by redbrick9 on 8/28/14.
  */
-@Entity(name = "FIN_RECEIVABLE_SUMMARY")
+@Entity(name = "ACT_RECEIVABLE_SUMMARY")
 public class ReceivableSummaryEntity extends BaseIdEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")

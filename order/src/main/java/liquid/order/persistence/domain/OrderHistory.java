@@ -1,5 +1,8 @@
-package liquid.persistence.domain;
+package liquid.order.persistence.domain;
 
+import liquid.persistence.domain.CustomerEntity;
+import liquid.persistence.domain.GoodsEntity;
+import liquid.persistence.domain.LocationEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -13,7 +16,7 @@ import java.util.Date;
  * Date: 11/12/13
  * Time: 10:59 PM
  */
-@Entity(name = "FIN_ORDER_HISTORY")
+@Entity(name = "ORD_HISTORY")
 public class OrderHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

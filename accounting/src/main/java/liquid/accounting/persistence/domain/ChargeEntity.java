@@ -15,7 +15,7 @@ import javax.persistence.*;
  * Date: 10/2/13
  * Time: 7:43 PM
  */
-@Entity(name = "FIN_CHARGE")
+@Entity(name = "ACT_CHARGE")
 @EntityListeners(liquid.audit.AuditListener.class)
 public class ChargeEntity extends BaseUpdateEntity {
 

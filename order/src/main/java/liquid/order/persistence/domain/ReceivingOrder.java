@@ -10,7 +10,7 @@ import java.util.List;
  * Date: 10/13/13
  * Time: 4:08 PM
  */
-@Entity(name = "FIN_RECV_ORDER")
+@Entity(name = "ORD_RECV")
 public class ReceivingOrder extends BaseOrder {
     @Transient
     private List<String> bicCodes = new ArrayList<String>();
