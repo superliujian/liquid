@@ -1,9 +1,9 @@
 package liquid.controller;
 
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.domain.VesselContainerEntity;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.service.ShippingContainerService;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.VesselContainerEntity;
+import liquid.transport.service.RouteService;
+import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class VesselController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initVesselContainers(orderId);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "vessel/main";
     }

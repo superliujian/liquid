@@ -1,7 +1,7 @@
 package liquid.task;
 
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.domain.ShippingContainerEntity;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShippingContainerEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,12 +18,12 @@ public class AllocationContainerTask extends AbstractTaskProxy {
     @Override
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
         int shippingContainerQuantity = 0;
 
         // TODO: This is temp solution for dual-allocated containers.
         List<ShippingContainerEntity> shippingContainers = new ArrayList<ShippingContainerEntity>();
-        for (RouteEntity route : routes) {
+        for (TransportEntity route : routes) {
             Collection<ShippingContainerEntity> scs = shippingContainerService.findByRouteId(route.getId());
             shippingContainerQuantity += scs.size();
 

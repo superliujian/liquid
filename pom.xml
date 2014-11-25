@@ -87,7 +87,7 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>shipping</artifactId>
+                <artifactId>transport</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -265,7 +265,7 @@
         <module>user</module>
         <module>container</module>
         <module>order</module>
-        <module>shipping</module>
+        <module>transport</module>
         <module>accounting-api</module>
         <module>accounting</module>
         <module>task</module>

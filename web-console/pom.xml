@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>shipping</artifactId>
+            <artifactId>transport</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>

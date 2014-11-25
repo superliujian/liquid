@@ -4,7 +4,7 @@ import liquid.facade.BookingFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ServiceProviderService;
-import liquid.shipping.web.domain.Booking;
+import liquid.transport.web.domain.Booking;
 import liquid.task.domain.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

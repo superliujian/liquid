@@ -1,8 +1,8 @@
 package liquid.task;
 
-import liquid.shipping.web.domain.TransMode;
-import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.web.domain.TransMode;
+import liquid.transport.persistence.domain.LegEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,9 +26,9 @@ public class PlanRouteTask extends AbstractTaskProxy {
         variableMap.putAll(transTypes);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
         boolean hasWaterTransport = false;
-        for (RouteEntity route : routes) {
+        for (TransportEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {
                 switch (TransMode.valueOf(leg.getTransMode())) {
@@ -55,8 +55,8 @@ public class PlanRouteTask extends AbstractTaskProxy {
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
 
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
-        for (RouteEntity route : routes) {
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        for (TransportEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {
                 TransMode mode = TransMode.valueOf(leg.getTransMode());

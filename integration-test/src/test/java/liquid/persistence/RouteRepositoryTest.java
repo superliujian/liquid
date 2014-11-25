@@ -1,8 +1,8 @@
 package liquid.persistence;
 
 import liquid.config.JpaConfig;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.repository.RouteRepository;
+import liquid.transport.persistence.domain.RouteEntity;
+import liquid.transport.persistence.repository.RouteRepository;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

@@ -33,7 +33,7 @@ import java.util.Locale;
 @ComponentScan(basePackages = {
         "liquid.controller",
         "liquid.api.controller",
-        "liquid.shipping.web.controller"})
+        "liquid.transport.web.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

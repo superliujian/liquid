@@ -1,9 +1,9 @@
 package liquid.controller;
 
-import liquid.shipping.web.domain.RailPlan;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.service.ShippingContainerService;
+import liquid.transport.web.domain.RailPlan;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.service.RouteService;
+import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class RailPlanController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

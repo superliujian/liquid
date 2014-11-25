@@ -5,9 +5,9 @@ import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.ChargeService;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.web.domain.TransMode;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.service.RouteService;
+import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +46,14 @@ public class PlanningController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
 
         int containerUsage = 0;
-        for (RouteEntity route : routes) {
+        for (TransportEntity route : routes) {
             containerUsage += route.getContainerQty();
         }
 
-        RouteEntity route = new RouteEntity();
+        TransportEntity route = new TransportEntity();
         // set remaining container quantity as the default value for the next route planning.
         route.setContainerQty(order.getContainerQty() - containerUsage);
 
@@ -74,7 +74,7 @@ public class PlanningController extends BaseTaskController {
     }
 
     @RequestMapping(value = "/route", method = RequestMethod.POST)
-    public String addRoute(@PathVariable String taskId, @Valid @ModelAttribute(value = "route") RouteEntity route,
+    public String addRoute(@PathVariable String taskId, @Valid @ModelAttribute(value = "route") TransportEntity route,
                            BindingResult result, Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("route: {}", route);
@@ -83,8 +83,8 @@ public class PlanningController extends BaseTaskController {
         OrderEntity order = orderService.find(orderId);
 
         int containerUsage = 0;
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
-        for (RouteEntity r : routes) {
+        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        for (TransportEntity r : routes) {
             containerUsage += r.getContainerQty();
         }
 

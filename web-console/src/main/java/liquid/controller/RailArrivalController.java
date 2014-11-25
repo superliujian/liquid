@@ -1,7 +1,7 @@
 package liquid.controller;
 
-import liquid.shipping.web.domain.RailArrival;
-import liquid.shipping.service.ShippingContainerService;
+import liquid.transport.web.domain.RailArrival;
+import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
