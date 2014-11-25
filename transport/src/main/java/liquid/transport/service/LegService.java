@@ -5,7 +5,7 @@ import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.TransportEntity;
 import liquid.transport.persistence.repository.LegRepository;
-import liquid.transport.persistence.repository.RouteRepository;
+import liquid.transport.persistence.repository.TransportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.List;
 public class LegService extends AbstractService<LegEntity, LegRepository> {
 
     @Autowired
-    private RouteRepository routeRepository;
+    private TransportRepository transportRepository;
 
     @Autowired
     private PurchaseService purchaseService;
@@ -42,6 +42,6 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
         LegEntity leg = repository.findOne(id);
         TransportEntity route = leg.getRoute();
         route.getLegs().remove(leg);
-        routeRepository.save(route);
+        transportRepository.save(route);
     }
 }

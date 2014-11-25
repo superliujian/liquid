@@ -9,7 +9,7 @@ import java.util.Date;
  * Date: 10/24/13
  * Time: 10:52 PM
  */
-@Entity(name = "SHP_DELIVERY_CONTAINER")
+@Entity(name = "TSP_DELIVERY_CONTAINER")
 public class DeliveryContainerEntity extends BaseLegContainer {
     @Column(name = "ADDRESS")
     private String address;

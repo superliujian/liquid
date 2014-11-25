@@ -6,7 +6,7 @@ import liquid.service.ServiceProviderService;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.TransportEntity;
 import liquid.transport.persistence.repository.RailContainerRepository;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import liquid.transport.web.domain.RailTransport;
 import liquid.transport.web.domain.Route;
 import liquid.transport.web.domain.Routes;
@@ -30,7 +30,7 @@ public class RouteController {
     private OrderService orderService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @Autowired
     private ServiceProviderService serviceProviderService;
@@ -41,7 +41,7 @@ public class RouteController {
     @RequestMapping(method = RequestMethod.GET)
     public String findByOrder(@RequestParam(value = "o") Long orderId, Model model) {
         OrderEntity order = orderService.find(orderId);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("tab", "route");
         model.addAttribute("order", order);
         model.addAttribute("routes", routes);
@@ -51,7 +51,7 @@ public class RouteController {
     @RequestMapping(method = RequestMethod.GET, params = "action=edit")
     public String initEditForm(@RequestParam(value = "o") Long orderId, Model model) {
         OrderEntity order = orderService.find(orderId);
-        Iterable<TransportEntity> routeEntities = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routeEntities = transportService.findByOrderId(orderId);
 
         Routes routes = new Routes();
         routes.setOrderId(orderId);

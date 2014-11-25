@@ -3,7 +3,7 @@ package liquid.transport.web.controller;
 import liquid.persistence.domain.LocationEntity;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.TransportEntity;
-import liquid.transport.persistence.repository.RouteRepository;
+import liquid.transport.persistence.repository.TransportRepository;
 import liquid.transport.web.domain.Leg;
 import liquid.transport.web.domain.TransMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ import java.util.List;
 @RequestMapping("/route_profile")
 public class RouteProfileController {
     @Autowired
-    private RouteRepository routeRepository;
+    private TransportRepository transportRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        Iterable<TransportEntity> routes = routeRepository.findAll();
+        Iterable<TransportEntity> routes = transportRepository.findAll();
         model.addAttribute("routes", routes);
         return "route_profile/list";
     }
@@ -35,7 +35,7 @@ public class RouteProfileController {
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String initForm(Model model) {
         TransportEntity route = new TransportEntity();
-        route = routeRepository.save(route);
+        route = transportRepository.save(route);
         List<Leg> legs = new ArrayList<>();
         for (int i = 0; i < 5; i++) legs.add(new Leg());
         model.addAttribute("route", route);
@@ -45,7 +45,7 @@ public class RouteProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String initForm(@PathVariable Long id, Model model) {
-        TransportEntity route = routeRepository.findOne(id);
+        TransportEntity route = transportRepository.findOne(id);
 
         Leg leg = new Leg();
 
@@ -65,7 +65,7 @@ public class RouteProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public String addLeg(@PathVariable Long id, Leg leg) {
-        TransportEntity route = routeRepository.findOne(id);
+        TransportEntity route = transportRepository.findOne(id);
         LegEntity entity = new LegEntity();
 
         entity.setRoute(route);
@@ -77,13 +77,13 @@ public class RouteProfileController {
             entity.setPrev(LegEntity.newInstance(LegEntity.class, leg.getPrevId()));
 
         route.getLegs().add(entity);
-        routeRepository.save(route);
+        transportRepository.save(route);
         return "redirect:/route_profile/" + id;
     }
 
     @RequestMapping(value = "/{id}/leg/{legId}", method = RequestMethod.POST)
     public String updateLeg(@PathVariable Long id, Model model) {
-        TransportEntity route = routeRepository.findOne(id);
+        TransportEntity route = transportRepository.findOne(id);
         model.addAttribute("route", route);
         model.addAttribute("leg", new LegEntity());
         return "redirect:route_profile/" + id;

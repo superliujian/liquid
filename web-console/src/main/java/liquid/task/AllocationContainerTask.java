@@ -18,7 +18,7 @@ public class AllocationContainerTask extends AbstractTaskProxy {
     @Override
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         int shippingContainerQuantity = 0;
 
         // TODO: This is temp solution for dual-allocated containers.

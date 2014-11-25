@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.transport.persistence.domain.TransportEntity;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import liquid.transport.service.ShippingContainerService;
 import liquid.transport.web.domain.RailYard;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class RailYardController extends BaseTaskController {
     private ShippingContainerService scService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
@@ -43,7 +43,7 @@ public class RailYardController extends BaseTaskController {
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
 
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

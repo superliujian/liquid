@@ -4,7 +4,7 @@ import liquid.finance.service.PurchaseService;
 import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.TransportEntity;
-import liquid.transport.persistence.repository.RouteRepository;
+import liquid.transport.persistence.repository.TransportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.Collection;
  * Time: 12:26 AM
  */
 @Service
-public class RouteService extends AbstractService<TransportEntity, RouteRepository> {
+public class TransportService extends AbstractService<TransportEntity, TransportRepository> {
 
     @Autowired
     private LegService legService;

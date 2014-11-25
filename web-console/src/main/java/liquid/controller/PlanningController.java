@@ -6,7 +6,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.ChargeService;
 import liquid.transport.persistence.domain.TransportEntity;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class PlanningController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(PlanningController.class);
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @Autowired
     private OrderService orderService;
@@ -46,7 +46,7 @@ public class PlanningController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
 
         int containerUsage = 0;
         for (TransportEntity route : routes) {
@@ -83,7 +83,7 @@ public class PlanningController extends BaseTaskController {
         OrderEntity order = orderService.find(orderId);
 
         int containerUsage = 0;
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         for (TransportEntity r : routes) {
             containerUsage += r.getContainerQty();
         }
@@ -116,7 +116,7 @@ public class PlanningController extends BaseTaskController {
             return "planning/main";
         } else {
             route.setOrder(order);
-            routeService.save(route);
+            transportService.save(route);
             return "redirect:/task/" + taskId + "/planning";
         }
     }
@@ -126,7 +126,7 @@ public class PlanningController extends BaseTaskController {
                               @PathVariable Long routeId) {
         logger.debug("taskId: {}", taskId);
         logger.debug("routeId: {}", routeId);
-        routeService.delete(routeId);
+        transportService.delete(routeId);
         return "redirect:/task/" + taskId + "/planning";
     }
 }

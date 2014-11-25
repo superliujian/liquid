@@ -3,7 +3,7 @@ package liquid.facade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.transport.persistence.domain.TransportEntity;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import liquid.transport.web.domain.Booking;
 import liquid.transport.web.domain.BookingItem;
 import liquid.transport.web.domain.TransMode;
@@ -27,14 +27,14 @@ public class BookingFacade {
     private BookingService bookingService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
 
     public Booking computeBooking(Long orderId) {
         Booking booking = new Booking();
 
         Iterable<SpaceBookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         for (TransportEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {

@@ -9,7 +9,7 @@ import liquid.metadata.Role;
 import liquid.transport.web.domain.TransMode;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class RailTruckController extends BaseTaskController {
     private ShippingContainerService scService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @Autowired
     private ChargeService chargeService;
@@ -55,7 +55,7 @@ public class RailTruckController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
 
         // for charges

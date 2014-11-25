@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Date: 10/10/13
  * Time: 8:15 PM
  */
-@Entity(name = "SHP_CONTAINER")
+@Entity(name = "TSP_CONTAINER")
 public class ShippingContainerEntity extends BaseUpdateEntity {
     @Column(name = "BIC_CODE")
     private String bicCode;

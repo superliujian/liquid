@@ -11,7 +11,7 @@ import java.util.Date;
  * Date: 10/12/13
  * Time: 10:22 AM
  */
-@Entity(name = "SHP_RAIL_CONTAINER")
+@Entity(name = "TSP_RAIL_CONTAINER")
 public class RailContainerEntity extends BaseLegContainer {
     @ManyToOne
     @JoinColumn(name = "FLEET_ID")

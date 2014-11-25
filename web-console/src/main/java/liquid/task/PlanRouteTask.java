@@ -26,7 +26,7 @@ public class PlanRouteTask extends AbstractTaskProxy {
         variableMap.putAll(transTypes);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         boolean hasWaterTransport = false;
         for (TransportEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
@@ -55,7 +55,7 @@ public class PlanRouteTask extends AbstractTaskProxy {
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
 
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         for (TransportEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {

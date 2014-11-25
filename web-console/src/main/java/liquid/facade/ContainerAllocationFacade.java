@@ -10,7 +10,7 @@ import liquid.order.service.OrderService;
 import liquid.transport.persistence.domain.TransportEntity;
 import liquid.transport.persistence.domain.ShippingContainerEntity;
 import liquid.transport.service.ContainerAllocationService;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import liquid.transport.service.ShippingContainerService;
 import liquid.util.CollectionUtil;
 import liquid.util.StringUtil;
@@ -33,7 +33,7 @@ public class ContainerAllocationFacade {
     private OrderService orderService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @Autowired
     private ContainerAllocationService containerAllocationService;
@@ -49,7 +49,7 @@ public class ContainerAllocationFacade {
         int type = order.getContainerType();
         String subtypeName = order.getContainerSubtype().getName();
 
-        Iterable<TransportEntity> routes = routeService.findByOrderId(order.getId());
+        Iterable<TransportEntity> routes = transportService.findByOrderId(order.getId());
         for (TransportEntity route : routes) {
             RouteContainerAllocation routeContainerAllocation = getRouteContainerAllocation(type, subtypeName, route);
             routeContainerAllocations.add(routeContainerAllocation);
@@ -140,7 +140,7 @@ public class ContainerAllocationFacade {
     }
 
     public void allocate(SelfContainerAllocation selfContainerAllocation) {
-        TransportEntity route = routeService.find(selfContainerAllocation.getRouteId());
+        TransportEntity route = transportService.find(selfContainerAllocation.getRouteId());
 
         List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(selfContainerAllocation.getRouteId());
         if (CollectionUtil.isEmpty(shippingContainers))

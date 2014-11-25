@@ -12,7 +12,7 @@ import javax.persistence.*;
  * Date: 10/10/13
  * Time: 8:18 PM
  */
-@Entity(name = "SHP_LEG")
+@Entity(name = "TSP_LEG")
 public class LegEntity extends BaseUpdateEntity {
 
     @ManyToOne

@@ -11,7 +11,7 @@ import liquid.transport.web.domain.Leg;
 import liquid.transport.web.domain.TransMode;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.TransportEntity;
-import liquid.transport.persistence.repository.RouteRepository;
+import liquid.transport.persistence.repository.TransportRepository;
 import liquid.transport.service.LegService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class LegController extends BaseTaskController {
     private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
-    private RouteRepository routeRepository;
+    private TransportRepository transportRepository;
 
     @Autowired
     private ServiceProviderTypeRepository stRepository;

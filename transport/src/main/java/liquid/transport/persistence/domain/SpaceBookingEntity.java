@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by redbrick9 on 8/15/14.
  */
-@Entity(name = "SHP_SPACE_BOOKING")
+@Entity(name = "TSP_SPACE_BOOKING")
 public class SpaceBookingEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")

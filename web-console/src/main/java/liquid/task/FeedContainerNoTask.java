@@ -18,7 +18,7 @@ public class FeedContainerNoTask extends AbstractTaskProxy {
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Iterable<TransportEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
 
         int allocatedContainerQuantity = 0;
 

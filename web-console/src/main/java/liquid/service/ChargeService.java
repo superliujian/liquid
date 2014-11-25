@@ -16,7 +16,7 @@ import liquid.security.SecurityContext;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.TransportEntity;
 import liquid.transport.persistence.repository.LegRepository;
-import liquid.transport.service.RouteService;
+import liquid.transport.service.TransportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     private TaskService taskService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     // TODO: have to enhance this function.
     @Override
@@ -76,7 +76,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         // new charge
         TransportEntity route = null;
         if (null != entity.getRoute()) {
-            route = routeService.find(entity.getRoute().getId());
+            route = transportService.find(entity.getRoute().getId());
             entity.setOrder(route.getOrder());
         }
         if (null != entity.getLeg()) {
