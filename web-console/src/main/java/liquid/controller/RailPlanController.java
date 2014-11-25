@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.transport.web.domain.RailPlan;
 import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class RailPlanController extends BaseTaskController {
     private static final String TASK_PATH = "rail_plan";
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @Autowired
     private ShippingContainerService scService;
@@ -42,7 +42,7 @@ public class RailPlanController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

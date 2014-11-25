@@ -6,7 +6,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.ChargeService;
 import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class PlanningController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(PlanningController.class);
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @Autowired
     private OrderService orderService;
@@ -44,25 +44,27 @@ public class PlanningController extends BaseTaskController {
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
+
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
 
         int containerUsage = 0;
-        for (ShipmentEntity route : routes) {
-            containerUsage += route.getContainerQty();
+        for (ShipmentEntity shipment : shipmentSet) {
+            containerUsage += shipment.getContainerQty();
         }
 
-        ShipmentEntity route = new ShipmentEntity();
-        // set remaining container quantity as the default value for the next route planning.
-        route.setContainerQty(order.getContainerQty() - containerUsage);
+        ShipmentEntity shipment = new ShipmentEntity();
+        // set remaining container quantity as the default value for the next shipment planning.
+        shipment.setContainerQty(order.getContainerQty() - containerUsage);
 
-        // route planning bar
-        model.addAttribute("route", route);
+        // shipment planning bar
+        model.addAttribute("shipment", shipment);
         model.addAttribute("containerTotality", order.getContainerQty());
 
-        // route table
-        model.addAttribute("routes", routes);
+        // shipment table
+        model.addAttribute("shipmentSet", shipmentSet);
         model.addAttribute("transModes", TransMode.toMap());
 
         // charge table
@@ -73,25 +75,25 @@ public class PlanningController extends BaseTaskController {
         return "planning/main";
     }
 
-    @RequestMapping(value = "/route", method = RequestMethod.POST)
-    public String addRoute(@PathVariable String taskId, @Valid @ModelAttribute(value = "route") ShipmentEntity route,
-                           BindingResult result, Model model) {
+    @RequestMapping(value = "/shipment", method = RequestMethod.POST)
+    public String addShipment(@PathVariable String taskId, @Valid @ModelAttribute(value = "shipment") ShipmentEntity shipment,
+                              BindingResult result, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("route: {}", route);
+        logger.debug("shipment: {}", shipment);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
 
         int containerUsage = 0;
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
-        for (ShipmentEntity r : routes) {
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        for (ShipmentEntity r : shipmentSet) {
             containerUsage += r.getContainerQty();
         }
 
         if (result.hasErrors()) {
             model.addAttribute("containerTotality", order.getContainerQty());
 
-            model.addAttribute("routes", routes);
+            model.addAttribute("shipmentSet", shipmentSet);
             model.addAttribute("transModes", TransMode.toMap());
 
             // charge table
@@ -100,12 +102,12 @@ public class PlanningController extends BaseTaskController {
             model.addAttribute("charges", charges);
             model.addAttribute("total", chargeService.total(charges));
             return "planning/main";
-        } else if (route.getContainerQty() > (order.getContainerQty() - containerUsage)) {
-            setFieldError(result, "route", "containerQty", route.getContainerQty(), (order.getContainerQty() - containerUsage));
+        } else if (shipment.getContainerQty() > (order.getContainerQty() - containerUsage)) {
+            setFieldError(result, "shipment", "containerQty", shipment.getContainerQty(), (order.getContainerQty() - containerUsage));
 
             model.addAttribute("containerTotality", order.getContainerQty());
 
-            model.addAttribute("routes", routes);
+            model.addAttribute("shipmentSet", shipmentSet);
             model.addAttribute("transModes", TransMode.toMap());
 
             // charge table
@@ -115,18 +117,18 @@ public class PlanningController extends BaseTaskController {
             model.addAttribute("total", chargeService.total(charges));
             return "planning/main";
         } else {
-            route.setOrder(order);
-            transportService.save(route);
+            shipment.setOrder(order);
+            shipmentService.save(shipment);
             return "redirect:/task/" + taskId + "/planning";
         }
     }
 
-    @RequestMapping(value = "/route/{routeId}", method = RequestMethod.POST, params = "delete")
-    public String deleteRoute(@PathVariable String taskId,
-                              @PathVariable Long routeId) {
+    @RequestMapping(value = "/shipment/{shipmentId}", method = RequestMethod.POST, params = "delete")
+    public String deleteShipment(@PathVariable String taskId,
+                                 @PathVariable Long shipmentId) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
-        transportService.delete(routeId);
+        logger.debug("shipmentId: {}", shipmentId);
+        shipmentService.delete(shipmentId);
         return "redirect:/task/" + taskId + "/planning";
     }
 }

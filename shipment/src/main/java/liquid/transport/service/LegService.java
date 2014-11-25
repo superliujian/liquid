@@ -5,7 +5,7 @@ import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.LegRepository;
-import liquid.transport.persistence.repository.TransportRepository;
+import liquid.transport.persistence.repository.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.List;
 public class LegService extends AbstractService<LegEntity, LegRepository> {
 
     @Autowired
-    private TransportRepository transportRepository;
+    private ShipmentRepository shipmentRepository;
 
     @Autowired
     private PurchaseService purchaseService;
@@ -32,7 +32,7 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
     }
 
     public List<LegEntity> findByRouteAndTransMode(ShipmentEntity route, int transMode) {
-        return repository.findByRouteAndTransMode(route, transMode);
+        return repository.findByShipmentAndTransMode(route, transMode);
     }
 
     @Transactional("transactionManager")
@@ -40,8 +40,8 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
         purchaseService.deleteByLegId(id);
 
         LegEntity leg = repository.findOne(id);
-        ShipmentEntity route = leg.getRoute();
-        route.getLegs().remove(leg);
-        transportRepository.save(route);
+        ShipmentEntity shipment = leg.getShipment();
+        shipment.getLegs().remove(leg);
+        shipmentRepository.save(shipment);
     }
 }

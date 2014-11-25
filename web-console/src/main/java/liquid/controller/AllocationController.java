@@ -17,7 +17,7 @@ import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.ShippingContainerEntity;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class AllocationController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(AllocationController.class);
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @Autowired
     private ShippingContainerService scService;
@@ -99,7 +99,7 @@ public class AllocationController extends BaseTaskController {
 
         model.addAttribute("taskId", taskId);
 
-        ShipmentEntity shipmentEntity = transportService.find(routeId);
+        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
         RouteContainerAllocation routeContainerAllocation = containerAllocationFacade.getRouteContainerAllocation(
                 ContainerType.RAIL.getType(), shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
         // For showing the allocated containers.
@@ -146,7 +146,7 @@ public class AllocationController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
 
         RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-        ShipmentEntity shipmentEntity = transportService.find(routeId);
+        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
         routeContainerAllocation.setRoute(shipmentEntity);
         routeContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
@@ -195,7 +195,7 @@ public class AllocationController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
 
         RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-        ShipmentEntity shipmentEntity = transportService.find(routeId);
+        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
         routeContainerAllocation.setRoute(shipmentEntity);
         routeContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
@@ -233,7 +233,7 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("taskId", taskId);
 
         RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-        ShipmentEntity shipmentEntity = transportService.find(routeId);
+        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
         routeContainerAllocation.setRoute(shipmentEntity);
         routeContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
@@ -299,7 +299,7 @@ public class AllocationController extends BaseTaskController {
         ShippingContainerEntity sc = scService.find(scId);
 
         // Set up pickup contact and his phone by default
-        ShipmentEntity route = transportService.find(routeId);
+        ShipmentEntity route = shipmentService.find(routeId);
         List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
 
         if (shippingContainers.iterator().hasNext()) {
@@ -327,7 +327,7 @@ public class AllocationController extends BaseTaskController {
         scService.allocate(routeId, sc);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "redirect:/task/" + taskId + "/allocation";
     }

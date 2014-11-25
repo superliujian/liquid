@@ -16,8 +16,8 @@ import javax.persistence.*;
 public class LegEntity extends BaseUpdateEntity {
 
     @ManyToOne
-    @JoinColumn(name = "ROUTE_ID")
-    private ShipmentEntity route;
+    @JoinColumn(name = "SHIPMENT_ID")
+    private ShipmentEntity shipment;
 
     @Column(name = "IS_HEAD")
     private Boolean head;
@@ -40,22 +40,16 @@ public class LegEntity extends BaseUpdateEntity {
     @JoinColumn(name = "DST_LOC_ID")
     private LocationEntity dstLoc;
 
-    @Transient
-    private long srcLocId;
-
-    @Transient
-    private long dstLocId;
-
     @OneToOne
     @JoinColumn(name = "PREV")
     private LegEntity prev;
 
-    public ShipmentEntity getRoute() {
-        return route;
+    public ShipmentEntity getShipment() {
+        return shipment;
     }
 
-    public void setRoute(ShipmentEntity route) {
-        this.route = route;
+    public void setShipment(ShipmentEntity shipment) {
+        this.shipment = shipment;
     }
 
     public Boolean isHead() {
@@ -104,22 +98,6 @@ public class LegEntity extends BaseUpdateEntity {
 
     public void setDstLoc(LocationEntity dstLoc) {
         this.dstLoc = dstLoc;
-    }
-
-    public long getSrcLocId() {
-        return srcLocId;
-    }
-
-    public void setSrcLocId(long srcLocId) {
-        this.srcLocId = srcLocId;
-    }
-
-    public long getDstLocId() {
-        return dstLocId;
-    }
-
-    public void setDstLocId(long dstLocId) {
-        this.dstLocId = dstLocId;
     }
 
     public LegEntity getPrev() {

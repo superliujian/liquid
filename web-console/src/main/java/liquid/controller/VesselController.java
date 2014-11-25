@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.VesselContainerEntity;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,14 +32,14 @@ public class VesselController extends BaseTaskController {
     private ShippingContainerService scService;
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initVesselContainers(orderId);
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "vessel/main";
     }

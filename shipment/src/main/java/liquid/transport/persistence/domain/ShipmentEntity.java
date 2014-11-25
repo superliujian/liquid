@@ -24,7 +24,7 @@ public class ShipmentEntity extends BaseUpdateEntity {
     @Column(name = "CONTAINER_QTY")
     private int containerQty;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shipment", orphanRemoval = true)
     public List<LegEntity> legs;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "route")

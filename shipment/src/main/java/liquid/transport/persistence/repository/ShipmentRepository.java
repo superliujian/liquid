@@ -9,6 +9,6 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 10/11/13
  * Time: 12:18 AM
  */
-public interface TransportRepository extends CrudRepository<ShipmentEntity, Long> {
+public interface ShipmentRepository extends CrudRepository<ShipmentEntity, Long> {
     Iterable<ShipmentEntity> findByOrderId(Long orderId);
 }

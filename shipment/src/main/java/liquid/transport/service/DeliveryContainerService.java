@@ -29,7 +29,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
     private OrderService orderService;
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @Autowired
     private ShippingContainerService shippingContainerService;
@@ -50,7 +50,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
         }
 
         dcList = new ArrayList<DeliveryContainerEntity>();
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(order.getId());
+        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(order.getId());
         for (ShipmentEntity route : routes) {
             List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
             for (ShippingContainerEntity sc : shippingContainers) {

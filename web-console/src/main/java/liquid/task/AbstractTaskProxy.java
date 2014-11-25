@@ -3,7 +3,7 @@ package liquid.task;
 import liquid.order.service.OrderService;
 import liquid.security.SecurityContext;
 import liquid.service.TaskService;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import liquid.task.service.ActivitiEngineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public abstract class AbstractTaskProxy {
     protected OrderService orderService;
 
     @Autowired
-    protected TransportService transportService;
+    protected ShipmentService shipmentService;
 
     @Autowired
     protected ShippingContainerService shippingContainerService;

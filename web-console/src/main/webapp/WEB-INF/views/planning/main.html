@@ -13,7 +13,7 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <form method="POST" th:action="'/task/' + ${taskId} + '/planning/route'" th:object="${route}" >
+    <form method="POST" th:action="'/task/' + ${taskId} + '/planning/shipment'" th:object="${shipment}" >
         <div class="row">
             <div class="col-xs-3">
                 <div class="input-group input-group-sm">        
@@ -22,7 +22,7 @@
                     <input class="form-control" type="text" th:field="*{containerQty}" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'"/>                                
                     
                     <span class="input-group-btn">
-                        <button class="btn btn-success" type="submit" name="addRoute" value="Add Route"><i class="glyphicon glyphicon-plus"/></button>
+                        <button class="btn btn-success" type="submit"><i class="glyphicon glyphicon-plus"/></button>
                     </span>
                 </div>
             </div>
@@ -35,11 +35,11 @@
     <hr />
 </div><!-- /.container -->
 
-<div class="container" th:unless="${#lists.isEmpty(routes)}">
-    <div class="panel panel-default" th:each="route : ${routes}">
+<div class="container" th:unless="${#lists.isEmpty(shipmentSet)}">
+    <div class="panel panel-default" th:each="shipment : ${shipmentSet}">
         <div class="panel-heading">
-            <span th:text="#{route} + ${route.id}">Route ID</span>
-            <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>            
+            <span th:text="#{shipment} + ${shipment.id}">Shipment ID</span>
+            <span th:text="#{container.quantity} + '(' + ${shipment.containerQty} + ')'">Container Qty</span>            
             <div class="pull-right">
                 <a data-toggle="modal" data-target="#m">
                     <i class="glyphicon glyphicon-remove text-danger"/>
@@ -57,21 +57,21 @@
                     <th th:text="#{origination}">Origination</th>
                     <th th:text="#{destination}">Destination</th>
                     <th>
-                        <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/rail'">
+                        <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id} + '/rail'">
                             <i class="glyphicon glyphicon-plus text-success"/>
                         </a>
                     </th>
                 </tr>
                 </thead>
-                <tbody th:unless="${#lists.isEmpty(route.legs)}">
-                <tr th:each="leg : ${route.legs}">
+                <tbody th:unless="${#lists.isEmpty(shipment.legs)}">
+                <tr th:each="leg : ${shipment.legs}">
                     <td th:text="${leg.id}">Leg ID</td>
                     <td th:text="#{${transModes[leg.transMode]}}">Trans Mode</td>
                     <td th:text="${leg.sp} ? ${leg.sp.name} : ''">SP Name</td>
                     <td th:text="${leg.srcLoc.name}">Origination</td>
                     <td th:text="${leg.dstLoc.name}">Destination</td>
                     <td>
-                        <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${route.id} + '/leg/' + ${leg.id}">
+                        <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id} + '/leg/' + ${leg.id}">
                             <i class="glyphicon glyphicon-remove text-danger"/>
                         </a>
                         &nbsp;
@@ -88,7 +88,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <span class="modal-title" id="myModalLabel" th:text="#{route.delete}">Delete Route</span>
+                            <span class="modal-title" id="myModalLabel" th:text="#{delete}">Delete Shipment</span>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -96,12 +96,12 @@
                                     <span class="glyphicon glyphicon-warning-sign text-danger"/>
                                 </div>
                                 <div class="col-xs-9">
-                                    <span th:text="#{route.delete.confirm}">Are you sure to delete route?</span>
+                                    <span th:text="#{shipment.delete.confirm}">Are you sure to delete shipment?</span>
                                 </div>
                             </div>                            
                         </div>
                         <div class="modal-footer">
-                            <form method="POST" th:action="'/task/' + ${taskId} + '/planning/route/' + ${route.id}">
+                            <form method="POST" th:action="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id}">
                                 <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">
                                     <span th:text="#{modal.close}"/>
                                 </button>                            
@@ -129,7 +129,7 @@
                    th:unless="${#lists.isEmpty(charges)}">
                 <thead>
                 <tr>
-                    <th th:text="#{route}">Route ID</th>
+                    <th th:text="#{shipment}">Shipment ID</th>
                     <th th:text="#{leg}">Leg ID</th>
                     <th th:text="#{trans.mode}">Trans Mode</th>
                     <th th:text="#{charge.type}">Type</th>
@@ -144,8 +144,8 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
-                    <td th:text="${charge.leg.route.id}">Route ID</td>
-                    <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Route ID</td>
+                    <td th:text="${charge.leg.shipment.id}">Shipment ID</td>
+                    <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Shipment Name</td>
                     <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>
                     <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>

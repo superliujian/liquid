@@ -13,5 +13,5 @@ import java.util.List;
  * Time: 12:17 AM
  */
 public interface LegRepository extends CrudRepository<LegEntity, Long> {
-    List<LegEntity> findByRouteAndTransMode(ShipmentEntity route, int transMode);
+    List<LegEntity> findByShipmentAndTransMode(ShipmentEntity shipment, int transMode);
 }

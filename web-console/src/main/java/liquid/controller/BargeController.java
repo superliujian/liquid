@@ -3,7 +3,7 @@ package liquid.controller;
 import liquid.transport.service.ShippingContainerService;
 import liquid.transport.persistence.domain.BargeContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class BargeController extends BaseTaskController {
     private ShippingContainerService scService;
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
@@ -40,7 +40,7 @@ public class BargeController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initBargeContainers(orderId);
 
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "barge/main";
     }

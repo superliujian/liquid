@@ -134,13 +134,13 @@ public class ChargeController extends BaseController {
             model.addAttribute("serviceSubtypes", serviceSubtypes);
             model.addAttribute("sps", sps);
             model.addAttribute("charge", charge);
-            model.addAttribute("route", leg.getRoute());
+            model.addAttribute("route", leg.getShipment());
             model.addAttribute("leg", leg);
             model.addAttribute("charges", charges);
             model.addAttribute("backToTask", taskService.computeTaskMainPath(charge.getTaskId()));
             return "charge/console";
         } else {
-            charge.setRouteId(leg.getRoute().getId());
+            charge.setRouteId(leg.getShipment().getId());
             chargeFacade.save(charge);
             String redirect = "/charge/console?taskId=" + charge.getTaskId() + "&legId=" + charge.getLegId();
             return "redirect:" + redirect;
@@ -158,7 +158,7 @@ public class ChargeController extends BaseController {
         Iterable<ChargeEntity> charges = chargeService.findByLegId(legId);
 
         Charge charge = new Charge();
-        charge.setRouteId(leg.getRoute().getId());
+        charge.setRouteId(leg.getShipment().getId());
         charge.setLegId(legId);
         charge.setWay(ChargeWay.PER_CONTAINER.getValue());
         if (null != leg.getSp()) charge.setServiceProviderId(leg.getSp().getId());
@@ -187,7 +187,7 @@ public class ChargeController extends BaseController {
         model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("sps", sps);
         model.addAttribute("charge", charge);
-        model.addAttribute("route", leg.getRoute());
+        model.addAttribute("route", leg.getShipment());
         model.addAttribute("leg", leg);
         model.addAttribute("charges", charges);
         model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));

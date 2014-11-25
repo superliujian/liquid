@@ -4,7 +4,7 @@ import liquid.finance.service.PurchaseService;
 import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.persistence.repository.TransportRepository;
+import liquid.transport.persistence.repository.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.Collection;
  * Time: 12:26 AM
  */
 @Service
-public class TransportService extends AbstractService<ShipmentEntity, TransportRepository> {
+public class ShipmentService extends AbstractService<ShipmentEntity, ShipmentRepository> {
 
     @Autowired
     private LegService legService;
@@ -31,26 +31,26 @@ public class TransportService extends AbstractService<ShipmentEntity, TransportR
 
     @Transactional("transactionManager")
     public Iterable<ShipmentEntity> findByOrderId(Long orderId) {
-        Iterable<ShipmentEntity> routes = repository.findByOrderId(orderId);
-        for (ShipmentEntity route : routes) {
-            route.getContainers().size();
-            route.getRailContainers().size();
-            route.getBargeContainers().size();
-            route.getVesselContainers().size();
-            route.getDeliveryContainers();
+        Iterable<ShipmentEntity> shipmentSet = repository.findByOrderId(orderId);
+        for (ShipmentEntity shipment : shipmentSet) {
+            shipment.getContainers().size();
+            shipment.getRailContainers().size();
+            shipment.getBargeContainers().size();
+            shipment.getVesselContainers().size();
+            shipment.getDeliveryContainers();
         }
-        return routes;
+        return shipmentSet;
     }
 
     public ShipmentEntity find(Long id) {
-        ShipmentEntity route = repository.findOne(id);
-        return route;
+        ShipmentEntity shipment = repository.findOne(id);
+        return shipment;
     }
 
     @Transactional("transactionManager")
     public void delete(Long id) {
-        ShipmentEntity route = repository.findOne(id);
-        Collection<LegEntity> legs = route.getLegs();
+        ShipmentEntity shipment = repository.findOne(id);
+        Collection<LegEntity> legs = shipment.getLegs();
         for (LegEntity leg : legs) {
             purchaseService.deleteByLegId(leg.getId());
         }
