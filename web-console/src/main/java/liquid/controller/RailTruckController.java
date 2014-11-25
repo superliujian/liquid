@@ -1,16 +1,16 @@
 package liquid.controller;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.shipping.web.domain.Truck;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.web.domain.Truck;
 import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.Role;
-import liquid.shipping.web.domain.TransMode;
+import liquid.transport.web.domain.TransMode;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.service.*;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.service.ShippingContainerService;
+import liquid.transport.service.TransportService;
+import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class RailTruckController extends BaseTaskController {
     private ShippingContainerService scService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @Autowired
     private ChargeService chargeService;
@@ -55,7 +55,7 @@ public class RailTruckController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
 
         // for charges

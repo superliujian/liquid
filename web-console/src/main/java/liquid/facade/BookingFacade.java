@@ -2,14 +2,14 @@ package liquid.facade;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.web.domain.Booking;
-import liquid.shipping.web.domain.BookingItem;
-import liquid.shipping.web.domain.TransMode;
-import liquid.shipping.persistence.domain.SpaceBookingEntity;
-import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.service.BookingService;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.service.TransportService;
+import liquid.transport.web.domain.Booking;
+import liquid.transport.web.domain.BookingItem;
+import liquid.transport.web.domain.TransMode;
+import liquid.transport.persistence.domain.SpaceBookingEntity;
+import liquid.transport.persistence.domain.LegEntity;
+import liquid.transport.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +27,15 @@ public class BookingFacade {
     private BookingService bookingService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
 
     public Booking computeBooking(Long orderId) {
         Booking booking = new Booking();
 
         Iterable<SpaceBookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
-        Iterable<RouteEntity> routes = routeService.findByOrderId(orderId);
-        for (RouteEntity route : routes) {
+        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        for (TransportEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {
                 switch (TransMode.valueOf(leg.getTransMode())) {

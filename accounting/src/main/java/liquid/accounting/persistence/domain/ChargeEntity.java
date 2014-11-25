@@ -4,8 +4,8 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.RouteEntity;
+import liquid.transport.persistence.domain.LegEntity;
+import liquid.transport.persistence.domain.TransportEntity;
 
 import javax.persistence.*;
 
@@ -15,7 +15,7 @@ import javax.persistence.*;
  * Date: 10/2/13
  * Time: 7:43 PM
  */
-@Entity(name = "FIN_CHARGE")
+@Entity(name = "ACT_CHARGE")
 @EntityListeners(liquid.audit.AuditListener.class)
 public class ChargeEntity extends BaseUpdateEntity {
 
@@ -28,7 +28,7 @@ public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private RouteEntity route;
+    private TransportEntity route;
 
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
@@ -87,11 +87,11 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.leg = leg;
     }
 
-    public RouteEntity getRoute() {
+    public TransportEntity getRoute() {
         return route;
     }
 
-    public void setRoute(RouteEntity route) {
+    public void setRoute(TransportEntity route) {
         this.route = route;
     }
 

@@ -31,7 +31,7 @@ import java.util.Properties;
         "liquid.container.persistence.repository",
         "liquid.accounting.persistence.repository",
         "liquid.order.persistence.repository",
-        "liquid.shipping.persistence.repository",
+        "liquid.transport.persistence.repository",
         "liquid.charge.persistence.repository",
         "liquid.purchasing.persistence.repository"})
 @Import(PropertyPlaceholderConfig.class)
@@ -67,7 +67,7 @@ public class JpaConfig {
         factory.setPackagesToScan("liquid.persistence.domain",
                 "liquid.container.persistence.domain",
                 "liquid.order.persistence.domain",
-                "liquid.shipping.persistence.domain",
+                "liquid.transport.persistence.domain",
                 "liquid.charge.persistence.domain",
                 "liquid.accounting.persistence.domain",
                 "liquid.purchasing.persistence.domain");

@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>shipping</artifactId>
+            <artifactId>transport</artifactId>
         </dependency>
     </dependencies>
 </project>

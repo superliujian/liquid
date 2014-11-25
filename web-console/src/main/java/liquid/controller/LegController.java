@@ -7,12 +7,12 @@ import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
-import liquid.shipping.web.domain.Leg;
-import liquid.shipping.web.domain.TransMode;
-import liquid.shipping.persistence.domain.LegEntity;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.persistence.repository.RouteRepository;
-import liquid.shipping.service.LegService;
+import liquid.transport.web.domain.Leg;
+import liquid.transport.web.domain.TransMode;
+import liquid.transport.persistence.domain.LegEntity;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.repository.TransportRepository;
+import liquid.transport.service.LegService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class LegController extends BaseTaskController {
     private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
-    private RouteRepository routeRepository;
+    private TransportRepository transportRepository;
 
     @Autowired
     private ServiceProviderTypeRepository stRepository;
@@ -111,7 +111,7 @@ public class LegController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
-        RouteEntity route = RouteEntity.newInstance(RouteEntity.class, routeId);
+        TransportEntity route = TransportEntity.newInstance(TransportEntity.class, routeId);
         LocationEntity srcLoc = LocationEntity.newInstance(LocationEntity.class, leg.getSourceId());
         LocationEntity dstLoc = LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId());
 

@@ -1,6 +1,6 @@
 package liquid.order.persistence.repository;
 
-import liquid.persistence.domain.OrderHistory;
+import liquid.order.persistence.domain.OrderHistory;
 import org.springframework.data.repository.CrudRepository;
 
 /**

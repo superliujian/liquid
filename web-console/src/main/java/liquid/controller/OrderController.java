@@ -18,9 +18,9 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.shipping.persistence.domain.RouteEntity;
-import liquid.shipping.service.RouteService;
-import liquid.shipping.web.domain.TransMode;
+import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.service.TransportService;
+import liquid.transport.web.domain.TransMode;
 import liquid.validation.FormValidationResult;
 import liquid.web.domain.SearchBarForm;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -68,7 +68,7 @@ public class OrderController extends BaseController {
     private TaskService taskService;
 
     @Autowired
-    private RouteService routeService;
+    private TransportService transportService;
 
     @Autowired
     private ChargeService chargeService;
@@ -297,7 +297,7 @@ public class OrderController extends BaseController {
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        Iterable<RouteEntity> routes = routeService.findByOrderId(id);
+        Iterable<TransportEntity> routes = transportService.findByOrderId(id);
         // TODO: move to an appropriate place
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("routes", routes);
@@ -323,7 +323,7 @@ public class OrderController extends BaseController {
                 OrderEntity orderEntity = orderService.find(id);
                 break;
             case "container":
-                Iterable<RouteEntity> routes = routeService.findByOrderId(id);
+                Iterable<TransportEntity> routes = transportService.findByOrderId(id);
                 model.addAttribute("routes", routes);
                 break;
             case "charge":
