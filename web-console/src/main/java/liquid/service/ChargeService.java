@@ -14,7 +14,7 @@ import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
 import liquid.transport.persistence.domain.LegEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.LegRepository;
 import liquid.transport.service.TransportService;
 import org.slf4j.Logger;
@@ -74,7 +74,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         if (null != entity.getId()) return;
 
         // new charge
-        TransportEntity route = null;
+        ShipmentEntity route = null;
         if (null != entity.getRoute()) {
             route = transportService.find(entity.getRoute().getId());
             entity.setOrder(route.getOrder());

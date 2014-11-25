@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.TransportService;
 import liquid.transport.service.ShippingContainerService;
 import liquid.transport.web.domain.RailYard;
@@ -43,7 +43,7 @@ public class RailYardController extends BaseTaskController {
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
 
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

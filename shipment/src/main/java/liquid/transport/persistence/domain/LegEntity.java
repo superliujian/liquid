@@ -17,7 +17,7 @@ public class LegEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private TransportEntity route;
+    private ShipmentEntity route;
 
     @Column(name = "IS_HEAD")
     private Boolean head;
@@ -50,11 +50,11 @@ public class LegEntity extends BaseUpdateEntity {
     @JoinColumn(name = "PREV")
     private LegEntity prev;
 
-    public TransportEntity getRoute() {
+    public ShipmentEntity getRoute() {
         return route;
     }
 
-    public void setRoute(TransportEntity route) {
+    public void setRoute(ShipmentEntity route) {
         this.route = route;
     }
 

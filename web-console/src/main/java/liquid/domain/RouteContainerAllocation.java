@@ -1,6 +1,6 @@
 package liquid.domain;
 
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class RouteContainerAllocation {
 
     private Long routeId;
 
-    private TransportEntity route;
+    private ShipmentEntity route;
 
     protected List<ContainerAllocation> containerAllocations = new ArrayList<>();
 
@@ -33,11 +33,11 @@ public class RouteContainerAllocation {
         this.routeId = routeId;
     }
 
-    public TransportEntity getRoute() {
+    public ShipmentEntity getRoute() {
         return route;
     }
 
-    public void setRoute(TransportEntity route) {
+    public void setRoute(ShipmentEntity route) {
         this.route = route;
     }
 

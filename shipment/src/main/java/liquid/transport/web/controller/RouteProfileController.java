@@ -2,7 +2,7 @@ package liquid.transport.web.controller;
 
 import liquid.persistence.domain.LocationEntity;
 import liquid.transport.persistence.domain.LegEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.TransportRepository;
 import liquid.transport.web.domain.Leg;
 import liquid.transport.web.domain.TransMode;
@@ -27,14 +27,14 @@ public class RouteProfileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        Iterable<TransportEntity> routes = transportRepository.findAll();
+        Iterable<ShipmentEntity> routes = transportRepository.findAll();
         model.addAttribute("routes", routes);
         return "route_profile/list";
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String initForm(Model model) {
-        TransportEntity route = new TransportEntity();
+        ShipmentEntity route = new ShipmentEntity();
         route = transportRepository.save(route);
         List<Leg> legs = new ArrayList<>();
         for (int i = 0; i < 5; i++) legs.add(new Leg());
@@ -45,7 +45,7 @@ public class RouteProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String initForm(@PathVariable Long id, Model model) {
-        TransportEntity route = transportRepository.findOne(id);
+        ShipmentEntity route = transportRepository.findOne(id);
 
         Leg leg = new Leg();
 
@@ -65,7 +65,7 @@ public class RouteProfileController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public String addLeg(@PathVariable Long id, Leg leg) {
-        TransportEntity route = transportRepository.findOne(id);
+        ShipmentEntity route = transportRepository.findOne(id);
         LegEntity entity = new LegEntity();
 
         entity.setRoute(route);
@@ -83,7 +83,7 @@ public class RouteProfileController {
 
     @RequestMapping(value = "/{id}/leg/{legId}", method = RequestMethod.POST)
     public String updateLeg(@PathVariable Long id, Model model) {
-        TransportEntity route = transportRepository.findOne(id);
+        ShipmentEntity route = transportRepository.findOne(id);
         model.addAttribute("route", route);
         model.addAttribute("leg", new LegEntity());
         return "redirect:route_profile/" + id;

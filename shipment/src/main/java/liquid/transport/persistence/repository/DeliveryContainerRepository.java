@@ -2,7 +2,7 @@ package liquid.transport.persistence.repository;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.transport.persistence.domain.DeliveryContainerEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
@@ -16,5 +16,5 @@ import java.util.Collection;
 public interface DeliveryContainerRepository extends CrudRepository<DeliveryContainerEntity, Long> {
     Collection<DeliveryContainerEntity> findByOrder(OrderEntity order);
 
-    Collection<DeliveryContainerEntity> findByRoute(TransportEntity route);
+    Collection<DeliveryContainerEntity> findByRoute(ShipmentEntity route);
 }

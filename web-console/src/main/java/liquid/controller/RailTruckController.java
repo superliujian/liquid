@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.web.domain.Truck;
 import liquid.dto.TruckingDto;
 import liquid.metadata.ChargeWay;
@@ -55,7 +55,7 @@ public class RailTruckController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
 
         // for charges

@@ -1,6 +1,6 @@
 package liquid.transport.web.domain;
 
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public class Route {
     private Integer containerQuantity;
     private RailTransport[] railTransport;
 
-    public static Route valueOf(TransportEntity entity) {
+    public static Route valueOf(ShipmentEntity entity) {
         Route route = new Route();
         route.setId(entity.getId());
         route.setContainerQuantity(entity.getContainerQty());
@@ -23,10 +23,10 @@ public class Route {
         return route;
     }
 
-    public static Route[] valueOf(Iterable<TransportEntity> entities) {
+    public static Route[] valueOf(Iterable<ShipmentEntity> entities) {
         List<Route> routes = new ArrayList<Route>();
 
-        for (TransportEntity entity : entities) {
+        for (ShipmentEntity entity : entities) {
             routes.add(valueOf(entity));
         }
         return routes.toArray(new Route[0]);

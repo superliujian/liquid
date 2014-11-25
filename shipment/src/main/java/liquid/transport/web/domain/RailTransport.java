@@ -4,7 +4,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.RailContainerEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.util.DateUtil;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class RailTransport extends TransportBase {
         RailContainerEntity entity = new RailContainerEntity();
         entity.setId(transport.getId());
         entity.setOrder(OrderEntity.newInstance(OrderEntity.class, transport.getOrderId()));
-        entity.setRoute(TransportEntity.newInstance(TransportEntity.class, transport.getRouteId()));
+        entity.setRoute(ShipmentEntity.newInstance(ShipmentEntity.class, transport.getRouteId()));
         entity.setLeg(LegEntity.newInstance(LegEntity.class, transport.getLegId()));
         entity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, transport.getFleetId()));
         entity.setTrucker(transport.getTrucker());

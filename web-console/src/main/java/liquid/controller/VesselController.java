@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.VesselContainerEntity;
 import liquid.transport.service.TransportService;
 import liquid.transport.service.ShippingContainerService;
@@ -39,7 +39,7 @@ public class VesselController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initVesselContainers(orderId);
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "vessel/main";
     }

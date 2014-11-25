@@ -2,7 +2,7 @@ package liquid.controller;
 
 import liquid.transport.service.ShippingContainerService;
 import liquid.transport.persistence.domain.BargeContainerEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.TransportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class BargeController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initBargeContainers(orderId);
 
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "barge/main";
     }

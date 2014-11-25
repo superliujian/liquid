@@ -14,8 +14,8 @@ import java.util.List;
  * Date: 10/10/13
  * Time: 9:15 PM
  */
-@Entity(name = "TSP_TRANSPORT")
-public class TransportEntity extends BaseUpdateEntity {
+@Entity(name = "TSP_SHIPMENT")
+public class ShipmentEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

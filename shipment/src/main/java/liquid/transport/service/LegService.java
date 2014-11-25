@@ -3,7 +3,7 @@ package liquid.transport.service;
 import liquid.finance.service.PurchaseService;
 import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.LegRepository;
 import liquid.transport.persistence.repository.TransportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
         return repository.findOne(id);
     }
 
-    public List<LegEntity> findByRouteAndTransMode(TransportEntity route, int transMode) {
+    public List<LegEntity> findByRouteAndTransMode(ShipmentEntity route, int transMode) {
         return repository.findByRouteAndTransMode(route, transMode);
     }
 
@@ -40,7 +40,7 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
         purchaseService.deleteByLegId(id);
 
         LegEntity leg = repository.findOne(id);
-        TransportEntity route = leg.getRoute();
+        ShipmentEntity route = leg.getRoute();
         route.getLegs().remove(leg);
         transportRepository.save(route);
     }

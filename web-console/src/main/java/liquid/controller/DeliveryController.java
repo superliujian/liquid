@@ -8,7 +8,7 @@ import liquid.transport.service.DeliveryContainerService;
 import liquid.service.ServiceSubtypeService;
 import liquid.transport.web.domain.TransMode;
 import liquid.transport.persistence.domain.DeliveryContainerEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.TransportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class DeliveryController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));
 

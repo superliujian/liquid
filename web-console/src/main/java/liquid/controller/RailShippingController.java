@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.web.domain.RailShipping;
 import liquid.transport.service.TransportService;
 import liquid.transport.service.ShippingContainerService;
@@ -42,7 +42,7 @@ public class RailShippingController extends BaseTaskController {
 
         model.addAttribute("rail_task", TASK_PATH);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
         model.addAttribute("routes", routes);
         return "rail/main";
     }

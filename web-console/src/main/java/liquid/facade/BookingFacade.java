@@ -2,7 +2,7 @@ package liquid.facade;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.TransportService;
 import liquid.transport.web.domain.Booking;
 import liquid.transport.web.domain.BookingItem;
@@ -34,8 +34,8 @@ public class BookingFacade {
         Booking booking = new Booking();
 
         Iterable<SpaceBookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
-        for (TransportEntity route : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        for (ShipmentEntity route : routes) {
             Collection<LegEntity> legs = route.getLegs();
             for (LegEntity leg : legs) {
                 switch (TransMode.valueOf(leg.getTransMode())) {

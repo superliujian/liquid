@@ -18,7 +18,7 @@ import liquid.order.service.OrderService;
 import liquid.persistence.domain.*;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.TransportService;
 import liquid.transport.web.domain.TransMode;
 import liquid.validation.FormValidationResult;
@@ -297,7 +297,7 @@ public class OrderController extends BaseController {
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
 
-        Iterable<TransportEntity> routes = transportService.findByOrderId(id);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(id);
         // TODO: move to an appropriate place
         model.addAttribute("transModes", TransMode.toMap());
         model.addAttribute("routes", routes);
@@ -323,7 +323,7 @@ public class OrderController extends BaseController {
                 OrderEntity orderEntity = orderService.find(id);
                 break;
             case "container":
-                Iterable<TransportEntity> routes = transportService.findByOrderId(id);
+                Iterable<ShipmentEntity> routes = transportService.findByOrderId(id);
                 model.addAttribute("routes", routes);
                 break;
             case "charge":

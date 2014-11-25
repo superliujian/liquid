@@ -7,10 +7,10 @@ import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.web.domain.Leg;
 import liquid.transport.web.domain.TransMode;
 import liquid.transport.persistence.domain.LegEntity;
-import liquid.transport.persistence.domain.TransportEntity;
 import liquid.transport.persistence.repository.TransportRepository;
 import liquid.transport.service.LegService;
 import org.slf4j.Logger;
@@ -111,7 +111,7 @@ public class LegController extends BaseTaskController {
         logger.debug("routeId: {}", routeId);
         logger.debug("tab: {}", tab);
 
-        TransportEntity route = TransportEntity.newInstance(TransportEntity.class, routeId);
+        ShipmentEntity route = ShipmentEntity.newInstance(ShipmentEntity.class, routeId);
         LocationEntity srcLoc = LocationEntity.newInstance(LocationEntity.class, leg.getSourceId());
         LocationEntity dstLoc = LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId());
 

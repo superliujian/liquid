@@ -4,7 +4,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.DeliveryContainerEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.ShippingContainerEntity;
 import liquid.transport.persistence.repository.DeliveryContainerRepository;
 import liquid.util.DateUtil;
@@ -50,8 +50,8 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
         }
 
         dcList = new ArrayList<DeliveryContainerEntity>();
-        Iterable<TransportEntity> routes = transportService.findByOrderId(order.getId());
-        for (TransportEntity route : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(order.getId());
+        for (ShipmentEntity route : routes) {
             List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
             for (ShippingContainerEntity sc : shippingContainers) {
                 DeliveryContainerEntity dc = new DeliveryContainerEntity();

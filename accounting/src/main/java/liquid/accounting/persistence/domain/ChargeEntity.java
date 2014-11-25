@@ -5,7 +5,7 @@ import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.transport.persistence.domain.LegEntity;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 
 import javax.persistence.*;
 
@@ -28,7 +28,7 @@ public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private TransportEntity route;
+    private ShipmentEntity route;
 
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
@@ -87,11 +87,11 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.leg = leg;
     }
 
-    public TransportEntity getRoute() {
+    public ShipmentEntity getRoute() {
         return route;
     }
 
-    public void setRoute(TransportEntity route) {
+    public void setRoute(ShipmentEntity route) {
         this.route = route;
     }
 

@@ -5,7 +5,7 @@ import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.ChargeService;
-import liquid.transport.persistence.domain.TransportEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.TransportService;
 import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
@@ -46,14 +46,14 @@ public class PlanningController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
 
         int containerUsage = 0;
-        for (TransportEntity route : routes) {
+        for (ShipmentEntity route : routes) {
             containerUsage += route.getContainerQty();
         }
 
-        TransportEntity route = new TransportEntity();
+        ShipmentEntity route = new ShipmentEntity();
         // set remaining container quantity as the default value for the next route planning.
         route.setContainerQty(order.getContainerQty() - containerUsage);
 
@@ -74,7 +74,7 @@ public class PlanningController extends BaseTaskController {
     }
 
     @RequestMapping(value = "/route", method = RequestMethod.POST)
-    public String addRoute(@PathVariable String taskId, @Valid @ModelAttribute(value = "route") TransportEntity route,
+    public String addRoute(@PathVariable String taskId, @Valid @ModelAttribute(value = "route") ShipmentEntity route,
                            BindingResult result, Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("route: {}", route);
@@ -83,8 +83,8 @@ public class PlanningController extends BaseTaskController {
         OrderEntity order = orderService.find(orderId);
 
         int containerUsage = 0;
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
-        for (TransportEntity r : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        for (ShipmentEntity r : routes) {
             containerUsage += r.getContainerQty();
         }
 

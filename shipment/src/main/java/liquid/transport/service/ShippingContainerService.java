@@ -65,8 +65,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     @Transactional("transactionManager")
     public void initialize(Long orderId) {
-        Iterable<TransportEntity> routes = transportService.findByOrderId(orderId);
-        for (TransportEntity route : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
+        for (ShipmentEntity route : routes) {
             Collection<ShippingContainerEntity> containers = findByRouteId(route.getId());
             if (null == containers) containers = new ArrayList<>();
             if (containers.size() == 0) {
@@ -124,8 +124,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         rcList = new ArrayList<RailContainerEntity>();
-        Iterable<TransportEntity> routes = transportService.findByOrderId(order.getId());
-        for (TransportEntity route : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(order.getId());
+        for (ShipmentEntity route : routes) {
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.RAIL.getType());
             if (legList.size() > 0) {
                 List<ShippingContainerEntity> shippingContainers = findByRouteId(route.getId());
@@ -350,8 +350,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         bcList = new ArrayList<BargeContainerEntity>();
-        Iterable<TransportEntity> routes = transportService.findByOrderId(order.getId());
-        for (TransportEntity route : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(order.getId());
+        for (ShipmentEntity route : routes) {
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.BARGE.getType());
             if (legList.size() > 0) {
                 List<ShippingContainerEntity> shippingContainers = route.getContainers();
@@ -383,7 +383,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     public void saveBargeContainer(long containerId, BargeContainerEntity formBean) {
         BargeContainerEntity container = bcRepository.findOne(containerId);
-        TransportEntity route = transportService.find(container.getRoute().getId());
+        ShipmentEntity route = transportService.find(container.getRoute().getId());
 
         if (formBean.isBatch()) {
 
@@ -436,8 +436,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         vcList = new ArrayList<VesselContainerEntity>();
-        Iterable<TransportEntity> routes = transportService.findByOrderId(order.getId());
-        for (TransportEntity route : routes) {
+        Iterable<ShipmentEntity> routes = transportService.findByOrderId(order.getId());
+        for (ShipmentEntity route : routes) {
             List<LegEntity> legList = legRepository.findByRouteAndTransMode(route, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
                 List<ShippingContainerEntity> shippingContainers = findByRouteId(route.getId());
@@ -469,7 +469,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     public void saveVesselContainer(long containerId, VesselContainerEntity formBean) {
         VesselContainerEntity container = vcRepository.findOne(containerId);
-        TransportEntity route = transportService.find(container.getRoute().getId());
+        ShipmentEntity route = transportService.find(container.getRoute().getId());
 
         if (formBean.isBatch()) {
             Collection<VesselContainerEntity> containers = vcRepository.findByRouteId(route.getId());
