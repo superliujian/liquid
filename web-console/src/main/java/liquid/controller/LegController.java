@@ -7,12 +7,12 @@ import liquid.persistence.domain.ServiceProviderTypeEnity;
 import liquid.persistence.repository.LocationRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.persistence.repository.ServiceProviderTypeRepository;
-import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.web.domain.Leg;
-import liquid.transport.web.domain.TransMode;
 import liquid.transport.persistence.domain.LegEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.ShipmentRepository;
 import liquid.transport.service.LegService;
+import liquid.transport.web.domain.Leg;
+import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.List;
  * Time: 9:54 PM
  */
 @Controller
-@RequestMapping("/task/{taskId}/planning/route/{routeId}")
+@RequestMapping("/task/{taskId}/planning/shipment/{shipmentId}")
 public class LegController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(LegController.class);
 
@@ -52,11 +52,11 @@ public class LegController extends BaseTaskController {
 
     @RequestMapping(value = "/{tab}", method = RequestMethod.GET)
     public String initLeg(@PathVariable String taskId,
-                          @PathVariable long routeId,
+                          @PathVariable Long shipmentId,
                           @PathVariable String tab,
                           Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("routeId: {}", shipmentId);
         logger.debug("tab: {}", tab);
 
         Leg leg = new Leg();
@@ -97,26 +97,26 @@ public class LegController extends BaseTaskController {
         }
 
         model.addAttribute("tab", tab);
-        model.addAttribute("routeId", routeId);
+        model.addAttribute("shipmentId", shipmentId);
         model.addAttribute("leg", leg);
         return "planning/" + tab + "_tab";
     }
 
     @RequestMapping(value = "/{tab}", method = RequestMethod.POST)
     public String addLeg(@PathVariable String taskId,
-                         @PathVariable long routeId,
+                         @PathVariable Long shipmentId,
                          @PathVariable String tab,
                          Leg leg) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("shipmentId: {}", shipmentId);
         logger.debug("tab: {}", tab);
 
-        ShipmentEntity route = ShipmentEntity.newInstance(ShipmentEntity.class, routeId);
+        ShipmentEntity shipment = ShipmentEntity.newInstance(ShipmentEntity.class, shipmentId);
         LocationEntity srcLoc = LocationEntity.newInstance(LocationEntity.class, leg.getSourceId());
         LocationEntity dstLoc = LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId());
 
         LegEntity legEntity = new LegEntity();
-        legEntity.setShipment(route);
+        legEntity.setShipment(shipment);
         legEntity.setTransMode(TransMode.valueOf(tab.toUpperCase()).getType());
         if (null != leg.getServiceProviderId())
             legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
@@ -128,10 +128,10 @@ public class LegController extends BaseTaskController {
 
     @RequestMapping(value = "/leg/{legId}", method = RequestMethod.GET)
     public String deleteLeg(@PathVariable String taskId,
-                            @PathVariable long routeId,
-                            @PathVariable long legId) {
+                            @PathVariable Long shipmentId,
+                            @PathVariable Long legId) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("routeId: {}", shipmentId);
         logger.debug("legId: {}", legId);
 
         legService.delete(legId);

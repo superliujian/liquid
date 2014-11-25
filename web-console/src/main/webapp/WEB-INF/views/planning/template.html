@@ -14,19 +14,19 @@
     <div id="m" class="container">
         <ul class="nav nav-tabs">
             <li class="active" th:class="${tab} == 'rail' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/rail'"
+                <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipmentId} + '/rail'"
                    th:text="#{rail}">Rail</a>
             </li>
             <li class="active" th:class="${tab} == 'barge' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/barge'"
+                <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipmentId} + '/barge'"
                    th:text="#{barge}">Barge</a>
             </li>
             <li class="active" th:class="${tab} == 'vessel' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/vessel'"
+                <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipmentId} + '/vessel'"
                    th:text="#{vessel}">Vessel</a>
             </li>
             <li class="active" th:class="${tab} == 'road' ? 'active'">
-                <a th:href="'/task/' + ${taskId} + '/planning/route/' + ${routeId} + '/road'"
+                <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipmentId} + '/road'"
                    th:text="#{road}">Road</a>
             </li>
         </ul>
