@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 @Controller
 @RequestMapping("/route")
-public class RouteController {
+public class ShipmentController {
     @Autowired
     private OrderService orderService;
 
