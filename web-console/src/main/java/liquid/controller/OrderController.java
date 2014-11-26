@@ -20,7 +20,6 @@ import liquid.security.SecurityContext;
 import liquid.service.*;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
-import liquid.transport.web.domain.TransMode;
 import liquid.validation.FormValidationResult;
 import liquid.web.domain.SearchBarForm;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -296,12 +295,6 @@ public class OrderController extends BaseController {
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
-
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(id);
-        // TODO: move to an appropriate place
-        model.addAttribute("transModes", TransMode.toMap());
-        model.addAttribute("routes", routes);
-
         return "order/detail";
     }
 
