@@ -27,8 +27,8 @@ public class ChargeEntity extends BaseUpdateEntity {
     private String taskId;
 
     @ManyToOne
-    @JoinColumn(name = "ROUTE_ID")
-    private ShipmentEntity route;
+    @JoinColumn(name = "SHIPMENT_ID")
+    private ShipmentEntity shipment;
 
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
@@ -87,12 +87,12 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.leg = leg;
     }
 
-    public ShipmentEntity getRoute() {
-        return route;
+    public ShipmentEntity getShipment() {
+        return shipment;
     }
 
-    public void setRoute(ShipmentEntity route) {
-        this.route = route;
+    public void setShipment(ShipmentEntity shipment) {
+        this.shipment = shipment;
     }
 
     public ServiceSubtypeEntity getServiceSubtype() {
@@ -177,7 +177,7 @@ public class ChargeEntity extends BaseUpdateEntity {
         sb.append("id=").append(id);
         sb.append(", orderId=").append(order == null ? null : order.getId());
         sb.append(", taskId='").append(taskId).append('\'');
-        sb.append(", routeId=").append(route == null ? null : route.getId());
+        sb.append(", routeId=").append(shipment == null ? null : shipment.getId());
         sb.append(", legId=").append(leg == null ? null : leg.getId());
         sb.append(", serviceSubtypeId=").append(serviceSubtype == null ? null : serviceSubtype.getId());
         sb.append(", spId=").append(sp == null ? null : sp.getId());

@@ -93,7 +93,7 @@ public class AllocationController extends BaseTaskController {
     @RequestMapping(value = "/rail", method = RequestMethod.GET, params = "shipmentId")
     public String initRailAlloc(@PathVariable String taskId, @RequestParam Long shipmentId, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", shipmentId);
+        logger.debug("shipmentId: {}", shipmentId);
 
         model.addAttribute("taskId", taskId);
 
@@ -141,7 +141,7 @@ public class AllocationController extends BaseTaskController {
                                     @RequestParam(required = false, defaultValue = "0") Integer number,
                                     Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", shipmentId);
+        logger.debug("shipmentId: {}", shipmentId);
 
         ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
@@ -168,7 +168,7 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("ownerId", ownerId);
         model.addAttribute("yardId", yardId);
         model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/task/" + taskId + "/allocation?" + "routeId=" + shipmentId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
+        model.addAttribute("contextPath", "/task/" + taskId + "/allocation?shipmentId=" + shipmentId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
 
         // For the allocation form
         SelfContainerAllocation selfContainerAllocation = new SelfContainerAllocation();
@@ -183,14 +183,13 @@ public class AllocationController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerAllocation: {}", selfContainerAllocation);
         containerAllocationFacade.allocate(selfContainerAllocation);
-//        return "redirect:/task/" + taskId + "/allocation/list?routeId=" + selfContainerAllocation.getShipmentId();
         return "redirect:" + referer;
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, params = "shipmentId")
     public String initContainerSearch(@PathVariable String taskId, @RequestParam Long shipmentId, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", shipmentId);
+        logger.debug("shipmentId: {}", shipmentId);
 
         ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
@@ -220,10 +219,10 @@ public class AllocationController extends BaseTaskController {
         selfContainerAllocation.setContainerIds(new Long[]{searchContainerAllocForm.getContainerId()});
         containerAllocationFacade.allocate(selfContainerAllocation);
 
-        return "redirect:/task/" + taskId + "/allocation/search?routeId=" + searchContainerAllocForm.getShipmentId();
+        return "redirect:/task/" + taskId + "/allocation/search?shipmentId=" + searchContainerAllocForm.getShipmentId();
     }
 
-    @RequestMapping(value = "/enter", method = RequestMethod.GET, params = "routeId")
+    @RequestMapping(value = "/enter", method = RequestMethod.GET, params = "shipmentId")
     public String initContainerEnter(@PathVariable String taskId, @RequestParam Long shipmentId, Model model) {
         logger.debug("taskId: {}", taskId);
         logger.debug("shipmentId: {}", shipmentId);
@@ -275,7 +274,7 @@ public class AllocationController extends BaseTaskController {
         selfContainerAllocation.setContainerIds(containerIds.toArray(new Long[0]));
         containerAllocationFacade.allocate(selfContainerAllocation);
 
-        return "redirect:/task/" + taskId + "/allocation/enter?routeId=" + containers.getShipmentId();
+        return "redirect:/task/" + taskId + "/allocation/enter?shipmentId=" + containers.getShipmentId();
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "undo")

@@ -75,8 +75,8 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
         // new charge
         ShipmentEntity route = null;
-        if (null != entity.getRoute()) {
-            route = shipmentService.find(entity.getRoute().getId());
+        if (null != entity.getShipment()) {
+            route = shipmentService.find(entity.getShipment().getId());
             entity.setOrder(route.getOrder());
         }
         if (null != entity.getLeg()) {

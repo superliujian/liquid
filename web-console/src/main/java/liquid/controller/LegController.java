@@ -56,7 +56,7 @@ public class LegController extends BaseTaskController {
                           @PathVariable String tab,
                           Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", shipmentId);
+        logger.debug("shipmentId: {}", shipmentId);
         logger.debug("tab: {}", tab);
 
         Leg leg = new Leg();
@@ -131,7 +131,7 @@ public class LegController extends BaseTaskController {
                             @PathVariable Long shipmentId,
                             @PathVariable Long legId) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", shipmentId);
+        logger.debug("shipmentId: {}", shipmentId);
         logger.debug("legId: {}", legId);
 
         legService.delete(legId);
