@@ -98,7 +98,7 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("taskId", taskId);
 
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
-        ShipmentContainerAllocation shipmentContainerAllocation = containerAllocationFacade.getRouteContainerAllocation(
+        ShipmentContainerAllocation shipmentContainerAllocation = containerAllocationFacade.getShipmentContainerAllocation(
                 ContainerType.RAIL.getType(), shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
         // For showing the allocated containers.
         model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);

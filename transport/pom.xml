@@ -8,9 +8,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>shipment</artifactId>
+    <artifactId>transport</artifactId>
     <packaging>jar</packaging>
-    <name>Shipment</name>
+    <name>Transport</name>
 
     <dependencies>
         <!-- liquid -->

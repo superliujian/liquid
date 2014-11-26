@@ -51,14 +51,14 @@ public class ContainerAllocationFacade {
 
         Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(order.getId());
         for (ShipmentEntity route : routes) {
-            ShipmentContainerAllocation shipmentContainerAllocation = getRouteContainerAllocation(type, subtypeName, route);
+            ShipmentContainerAllocation shipmentContainerAllocation = getShipmentContainerAllocation(type, subtypeName, route);
             shipmentContainerAllocations.add(shipmentContainerAllocation);
         }
 
         return shipmentContainerAllocations;
     }
 
-    public ShipmentContainerAllocation getRouteContainerAllocation(int type, String subtypeName, ShipmentEntity route) {
+    public ShipmentContainerAllocation getShipmentContainerAllocation(int type, String subtypeName, ShipmentEntity route) {
         ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
         shipmentContainerAllocation.setShipmentId(route.getId());
         shipmentContainerAllocation.setShipment(route);
