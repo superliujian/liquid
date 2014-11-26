@@ -72,7 +72,7 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     public Page<OrderEntity> findByCreateUser(String username, Pageable pageable) {
-        return repository.findByCreateUser(username, pageable);
+        return repository.findByCreatedBy(username, pageable);
     }
 
     public Page<OrderEntity> findAll(Pageable pageable) {
@@ -141,7 +141,7 @@ public class OrderService extends AbstractBaseOrderService {
             Specification<OrderEntity> usernameSpec = new Specification<OrderEntity>() {
                 @Override
                 public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
-                    return builder.equal(root.get(OrderEntity_.createUser.getName()), username);
+                    return builder.equal(root.get(OrderEntity_.createdBy.getName()), username);
                 }
             };
         }

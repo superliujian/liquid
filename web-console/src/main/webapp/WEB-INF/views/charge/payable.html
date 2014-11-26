@@ -47,7 +47,7 @@
         <tr th:each="charge : ${page.content}">
             <td th:text="${charge.id}">ID</td>
             <td th:text="${charge.order.orderNo}">Order No.</td>
-            <td th:text="${charge.order.createTime}"></td>
+            <td th:text="${charge.order.createdAt}"></td>
             <td></td>
             <td th:text="${charge.order.containerQty}">Container Quantity</td>
             <td></td>

@@ -96,8 +96,8 @@ public class OrderFacade {
         Map<String, Object> variableMap = new HashMap<>();
         variableMap.put("loadingType", orderEntity.getLoadingType());
         variableMap.put("hasDelivery", hasDelivery);
-        variableMap.put("orderOwner", orderEntity.getUpdateUser());
-        bpmService.startProcess(orderEntity.getUpdateUser(), orderEntity.getId(), variableMap);
+        variableMap.put("orderOwner", orderEntity.getUpdatedBy());
+        bpmService.startProcess(orderEntity.getUpdatedBy(), orderEntity.getId(), variableMap);
         return orderEntity;
     }
 

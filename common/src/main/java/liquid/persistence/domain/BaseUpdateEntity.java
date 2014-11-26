@@ -1,6 +1,7 @@
 package liquid.persistence.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
 /**
@@ -11,48 +12,48 @@ import java.util.Date;
  */
 @MappedSuperclass
 public class BaseUpdateEntity extends BaseIdEntity {
-    @Column(name = "CREATE_USER")
-    private String createUser;
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 
-    @Column(name = "CREATE_TIME")
-    private Date createTime;
+    @Column(name = "CREATED_AT")
+    private Date createdAt;
 
-    @Column(name = "UPDATE_USER")
-    private String updateUser;
+    @Column(name = "UPDATED_BY")
+    private String updatedBy;
 
-    @Column(name = "UPDATE_TIME")
-    private Date updateTime;
+    @Column(name = "UPDATED_AT")
+    private Date updatedAt;
 
-    public String getCreateUser() {
-        return createUser;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getUpdateUser() {
-        return updateUser;
+    public String getUpdatedBy() {
+        return updatedBy;
     }
 
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public boolean isNew() {

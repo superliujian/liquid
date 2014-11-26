@@ -73,8 +73,8 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
                 for (int i = 0; i < shipment.getContainerQty(); i++) {
                     ShippingContainerEntity container = new ShippingContainerEntity();
                     container.setShipment(shipment);
-                    container.setCreateTime(new Date());
-                    container.setUpdateTime(new Date());
+                    container.setCreatedAt(new Date());
+                    container.setUpdatedAt(new Date());
                     containers.add(container);
                 }
                 repository.save(containers);
