@@ -13,11 +13,11 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <div th:unless="${#lists.isEmpty(routes)}">
-        <div class="panel panel-default" th:each="route : ${routes}">
+    <div th:unless="${#lists.isEmpty(shipmentSet)}">
+        <div class="panel panel-default" th:each="shipment : ${shipmentSet}">
             <div class="panel-heading">
-                <span th:text="#{route} + ${route.id}">Route ID</span>
-                <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+                <span th:text="#{shipment} + ${shipment.id}">Shipment ID</span>
+                <span th:text="#{container.quantity} + '(' + ${shipment.containerQty} + ')'">Container Qty</span>
             </div>
 
             <div class="panel-body">
@@ -39,7 +39,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="container : ${route.railContainers}">
+                    <tr th:each="container : ${shipment.railContainers}">
                         <td th:text="${container.leg.srcLoc.name}">Railway Origination</td>
                         <td th:text="${container.leg.dstLoc.name}">Railway Destination</td>
                         <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}">
@@ -85,7 +85,7 @@
                    th:unless="${#lists.isEmpty(charges)}">
                 <thead>
                 <tr>
-                    <th th:text="#{route}">Route ID</th>
+                    <th th:text="#{shipment}">Shipment ID</th>
                     <th th:text="#{leg}">Leg ID</th>
                     <th th:text="#{trans.mode}">Trans Mode</th>
                     <th th:text="#{charge.type}">Type</th>
@@ -98,8 +98,8 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
-                    <td th:text="${charge.leg.route.id}">Route ID</td>
-                    <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Route ID</td>
+                    <td th:text="${charge.leg.shipment.id}">Shipment ID</td>
+                    <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Shipment Name</td>
                     <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>
                     <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>

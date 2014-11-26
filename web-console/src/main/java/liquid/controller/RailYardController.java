@@ -43,8 +43,8 @@ public class RailYardController extends BaseTaskController {
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
 
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        model.addAttribute("routes", routes);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("shipmentSet", shipmentSet);
         return "rail/main";
     }
 

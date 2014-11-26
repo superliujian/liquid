@@ -87,7 +87,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     }
 
     @Transactional("transactionManager")
-    public void allocate(long routeId, ShippingContainerEntity formBean) {
+    public void allocate(Long shipmentId, ShippingContainerEntity formBean) {
         ShippingContainerEntity oldOne = find(formBean.getId());
         formBean.setRoute(oldOne.getRoute());
 

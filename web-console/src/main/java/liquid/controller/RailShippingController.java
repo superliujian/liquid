@@ -42,8 +42,8 @@ public class RailShippingController extends BaseTaskController {
 
         model.addAttribute("rail_task", TASK_PATH);
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        model.addAttribute("routes", routes);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("shipmentSet", shipmentSet);
         return "rail/main";
     }
 

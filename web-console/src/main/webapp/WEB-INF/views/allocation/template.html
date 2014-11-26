@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-xs-9">
                 <h3>
-                    <span th:text="#{route}" /><span th:text="${routeContainerAllocation.route.id}" />
+                    <span th:text="#{shipment}" /><span th:text="${routeContainerAllocation.route.id}" />
                     <small>
                         <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.containerQty}" /></b><span>;</span>
                         <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.order.containerSubtype.name}" /></b>
@@ -87,7 +87,7 @@
         <div class="row">
             <div class="col-xs-9">
                 <h3>
-                    <span th:text="#{route}" /><span th:text="${routeContainerAllocation.routeId}" />
+                    <span th:text="#{shipment}" /><span th:text="${routeContainerAllocation.routeId}" />
                     <small>
                         <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.containerQty}" /></b><span>;</span>
                         <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.order.containerSubtype.name}" /></b>

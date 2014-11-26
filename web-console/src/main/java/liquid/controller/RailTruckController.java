@@ -55,8 +55,8 @@ public class RailTruckController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("containers", scService.initializeRailContainers(orderId));
         model.addAttribute("rail_task", TASK_PATH);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        model.addAttribute("routes", routes);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("shipmentSet", shipmentSet);
 
         // for charges
         Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
