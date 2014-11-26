@@ -51,8 +51,8 @@ public class DeliveryController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        model.addAttribute("routes", routes);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("shipmentSet", shipmentSet);
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));
 
         // for charges

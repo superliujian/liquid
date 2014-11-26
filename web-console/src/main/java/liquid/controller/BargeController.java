@@ -40,8 +40,8 @@ public class BargeController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         scService.initBargeContainers(orderId);
 
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        model.addAttribute("routes", routes);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("shipmentSet", shipmentSet);
         return "barge/main";
     }
 
