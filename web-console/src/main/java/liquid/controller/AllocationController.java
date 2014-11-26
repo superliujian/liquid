@@ -16,7 +16,6 @@ import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
 import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.persistence.domain.ShippingContainerEntity;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import org.slf4j.Logger;
@@ -27,7 +26,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -81,9 +79,9 @@ public class AllocationController extends BaseTaskController {
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        List<RouteContainerAllocation> routeContainerAllocations = containerAllocationFacade.computeContainerAllocation(order);
+        List<ShipmentContainerAllocation> shipmentContainerAllocations = containerAllocationFacade.computeContainerAllocation(order);
 
-        model.addAttribute("routeContainerAllocations", routeContainerAllocations);
+        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocations);
 
         if (ContainerType.RAIL.getType() == order.getContainerType()) {
             return "allocation/rail_container";
@@ -92,22 +90,22 @@ public class AllocationController extends BaseTaskController {
         }
     }
 
-    @RequestMapping(value = "/rail", method = RequestMethod.GET, params = "routeId")
-    public String initRailAlloc(@PathVariable String taskId, @RequestParam Long routeId, Model model) {
+    @RequestMapping(value = "/rail", method = RequestMethod.GET, params = "shipmentId")
+    public String initRailAlloc(@PathVariable String taskId, @RequestParam Long shipmentId, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("routeId: {}", shipmentId);
 
         model.addAttribute("taskId", taskId);
 
-        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
-        RouteContainerAllocation routeContainerAllocation = containerAllocationFacade.getRouteContainerAllocation(
+        ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
+        ShipmentContainerAllocation shipmentContainerAllocation = containerAllocationFacade.getRouteContainerAllocation(
                 ContainerType.RAIL.getType(), shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
         // For showing the allocated containers.
-        model.addAttribute("routeContainerAllocation", routeContainerAllocation);
+        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
 
         Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.RAIL);
         EnterContainerAllocForm containers = new EnterContainerAllocForm();
-        containers.setRouteId(routeId);
+        containers.setShipmentId(shipmentId);
 
         // For the allocation form
         model.addAttribute("containerSubtypes", subtypes);
@@ -118,41 +116,41 @@ public class AllocationController extends BaseTaskController {
      * Rail Container Allocation.
      *
      * @param taskId
-     * @param routeContainerAllocation
+     * @param shipmentContainerAllocation
      * @param model
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String allocate(@PathVariable String taskId, RouteContainerAllocation routeContainerAllocation, Model model) {
+    public String allocate(@PathVariable String taskId, ShipmentContainerAllocation shipmentContainerAllocation, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeContainerAllocation: {}", routeContainerAllocation);
+        logger.debug("shipmentContainerAllocations: {}", shipmentContainerAllocation);
 
-        containerAllocationFacade.allocate(routeContainerAllocation);
+        containerAllocationFacade.allocate(shipmentContainerAllocation);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        model.addAttribute("routeContainerAllocation", containerAllocationFacade.computeContainerAllocation(orderId));
+        model.addAttribute("shipmentContainerAllocations", containerAllocationFacade.computeContainerAllocation(orderId));
 
         model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
         return "redirect:/task/" + taskId + "/allocation";
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET, params = "routeId")
-    public String initContainerList(@PathVariable String taskId, @RequestParam Long routeId,
+    @RequestMapping(value = "/list", method = RequestMethod.GET, params = "shipmentId")
+    public String initContainerList(@PathVariable String taskId, @RequestParam Long shipmentId,
                                     @RequestParam(required = false, defaultValue = "0") Long ownerId,
                                     @RequestParam(required = false, defaultValue = "0") Long yardId,
                                     @RequestParam(required = false, defaultValue = "0") Integer number,
                                     Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("routeId: {}", shipmentId);
 
-        RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
-        routeContainerAllocation.setRoute(shipmentEntity);
-        routeContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
+        ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
+        ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
+        shipmentContainerAllocation.setShipment(shipmentEntity);
+        shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
-        routeContainerAllocation.setContainerAllocations(containerAllocations);
+        shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
-        model.addAttribute("routeContainerAllocation", routeContainerAllocation);
+        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
 
         model.addAttribute("taskId", taskId);
 
@@ -170,11 +168,11 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("ownerId", ownerId);
         model.addAttribute("yardId", yardId);
         model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/task/" + taskId + "/allocation?" + "routeId=" + routeId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
+        model.addAttribute("contextPath", "/task/" + taskId + "/allocation?" + "routeId=" + shipmentId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
 
         // For the allocation form
         SelfContainerAllocation selfContainerAllocation = new SelfContainerAllocation();
-        selfContainerAllocation.setRouteId(routeId);
+        selfContainerAllocation.setShipmentId(shipmentId);
         model.addAttribute("selfContainerAllocation", selfContainerAllocation);
         return "allocation/list";
     }
@@ -185,29 +183,29 @@ public class AllocationController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerAllocation: {}", selfContainerAllocation);
         containerAllocationFacade.allocate(selfContainerAllocation);
-//        return "redirect:/task/" + taskId + "/allocation/list?routeId=" + selfContainerAllocation.getRouteId();
+//        return "redirect:/task/" + taskId + "/allocation/list?routeId=" + selfContainerAllocation.getShipmentId();
         return "redirect:" + referer;
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET, params = "routeId")
-    public String initContainerSearch(@PathVariable String taskId, @RequestParam Long routeId, Model model) {
+    @RequestMapping(value = "/search", method = RequestMethod.GET, params = "shipmentId")
+    public String initContainerSearch(@PathVariable String taskId, @RequestParam Long shipmentId, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("routeId: {}", shipmentId);
 
-        RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
-        routeContainerAllocation.setRoute(shipmentEntity);
-        routeContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
+        ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
+        ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
+        shipmentContainerAllocation.setShipment(shipmentEntity);
+        shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
-        routeContainerAllocation.setContainerAllocations(containerAllocations);
+        shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
-        model.addAttribute("routeContainerAllocation", routeContainerAllocation);
+        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
 
         model.addAttribute("taskId", taskId);
 
         // For the allocation form
         SearchContainerAllocForm searchContainerAllocForm = new SearchContainerAllocForm();
-        searchContainerAllocForm.setRouteId(routeId);
+        searchContainerAllocForm.setShipmentId(shipmentId);
         model.addAttribute("searchContainerAllocForm", searchContainerAllocForm);
         return "allocation/search";
     }
@@ -218,28 +216,28 @@ public class AllocationController extends BaseTaskController {
         logger.debug("searchContainerAllocForm: {}", searchContainerAllocForm);
 
         SelfContainerAllocation selfContainerAllocation = new SelfContainerAllocation();
-        selfContainerAllocation.setRouteId(searchContainerAllocForm.getRouteId());
+        selfContainerAllocation.setShipmentId(searchContainerAllocForm.getShipmentId());
         selfContainerAllocation.setContainerIds(new Long[]{searchContainerAllocForm.getContainerId()});
         containerAllocationFacade.allocate(selfContainerAllocation);
 
-        return "redirect:/task/" + taskId + "/allocation/search?routeId=" + searchContainerAllocForm.getRouteId();
+        return "redirect:/task/" + taskId + "/allocation/search?routeId=" + searchContainerAllocForm.getShipmentId();
     }
 
     @RequestMapping(value = "/enter", method = RequestMethod.GET, params = "routeId")
-    public String initContainerEnter(@PathVariable String taskId, @RequestParam Long routeId, Model model) {
+    public String initContainerEnter(@PathVariable String taskId, @RequestParam Long shipmentId, Model model) {
         logger.debug("taskId: {}", taskId);
-        logger.debug("routeId: {}", routeId);
+        logger.debug("shipmentId: {}", shipmentId);
 
         model.addAttribute("taskId", taskId);
 
-        RouteContainerAllocation routeContainerAllocation = new RouteContainerAllocation();
-        ShipmentEntity shipmentEntity = shipmentService.find(routeId);
-        routeContainerAllocation.setRoute(shipmentEntity);
-        routeContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
+        ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
+        ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
+        shipmentContainerAllocation.setShipment(shipmentEntity);
+        shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
-        routeContainerAllocation.setContainerAllocations(containerAllocations);
+        shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
-        model.addAttribute("routeContainerAllocation", routeContainerAllocation);
+        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
 
         // Owner list
         List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
@@ -248,7 +246,7 @@ public class AllocationController extends BaseTaskController {
         // container subtypes
         Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.SELF);
         EnterContainerAllocForm containers = new EnterContainerAllocForm();
-        containers.setRouteId(routeId);
+        containers.setShipmentId(shipmentId);
         for (int i = 0; i < 5; i++) {
             containers.getList().add(new Container());
         }
@@ -272,12 +270,12 @@ public class AllocationController extends BaseTaskController {
         }
 
         SelfContainerAllocation selfContainerAllocation = new SelfContainerAllocation();
-        selfContainerAllocation.setRouteId(containers.getRouteId());
+        selfContainerAllocation.setShipmentId(containers.getShipmentId());
 
         selfContainerAllocation.setContainerIds(containerIds.toArray(new Long[0]));
         containerAllocationFacade.allocate(selfContainerAllocation);
 
-        return "redirect:/task/" + taskId + "/allocation/enter?routeId=" + containers.getRouteId();
+        return "redirect:/task/" + taskId + "/allocation/enter?routeId=" + containers.getShipmentId();
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "undo")
@@ -289,45 +287,4 @@ public class AllocationController extends BaseTaskController {
         containerAllocationFacade.undo(allocationId);
         return "redirect:" + referer;
     }
-
-//    @RequestMapping(value = "/route/{routeId}/sc/{scId}", method = RequestMethod.GET)
-//    public String initAllocation(@PathVariable String taskId, @PathVariable Long routeId, @PathVariable Long scId, Model model) {
-//        logger.debug("taskId: {}", taskId);
-//        logger.debug("routeId: {}", routeId);
-//
-//        ShippingContainerEntity sc = scService.find(scId);
-//
-//        // Set up pickup contact and his phone by default
-//        ShipmentEntity route = shipmentService.find(routeId);
-//        List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByRouteId(route.getId());
-//
-//        if (shippingContainers.iterator().hasNext()) {
-//            ShippingContainerEntity firstOne = shippingContainers.iterator().next();
-//            sc.setPickupContact(firstOne.getPickupContact());
-//            sc.setContactPhone(firstOne.getContactPhone());
-//        }
-//
-//        model.addAttribute("sc", sc);
-//        model.addAttribute("routeId", routeId);
-//        model.addAttribute("containers", containerService.findAllInStock(route.getOrder().getContainerType()));
-//        return "allocation/allocating";
-//    }
-//
-//    @RequestMapping(value = "/route/{routeId}/sc", method = RequestMethod.POST)
-//    public String allocate(@PathVariable String taskId, @PathVariable long routeId, ShippingContainerEntity sc,
-//                           BindingResult bindingResult, Model model) {
-//        logger.debug("taskId: {}", taskId);
-//        logger.debug("routeId: {}", routeId);
-//
-//        if (bindingResult.hasErrors()) {
-//            return "allocation/allocating";
-//        }
-//
-//        scService.allocate(routeId, sc);
-//
-//        Long orderId = taskService.getOrderIdByTaskId(taskId);
-//        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-//        model.addAttribute("routes", routes);
-//        return "redirect:/task/" + taskId + "/allocation";
-//    }
 }

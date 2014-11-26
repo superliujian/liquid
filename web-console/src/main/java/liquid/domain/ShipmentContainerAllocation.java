@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Created by redbrick9 on 5/20/14.
  */
-public class RouteContainerAllocation {
+public class ShipmentContainerAllocation {
     private int type;
 
-    private Long routeId;
+    private Long shipmentId;
 
-    private ShipmentEntity route;
+    private ShipmentEntity shipment;
 
     protected List<ContainerAllocation> containerAllocations = new ArrayList<>();
 
@@ -25,20 +25,20 @@ public class RouteContainerAllocation {
         this.type = type;
     }
 
-    public Long getRouteId() {
-        return routeId;
+    public Long getShipmentId() {
+        return shipmentId;
     }
 
-    public void setRouteId(Long routeId) {
-        this.routeId = routeId;
+    public void setShipmentId(Long shipmentId) {
+        this.shipmentId = shipmentId;
     }
 
-    public ShipmentEntity getRoute() {
-        return route;
+    public ShipmentEntity getShipment() {
+        return shipment;
     }
 
-    public void setRoute(ShipmentEntity route) {
-        this.route = route;
+    public void setShipment(ShipmentEntity shipment) {
+        this.shipment = shipment;
     }
 
     public List<ContainerAllocation> getContainerAllocations() {

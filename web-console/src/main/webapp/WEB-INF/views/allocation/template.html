@@ -10,10 +10,10 @@
         <div class="row">
             <div class="col-xs-9">
                 <h3>
-                    <span th:text="#{shipment}" /><span th:text="${routeContainerAllocation.route.id}" />
+                    <span th:text="#{shipment}" /><span th:text="${shipmentContainerAllocation.shipment.id}" />
                     <small>
-                        <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.containerQty}" /></b><span>;</span>
-                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.order.containerSubtype.name}" /></b>
+                        <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.containerQty}" /></b><span>;</span>
+                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.order.containerSubtype.name}" /></b>
                     </small>      
                 </h3>
             </div>
@@ -24,15 +24,15 @@
                         data-toggle="tooltip" data-placement="left" th:title="#{container.allocation.tooltip.back}">
                         <i class="glyphicon glyphicon-arrow-left text-success"/>
                     </a>
-                    <a th:href="'/task/' + ${taskId} + '/allocation/list?routeId=' + ${routeContainerAllocation.route.id}"
+                    <a th:href="'/task/' + ${taskId} + '/allocation/list?shipmentId=' + ${shipmentContainerAllocation.shipment.id}"
                         data-toggle="tooltip" data-placement="top" th:title="#{container.allocation.tooltip.list}">
                         <i class="glyphicon glyphicon-list text-success"/>
                     </a>
-                    <a th:href="'/task/' + ${taskId} + '/allocation/search?routeId=' + ${routeContainerAllocation.route.id}"
+                    <a th:href="'/task/' + ${taskId} + '/allocation/search?shipmentId=' + ${shipmentContainerAllocation.shipment.id}"
                         data-toggle="tooltip" data-placement="buttom" th:title="#{container.allocation.tooltip.search}">
                         <i class="glyphicon glyphicon-search text-success"/>
                     </a>
-                    <a th:href="'/task/' + ${taskId} + '/allocation/enter?routeId=' + ${routeContainerAllocation.route.id}"
+                    <a th:href="'/task/' + ${taskId} + '/allocation/enter?shipmentId=' + ${shipmentContainerAllocation.shipment.id}"
                         data-toggle="tooltip" data-placement="right" th:title="#{container.allocation.tooltip.enter}">
                         <i class="glyphicon glyphicon-align-justify text-success"/>
                     </a>
@@ -65,7 +65,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="containerAllocation : ${routeContainerAllocation.containerAllocations}">
+                <tr th:each="containerAllocation : ${shipmentContainerAllocation.containerAllocations}">
                 <form method="post" th:action="'/task/' + ${taskId} + '/allocation'">
                     <td><b><span th:text="${containerAllocation.bicCode}">BIC Code</span></b></td>
                     <td><span th:text="${containerAllocation.owner}">Owner Name</span></td>
@@ -87,10 +87,10 @@
         <div class="row">
             <div class="col-xs-9">
                 <h3>
-                    <span th:text="#{shipment}" /><span th:text="${routeContainerAllocation.routeId}" />
+                    <span th:text="#{shipment}" /><span th:text="${shipmentContainerAllocation.shipmentId}" />
                     <small>
-                        <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.containerQty}" /></b><span>;</span>
-                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${routeContainerAllocation.route.order.containerSubtype.name}" /></b>
+                        <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.containerQty}" /></b><span>;</span>
+                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.order.containerSubtype.name}" /></b>
                     </small>      
                 </h3>
             </div>
@@ -101,7 +101,7 @@
                         data-toggle="tooltip" data-placement="left" th:title="#{container.allocation.tooltip.back}">
                         <i class="glyphicon glyphicon-arrow-left text-success"/>
                     </a>
-                    <a th:href="'/task/' + ${taskId} + '/allocation/rail?routeId=' + ${routeContainerAllocation.route.id}"
+                    <a th:href="'/task/' + ${taskId} + '/allocation/rail?shipmentId=' + ${shipmentContainerAllocation.shipment.id}"
                         data-toggle="tooltip" data-placement="right" th:title="#{container.allocation.tooltip.enter}">
                         <i class="glyphicon glyphicon-align-justify text-success"/>
                     </a>
@@ -118,16 +118,16 @@
             <thead>
                 <tr>
                     <th>No.</th>
-                    <th th:text="#{route}">Route</th>
+                    <th th:text="#{shipment}">Shipment</th>
                     <th th:text="#{container.type}">Container Type</th>
                     <th th:text="#{container.subtype}">Container Subtype</th>
                     <th>BIC Code</th> 
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="containerAllocation, rowStat: ${routeContainerAllocation.containerAllocations}">
+                <tr th:each="containerAllocation, rowStat: ${shipmentContainerAllocation.containerAllocations}">
                     <td th:text="${rowStat.count}">Seq</td>
-                    <td th:text="${containerAllocation.routeId}">Route ID</td>
+                    <td th:text="${containerAllocation.shipmentId}">Shipment ID</td>
                     <td th:text="#{${containerAllocation.typeNameKey}}">Type Name</td>
                     <td th:text="${containerAllocation.subtypeName}">Subtype Name</td>
                     <td th:text="${containerAllocation.bicCode}"></td>

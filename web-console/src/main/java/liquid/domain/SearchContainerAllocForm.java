@@ -4,18 +4,18 @@ package liquid.domain;
  * Created by mat on 10/5/14.
  */
 public class SearchContainerAllocForm {
-    private Long routeId;
+    private Long shipmentId;
 
     private Long containerId;
 
     private String bicCode;
 
-    public Long getRouteId() {
-        return routeId;
+    public Long getShipmentId() {
+        return shipmentId;
     }
 
-    public void setRouteId(Long routeId) {
-        this.routeId = routeId;
+    public void setShipmentId(Long shipmentId) {
+        this.shipmentId = shipmentId;
     }
 
     public Long getContainerId() {
@@ -39,7 +39,7 @@ public class SearchContainerAllocForm {
         final StringBuilder sb = new StringBuilder("SearchContainerAllocForm{");
         sb.append("bicCode='").append(bicCode).append('\'');
         sb.append(", containerId=").append(containerId);
-        sb.append(", routeId=").append(routeId);
+        sb.append(", shipmentId=").append(shipmentId);
         sb.append('}');
         return sb.toString();
     }
