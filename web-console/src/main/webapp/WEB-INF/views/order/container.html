@@ -10,10 +10,10 @@
 
 <div th:include="order/template :: tab"></div>
 
-<div id="t" class="container" th:each="route : ${routes}">
+<div id="t" class="container" th:each="shipment : ${shipmentSet}">
     <h4>
-        <span th:text="#{route} + ${route.id}">Route ID</span>
-        <small th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</small>
+        <span th:text="#{shipment} + ${shipment.id}">Route ID</span>
+        <small th:text="#{container.quantity} + '(' + ${shipment.containerQty} + ')'">Container Qty</small>
     </h4>
 
             <table class="table table-striped table-hover table-condensed table-16">
@@ -26,7 +26,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="container : ${route.containers}">
+                <tr th:each="container : ${shipment.containers}">
                     <td th:text="${container.container} ? ${container.container.bicCode} : ${container.bicCode}">
                         Container No.
                     </td>
