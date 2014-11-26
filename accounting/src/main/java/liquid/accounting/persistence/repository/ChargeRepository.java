@@ -17,9 +17,9 @@ import java.util.List;
 public interface ChargeRepository extends CrudRepository<ChargeEntity, Long>  {
     List<ChargeEntity> findByTaskId(String taskId);
 
-    Iterable<ChargeEntity> findByOrderId(long orderId);
+    Iterable<ChargeEntity> findByOrderId(Long orderId);
 
-    Page<ChargeEntity> findByOrderId(long orderId, Pageable pageable);
+    Page<ChargeEntity> findByOrderId(Long orderId, Pageable pageable);
 
     Iterable<ChargeEntity> findByOrderOrderNoLike(String orderNo);
 
@@ -27,11 +27,11 @@ public interface ChargeRepository extends CrudRepository<ChargeEntity, Long>  {
 
     Page<ChargeEntity> findBySpNameLike(String cumtomerName, Pageable pageable);
 
-    Iterable<ChargeEntity> findByLegId(long legId);
+    Iterable<ChargeEntity> findByLegId(Long legId);
 
-    Iterable<ChargeEntity> findByRouteId(long routeId);
+    Iterable<ChargeEntity> findByShipmentId(Long shipmentId);
 
-    Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole);
+    Iterable<ChargeEntity> findByOrderIdAndCreateRole(Long orderId, String createRole);
 
     Page<ChargeEntity> findAll(Pageable pageable);
 

@@ -8,8 +8,8 @@ import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.RailContainerRepository;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.RailTransport;
-import liquid.transport.web.domain.Route;
-import liquid.transport.web.domain.Routes;
+import liquid.transport.web.domain.Shipment;
+import liquid.transport.web.domain.ShipmentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +24,7 @@ import java.util.Collection;
  * Created by redbrick9 on 9/11/14.
  */
 @Controller
-@RequestMapping("/route")
+@RequestMapping("/shipment")
 public class ShipmentController {
     @Autowired
     private OrderService orderService;
@@ -41,36 +41,36 @@ public class ShipmentController {
     @RequestMapping(method = RequestMethod.GET)
     public String findByOrder(@RequestParam(value = "o") Long orderId, Model model) {
         OrderEntity order = orderService.find(orderId);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        model.addAttribute("tab", "route");
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("tab", "shipment");
         model.addAttribute("order", order);
-        model.addAttribute("routes", routes);
-        return "route/detail";
+        model.addAttribute("shipmentSet", shipmentSet);
+        return "shipment/detail";
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "action=edit")
     public String initEditForm(@RequestParam(value = "o") Long orderId, Model model) {
         OrderEntity order = orderService.find(orderId);
-        Iterable<ShipmentEntity> routeEntities = shipmentService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> shipmentEntities = shipmentService.findByOrderId(orderId);
 
-        Routes routes = new Routes();
-        routes.setOrderId(orderId);
-        routes.setRoutes(Route.valueOf(routeEntities));
+        ShipmentSet shipmentSet = new ShipmentSet();
+        shipmentSet.setOrderId(orderId);
+        shipmentSet.setShipments(Shipment.valueOf(shipmentEntities));
 
-        model.addAttribute("tab", "route");
+        model.addAttribute("tab", "shipment");
         model.addAttribute("order", order);
-        model.addAttribute("routes", routes);
+        model.addAttribute("shipmentSet", shipmentSet);
         model.addAttribute("fleets", serviceProviderService.findByType(4L));
-        return "route/edit";
+        return "shipment/edit";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String edit(@RequestParam(value = "o") Long orderId, @ModelAttribute Routes routes) {
+    public String edit(@RequestParam(value = "o") Long orderId, @ModelAttribute ShipmentSet shipmentSet) {
         RailTransport[] railTransportSet = null;
 
         Collection<RailContainerEntity> entities = RailTransport.toEntities(railTransportSet);
         railContainerRepository.save(entities);
 
-        return "redirect:/route?o=" + orderId;
+        return "redirect:/shipment?o=" + orderId;
     }
 }

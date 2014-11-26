@@ -15,10 +15,10 @@ import java.util.Map;
 /**
  * Created by redbrick9 on 6/7/14.
  */
-@DefinitionKey("planRoute")
+@DefinitionKey("planShipment")
 @Service
-public class PlanRouteTask extends AbstractTaskProxy {
-    private static final Logger logger = LoggerFactory.getLogger(PlanRouteTask.class);
+public class PlanShipmentTask extends AbstractTaskProxy {
+    private static final Logger logger = LoggerFactory.getLogger(PlanShipmentTask.class);
 
     @Override
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
@@ -26,10 +26,10 @@ public class PlanRouteTask extends AbstractTaskProxy {
         variableMap.putAll(transTypes);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
         boolean hasWaterTransport = false;
-        for (ShipmentEntity route : routes) {
-            Collection<LegEntity> legs = route.getLegs();
+        for (ShipmentEntity shipment : shipmentSet) {
+            Collection<LegEntity> legs = shipment.getLegs();
             for (LegEntity leg : legs) {
                 switch (TransMode.valueOf(leg.getTransMode())) {
                     case BARGE:
@@ -55,9 +55,9 @@ public class PlanRouteTask extends AbstractTaskProxy {
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
 
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        for (ShipmentEntity route : routes) {
-            Collection<LegEntity> legs = route.getLegs();
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        for (ShipmentEntity shipment : shipmentSet) {
+            Collection<LegEntity> legs = shipment.getLegs();
             for (LegEntity leg : legs) {
                 TransMode mode = TransMode.valueOf(leg.getTransMode());
                 switch (mode) {

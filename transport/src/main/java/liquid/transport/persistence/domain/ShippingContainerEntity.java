@@ -26,8 +26,8 @@ public class ShippingContainerEntity extends BaseUpdateEntity {
     private long containerId;
 
     @ManyToOne
-    @JoinColumn(name = "ROUTE_ID")
-    private ShipmentEntity route;
+    @JoinColumn(name = "SHIPMENT_ID")
+    private ShipmentEntity shipment;
 
     @NotNull
     @NotEmpty
@@ -63,12 +63,12 @@ public class ShippingContainerEntity extends BaseUpdateEntity {
         this.containerId = containerId;
     }
 
-    public ShipmentEntity getRoute() {
-        return route;
+    public ShipmentEntity getShipment() {
+        return shipment;
     }
 
-    public void setRoute(ShipmentEntity route) {
-        this.route = route;
+    public void setShipment(ShipmentEntity shipment) {
+        this.shipment = shipment;
     }
 
     public String getPickupContact() {
@@ -93,7 +93,7 @@ public class ShippingContainerEntity extends BaseUpdateEntity {
         sb.append("ShippingContainer{");
         sb.append("container=").append(container);
         sb.append(", containerId=").append(containerId);
-        sb.append(", route=").append(route);
+        sb.append(", shipment=").append(shipment);
         sb.append(", pickupContact='").append(pickupContact).append('\'');
         sb.append(", contactPhone='").append(contactPhone).append('\'');
         sb.append('}');

@@ -59,20 +59,20 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     @Override
     public void doSaveBefore(ShippingContainerEntity entity) { }
 
-    public List<ShippingContainerEntity> findByRouteId(Long routeId) {
-        return repository.findByRouteId(routeId);
+    public List<ShippingContainerEntity> findByShipmentId(Long shipmentid) {
+        return repository.findByShipmentId(shipmentid);
     }
 
     @Transactional("transactionManager")
     public void initialize(Long orderId) {
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        for (ShipmentEntity route : routes) {
-            Collection<ShippingContainerEntity> containers = findByRouteId(route.getId());
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        for (ShipmentEntity shipment : shipmentSet) {
+            Collection<ShippingContainerEntity> containers = findByShipmentId(shipment.getId());
             if (null == containers) containers = new ArrayList<>();
             if (containers.size() == 0) {
-                for (int i = 0; i < route.getContainerQty(); i++) {
+                for (int i = 0; i < shipment.getContainerQty(); i++) {
                     ShippingContainerEntity container = new ShippingContainerEntity();
-                    container.setRoute(route);
+                    container.setShipment(shipment);
                     container.setCreateTime(new Date());
                     container.setUpdateTime(new Date());
                     containers.add(container);
@@ -89,7 +89,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
     @Transactional("transactionManager")
     public void allocate(Long shipmentId, ShippingContainerEntity formBean) {
         ShippingContainerEntity oldOne = find(formBean.getId());
-        formBean.setRoute(oldOne.getRoute());
+        formBean.setShipment(oldOne.getShipment());
 
         if (null != oldOne.getContainer()) {
             oldOne.getContainer().setStatus(ContainerStatus.IN_STOCK.getValue());
@@ -124,15 +124,15 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         rcList = new ArrayList<RailContainerEntity>();
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(order.getId());
-        for (ShipmentEntity route : routes) {
-            List<LegEntity> legList = legRepository.findByShipmentAndTransMode(route, TransMode.RAIL.getType());
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(order.getId());
+        for (ShipmentEntity shipment : shipmentSet) {
+            List<LegEntity> legList = legRepository.findByShipmentAndTransMode(shipment, TransMode.RAIL.getType());
             if (legList.size() > 0) {
-                List<ShippingContainerEntity> shippingContainers = findByRouteId(route.getId());
+                List<ShippingContainerEntity> shippingContainers = findByShipmentId(shipment.getId());
                 for (ShippingContainerEntity sc : shippingContainers) {
                     RailContainerEntity rc = new RailContainerEntity();
-                    rc.setOrder(route.getOrder());
-                    rc.setRoute(route);
+                    rc.setOrder(shipment.getOrder());
+                    rc.setShipment(shipment);
                     rc.setLeg(legList.get(0));
                     rc.setSc(sc);
                     rcList.add(rc);
@@ -253,7 +253,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         ServiceProviderEntity fleet = serviceProviderService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
-            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            Collection<RailContainerEntity> containers = rcRepository.findByShipment(container.getShipment());
             for (RailContainerEntity railContainer : containers) {
                 railContainer.setFleet(fleet);
                 railContainer.setPlateNo(truck.getPlateNo());
@@ -275,7 +275,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         RailContainerEntity container = rcRepository.findOne(railYard.getRailContainerId());
 
         if (railYard.isBatch()) {
-            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            Collection<RailContainerEntity> containers = rcRepository.findByShipment(container.getShipment());
             for (RailContainerEntity railContainer : containers) {
                 railContainer.setStationToa(DateUtil.dateOf(railYard.getRailYardToa()));
             }
@@ -291,7 +291,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         RailContainerEntity container = rcRepository.findOne(railPlan.getRailContainerId());
 
         if (railPlan.isBatch()) {
-            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            Collection<RailContainerEntity> containers = rcRepository.findByShipment(container.getShipment());
             for (RailContainerEntity railContainer : containers) {
                 railContainer.setTransPlanNo(railPlan.getPlanNo());
                 railContainer.setEts(DateUtil.dayOf(railPlan.getEts()));
@@ -309,7 +309,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         RailContainerEntity container = rcRepository.findOne(railShipping.getRailContainerId());
 
         if (railShipping.isBatch()) {
-            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            Collection<RailContainerEntity> containers = rcRepository.findByShipment(container.getShipment());
             for (RailContainerEntity railContainer : containers) {
                 railContainer.setAts(DateUtil.dateOf(railShipping.getAts()));
             }
@@ -325,7 +325,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         RailContainerEntity container = rcRepository.findOne(railArrival.getRailContainerId());
 
         if (railArrival.isBatch()) {
-            Collection<RailContainerEntity> containers = rcRepository.findByRoute(container.getRoute());
+            Collection<RailContainerEntity> containers = rcRepository.findByShipment(container.getShipment());
             for (RailContainerEntity railContainer : containers) {
                 railContainer.setAta(DateUtil.dateOf(railArrival.getAta()));
             }
@@ -350,15 +350,15 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         bcList = new ArrayList<BargeContainerEntity>();
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(order.getId());
-        for (ShipmentEntity route : routes) {
-            List<LegEntity> legList = legRepository.findByShipmentAndTransMode(route, TransMode.BARGE.getType());
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(order.getId());
+        for (ShipmentEntity shipment : shipmentSet) {
+            List<LegEntity> legList = legRepository.findByShipmentAndTransMode(shipment, TransMode.BARGE.getType());
             if (legList.size() > 0) {
-                List<ShippingContainerEntity> shippingContainers = route.getContainers();
+                List<ShippingContainerEntity> shippingContainers = shipment.getContainers();
                 for (ShippingContainerEntity sc : shippingContainers) {
                     BargeContainerEntity bc = new BargeContainerEntity();
-                    bc.setOrder(route.getOrder());
-                    bc.setRoute(route);
+                    bc.setOrder(shipment.getOrder());
+                    bc.setShipment(shipment);
                     bc.setLeg(legList.get(0));
                     bc.setSc(sc);
                     bcList.add(bc);
@@ -383,11 +383,11 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     public void saveBargeContainer(long containerId, BargeContainerEntity formBean) {
         BargeContainerEntity container = bcRepository.findOne(containerId);
-        ShipmentEntity route = shipmentService.find(container.getRoute().getId());
+        ShipmentEntity shipment = shipmentService.find(container.getShipment().getId());
 
         if (formBean.isBatch()) {
 
-            Collection<BargeContainerEntity> containers = bcRepository.findByRouteId(route.getId());
+            Collection<BargeContainerEntity> containers = bcRepository.findByShipmentId(shipment.getId());
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (WaterContainerEntity rc : containers) {
@@ -436,15 +436,15 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
         }
 
         vcList = new ArrayList<VesselContainerEntity>();
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(order.getId());
-        for (ShipmentEntity route : routes) {
-            List<LegEntity> legList = legRepository.findByShipmentAndTransMode(route, TransMode.VESSEL.getType());
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(order.getId());
+        for (ShipmentEntity shipment : shipmentSet) {
+            List<LegEntity> legList = legRepository.findByShipmentAndTransMode(shipment, TransMode.VESSEL.getType());
             if (legList.size() > 0) {
-                List<ShippingContainerEntity> shippingContainers = findByRouteId(route.getId());
+                List<ShippingContainerEntity> shippingContainers = findByShipmentId(shipment.getId());
                 for (ShippingContainerEntity sc : shippingContainers) {
                     VesselContainerEntity vc = new VesselContainerEntity();
-                    vc.setOrder(route.getOrder());
-                    vc.setRoute(route);
+                    vc.setOrder(shipment.getOrder());
+                    vc.setShipment(shipment);
                     vc.setLeg(legList.get(0));
                     vc.setSc(sc);
                     vcList.add(vc);
@@ -469,10 +469,10 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     public void saveVesselContainer(long containerId, VesselContainerEntity formBean) {
         VesselContainerEntity container = vcRepository.findOne(containerId);
-        ShipmentEntity route = shipmentService.find(container.getRoute().getId());
+        ShipmentEntity shipment = shipmentService.find(container.getShipment().getId());
 
         if (formBean.isBatch()) {
-            Collection<VesselContainerEntity> containers = vcRepository.findByRouteId(route.getId());
+            Collection<VesselContainerEntity> containers = vcRepository.findByShipmentId(shipment.getId());
 
             if (formBean.getEtsStr() != null && formBean.getEtsStr().trim().length() > 0) {
                 for (VesselContainerEntity rc : containers) {

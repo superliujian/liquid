@@ -18,12 +18,12 @@ public class FeedContainerNoTask extends AbstractTaskProxy {
     public void doBeforeComplete(String taskId, Map<String, Object> variableMap) {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
 
         int allocatedContainerQuantity = 0;
 
-        for (ShipmentEntity route : routes) {
-            Collection<ShippingContainerEntity> scs = shippingContainerService.findByRouteId(route.getId());
+        for (ShipmentEntity shipment : shipmentSet) {
+            Collection<ShippingContainerEntity> scs = shippingContainerService.findByShipmentId(shipment.getId());
             for (ShippingContainerEntity shippingContainer : scs) {
                 if (null != shippingContainer.getContainer() || null != shippingContainer.getBicCode()) {
                     allocatedContainerQuantity++;

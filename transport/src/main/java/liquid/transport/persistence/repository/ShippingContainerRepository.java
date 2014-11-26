@@ -12,5 +12,5 @@ import java.util.List;
  * Time: 12:42 AM
  */
 public interface ShippingContainerRepository extends CrudRepository<ShippingContainerEntity, Long> {
-    List<ShippingContainerEntity> findByRouteId(Long routeId);
+    List<ShippingContainerEntity> findByShipmentId(Long shipmentId);
 }

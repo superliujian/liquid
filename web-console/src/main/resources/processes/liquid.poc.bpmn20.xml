@@ -25,9 +25,9 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow10" sourceRef="feedDistyPrice" targetRef="planRoute"/>
+        <sequenceFlow id="flow10" sourceRef="feedDistyPrice" targetRef="planShipment"/>
 
-        <userTask id="planRoute" name="路线规划">
+        <userTask id="planShipment" name="路线规划">
             <documentation>
                 ${employeeName}已经在${endTime}填写渠道价格。您需要制定运输路线方案。
             </documentation>
@@ -37,7 +37,7 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow20" sourceRef="planRoute" targetRef="bookingShippingSpaceDecision"/>
+        <sequenceFlow id="flow20" sourceRef="planShipment" targetRef="bookingShippingSpaceDecision"/>
 
         <exclusiveGateway id="bookingShippingSpaceDecision" name="订舱操作决策"/>
         <sequenceFlow id="flow24" sourceRef="bookingShippingSpaceDecision" targetRef="allocateContainers">

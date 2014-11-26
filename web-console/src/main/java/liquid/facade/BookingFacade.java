@@ -34,9 +34,9 @@ public class BookingFacade {
         Booking booking = new Booking();
 
         Iterable<SpaceBookingEntity> bookingEntities = bookingService.findByOrderId(orderId);
-        Iterable<ShipmentEntity> routes = shipmentService.findByOrderId(orderId);
-        for (ShipmentEntity route : routes) {
-            Collection<LegEntity> legs = route.getLegs();
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        for (ShipmentEntity shipment : shipmentSet) {
+            Collection<LegEntity> legs = shipment.getLegs();
             for (LegEntity leg : legs) {
                 switch (TransMode.valueOf(leg.getTransMode())) {
                     case BARGE:
@@ -45,7 +45,7 @@ public class BookingFacade {
                         bookingItem.setLegId(leg.getId());
                         bookingItem.setSource(leg.getSrcLoc().getName());
                         bookingItem.setDestination(leg.getDstLoc().getName());
-                        bookingItem.setContainerQuantity(route.getContainerQty());
+                        bookingItem.setContainerQuantity(shipment.getContainerQty());
 
                         for (SpaceBookingEntity bookingEntity : bookingEntities) {
                             if (bookingEntity.getLeg().getId().equals(leg.getId())) {

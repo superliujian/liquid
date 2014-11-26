@@ -3,10 +3,10 @@ package liquid.transport.web.domain;
 /**
  * Created by redbrick9 on 9/11/14.
  */
-public class Routes {
+public class ShipmentSet {
     private Long orderId;
 
-    private Route[] routes;
+    private Shipment[] shipments;
 
     public Long getOrderId() {
         return orderId;
@@ -16,11 +16,11 @@ public class Routes {
         this.orderId = orderId;
     }
 
-    public Route[] getRoutes() {
-        return routes;
+    public Shipment[] getShipments() {
+        return shipments;
     }
 
-    public void setRoutes(Route[] routes) {
-        this.routes = routes;
+    public void setShipments(Shipment[] shipments) {
+        this.shipments = shipments;
     }
 }

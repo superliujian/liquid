@@ -19,7 +19,7 @@ public class RailTransport extends TransportBase {
 
     public Long orderId;
 
-    private Long routeId;
+    private Long shipmentId;
 
     private Long legId;
 
@@ -43,7 +43,7 @@ public class RailTransport extends TransportBase {
         RailContainerEntity entity = new RailContainerEntity();
         entity.setId(transport.getId());
         entity.setOrder(OrderEntity.newInstance(OrderEntity.class, transport.getOrderId()));
-        entity.setRoute(ShipmentEntity.newInstance(ShipmentEntity.class, transport.getRouteId()));
+        entity.setShipment(ShipmentEntity.newInstance(ShipmentEntity.class, transport.getShipmentId()));
         entity.setLeg(LegEntity.newInstance(LegEntity.class, transport.getLegId()));
         entity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, transport.getFleetId()));
         entity.setTrucker(transport.getTrucker());
@@ -73,7 +73,7 @@ public class RailTransport extends TransportBase {
         RailTransport value = new RailTransport();
         value.setId(entity.getId());
         value.setOrderId(entity.getOrder().getId());
-        value.setRouteId(entity.getRoute().getId());
+        value.setShipmentId(entity.getShipment().getId());
         value.setLegId(entity.getLeg().getId());
         value.setSource(entity.getLeg().getSrcLoc().getName());
         value.setDestination(entity.getLeg().getDstLoc().getName());
@@ -114,12 +114,12 @@ public class RailTransport extends TransportBase {
         this.orderId = orderId;
     }
 
-    public Long getRouteId() {
-        return routeId;
+    public Long getShipmentId() {
+        return shipmentId;
     }
 
-    public void setRouteId(Long routeId) {
-        this.routeId = routeId;
+    public void setShipmentId(Long shipmentId) {
+        this.shipmentId = shipmentId;
     }
 
     public Long getLegId() {
@@ -197,7 +197,7 @@ public class RailTransport extends TransportBase {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("RailTransport{");
-        sb.append("routeId=").append(routeId);
+        sb.append("shipmentId=").append(shipmentId);
         sb.append(", fleetId=").append(fleetId);
         sb.append(", trucker='").append(trucker).append('\'');
         sb.append(", plateNo='").append(plateNo).append('\'');

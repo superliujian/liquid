@@ -15,5 +15,5 @@ import java.util.Collection;
 public interface BargeContainerRepository extends CrudRepository<BargeContainerEntity, Long> {
     Collection<BargeContainerEntity> findByOrder(OrderEntity order);
 
-    Collection<BargeContainerEntity> findByRouteId(Long routeId);
+    Collection<BargeContainerEntity> findByShipmentId(Long shipmentId);
 }

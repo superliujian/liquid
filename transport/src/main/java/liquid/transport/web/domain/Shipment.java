@@ -9,27 +9,27 @@ import java.util.List;
 /**
  * Created by redbrick9 on 9/12/14.
  */
-public class Route {
+public class Shipment {
     private Long id;
     private Integer containerQuantity;
     private RailTransport[] railTransport;
 
-    public static Route valueOf(ShipmentEntity entity) {
-        Route route = new Route();
-        route.setId(entity.getId());
-        route.setContainerQuantity(entity.getContainerQty());
+    public static Shipment valueOf(ShipmentEntity entity) {
+        Shipment shipment = new Shipment();
+        shipment.setId(entity.getId());
+        shipment.setContainerQuantity(entity.getContainerQty());
         // TODO: BUG
-        route.setRailTransport(RailTransport.valueOf(entity.getRailContainers()));
-        return route;
+        shipment.setRailTransport(RailTransport.valueOf(entity.getRailContainers()));
+        return shipment;
     }
 
-    public static Route[] valueOf(Iterable<ShipmentEntity> entities) {
-        List<Route> routes = new ArrayList<Route>();
+    public static Shipment[] valueOf(Iterable<ShipmentEntity> entities) {
+        List<Shipment> shipments = new ArrayList<Shipment>();
 
         for (ShipmentEntity entity : entities) {
-            routes.add(valueOf(entity));
+            shipments.add(valueOf(entity));
         }
-        return routes.toArray(new Route[0]);
+        return shipments.toArray(new Shipment[0]);
     }
 
     public Long getId() {

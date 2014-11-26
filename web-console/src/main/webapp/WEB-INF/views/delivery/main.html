@@ -90,7 +90,7 @@
                 <tbody>
                 <tr th:each="charge : ${charges}">
                     <!-- NOTE: Very important expression -->
-                    <td th:text="${charge.route.id}">Shipment ID</td>
+                    <td th:text="${charge.shipment.id}">Shipment ID</td>
                     <!--
                     <td th:text="${charge.leg.srcLoc.name} + '-' + ${charge.leg.dstLoc.name}">Shipment Name</td>
                     <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>

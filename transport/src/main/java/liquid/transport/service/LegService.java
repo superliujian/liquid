@@ -31,8 +31,8 @@ public class LegService extends AbstractService<LegEntity, LegRepository> {
         return repository.findOne(id);
     }
 
-    public List<LegEntity> findByRouteAndTransMode(ShipmentEntity route, int transMode) {
-        return repository.findByShipmentAndTransMode(route, transMode);
+    public List<LegEntity> findByShipmentAndTransMode(ShipmentEntity shipment, int transMode) {
+        return repository.findByShipmentAndTransMode(shipment, transMode);
     }
 
     @Transactional("transactionManager")

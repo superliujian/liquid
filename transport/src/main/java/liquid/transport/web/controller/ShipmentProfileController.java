@@ -20,55 +20,55 @@ import java.util.List;
  * Created by mat on 10/6/14.
  */
 @Controller
-@RequestMapping("/route_profile")
-public class RouteProfileController {
+@RequestMapping("/shipment_profile")
+public class ShipmentProfileController {
     @Autowired
     private ShipmentRepository shipmentRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
-        Iterable<ShipmentEntity> routes = shipmentRepository.findAll();
-        model.addAttribute("routes", routes);
-        return "route_profile/list";
+        Iterable<ShipmentEntity> shipmentSet = shipmentRepository.findAll();
+        model.addAttribute("shipmentSet", shipmentSet);
+        return "shipment_profile/list";
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String initForm(Model model) {
-        ShipmentEntity route = new ShipmentEntity();
-        route = shipmentRepository.save(route);
+        ShipmentEntity shipment = new ShipmentEntity();
+        shipment = shipmentRepository.save(shipment);
         List<Leg> legs = new ArrayList<>();
         for (int i = 0; i < 5; i++) legs.add(new Leg());
-        model.addAttribute("route", route);
+        model.addAttribute("shipment", shipment);
         model.addAttribute("legs", legs);
-        return "route_profile/form";
+        return "shipment_profile/form";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String initForm(@PathVariable Long id, Model model) {
-        ShipmentEntity route = shipmentRepository.findOne(id);
+        ShipmentEntity shipment = shipmentRepository.findOne(id);
 
         Leg leg = new Leg();
 
-        if (route.getLegs().size() == 0) {
+        if (shipment.getLegs().size() == 0) {
             // First Line
             leg.setHead(Boolean.TRUE);
         } else {
             // Other Lines
-            leg.setPrevId(route.getLegs().get(route.getLegs().size() - 1).getId());
+            leg.setPrevId(shipment.getLegs().get(shipment.getLegs().size() - 1).getId());
         }
 
         model.addAttribute("transportOptions", TransMode.values());
-        model.addAttribute("route", route);
+        model.addAttribute("shipment", shipment);
         model.addAttribute("leg", leg);
-        return "route_profile/form";
+        return "shipment_profile/form";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public String addLeg(@PathVariable Long id, Leg leg) {
-        ShipmentEntity route = shipmentRepository.findOne(id);
+        ShipmentEntity shipment = shipmentRepository.findOne(id);
         LegEntity entity = new LegEntity();
 
-        entity.setShipment(route);
+        entity.setShipment(shipment);
         entity.setHead(leg.getHead());
         entity.setTransMode(leg.getTransMode());
         entity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, leg.getSourceId()));
@@ -76,16 +76,16 @@ public class RouteProfileController {
         if (null != leg.getPrevId())
             entity.setPrev(LegEntity.newInstance(LegEntity.class, leg.getPrevId()));
 
-        route.getLegs().add(entity);
-        shipmentRepository.save(route);
-        return "redirect:/route_profile/" + id;
+        shipment.getLegs().add(entity);
+        shipmentRepository.save(shipment);
+        return "redirect:/shipment_profile/" + id;
     }
 
     @RequestMapping(value = "/{id}/leg/{legId}", method = RequestMethod.POST)
     public String updateLeg(@PathVariable Long id, Model model) {
-        ShipmentEntity route = shipmentRepository.findOne(id);
-        model.addAttribute("route", route);
+        ShipmentEntity shipment = shipmentRepository.findOne(id);
+        model.addAttribute("shipment", shipment);
         model.addAttribute("leg", new LegEntity());
-        return "redirect:route_profile/" + id;
+        return "redirect:shipment_profile/" + id;
     }
 }

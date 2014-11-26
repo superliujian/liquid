@@ -22,7 +22,7 @@ public class BaseLegContainer extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "ROUTE_ID")
-    private ShipmentEntity route;
+    private ShipmentEntity shipment;
 
     @ManyToOne
     @JoinColumn(name = "LEG_ID")
@@ -40,12 +40,12 @@ public class BaseLegContainer extends BaseUpdateEntity {
         this.order = order;
     }
 
-    public ShipmentEntity getRoute() {
-        return route;
+    public ShipmentEntity getShipment() {
+        return shipment;
     }
 
-    public void setRoute(ShipmentEntity route) {
-        this.route = route;
+    public void setShipment(ShipmentEntity shipment) {
+        this.shipment = shipment;
     }
 
     public LegEntity getLeg() {

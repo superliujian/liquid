@@ -9,8 +9,8 @@
 <!-- {!end layout} -->
 
 <div class="container">
-    <div th:each="route : ${routes}">
-        <h3><span th:text="${route.id}"></span></h3>
+    <div th:each="shipment : ${shipmentSet}">
+        <h3><span th:text="${shipment.id}"></span></h3>
             <table class="table table-striped table-hover table-condensed table-16">
                 <thead>
                 <tr>
@@ -21,8 +21,8 @@
                     <th th:text="#{destination}">Destination</th>
                 </tr>
                 </thead>
-                <tbody th:unless="${#lists.isEmpty(route.legs)}">
-                <tr th:each="leg : ${route.legs}">
+                <tbody th:unless="${#lists.isEmpty(shipment.legs)}">
+                <tr th:each="leg : ${shipment.legs}">
                     <td th:text="${leg.id}">Leg ID</td>
                     <td th:text="${leg.transMode}">Trans Mode</td>
                     <td th:text="${leg.sp} ? ${leg.sp.name} : ''">SP Name</td>

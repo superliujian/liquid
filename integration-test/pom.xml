@@ -36,6 +36,12 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>transport</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

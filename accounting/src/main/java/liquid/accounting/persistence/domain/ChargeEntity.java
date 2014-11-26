@@ -177,7 +177,7 @@ public class ChargeEntity extends BaseUpdateEntity {
         sb.append("id=").append(id);
         sb.append(", orderId=").append(order == null ? null : order.getId());
         sb.append(", taskId='").append(taskId).append('\'');
-        sb.append(", routeId=").append(shipment == null ? null : shipment.getId());
+        sb.append(", shipmentId=").append(shipment == null ? null : shipment.getId());
         sb.append(", legId=").append(leg == null ? null : leg.getId());
         sb.append(", serviceSubtypeId=").append(serviceSubtype == null ? null : serviceSubtype.getId());
         sb.append(", spId=").append(sp == null ? null : sp.getId());

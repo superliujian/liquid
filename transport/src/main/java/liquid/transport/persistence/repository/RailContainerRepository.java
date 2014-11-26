@@ -16,5 +16,5 @@ import java.util.Collection;
 public interface RailContainerRepository extends CrudRepository<RailContainerEntity, Long> {
     Collection<RailContainerEntity> findByOrder(OrderEntity order);
 
-    Collection<RailContainerEntity> findByRoute(ShipmentEntity route);
+    Collection<RailContainerEntity> findByShipment(ShipmentEntity shipment);
 }

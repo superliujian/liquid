@@ -22,7 +22,7 @@
                 </tr>
                 </thead>
                 <tbody >
-                <tr th:unless="${#lists.isEmpty(route.legs)}" th:each="leg : ${route.legs}">
+                <tr th:unless="${#lists.isEmpty(shipment.legs)}" th:each="leg : ${shipment.legs}">
                     <td><span><i th:if="${leg.head}" class="glyphicon glyphicon-check" /></span></td>                    
                     <td><span th:text="${leg.id}" /></td>
                     <td><span th:text="${leg.transMode}" /></td>                    
@@ -33,7 +33,7 @@
                 </tr>
                 
                 <tr>
-                <form method="POST" th:action="'/route_profile/' + ${route.id}" th:object="${leg}">  
+                <form method="POST" th:action="'/shipment_profile/' + ${shipment.id}" th:object="${leg}">  
                     <td>
                     <input type="hidden" th:field="*{head}" />
                     <i th:if="*{head}" class="glyphicon glyphicon-flag" />
@@ -56,7 +56,7 @@
                     </td>                    
                     <td>
             <select th:unless="*{head}" class="form-control input-sm" th:field="*{prevId}">
-                <option th:each="option : ${route.legs}"
+                <option th:each="option : ${shipment.legs}"
                         th:value="${option.id}" th:text="'(' + ${option.id} + ') ' + ${option.srcLoc.name} + ' - ' + ${option.dstLoc.name}">Prev Id
                 </option>
             </select>                    
