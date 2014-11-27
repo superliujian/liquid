@@ -12,6 +12,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class LegServiceTest {
     @Test
     public void deleteLeg() {
+        System.setProperty("env.target", "dev");
+
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(LegService.class);
         context.register(ShipmentRepository.class);
@@ -19,6 +21,6 @@ public class LegServiceTest {
         context.refresh();
 
         LegService legService = context.getBean(LegService.class);
-        legService.delete(131L);
+//        legService.delete(131L);
     }
 }

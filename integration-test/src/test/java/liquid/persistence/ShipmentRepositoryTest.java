@@ -12,6 +12,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class ShipmentRepositoryTest {
     @Test
     public void findOne() {
+        System.setProperty("env.target", "dev");
+
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(JpaConfig.class);
         context.refresh();
