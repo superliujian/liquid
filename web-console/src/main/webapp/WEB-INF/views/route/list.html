@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-2"><h3><span th:text="#{route}"></span> <small><a href="/route/form"><i class="glyphicon glyphicon-plus text-success" /></a></small></h3></div>
+    </div><!-- row -->
+    
+    <hr />    
+    
+    <ul class="list-group" th:unless="${#lists.isEmpty(page.content)}">
+        <li class="list-group-item" th:each="row : ${page.content}">
+            <h4>
+            #<span th:text="${row.id}"></span> <a th:href="'/route/' + ${row.id}"><span th:text="${row.name}"></span></a> <small><span th:text="${row.from.name}" /><span th:text="${row.to.name}" /></small>
+            </h4>
+        </li>
+    </ul>
+
+    <div th:include="layout :: pagination_bar"></div>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>
