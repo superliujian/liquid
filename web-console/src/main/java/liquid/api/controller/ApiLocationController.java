@@ -24,8 +24,10 @@ public class ApiLocationController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<LocationEntity> listByName(@RequestParam Integer type, @RequestParam String name) {
+    public Iterable<LocationEntity> listByName(@RequestParam(required = false) Integer type, @RequestParam String name) {
         logger.debug("name: {}", name);
+        if (null == type)
+            return locationService.findByNameLike(name);
         return locationService.findByTypeAndNameLike(type, name);
     }
 }

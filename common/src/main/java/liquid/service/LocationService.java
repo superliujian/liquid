@@ -46,7 +46,7 @@ public class LocationService extends AbstractService<LocationEntity, LocationRep
     }
 
     public Iterable<LocationEntity> findByNameLike(String name) {
-        Iterable<LocationEntity> locations = locationRepository.findByNameLike("%" + name + "%");
+        Iterable<LocationEntity> locations = locationRepository.findByQueryNameLike("%" + name + "%");
         return locations;
     }
 
