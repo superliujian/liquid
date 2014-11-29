@@ -25,7 +25,7 @@ public class PathEntity extends BaseIdEntity {
     @Column(name = "TSP_MODE")
     private Integer transportMode;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "NEXT_ID")
     private PathEntity next;
 

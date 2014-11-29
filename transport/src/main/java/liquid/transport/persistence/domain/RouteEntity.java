@@ -18,7 +18,7 @@ public class RouteEntity extends BaseStatusEntity {
     @Column(name = "COMMENT")
     private String comment;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "HEAD_ID")
     private PathEntity head;
 
