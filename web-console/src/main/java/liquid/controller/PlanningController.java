@@ -6,6 +6,7 @@ import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.ChargeService;
 import liquid.transport.persistence.domain.ShipmentEntity;
+import liquid.transport.service.RouteService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
@@ -41,6 +42,9 @@ public class PlanningController extends BaseTaskController {
     @Autowired
     private ChargeService chargeService;
 
+    @Autowired
+    private RouteService routeService;
+
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
@@ -62,6 +66,7 @@ public class PlanningController extends BaseTaskController {
         // shipment planning bar
         model.addAttribute("shipment", shipment);
         model.addAttribute("containerTotality", order.getContainerQty());
+        model.addAttribute("routes", routeService.find(order.getSrcLoc().getId(), order.getDstLoc().getId()));
 
         // shipment table
         model.addAttribute("shipmentSet", shipmentSet);

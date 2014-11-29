@@ -1,8 +1,11 @@
 package liquid.transport.service;
 
-import liquid.service.StandardCrudService;
+import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.PathEntity;
 import liquid.transport.persistence.domain.RouteEntity;
+import liquid.transport.persistence.repository.RouteRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -12,7 +15,7 @@ import java.util.List;
  * Created by Tao Ma on 11/26/14.
  */
 @Service
-public class RouteService extends StandardCrudService<RouteEntity> {
+public class RouteService extends AbstractService<RouteEntity, RouteRepository> {
 
     @Override
     public void doSaveBefore(RouteEntity entity) { }
@@ -71,5 +74,13 @@ public class RouteService extends StandardCrudService<RouteEntity> {
         }
 
         route.setPaths(Arrays.asList(pathArray));
+    }
+
+    public Page<RouteEntity> findAll(Pageable pageable){
+        return repository.findAll(pageable);
+    }
+
+    public Iterable<RouteEntity> find(Long fromId, Long toId) {
+        return repository.findByFromIdAndToId(fromId, toId);
     }
 }

@@ -28,6 +28,10 @@ function initLocationsAc(type) {
     });
 }
 
+function initAllLocationsAc() {
+    return initAcEngine({url: '/api/location?name=%QUERY'});
+}
+
 function initContainersAc() {
     return initAcEngine({url: '/api/container?bicCode=%QUERY'});
 }

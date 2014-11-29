@@ -450,9 +450,9 @@
         var customers = initCustomerAc();
         $('#customerName').acWithTemplate(customers, 'name', 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
 
-        var cities = initLocationsAc(0);
-        $('#origination').autoComplete(cities, 'originId');
-        $('#destination').autoComplete(cities, 'destinationId');
+        var locations = initAllLocationsAc();
+        $('#origination').autoComplete(locations, 'originId');
+        $('#destination').autoComplete(locations, 'destinationId');
 
         var stations = initLocationsAc(1);
         $('#railSource').autoComplete(stations, 'railSourceId');
