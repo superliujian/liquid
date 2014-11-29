@@ -16,13 +16,12 @@
     
     <hr />    
     
-    <ul class="list-group" th:unless="${#lists.isEmpty(page.content)}">
-        <li class="list-group-item" th:each="row : ${page.content}">
-            <h4>
-            #<span th:text="${row.id}"></span> <a th:href="'/route/' + ${row.id}"><span th:text="${row.name}"></span></a> <small><span th:if="${row.from}" th:text="${row.from.name}" /><span th:if="${row.to}"  th:text="${row.to.name}" /></small>
-            </h4>
-        </li>
-    </ul>
+    <div class="list-group">
+        <a th:each="row : ${page.content}" th:href="'/route/' + ${row.id}" class="list-group-item">
+            <h4 class="list-group-item-heading"><span th:text="${row.name}"></span></h4>
+            <p class="list-group-item-text"><span th:if="${row.from}" th:text="${row.from.name}" /> - <span th:if="${row.to}"  th:text="${row.to.name}" /></p>
+        </a>
+    </div>
 
     <div th:include="layout :: pagination_bar"></div>
 </div>
