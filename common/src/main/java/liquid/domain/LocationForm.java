@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created by redbrick9 on 7/9/14.
  */
-public class Location {
+public class LocationForm {
     @NotNull
     @NotEmpty
     private String name;

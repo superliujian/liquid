@@ -21,6 +21,22 @@ public enum LocationType {
         this.i18nKey = i18nKey;
     }
 
+    public static LocationType valueOf(int type) {
+        switch (type) {
+            case 0:
+                return CITY;
+            case 1:
+                return STATION;
+            case 2:
+                return PORT;
+            case 3:
+                return YARD;
+            default:
+                break;
+        }
+        throw new RuntimeException("input transMode is illegal.");
+    }
+
     public int getType() {
         return type;
     }

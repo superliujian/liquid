@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.domain.Location;
+import liquid.domain.LocationForm;
 import liquid.domain.LocationType;
 import liquid.facade.LocationFacade;
 import liquid.persistence.domain.LocationEntity;
@@ -62,12 +62,12 @@ public class LocationController extends BaseController {
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String initNew(Model model) {
-        model.addAttribute("location", new Location());
+        model.addAttribute("location", new LocationForm());
         return "location/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String add(@Valid @ModelAttribute Location location,
+    public String add(@Valid @ModelAttribute LocationForm location,
                       BindingResult bindingResult, Model model) {
         logger.debug("location: {}", location);
 
