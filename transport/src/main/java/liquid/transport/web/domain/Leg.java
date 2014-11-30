@@ -4,6 +4,7 @@ package liquid.transport.web.domain;
  * Created by redbrick9 on 8/26/14.
  */
 public class Leg {
+    private Long id;
     private int transMode;
     private Long serviceProviderId;
     private Long sourceId;
@@ -12,6 +13,14 @@ public class Leg {
     private String destination;
     private Boolean head;
     private Long prevId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getTransMode() {
         return transMode;
@@ -79,8 +88,9 @@ public class Leg {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Leg{");
-        sb.append("transMode=").append(transMode);
+        final StringBuilder sb = new StringBuilder("{Class=Leg");
+        sb.append(", id=").append(id);
+        sb.append(", transMode=").append(transMode);
         sb.append(", serviceProviderId=").append(serviceProviderId);
         sb.append(", sourceId=").append(sourceId);
         sb.append(", source='").append(source).append('\'');

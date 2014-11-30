@@ -17,8 +17,8 @@
         <div class="row">
             <div class="col-xs-3">
                 <div class="form-group">
-                    <label th:text="#{route}" class="control-label">Route</label>
-                    <select class="form-control input-sm">
+                    <label for="routeId" th:text="#{route}" class="control-label">Route</label>
+                    <select class="form-control input-sm" th:field="*{routeId}">
                         <option th:each="option : ${routes}"
                                 th:value="${option.id}" th:text="${option.name}">Route
                         </option>
@@ -27,13 +27,13 @@
             </div>
             
             <div class="col-xs-3">
-                <div class="form-group" th:classappend="${#fields.hasErrors('containerQty')} ? 'has-error'">
-                    <label for="containerQty" th:text="#{container.quantity} + '(' + ${containerTotality} + ')'">Container QTY</label>
+                <div class="form-group" th:classappend="${#fields.hasErrors('containerQuantity')} ? 'has-error'">
+                    <label for="containerQuantity" th:text="#{container.quantity} + '(' + ${containerTotality} + ')'">Container QTY</label>
                     
-                    <input type="text" th:field="*{containerQty}" class="form-control input-sm"/>
+                    <input type="text" th:field="*{containerQuantity}" class="form-control input-sm"/>
 
                     <div>
-                        <span th:errors="*{containerQty}">error</span>
+                        <span th:errors="*{containerQuantity}">error</span>
                     </div>
                 </div>
             </div>            
@@ -57,7 +57,7 @@
             </div>
             
             <div class="col-xs-3">
-                <p class="text-danger" style="padding:5px" th:errors="*{containerQty}">...</p>
+                <p class="text-danger" style="padding:5px" th:errors="*{containerQuantity}">...</p>
             </div>
         </div>        
     </form>       
@@ -102,7 +102,11 @@
                     <td th:text="${leg.srcLoc.name}">Origination</td>
                     <td th:text="${leg.dstLoc.name}">Destination</td>
                     <td>
-                        <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id} + '/leg/' + ${leg.id}">
+                        <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id} + '/leg/' + ${leg.id} + '/edit'">
+                            <i class="glyphicon glyphicon-edit text-success"/>
+                        </a>
+                        &nbsp;
+                        <a th:href="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id} + '/leg/' + ${leg.id} + '/delete'">
                             <i class="glyphicon glyphicon-remove text-danger"/>
                         </a>
                         &nbsp;

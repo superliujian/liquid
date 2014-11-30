@@ -15,9 +15,10 @@
 <!-- {!end layout} -->
 
 <div id="f" class="container">
-    <form action="/task/{taskId}/planning/{tab}" method="POST"
-          th:object="${leg}" th:action="@{${#httpServletRequest.servletPath}}">
-          
+    <!-- @{${#httpServletRequest.servletPath}}" -->
+    <form method="POST" th:object="${leg}" th:action="'/task/' + ${taskId} + '/planning/shipment/' + ${shipmentId} + '/' + ${tab}">
+        
+        <input type="hidden" th:field="*{id}"/>
         <div class="form-group">
             <label for="serviceProvider" th:text="#{sp}">Service Provider</label>       
             <select th:field="*{serviceProviderId}" class="form-control input-sm">

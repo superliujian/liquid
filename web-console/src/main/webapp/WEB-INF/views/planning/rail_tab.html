@@ -15,8 +15,8 @@
 <!-- {!end layout} -->
 
 <div id="f" class="container">
-    <form action="/task/{taskId}/planning/{tab}" method="POST"
-          th:object="${leg}" th:action="@{${#httpServletRequest.servletPath}}">
+    <form method="POST" th:object="${leg}" th:action="'/task/' + ${taskId} + '/planning/shipment/' + ${shipmentId} + '/' + ${tab}">
+        <input type="hidden" th:field="*{id}"/>
 
         <input type="hidden" th:field="*{sourceId}"/>
         <div class="form-group" th:classappend="${#fields.hasErrors('source')} ? 'has-error'">

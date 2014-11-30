@@ -116,6 +116,7 @@ public class LegController extends BaseTaskController {
         LocationEntity dstLoc = LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId());
 
         LegEntity legEntity = new LegEntity();
+        legEntity.setId(leg.getId());
         legEntity.setShipment(shipment);
         legEntity.setTransMode(TransMode.valueOf(tab.toUpperCase()).getType());
         if (null != leg.getServiceProviderId())
@@ -126,7 +127,7 @@ public class LegController extends BaseTaskController {
         return "redirect:/task/" + taskId + "/planning";
     }
 
-    @RequestMapping(value = "/leg/{legId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/leg/{legId}/delete", method = RequestMethod.GET)
     public String deleteLeg(@PathVariable String taskId,
                             @PathVariable Long shipmentId,
                             @PathVariable Long legId) {
@@ -137,6 +138,66 @@ public class LegController extends BaseTaskController {
         legService.delete(legId);
 
         return "redirect:/task/" + taskId + "/planning";
+    }
+
+    @RequestMapping(value = "/leg/{legId}/edit", method = RequestMethod.GET)
+    public String updateLeg(@PathVariable String taskId,
+                            @PathVariable Long shipmentId,
+                            @PathVariable Long legId,
+                            Model model) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("shipmentId: {}", shipmentId);
+        logger.debug("legId: {}", legId);
+
+        LegEntity entity = legService.find(legId);
+        Leg leg = new Leg();
+        leg.setId(entity.getId());
+        leg.setTransMode(entity.getTransMode());
+        leg.setSourceId(entity.getSrcLoc().getId());
+        leg.setSource(entity.getSrcLoc().getName());
+        leg.setDestinationId(entity.getDstLoc().getId());
+        leg.setDestination(entity.getDstLoc().getName());
+        leg.setServiceProviderId(entity.getSp().getId());
+
+        String tab = null;
+
+        switch (entity.getTransMode()) {
+            case 0:
+                List<LocationEntity> stationLocs = locationRepository.findByType(LocationType.STATION.getType());
+                model.addAttribute("locations", stationLocs);
+                tab = "rail";
+                break;
+            case 1:
+                List<LocationEntity> portLocs = locationRepository.findByType(LocationType.PORT.getType());
+                ServiceProviderTypeEnity bargeType = stRepository.findOne(2L);
+                model.addAttribute("sps", serviceProviderRepository.findByType(bargeType));
+                model.addAttribute("locations", portLocs);
+                tab = "barge";
+                break;
+            case 2:
+                portLocs = locationRepository.findByType(LocationType.PORT.getType());
+
+                ServiceProviderTypeEnity vesselType = stRepository.findOne(3L);
+                model.addAttribute("sps", serviceProviderRepository.findByType(vesselType));
+                model.addAttribute("locations", portLocs);
+                tab = "vessel";
+                break;
+            case 3:
+                List<LocationEntity> cityLocs = locationRepository.findByType(LocationType.CITY.getType());
+
+                ServiceProviderTypeEnity roadType = stRepository.findOne(4L);
+                model.addAttribute("sps", serviceProviderRepository.findByType(roadType));
+                model.addAttribute("locations", cityLocs);
+                tab = "road";
+                break;
+            default:
+                break;
+        }
+
+        model.addAttribute("tab", tab);
+        model.addAttribute("shipmentId", shipmentId);
+        model.addAttribute("leg", leg);
+        return "planning/" + tab + "_tab";
     }
 
     private long computeDefaultDstLocId(List<LocationEntity> locationEntities) {

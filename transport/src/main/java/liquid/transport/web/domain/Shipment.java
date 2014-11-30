@@ -12,6 +12,7 @@ import java.util.List;
 public class Shipment {
     private Long id;
     private Integer containerQuantity;
+    private Long routeId;
     private RailTransport[] railTransport;
 
     public static Shipment valueOf(ShipmentEntity entity) {
@@ -48,6 +49,14 @@ public class Shipment {
         this.containerQuantity = containerQuantity;
     }
 
+    public Long getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
+    }
+
     public RailTransport[] getRailTransport() {
         return railTransport;
     }
@@ -58,10 +67,11 @@ public class Shipment {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Route{");
-        sb.append("id=").append(id);
+        final StringBuilder sb = new StringBuilder("{Class=Shipment");
+        sb.append(", id=").append(id);
         sb.append(", containerQuantity=").append(containerQuantity);
-        sb.append(", railTransport=").append(railTransport == null ? "null" : Arrays.asList(railTransport).toString());
+        sb.append(", routeId=").append(routeId);
+        sb.append(", railTransport=").append(Arrays.toString(railTransport));
         sb.append('}');
         return sb.toString();
     }
