@@ -58,7 +58,7 @@ public class LocationFacade {
     }
 
     public Iterable<Location> findByTypeAndNameLike(Integer type, String name) {
-        Iterable<LocationEntity> entities = locationService.findByNameLike(name);
+        Iterable<LocationEntity> entities = locationService.findByTypeAndNameLike(type, name);
         List<Location> locations = new ArrayList<>();
         for (LocationEntity entity : entities) {
             Location location = convert(entity);

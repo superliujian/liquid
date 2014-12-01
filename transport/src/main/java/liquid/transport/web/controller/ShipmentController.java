@@ -2,24 +2,27 @@ package liquid.transport.web.controller;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.ServiceProviderService;
 import liquid.transport.persistence.domain.*;
 import liquid.transport.persistence.repository.RailContainerRepository;
+import liquid.transport.service.LegService;
 import liquid.transport.service.RouteService;
 import liquid.transport.service.ShipmentService;
-import liquid.transport.web.domain.RailTransport;
-import liquid.transport.web.domain.Shipment;
-import liquid.transport.web.domain.ShipmentSet;
+import liquid.transport.web.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +38,9 @@ public class ShipmentController {
 
     @Autowired
     private ShipmentService shipmentService;
+
+    @Autowired
+    private LegService legService;
 
     @Autowired
     private ServiceProviderService serviceProviderService;
@@ -119,5 +125,63 @@ public class ShipmentController {
         railContainerRepository.save(entities);
 
         return "redirect:/shipment?o=" + orderId;
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST, params = "delete")
+    public String deleteShipment(@PathVariable Long id) {
+        ShipmentEntity shipmentEntity = shipmentService.find(id);
+        shipmentService.delete(id);
+        return "redirect:/task/" + shipmentEntity.getTaskId() + "/planning";
+    }
+
+    @RequestMapping(value = "/{id}/leg", method = RequestMethod.GET)
+    public String get(@PathVariable Long id, Model model) {
+        Leg leg = new Leg();
+        leg.setShipmentId(id);
+
+        model.addAttribute("transportModeOptions", TransMode.values());
+        model.addAttribute("leg", leg);
+        return "leg/form";
+    }
+
+    @RequestMapping(value = "/{id}/leg", method = RequestMethod.POST)
+    public String post(@PathVariable Long id, Leg leg, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            Long serviceSubtype = TransMode.toServiceType(leg.getTransMode());
+            Iterable<ServiceProviderEntity> sps = Collections.emptyList();
+            if (serviceSubtype != null) {
+                sps = serviceProviderService.findByType(serviceSubtype);
+            }
+
+            model.addAttribute("transportModeOptions", TransMode.values());
+            model.addAttribute("sps", sps);
+            model.addAttribute("leg", leg);
+            return "leg/form";
+        }
+
+        ShipmentEntity shipmentEntity = shipmentService.find(id);
+
+        LegEntity legEntity = new LegEntity();
+        legEntity.setId(leg.getId());
+        legEntity.setTransMode(leg.getTransMode());
+        if (leg.getServiceProviderId() != null)
+            legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
+        legEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, leg.getSourceId()));
+        legEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId()));
+        legEntity.setShipment(shipmentEntity);
+        legService.save(legEntity);
+
+        return "redirect:/task/" + shipmentEntity.getTaskId() + "/planning";
+    }
+
+    private Long computeDefaultDstLocId(List<LocationEntity> locationEntities) {
+        int size = locationEntities.size();
+        long id = 0;
+        if (size < 2) {
+            id = locationEntities.get(0).getId();
+        } else {
+            id = locationEntities.get(1).getId();
+        }
+        return id;
     }
 }

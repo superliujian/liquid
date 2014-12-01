@@ -5,6 +5,7 @@ package liquid.transport.web.domain;
  */
 public class Leg {
     private Long id;
+    private Long shipmentId;
     private int transMode;
     private Long serviceProviderId;
     private Long sourceId;
@@ -20,6 +21,14 @@ public class Leg {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getShipmentId() {
+        return shipmentId;
+    }
+
+    public void setShipmentId(Long shipmentId) {
+        this.shipmentId = shipmentId;
     }
 
     public int getTransMode() {
@@ -90,6 +99,7 @@ public class Leg {
     public String toString() {
         final StringBuilder sb = new StringBuilder("{Class=Leg");
         sb.append(", id=").append(id);
+        sb.append(", shipmentId=").append(shipmentId);
         sb.append(", transMode=").append(transMode);
         sb.append(", serviceProviderId=").append(serviceProviderId);
         sb.append(", sourceId=").append(sourceId);

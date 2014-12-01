@@ -1,7 +1,7 @@
 package liquid.transport.persistence.domain;
 
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.persistence.domain.BaseUpdateEntity;
+import liquid.persistence.domain.BaseTaskEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -15,7 +15,7 @@ import java.util.List;
  * Time: 9:15 PM
  */
 @Entity(name = "TSP_SHIPMENT")
-public class ShipmentEntity extends BaseUpdateEntity {
+public class ShipmentEntity extends BaseTaskEntity {
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;

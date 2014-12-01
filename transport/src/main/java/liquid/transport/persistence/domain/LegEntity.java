@@ -1,6 +1,6 @@
 package liquid.transport.persistence.domain;
 
-import liquid.persistence.domain.BaseUpdateEntity;
+import liquid.persistence.domain.BaseIdEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 
@@ -13,7 +13,7 @@ import javax.persistence.*;
  * Time: 8:18 PM
  */
 @Entity(name = "TSP_LEG")
-public class LegEntity extends BaseUpdateEntity {
+public class LegEntity extends BaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name = "SHIPMENT_ID")
@@ -28,9 +28,6 @@ public class LegEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "SP_ID")
     private ServiceProviderEntity sp;
-
-    @Transient
-    private long spId;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
@@ -74,14 +71,6 @@ public class LegEntity extends BaseUpdateEntity {
 
     public void setSp(ServiceProviderEntity sp) {
         this.sp = sp;
-    }
-
-    public long getSpId() {
-        return spId;
-    }
-
-    public void setSpId(long spId) {
-        this.spId = spId;
     }
 
     public LocationEntity getSrcLoc() {

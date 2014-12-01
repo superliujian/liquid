@@ -4,25 +4,35 @@ import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.security.SecurityContext;
 import liquid.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
-import liquid.task.NotCompletedException;
 import liquid.task.domain.Task;
-import liquid.task.domain.TaskBar;
-import liquid.task.service.ActivitiEngineService;
-import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
+import liquid.transport.persistence.domain.LegEntity;
+import liquid.transport.persistence.domain.PathEntity;
+import liquid.transport.persistence.domain.RouteEntity;
+import liquid.transport.persistence.domain.ShipmentEntity;
+import liquid.transport.service.RouteService;
+import liquid.transport.service.ShipmentService;
+import liquid.transport.web.domain.Shipment;
+import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -31,16 +41,21 @@ import java.util.Locale;
  * Time: 11:25 PM
  */
 @Controller
-@RequestMapping("/task")
-public class TaskController extends BaseController {
+@RequestMapping("/task/{taskId}")
+public class TaskController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
-
-    @Deprecated
-    @Autowired
-    private ActivitiEngineService bpmService;
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private ShipmentService shipmentService;
+
+    @Autowired
+    private RouteService routeService;
 
     @Autowired
     private ChargeService chargeService;
@@ -49,53 +64,6 @@ public class TaskController extends BaseController {
     private ServiceSubtypeService serviceSubtypeService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String tasks(Model model) {
-        return "redirect:/task?q=all";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "q")
-    public String list(@RequestParam("q") String tab, Model model) {
-        Task[] tasks;
-
-        switch (tab) {
-            case "all":
-                tasks = taskService.listTasks(SecurityContext.getInstance().getRole());
-                break;
-            case "my":
-                tasks = taskService.listMyTasks(SecurityContext.getInstance().getUsername());
-                break;
-            case "warning":
-                tasks = taskService.listWarningTasks();
-                break;
-            default:
-                tasks = new Task[0];
-                break;
-        }
-        TaskBar taskBar = taskService.calculateTaskBar(SecurityContext.getInstance().getRole(),
-                SecurityContext.getInstance().getUsername());
-        taskBar.setTitle("task." + tab);
-        model.addAttribute("taskBar", taskBar);
-        model.addAttribute("tab", tab);
-        model.addAttribute("tasks", tasks);
-        return "task/list";
-    }
-
-    /**
-     * TODO: Move to another controller.
-     *
-     * @param taskId
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/{taskId}/common", method = RequestMethod.GET)
-    public String toCommon(@PathVariable String taskId, Model model) {
-        logger.debug("taskId: {}", taskId);
-        Task task = taskService.getTask(taskId);
-        model.addAttribute("task", task);
-        return "task/common";
-    }
-
-    @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
     public String redirect(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
         Task task = taskService.getTask(taskId);
@@ -105,39 +73,22 @@ public class TaskController extends BaseController {
         return "redirect:" + taskService.computeTaskMainPath(taskId);
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "claim")
-    public String claim(@RequestParam String taskId, HttpServletRequest request) {
+    /**
+     * TODO: Move to another controller.
+     *
+     * @param taskId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/common", method = RequestMethod.GET)
+    public String toCommon(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
-        try {
-            bpmService.claimTask(taskId, SecurityContext.getInstance().getUsername());
-        } catch (ActivitiTaskAlreadyClaimedException e) {
-            request.getSession().setAttribute("message",
-                    messageSource.getMessage("task.claimed.by.someone.else", new String[]{}, Locale.CHINA));
-            return "error/error";
-        }
-        return "redirect:/task/" + taskId;
+        Task task = taskService.getTask(taskId);
+        model.addAttribute("task", task);
+        return "task/common";
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "complete")
-    public String complete(@RequestParam String taskId,
-                           @RequestHeader(value = "referer") String referer,
-                           Model model) {
-        logger.debug("taskId: {}", taskId);
-
-        try {
-            taskService.complete(taskId);
-        } catch (NotCompletedException e) {
-            model.addAttribute("task_error", getMessage(e.getCode()));
-            return "redirect:" + referer;
-        } catch (Exception e) {
-            logger.error(String.format("Complete taskId '%s' and referer '%s'.", taskId, referer), e);
-            return "redirect:" + referer;
-        }
-
-        return "redirect:/task";
-    }
-
-    @RequestMapping(value = "/{taskId}/check_amount", method = RequestMethod.GET)
+    @RequestMapping(value = "/check_amount", method = RequestMethod.GET)
     public String checkAmount(@PathVariable String taskId, Model model) {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         Task task = taskService.getTask(taskId);
@@ -158,7 +109,7 @@ public class TaskController extends BaseController {
         return "charge/list";
     }
 
-    @RequestMapping(value = "/{taskId}/settlement", method = RequestMethod.GET)
+    @RequestMapping(value = "/settlement", method = RequestMethod.GET)
     public String settle(@PathVariable String taskId, Model model) {
         Task task = taskService.getTask(taskId);
         model.addAttribute("task", task);
@@ -174,5 +125,107 @@ public class TaskController extends BaseController {
         EarningDto earning = chargeService.calculateEarning(order, charges);
         model.addAttribute("earning", earning);
         return "charge/settlement";
+    }
+
+    @RequestMapping(value = "/planning", method = RequestMethod.GET)
+    public String init(@PathVariable String taskId, Model model) {
+        logger.debug("taskId: {}", taskId);
+
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
+        OrderEntity order = orderService.find(orderId);
+
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+
+        int containerUsage = 0;
+        for (ShipmentEntity shipment : shipmentSet) {
+            containerUsage += shipment.getContainerQty();
+        }
+
+        Shipment shipment = new Shipment();
+        // set remaining container quantity as the default value for the next shipment planning.
+        shipment.setContainerQuantity(order.getContainerQty() - containerUsage);
+
+        // shipment planning bar
+        model.addAttribute("shipment", shipment);
+        model.addAttribute("containerTotality", order.getContainerQty());
+        model.addAttribute("routes", routeService.find(order.getSrcLoc().getId(), order.getDstLoc().getId()));
+
+        // shipment table
+        model.addAttribute("shipmentSet", shipmentSet);
+        model.addAttribute("transModes", TransMode.toMap());
+
+        // charge table
+        model.addAttribute("chargeWays", ChargeWay.values());
+        Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
+        model.addAttribute("charges", charges);
+        model.addAttribute("total", chargeService.total(charges));
+        return "planning/main";
+    }
+
+    @RequestMapping(value = "/planning/shipment", method = RequestMethod.POST)
+    public String addShipment(@PathVariable String taskId, @Valid @ModelAttribute(value = "shipment") Shipment shipment,
+                              BindingResult result, Model model) {
+        logger.debug("taskId: {}", taskId);
+        logger.debug("shipment: {}", shipment);
+
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
+        OrderEntity order = orderService.find(orderId);
+
+        int containerUsage = 0;
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        for (ShipmentEntity r : shipmentSet) {
+            containerUsage += r.getContainerQty();
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("containerTotality", order.getContainerQty());
+
+            model.addAttribute("shipmentSet", shipmentSet);
+            model.addAttribute("transModes", TransMode.toMap());
+
+            // charge table
+            model.addAttribute("chargeWays", ChargeWay.values());
+            Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
+            model.addAttribute("charges", charges);
+            model.addAttribute("total", chargeService.total(charges));
+            return "planning/main";
+        } else if (shipment.getContainerQuantity() > (order.getContainerQty() - containerUsage)) {
+            setFieldError(result, "shipment", "containerQty", shipment.getContainerQuantity(), (order.getContainerQty() - containerUsage));
+
+            model.addAttribute("containerTotality", order.getContainerQty());
+
+            model.addAttribute("shipmentSet", shipmentSet);
+            model.addAttribute("transModes", TransMode.toMap());
+
+            // charge table
+            model.addAttribute("chargeWays", ChargeWay.values());
+            Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
+            model.addAttribute("charges", charges);
+            model.addAttribute("total", chargeService.total(charges));
+            return "planning/main";
+        } else {
+            ShipmentEntity shipmentEntityntity = new ShipmentEntity();
+            shipmentEntityntity.setOrder(order);
+            shipmentEntityntity.setContainerQty(shipment.getContainerQuantity());
+            shipmentEntityntity.setTaskId(taskId);
+
+            if (null != shipment.getRouteId()) {
+                RouteEntity route = routeService.findOne(shipment.getRouteId());
+                List<PathEntity> paths = route.getPaths();
+                List<LegEntity> legs = new ArrayList<>(paths.size());
+                for (PathEntity path : paths) {
+                    LegEntity leg = new LegEntity();
+                    leg.setShipment(shipmentEntityntity);
+                    leg.setTransMode(path.getTransportMode());
+                    leg.setSrcLoc(path.getFrom());
+                    leg.setDstLoc(path.getTo());
+                    legs.add(leg);
+                }
+                shipmentEntityntity.setLegs(legs);
+            }
+
+            shipmentService.save(shipmentEntityntity);
+            return "redirect:/task/" + taskId + "/planning";
+        }
     }
 }

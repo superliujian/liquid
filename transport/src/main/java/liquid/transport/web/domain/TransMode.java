@@ -49,6 +49,19 @@ public enum TransMode {
         return types;
     }
 
+    public static Long toServiceType(int transportMode) {
+        switch (transportMode) {
+            case 1:
+                return 2L;
+            case 2:
+                return 3L;
+            case 3:
+                return 4L;
+            default:
+                return null;
+        }
+    }
+
     public int getType() {
         return type;
     }

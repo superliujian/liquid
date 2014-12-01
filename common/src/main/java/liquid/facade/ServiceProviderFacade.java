@@ -38,6 +38,15 @@ public class ServiceProviderFacade {
         return serviceProvider;
     }
 
+    public List<ServiceProvider> findByType(Long serviceType) {
+        Iterable<ServiceProviderEntity> providerEntities = serviceProviderService.findByType(serviceType);
+        List<ServiceProvider> serviceProviders = new ArrayList<>();
+        for (ServiceProviderEntity providerEntity : providerEntities) {
+            serviceProviders.add(simplyConvert(providerEntity));
+        }
+        return serviceProviders;
+    }
+
     public List<ServiceProvider> findBySubtypeId(Long subtypeId) {
         List<ServiceProviderEntity> providerEntities = serviceProviderService.findByServiceSubtypeId(subtypeId);
         List<ServiceProvider> serviceProviders = new ArrayList<>();
