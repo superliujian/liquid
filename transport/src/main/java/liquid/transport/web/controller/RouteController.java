@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,15 +45,23 @@ public class RouteController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String getNew(@PathVariable Long id, Model model) {
+    public String get(@PathVariable Long id, Model model) {
         RouteEntity route = routeService.findOne(id);
         model.addAttribute("route", route);
         return "route/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String post(RouteEntity route, Model model) {
-        RouteEntity newRoute = routeService.save(route);
+    public String post(RouteEntity route, BindingResult bindingResult, Model model) {
+        RouteEntity newRoute = null;
+        if (null == route.getId()) {
+            newRoute = routeService.save(route);
+        } else {
+            RouteEntity oldRoute = routeService.findOne(route.getId());
+            oldRoute.setName(route.getName());
+            oldRoute.setComment(route.getComment());
+            newRoute = routeService.save(oldRoute);
+        }
         return "redirect:/route/" + newRoute.getId();
     }
 

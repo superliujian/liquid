@@ -61,6 +61,7 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
 
         PathEntity p = head;
 
+        // TODO: Optimize this algorithm by the reversed order
         for (int i = 0; i < route.getPaths().size(); i++) {
             for (int j = i; j < route.getPaths().size(); j++) {
                 if (p.getId() == pathArray[j].getId()) {
@@ -68,15 +69,15 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
                     pathArray[i] = pathArray[j];
                     pathArray[j] = p;
                     p = pathArray[i].getNext();
+                    break;
                 }
-                break;
             }
         }
 
         route.setPaths(Arrays.asList(pathArray));
     }
 
-    public Page<RouteEntity> findAll(Pageable pageable){
+    public Page<RouteEntity> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 

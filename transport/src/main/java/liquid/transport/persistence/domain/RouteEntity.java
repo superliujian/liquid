@@ -7,7 +7,13 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Created by mat on 11/26/14.
+ * Created by Tao Ma on 11/26/14.
+ *
+ * Status:
+ * created      创建,
+ * activated    激活,
+ * enabled      启用,
+ * disabled     禁用.
  */
 @Entity(name = "TSP_ROUTE")
 public class RouteEntity extends BaseStatusEntity {

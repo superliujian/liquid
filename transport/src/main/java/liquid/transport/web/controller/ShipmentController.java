@@ -112,6 +112,7 @@ public class ShipmentController {
             }
             prev = path;
         }
+        route.setPaths(paths);
         RouteEntity newRoute = routeService.save(route);
 
         return "redirect:/route/" + newRoute.getId();

@@ -136,7 +136,7 @@
                             </div>                            
                         </div>
                         <div class="modal-footer">
-                            <form method="POST" th:action="'/task/' + ${taskId} + '/planning/shipment/' + ${shipment.id}">
+                            <form method="POST" th:action="'/shipment/' + ${shipment.id}">
                                 <button type="button" data-dismiss="modal" class="btn btn-default btn-sm">
                                     <span th:text="#{modal.close}"/>
                                 </button>                            
