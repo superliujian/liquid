@@ -65,6 +65,12 @@ public class RouteController {
         return "redirect:/route/" + newRoute.getId();
     }
 
+    @RequestMapping(method = RequestMethod.POST, params = "delete")
+    public String post(RouteEntity route) {
+        routeService.delete(route.getId());
+        return "redirect:/route";
+    }
+
     @RequestMapping(value = "/{id}/path", method = RequestMethod.POST)
     public String postPath(@PathVariable Long id, Path path, Model model) {
         PathEntity entity = new PathEntity();

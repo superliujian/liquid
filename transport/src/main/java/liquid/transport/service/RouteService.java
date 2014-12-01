@@ -24,6 +24,10 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
 
     public void disable(Long id) {}
 
+    public void delete(Long id) {
+        repository.delete(id);
+    }
+
     public RouteEntity findOne(Long id) {
         RouteEntity route = repository.findOne(id);
         sort(route);
