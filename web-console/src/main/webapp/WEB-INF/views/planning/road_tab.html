@@ -72,8 +72,8 @@
 /*<![CDATA[*/
     $(document).ready(function() {
         var cities = initLocationsAc(0);        
-        $('#source').autoComplete(ports, 'sourceId');
-        $('#destination').autoComplete(ports, 'destinationId');
+        $('#source').autoComplete(cities, 'sourceId');
+        $('#destination').autoComplete(cities, 'destinationId');
         $(".tt-hint").addClass("form-control"); 
     }); // ready end
 /*]]>*/
