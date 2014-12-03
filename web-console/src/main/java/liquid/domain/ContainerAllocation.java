@@ -6,7 +6,7 @@ package liquid.domain;
 public class ContainerAllocation {
     private Long allocationId;
 
-    private long routeId;
+    private long shipmentId;
 
     private String typeNameKey;
 
@@ -36,12 +36,12 @@ public class ContainerAllocation {
         this.allocationId = allocationId;
     }
 
-    public long getRouteId() {
-        return routeId;
+    public long getShipmentId() {
+        return shipmentId;
     }
 
-    public void setRouteId(long routeId) {
-        this.routeId = routeId;
+    public void setShipmentId(long shipmentId) {
+        this.shipmentId = shipmentId;
     }
 
     public String getTypeNameKey() {

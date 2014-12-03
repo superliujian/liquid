@@ -9,7 +9,7 @@ import liquid.service.ServiceSubtypeService;
 import liquid.transport.web.domain.TransMode;
 import liquid.transport.persistence.domain.DeliveryContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class DeliveryController extends BaseTaskController {
     private DeliveryContainerService deliveryContainerService;
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     @Autowired
     private ChargeService chargeService;
@@ -51,8 +51,8 @@ public class DeliveryController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
 
         Long orderId = taskService.getOrderIdByTaskId(taskId);
-        Iterable<ShipmentEntity> routes = transportService.findByOrderId(orderId);
-        model.addAttribute("routes", routes);
+        Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(orderId);
+        model.addAttribute("shipmentSet", shipmentSet);
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));
 
         // for charges

@@ -13,12 +13,12 @@
 <!-- {!end task bar} -->
 
 <div class="container" th:if="${task.assignee}">
-    <div th:unless="${#lists.isEmpty(routes)}">
-        <div th:each="route : ${routes}">
-            <div class="panel panel-default" th:unless="${#lists.isEmpty(route.bargeContainers)}">
+    <div th:unless="${#lists.isEmpty(shipmentSet)}">
+        <div th:each="shipment : ${shipmentSet}">
+            <div class="panel panel-default" th:unless="${#lists.isEmpty(shipment.bargeContainers)}">
                 <div class="panel-heading">
-                    <span th:text="#{route} + ${route.id}">Route ID</span>
-                    <span th:text="#{container.quantity} + '(' + ${route.containerQty} + ')'">Container Qty</span>
+                    <span th:text="#{shipment} + ${shipment.id}">Shipment ID</span>
+                    <span th:text="#{container.quantity} + '(' + ${shipment.containerQty} + ')'">Container Qty</span>
                 </div>
 
                 <div class="panel-body">
@@ -36,7 +36,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="container : ${route.bargeContainers}">
+                        <tr th:each="container : ${shipment.bargeContainers}">
                             <td th:text="${container.leg.srcLoc.name}">Barge Origination</td>
                             <td th:text="${container.leg.dstLoc.name}">Barge Destination</td>
                             <td th:text="${container.leg.sp.name}">SP Name</td>

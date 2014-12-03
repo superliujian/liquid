@@ -122,7 +122,7 @@ public class TaskService {
         switch (task.getTaskDefinitionKey()) {
             case "feedDistyPrice":
                 return "/dp?t=" + task.getId();
-            case "planRoute":
+            case "planShipment":
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
             case "feedContainerNo":

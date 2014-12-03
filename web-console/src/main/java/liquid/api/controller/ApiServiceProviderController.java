@@ -2,6 +2,7 @@ package liquid.api.controller;
 
 import liquid.domain.ServiceProvider;
 import liquid.facade.ServiceProviderFacade;
+import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,6 +30,16 @@ public class ApiServiceProviderController {
     @ResponseBody
     public List<ServiceProvider> list(@RequestParam Long subtypeId) {
         return serviceProviderFacade.findBySubtypeId(subtypeId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "transportMode")
+    @ResponseBody
+    public List<ServiceProvider> list(@RequestParam Integer transportMode) {
+        Long serviceType = TransMode.toServiceType(transportMode);
+        if (null == serviceType) {
+            return Collections.emptyList();
+        }
+        return serviceProviderFacade.findByType(serviceType);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "name")

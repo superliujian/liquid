@@ -18,7 +18,7 @@ public class TaskFactory {
     private final Object lock = new Object();
 
     private Class<? extends AbstractTaskProxy>[] classes = new Class[]{
-            AllocationContainerTask.class, FeedContainerNoTask.class, PlanRouteTask.class, SendInvoiceTask.class
+            AllocationContainerTask.class, FeedContainerNoTask.class, PlanShipmentTask.class, SendInvoiceTask.class
     };
     private Map<String, AbstractTaskProxy> cache = new HashMap<>();
 

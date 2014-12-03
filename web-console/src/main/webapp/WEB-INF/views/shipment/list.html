@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="m" class="container">
+    <div class="row">
+        <div class="col-xs-4"><h3><span th:text="#{shipment}"></span></h3></div>    
+    </div><!-- row -->
+    
+    <hr />    
+    
+    <div class="list-group">
+        <div th:each="row : ${page.content}" class="list-group-item">
+            <div class="row">
+                <div class="col-xs-4"><h4 class="list-group-item-heading"><span th:text="${row.id}"></span></h4></div>
+                <div class="col-xs-8">
+                    <form th:action="'/shipment/' + ${row.id}" method="post">
+                        <button class="btn btn-default btn-xs pull-right" type="submit" name="save_to_route"><i class="glyphicon glyphicon-floppy-save text-success" /></button>
+                    </form>
+                </div>
+            </div>
+            <p class="list-group-item-text">
+                <span th:each="leg : ${row.legs}">
+                    <span th:text="${leg.srcLoc.name}" /> - <span th:text="${leg.dstLoc.name}" />; 
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div th:include="layout :: pagination_bar"></div>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>

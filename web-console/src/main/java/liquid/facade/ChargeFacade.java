@@ -28,8 +28,8 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
     public ChargeEntity convert(Charge charge) {
         ChargeEntity entity = new ChargeEntity();
         entity.setId(charge.getId());
-        if (null != charge.getRouteId())
-            entity.setRoute(ShipmentEntity.newInstance(ShipmentEntity.class, charge.getRouteId()));
+        if (null != charge.getShipmentId())
+            entity.setShipment(ShipmentEntity.newInstance(ShipmentEntity.class, charge.getShipmentId()));
         if (null != charge.getLegId())
             entity.setLeg(LegEntity.newInstance(LegEntity.class, charge.getLegId()));
         entity.setServiceSubtype(ServiceSubtypeEntity.newInstance(ServiceSubtypeEntity.class, charge.getServiceSubtypeId()));

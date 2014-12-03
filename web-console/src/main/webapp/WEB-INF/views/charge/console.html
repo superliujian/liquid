@@ -13,10 +13,10 @@
 <div class="container">
 <div class="row">
 <div class="col-lg-8">
-    <!-- charges for this route ${route}-->
+    <!-- charges for this shipment ${shipment}-->
     <div class="panel panel-default" th:if="false">
         <div class="panel-heading">
-            <strong th:text="#{route} + ${route.id}">Route No.</strong>
+            <strong th:text="#{shipment} + ${shipment.id}">Shipment ID</strong>
 
             <a href="/task/{taskId}" class="btn btn-default btn-xs pull-right"
                th:href="${backToTask}">
@@ -61,10 +61,10 @@
     <!-- charges for this leg -->
     <div class="panel panel-default" th:if="${leg}">
         <div class="panel-heading">
-            <strong th:text="#{route} + ${leg.route.id}">Route No.</strong>
+            <strong th:text="#{shipment} + ${leg.shipment.id}">Shipment No.</strong>
             <span th:text="#{${transModes[leg.transMode]}}"></span>
             <span th:text="${leg.srcLoc.name} + '-' + ${leg.dstLoc.name}"></span>
-            <span th:text="#{container.quantity} + '(' + ${leg.route.containerQty}+ ')'"></span>
+            <span th:text="#{container.quantity} + '(' + ${leg.shipment.containerQty}+ ')'"></span>
 
             <a href="/task/{taskId}" class="pull-right" th:href="${backToTask}">
                 <i class="glyphicon glyphicon-arrow-left text-success"/>

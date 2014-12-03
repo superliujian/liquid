@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="order_template :: tab"/>
+<!-- {!end task bar} -->
+
+<div class="container" th:unless="${#lists.isEmpty(shipmentSet)}">
+    <div class="panel panel-default" th:each="shipment : ${shipmentSet}">
+        <div class="panel-body">
+            <form th:action="'/shipment?o=' + ${order.id}" method="POST" th:object="${shipmentSet}">
+            <table class="table table-striped table-hover table-condensed table-16" th:each="shipment, rowStat: *{shipmentSet}">
+                <caption th:text="#{rail}"></caption>
+                <thead>
+                <tr>
+                    <th th:text="#{rail.origination}">Railway Origination</th>
+                    <th th:text="#{rail.destination}">Railway Destination</th>
+                    <th th:text="#{container.no}">Container No.</th>
+                    <th th:text="#{fleet}">Fleet</th>
+                    <th th:text="#{plate.no}">Plate No.</th>
+                    <th th:text="#{trucker}">Trucker</th>
+                    <th th:text="#{loading.toc}">Loading TOC</th>
+                    <th th:text="#{rail.plan.no}">Trans Plan No.</th>
+                    <th th:text="#{rail.ets}">Rail ETS</th>
+                    <th th:text="#{station.toa}">Station TOA</th>
+                    <th th:text="#{rail.ats}">Rail ATS</th>
+                </tr>
+                </thead>
+                <tbody>                
+                <tr th:each="transport, rowStat1: *{shipmentSet[__${rowStat.index}__].railTransport}">
+                    <input type="hidden" th:field="*{shipmentSet[__${rowStat.index}__].railTransport[__${rowStat1.index}__].id}" />
+                    <td th:text="*{shipmentSet[__${rowStat.index}__].railTransport[__${rowStat1.index}__].source}"></td>
+                    <td th:text="*{shipmentSet[__${rowStat.index}__].railTransport[__${rowStat1.index}__].destination}"></td>
+                    <td>Container No.</td>
+                    <td>
+                        <select th:field="*{shipmentSet[__${rowStat.index}__].railTransport[__${rowStat1.index}__].fleetId}" class="form-control input-sm">
+                            <option th:each="fleet : ${fleets}"
+                                    th:value="${fleet.id}"
+                                    th:text="${fleet.name}">SP Name
+                            </option>
+                        </select>                        
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{shipmentSet[__${rowStat.index}__].railTransport[__${rowStat1.index}__].plateNo}" class="form-control input-sm"/>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{shipmentSet[__${rowStat.index}__].railTransport[__${rowStat1.index}__].trucker}" class="form-control input-sm"/>
+                    </td>
+                    <td>Loading TOC</td>
+                    <td>Trans Plan No.</td>
+                    <td>Rail TOA</td>
+                    <td>Station TOA</td>
+                    <td>Rail ATS</td>
+                </tr>
+                </tbody>
+            </table>
+            </form>
+        </div><!-- panel-body -->
+    </div><!-- panel -->
+</div><!-- container -->
+
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>

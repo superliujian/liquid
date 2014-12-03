@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="m" class="container">
+    <h3><span th:text="#{route}"></span></h3>
+    
+    <hr />
+    
+    <form action="/route" method="POST" th:object="${route}">
+        <input type="hidden" th:field="*{id}"/>
+    
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+                    <label for="name" th:text="#{route.name}">Name</label>
+                    
+                    <input type="text" th:field="*{name}" class="form-control input-sm"/>
+
+                    <div>
+                        <span th:errors="*{name}">error</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xs-8">
+                <div class="form-group" th:classappend="${#fields.hasErrors('comment')} ? 'has-error'">
+                    <label for="comment" th:text="#{comment}">Name</label>
+                    
+                    <input type="text" th:field="*{comment}" class="form-control input-sm"/>
+
+                    <div>
+                        <span th:errors="*{comment}">error</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4 pull-right">
+                <input type="submit" class="btn btn-success btn-sm" th:value="#{save}"/>
+                <input type="submit" class="btn btn-danger btn-sm" name="delete" th:value="#{delete}"/>
+            </div>
+        </div>        
+    </form>
+</div>
+
+<div th:if="${route.id}" id="m" class="container">
+    <hr />
+    
+    <div class="row">
+        <div class="col-xs-4"><h4><span th:text="#{path}"></span></h4></div>
+        <div class="col-xs-8"><a th:href="'/route/' + *{id} + '/path/new'" class="pull-right"><i class="glyphicon glyphicon-plus text-success" /></a></div>        
+    </div><!-- row -->
+
+    <hr />    
+
+    <ul class="list-group" th:unless="${#lists.isEmpty(route.paths)}">
+        <li class="list-group-item" th:each="row : ${route.paths}">
+            #<span th:text="${row.id}"></span> <a th:href="'/route/' + ${row.id}"></a> <small><span th:if="${row.from}" th:text="${row.from.name}" /> - <span th:if="${row.to}" th:text="${row.to.name}" /></small>
+        </li>
+    </ul>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>

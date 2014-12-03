@@ -30,7 +30,7 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaR
      * @param pageable
      * @return
      */
-    Page<OrderEntity> findByCreateUser(String uid, Pageable pageable);
+    Page<OrderEntity> findByCreatedBy(String uid, Pageable pageable);
 
     /**
      * TODO: Low Efficiency

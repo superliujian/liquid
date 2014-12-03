@@ -28,6 +28,10 @@ function initLocationsAc(type) {
     });
 }
 
+function initAllLocationsAc() {
+    return initAcEngine({url: '/api/location?name=%QUERY'});
+}
+
 function initContainersAc() {
     return initAcEngine({url: '/api/container?bicCode=%QUERY'});
 }
@@ -37,14 +41,14 @@ $.fn.extend({
     autoComplete: function(dataset, hiddenId) {
         this.acWithTemplate(dataset, "name", hiddenId, '<p><strong>{{name}}</strong></p>');
     },
-    acWithTemplate: function(dataset, displayKey, hiddenId, template) {
+    acWithTemplate: function(dataset, displayKey, hiddenId, template) {    
         this.typeahead(null, {
           name: this.attr('id'),
           displayKey: displayKey,
           source: dataset.ttAdapter(),
           templates: {
             suggestion: Handlebars.compile(template)
-          }  
+          }
         }).on('typeahead:selected', function (obj, datum) {
             $('#' + hiddenId).val(datum.id);
         });

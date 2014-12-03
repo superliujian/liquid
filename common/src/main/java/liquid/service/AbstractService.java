@@ -21,32 +21,32 @@ public abstract class AbstractService<E extends BaseUpdateEntity, R extends Crud
     public E save(E entity) {
         doSaveBefore(entity);
 
-        entity.setUpdateUser(SecurityContext.getInstance().getUsername());
-        entity.setUpdateTime(new Date());
+        entity.setUpdatedBy(SecurityContext.getInstance().getUsername());
+        entity.setUpdatedAt(new Date());
         // new entity
         if (null == entity.getId()) {
-            entity.setCreateUser(entity.getUpdateUser());
-            entity.setCreateTime(entity.getUpdateTime());
+            entity.setCreatedBy(entity.getUpdatedBy());
+            entity.setCreatedAt(entity.getUpdatedAt());
         } else {
             E oldOne = repository.findOne(entity.getId());
-            entity.setCreateUser(oldOne.getCreateUser());
-            entity.setCreateTime(oldOne.getCreateTime());
+            entity.setCreatedBy(oldOne.getCreatedBy());
+            entity.setCreatedAt(oldOne.getCreatedAt());
         }
         return repository.save(entity);
     }
 
     public Iterable<E> save(Iterable<E> entities) {
         for (E entity : entities) {
-            entity.setUpdateUser(SecurityContext.getInstance().getUsername());
-            entity.setUpdateTime(new Date());
+            entity.setUpdatedBy(SecurityContext.getInstance().getUsername());
+            entity.setUpdatedAt(new Date());
             // new entity
             if (null == entity.getId()) {
-                entity.setCreateUser(entity.getUpdateUser());
-                entity.setCreateTime(entity.getUpdateTime());
+                entity.setCreatedBy(entity.getUpdatedBy());
+                entity.setCreatedAt(entity.getUpdatedAt());
             } else {
                 E oldOne = repository.findOne(entity.getId());
-                entity.setCreateUser(oldOne.getCreateUser());
-                entity.setCreateTime(oldOne.getCreateTime());
+                entity.setCreatedBy(oldOne.getCreatedBy());
+                entity.setCreatedAt(oldOne.getCreatedAt());
             }
         }
         return repository.save(entities);

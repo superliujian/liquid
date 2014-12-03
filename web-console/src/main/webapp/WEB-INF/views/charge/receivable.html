@@ -58,7 +58,7 @@
                     <a href="/charge/order/{orderId}" th:href="'/charge/order/' + ${order.id}"
                        th:text="${order.orderNo}"/>
                 </td>
-                <td th:text="${#calendars.format(order.createTime,'yyyy/MM/dd')}"></td>
+                <td th:text="${#calendars.format(order.createdAt,'yyyy/MM/dd')}"></td>
                 <td th:text="${order.customer.name}">Customer Name</td>
                 <td th:text="${order.srcLoc.name}">Origin</td>
                 <td th:text="${order.dstLoc.name}">Destination</td>

@@ -66,8 +66,8 @@ public class OrderDistyController extends BaseController {
         OrderEntity order = orderService.find(orderId);
         order.setDistyPrice(disty.getDistyCny());
         order.setDistyUsd(disty.getDistyUsd());
-        order.setUpdateUser(principal.getName());
-        order.setUpdateTime(new Date());
+        order.setUpdatedBy(principal.getName());
+        order.setUpdatedAt(new Date());
         orderService.save(order);
 
         model.addAttribute("disty", disty);

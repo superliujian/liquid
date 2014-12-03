@@ -1,7 +1,7 @@
 package liquid.api.controller;
 
-import liquid.persistence.domain.LocationEntity;
-import liquid.service.LocationService;
+import liquid.facade.LocationFacade;
+import liquid.web.domain.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,14 @@ public class ApiLocationController {
     private static final Logger logger = LoggerFactory.getLogger(ApiLocationController.class);
 
     @Autowired
-    private LocationService locationService;
+    private LocationFacade locationFacade;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<LocationEntity> listByName(@RequestParam Integer type, @RequestParam String name) {
+    public Iterable<Location> listByName(@RequestParam(required = false) Integer type, @RequestParam String name) {
         logger.debug("name: {}", name);
-        return locationService.findByTypeAndNameLike(type, name);
+        if (null == type)
+            return locationFacade.findByNameLike(name);
+        return locationFacade.findByTypeAndNameLike(type, name);
     }
 }

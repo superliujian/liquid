@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="f" class="container">
+    <h3><span th:text="#{path}"></span></h3>
+    
+    <hr />
+    
+    <form th:action="'/route/' + ${path.routeId} + '/path'" method="POST" th:object="${path}">
+        <input type="hidden" th:field="*{id}"/>
+        
+        <div class="form-group">
+            <label th:text="#{trans.mode}" class="control-label">Transport Mode</label>
+            <select th:field="*{transportMode}" class="form-control input-sm">
+                <option th:each="option : ${transportModeOptions}"
+                        th:value="${option.type}" th:text="#{${option.i18nKey}}">Transport Mode
+                </option>
+            </select>
+        </div>
+        
+        <input type="hidden" th:field="*{fromId}"/>
+        <div class="form-group" th:classappend="${#fields.hasErrors('fromId')} ? 'has-error'">
+            <label><span th:text="#{origination}">Source</span><span>*</span></label>
+            <input type="text" th:field="*{from}" class="form-control input-sm" th:placeholder="#{origination}"/>
+            <span th:errors="*{fromId}">error</span>            
+        </div>
+
+        <input type="hidden" th:field="*{toId}"/>
+        <div class="form-group" th:classappend="${#fields.hasErrors('to')} ? 'has-error'">
+            <label><span th:text="#{destination}">Destination</span><span>*</span></label>
+            <input type="text" th:field="*{to}" class="form-control input-sm" th:placeholder="#{destination}"/>
+            <span th:errors="*{to}">error</span>      
+        </div>
+        
+        <input type="submit" class="btn btn-success btn-block" th:value="#{save}"/>
+    </form>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        var dataset = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,  
+            limit: 10,
+            remote: { 
+                // TODO: Make url as an input argument.
+                url: '/api/location',
+                replace: function(url, query) {
+                    // TODO: Make $('#transportMode').val() as an input argument.
+                    switch($('#transportMode').val()) {
+                        case '0': 
+                            return url + '?type=1&name=' + encodeURIComponent(query);
+                        case '1':
+                        case '2':
+                            return url + '?type=2&name=' + encodeURIComponent(query);
+                        default:
+                            return url + '?name=' + encodeURIComponent(query);                        
+                    }
+                }        
+            }
+        });
+        
+        dataset.initialize();
+    
+        $('#from').typeahead(null, {
+          displayKey: 'name',
+          source: dataset.ttAdapter(),
+          templates: {
+            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
+          }
+        }).on('typeahead:selected', function (obj, datum) {
+            $('#fromId').val(datum.id);
+        });
+        
+        $('#to').typeahead(null, {
+          displayKey: 'name',
+          source: dataset.ttAdapter(),
+          templates: {
+            suggestion: Handlebars.compile('<p><strong>{{name}}</strong></p>')
+          }
+        }).on('typeahead:selected', function (obj, datum) {
+            $('#toId').val(datum.id);
+        });        
+
+        $(".tt-hint").addClass("form-control"); 
+    }); // ready end
+/*]]>*/
+</script>
+</body>
+
+</html>

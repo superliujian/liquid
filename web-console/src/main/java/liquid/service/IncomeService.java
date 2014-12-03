@@ -30,10 +30,10 @@ public class IncomeService {
     }
 
     public IncomeEntity addIncome(IncomeEntity income, String uid) {
-        income.setCreateUser(uid);
-        income.setCreateTime(new Date());
-        income.setUpdateUser(uid);
-        income.setUpdateTime(new Date());
+        income.setCreatedBy(uid);
+        income.setCreatedAt(new Date());
+        income.setUpdatedBy(uid);
+        income.setUpdatedAt(new Date());
         return incomeRepository.save(income);
     }
 

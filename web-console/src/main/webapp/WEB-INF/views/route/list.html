@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="m" class="container">
+    <div class="row">
+        <div class="col-xs-4"><h3><span th:text="#{route}"></span></h3></div>
+        <div class="col-xs-8"><br /><a href="/route/new" class="pull-right"><i class="glyphicon glyphicon-plus text-success" /></a></div>        
+    </div><!-- row -->
+    
+    <hr />    
+    
+    <div class="list-group">
+        <a th:each="row : ${page.content}" th:href="'/route/' + ${row.id}" class="list-group-item">
+            <h4 class="list-group-item-heading"><span th:text="${row.name}"></span></h4>
+            <p class="list-group-item-text"><span th:if="${row.from}" th:text="${row.from.name}" /> - <span th:if="${row.to}"  th:text="${row.to.name}" /></p>
+        </a>
+    </div>
+
+    <div th:include="layout :: pagination_bar"></div>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>

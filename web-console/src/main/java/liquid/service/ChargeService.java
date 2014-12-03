@@ -16,7 +16,7 @@ import liquid.security.SecurityContext;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.LegRepository;
-import liquid.transport.service.TransportService;
+import liquid.transport.service.ShipmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     private TaskService taskService;
 
     @Autowired
-    private TransportService transportService;
+    private ShipmentService shipmentService;
 
     // TODO: have to enhance this function.
     @Override
@@ -74,15 +74,15 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         if (null != entity.getId()) return;
 
         // new charge
-        ShipmentEntity route = null;
-        if (null != entity.getRoute()) {
-            route = transportService.find(entity.getRoute().getId());
-            entity.setOrder(route.getOrder());
+        ShipmentEntity shipment = null;
+        if (null != entity.getShipment()) {
+            shipment = shipmentService.find(entity.getShipment().getId());
+            entity.setOrder(shipment.getOrder());
         }
         if (null != entity.getLeg()) {
             LegEntity leg = legRepository.findOne(entity.getLeg().getId());
-            route = leg.getRoute();
-            entity.setOrder(route.getOrder());
+            shipment = leg.getShipment();
+            entity.setOrder(shipment.getOrder());
         }
         if (null == entity.getOrder()) {
             OrderEntity order = taskService.findOrderByTaskId(entity.getTaskId());
@@ -93,7 +93,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             entity.setTotalPrice(entity.getUnitPrice());
             entity.setUnitPrice(0L);
         } else if (ChargeWay.PER_CONTAINER.getValue() == entity.getWay()) {
-            entity.setTotalPrice(entity.getUnitPrice() * route.getContainerQty());
+            entity.setTotalPrice(entity.getUnitPrice() * shipment.getContainerQty());
         } else {
             logger.warn("{} is out of charge way range.", entity.getWay());
         }
@@ -134,8 +134,8 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         return chargeRepository.findByLegId(legId);
     }
 
-    public Iterable<ChargeEntity> findByRouteId(long routeId) {
-        return chargeRepository.findByRouteId(routeId);
+    public Iterable<ChargeEntity> findByShipmentId(long shipmentId) {
+        return chargeRepository.findByShipmentId(shipmentId);
     }
 
     public Iterable<ChargeEntity> findByTaskId(String taskId) {

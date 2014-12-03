@@ -71,7 +71,7 @@
             <td th:text="${order.containerQty}">Container Quantity</td>
             <td th:text="${order.receivableSummary.cny}">CNY Price</td>
             <td th:text="${order.receivableSummary.usd}">USD Price</td>
-            <td th:text="${order.updateTime}">Create Time</td>
+            <td th:text="${order.updatedAt}">Create Time</td>
             <td>
                 <a sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
                    th:if="${order.status} != 1"

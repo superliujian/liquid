@@ -61,6 +61,15 @@
                             -->
                         </ul>
                     </li>
+                    <li class="dropdown" sec:authorize="hasAnyRole('ROLE_MARKETING')">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span th:text="#{route}">Route</span><b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/route" th:text="#{route}">Route<b class="caret"></b></a></li>
+                            <li><a href="/shipment" th:text="#{shipment}">Shipment<b class="caret"></b></a></li>
+                        </ul>
+                    </li>
                     <li sec:authorize="hasRole('ROLE_CONTAINER')">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span th:text="#{container}">Container</span><b class="caret"></b>

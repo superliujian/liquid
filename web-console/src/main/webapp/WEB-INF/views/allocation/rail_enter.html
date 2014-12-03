@@ -19,13 +19,13 @@
 
 <div id="t" class="container" th:if="${task.assignee}">
 
-    <form method="post" th:action="'/task/' + ${taskId} + '/allocation'" th:object="${routeContainerAllocation}" > 
+    <form method="post" th:action="'/task/' + ${taskId} + '/allocation'" th:object="${shipmentContainerAllocation}" > 
 
                 <table class="table table-striped table-hover table-condensed table-16">
                     <thead>
                     <tr>
                         <th>No.</th>
-                        <th th:text="#{route}">Route</th>
+                        <th th:text="#{shipment}">Shipment</th>
                         <th th:text="#{container.type}">Container Type</th>
                         <th th:text="#{container.subtype}">Container Subtype</th>
                         <th>BIC Code</th>                        
@@ -35,7 +35,7 @@
                     <tr th:each="containerAllocation, rowStat: *{containerAllocations}">
                         <input type="hidden" th:field="*{containerAllocations[__${rowStat.index}__].allocationId}" />
                         <td th:text="${rowStat.index + 1}">Seq</td>
-                        <td th:text="${containerAllocation.routeId}">Route ID</td>
+                        <td th:text="${containerAllocation.shipmentId}">Shipment ID</td>
                         <td th:text="#{${containerAllocation.typeNameKey}}">Type Name</td>
                         <td th:text="${containerAllocation.subtypeName}">Subtype Name</td>
                         <td>
@@ -48,7 +48,7 @@
 
         <div class="row">
             <div class="col-xs-3 pull-right">
-                <input type="hidden" th:field="*{routeId}" />
+                <input type="hidden" th:field="*{shipmentId}" />
                 <input type="submit" name="allocate" value="Allocate Container" class="btn btn-success btn-block btn-sm" th:value="#{container.allocate}"/>
             </div>
         </div>                      

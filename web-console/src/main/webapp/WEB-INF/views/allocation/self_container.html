@@ -12,7 +12,7 @@
 <div th:include="layout :: task-bar"/>
 <!-- {!end task bar} -->
 
-<div th:if="${task.assignee}" th:each="routeContainerAllocation : ${routeContainerAllocations}">
+<div th:if="${task.assignee}" th:each="shipmentContainerAllocation : ${shipmentContainerAllocations}">
     <div th:include="allocation/template :: console-header"></div>
     
     <div th:include="allocation/template :: console-result"></div>

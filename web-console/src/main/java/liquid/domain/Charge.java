@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
  * Created by redbrick9 on 6/9/14.
  */
 public class Charge extends BaseIdObject {
-    private Long routeId;
+    private Long shipmentId;
     private Long legId;
     private Long serviceSubtypeId;
 
@@ -20,12 +20,12 @@ public class Charge extends BaseIdObject {
     private String taskId;
     private String comment;
 
-    public Long getRouteId() {
-        return routeId;
+    public Long getShipmentId() {
+        return shipmentId;
     }
 
-    public void setRouteId(Long routeId) {
-        this.routeId = routeId;
+    public void setShipmentId(Long shipmentId) {
+        this.shipmentId = shipmentId;
     }
 
     public Long getLegId() {
@@ -95,7 +95,7 @@ public class Charge extends BaseIdObject {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{Class=Charge");
-        sb.append(", routeId=").append(routeId);
+        sb.append(", shipmentId=").append(shipmentId);
         sb.append(", legId=").append(legId);
         sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
         sb.append(", serviceProviderId=").append(serviceProviderId);
