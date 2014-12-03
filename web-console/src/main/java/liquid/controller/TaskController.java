@@ -148,7 +148,10 @@ public class TaskController extends BaseTaskController {
         // shipment planning bar
         model.addAttribute("shipment", shipment);
         model.addAttribute("containerTotality", order.getContainerQty());
-        model.addAttribute("routes", routeService.find(order.getSrcLoc().getId(), order.getDstLoc().getId()));
+
+        List<RouteEntity> routes = routeService.find(order.getSrcLoc().getId(), order.getDstLoc().getId());
+        routes.add(RouteEntity.newInstance(RouteEntity.class, 0L));
+        model.addAttribute("routes", routes);
 
         // shipment table
         model.addAttribute("shipmentSet", shipmentSet);
@@ -209,7 +212,7 @@ public class TaskController extends BaseTaskController {
             shipmentEntityntity.setContainerQty(shipment.getContainerQuantity());
             shipmentEntityntity.setTaskId(taskId);
 
-            if (null != shipment.getRouteId()) {
+            if (null != shipment.getRouteId() && shipment.getRouteId() > 0L) {
                 RouteEntity route = routeService.findOne(shipment.getRouteId());
                 List<PathEntity> paths = route.getPaths();
                 List<LegEntity> legs = new ArrayList<>(paths.size());

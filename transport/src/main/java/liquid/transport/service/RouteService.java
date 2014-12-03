@@ -85,7 +85,7 @@ public class RouteService extends AbstractService<RouteEntity, RouteRepository> 
         return repository.findAll(pageable);
     }
 
-    public Iterable<RouteEntity> find(Long fromId, Long toId) {
+    public List<RouteEntity> find(Long fromId, Long toId) {
         return repository.findByFromIdAndToId(fromId, toId);
     }
 }

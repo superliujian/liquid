@@ -27,7 +27,7 @@
         </userTask>
         <sequenceFlow id="flow10" sourceRef="feedDistyPrice" targetRef="planShipment"/>
 
-        <userTask id="planShipment" name="路线规划">
+        <userTask id="planShipment" name="运输规划">
             <documentation>
                 ${employeeName}已经在${endTime}填写渠道价格。您需要制定运输路线方案。
             </documentation>
