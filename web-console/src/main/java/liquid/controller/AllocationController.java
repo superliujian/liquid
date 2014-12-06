@@ -150,7 +150,7 @@ public class AllocationController extends BaseTaskController {
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
-        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
+        model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
 
         model.addAttribute("taskId", taskId);
 
@@ -198,7 +198,7 @@ public class AllocationController extends BaseTaskController {
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
-        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
+        model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
 
         model.addAttribute("taskId", taskId);
 
@@ -236,7 +236,7 @@ public class AllocationController extends BaseTaskController {
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
-        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
+        model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
 
         // Owner list
         List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();

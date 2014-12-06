@@ -162,9 +162,14 @@ public class ShipmentController {
 
         ShipmentEntity shipmentEntity = shipmentService.find(id);
 
-        LegEntity legEntity = new LegEntity();
-        legEntity.setId(leg.getId());
-        legEntity.setTransMode(leg.getTransMode());
+        LegEntity legEntity = null;
+        if (null == leg.getId()) {
+            legEntity = new LegEntity();
+            legEntity.setTransMode(leg.getTransMode());
+        } else {
+            legEntity = legService.find(leg.getId());
+        }
+
         if (leg.getServiceProviderId() != null)
             legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
         legEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, leg.getSourceId()));
