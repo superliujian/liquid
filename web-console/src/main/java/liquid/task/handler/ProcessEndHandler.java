@@ -1,6 +1,5 @@
 package liquid.task.handler;
 
-import liquid.metadata.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import org.activiti.engine.delegate.DelegateExecution;
@@ -27,8 +26,6 @@ public class ProcessEndHandler implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
         String businessKey = execution.getProcessBusinessKey();
         long orderId = Long.parseLong(businessKey);
-        OrderEntity order = orderService.find(orderId);
-        order.setStatus(OrderStatus.COMPLETED.getValue());
-        orderService.save(order);
+        OrderEntity order = orderService.complete(orderId);
     }
 }

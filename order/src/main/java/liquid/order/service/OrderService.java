@@ -2,6 +2,7 @@ package liquid.order.service;
 
 import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
+import liquid.order.domain.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.persistence.repository.OrderHistoryRepository;
@@ -14,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
@@ -67,8 +67,11 @@ public class OrderService extends AbstractBaseOrderService {
         }
     }
 
-    public List<OrderEntity> findAllOrderByDesc() {
-        return repository.findAll(new Sort(Sort.Direction.DESC, "id"));
+    public OrderEntity complete(Long orderId) {
+        OrderEntity order = find(orderId);
+        order.setStatus(OrderStatus.COMPLETED.getValue());
+        order = save(order);
+        return order;
     }
 
     public Page<OrderEntity> findByCreateUser(String username, Pageable pageable) {
@@ -84,7 +87,7 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     @Transactional("transactionManager")
-    public OrderEntity find(long id) {
+    public OrderEntity find(Long id) {
         OrderEntity order = repository.findOne(id);
 
         order.setOrigination(order.getSrcLoc().getId());
@@ -101,7 +104,6 @@ public class OrderService extends AbstractBaseOrderService {
         order.setGoodsId(order.getGoods().getId());
         // Initialize one to many children
         order.getServiceItems().size();
-
         return order;
     }
 

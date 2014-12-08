@@ -13,7 +13,7 @@ import liquid.facade.ServiceProviderFacade;
 import liquid.metadata.ChargeStatus;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.metadata.OrderStatus;
+import liquid.order.domain.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;

@@ -10,7 +10,7 @@ import liquid.domain.ServiceItem;
 import liquid.domain.TradeType;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.metadata.OrderStatus;
+import liquid.order.domain.OrderStatus;
 import liquid.order.domain.Order;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;

@@ -1,4 +1,4 @@
-package liquid.metadata;
+package liquid.order.domain;
 
 /**
  * TODO: Comments.
