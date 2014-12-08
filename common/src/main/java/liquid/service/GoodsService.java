@@ -16,6 +16,10 @@ public class GoodsService {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    public Iterable<GoodsEntity> findAll() {
+        return goodsRepository.findAll();
+    }
+
     public Page<GoodsEntity> findAll(Pageable pageable) {
         return goodsRepository.findAll(pageable);
     }

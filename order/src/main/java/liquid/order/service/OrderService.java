@@ -8,7 +8,6 @@ import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.persistence.repository.OrderHistoryRepository;
 import liquid.persistence.domain.CustomerEntity_;
 import liquid.persistence.repository.CustomerRepository;
-import liquid.persistence.repository.GoodsRepository;
 import liquid.persistence.repository.LocationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +40,6 @@ public class OrderService extends AbstractBaseOrderService {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private GoodsRepository goodsRepository;
 
     @Autowired
     private OrderHistoryRepository orderHistoryRepository;
