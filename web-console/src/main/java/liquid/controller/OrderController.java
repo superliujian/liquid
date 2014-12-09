@@ -10,8 +10,8 @@ import liquid.domain.ServiceItem;
 import liquid.domain.TradeType;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.order.domain.OrderStatus;
 import liquid.order.domain.Order;
+import liquid.order.domain.OrderStatus;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
@@ -61,7 +61,7 @@ public class OrderController extends BaseController {
     private CustomerService customerService;
 
     @Autowired
-    private CargoTypeService cargoTypeService;
+    private GoodsService goodsService;
 
     @Autowired
     private TaskService taskService;
@@ -94,7 +94,7 @@ public class OrderController extends BaseController {
 
     @ModelAttribute("cargos")
     public Iterable<GoodsEntity> populateCargos() {
-        return cargoTypeService.findAll();
+        return goodsService.findAll();
     }
 
     @ModelAttribute("tradeTypes")
@@ -151,15 +151,15 @@ public class OrderController extends BaseController {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String username = SecurityContext.getInstance().getUsername();
 
-        Page<OrderEntity> page;
+        Page<Order> page;
 
         switch (SecurityContext.getInstance().getRole()) {
             case "ROLE_SALES":
             case "ROLE_MARKETING":
-                page = orderService.findByCreateUser(username, pageRequest);
+                page = orderFacade.findByCreateUser(username, pageRequest);
                 break;
             default:
-                page = orderService.findAll(pageRequest);
+                page = orderFacade.findAll(pageRequest);
                 break;
         }
 
@@ -180,15 +180,15 @@ public class OrderController extends BaseController {
         String customerName = "customerName".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
         String username = SecurityContext.getInstance().getUsername();
 
-        Page<OrderEntity> page;
+        Page<Order> page;
 
         switch (SecurityContext.getInstance().getRole()) {
             case "ROLE_SALES":
             case "ROLE_MARKETING":
-                page = orderService.findAll(orderNo, customerName, username, pageRequest);
+                page = orderFacade.findAll(orderNo, customerName, username, pageRequest);
                 break;
             default:
-                page = orderService.findAll(orderNo, customerName, null, pageRequest);
+                page = orderFacade.findAll(orderNo, customerName, null, pageRequest);
                 break;
         }
 

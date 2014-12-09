@@ -51,4 +51,12 @@ public abstract class AbstractService<E extends BaseUpdateEntity, R extends Crud
         }
         return repository.save(entities);
     }
+
+    public Iterable<E> findAll() {
+        return repository.findAll();
+    }
+
+    public E find(Long id) {
+        return repository.findOne(id);
+    }
 }

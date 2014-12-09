@@ -1,7 +1,10 @@
 package liquid.order.persistence.domain;
 
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
-import liquid.persistence.domain.*;
+import liquid.persistence.domain.BaseUpdateEntity;
+import liquid.persistence.domain.CustomerEntity;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.ServiceTypeEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -65,12 +68,8 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "CONSIGNEE_ADDR")
     private String consigneeAddress;
 
-    @Transient
-    private long goodsId;
-
-    @ManyToOne
-    @JoinColumn(name = "GOODS_ID")
-    private GoodsEntity goods;
+    @Column(name = "GOODS_ID")
+    private Long goodsId;
 
     /**
      * unit kilogram
@@ -239,14 +238,6 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setGoodsId(long goodsId) {
         this.goodsId = goodsId;
-    }
-
-    public GoodsEntity getGoods() {
-        return goods;
-    }
-
-    public void setGoods(GoodsEntity goods) {
-        this.goods = goods;
     }
 
     public int getGoodsWeight() {

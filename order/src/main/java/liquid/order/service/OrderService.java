@@ -97,7 +97,7 @@ public class OrderService extends AbstractBaseOrderService {
             order.setRailContainerSubtypeId(order.getContainerSubtypeId());
         }
         order.setCustomerName0(order.getCustomer().getName());
-        order.setGoodsId(order.getGoods().getId());
+        order.setGoodsId(order.getGoodsId());
         // Initialize one to many children
         order.getServiceItems().size();
         return order;

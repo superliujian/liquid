@@ -13,7 +13,9 @@ import liquid.facade.ServiceProviderFacade;
 import liquid.metadata.ChargeStatus;
 import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
+import liquid.order.domain.Order;
 import liquid.order.domain.OrderStatus;
+import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
@@ -53,6 +55,9 @@ public class ChargeController extends BaseController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private OrderFacade orderFacade;
 
     @Autowired
     private OrderService orderService;
@@ -230,7 +235,7 @@ public class ChargeController extends BaseController {
 
     private void list(int number, Model model, String action) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<OrderEntity> page = orderService.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
+        Page<Order> page = orderFacade.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
 
         SearchBarForm searchBarForm = new SearchBarForm();
         searchBarForm.setAction(action);
@@ -245,7 +250,7 @@ public class ChargeController extends BaseController {
         String orderNo = "orderNo".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
         String customerName = "customerName".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
 
-        Page<OrderEntity> page = orderService.findAll(orderNo, customerName, null, pageRequest);
+        Page<Order> page = orderFacade.findAll(orderNo, customerName, null, pageRequest);
 
         searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
         model.addAttribute("searchBarForm", searchBarForm);

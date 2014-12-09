@@ -59,11 +59,11 @@
                        th:text="${order.orderNo}"/>
                 </td>
                 <td th:text="${#calendars.format(order.createdAt,'yyyy/MM/dd')}"></td>
-                <td th:text="${order.customer.name}">Customer Name</td>
-                <td th:text="${order.srcLoc.name}">Origin</td>
-                <td th:text="${order.dstLoc.name}">Destination</td>
+                <td th:text="${order.customerName}">Customer Name</td>
+                <td th:text="${order.origination}">Origin</td>
+                <td th:text="${order.destination}">Destination</td>
                 <td></td>
-                <td th:text="${order.goods.name}"></td>
+                <td th:text="${order.goodsName}"></td>
                 <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
                 <td></td>
                 <td th:text="${order.containerQty}">Container Quantity</td>

@@ -58,20 +58,20 @@
                 &nbsp;
                 <a href="/order/id?action=edit" th:href="'/order/' + ${order.id}" th:text="${order.orderNo}"/>
             </td>                    
-            <td th:text="${order.customer} ? ${order.customer.name} : ''">Customer Name</td>
-            <td th:text="${order.serviceType.name}">Service Type</td>
-            <td th:text="${order.srcLoc.name}">Origin</td>
-            <td th:text="${order.dstLoc.name}">Destination</td>
-            <td th:text="${order.goods.name}">Cargo Name</td>
+            <td th:text="${order.customerName}">Customer Name</td>
+            <td th:text="${order.serviceType}">Service Type</td>
+            <td th:text="${order.origination}">Origin</td>
+            <td th:text="${order.destination}">Destination</td>
+            <td th:text="${order.goodsName}">Cargo Name</td>
             <td th:text="${order.goodsWeight}">Cargo Weight</td>
             <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
             <td th:text="#{${loadingTypes[__${order.loadingType}__].i18nKey}}">Loading Type</td>
             <td th:text="#{${containerTypeMap[order.containerType]}}">Container Type</td>
-            <td th:text="${order.containerSubtype.name}">Container Subtype</td>
-            <td th:text="${order.containerQty}">Container Quantity</td>
-            <td th:text="${order.receivableSummary.cny}">CNY Price</td>
-            <td th:text="${order.receivableSummary.usd}">USD Price</td>
-            <td th:text="${order.updatedAt}">Create Time</td>
+            <td th:text="${order.containerSubtype}">Container Subtype</td>
+            <td th:text="${order.containerQuantity}">Container Quantity</td>
+            <td th:text="${order.cnyTotal}">CNY Price</td>
+            <td th:text="${order.usdTotal}">USD Price</td>
+            <td th:text="${order.updateAt}">Update At</td>
             <td>
                 <a sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
                    th:if="${order.status} != 1"

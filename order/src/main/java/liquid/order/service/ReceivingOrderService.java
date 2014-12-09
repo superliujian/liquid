@@ -6,11 +6,10 @@ import liquid.order.persistence.domain.ReceivingOrder;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.persistence.repository.ReceivingOrderRepository;
 import liquid.persistence.domain.CustomerEntity;
-import liquid.persistence.domain.GoodsEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
-import liquid.service.CargoTypeService;
 import liquid.service.CustomerService;
+import liquid.service.GoodsService;
 import liquid.service.LocationService;
 import liquid.util.CollectionUtil;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
     private CustomerService customerService;
 
     @Autowired
-    private CargoTypeService cargoTypeService;
+    private GoodsService goodsService;
 
     @Autowired
     private LocationService locationService;
@@ -66,12 +65,10 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
     public ReceivingOrder save(ReceivingOrder order) {
         ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
         CustomerEntity customer = customerService.find(order.getCustomerId());
-        GoodsEntity goods = cargoTypeService.find(order.getGoodsId());
         LocationEntity srcLoc = locationService.find(order.getOrigination());
         LocationEntity dstLoc = locationService.find(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
         if (null != customer) order.setCustomer(customer);
-        if (null != goods) order.setGoods(goods);
         if (null != srcLoc) order.setSrcLoc(srcLoc);
         if (null != dstLoc) order.setDstLoc(dstLoc);
 
@@ -94,9 +91,9 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
         return newOne;
     }
 
-    public Iterable<ReceivingOrder> findAll() {
-        return recvOrderRepository.findAll();
-    }
+//    public Iterable<ReceivingOrder> findAll() {
+//        return recvOrderRepository.findAll();
+//    }
 
     public List<ReceivingOrder> findAllOrderByDesc() {
         return recvOrderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
@@ -110,7 +107,7 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
         order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomer().getId());
         order.setCustomerName0(order.getCustomer().getName());
-        order.setGoodsId(order.getGoods().getId());
+        order.setGoodsId(order.getGoodsId());
 
         Iterable<ReceivingContainer> containers = recvContainerRepository.findByReceivingOrder(order);
         for (ReceivingContainer container : containers) {

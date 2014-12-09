@@ -81,10 +81,17 @@ public class Order extends BaseIdObject {
     private List<ServiceItem> serviceItems;
 
     private Long receivableSummaryId;
+    private ReceivableSummary receivableSummary;
 
     @Min(1)
     private Long cnyTotal;
     private Long usdTotal;
+    private Long distyPrice = 0L;
+    private Long distyUsd = 0L;
+    private Long grandTotal = 0L;
+
+    private String createAt;
+    private String updateAt;
 
     private String role;
     private Integer status;
@@ -445,6 +452,14 @@ public class Order extends BaseIdObject {
         this.receivableSummaryId = receivableSummaryId;
     }
 
+    public ReceivableSummary getReceivableSummary() {
+        return receivableSummary;
+    }
+
+    public void setReceivableSummary(ReceivableSummary receivableSummary) {
+        this.receivableSummary = receivableSummary;
+    }
+
     public Long getCnyTotal() {
         return cnyTotal;
     }
@@ -459,6 +474,46 @@ public class Order extends BaseIdObject {
 
     public void setUsdTotal(Long usdTotal) {
         this.usdTotal = usdTotal;
+    }
+
+    public Long getDistyPrice() {
+        return distyPrice;
+    }
+
+    public void setDistyPrice(Long distyPrice) {
+        this.distyPrice = distyPrice;
+    }
+
+    public Long getDistyUsd() {
+        return distyUsd;
+    }
+
+    public void setDistyUsd(Long distyUsd) {
+        this.distyUsd = distyUsd;
+    }
+
+    public Long getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(Long grandTotal) {
+        this.grandTotal = grandTotal;
+    }
+
+    public String getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
+    }
+
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(String updateAt) {
+        this.updateAt = updateAt;
     }
 
     public String getRole() {
@@ -479,8 +534,8 @@ public class Order extends BaseIdObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("orderNo='").append(orderNo).append('\'');
+        final StringBuilder sb = new StringBuilder("{Class=Order");
+        sb.append(", orderNo='").append(orderNo).append('\'');
         sb.append(", serviceTypeId=").append(serviceTypeId);
         sb.append(", serviceType='").append(serviceType).append('\'');
         sb.append(", customerId=").append(customerId);
@@ -524,12 +579,15 @@ public class Order extends BaseIdObject {
         sb.append(", sameDay=").append(sameDay);
         sb.append(", serviceItems=").append(serviceItems);
         sb.append(", receivableSummaryId=").append(receivableSummaryId);
+        sb.append(", receivableSummary=").append(receivableSummary);
         sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", usdTotal=").append(usdTotal);
+        sb.append(", createAt='").append(createAt).append('\'');
+        sb.append(", updateAt='").append(updateAt).append('\'');
         sb.append(", role='").append(role).append('\'');
         sb.append(", status=").append(status);
+        sb.append(", ").append(super.toString());
         sb.append('}');
         return sb.toString();
     }
 }
-

@@ -1,13 +1,19 @@
 package liquid.controller;
 
-import liquid.metadata.ContainerCap;
 import liquid.container.domain.ContainerType;
 import liquid.domain.LocationType;
+import liquid.metadata.ContainerCap;
 import liquid.order.domain.OrderStatus;
 import liquid.order.persistence.domain.ReceivingOrder;
 import liquid.order.service.ReceivingOrderService;
-import liquid.persistence.domain.*;
-import liquid.service.*;
+import liquid.persistence.domain.CustomerEntity;
+import liquid.persistence.domain.GoodsEntity;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.ServiceTypeEntity;
+import liquid.service.CustomerService;
+import liquid.service.GoodsService;
+import liquid.service.LocationService;
+import liquid.service.ServiceTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +48,7 @@ public class ReceivingOrderController {
     private CustomerService customerService;
 
     @Autowired
-    private CargoTypeService cargoTypeService;
+    private GoodsService goodsService;
 
     @Autowired
     private ServiceTypeService serviceTypeService;
@@ -59,7 +65,7 @@ public class ReceivingOrderController {
 
     @ModelAttribute("cargos")
     public Iterable<GoodsEntity> populateCargoTypes() {
-        return cargoTypeService.findAll();
+        return goodsService.findAll();
     }
 
     @ModelAttribute("locations")
