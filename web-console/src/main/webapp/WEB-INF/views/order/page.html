@@ -16,7 +16,7 @@
     
         <div class="col-xs-3 pull-right">
             <br />
-            <form method="GET" role="form" th:action="${searchBarForm.action}" th:object="${searchBarForm}">
+            <form method="GET" role="form" action="/order/search" th:object="${searchBarForm}">
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{type}"/>
                 <div class="input-group input-group-sm">

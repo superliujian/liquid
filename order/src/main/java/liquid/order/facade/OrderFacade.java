@@ -374,4 +374,13 @@ public class OrderFacade {
         if (name.equals(customer.getName())) return FormValidationResult.newSuccess();
         else return FormValidationResult.newFailure("invalid.customer");
     }
+
+    public Page<Order> findByCustomerId(Long customerId, Pageable pageable) {
+        Page<OrderEntity> page = orderService.findByCustomerId(customerId, SecurityContext.getInstance().getUsername(), pageable);
+
+        List<OrderEntity> entities = page.getContent();
+        List<Order> orders = convert(entities);
+
+        return new PageImpl<Order>(orders, pageable, page.getTotalElements());
+    }
 }

@@ -148,4 +148,16 @@ public class OrderService extends AbstractBaseOrderService {
 
         return repository.findAll(pageable);
     }
+
+    public Page<OrderEntity> findByCustomerId(Long customerId, String createdBy, Pageable pageable) {
+        return repository.findByCustomerIdAndCreatedBy(customerId, createdBy, pageable);
+    }
+
+    public Page<OrderEntity> findByOrderNoLike(String orderNo, Pageable pageable) {
+        return repository.findByOrderNoLike("%" + orderNo + "%", pageable);
+    }
+
+    public Iterable<OrderEntity> findByOrderNoLike(String orderNo) {
+        return repository.findByOrderNoLike("%" + orderNo + "%");
+    }
 }

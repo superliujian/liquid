@@ -41,6 +41,9 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaR
      */
     Page<OrderEntity> findByStatus(Integer status, Pageable pageable);
 
-    @Deprecated
+    Page<OrderEntity> findByOrderNoLike(String orderNo, Pageable pageable);
+
     Iterable<OrderEntity> findByOrderNoLike(String orderNo);
+
+    Page<OrderEntity> findByCustomerIdAndCreatedBy(Long customerId, String createdBy, Pageable pageable);
 }

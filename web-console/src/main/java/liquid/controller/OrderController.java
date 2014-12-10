@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -173,8 +175,25 @@ public class OrderController extends BaseController {
         return "order/page";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = {"type", "text"})
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String search(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
+        Page<Order> page = null;
+        if ("customer".equals(searchBarForm.getType())) {
+            PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+            page = orderFacade.findByCustomerId(searchBarForm.getId(), pageRequest);
+        } else if ("order".equals(searchBarForm.getType())) {
+            Order order = orderFacade.find(searchBarForm.getId());
+            List<Order> orders = new ArrayList<>();
+            orders.add(order);
+            page = new PageImpl<Order>(orders);
+        }
+        model.addAttribute("page", page);
+        model.addAttribute("searchBarForm", searchBarForm);
+        return "order/page";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"type", "text"})
+    public String search0(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
         String orderNo = "orderNo".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
         String customerName = "customerName".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
