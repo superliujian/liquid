@@ -15,6 +15,10 @@ function initCustomerAc() {
     return initAcEngine({url: '/api/customer?name=%QUERY'});
 }
 
+function initOrderAc() {
+    return initAcEngine({url: '/api/order?text=%QUERY'});
+}
+
 function initSpAc() {
     return initAcEngine({url: '/api/sp?name=%QUERY'});
 }

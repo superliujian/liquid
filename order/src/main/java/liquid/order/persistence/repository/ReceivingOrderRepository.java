@@ -12,6 +12,4 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ReceivingOrderRepository extends CrudRepository<ReceivingOrder, Long>, JpaRepository<ReceivingOrder, Long> {
     Iterable<ReceivingOrder> findByOrderNoLike(String orderNo);
-
-    Iterable<ReceivingOrder> findByCustomerNameLike(String cumtomerName);
 }

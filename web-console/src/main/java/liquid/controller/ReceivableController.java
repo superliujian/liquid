@@ -6,6 +6,7 @@ import liquid.order.persistence.domain.ReceivableSettlementEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.ReceivableSettlementService;
 import liquid.persistence.domain.CustomerEntity;
+import liquid.service.CustomerService;
 import liquid.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class ReceivableController {
     private OrderService orderService;
 
     @Autowired
+    private CustomerService customerService;
+
+    @Autowired
     private ReceivableSettlementService receivableSettlementService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -47,8 +51,8 @@ public class ReceivableController {
 
         formBean.setCnyOfInvoice(cnyOfInvoice);
         formBean.setUsdOfInvoice(usdOfInvoice);
-        formBean.setPayerId(order.getCustomer().getId());
-        formBean.setPayerName(order.getCustomer().getName());
+        formBean.setPayerId(order.getCustomerId());
+        formBean.setPayerName(customerService.find(order.getCustomerId()).getName());
         formBean.setDateOfInvoice(DateUtil.dayStrOf());
         formBean.setExpectedDateOfReceivable(DateUtil.dayStrOf());
         formBean.setCny(cnyOfInvoice);

@@ -179,7 +179,7 @@ public class OrderFacade {
         orderEntity.setId(order.getId());
         orderEntity.setOrderNo(order.getOrderNo());
         orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
-        orderEntity.setCustomer(CustomerEntity.newInstance(CustomerEntity.class, order.getCustomerId()));
+        orderEntity.setCustomerId(order.getCustomerId());
         orderEntity.setTradeType(order.getTradeType());
         orderEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, order.getOriginId()));
         orderEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, order.getDestinationId()));
@@ -275,8 +275,8 @@ public class OrderFacade {
         order.setOrderNo(orderEntity.getOrderNo());
         order.setServiceTypeId(orderEntity.getServiceType().getId());
         order.setServiceType(orderEntity.getServiceType().getName());
-        order.setCustomerId(orderEntity.getCustomer().getId());
-        order.setCustomerName(orderEntity.getCustomer().getName());
+        order.setCustomerId(orderEntity.getCustomerId());
+        order.setCustomerName(customerService.find(orderEntity.getCustomerId()).getName());
         order.setTradeType(orderEntity.getTradeType());
         order.setTradeTypeName(TradeType.valueOf(orderEntity.getTradeType()).getI18nKey());
         order.setOriginId(orderEntity.getSrcLoc().getId());

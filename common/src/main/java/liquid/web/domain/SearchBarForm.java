@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class SearchBarForm {
     private String action;
     private String types[][];
+    private Long id;
     private String type;
     private String text;
 
@@ -25,6 +26,14 @@ public class SearchBarForm {
 
     public void setTypes(String[][] types) {
         this.types = types;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getType() {
@@ -48,6 +57,7 @@ public class SearchBarForm {
         final StringBuilder sb = new StringBuilder("{Class=SearchBarForm");
         sb.append(", action='").append(action).append('\'');
         sb.append(", types=").append(Arrays.toString(types));
+        sb.append(", id=").append(id);
         sb.append(", type='").append(type).append('\'');
         sb.append(", text='").append(text).append('\'');
         sb.append('}');

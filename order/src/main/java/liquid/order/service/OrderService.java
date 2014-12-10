@@ -6,8 +6,6 @@ import liquid.order.domain.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.persistence.repository.OrderHistoryRepository;
-import liquid.persistence.domain.CustomerEntity_;
-import liquid.persistence.repository.CustomerRepository;
 import liquid.persistence.repository.LocationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +35,6 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @Service
 public class OrderService extends AbstractBaseOrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
-
-    @Autowired
-    private CustomerRepository customerRepository;
 
     @Autowired
     private OrderHistoryRepository orderHistoryRepository;
@@ -89,14 +84,13 @@ public class OrderService extends AbstractBaseOrderService {
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setServiceTypeId(order.getServiceType().getId());
-        order.setCustomerId(order.getCustomer().getId());
+        order.setCustomerId(order.getCustomerId());
         order.setContainerSubtypeId(order.getContainerSubtype().getId());
         if (order.getContainerType() == ContainerType.SELF.getType()) {
             order.setOwnContainerSubtypeId(order.getContainerSubtypeId());
         } else {
             order.setRailContainerSubtypeId(order.getContainerSubtypeId());
         }
-        order.setCustomerName0(order.getCustomer().getName());
         order.setGoodsId(order.getGoodsId());
         // Initialize one to many children
         order.getServiceItems().size();
@@ -125,15 +119,15 @@ public class OrderService extends AbstractBaseOrderService {
             specList.add(orderNoSpec);
         }
 
-        if (null != customerName) {
-            Specification<OrderEntity> customerNameSpec = new Specification<OrderEntity>() {
-                @Override
-                public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
-                    return builder.like(root.get(OrderEntity_.customer).get(CustomerEntity_.name), "%" + customerName + "%");
-                }
-            };
-            specList.add(customerNameSpec);
-        }
+//        if (null != customerName) {
+//            Specification<OrderEntity> customerNameSpec = new Specification<OrderEntity>() {
+//                @Override
+//                public Predicate toPredicate(Root<OrderEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
+//                    return builder.like(root.get(OrderEntity_.customer).get(CustomerEntity_.name), "%" + customerName + "%");
+//                }
+//            };
+//            specList.add(customerNameSpec);
+//        }
 
         if (null != username) {
             Specification<OrderEntity> usernameSpec = new Specification<OrderEntity>() {

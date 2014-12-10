@@ -2,14 +2,11 @@ package liquid.order.persistence.domain;
 
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
-import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 /**
  * TODO: Comments.
@@ -30,20 +27,8 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "ORDER_NO")
     private String orderNo;
 
-    @Transient
+    @Column(name = "CUSTOMER_ID")
     private long customerId;
-
-    /**
-     * Can't use customerName, there is a conflict with Repository
-     */
-    @NotNull
-    @NotEmpty
-    @Transient
-    private String customerName0;
-
-    @ManyToOne
-    @JoinColumn(name = "CUSTOMER_ID")
-    private CustomerEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
@@ -158,22 +143,6 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setCustomerId(long customerId) {
         this.customerId = customerId;
-    }
-
-    public String getCustomerName0() {
-        return customerName0;
-    }
-
-    public void setCustomerName0(String customerName0) {
-        this.customerName0 = customerName0;
-    }
-
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
     }
 
     public LocationEntity getSrcLoc() {

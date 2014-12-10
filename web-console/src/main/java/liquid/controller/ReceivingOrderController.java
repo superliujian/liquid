@@ -97,14 +97,6 @@ public class ReceivingOrderController {
         return "recv_order/find";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "findByCustomerName")
-    public String findByCustomerName(@RequestParam String param, Model model, Principal principal) {
-        logger.debug("param: {}", param);
-
-        model.addAttribute("orders", recvOrderService.findByCustomerName(param));
-        return "recv_order/find";
-    }
-
     @RequestMapping(method = RequestMethod.GET, params = "add")
     public String initCreationForm(Model model) {
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());

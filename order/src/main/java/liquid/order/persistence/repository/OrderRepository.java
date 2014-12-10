@@ -43,7 +43,4 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaR
 
     @Deprecated
     Iterable<OrderEntity> findByOrderNoLike(String orderNo);
-
-    @Deprecated
-    Iterable<OrderEntity> findByCustomerNameLike(String cumtomerName);
 }

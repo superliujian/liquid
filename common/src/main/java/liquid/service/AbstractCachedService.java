@@ -10,7 +10,7 @@ import java.util.TreeMap;
  * Created by Tao Ma on 12/8/14.
  */
 public abstract class AbstractCachedService<E extends BaseUpdateEntity, R extends CrudRepository<E, Long>> extends AbstractService<E, R> {
-    private final Map<Long, E> cache = new TreeMap<>();
+    protected final Map<Long, E> cache = new TreeMap<>();
     private Object lock = new Object();
 
     @Override
@@ -43,10 +43,12 @@ public abstract class AbstractCachedService<E extends BaseUpdateEntity, R extend
     public E find(Long id) {
         E e = null;
         e = cache.get(id);
-        synchronized (lock) {
-            if (null == e) {
-                reload();
-                e = cache.get(id);
+        if (null == e) {
+            synchronized (lock) {
+                if (null == e) {
+                    reload();
+                    e = cache.get(id);
+                }
             }
         }
         return e;

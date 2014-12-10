@@ -6,6 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * TODO: Comments.
  * User: tao
@@ -13,14 +17,9 @@ import org.springframework.stereotype.Service;
  * Time: 6:28 PM
  */
 @Service
-public class CustomerService extends AbstractService<CustomerEntity, CustomerRepository> {
-    public CustomerEntity find(Long id) {
-        return repository.findOne(id);
-    }
-
-    public Iterable<CustomerEntity> findAll() {
-        return repository.findAll();
-    }
+public class CustomerService extends AbstractCachedService<CustomerEntity, CustomerRepository> {
+    @Override
+    public void doSaveBefore(CustomerEntity entity) { }
 
     public Page<CustomerEntity> findAll(Pageable pageable) {
         return repository.findAll(pageable);
@@ -39,6 +38,14 @@ public class CustomerService extends AbstractService<CustomerEntity, CustomerRep
         return repository.findByQueryNameLike("%" + name + "%", pageable);
     }
 
-    @Override
-    public void doSaveBefore(CustomerEntity entity) { }
+    public Iterable<CustomerEntity> findByQueryNameLike(String name) {
+        List<CustomerEntity> result = new ArrayList<>();
+
+        Iterable<CustomerEntity> entities = super.findAll();
+        for (CustomerEntity entity : entities) {
+            int index = entity.getQueryName().indexOf(name);
+            if (index > -1) result.add(entity);
+        }
+        return result;
+    }
 }

@@ -68,7 +68,7 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
         LocationEntity srcLoc = locationService.find(order.getOrigination());
         LocationEntity dstLoc = locationService.find(order.getDestination());
         if (null != serviceType) order.setServiceType(serviceType);
-        if (null != customer) order.setCustomer(customer);
+
         if (null != srcLoc) order.setSrcLoc(srcLoc);
         if (null != dstLoc) order.setDstLoc(dstLoc);
 
@@ -105,8 +105,7 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
         order.setOrigination(order.getSrcLoc().getId());
         order.setDestination(order.getDstLoc().getId());
         order.setServiceTypeId(order.getServiceType().getId());
-        order.setCustomerId(order.getCustomer().getId());
-        order.setCustomerName0(order.getCustomer().getName());
+        order.setCustomerId(order.getCustomerId());
         order.setGoodsId(order.getGoodsId());
 
         Iterable<ReceivingContainer> containers = recvContainerRepository.findByReceivingOrder(order);
@@ -119,9 +118,5 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
 
     public Iterable<ReceivingOrder> findByOrderNo(String orderNo) {
         return recvOrderRepository.findByOrderNoLike("%" + orderNo + "%");
-    }
-
-    public Iterable<ReceivingOrder> findByCustomerName(String customerName) {
-        return recvOrderRepository.findByCustomerNameLike("%" + customerName + "%");
     }
 }
