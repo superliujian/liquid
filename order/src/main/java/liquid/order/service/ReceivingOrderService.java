@@ -7,7 +7,6 @@ import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.persistence.repository.ReceivingOrderRepository;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.service.CustomerService;
 import liquid.service.GoodsService;
 import liquid.service.LocationService;
@@ -52,26 +51,18 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
     public ReceivingOrder newOrder(List<LocationEntity> locationEntities) {
         ReceivingOrder order = new ReceivingOrder();
         LocationEntity second = CollectionUtil.tryToGet2ndElement(locationEntities);
-        order.setOrigination(second.getId());
+        order.setSrcLocId(second.getId());
         return order;
     }
 
     @Override
-    public void doSaveBefore(OrderEntity entity) {
-
-    }
+    public void doSaveBefore(OrderEntity entity) { }
 
     @Transactional(value = "transactionManager")
     public ReceivingOrder save(ReceivingOrder order) {
-        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
+//        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
         CustomerEntity customer = customerService.find(order.getCustomerId());
-        LocationEntity srcLoc = locationService.find(order.getOrigination());
-        LocationEntity dstLoc = locationService.find(order.getDestination());
-        if (null != serviceType) order.setServiceType(serviceType);
-
-        if (null != srcLoc) order.setSrcLoc(srcLoc);
-        if (null != dstLoc) order.setDstLoc(dstLoc);
-
+//        if (null != serviceType) order.setServiceType(serviceType);
         order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
         logger.debug("receivingOrder: {}", order);
         ReceivingOrder newOne = recvOrderRepository.save(order);
@@ -102,9 +93,6 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
     public ReceivingOrder find(long id) {
         ReceivingOrder order = recvOrderRepository.findOne(id);
 
-        order.setOrigination(order.getSrcLoc().getId());
-        order.setDestination(order.getDstLoc().getId());
-        order.setServiceTypeId(order.getServiceType().getId());
         order.setCustomerId(order.getCustomerId());
         order.setGoodsId(order.getGoodsId());
 

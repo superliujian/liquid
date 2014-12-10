@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -119,52 +118,7 @@ public class ContainerController extends BaseController {
             List<ContainerEntity> containers = containerService.findBicCode(bicCode);
             if (null == containers) containers = new ArrayList<>();
             final List<ContainerEntity> list = containers;
-            model.addAttribute("page", new Page<ContainerEntity>() {
-                @Override
-                public int getTotalPages() { return 1; }
-
-                @Override
-                public long getTotalElements() { return list.size(); }
-
-                @Override
-                public int getNumber() { return 0; }
-
-                @Override
-                public int getSize() { return list.size(); }
-
-                @Override
-                public int getNumberOfElements() { return 0;}
-
-                @Override
-                public List<ContainerEntity> getContent() {return list; }
-
-                @Override
-                public boolean hasContent() {return true; }
-
-                @Override
-                public Sort getSort() {return null; }
-
-                @Override
-                public boolean isFirst() {return true; }
-
-                @Override
-                public boolean isLast() { return false; }
-
-                @Override
-                public boolean hasNext() { return false; }
-
-                @Override
-                public boolean hasPrevious() { return false; }
-
-                @Override
-                public Pageable nextPageable() { return null; }
-
-                @Override
-                public Pageable previousPageable() { return null; }
-
-                @Override
-                public Iterator<ContainerEntity> iterator() { return null; }
-            });
+            model.addAttribute("page", new PageImpl<ContainerEntity>(list));
         } else {
             PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
             Page<ContainerEntity> page = containerService.findAll(subtypeId, ownerId, yardId, pageRequest);

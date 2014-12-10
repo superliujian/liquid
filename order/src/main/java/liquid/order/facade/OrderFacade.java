@@ -3,7 +3,9 @@ package liquid.order.facade;
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.domain.Currency;
-import liquid.domain.*;
+import liquid.domain.LoadingType;
+import liquid.domain.ServiceItem;
+import liquid.domain.TradeType;
 import liquid.order.domain.Order;
 import liquid.order.domain.ReceivableSummary;
 import liquid.order.persistence.domain.OrderEntity;
@@ -19,7 +21,6 @@ import liquid.service.GoodsService;
 import liquid.service.LocationService;
 import liquid.service.ServiceTypeService;
 import liquid.task.service.ActivitiEngineService;
-import liquid.util.CollectionUtil;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,10 @@ public class OrderFacade {
 
     public Order initOrder() {
         Order order = new Order();
-        List<LocationEntity> locations = locationService.findByType(LocationType.CITY.getType());
-        LocationEntity secondCity = CollectionUtil.tryToGet2ndElement(locations);
-        order.setDestinationId(secondCity.getId());
+        order.setOriginId(Long.valueOf(env.getProperty("default.origin.id")));
+        order.setOrigination(locationService.find(Long.valueOf(env.getProperty("default.origin.id"))).getName());
+        order.setDestinationId(Long.valueOf(env.getProperty("default.destination.id")));
+        order.setDestination(locationService.find(Long.valueOf(env.getProperty("default.destination.id"))).getName());
         order.setLoadingEstimatedTime(DateUtil.stringOf(new Date()));
 
         order.setPlanReportTime(DateUtil.stringOf(new Date()));
@@ -181,8 +183,8 @@ public class OrderFacade {
         orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
         orderEntity.setCustomerId(order.getCustomerId());
         orderEntity.setTradeType(order.getTradeType());
-        orderEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, order.getOriginId()));
-        orderEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, order.getDestinationId()));
+        orderEntity.setSrcLocId(order.getOriginId());
+        orderEntity.setDstLocId(order.getDestinationId());
         orderEntity.setConsignee(order.getConsignee());
         orderEntity.setConsigneePhone(order.getConsigneePhone());
         orderEntity.setConsigneeAddress(order.getConsigneeAddress());
@@ -279,10 +281,10 @@ public class OrderFacade {
         order.setCustomerName(customerService.find(orderEntity.getCustomerId()).getName());
         order.setTradeType(orderEntity.getTradeType());
         order.setTradeTypeName(TradeType.valueOf(orderEntity.getTradeType()).getI18nKey());
-        order.setOriginId(orderEntity.getSrcLoc().getId());
-        order.setOrigination(orderEntity.getSrcLoc().getName());
-        order.setDestinationId(orderEntity.getDstLoc().getId());
-        order.setDestination(orderEntity.getDstLoc().getName());
+        order.setOriginId(orderEntity.getSrcLocId());
+        order.setOrigination(locationService.find(orderEntity.getSrcLocId()).getName());
+        order.setDestinationId(orderEntity.getDstLocId());
+        order.setDestination(locationService.find(orderEntity.getDstLocId()).getName());
         order.setConsignee(orderEntity.getConsignee());
         order.setConsigneePhone(orderEntity.getConsigneePhone());
         order.setConsigneeAddress(orderEntity.getConsigneeAddress());

@@ -2,7 +2,6 @@ package liquid.order.persistence.domain;
 
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
-import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
 
 import javax.persistence.*;
@@ -16,10 +15,6 @@ import javax.validation.constraints.Min;
  */
 @MappedSuperclass
 public class BaseOrder extends BaseUpdateEntity {
-    // Receiving order use it.
-    @Transient
-    private long serviceTypeId;
-
     @ManyToOne
     @JoinColumn(name = "SERVICE_TYPE_ID")
     private ServiceTypeEntity serviceType;
@@ -30,19 +25,11 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "CUSTOMER_ID")
     private long customerId;
 
-    @ManyToOne
-    @JoinColumn(name = "SRC_LOC_ID")
-    private LocationEntity srcLoc;
+    @Column(name = "SRC_LOC_ID")
+    private Long srcLocId;
 
-    @Transient
-    private long origination;
-
-    @ManyToOne
-    @JoinColumn(name = "DST_LOC_ID")
-    private LocationEntity dstLoc;
-
-    @Transient
-    private long destination;
+    @Column(name = "DST_LOC_ID")
+    private Long dstLocId;
 
     @Column(name = "CONSIGNEE")
     private String consignee;
@@ -113,14 +100,6 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "STATUS")
     private int status;
 
-    public long getServiceTypeId() {
-        return serviceTypeId;
-    }
-
-    public void setServiceTypeId(long serviceTypeId) {
-        this.serviceTypeId = serviceTypeId;
-    }
-
     public ServiceTypeEntity getServiceType() {
         return serviceType;
     }
@@ -145,36 +124,20 @@ public class BaseOrder extends BaseUpdateEntity {
         this.customerId = customerId;
     }
 
-    public LocationEntity getSrcLoc() {
-        return srcLoc;
+    public Long getSrcLocId() {
+        return srcLocId;
     }
 
-    public void setSrcLoc(LocationEntity srcLoc) {
-        this.srcLoc = srcLoc;
+    public void setSrcLocId(Long srcLocId) {
+        this.srcLocId = srcLocId;
     }
 
-    public long getOrigination() {
-        return origination;
+    public Long getDstLocId() {
+        return dstLocId;
     }
 
-    public void setOrigination(long origination) {
-        this.origination = origination;
-    }
-
-    public LocationEntity getDstLoc() {
-        return dstLoc;
-    }
-
-    public void setDstLoc(LocationEntity dstLoc) {
-        this.dstLoc = dstLoc;
-    }
-
-    public long getDestination() {
-        return destination;
-    }
-
-    public void setDestination(long destination) {
-        this.destination = destination;
+    public void setDstLocId(Long dstLocId) {
+        this.dstLocId = dstLocId;
     }
 
     public String getConsignee() {
@@ -201,11 +164,11 @@ public class BaseOrder extends BaseUpdateEntity {
         this.consigneeAddress = consigneeAddress;
     }
 
-    public long getGoodsId() {
+    public Long getGoodsId() {
         return goodsId;
     }
 
-    public void setGoodsId(long goodsId) {
+    public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
     }
 

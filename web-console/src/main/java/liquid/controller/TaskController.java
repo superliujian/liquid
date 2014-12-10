@@ -149,7 +149,7 @@ public class TaskController extends BaseTaskController {
         model.addAttribute("shipment", shipment);
         model.addAttribute("containerTotality", order.getContainerQty());
 
-        List<RouteEntity> routes = routeService.find(order.getSrcLoc().getId(), order.getDstLoc().getId());
+        List<RouteEntity> routes = routeService.find(order.getSrcLocId(), order.getDstLocId());
         routes.add(RouteEntity.newInstance(RouteEntity.class, 0L));
         model.addAttribute("routes", routes);
 

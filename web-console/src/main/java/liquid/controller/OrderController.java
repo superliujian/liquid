@@ -192,6 +192,7 @@ public class OrderController extends BaseController {
         return "order/page";
     }
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET, params = {"type", "text"})
     public String search0(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));

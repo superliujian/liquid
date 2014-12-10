@@ -80,11 +80,6 @@ public class OrderService extends AbstractBaseOrderService {
     @Transactional("transactionManager")
     public OrderEntity find(Long id) {
         OrderEntity order = repository.findOne(id);
-
-        order.setOrigination(order.getSrcLoc().getId());
-        order.setDestination(order.getDstLoc().getId());
-        order.setServiceTypeId(order.getServiceType().getId());
-        order.setCustomerId(order.getCustomerId());
         order.setContainerSubtypeId(order.getContainerSubtype().getId());
         if (order.getContainerType() == ContainerType.SELF.getType()) {
             order.setOwnContainerSubtypeId(order.getContainerSubtypeId());
