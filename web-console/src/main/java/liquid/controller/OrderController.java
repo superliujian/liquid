@@ -177,7 +177,7 @@ public class OrderController extends BaseController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String search(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
-        Page<Order> page = null;
+        Page<Order> page = new PageImpl<Order>(new ArrayList<>());
         if ("customer".equals(searchBarForm.getType())) {
             PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
             page = orderFacade.findByCustomerId(searchBarForm.getId(), pageRequest);

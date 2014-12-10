@@ -11,5 +11,5 @@
 # Dir #
 .idea
 **/target
-**/log
+**/logs
 **/supervise

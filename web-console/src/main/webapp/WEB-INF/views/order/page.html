@@ -20,7 +20,7 @@
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{type}"/>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control input-sm" th:field="*{text}" />
+                    <input type="text" class="form-control input-sm" th:field="*{text}" th:placeholder="#{customer.name} + ' ' + #{order.no}" />
                     
                     <span class="input-group-btn">                    
                         <button type="submit" name="search" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
