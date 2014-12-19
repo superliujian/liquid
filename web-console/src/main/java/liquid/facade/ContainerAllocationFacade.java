@@ -2,9 +2,10 @@ package liquid.facade;
 
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerEntity;
+import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.ContainerAllocation;
-import liquid.domain.ShipmentContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
+import liquid.domain.ShipmentContainerAllocation;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.transport.persistence.domain.ShipmentEntity;
@@ -38,6 +39,9 @@ public class ContainerAllocationFacade {
     @Autowired
     private ContainerAllocationService containerAllocationService;
 
+    @Autowired
+    private ContainerSubtypeService containerSubtypeService;
+
     public List<ShipmentContainerAllocation> computeContainerAllocation(Long orderId) {
         OrderEntity order = orderService.find(orderId);
         return computeContainerAllocation(order);
@@ -47,7 +51,7 @@ public class ContainerAllocationFacade {
         List<ShipmentContainerAllocation> shipmentContainerAllocations = new ArrayList<>();
 
         int type = order.getContainerType();
-        String subtypeName = order.getContainerSubtype().getName();
+        String subtypeName = containerSubtypeService.find(order.getContainerSubtypeId()).getName();
 
         Iterable<ShipmentEntity> shipmentSet = shipmentService.findByOrderId(order.getId());
         for (ShipmentEntity shipment : shipmentSet) {

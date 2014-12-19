@@ -1,8 +1,6 @@
 package liquid.order.persistence.domain;
 
-import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
-import liquid.persistence.domain.ServiceTypeEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -15,9 +13,8 @@ import javax.validation.constraints.Min;
  */
 @MappedSuperclass
 public class BaseOrder extends BaseUpdateEntity {
-    @ManyToOne
-    @JoinColumn(name = "SERVICE_TYPE_ID")
-    private ServiceTypeEntity serviceType;
+    @Column(name = "SERVICE_TYPE_ID")
+    private Long serviceTypeId;
 
     @Column(name = "ORDER_NO")
     private String orderNo;
@@ -57,18 +54,8 @@ public class BaseOrder extends BaseUpdateEntity {
     private int containerType;
 
     // The following three filed are used for list order
-    @Transient
-    private long containerSubtypeId;
-
-    @Transient
-    private long railContainerSubtypeId;
-
-    @Transient
-    private long ownContainerSubtypeId;
-
-    @ManyToOne
-    @JoinColumn(name = "CONTAINER_SUBTYPE_ID")
-    private ContainerSubtypeEntity containerSubtype;
+    @Column(name = "CONTAINER_SUBTYPE_ID")
+    private Long containerSubtypeId;
 
     @Column(name = "CONTAINER_CAP")
     private int containerCap;
@@ -80,7 +67,7 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "CONTAINER_ATTR")
     private String containerAttribute;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     @JoinColumn(name = "RAILWAY_ID")
     private OrderRailEntity railway;
 
@@ -100,12 +87,12 @@ public class BaseOrder extends BaseUpdateEntity {
     @Column(name = "STATUS")
     private int status;
 
-    public ServiceTypeEntity getServiceType() {
-        return serviceType;
+    public Long getServiceTypeId() {
+        return serviceTypeId;
     }
 
-    public void setServiceType(ServiceTypeEntity serviceType) {
-        this.serviceType = serviceType;
+    public void setServiceTypeId(Long serviceType) {
+        this.serviceTypeId = serviceTypeId;
     }
 
     public String getOrderNo() {
@@ -196,36 +183,12 @@ public class BaseOrder extends BaseUpdateEntity {
         this.containerType = containerType;
     }
 
-    public long getContainerSubtypeId() {
+    public Long getContainerSubtypeId() {
         return containerSubtypeId;
     }
 
-    public void setContainerSubtypeId(long containerSubtypeId) {
+    public void setContainerSubtypeId(Long containerSubtypeId) {
         this.containerSubtypeId = containerSubtypeId;
-    }
-
-    public long getRailContainerSubtypeId() {
-        return railContainerSubtypeId;
-    }
-
-    public void setRailContainerSubtypeId(long railContainerSubtypeId) {
-        this.railContainerSubtypeId = railContainerSubtypeId;
-    }
-
-    public long getOwnContainerSubtypeId() {
-        return ownContainerSubtypeId;
-    }
-
-    public void setOwnContainerSubtypeId(long ownContainerSubtypeId) {
-        this.ownContainerSubtypeId = ownContainerSubtypeId;
-    }
-
-    public ContainerSubtypeEntity getContainerSubtype() {
-        return containerSubtype;
-    }
-
-    public void setContainerSubtype(ContainerSubtypeEntity containerSubtype) {
-        this.containerSubtype = containerSubtype;
     }
 
     public int getContainerCap() {

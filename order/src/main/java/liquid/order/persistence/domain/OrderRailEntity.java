@@ -1,10 +1,11 @@
 package liquid.order.persistence.domain;
 
 import liquid.persistence.domain.BaseIdEntity;
-import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.RailPlanTypeEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Date;
 
 /**
@@ -19,20 +20,17 @@ public class OrderRailEntity extends BaseIdEntity {
     @Column(name = "PLAN_REPORT_TIME")
     private Date planReportTime;
 
-    @ManyToOne
-    @JoinColumn(name = "PLAN_TYPE")
-    private RailPlanTypeEntity planType;
+    @Column(name = "PLAN_TYPE")
+    private Long planType;
 
     @Column(name = "PROGRAM_NO")
     private String programNo;
 
-    @ManyToOne
-    @JoinColumn(name = "SOURCE_ID")
-    private LocationEntity source;
+    @Column(name = "SOURCE_ID")
+    private Long sourceId;
 
-    @ManyToOne
-    @JoinColumn(name = "DESTINATION_ID")
-    private LocationEntity destination;
+    @Column(name = "DESTINATION_ID")
+    private Long destinationId;
 
     @Column(name = "COMMENT")
     private String comment;
@@ -56,11 +54,11 @@ public class OrderRailEntity extends BaseIdEntity {
         this.planReportTime = planReportTime;
     }
 
-    public RailPlanTypeEntity getPlanType() {
+    public Long getPlanType() {
         return planType;
     }
 
-    public void setPlanType(RailPlanTypeEntity planType) {
+    public void setPlanType(Long planType) {
         this.planType = planType;
     }
 
@@ -72,20 +70,20 @@ public class OrderRailEntity extends BaseIdEntity {
         this.programNo = programNo;
     }
 
-    public LocationEntity getSource() {
-        return source;
+    public Long getSourceId() {
+        return sourceId;
     }
 
-    public void setSource(LocationEntity source) {
-        this.source = source;
+    public void setSourceId(Long sourceId) {
+        this.sourceId = sourceId;
     }
 
-    public LocationEntity getDestination() {
-        return destination;
+    public Long getDestinationId() {
+        return destinationId;
     }
 
-    public void setDestination(LocationEntity destination) {
-        this.destination = destination;
+    public void setDestinationId(Long destinationId) {
+        this.destinationId = destinationId;
     }
 
     public String getComment() {

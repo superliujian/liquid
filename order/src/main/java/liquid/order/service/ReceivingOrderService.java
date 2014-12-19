@@ -63,7 +63,7 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
 //        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
         CustomerEntity customer = customerService.find(order.getCustomerId());
 //        if (null != serviceType) order.setServiceType(serviceType);
-        order.setOrderNo(computeOrderNo(order.getCreateRole(), order.getServiceType().getCode()));
+        order.setOrderNo(computeOrderNo(order.getCreateRole(), serviceTypeService.find(order.getServiceTypeId()).getCode()));
         logger.debug("receivingOrder: {}", order);
         ReceivingOrder newOne = recvOrderRepository.save(order);
 

@@ -1,6 +1,5 @@
 package liquid.order.service;
 
-import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.order.domain.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
@@ -80,12 +79,7 @@ public class OrderService extends AbstractBaseOrderService {
     @Transactional("transactionManager")
     public OrderEntity find(Long id) {
         OrderEntity order = repository.findOne(id);
-        order.setContainerSubtypeId(order.getContainerSubtype().getId());
-        if (order.getContainerType() == ContainerType.SELF.getType()) {
-            order.setOwnContainerSubtypeId(order.getContainerSubtypeId());
-        } else {
-            order.setRailContainerSubtypeId(order.getContainerSubtypeId());
-        }
+        order.setContainerSubtypeId(order.getContainerSubtypeId());
         order.setGoodsId(order.getGoodsId());
         // Initialize one to many children
         order.getServiceItems().size();

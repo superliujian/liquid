@@ -1,7 +1,7 @@
 package liquid.order.facade;
 
 import liquid.container.domain.ContainerType;
-import liquid.container.persistence.domain.ContainerSubtypeEntity;
+import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.Currency;
 import liquid.domain.LoadingType;
 import liquid.domain.ServiceItem;
@@ -14,12 +14,11 @@ import liquid.order.persistence.domain.ReceivableSummaryEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
-import liquid.persistence.domain.*;
+import liquid.persistence.domain.CustomerEntity;
+import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.security.SecurityContext;
-import liquid.service.CustomerService;
-import liquid.service.GoodsService;
-import liquid.service.LocationService;
-import liquid.service.ServiceTypeService;
+import liquid.service.*;
 import liquid.task.service.ActivitiEngineService;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
@@ -61,6 +60,12 @@ public class OrderFacade {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private ContainerSubtypeService containerSubtypeService;
+
+    @Autowired
+    private RailwayPlanTypeService railwayPlanTypeService;
 
     public Order initOrder() {
         Order order = new Order();
@@ -180,7 +185,7 @@ public class OrderFacade {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setId(order.getId());
         orderEntity.setOrderNo(order.getOrderNo());
-        orderEntity.setServiceType(ServiceTypeEntity.newInstance(ServiceTypeEntity.class, order.getServiceTypeId()));
+        orderEntity.setServiceTypeId(order.getServiceTypeId());
         orderEntity.setCustomerId(order.getCustomerId());
         orderEntity.setTradeType(order.getTradeType());
         orderEntity.setSrcLocId(order.getOriginId());
@@ -198,11 +203,9 @@ public class OrderFacade {
         orderEntity.setLoadingEt(DateUtil.dateOf(order.getLoadingEstimatedTime()));
         orderEntity.setContainerType(order.getContainerType());
         if (order.getContainerType() == ContainerType.RAIL.getType())
-            orderEntity.setContainerSubtype(ContainerSubtypeEntity.
-                    newInstance(ContainerSubtypeEntity.class, order.getRailContainerSubtypeId()));
+            orderEntity.setContainerSubtypeId(order.getRailContainerSubtypeId());
         else
-            orderEntity.setContainerSubtype(ContainerSubtypeEntity.
-                    newInstance(ContainerSubtypeEntity.class, order.getSelfContainerSubtypeId()));
+            orderEntity.setContainerSubtypeId(order.getSelfContainerSubtypeId());
         orderEntity.setContainerQty(order.getContainerQuantity());
         orderEntity.setContainerAttribute(order.getContainerAttribute());
 
@@ -239,16 +242,16 @@ public class OrderFacade {
         if (null != railwayEntity) {
             order.setRailwayId(railwayEntity.getId());
             order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
-            order.setRailwayPlanTypeId(railwayEntity.getPlanType().getId());
-            order.setRailwayPlanType(railwayEntity.getPlanType().getName());
+            order.setRailwayPlanTypeId(railwayEntity.getPlanType());
+            order.setRailwayPlanType(railwayPlanTypeService.find(railwayEntity.getPlanType()).getName());
             order.setProgramNo(railwayEntity.getProgramNo());
-            if (null != railwayEntity.getSource()) {
-                order.setRailSourceId(railwayEntity.getSource().getId());
-                order.setRailSource(railwayEntity.getSource().getName());
+            if (null != railwayEntity.getSourceId()) {
+                order.setRailSourceId(railwayEntity.getSourceId());
+                order.setRailSource(locationService.find(railwayEntity.getSourceId()).getName());
             }
-            if (null != railwayEntity.getDestination()) {
-                order.setRailDestinationId(railwayEntity.getDestination().getId());
-                order.setRailDestination(railwayEntity.getDestination().getName());
+            if (null != railwayEntity.getDestinationId()) {
+                order.setRailDestinationId(railwayEntity.getDestinationId());
+                order.setRailDestination(locationService.find(railwayEntity.getDestinationId()).getName());
             }
             order.setComment(railwayEntity.getComment());
             order.setSameDay(railwayEntity.getSameDay());
@@ -275,8 +278,8 @@ public class OrderFacade {
         Order order = new Order();
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
-        order.setServiceTypeId(orderEntity.getServiceType().getId());
-        order.setServiceType(orderEntity.getServiceType().getName());
+        order.setServiceTypeId(orderEntity.getServiceTypeId());
+        order.setServiceType(serviceTypeService.find(orderEntity.getServiceTypeId()).getName());
         order.setCustomerId(orderEntity.getCustomerId());
         order.setCustomerName(customerService.find(orderEntity.getCustomerId()).getName());
         order.setTradeType(orderEntity.getTradeType());
@@ -301,10 +304,10 @@ public class OrderFacade {
         order.setContainerType(orderEntity.getContainerType());
         order.setContainerTypeName(ContainerType.valueOf(orderEntity.getContainerType()).getI18nKey());
         if (order.getContainerType() == ContainerType.RAIL.getType())
-            order.setRailContainerSubtypeId(orderEntity.getContainerSubtype().getId());
+            order.setRailContainerSubtypeId(orderEntity.getContainerSubtypeId());
         else
-            order.setSelfContainerSubtypeId(orderEntity.getContainerSubtype().getId());
-        order.setContainerSubtype(orderEntity.getContainerSubtype().getName());
+            order.setSelfContainerSubtypeId(orderEntity.getContainerSubtypeId());
+        order.setContainerSubtype(containerSubtypeService.find(orderEntity.getContainerSubtypeId()).getName());
         order.setContainerQuantity(orderEntity.getContainerQty());
         order.setContainerAttribute(orderEntity.getContainerAttribute());
 
@@ -327,9 +330,9 @@ public class OrderFacade {
         OrderRailEntity railwayEntity = new OrderRailEntity();
         railwayEntity.setId(order.getRailwayId());
         railwayEntity.setPlanReportTime(DateUtil.dateOf(order.getPlanReportTime()));
-        railwayEntity.setPlanType(RailPlanTypeEntity.newInstance(RailPlanTypeEntity.class, order.getRailwayPlanTypeId()));
-        railwayEntity.setSource(LocationEntity.newInstance(LocationEntity.class, order.getRailSourceId()));
-        railwayEntity.setDestination(LocationEntity.newInstance(LocationEntity.class, order.getDestinationId()));
+        railwayEntity.setPlanType(order.getRailwayPlanTypeId());
+        railwayEntity.setSourceId(order.getRailSourceId());
+        railwayEntity.setDestinationId(order.getDestinationId());
         railwayEntity.setProgramNo(order.getProgramNo());
         railwayEntity.setComment(order.getComment());
         railwayEntity.setSameDay(order.getSameDay());

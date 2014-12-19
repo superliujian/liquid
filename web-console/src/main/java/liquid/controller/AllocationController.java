@@ -99,7 +99,7 @@ public class AllocationController extends BaseTaskController {
 
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
         ShipmentContainerAllocation shipmentContainerAllocation = containerAllocationFacade.getShipmentContainerAllocation(
-                ContainerType.RAIL.getType(), shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
+                ContainerType.RAIL.getType(), containerSubtypeService.find(shipmentEntity.getOrder().getContainerSubtypeId()).getName(), shipmentEntity);
         // For showing the allocated containers.
         model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
 
@@ -147,7 +147,7 @@ public class AllocationController extends BaseTaskController {
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
         shipmentContainerAllocation.setShipment(shipmentEntity);
         shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
-        List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
+        List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(containerSubtypeService.find(shipmentEntity.getOrder().getContainerSubtypeId()).getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
         model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
@@ -156,7 +156,7 @@ public class AllocationController extends BaseTaskController {
 
         int size = 5;
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<ContainerEntity> page = containerService.findAll(shipmentEntity.getOrder().getContainerSubtype().getId(),
+        Page<ContainerEntity> page = containerService.findAll(shipmentEntity.getOrder().getContainerSubtypeId(),
                 ownerId, yardId, pageRequest);
         // Owner list
         List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
@@ -195,7 +195,7 @@ public class AllocationController extends BaseTaskController {
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
         shipmentContainerAllocation.setShipment(shipmentEntity);
         shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
-        List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
+        List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(containerSubtypeService.find(shipmentEntity.getOrder().getContainerSubtypeId()).getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
         model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
@@ -233,7 +233,7 @@ public class AllocationController extends BaseTaskController {
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
         shipmentContainerAllocation.setShipment(shipmentEntity);
         shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
-        List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(shipmentEntity.getOrder().getContainerSubtype().getName(), shipmentEntity);
+        List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(containerSubtypeService.find(shipmentEntity.getOrder().getContainerSubtypeId()).getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
         // For showing the allocated containers.
         model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);

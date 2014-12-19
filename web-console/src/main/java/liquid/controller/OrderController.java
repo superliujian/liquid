@@ -138,11 +138,6 @@ public class OrderController extends BaseController {
     @ModelAttribute("serviceSubtypes")
     public Iterable<ServiceSubtypeEntity> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
 
-    @ModelAttribute("locations")
-    public List<LocationEntity> populateLocations() {
-        return locationService.findByType(LocationType.CITY.getType());
-    }
-
     @ModelAttribute("railwayPlanTypes")
     public Iterable<RailPlanTypeEntity> populateRailwayPlanTypes() {
         return railwayPlanTypeService.findAll();

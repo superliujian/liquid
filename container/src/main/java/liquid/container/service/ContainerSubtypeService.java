@@ -3,35 +3,22 @@ package liquid.container.service;
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.persistence.repository.ContainerSubtypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import liquid.service.AbstractCachedService;
 import org.springframework.stereotype.Service;
 
 /**
  * Created by redbrick9 on 5/4/14.
  */
 @Service
-public class ContainerSubtypeService {
-
-    @Autowired
-    private ContainerSubtypeRepository containerSubtypeRepository;
-
-    public ContainerSubtypeEntity save(ContainerSubtypeEntity containerSubtypeEntity) {
-        return containerSubtypeRepository.save(containerSubtypeEntity);
-    }
-
-    public ContainerSubtypeEntity find(long id) {
-        return containerSubtypeRepository.findOne(id);
-    }
-
-    public Iterable<ContainerSubtypeEntity> findAll() {
-        return containerSubtypeRepository.findAll();
-    }
+public class ContainerSubtypeService extends AbstractCachedService<ContainerSubtypeEntity, ContainerSubtypeRepository> {
+    @Override
+    public void doSaveBefore(ContainerSubtypeEntity entity) { }
 
     public Iterable<ContainerSubtypeEntity> findEnabled() {
-        return containerSubtypeRepository.findByState(0);
+        return repository.findByState(0);
     }
 
     public Iterable<ContainerSubtypeEntity> findByContainerType(ContainerType containerType) {
-        return containerSubtypeRepository.findByContainerType(containerType.getType());
+        return repository.findByContainerType(containerType.getType());
     }
 }
