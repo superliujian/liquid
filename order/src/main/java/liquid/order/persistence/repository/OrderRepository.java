@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -30,6 +31,8 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Long>, JpaR
      * @param pageable
      * @return
      */
+    @Query(value = "SELECT o FROM ORD_ORDER o LEFT JOIN FETCH o.railway r LEFT JOIN FETCH o.receivableSummary s WHERE o.createdBy = ?1",
+            countQuery = "SELECT count(o) FROM ORD_ORDER o WHERE o.createdBy = ?1")
     Page<OrderEntity> findByCreatedBy(String uid, Pageable pageable);
 
     /**
