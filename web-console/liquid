@@ -1,0 +1,18 @@
+if [ $# -eq 0 ]
+  then
+    ENV_TARGET=dev
+elif [ "$1" = "--help" ]
+  then 
+    echo "dev test prod"
+    exit
+else
+    ENV_TARGET=$1
+fi
+
+if [ -z $MAVEN_OPTS ]
+  then
+    export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+fi
+
+mvn -Dmaven.tomcat.uriEncoding=UTF-8 -Denv.target=$ENV_TARGET tomcat7:run
+# mvn -Dmaven.tomcat.uriEncoding=UTF-8 tomcat7:run > log/console.log 2>&1 &

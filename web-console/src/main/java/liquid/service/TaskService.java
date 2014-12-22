@@ -85,12 +85,13 @@ public class TaskService {
 
     public TaskBar calculateTaskBar(String candidateGid, String uid) {
         TaskBar taskBadge = new TaskBar();
-        liquid.task.domain.Task[] queue = listTasks(candidateGid);
-        liquid.task.domain.Task[] myTasks = listMyTasks(uid);
-        liquid.task.domain.Task[] warnings = listWarningTasks();
-        taskBadge.setTaskQueueSize(queue.length);
-        taskBadge.setMyTasksSize(myTasks.length);
-        taskBadge.setWarningsSize(warnings.length);
+        List<Task> queue = bpmService.listTasks(candidateGid);
+        List<Task> myTasks = bpmService.listMyTasks(uid);
+        List<Task> warnings = bpmService.listWarningTasks();
+
+        taskBadge.setTaskQueueSize(queue.size());
+        taskBadge.setMyTasksSize(myTasks.size());
+        taskBadge.setWarningsSize(warnings.size());
         return taskBadge;
     }
 
