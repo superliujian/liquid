@@ -101,6 +101,11 @@ public class TaskService {
         return businessKey.getOrderId();
     }
 
+    public BusinessKey getBusinessKeyByProcessInstanceId(String processInstanceId) {
+        String text = bpmService.getBusinessKeyByProcessInstanceId(processInstanceId);
+        return BusinessKey.decode(text);
+    }
+
     public BusinessKey getBusinessKeyByTaskId(String taskId) {
         String text = bpmService.getBusinessKeyByTaskId(taskId);
         return BusinessKey.decode(text);
@@ -177,7 +182,7 @@ public class TaskService {
         for (int i = 0; i < tasks.length; i++) {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
-            BusinessKey businessKey = getBusinessKeyByTaskId(task.getId());
+            BusinessKey businessKey = getBusinessKeyByProcessInstanceId(task.getProcessInstanceId());
             tasks[i].setOrderId(businessKey.getOrderId());
             tasks[i].setOrderNo(businessKey.getOrderNo());
         }

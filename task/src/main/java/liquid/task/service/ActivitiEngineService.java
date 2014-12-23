@@ -8,8 +8,6 @@ import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
-import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLinkType;
 import org.activiti.engine.task.Task;
@@ -131,15 +129,13 @@ public class ActivitiEngineService {
     public String getBusinessKeyByTaskId(String taskId) {
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        return getBusinessKeyByProcessInstanceId(task.getProcessInstanceId());
+    }
+
+    public String getBusinessKeyByProcessInstanceId(String processInstanceId) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
-        Execution execution = runtimeService.createExecutionQuery().executionId(task.getProcessInstanceId()).singleResult();
-        logger.debug("process instance id: {}", task.getExecutionId());
-        if (execution instanceof ExecutionEntity) {
-            ExecutionEntity entity = (ExecutionEntity) execution;
-            logger.debug("business key: {}", entity.getBusinessKey());
-            return entity.getBusinessKey();
-        }
-        throw new RuntimeException("execution is not an instance of ExecutionEntity");
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        return processInstance.getBusinessKey();
     }
 
     public List<Task> listTasksByOrderId(long orderId) {
