@@ -19,6 +19,7 @@ import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.security.SecurityContext;
 import liquid.service.*;
+import liquid.task.domain.BusinessKey;
 import liquid.task.service.ActivitiEngineService;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
@@ -110,7 +111,7 @@ public class OrderFacade {
         variableMap.put("loadingType", orderEntity.getLoadingType());
         variableMap.put("hasDelivery", hasDelivery);
         variableMap.put("orderOwner", orderEntity.getUpdatedBy());
-        bpmService.startProcess(orderEntity.getUpdatedBy(), orderEntity.getId(), variableMap);
+        bpmService.startProcess(orderEntity.getUpdatedBy(), BusinessKey.encode(orderEntity.getId(), orderEntity.getOrderNo()), variableMap);
         return orderEntity;
     }
 

@@ -5,6 +5,7 @@ import liquid.order.service.OrderService;
 import liquid.task.AbstractTaskProxy;
 import liquid.task.NotCompletedException;
 import liquid.task.TaskFactory;
+import liquid.task.domain.BusinessKey;
 import liquid.task.domain.TaskBar;
 import liquid.task.service.ActivitiEngineService;
 import liquid.util.DatePattern;
@@ -96,8 +97,13 @@ public class TaskService {
     }
 
     public Long getOrderIdByTaskId(String taskId) {
-        String businessKey = bpmService.getBusinessKeyByTaskId(taskId);
-        return null == businessKey ? null : Long.valueOf(businessKey);
+        BusinessKey businessKey = getBusinessKeyByTaskId(taskId);
+        return businessKey.getOrderId();
+    }
+
+    public BusinessKey getBusinessKeyByTaskId(String taskId) {
+        String text = bpmService.getBusinessKeyByTaskId(taskId);
+        return BusinessKey.decode(text);
     }
 
     public void complete(String taskId) throws NotCompletedException {
@@ -171,10 +177,9 @@ public class TaskService {
         for (int i = 0; i < tasks.length; i++) {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
-            long orderId = getOrderIdByTaskId(task.getId());
-            OrderEntity order = orderService.find(orderId);
-            tasks[i].setOrderId(orderId);
-            tasks[i].setOrderNo(order.getOrderNo());
+            BusinessKey businessKey = getBusinessKeyByTaskId(task.getId());
+            tasks[i].setOrderId(businessKey.getOrderId());
+            tasks[i].setOrderNo(businessKey.getOrderNo());
         }
         return tasks;
     }

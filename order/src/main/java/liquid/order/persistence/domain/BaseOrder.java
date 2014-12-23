@@ -91,7 +91,7 @@ public class BaseOrder extends BaseUpdateEntity {
         return serviceTypeId;
     }
 
-    public void setServiceTypeId(Long serviceType) {
+    public void setServiceTypeId(Long serviceTypeId) {
         this.serviceTypeId = serviceTypeId;
     }
 

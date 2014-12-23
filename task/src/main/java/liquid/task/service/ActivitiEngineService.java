@@ -1,6 +1,7 @@
 package liquid.task.service;
 
 import liquid.service.MailNotificationService;
+import liquid.task.domain.BusinessKey;
 import liquid.user.persistence.domain.Account;
 import liquid.user.service.AccountService;
 import liquid.util.DatePattern;
@@ -42,14 +43,14 @@ public class ActivitiEngineService {
     @Autowired
     private MessageSource messageSource;
 
-    public void startProcess(String uid, Long orderId, Map<String, Object> variableMap) {
+    public void startProcess(String uid, BusinessKey businessKey, Map<String, Object> variableMap) {
         RuntimeService runtimeService = processEngine.getRuntimeService();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         repositoryService.createDeployment().addClasspathResource("processes/liquid.poc.bpmn20.xml").deploy();
 
         variableMap.put("employeeName", uid);
         variableMap.put("endTime", DateUtil.stringOf(Calendar.getInstance().getTime(), DatePattern.UNTIL_SECOND));
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", String.valueOf(orderId), variableMap);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("liquidPoc", businessKey.getText(), variableMap);
         runtimeService.addUserIdentityLink(processInstance.getId(), uid, IdentityLinkType.STARTER);
 
 //        Account account = accountService.find(uid);
