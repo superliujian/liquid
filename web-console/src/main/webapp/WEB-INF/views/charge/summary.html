@@ -58,7 +58,7 @@
             <td th:text="${order.customerName}">Customer Name</td>
             <td th:text="${order.origination}">Origin</td>
             <td th:text="${order.destination}">Destination</td>
-            <td></td>
+            <td th:text="${order.railDestination}">Destination</td>
             <td th:text="${order.goodsName}"></td>
             <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
             <td></td>

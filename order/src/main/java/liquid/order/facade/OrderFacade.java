@@ -239,27 +239,6 @@ public class OrderFacade {
     public Order convert(OrderEntity orderEntity) {
         Order order = convertBasic(orderEntity);
 
-        OrderRailEntity railwayEntity = orderEntity.getRailway();
-        if (null != railwayEntity) {
-            order.setRailwayId(railwayEntity.getId());
-            order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
-            order.setRailwayPlanTypeId(railwayEntity.getPlanType());
-            order.setRailwayPlanType(railwayPlanTypeService.find(railwayEntity.getPlanType()).getName());
-            order.setProgramNo(railwayEntity.getProgramNo());
-            if (null != railwayEntity.getSourceId()) {
-                order.setRailSourceId(railwayEntity.getSourceId());
-                order.setRailSource(locationService.find(railwayEntity.getSourceId()).getName());
-            }
-            if (null != railwayEntity.getDestinationId()) {
-                order.setRailDestinationId(railwayEntity.getDestinationId());
-                order.setRailDestination(locationService.find(railwayEntity.getDestinationId()).getName());
-            }
-            order.setComment(railwayEntity.getComment());
-            order.setSameDay(railwayEntity.getSameDay());
-        } else {
-            order.setPlanReportTime(DateUtil.stringOf(new Date()));
-        }
-
         List<ServiceItemEntity> serviceItemEntities = orderEntity.getServiceItems();
         for (ServiceItemEntity serviceItemEntity : serviceItemEntities) {
             ServiceItem serviceItem = new ServiceItem();
@@ -312,6 +291,27 @@ public class OrderFacade {
         order.setContainerQuantity(orderEntity.getContainerQty());
         order.setContainerAttribute(orderEntity.getContainerAttribute());
 
+        OrderRailEntity railwayEntity = orderEntity.getRailway();
+        if (null != railwayEntity) {
+            order.setRailwayId(railwayEntity.getId());
+            order.setPlanReportTime(DateUtil.stringOf(railwayEntity.getPlanReportTime()));
+            order.setRailwayPlanTypeId(railwayEntity.getPlanType());
+            order.setRailwayPlanType(railwayPlanTypeService.find(railwayEntity.getPlanType()).getName());
+            order.setProgramNo(railwayEntity.getProgramNo());
+            if (null != railwayEntity.getSourceId()) {
+                order.setRailSourceId(railwayEntity.getSourceId());
+                order.setRailSource(locationService.find(railwayEntity.getSourceId()).getName());
+            }
+            if (null != railwayEntity.getDestinationId()) {
+                order.setRailDestinationId(railwayEntity.getDestinationId());
+                order.setRailDestination(locationService.find(railwayEntity.getDestinationId()).getName());
+            }
+            order.setComment(railwayEntity.getComment());
+            order.setSameDay(railwayEntity.getSameDay());
+        } else {
+            order.setPlanReportTime(DateUtil.stringOf(new Date()));
+        }
+
         order.setReceivableSummaryId(orderEntity.getReceivableSummary().getId());
         order.setUsdTotal(orderEntity.getReceivableSummary().getUsd());
         order.setCnyTotal(orderEntity.getReceivableSummary().getCny());
@@ -333,7 +333,7 @@ public class OrderFacade {
         railwayEntity.setPlanReportTime(DateUtil.dateOf(order.getPlanReportTime()));
         railwayEntity.setPlanType(order.getRailwayPlanTypeId());
         railwayEntity.setSourceId(order.getRailSourceId());
-        railwayEntity.setDestinationId(order.getDestinationId());
+        railwayEntity.setDestinationId(order.getRailDestinationId());
         railwayEntity.setProgramNo(order.getProgramNo());
         railwayEntity.setComment(order.getComment());
         railwayEntity.setSameDay(order.getSameDay());
