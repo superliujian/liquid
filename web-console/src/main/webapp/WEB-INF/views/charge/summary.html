@@ -54,11 +54,11 @@
                 <a href="/charge/order/{orderId}" th:href="'/charge/order/' + ${order.id}"
                    th:text="${order.orderNo}"/>
             </td>
-            <td th:text="${order.createAt}"></td>
+            <td th:text="${order.createdAt}"></td>
             <td th:text="${order.customerName}">Customer Name</td>
             <td th:text="${order.origination}">Origin</td>
             <td th:text="${order.destination}">Destination</td>
-            <td th:text="${order.railDestination}">Destination</td>
+            <td th:text="${order.railDestination}">Rail Destination</td>
             <td th:text="${order.goodsName}"></td>
             <td th:text="#{${tradeTypes[__${order.tradeType}__].i18nKey}}">Trade Type</td>
             <td></td>

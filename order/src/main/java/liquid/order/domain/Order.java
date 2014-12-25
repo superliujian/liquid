@@ -90,8 +90,8 @@ public class Order extends BaseIdObject {
     private Long distyUsd = 0L;
     private Long grandTotal = 0L;
 
-    private String createAt;
-    private String updateAt;
+    private String createdAt;
+    private String updatedAt;
 
     private String role;
     private Integer status;
@@ -500,20 +500,20 @@ public class Order extends BaseIdObject {
         this.grandTotal = grandTotal;
     }
 
-    public String getCreateAt() {
-        return createAt;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getUpdateAt() {
-        return updateAt;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateAt(String updateAt) {
-        this.updateAt = updateAt;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getRole() {
@@ -582,8 +582,8 @@ public class Order extends BaseIdObject {
         sb.append(", receivableSummary=").append(receivableSummary);
         sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", usdTotal=").append(usdTotal);
-        sb.append(", createAt='").append(createAt).append('\'');
-        sb.append(", updateAt='").append(updateAt).append('\'');
+        sb.append(", createdAt='").append(createdAt).append('\'');
+        sb.append(", updatedAt='").append(updatedAt).append('\'');
         sb.append(", role='").append(role).append('\'');
         sb.append(", status=").append(status);
         sb.append(", ").append(super.toString());

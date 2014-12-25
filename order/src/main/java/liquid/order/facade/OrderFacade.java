@@ -320,8 +320,8 @@ public class OrderFacade {
         order.setDistyUsd(orderEntity.getDistyUsd());
         order.setReceivableSummary(convert(orderEntity.getReceivableSummary()));
 
-        order.setCreateAt(DateUtil.stringOf(orderEntity.getCreatedAt()));
-        order.setUpdateAt(DateUtil.stringOf(orderEntity.getUpdatedAt()));
+        order.setCreatedAt(DateUtil.stringOf(orderEntity.getCreatedAt()));
+        order.setUpdatedAt(DateUtil.stringOf(orderEntity.getUpdatedAt()));
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
         return order;
