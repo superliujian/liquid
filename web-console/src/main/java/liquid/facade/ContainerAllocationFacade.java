@@ -66,6 +66,7 @@ public class ContainerAllocationFacade {
         ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
         shipmentContainerAllocation.setShipmentId(shipment.getId());
         shipmentContainerAllocation.setShipment(shipment);
+        shipmentContainerAllocation.setContainerSubtype(subtypeName);
         shipmentContainerAllocation.setType(type);
         List<ContainerAllocation> containerAllocations = null;
         if (ContainerType.RAIL.getType() == type) {

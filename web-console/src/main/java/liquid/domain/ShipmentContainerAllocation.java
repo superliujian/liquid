@@ -11,6 +11,8 @@ import java.util.List;
 public class ShipmentContainerAllocation {
     private int type;
 
+    private String containerSubtype;
+
     private Long shipmentId;
 
     private ShipmentEntity shipment;
@@ -23,6 +25,14 @@ public class ShipmentContainerAllocation {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getContainerSubtype() {
+        return containerSubtype;
+    }
+
+    public void setContainerSubtype(String containerSubtype) {
+        this.containerSubtype = containerSubtype;
     }
 
     public Long getShipmentId() {
