@@ -13,7 +13,7 @@
                     <span th:text="#{shipment}" /><span th:text="${shipmentContainerAllocation.shipment.id}" />
                     <small>
                         <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.containerQty}" /></b><span>;</span>
-                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.order.containerSubtype.name}" /></b>
+                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.order.containerSubtypeId}" /></b>
                     </small>      
                 </h3>
             </div>

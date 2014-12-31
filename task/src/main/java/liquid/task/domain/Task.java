@@ -11,6 +11,8 @@ import java.io.Serializable;
 public class Task implements Serializable {
     private String id;
 
+    private String definitionKey;
+
     private Long orderId;
 
     private String orderNo;
@@ -31,6 +33,14 @@ public class Task implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDefinitionKey() {
+        return definitionKey;
+    }
+
+    public void setDefinitionKey(String definitionKey) {
+        this.definitionKey = definitionKey;
     }
 
     public Long getOrderId() {
@@ -91,8 +101,9 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TaskDto{");
-        sb.append("id='").append(id).append('\'');
+        final StringBuilder sb = new StringBuilder("{Class=Task");
+        sb.append(", id='").append(id).append('\'');
+        sb.append(", definitionKey='").append(definitionKey).append('\'');
         sb.append(", orderId=").append(orderId);
         sb.append(", orderNo='").append(orderNo).append('\'');
         sb.append(", name='").append(name).append('\'');

@@ -22,6 +22,7 @@ public class Order extends BaseIdObject {
     @NotEmpty
     private String customerName;
     private Integer tradeType = 0;
+    private String verificationSheetSn;
     private String tradeTypeName;
     private Long originId;
 
@@ -154,6 +155,14 @@ public class Order extends BaseIdObject {
 
     public void setTradeTypeName(String tradeTypeName) {
         this.tradeTypeName = tradeTypeName;
+    }
+
+    public String getVerificationSheetSn() {
+        return verificationSheetSn;
+    }
+
+    public void setVerificationSheetSn(String verificationSheetSn) {
+        this.verificationSheetSn = verificationSheetSn;
     }
 
     public Long getOriginId() {
@@ -541,6 +550,7 @@ public class Order extends BaseIdObject {
         sb.append(", customerId=").append(customerId);
         sb.append(", customerName='").append(customerName).append('\'');
         sb.append(", tradeType=").append(tradeType);
+        sb.append(", verificationSheetSn='").append(verificationSheetSn).append('\'');
         sb.append(", tradeTypeName='").append(tradeTypeName).append('\'');
         sb.append(", originId=").append(originId);
         sb.append(", origination='").append(origination).append('\'');
@@ -582,6 +592,9 @@ public class Order extends BaseIdObject {
         sb.append(", receivableSummary=").append(receivableSummary);
         sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", usdTotal=").append(usdTotal);
+        sb.append(", distyPrice=").append(distyPrice);
+        sb.append(", distyUsd=").append(distyUsd);
+        sb.append(", grandTotal=").append(grandTotal);
         sb.append(", createdAt='").append(createdAt).append('\'');
         sb.append(", updatedAt='").append(updatedAt).append('\'');
         sb.append(", role='").append(role).append('\'');

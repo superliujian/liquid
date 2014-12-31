@@ -48,11 +48,6 @@ public class TaskService {
         Task task = bpmService.getTask(taskId);
         liquid.task.domain.Task taskDto = toTaskDto(task);
 
-        long orderId = getOrderIdByTaskId(task.getId());
-        OrderEntity order = orderService.find(orderId);
-
-        taskDto.setOrderId(orderId);
-        taskDto.setOrderNo(order.getOrderNo());
         String prompt = messageSource.getMessage("task.complete.prompt." + task.getTaskDefinitionKey(), new Object[0], "", Locale.CHINA);
         if (!StringUtil.valid(prompt))
             prompt = messageSource.getMessage("task.complete.prompt.default", new Object[0], "", Locale.CHINA);
@@ -182,9 +177,6 @@ public class TaskService {
         for (int i = 0; i < tasks.length; i++) {
             Task task = list.get(i);
             tasks[i] = toTaskDto(task);
-            BusinessKey businessKey = getBusinessKeyByProcessInstanceId(task.getProcessInstanceId());
-            tasks[i].setOrderId(businessKey.getOrderId());
-            tasks[i].setOrderNo(businessKey.getOrderNo());
         }
         return tasks;
     }
@@ -192,10 +184,14 @@ public class TaskService {
     private liquid.task.domain.Task toTaskDto(Task task) {
         liquid.task.domain.Task dto = new liquid.task.domain.Task();
         dto.setId(task.getId());
+        dto.setDefinitionKey(task.getTaskDefinitionKey());
         dto.setName(task.getName());
         dto.setDescription(task.getDescription());
         dto.setAssignee(task.getAssignee());
         dto.setCreateDate(DateUtil.stringOf(task.getCreateTime(), DatePattern.UNTIL_SECOND));
+        BusinessKey businessKey = getBusinessKeyByProcessInstanceId(task.getProcessInstanceId());
+        dto.setOrderId(businessKey.getOrderId());
+        dto.setOrderNo(businessKey.getOrderNo());
         return dto;
     }
 

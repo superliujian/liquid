@@ -111,6 +111,7 @@ public class OrderFacade {
         variableMap.put("loadingType", orderEntity.getLoadingType());
         variableMap.put("hasDelivery", hasDelivery);
         variableMap.put("orderOwner", orderEntity.getUpdatedBy());
+        variableMap.put("tradeType", orderEntity.getTradeType());
         bpmService.startProcess(orderEntity.getUpdatedBy(), BusinessKey.encode(orderEntity.getId(), orderEntity.getOrderNo()), variableMap);
         return orderEntity;
     }
@@ -189,6 +190,7 @@ public class OrderFacade {
         orderEntity.setServiceTypeId(order.getServiceTypeId());
         orderEntity.setCustomerId(order.getCustomerId());
         orderEntity.setTradeType(order.getTradeType());
+        orderEntity.setVerificationSheetSn(order.getVerificationSheetSn());
         orderEntity.setSrcLocId(order.getOriginId());
         orderEntity.setDstLocId(order.getDestinationId());
         orderEntity.setConsignee(order.getConsignee());

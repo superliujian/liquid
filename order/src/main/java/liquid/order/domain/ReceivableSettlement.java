@@ -1,10 +1,17 @@
 package liquid.order.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by redbrick9 on 8/29/14.
  */
 public class ReceivableSettlement {
+    @NotNull
+    @NotEmpty
     private String invoiceNo;
+    
     private Long cnyOfInvoice;
     private Long usdOfInvoice;
     private String dateOfInvoice;

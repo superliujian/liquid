@@ -3,6 +3,9 @@ package liquid.controller;
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
+import liquid.order.domain.Order;
+import liquid.order.domain.VerificationSheetForm;
+import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -52,6 +56,9 @@ public class TaskController extends BaseTaskController {
     private OrderService orderService;
 
     @Autowired
+    private OrderFacade orderFacade;
+
+    @Autowired
     private ShipmentService shipmentService;
 
     @Autowired
@@ -64,13 +71,48 @@ public class TaskController extends BaseTaskController {
     private ServiceSubtypeService serviceSubtypeService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String redirect(@PathVariable String taskId, Model model) {
+    public String initForm(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
         Task task = taskService.getTask(taskId);
         logger.debug("task: {}", task);
         model.addAttribute("task", task);
 
+        switch (task.getDefinitionKey()) {
+            case "CDCI":
+                String verificationSheetSn = orderService.find(task.getOrderId()).getVerificationSheetSn();
+                VerificationSheetForm verificationSheetForm = new VerificationSheetForm();
+                verificationSheetForm.setDefinitionKey(task.getDefinitionKey());
+                verificationSheetForm.setSn(verificationSheetSn);
+                verificationSheetForm.setOrderId(task.getOrderId());
+                model.addAttribute("task", task);
+                model.addAttribute("verificationSheetForm", verificationSheetForm);
+                return "order/verification_sheet_sn";
+        }
+        
         return "redirect:" + taskService.computeTaskMainPath(taskId);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "definitionKey=CDCI")
+    public String fillIn(@PathVariable String taskId, @Valid @ModelAttribute VerificationSheetForm verificationSheetForm,
+                         BindingResult bindingResult, Model model) {
+        logger.debug("taskId: {}", taskId);
+        Task task = taskService.getTask(taskId);
+        logger.debug("task: {}", task);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("verificationSheetForm", verificationSheetForm);
+            model.addAttribute("task", task);
+            return "order/verification_sheet_sn";
+        }
+
+        Order order = orderFacade.find(verificationSheetForm.getOrderId());
+        order.setVerificationSheetSn(verificationSheetForm.getSn());
+        orderFacade.save(order);
+
+        model.addAttribute("verificationSheetForm", verificationSheetForm);
+        model.addAttribute("task", task);
+        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+        return "order/verification_sheet_sn";
     }
 
     /**

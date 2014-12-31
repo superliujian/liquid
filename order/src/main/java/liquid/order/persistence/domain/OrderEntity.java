@@ -17,6 +17,12 @@ public class OrderEntity extends BaseOrder {
     @Column(name = "TRADE_TYPE")
     private int tradeType;
 
+    /**
+     * Hid
+     */
+    @Column(name = "VER_SHEET_SN")
+    private String verificationSheetSn;
+
     // 0: yard; 1: truck
     @Column(name = "LOADING_TYPE")
     private int loadingType;
@@ -52,6 +58,14 @@ public class OrderEntity extends BaseOrder {
 
     public void setTradeType(int tradeType) {
         this.tradeType = tradeType;
+    }
+
+    public String getVerificationSheetSn() {
+        return verificationSheetSn;
+    }
+
+    public void setVerificationSheetSn(String verificationSheetSn) {
+        this.verificationSheetSn = verificationSheetSn;
     }
 
     public int getLoadingType() {

@@ -231,7 +231,28 @@
                 </resourceAssignmentExpression>
             </potentialOwner>
         </userTask>
-        <sequenceFlow id="flow230" sourceRef="recordTod" targetRef="bargeOpsDecision"/>
+        <sequenceFlow id="flow230" sourceRef="recordTod" targetRef="CDCIDecision"/>
+
+        <exclusiveGateway id="CDCIDecision" name="报关报检决策"/>
+        <sequenceFlow id="flow240" sourceRef="CDCIDecision" targetRef="CDCI">
+            <conditionExpression xsi:type="tFormalExpression">${tradeType == 1}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="flow250" sourceRef="CDCIDecision" targetRef="bargeOpsDecision">
+            <conditionExpression xsi:type="tFormalExpression">${tradeType == 0}</conditionExpression>
+        </sequenceFlow>
+
+        <!-- record time of dispatch -->
+        <userTask id="CDCI" name="报关报检">
+            <documentation>
+                ${employeeName}已经在${endTime}记录装车发运时间。您需要记录核销单号。
+            </documentation>
+            <potentialOwner>
+                <resourceAssignmentExpression>
+                    <formalExpression>ROLE_OPERATING</formalExpression>
+                </resourceAssignmentExpression>
+            </potentialOwner>
+        </userTask>
+        <sequenceFlow id="flow255" sourceRef="CDCI" targetRef="bargeOpsDecision"/>
 
         <exclusiveGateway id="bargeOpsDecision" name="驳船操作决策"/>
         <sequenceFlow id="flow260" sourceRef="bargeOpsDecision" targetRef="doBargeOps">

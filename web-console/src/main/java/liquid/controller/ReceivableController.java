@@ -13,10 +13,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
 
 /**
  * Created by redbrick9 on 8/29/14.
@@ -66,7 +69,13 @@ public class ReceivableController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addReceivableSettlement(@PathVariable Long orderId, @ModelAttribute("formBean") ReceivableSettlement formBean) {
+    public String addReceivableSettlement(@PathVariable Long orderId, @Valid @ModelAttribute("formBean") ReceivableSettlement formBean,
+                                          BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+
+            return "receivable/panel";
+        }
+
         ReceivableSettlementEntity entity = new ReceivableSettlementEntity();
         entity.setOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
         entity.setInvoiceNo(formBean.getInvoiceNo());

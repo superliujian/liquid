@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<div id="f" class="container" th:if="${task.assignee}">
+    <div th:include="layout :: alert"/>
+    
+    <form method="POST" th:object="${verificationSheetForm}" th:action="'/task/' + ${task.id}" class="form">
+        <h3 class="form-heading" th:text="#{verification.sheet.sn}">Verification Sheet SN</h3>
+        
+        <hr />
+        
+        <div class="form-group" th:classappend="${#fields.hasErrors('sn')} ? 'has-error'">
+            <input type="text" th:field="*{sn}" class="form-control"/>
+            <span th:errors="*{sn}">error</span>
+        </div>
+
+        <input type="hidden" th:field="*{definitionKey}" class="form-control"/>
+        <input type="hidden" th:field="*{orderId}" class="form-control"/>        
+        <input type="submit" value="Fill In" class="btn btn-success btn-block btn-sm" th:value="#{save}"/>
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include=" layout :: footer"/>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>
