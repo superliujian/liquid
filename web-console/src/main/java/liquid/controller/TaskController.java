@@ -1,7 +1,10 @@
 package liquid.controller;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.domain.SendingTruckForm;
+import liquid.domain.Truck;
 import liquid.dto.EarningDto;
+import liquid.facade.ServiceProviderFacade;
 import liquid.metadata.ChargeWay;
 import liquid.order.domain.Order;
 import liquid.order.domain.VerificationSheetForm;
@@ -70,6 +73,9 @@ public class TaskController extends BaseTaskController {
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
 
+    @Autowired
+    private ServiceProviderFacade serviceProviderFacade;
+
     @RequestMapping(method = RequestMethod.GET)
     public String initForm(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
@@ -77,9 +83,11 @@ public class TaskController extends BaseTaskController {
         logger.debug("task: {}", task);
         model.addAttribute("task", task);
 
+        Order order = orderFacade.find(task.getOrderId());
+
         switch (task.getDefinitionKey()) {
             case "CDCI":
-                String verificationSheetSn = orderService.find(task.getOrderId()).getVerificationSheetSn();
+                String verificationSheetSn = order.getVerificationSheetSn();
                 VerificationSheetForm verificationSheetForm = new VerificationSheetForm();
                 verificationSheetForm.setDefinitionKey(task.getDefinitionKey());
                 verificationSheetForm.setSn(verificationSheetSn);
@@ -87,8 +95,25 @@ public class TaskController extends BaseTaskController {
                 model.addAttribute("task", task);
                 model.addAttribute("verificationSheetForm", verificationSheetForm);
                 return "order/verification_sheet_sn";
+            case "sendTruck":
+                SendingTruckForm sendingTruckForm = new SendingTruckForm();
+                sendingTruckForm.setDefinitionKey(task.getDefinitionKey());
+                sendingTruckForm.setOrderId(task.getOrderId());
+
+                List<Truck> truckList = new ArrayList<>(order.getContainerQuantity());
+                for (int i = 0; i < order.getContainerQuantity(); i++) {
+                    Truck truck = new Truck();
+                    truckList.add(truck);
+                }
+                sendingTruckForm.setTruckList(truckList);
+
+                model.addAttribute("sendingTruckForm", sendingTruckForm);
+                model.addAttribute("sps", serviceProviderFacade.findByType(4L));
+
+                model.addAttribute("task", task);
+                return "truck/sending_truck_task";
         }
-        
+
         return "redirect:" + taskService.computeTaskMainPath(taskId);
     }
 
@@ -113,6 +138,23 @@ public class TaskController extends BaseTaskController {
         model.addAttribute("task", task);
         model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
         return "order/verification_sheet_sn";
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "definitionKey=sendTruck")
+    public String fillIn(@PathVariable String taskId, @Valid @ModelAttribute SendingTruckForm sendingTruckForm,
+                         BindingResult bindingResult, Model model) {
+        logger.debug("taskId: {}", taskId);
+        Task task = taskService.getTask(taskId);
+        logger.debug("task: {}", task);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("sendingTruckForm", sendingTruckForm);
+            model.addAttribute("sps", serviceProviderFacade.findByType(4L));
+
+            model.addAttribute("task", task);
+            return "truck/sending_truck_task";
+        }
+        return "truck/sending_truck_task";
     }
 
     /**

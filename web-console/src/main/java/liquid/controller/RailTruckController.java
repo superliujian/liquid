@@ -66,7 +66,7 @@ public class RailTruckController extends BaseTaskController {
         Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
         model.addAttribute("charges", charges);
         model.addAttribute("total", chargeService.total(charges));
-        return "rail/main";
+        return "rail/ ";
     }
 
     @RequestMapping(value = "/{containerId}", method = RequestMethod.GET)

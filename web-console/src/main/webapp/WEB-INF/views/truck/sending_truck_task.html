@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin task bar} -->
+<div th:include="layout :: task-bar"/>
+<!-- {!end task bar} -->
+
+<div id="t" class="container" th:if="${task.assignee}">
+    <div th:include="layout :: alert"/>
+    
+    <form method="POST" th:object="${sendingTruckForm}" th:action="'/task/' + ${task.id}" class="form">
+        <h3 class="form-heading" th:text="#{truck.info}">Truck Info</h3>
+        
+        <hr />
+        
+        <table id="f" class="table table-bordered table-hover table-condensed table-16">
+            <thead>
+            <tr>
+                <th>Picking At</th>
+                <th>Truck Service Provider</th>                
+                <th>License Plate</th>
+                <th>Driver</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="truck, rowStat : *{truckList}">
+                <td>
+                    <input type="hidden" th:field="*{truckList[__${rowStat.index}__].id}" />
+                                
+                    <div class="form-group" th:classappend="${#fields.hasErrors('truckList[__${rowStat.index}__].pickingAt')} ? 'has-error'">
+                        <div class="input-group input-group-sm date" th:id="'pickingAtTimePicker' + ${rowStat.index}">
+                            <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{truckList[__${rowStat.index}__].pickingAt}" />
+                            <span class="input-group-addon">                    
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group ">
+	                    <select th:field="*{truckList[__${rowStat.index}__].serviceProviderId}" class="form-control input-sm">
+                            <option th:each="sp : ${sps}"
+                                th:value="${sp.id}" th:text="${sp.name}">SP Name
+                            </option>
+	                    </select>
+	                </div>
+                </td>
+                <td>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('truckList[__${rowStat.index}__].licensePlate')} ? 'has-error'">
+                        <input type="text" class="form-control input-sm" th:field="*{truckList[__${rowStat.index}__].licensePlate}" />                        
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('truckList[__${rowStat.index}__].driver')} ? 'has-error'">
+                        <input type="text" class="form-control input-sm" th:field="*{truckList[__${rowStat.index}__].driver}" />
+                    </div>
+                </td>        
+            </tr>
+            </tbody>
+        </table>
+        
+        <hr />
+
+        <div class="row">
+            <div class="col-xs-3 pull-right">
+                <input type="hidden" th:field="*{definitionKey}" class="form-control"/>
+                <input type="hidden" th:field="*{orderId}" class="form-control"/>
+                <input type="submit" value="Fill In" class="btn btn-success btn-block btn-sm" th:value="#{save}"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- /.container -->
+
+<!-- {!begin layout} -->
+<div th:include=" layout :: footer"/>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        var rowCount = $('#f > tbody > tr').length;
+        console.log(rowCount);
+        for(var i = 0; i < rowCount; i++) {
+          $('#pickingAtTimePicker' + i).dtPicker();
+        }
+    }); // ready end
+/*]]>*/
+</script>
+</body>
+
+</html>

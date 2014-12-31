@@ -266,6 +266,7 @@ public class OrderFacade {
         order.setCustomerName(customerService.find(orderEntity.getCustomerId()).getName());
         order.setTradeType(orderEntity.getTradeType());
         order.setTradeTypeName(TradeType.valueOf(orderEntity.getTradeType()).getI18nKey());
+        order.setVerificationSheetSn(orderEntity.getVerificationSheetSn());
         order.setOriginId(orderEntity.getSrcLocId());
         order.setOrigination(locationService.find(orderEntity.getSrcLocId()).getName());
         order.setDestinationId(orderEntity.getDstLocId());
