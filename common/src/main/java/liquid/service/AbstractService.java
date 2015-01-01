@@ -35,6 +35,7 @@ public abstract class AbstractService<E extends BaseUpdateEntity, R extends Crud
         return repository.save(entity);
     }
 
+    @Transactional("transactionManager")
     public Iterable<E> save(Iterable<E> entities) {
         for (E entity : entities) {
             entity.setUpdatedBy(SecurityContext.getInstance().getUsername());

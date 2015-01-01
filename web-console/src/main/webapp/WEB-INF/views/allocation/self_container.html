@@ -15,7 +15,7 @@
 <div th:if="${task.assignee}" th:each="shipmentContainerAllocation : ${shipmentContainerAllocations}">
     <div th:include="allocation/template :: console-header"></div>
     
-    <div th:include="allocation/template :: console-result"></div>
+    <div th:include="allocation/template :: console-result-view"></div>
 </div>
 
 <!-- {!begin layout} -->

@@ -23,6 +23,9 @@ public class RailContainerEntity extends BaseLegContainer {
     @Column(name = "PLATE_NO")
     private String plateNo;
 
+    @Column(name = "RELEASED_AT")
+    private Date releasedAt;
+
     /**
      * Time of Completion of Loading
      */
@@ -86,6 +89,14 @@ public class RailContainerEntity extends BaseLegContainer {
 
     public void setPlateNo(String plateNo) {
         this.plateNo = plateNo;
+    }
+
+    public Date getReleasedAt() {
+        return releasedAt;
+    }
+
+    public void setReleasedAt(Date releasedAt) {
+        this.releasedAt = releasedAt;
     }
 
     public Date getLoadingToc() {

@@ -15,9 +15,13 @@ import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
+import liquid.transport.facade.TruckFacade;
+import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
+import liquid.transport.service.RailContainerService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
+import liquid.transport.web.domain.TruckForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Container allocation controller.
@@ -68,10 +70,16 @@ public class AllocationController extends BaseTaskController {
     private ContainerSubtypeService containerSubtypeService;
 
     @Autowired
+    private ShippingContainerService shippingContainerService;
+
+    @Autowired
     private ContainerAllocationFacade containerAllocationFacade;
 
     @Autowired
-    private ShippingContainerService shippingContainerService;
+    private TruckFacade truckFacade;
+
+    @Autowired
+    private RailContainerService railContainerService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@PathVariable String taskId, Model model) {
@@ -86,6 +94,15 @@ public class AllocationController extends BaseTaskController {
         if (ContainerType.RAIL.getType() == order.getContainerType()) {
             return "allocation/rail_container";
         } else {
+            List<TruckForm> truckForms = new ArrayList<>();
+
+            Iterable<ShipmentEntity> shipmentEntities = shipmentService.findByOrderId(orderId);
+            for (ShipmentEntity shipmentEntity : shipmentEntities) {
+                List<TruckForm> truckFormsForShipment = truckFacade.findByShipmentId(shipmentEntity.getId());
+                truckForms.addAll(truckFormsForShipment);
+            }
+
+            model.addAttribute("truckForms", truckForms);
             return "allocation/self_container";
         }
     }
@@ -101,7 +118,7 @@ public class AllocationController extends BaseTaskController {
         ShipmentContainerAllocation shipmentContainerAllocation = containerAllocationFacade.getShipmentContainerAllocation(
                 ContainerType.RAIL.getType(), containerSubtypeService.find(shipmentEntity.getOrder().getContainerSubtypeId()).getName(), shipmentEntity);
         // For showing the allocated containers.
-        model.addAttribute("shipmentContainerAllocations", shipmentContainerAllocation);
+        model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
 
         Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.RAIL);
         EnterContainerAllocForm containers = new EnterContainerAllocForm();
@@ -146,6 +163,7 @@ public class AllocationController extends BaseTaskController {
         ShipmentContainerAllocation shipmentContainerAllocation = new ShipmentContainerAllocation();
         ShipmentEntity shipmentEntity = shipmentService.find(shipmentId);
         shipmentContainerAllocation.setShipment(shipmentEntity);
+        shipmentContainerAllocation.setShipmentId(shipmentId);
         shipmentContainerAllocation.setType(shipmentEntity.getOrder().getContainerType());
         List<ContainerAllocation> containerAllocations = containerAllocationFacade.computeSelfContainerAllocations(containerSubtypeService.find(shipmentEntity.getOrder().getContainerSubtypeId()).getName(), shipmentEntity);
         shipmentContainerAllocation.setContainerAllocations(containerAllocations);
@@ -171,6 +189,11 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("contextPath", "/task/" + taskId + "/allocation?shipmentId=" + shipmentId + "&ownerId=" + ownerId + "&yardId=" + yardId + "&");
 
         // For the allocation form
+        List<TruckForm> truckForms = new ArrayList<>();
+        List<TruckForm> truckFormsForShipment = truckFacade.findByShipmentId(shipmentEntity.getId());
+        truckForms.addAll(truckFormsForShipment);
+        model.addAttribute("truckForms", truckForms);
+
         SelfContainerAllocation selfContainerAllocation = new SelfContainerAllocation();
         selfContainerAllocation.setShipmentId(shipmentId);
         model.addAttribute("selfContainerAllocation", selfContainerAllocation);
@@ -183,6 +206,27 @@ public class AllocationController extends BaseTaskController {
         logger.debug("taskId: {}", taskId);
         logger.debug("containerAllocation: {}", selfContainerAllocation);
         containerAllocationFacade.allocate(selfContainerAllocation);
+        return "redirect:" + referer;
+    }
+
+    @RequestMapping(value = "/release", method = RequestMethod.POST, params = "release")
+    public String release(@PathVariable String taskId, ShipmentContainerAllocation shipmentContainerAllocation,
+                          @RequestHeader(value = "referer", required = false) final String referer) {
+        List<ContainerAllocation> containerAllocations = shipmentContainerAllocation.getContainerAllocations();
+        Collection<RailContainerEntity> railContainerEntities = railContainerService.findByShipmentId(shipmentContainerAllocation.getShipmentId());
+        for (RailContainerEntity railContainerEntity : railContainerEntities) {
+            for (ContainerAllocation containerAllocation : containerAllocations) {
+                if (railContainerEntity.getSc().getId().equals(containerAllocation.getAllocationId())) {
+                    TruckForm truckForm = truckFacade.find(containerAllocation.getTruckId());
+                    railContainerEntity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, truckForm.getServiceProviderId()));
+                    railContainerEntity.setPlateNo(truckForm.getLicensePlate());
+                    railContainerEntity.setTrucker(truckForm.getDriver());
+                    railContainerEntity.setReleasedAt(new Date());
+                    railContainerService.save(railContainerEntity);
+                }
+            }
+        }
+
         return "redirect:" + referer;
     }
 

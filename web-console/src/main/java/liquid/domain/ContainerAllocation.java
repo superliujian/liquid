@@ -26,6 +26,8 @@ public class ContainerAllocation {
 
     private String yard;
 
+    private Long truckId;
+
     public ContainerAllocation() {}
 
     public Long getAllocationId() {
@@ -90,5 +92,13 @@ public class ContainerAllocation {
 
     public void setYard(String yard) {
         this.yard = yard;
+    }
+
+    public Long getTruckId() {
+        return truckId;
+    }
+
+    public void setTruckId(Long truckId) {
+        this.truckId = truckId;
     }
 }

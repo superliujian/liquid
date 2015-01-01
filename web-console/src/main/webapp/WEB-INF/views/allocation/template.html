@@ -51,7 +51,7 @@
     </div>
 </div>
       
-<div th:fragment="console-result">
+<div th:fragment="console-result-view">
     <div class="container" id="t">
                    
         <table class="table table-striped table-hover table-condensed table-16">
@@ -61,6 +61,7 @@
                     <th th:text="#{container.owner}">Owner</th>
                     <th th:text="#{container.yard}">Yard</th>
                     <th th:text="#{container.subtype}">Subtype</th>
+                    <th th:text="#{truck.license.plate}">Truck License Plate</th>
                     <th></th>
                 </tr>
             </thead>
@@ -71,6 +72,14 @@
                     <td><span th:text="${containerAllocation.owner}">Owner Name</span></td>
                     <td><span th:text="${containerAllocation.yard}">Yard Name</span></td>
                     <td><span th:text="${containerAllocation.subtypeName}">Subtype Name</span></td>
+                    <td>
+                        <select class="form-control input-sm">
+                            <option th:each="truckForm : ${truckForms}"
+                                    th:value="${truckForm.id}"
+                                    th:text="${truckForm.licensePlate}">Truck License Plate
+                            </option>
+                        </select>                        
+                    </td>                    
                     <td>  
                         <input type="hidden" name="allocationId" th:value="${containerAllocation.allocationId}" />
                         <button type="submit" class="close" name="undo"><span>&times;</span></button>
@@ -79,6 +88,47 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+      
+<div th:fragment="console-result">
+    <div class="container" id="t">
+        <form method="post" th:object="${shipmentContainerAllocation}" th:action="'/task/' + ${taskId} + '/allocation/release'">
+        <table class="table table-striped table-hover table-condensed table-16">
+            <thead>
+                <tr>
+                    <th>BIC Code</th>
+                    <th th:text="#{container.owner}">Owner</th>
+                    <th th:text="#{container.yard}">Yard</th>
+                    <th th:text="#{container.subtype}">Subtype</th>
+                    <th th:text="#{truck.license.plate}">Truck License Plate</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="containerAllocation, rowStat : *{containerAllocations}">                
+                    <td><b><span th:text="*{containerAllocations[__${rowStat.index}__].bicCode}">BIC Code</span></b></td>
+                    <td><span th:text="*{containerAllocations[__${rowStat.index}__].owner}">Owner Name</span></td>
+                    <td><span th:text="*{containerAllocations[__${rowStat.index}__].yard}">Yard Name</span></td>
+                    <td><span th:text="*{containerAllocations[__${rowStat.index}__].subtypeName}">Subtype Name</span></td>
+                    <td>
+                        <select class="form-control input-sm" th:field="*{containerAllocations[__${rowStat.index}__].truckId}" >
+                            <option th:each="truckForm : ${truckForms}"
+                                    th:value="${truckForm.id}"
+                                    th:text="${truckForm.licensePlate}">Truck License Plate
+                            </option>
+                        </select>                        
+                    </td>
+                    <td>  
+                        <input type="hidden" th:field="*{containerAllocations[__${rowStat.index}__].allocationId}" />
+                        <button data-toggle="modal" data-target="#completeTask" class="close" name="unallocate"><span>&times;</span></button>
+                    </td>                
+                </tr>
+            </tbody>
+        </table>
+            <input type="hidden" th:field="*{shipmentId}" />
+            <input type="submit" name="release" value="release" class="btn btn-success btn-sm"/>
+        </form>
     </div>
 </div>
 
@@ -90,7 +140,7 @@
                     <span th:text="#{shipment}" /><span th:text="${shipmentContainerAllocation.shipmentId}" />
                     <small>
                         <span th:text="#{container.quantity}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.containerQty}" /></b><span>;</span>
-                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.shipment.order.containerSubtype.name}" /></b>
+                        <span th:text="#{container.subtype}" /><span>:</span><b><span th:text="${shipmentContainerAllocation.containerSubtype}" /></b>
                     </small>      
                 </h3>
             </div>

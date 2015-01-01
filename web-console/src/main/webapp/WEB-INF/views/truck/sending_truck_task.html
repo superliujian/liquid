@@ -23,17 +23,17 @@
         <table id="f" class="table table-bordered table-hover table-condensed table-16">
             <thead>
             <tr>
-                <th>Picking At</th>
-                <th>Truck Service Provider</th>                
-                <th>License Plate</th>
-                <th>Driver</th>
+                <th th:text="#{truck.picking.at}">Picking At</th>
+                <th th:text="#{truck.service.provider}">Truck Service Provider</th>                
+                <th th:text="#{truck.license.plate}">License Plate</th>
+                <th th:text="#{truck.driver}">Driver</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="truck, rowStat : *{truckList}">
-                <td>
+            <tr th:each="truck, rowStat : *{truckList}" >
+                <td class="col-xs-3">
                     <input type="hidden" th:field="*{truckList[__${rowStat.index}__].id}" />
-                                
+                    <input type="hidden" th:field="*{truckList[__${rowStat.index}__].shipmentId}" />
                     <div class="form-group" th:classappend="${#fields.hasErrors('truckList[__${rowStat.index}__].pickingAt')} ? 'has-error'">
                         <div class="input-group input-group-sm date" th:id="'pickingAtTimePicker' + ${rowStat.index}">
                             <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{truckList[__${rowStat.index}__].pickingAt}" />
@@ -91,7 +91,6 @@
 /*<![CDATA[*/
     $(document).ready(function() {
         var rowCount = $('#f > tbody > tr').length;
-        console.log(rowCount);
         for(var i = 0; i < rowCount; i++) {
           $('#pickingAtTimePicker' + i).dtPicker();
         }

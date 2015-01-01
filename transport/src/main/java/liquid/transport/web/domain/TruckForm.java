@@ -1,4 +1,4 @@
-package liquid.domain;
+package liquid.transport.web.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by Tao Ma on 12/31/14.
  */
-public class Truck {
+public class TruckForm {
     private Long id;
     private Long shipmentId;
     private Long serviceProviderId;

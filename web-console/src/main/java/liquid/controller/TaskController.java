@@ -2,7 +2,6 @@ package liquid.controller;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.domain.SendingTruckForm;
-import liquid.domain.Truck;
 import liquid.dto.EarningDto;
 import liquid.facade.ServiceProviderFacade;
 import liquid.metadata.ChargeWay;
@@ -17,6 +16,7 @@ import liquid.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
 import liquid.task.domain.Task;
+import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.PathEntity;
 import liquid.transport.persistence.domain.RouteEntity;
@@ -25,6 +25,8 @@ import liquid.transport.service.RouteService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.Shipment;
 import liquid.transport.web.domain.TransMode;
+import liquid.transport.web.domain.TruckForm;
+import liquid.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,6 +79,9 @@ public class TaskController extends BaseTaskController {
     @Autowired
     private ServiceProviderFacade serviceProviderFacade;
 
+    @Autowired
+    private TruckFacade truckFacade;
+
     @RequestMapping(method = RequestMethod.GET)
     public String initForm(@PathVariable String taskId, Model model) {
         logger.debug("taskId: {}", taskId);
@@ -100,11 +106,19 @@ public class TaskController extends BaseTaskController {
                 sendingTruckForm.setDefinitionKey(task.getDefinitionKey());
                 sendingTruckForm.setOrderId(task.getOrderId());
 
-                List<Truck> truckList = new ArrayList<>(order.getContainerQuantity());
-                for (int i = 0; i < order.getContainerQuantity(); i++) {
-                    Truck truck = new Truck();
-                    truckList.add(truck);
+                Iterable<ShipmentEntity> shipmentEntities = shipmentService.findByOrderId(order.getId());
+                List<TruckForm> truckList = new ArrayList<>();
+                for (ShipmentEntity shipmentEntity : shipmentEntities) {
+                    List<TruckForm> truckFormListForShipment = truckFacade.findByShipmentId(shipmentEntity.getId());
+                    for (int i = truckFormListForShipment.size(); i < shipmentEntity.getContainerQty(); i++) {
+                        TruckForm truck = new TruckForm();
+                        truck.setPickingAt(DateUtil.stringOf(new Date()));
+                        truck.setShipmentId(shipmentEntity.getId());
+                        truckFormListForShipment.add(truck);
+                    }
+                    truckList.addAll(truckFormListForShipment);
                 }
+
                 sendingTruckForm.setTruckList(truckList);
 
                 model.addAttribute("sendingTruckForm", sendingTruckForm);
@@ -154,6 +168,15 @@ public class TaskController extends BaseTaskController {
             model.addAttribute("task", task);
             return "truck/sending_truck_task";
         }
+
+        List<TruckForm> truckFormList = truckFacade.save(sendingTruckForm.getTruckList());
+        sendingTruckForm.setTruckList(truckFormList);
+
+        model.addAttribute("sendingTruckForm", sendingTruckForm);
+        model.addAttribute("sps", serviceProviderFacade.findByType(4L));
+
+        model.addAttribute("task", task);
+        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
         return "truck/sending_truck_task";
     }
 

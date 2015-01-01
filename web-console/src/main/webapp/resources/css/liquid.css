@@ -83,28 +83,30 @@ tr, td {
   font-size: 12px;
 }
 
+/* table which contains the forms and inputs */
 table#f > tbody > tr > td {
   margin: 0; 
   padding: 0;
 }
 
-td > div.form-group {
+td div.form-group {
   margin-bottom: 0px;
 }
 
-td > div > input.input-sm {
-  display: block; padding: 0; border: 0; width: 100%;
+td input.input-sm {
+  display: block; 
+  padding: 0; 
+  border: 0; 
+  width: 100%;
 }
 
-td > div > select.input-sm {
-  padding: 0; border: 0; width: 100%;
+td select.input-sm {
+  padding: 0;
+  border: 0; 
+  width: 100%;
 }
 
-td > div > div > input.input-sm {
-  display: block; padding: 0; border: 0; width: 100%;
-}
-
-td > div > div > span.input-group-addon:last-child {
+td span.input-group-addon:last-child {
   border-left: 1px solid #ccc;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;

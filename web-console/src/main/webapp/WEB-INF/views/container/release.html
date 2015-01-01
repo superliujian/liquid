@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="t" class="container">
+    <h3><span th:text="#{container.release}"></span></h3>
+    
+    <hr />
+    
+                <table class="table table-striped table-hover table-condensed table-16">
+                    <thead>
+                    <tr>
+                        <th th:text="#{container.no}">Container No.</th>
+                        <th th:text="#{fleet}">Fleet</th>
+                        <th th:text="#{plate.no}">Plate No.</th>
+                        <th th:text="#{trucker}">Trucker</th>
+                        <th th:text="#{container.released.at}">Released At</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="container : ${containers}">
+                        <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}">
+                            Container No.
+                        </td>
+                        <td th:text="${container.fleet} ? ${container.fleet.name} : ''">Trucker</td>
+                        <td th:text="${container.plateNo}">Container No.</td>
+                        <td th:text="${container.trucker}">Trucker</td>
+                        <td th:text="${container.releasedAt} ? ${#calendars.format(container.releasedAt,'yyyy/MM/dd')} : ''">Released At</td>
+                    </tr>
+                    </tbody>
+                </table>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>

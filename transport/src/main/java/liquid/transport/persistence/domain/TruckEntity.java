@@ -2,10 +2,7 @@ package liquid.transport.persistence.domain;
 
 import liquid.persistence.domain.BaseUpdateEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -44,7 +41,7 @@ public class TruckEntity extends BaseUpdateEntity {
     public void setPickingAt(Date pickingAt) {
         this.pickingAt = pickingAt;
     }
-    
+
     public Long getServiceProviderId() {
         return serviceProviderId;
     }

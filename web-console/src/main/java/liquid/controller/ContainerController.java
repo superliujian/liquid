@@ -12,6 +12,8 @@ import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
+import liquid.transport.persistence.domain.RailContainerEntity;
+import liquid.transport.service.RailContainerService;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +63,9 @@ public class ContainerController extends BaseController {
 
     @Autowired
     private ServiceItemService serviceItemService;
+
+    @Autowired
+    private RailContainerService railContainerService;
 
     @ModelAttribute("container")
     public Container populateContainer() {
@@ -248,5 +253,13 @@ public class ContainerController extends BaseController {
             }
         }
         return "redirect:/container/import";
+    }
+
+    @RequestMapping(value = "/release", method = RequestMethod.GET)
+    public String release(Model model) {
+        Iterable<RailContainerEntity> containers = railContainerService.findByReleasedAtToday();
+
+        model.addAttribute("containers", containers);
+        return "container/release";
     }
 }
