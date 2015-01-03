@@ -12,7 +12,6 @@ import liquid.metadata.ChargeWay;
 import liquid.metadata.ContainerCap;
 import liquid.order.domain.Order;
 import liquid.order.domain.OrderStatus;
-import liquid.order.domain.VerificationSheetForm;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
@@ -41,7 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -326,7 +324,7 @@ public class OrderController extends BaseController {
         switch (tab) {
             case "task":
                 List<Task> tasks = taskService.listTasksByOrderId(id);
-                List<HistoricTaskInstance> completedTasks = taskService.listCompltedTasks(id);
+                List<HistoricTaskInstance> completedTasks = taskService.listCompltedTasks(id + ":" + order.getOrderNo());
                 model.addAttribute("tasks", tasks);
                 model.addAttribute("completedTasks", completedTasks);
                 break;

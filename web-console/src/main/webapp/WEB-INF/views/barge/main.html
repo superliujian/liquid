@@ -39,7 +39,7 @@
                         <tr th:each="container : ${shipment.bargeContainers}">
                             <td th:text="${container.leg.srcLoc.name}">Barge Origination</td>
                             <td th:text="${container.leg.dstLoc.name}">Barge Destination</td>
-                            <td th:text="${container.leg.sp.name}">SP Name</td>
+                            <td th:text="${container.leg.sp} ? ${container.leg.sp.name} : ''">SP Name</td>
                             <td th:text="${container.sc.container} ? ${container.sc.container.bicCode} : ${container.sc.bicCode}">
                                 Container No.
                             </td>

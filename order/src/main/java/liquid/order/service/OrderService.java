@@ -58,7 +58,7 @@ public class OrderService extends AbstractBaseOrderService {
     }
 
     public OrderEntity complete(Long orderId) {
-        OrderEntity order = find(orderId);
+        OrderEntity order = repository.findOne(orderId);
         order.setStatus(OrderStatus.COMPLETED.getValue());
         order = save(order);
         return order;
@@ -76,7 +76,7 @@ public class OrderService extends AbstractBaseOrderService {
         return repository.findByStatus(status, pageable);
     }
 
-    @Transactional("transactionManager")
+    @Transactional(value = "transactionManager")
     public OrderEntity find(Long id) {
         OrderEntity order = repository.findOne(id);
         order.setContainerSubtypeId(order.getContainerSubtypeId());

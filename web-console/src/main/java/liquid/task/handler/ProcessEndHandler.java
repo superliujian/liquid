@@ -2,6 +2,7 @@ package liquid.task.handler;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
+import liquid.task.domain.BusinessKey;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.slf4j.Logger;
@@ -24,8 +25,8 @@ public class ProcessEndHandler implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String businessKey = execution.getProcessBusinessKey();
-        long orderId = Long.parseLong(businessKey);
-        OrderEntity order = orderService.complete(orderId);
+        String businessKeyText = execution.getProcessBusinessKey();
+        BusinessKey businessKey = BusinessKey.decode(businessKeyText);
+        OrderEntity order = orderService.complete(businessKey.getOrderId());
     }
 }

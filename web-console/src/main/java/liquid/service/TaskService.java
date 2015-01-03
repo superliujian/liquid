@@ -60,8 +60,8 @@ public class TaskService {
         return orderService.find(orderId);
     }
 
-    public List<HistoricTaskInstance> listCompltedTasks(long orderId) {
-        return bpmService.listCompltedTasks(String.valueOf(orderId));
+    public List<HistoricTaskInstance> listCompltedTasks(String businessKey) {
+        return bpmService.listCompltedTasks(businessKey);
     }
 
     public liquid.task.domain.Task[] listTasks(String candidateGid) {
