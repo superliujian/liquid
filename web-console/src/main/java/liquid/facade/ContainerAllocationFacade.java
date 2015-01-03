@@ -8,9 +8,11 @@ import liquid.domain.SelfContainerAllocation;
 import liquid.domain.ShipmentContainerAllocation;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
+import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.ShippingContainerEntity;
 import liquid.transport.service.ContainerAllocationService;
+import liquid.transport.service.RailContainerService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import liquid.util.CollectionUtil;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,6 +44,9 @@ public class ContainerAllocationFacade {
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
+
+    @Autowired
+    private RailContainerService railContainerService;
 
     public List<ShipmentContainerAllocation> computeContainerAllocation(Long orderId) {
         OrderEntity order = orderService.find(orderId);
@@ -83,6 +89,8 @@ public class ContainerAllocationFacade {
 
         List<ShippingContainerEntity> shippingContainers = shippingContainerService.findByShipmentId(shipment.getId());
         int allocatedQuantity = shippingContainers == null ? 0 : shippingContainers.size();
+
+        Collection<RailContainerEntity> railContainerEntities = railContainerService.findByShipmentId(shipment.getId());
         for (int j = 0; j < allocatedQuantity; j++) {
             ContainerAllocation containerAllocation = new ContainerAllocation();
             ShippingContainerEntity shippingContainer = shippingContainers.get(j);
@@ -96,6 +104,13 @@ public class ContainerAllocationFacade {
                 containerAllocation.setBicCode(shippingContainers.get(j).getContainer().getBicCode());
                 containerAllocation.setOwner(shippingContainers.get(j).getContainer().getOwner().getName());
                 containerAllocation.setYard(shippingContainers.get(j).getContainer().getYard().getName());
+
+                for (RailContainerEntity railContainerEntity : railContainerEntities) {
+                    if (railContainerEntity.getSc().getId().equals(shippingContainer.getId())) {
+                        if (null != railContainerEntity.getTruck())
+                            containerAllocation.setTruckId(railContainerEntity.getTruck().getId());
+                    }
+                }
                 containerAllocations.add(containerAllocation);
             }
         }

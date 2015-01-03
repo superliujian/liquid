@@ -23,6 +23,7 @@
         <table id="f" class="table table-bordered table-hover table-condensed table-16">
             <thead>
             <tr>
+                <th th:text="#{shipment}">Picking At</th>
                 <th th:text="#{truck.picking.at}">Picking At</th>
                 <th th:text="#{truck.service.provider}">Truck Service Provider</th>                
                 <th th:text="#{truck.license.plate}">License Plate</th>
@@ -30,10 +31,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="truck, rowStat : *{truckList}" >
+            <tr th:each="truck, rowStat : *{truckList}">
+                <td>
+                    <span th:text="*{truckList[__${rowStat.index}__].shipmentId}" />
+                    <input type="hidden" th:field="*{truckList[__${rowStat.index}__].shipmentId}" />
+                </td>
                 <td class="col-xs-3">
                     <input type="hidden" th:field="*{truckList[__${rowStat.index}__].id}" />
-                    <input type="hidden" th:field="*{truckList[__${rowStat.index}__].shipmentId}" />
                     <div class="form-group" th:classappend="${#fields.hasErrors('truckList[__${rowStat.index}__].pickingAt')} ? 'has-error'">
                         <div class="input-group input-group-sm date" th:id="'pickingAtTimePicker' + ${rowStat.index}">
                             <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{truckList[__${rowStat.index}__].pickingAt}" />

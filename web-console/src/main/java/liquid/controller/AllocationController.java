@@ -18,9 +18,11 @@ import liquid.service.LocationService;
 import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
+import liquid.transport.persistence.domain.TruckEntity;
 import liquid.transport.service.RailContainerService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
+import liquid.transport.service.TruckService;
 import liquid.transport.web.domain.TruckForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +81,9 @@ public class AllocationController extends BaseTaskController {
     private TruckFacade truckFacade;
 
     @Autowired
+    private TruckService truckService;
+
+    @Autowired
     private RailContainerService railContainerService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -102,6 +107,7 @@ public class AllocationController extends BaseTaskController {
                 truckForms.addAll(truckFormsForShipment);
             }
 
+            model.addAttribute("shipmentContainerAllocation", new ShipmentContainerAllocation());
             model.addAttribute("truckForms", truckForms);
             return "allocation/self_container";
         }
@@ -217,10 +223,11 @@ public class AllocationController extends BaseTaskController {
         for (RailContainerEntity railContainerEntity : railContainerEntities) {
             for (ContainerAllocation containerAllocation : containerAllocations) {
                 if (railContainerEntity.getSc().getId().equals(containerAllocation.getAllocationId())) {
-                    TruckForm truckForm = truckFacade.find(containerAllocation.getTruckId());
-                    railContainerEntity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, truckForm.getServiceProviderId()));
-                    railContainerEntity.setPlateNo(truckForm.getLicensePlate());
-                    railContainerEntity.setTrucker(truckForm.getDriver());
+                    TruckEntity truckEntity = truckService.find(containerAllocation.getTruckId());
+                    railContainerEntity.setTruck(truckEntity);
+                    railContainerEntity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, truckEntity.getServiceProviderId()));
+                    railContainerEntity.setPlateNo(truckEntity.getLicensePlate());
+                    railContainerEntity.setTrucker(truckEntity.getDriver());
                     railContainerEntity.setReleasedAt(new Date());
                     railContainerService.save(railContainerEntity);
                 }

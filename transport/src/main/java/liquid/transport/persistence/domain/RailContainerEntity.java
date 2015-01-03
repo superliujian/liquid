@@ -13,6 +13,10 @@ import java.util.Date;
  */
 @Entity(name = "TSP_RAIL_CONTAINER")
 public class RailContainerEntity extends BaseLegContainer {
+    @OneToOne
+    @JoinColumn(name = "TRUCK_ID")
+    private TruckEntity truck;
+
     @ManyToOne
     @JoinColumn(name = "FLEET_ID")
     private ServiceProviderEntity fleet;
@@ -66,6 +70,14 @@ public class RailContainerEntity extends BaseLegContainer {
 
     @Transient
     private boolean batch;
+
+    public TruckEntity getTruck() {
+        return truck;
+    }
+
+    public void setTruck(TruckEntity truck) {
+        this.truck = truck;
+    }
 
     public ServiceProviderEntity getFleet() {
         return fleet;
