@@ -14,7 +14,7 @@
             <li class="active" th:class="${tab} == 'task' ? 'active'">
                 <a th:href="'/order/' + ${order.id} + '/task'" th:text="#{task}">Task</a></li>
             <li class="active" th:class="${tab} == 'railway' ? 'active'">
-                <a th:href="'/order/' + ${order.id} + '/railway'" th:text="#{railway.info}">Railway</a></li>            
+                <a th:href="'/order/' + ${order.id} + '/railway'" th:text="#{railway.plan.info}">Railway</a></li>            
             <li class="active" th:class="${tab} == 'container' ? 'active'">
                 <a th:href="'/order/' + ${order.id} + '/container'" th:text="#{container}">Container</a></li>
             <li class="active" th:class="${tab} == 'shipment' ? 'active'">
