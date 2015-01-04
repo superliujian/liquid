@@ -24,7 +24,7 @@ public abstract class BaseController {
     @Autowired
     private Locale locale;
 
-    public void setFieldError(BindingResult result, String objectName, String fieldName, Object rejectedValue,
+    public void addFieldError(BindingResult result, String objectName, String fieldName, Object rejectedValue,
                               Object... arguments) {
         String defaultMessage = messageSource.getMessage(objectName + "." + fieldName, arguments, locale);
         FieldError filedError = new FieldError(objectName, fieldName, rejectedValue, false, null, null, defaultMessage);

@@ -5,34 +5,41 @@ package liquid.validation;
  */
 public class FormValidationResult {
     private final boolean isSuccessful;
-    private final String messageKey;
+    private final Long id;
+    private final String name;
 
-    private FormValidationResult(boolean isSuccessful, String messageKey) {
+    private FormValidationResult(boolean isSuccessful, Long id, String name) {
         this.isSuccessful = isSuccessful;
-        this.messageKey = messageKey;
+        this.id = id;
+        this.name = name;
     }
 
-    public static FormValidationResult newSuccess() {
-        return new FormValidationResult(true, "");
+    public static FormValidationResult newSuccess(Long id, String name) {
+        return new FormValidationResult(true, id, name);
     }
 
-    public static FormValidationResult newFailure(String messageKey) {
-        return new FormValidationResult(false, messageKey);
+    public static FormValidationResult newFailure() {
+        return new FormValidationResult(false, null, null);
     }
 
     public boolean isSuccessful() {
         return isSuccessful;
     }
 
-    public String getMessageKey() {
-        return messageKey;
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("FormValidationResult{");
-        sb.append("isSuccessful=").append(isSuccessful);
-        sb.append(", messageKey='").append(messageKey).append('\'');
+        final StringBuilder sb = new StringBuilder("{Class=FormValidationResult");
+        sb.append(", isSuccessful=").append(isSuccessful);
+        sb.append(", id=").append(id);
+        sb.append(", name='").append(name).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -242,42 +242,115 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
     public String save(@Valid @ModelAttribute Order order, BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
-        FormValidationResult result = orderFacade.validateCustomer(order);
-        if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
-        }
         if (bindingResult.hasErrors()) {
-            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-
-            model.addAttribute("locations", locationEntities);
             return "order/form";
-        } else {
-            order.setStatus(OrderStatus.SAVED.getValue());
-            orderFacade.save(order);
-            return "redirect:/order?number=0";
         }
-    }
 
+        FormValidationResult result = orderFacade.validateCustomer(order.getCustomerId(), order.getCustomerName());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "customerName", order.getCustomerName(), order.getCustomerName());
+        } else {
+            order.setCustomerId(result.getId());
+            order.setCustomerName(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getOriginId(), order.getOrigination());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "origination", order.getOrigination(), order.getOrigination());
+        } else {
+            order.setOriginId(result.getId());
+            order.setOrigination(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getDestinationId(), order.getDestination());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "destination", order.getDestination(), order.getDestination());
+        } else {
+            order.setDestinationId(result.getId());
+            order.setDestination(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getRailSourceId(), order.getRailSource(), LocationType.STATION.getType());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "railSource", order.getRailSource(), order.getRailSource());
+        } else {
+            order.setRailSourceId(result.getId());
+            order.setRailSource(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getRailDestinationId(), order.getRailDestination(), LocationType.STATION.getType());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "railDestination", order.getRailDestination(), order.getRailDestination());
+        } else {
+            order.setRailDestinationId(result.getId());
+            order.setRailDestination(result.getName());
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "order/form";
+        }
+
+        order.setStatus(OrderStatus.SAVED.getValue());
+        orderFacade.save(order);
+        return "redirect:/order?number=0";
+    }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "submit")
     public String submit(@Valid @ModelAttribute Order order,
                          BindingResult bindingResult, Model model) {
         logger.debug("order: {}", order);
-        FormValidationResult result = orderFacade.validateCustomer(order);
-        if (!result.isSuccessful()) {
-            setFieldError(bindingResult, "order", "customerName", order.getCustomerName());
-        }
         if (bindingResult.hasErrors()) {
-            List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-
-            model.addAttribute("locations", locationEntities);
             return "order/form";
-        } else {
-            order.setStatus(OrderStatus.SUBMITTED.getValue());
-            orderFacade.submit(order);
-
-            return "redirect:/order?number=0";
         }
+
+        FormValidationResult result = orderFacade.validateCustomer(order.getCustomerId(), order.getCustomerName());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "customerName", order.getCustomerName(), order.getCustomerName());
+        } else {
+            order.setCustomerId(result.getId());
+            order.setCustomerName(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getOriginId(), order.getOrigination());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "origination", order.getOrigination(), order.getOrigination());
+        } else {
+            order.setOriginId(result.getId());
+            order.setOrigination(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getDestinationId(), order.getDestination());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "destination", order.getDestination(), order.getDestination());
+        } else {
+            order.setDestinationId(result.getId());
+            order.setDestination(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getRailSourceId(), order.getRailSource(), LocationType.STATION.getType());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "railSource", order.getRailSource(), order.getRailSource());
+        } else {
+            order.setRailSourceId(result.getId());
+            order.setRailSource(result.getName());
+        }
+
+        result = orderFacade.validateLocation(order.getRailDestinationId(), order.getRailDestination(), LocationType.STATION.getType());
+        if (!result.isSuccessful()) {
+            addFieldError(bindingResult, "order", "railDestination", order.getRailDestination(), order.getRailDestination());
+        } else {
+            order.setRailDestinationId(result.getId());
+            order.setRailDestination(result.getName());
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "order/form";
+        }
+
+        order.setStatus(OrderStatus.SUBMITTED.getValue());
+        orderFacade.submit(order);
+
+        return "redirect:/order?number=0";
     }
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)

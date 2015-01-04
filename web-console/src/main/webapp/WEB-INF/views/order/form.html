@@ -400,14 +400,14 @@
         <div class="row">
             <input type="hidden" th:field="*{receivableSummaryId}" />
             <div class="col-lg-3">
-                <div class="form-group">
+                <div class="form-group" th:classappend="${#fields.hasErrors('usdTotal')} ? 'has-error'">
                     <label th:text="#{usd.total} + ' *'">USD Total</label>
                     <input type="text" th:field="*{usdTotal}" class="form-control input-sm" readonly="readonly"/>
                     <span th:errors="*{usdTotal}">error</span>
                 </div>
             </div>
             <div class="col-lg-3">
-                <div class="form-group">
+                <div class="form-group" th:classappend="${#fields.hasErrors('cnyTotal')} ? 'has-error'">
                     <label th:text="#{cny.total} + ' *'">CNY Total</label>
                     <input type="text" th:field="*{cnyTotal}" class="form-control input-sm" readonly="readonly"/>
                     <span th:errors="*{cnyTotal}">error</span>

@@ -47,6 +47,10 @@ public class LocationService extends AbstractCachedService<LocationEntity, Locat
         return locations;
     }
 
+    public LocationEntity findByName(String name) {
+        return repository.findByName(name);
+    }
+
     public LocationEntity findByTypeAndName(Integer type, String name) {
         return repository.findByTypeAndName(type, name);
     }

@@ -300,7 +300,7 @@ public class TaskController extends BaseTaskController {
             model.addAttribute("total", chargeService.total(charges));
             return "planning/main";
         } else if (shipment.getContainerQuantity() > (order.getContainerQty() - containerUsage)) {
-            setFieldError(result, "shipment", "containerQty", shipment.getContainerQuantity(), (order.getContainerQty() - containerUsage));
+            addFieldError(result, "shipment", "containerQty", shipment.getContainerQuantity(), (order.getContainerQty() - containerUsage));
 
             model.addAttribute("containerTotality", order.getContainerQty());
 

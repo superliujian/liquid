@@ -15,6 +15,7 @@ import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
 import liquid.persistence.domain.CustomerEntity;
+import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.security.SecurityContext;
@@ -357,31 +358,66 @@ public class OrderFacade {
     /**
      * If customer name is exactly equals to the one in database, the customer id is set.
      *
-     * @param order
+     * @param id
+     * @param name
      * @return
      */
-    public FormValidationResult validateCustomer(Order order) {
-        long id = order.getCustomerId();
-        String name = order.getCustomerName();
-        if (id == 0L) {
+    public FormValidationResult validateCustomer(Long id, String name) {
+        if (null == id) {
             if (null != name && name.trim().length() > 0) {
                 CustomerEntity customer = customerService.findByName(name);
                 if (null != customer) {
-                    order.setCustomerId(customer.getId());
-                    return FormValidationResult.newSuccess();
+                    return FormValidationResult.newSuccess(customer.getId(), name);
                 }
-            } else {
-                return FormValidationResult.newFailure("invalid.customer");
             }
+            return FormValidationResult.newFailure();
         }
 
         CustomerEntity customer = customerService.find(id);
-        if (name == null) return FormValidationResult.newFailure("invalid.customer");
+        if (name == null) return FormValidationResult.newFailure();
+        if (null == customer) return FormValidationResult.newFailure();
 
-        if (null == customer) return FormValidationResult.newFailure("invalid.customer");
+        if (name.equals(customer.getName()))
+            return FormValidationResult.newSuccess(customer.getId(), customer.getName());
+        else return FormValidationResult.newFailure();
+    }
 
-        if (name.equals(customer.getName())) return FormValidationResult.newSuccess();
-        else return FormValidationResult.newFailure("invalid.customer");
+    public FormValidationResult validateLocation(Long id, String name) {
+        if (null == id) {
+            if (null != name && name.trim().length() > 0) {
+                LocationEntity location = locationService.findByName(name);
+                if (null != location) {
+                    return FormValidationResult.newSuccess(location.getId(), location.getName());
+                }
+            }
+            return FormValidationResult.newFailure();
+        }
+
+        LocationEntity location = locationService.find(id);
+        if (name == null) return FormValidationResult.newFailure();
+        if (null == location) return FormValidationResult.newFailure();
+        if (name.equals(location.getName()))
+            return FormValidationResult.newSuccess(location.getId(), location.getName());
+        else return FormValidationResult.newFailure();
+    }
+
+    public FormValidationResult validateLocation(Long id, String name, int type) {
+        if (null == id) {
+            if (null != name && name.trim().length() > 0) {
+                LocationEntity location = locationService.findByTypeAndName(type, name);
+                if (null != location) {
+                    return FormValidationResult.newSuccess(location.getId(), location.getName());
+                }
+            }
+            return FormValidationResult.newFailure();
+        }
+
+        LocationEntity location = locationService.find(id);
+        if (name == null) return FormValidationResult.newFailure();
+        if (null == location) return FormValidationResult.newFailure();
+        if (name.equals(location.getName()))
+            return FormValidationResult.newSuccess(location.getId(), location.getName());
+        else return FormValidationResult.newFailure();
     }
 
     public Page<Order> findByCustomerId(Long customerId, Pageable pageable) {

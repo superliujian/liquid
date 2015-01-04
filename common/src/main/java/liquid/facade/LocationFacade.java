@@ -66,12 +66,4 @@ public class LocationFacade {
         }
         return locations;
     }
-
-    public FormValidationResult validateLocation(Long id, String name, Integer type) {
-        if (null == id) {
-            LocationEntity location = locationService.findByTypeAndName(type, name);
-            if (null == location) return FormValidationResult.newFailure("invalid.location");
-        }
-        return FormValidationResult.newSuccess();
-    }
 }
