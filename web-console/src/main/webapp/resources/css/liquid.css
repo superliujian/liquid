@@ -96,7 +96,7 @@ td div.form-group {
 td input.input-sm {
   display: block; 
   padding: 0; 
-  border: 0; 
+  border: 1px; 
   width: 100%;
 }
 
