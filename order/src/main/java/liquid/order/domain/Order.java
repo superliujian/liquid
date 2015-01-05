@@ -4,6 +4,7 @@ import liquid.domain.BaseIdObject;
 import liquid.domain.ServiceItem;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -56,8 +57,8 @@ public class Order extends BaseIdObject {
     private Long selfContainerSubtypeId;
     private String containerSubtype;
 
-    @Min(1)
     @NotNull
+    @Min(1)
     private Integer containerQuantity;
     private String containerAttribute;
 
@@ -79,6 +80,7 @@ public class Order extends BaseIdObject {
     private String comment;
     private Boolean sameDay;
 
+    @Valid
     private List<ServiceItem> serviceItems;
 
     private Long receivableSummaryId;

@@ -77,12 +77,30 @@ public class OrderFacade {
         order.setDestination(locationService.find(Long.valueOf(env.getProperty("default.destination.id"))).getName());
         order.setLoadingEstimatedTime(DateUtil.stringOf(new Date()));
 
+        order.setRailSourceId(order.getOriginId());
+        order.setRailSource(order.getOrigination());
+        order.setRailDestinationId(order.getDestinationId());
+        order.setRailDestination(order.getDestination());
         order.setPlanReportTime(DateUtil.stringOf(new Date()));
+
+        List<ServiceItem> serviceItemList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            ServiceItem serviceItem = new ServiceItem();
+            serviceItemList.add(serviceItem);
+        }
+        order.setServiceItems(serviceItemList);
         return order;
     }
 
     @Transactional("transactionManager")
     public OrderEntity save(Order order) {
+        List<ServiceItem> serviceItemList = order.getServiceItems();
+        Iterator<ServiceItem> serviceItemIterator = serviceItemList.iterator();
+        while (serviceItemIterator.hasNext()) {
+            ServiceItem serviceItem = serviceItemIterator.next();
+            if (serviceItem.getQuotation() == null) serviceItemIterator.remove();
+        }
+
         OrderEntity orderEntity = convert(order);
         OrderRailEntity railwayEntity = convertRailway(order);
         railwayEntity.setOrder(orderEntity);
@@ -102,7 +120,7 @@ public class OrderFacade {
         boolean hasDelivery = false;
         List<ServiceItem> serviceItems = order.getServiceItems();
         for (ServiceItem serviceItem : serviceItems) {
-            if (serviceItem.getServiceSubtypeId() == Integer.valueOf(env.getProperty("service.subtype.delivery.id"))) {
+            if (serviceItem.getServiceSubtypeId() == Long.valueOf(env.getProperty("service.subtype.delivery.id"))) {
                 hasDelivery = true;
                 break;
             }

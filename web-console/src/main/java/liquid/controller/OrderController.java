@@ -360,6 +360,15 @@ public class OrderController extends BaseController {
         Order order = orderFacade.find(id);
         logger.debug("order: {}", order);
 
+        List<ServiceItem> serviceItemList = order.getServiceItems();
+        if (null == serviceItemList) serviceItemList = new ArrayList<>();
+        if (serviceItemList.size() < 5) {
+            for (int i = serviceItemList.size(); i < 5; i++) {
+                serviceItemList.add(new ServiceItem());
+            }
+        }
+        order.setServiceItems(serviceItemList);
+
         model.addAttribute("order", order);
         return "order/form";
     }

@@ -1,21 +1,26 @@
 package liquid.domain;
 
+import org.springframework.format.annotation.NumberFormat;
+
 /**
  * Created by redbrick9 on 5/27/14.
  */
 public class ServiceItem extends BaseIdObject {
-    private long serviceSubtypeId;
+    private Long serviceSubtypeId;
     private String serviceSubtype;
-    private Integer currency = 0;
+
+    @NumberFormat
+    private Integer currency;
     private String currencyText;
-    private long quotation;
+
+    private Long quotation;
     private String comment;
 
-    public long getServiceSubtypeId() {
+    public Long getServiceSubtypeId() {
         return serviceSubtypeId;
     }
 
-    public void setServiceSubtypeId(long serviceSubtypeId) {
+    public void setServiceSubtypeId(Long serviceSubtypeId) {
         this.serviceSubtypeId = serviceSubtypeId;
     }
 
@@ -43,11 +48,11 @@ public class ServiceItem extends BaseIdObject {
         this.currencyText = currencyText;
     }
 
-    public long getQuotation() {
+    public Long getQuotation() {
         return quotation;
     }
 
-    public void setQuotation(long quotation) {
+    public void setQuotation(Long quotation) {
         this.quotation = quotation;
     }
 
@@ -61,13 +66,14 @@ public class ServiceItem extends BaseIdObject {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ServiceItem{");
-        sb.append("serviceSubtypeId=").append(serviceSubtypeId);
+        final StringBuilder sb = new StringBuilder("{Class=ServiceItem");
+        sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
         sb.append(", serviceSubtype='").append(serviceSubtype).append('\'');
         sb.append(", currency=").append(currency);
         sb.append(", currencyText='").append(currencyText).append('\'');
         sb.append(", quotation=").append(quotation);
         sb.append(", comment='").append(comment).append('\'');
+        sb.append(", ").append(super.toString());
         sb.append('}');
         return sb.toString();
     }

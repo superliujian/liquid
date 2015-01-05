@@ -380,7 +380,10 @@
 	        </select>        
         </td>
         <td>
-            <input type="text" class="form-control input-sm" th:field="*{serviceItems[__${rowStat.index}__].quotation}" />
+            <div class="form-group" th:classappend="${#fields.hasErrors('serviceItems[__${rowStat.index}__].quotation')} ? 'has-error'">
+                <input type="text" th:field="*{serviceItems[__${rowStat.index}__].quotation}" class="form-control input-sm"/>
+                <span th:errors="*{serviceItems[__${rowStat.index}__].quotation}">error</span>
+            </div>
         </td>
         <td>
             <input type="text" class="form-control input-sm" th:field="*{serviceItems[__${rowStat.index}__].comment}" />
@@ -512,9 +515,15 @@
             $("table[id='price'] > tbody > tr").each(function() {
                 var subtype = $('td:eq(0) select option:selected', this).val();
                 var currency = $('td:eq(1) select option:selected', this).val();
-                var price = $('td:eq(2) input', this).val();
-                if(currency == 0) cny += parseInt(price, 10);
-                else usd += parseInt(price, 10);
+                var priceText = $('td:eq(2) input', this).val();
+                var price = parseInt(priceText, 10);
+                console.log(priceText);
+                console.log("price: "+ price);
+                console.log(isNaN(price));
+                if(!isNaN(price)) {
+                    if(currency == 0) cny += price;
+                    else usd += price;
+                }
             });
             
             $('#usdTotal').val(usd);
