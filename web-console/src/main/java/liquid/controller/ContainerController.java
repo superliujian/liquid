@@ -255,11 +255,23 @@ public class ContainerController extends BaseController {
         return "redirect:/container/import";
     }
 
-    @RequestMapping(value = "/release", method = RequestMethod.GET)
-    public String release(Model model) {
+    @RequestMapping(value = "/release/now", method = RequestMethod.GET)
+    public String listReleasedNow(Model model) {
         Iterable<RailContainerEntity> containers = railContainerService.findByReleasedAtToday();
 
         model.addAttribute("containers", containers);
-        return "container/release";
+        model.addAttribute("tab", "now");
+        return "container/now_release";
+    }
+
+    @RequestMapping(value = "/release/all", method = RequestMethod.GET)
+    public String listReleasedAll(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        Page<RailContainerEntity> page = railContainerService.findAll(pageRequest);
+
+        model.addAttribute("page", page);
+        model.addAttribute("tab", "all");
+        model.addAttribute("contextPath", "/container/release/all?");
+        return "container/all_release";
     }
 }

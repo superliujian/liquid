@@ -8,10 +8,17 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div id="t" class="container">
-    <h3><span th:text="#{container.release}"></span></h3>
+<br/>
+
+<div id="l" class="container">
+    <div class="row">
+
+        <div th:include="container/template :: release-bar"/>
+
+        <div class="col-xs-10">
+            <h3><span th:text="#{container.release.now}"></span></h3>
     
-    <hr />
+            <hr />
     
                 <table class="table table-striped table-hover table-condensed table-16">
                     <thead>
@@ -35,6 +42,8 @@
                     </tr>
                     </tbody>
                 </table>
+        </div>                
+    </div><!-- row -->                
 </div>
 
 <!-- {!begin layout} -->

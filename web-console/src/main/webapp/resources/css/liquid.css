@@ -127,6 +127,11 @@ div#m.container {
   max-width: 600px;
 }
 
+/* l - large */
+div#l.container {
+  max-width: 960px;
+}
+
 /* tc - tab content */
 div#tc.container {
   padding-top: 10px;

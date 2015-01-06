@@ -61,5 +61,13 @@
         </div>        
     </form>
 </div>
+
+<div th:fragment="release-bar">
+        <ul class="col-xs-2 list-group">
+            <a class="list-group-item" th:classappend="${tab} == 'now' ? 'active'" href="/container/release/now"><span th:text="#{container.release.now}">Now</span></a>
+            <a class="list-group-item" th:classappend="${tab} == 'all' ? 'active'" href="/container/release/all"><span th:text="#{container.release.all}">All</span></a>
+        </ul>
+</div>
+
 </body>
 </html>
