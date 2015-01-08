@@ -11,51 +11,73 @@
 <br/>
 
 <div class="container-fluid">
-
-        <table class="table table-striped table-hover table-condensed table-16">
+    <div class="row">
+        <div class="col-xs-7">
+            <table id="f" class="col-xs-6 table table-striped table-bordered table-hover table-condensed table-16">
+                <thead>
+                    <tr>
+                        <th th:text="#{invoice.no}">Invoice No.</th>
+                        <th th:text="#{cny.of.invoice}">CNY of Invoice</th>
+                        <th th:text="#{usd.of.invoice}">USD of Invoice</th>
+                        <th th:text="#{payer}">Payer</th>
+                        <th th:text="#{date.of.invoice}">Date of Invoice</th>
+                        <th th:text="#{expected.date.of.receivable}">Excepted Date of Receivable</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="record : ${records}">
+                        <td th:text="${record.invoiceNo}"></td>
+                        <td th:text="${record.cnyOfInvoice}">></td>
+                        <td th:text="${record.usdOfInvoice}">></td>
+                        <td th:text="${record.payer.name}">></td>
+                        <td th:text="${#calendars.format(record.dateOfInvoice,'yyyy-MM-dd')}">></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                    <form method="POST" th:action="'/receivable/' + ${orderId}" th:object="${formBean}">
+                        <td><input type="text" class="form-control input-sm" th:field="*{invoiceNo}"></input></td>
+                        <td><input type="text" class="form-control input-sm" th:field="*{cnyOfInvoice}"></input></td>
+                        <td><input type="text" class="form-control input-sm" th:field="*{usdOfInvoice}"></input></td>
+                        <td><input type="hidden" class="form-control input-sm" th:field="*{payerId}"></input><input type="text" class="form-control input-sm" th:field="*{payerName}"></input></td>
+                        <td><input type="text" class="form-control input-sm" th:field="*{dateOfInvoice}"></input></td>
+                        <td><input type="text" class="form-control input-sm" th:field="*{expectedDateOfReceivable}"></input></td>
+                        <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"/></button></td>
+                    </form>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       
+        <div class="col-xs-5 vertical-line">
+        <table id="f" class="col-xs-6 table table-striped table-bordered table-hover table-condensed table-16">
             <thead>
-            <tr>
-                <th th:text="#{invoice.no}">Invoice No.</th>
-                <th th:text="#{cny.of.invoice}">CNY of Invoice</th>
-                <th th:text="#{usd.of.invoice}">USD of Invoice</th>
-                <th th:text="#{payer}">Payer</th>
-                <th th:text="#{date.of.invoice}">Date of Invoice</th>
-                <th th:text="#{expected.date.of.receivable}">Excepted Date of Receivable</th>
-                <th th:text="#{actual.cny}">Actual CNY</th>
-                <th th:text="#{actual.usd}">Actual USD</th>
-                <th th:text="#{date.of.receivable}">Date of Receivable</th>
-                <th></th>
-            </tr>
+                <tr> 
+                    <th th:text="#{actual.cny}">Actual CNY</th>
+                    <th th:text="#{actual.usd}">Actual USD</th>
+                    <th th:text="#{date.of.receivable}">Date of Receivable</th>            
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="record : ${records}">
-                <td th:text="${record.invoiceNo}"></td>
-                <td th:text="${record.cnyOfInvoice}">></td>
-                <td th:text="${record.usdOfInvoice}">></td>
-                <td th:text="${record.payer.name}">></td>
-                <td th:text="${#calendars.format(record.dateOfInvoice,'yyyy-MM-dd')}">></td>
-                <td th:text="${#calendars.format(record.expectedDateOfReceivable,'yyyy-MM-dd')}"></td>
-                <td th:text="${record.cny}">></td>
-                <td th:text="${record.usd}">></td>
-                <td th:text="${#calendars.format(record.dateOfReceivable,'yyyy-MM-dd')}"></td>
-                <td></td>
-            </tr>
-            <tr>
-            <form method="POST" th:action="'/receivable/' + ${orderId}" th:object="${formBean}">
-                <td><input type="text" class="form-control input-sm" th:field="*{invoiceNo}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{cnyOfInvoice}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{usdOfInvoice}"></input></td>
-                <td><input type="hidden" class="form-control input-sm" th:field="*{payerId}"></input><input type="text" class="form-control input-sm" th:field="*{payerName}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{dateOfInvoice}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{expectedDateOfReceivable}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{cny}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{usd}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{dateOfReceivable}"></input></td>
-                <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"/></button></td>
-            </form>
-            </tr>
-            </tbody>
-        </table>    
+                <tr th:each="record : ${records}">
+                    <td th:text="${record.cny}">></td>
+                    <td th:text="${record.usd}">></td>
+                    <td th:text="${#calendars.format(record.dateOfReceivable,'yyyy-MM-dd')}"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                <form method="POST" th:action="'/receivable/' + ${orderId}" th:object="${formBean}">
+                    <td><input type="text" class="form-control input-sm" th:field="*{cny}"></input></td>
+                    <td><input type="text" class="form-control input-sm" th:field="*{usd}"></input></td>
+                    <td><input type="text" class="form-control input-sm" th:field="*{dateOfReceivable}"></input></td>
+                    <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"/></button></td>
+                </form>
+                </tr>
+            </tbody>                                    
+        </table>
+        </div>
+    </div><!-- row -->
 </div>
 
 <div class="container text-center">
