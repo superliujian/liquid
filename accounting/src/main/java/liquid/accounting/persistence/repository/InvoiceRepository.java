@@ -10,6 +10,8 @@ import org.springframework.data.repository.CrudRepository;
  * Created by Tao Ma on 1/8/15.
  */
 public interface InvoiceRepository extends CrudRepository<InvoiceEntity, Long> {
+    Iterable<InvoiceEntity> findByOrderId(Long orderId);
+
     Page<InvoiceEntity> findAll(Pageable pageable);
 
     Iterable<InvoiceEntity> findByBuyerId(Long buyerId);

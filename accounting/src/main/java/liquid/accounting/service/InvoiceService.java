@@ -26,6 +26,10 @@ public class InvoiceService extends AbstractService<InvoiceEntity, InvoiceReposi
     @Override
     public void doSaveBefore(InvoiceEntity entity) {}
 
+    public Iterable<InvoiceEntity> findByOrderId(Long orderId) {
+        return repository.findByOrderId(orderId);
+    }
+
     public Page<InvoiceEntity> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
@@ -55,4 +59,5 @@ public class InvoiceService extends AbstractService<InvoiceEntity, InvoiceReposi
     public Iterable<InvoiceEntity> findByBuyerId(Long buyerId) {
         return repository.findByBuyerId(buyerId);
     }
+
 }

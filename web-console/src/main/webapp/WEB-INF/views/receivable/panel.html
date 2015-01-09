@@ -10,12 +10,97 @@
 
 <br/>
 
+    <!-- Modal -->
+    <form method="POST" action="/invoice" th:object="${invoice}">  
+        <div class="modal" id="addInvoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y: hidden;">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                                  
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel"><span>Add Invoice</span></h4>
+                    </div>
+                    <div class="modal-body">                        
+                        <input type="hidden" th:field="*{orderId}"></input>
+                        <input type="text" class="form-control input-sm" th:field="*{invoiceNo}"></input>
+                        <input type="text" class="form-control input-sm" th:field="*{cny}"></input>
+                        <input type="text" class="form-control input-sm" th:field="*{usd}"></input>
+                            <input type="hidden" class="form-control input-sm" th:field="*{buyerId}"></input>
+                            <input type="text" class="form-control input-sm" th:field="*{buyerName}"></input>
+                            <div class="input-group input-group-sm date" id="invoiceIssuedAtPicker">
+                                <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{issuedAt}" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+
+                            <div class="input-group input-group-sm date" id="expectedPaymentAtPicker">
+                                <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{expectedPaymentAt}" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                <span th:text="#{modal.close}"/>
+                            </button>
+                             <button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-plus"/></button>
+                     </div>
+                     
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </form>
+    
+    <form method="POST" action="/receipt" th:object="${receipt}">
+        <div class="modal" id="addReceipt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="overflow-y: hidden;">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel"><span>Add Receipt</span></h4>
+                    </div>  
+                    <div class="modal-body">                              
+                        <td><input type="hidden" th:field="*{orderId}"></input></td>
+                        <td><input type="text" class="form-control input-sm" th:field="*{cny}"></input></td>
+                        <td><input type="text" class="form-control input-sm" th:field="*{usd}"></input></td>
+                        <td>
+                            <div class="input-group input-group-sm date" id="receiptIssuedAtPicker">
+                                <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{issuedAt}" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </td>
+                    </div>
+                    <div class="modal-footer">
+                              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                <span th:text="#{modal.close}"/>
+                            </button>
+                             <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"/></button></td>
+                    </div>                    
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </form>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-7">
-            <table id="f" class="col-xs-6 table table-striped table-bordered table-hover table-condensed table-16">
+           
+            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button class="btn btn-sm btn-success btn-block" data-toggle="modal" data-target="#addInvoice"><i class="glyphicon glyphicon-plus"/></button>
+                </div>
+            </div>
+
+            <br />
+                 
+            <table class="col-xs-6 table table-striped table-bordered table-hover table-condensed table-16">
                 <thead>
                     <tr>
+                        <th></th>
                         <th th:text="#{invoice.no}">Invoice No.</th>
                         <th th:text="#{cny.of.invoice}">CNY of Invoice</th>
                         <th th:text="#{usd.of.invoice}">USD of Invoice</th>
@@ -26,56 +111,68 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="record : ${records}">
-                        <td th:text="${record.invoiceNo}"></td>
-                        <td th:text="${record.cnyOfInvoice}">></td>
-                        <td th:text="${record.usdOfInvoice}">></td>
-                        <td th:text="${record.payer.name}">></td>
-                        <td th:text="${#calendars.format(record.dateOfInvoice,'yyyy-MM-dd')}">></td>
+                    <tr th:each="invoice, row : ${statement.content}">
+                        <td><span th:text="${row.count}" /></td>
+                        <td th:text="${invoice.invoiceNo}"></td>
+                        <td class="text-right" th:text="${invoice.cny}"></td>
+                        <td class="text-right" th:text="${invoice.usd}"></td>
+                        <td th:text="${invoice.buyerName}"></td>
+                        <td th:text="${invoice.issuedAt}"></td>
+                        <td th:text="${invoice.expectedPaymentAt}"></td>
                         <td></td>
                     </tr>
                     <tr>
-                    <form method="POST" th:action="'/receivable/' + ${orderId}" th:object="${formBean}">
-                        <td><input type="text" class="form-control input-sm" th:field="*{invoiceNo}"></input></td>
-                        <td><input type="text" class="form-control input-sm" th:field="*{cnyOfInvoice}"></input></td>
-                        <td><input type="text" class="form-control input-sm" th:field="*{usdOfInvoice}"></input></td>
-                        <td><input type="hidden" class="form-control input-sm" th:field="*{payerId}"></input><input type="text" class="form-control input-sm" th:field="*{payerName}"></input></td>
-                        <td><input type="text" class="form-control input-sm" th:field="*{dateOfInvoice}"></input></td>
-                        <td><input type="text" class="form-control input-sm" th:field="*{expectedDateOfReceivable}"></input></td>
-                        <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"/></button></td>
-                    </form>
-                    </tr>
+                        <td></td>
+                        <td><span><strong>Sum</strong></span></td>
+                        <td class="text-right"><span th:text="${statement.cnyTotal}" /></td>
+                        <td class="text-right"><span th:text="${statement.usdTotal}" /></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>                    
                 </tbody>
             </table>
+         
         </div>
        
         <div class="col-xs-5 vertical-line">
-        <table id="f" class="col-xs-6 table table-striped table-bordered table-hover table-condensed table-16">
-            <thead>
-                <tr> 
-                    <th th:text="#{actual.cny}">Actual CNY</th>
-                    <th th:text="#{actual.usd}">Actual USD</th>
-                    <th th:text="#{date.of.receivable}">Date of Receivable</th>            
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="record : ${records}">
-                    <td th:text="${record.cny}">></td>
-                    <td th:text="${record.usd}">></td>
-                    <td th:text="${#calendars.format(record.dateOfReceivable,'yyyy-MM-dd')}"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                <form method="POST" th:action="'/receivable/' + ${orderId}" th:object="${formBean}">
-                    <td><input type="text" class="form-control input-sm" th:field="*{cny}"></input></td>
-                    <td><input type="text" class="form-control input-sm" th:field="*{usd}"></input></td>
-                    <td><input type="text" class="form-control input-sm" th:field="*{dateOfReceivable}"></input></td>
-                    <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"/></button></td>
-                </form>
-                </tr>
-            </tbody>                                    
-        </table>
+            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button class="btn btn-sm btn-success btn-block" data-toggle="modal" data-target="#addReceipt"><i class="glyphicon glyphicon-plus"/></button>
+                </div>
+            </div>        
+            
+            <br />
+            
+            <table class="col-xs-6 table table-striped table-bordered table-hover table-condensed table-16">
+                <thead>
+                    <tr>
+                        <th></th> 
+                        <th th:text="#{actual.cny}">Actual CNY</th>
+                        <th th:text="#{actual.usd}">Actual USD</th>
+                        <th th:text="#{date.of.receivable}">Date of Receivable</th>            
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="receipt, row : ${receiptStatement.content}">
+                        <td><span th:text="${row.count}" /></td>
+                        <td class="text-right" th:text="${receipt.cny}">></td>
+                        <td class="text-right" th:text="${receipt.usd}">></td>
+                        <td th:text="${receipt.issuedAt}"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span><strong>Sum</strong></span></td>
+                        <td class="text-right"><span th:text="${receiptStatement.cnyTotal}" /></td>
+                        <td class="text-right"><span th:text="${receiptStatement.usdTotal}" /></td>
+                        <td></td>
+                        <td></td>
+                    </tr> 
+                </tbody>                                    
+            </table>
+          
         </div>
     </div><!-- row -->
 </div>
@@ -95,8 +192,9 @@
 <script>
 /*<![CDATA[*/
     $(document).ready(function() {
-        var customers = initCustomerAc();
-        $('#payerName').acWithTemplate(customers, 'payerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
+        $('#invoiceIssuedAtPicker').dtPicker();
+        $('#expectedPaymentAtPicker').dtPicker();
+        $('#receiptIssuedAtPicker').dtPicker();
     }); // ready end
 /*]]>*/
 </script>

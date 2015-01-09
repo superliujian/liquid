@@ -14,6 +14,10 @@ public class ReceiptService extends AbstractService<ReceiptEntity, ReceiptReposi
     @Override
     public void doSaveBefore(ReceiptEntity entity) {}
 
+    public Iterable<ReceiptEntity> findByOrderId(Long orderId) {
+        return repository.findByOrderId(orderId);
+    }
+
     public Iterable<ReceiptEntity> findByPayerId(Long payerId) {
         return repository.findByPayerId(payerId);
     }

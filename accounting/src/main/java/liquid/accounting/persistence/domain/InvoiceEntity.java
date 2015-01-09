@@ -21,11 +21,11 @@ public class InvoiceEntity extends BaseUpdateEntity {
     @Column(name = "INVOICE_NO")
     private String invoiceNo;
 
-    @Column(name = "CNY_OF_INVOICE")
-    private Long cnyOfInvoice;
+    @Column(name = "CNY")
+    private Long cny;
 
-    @Column(name = "USD_OF_INVOICE")
-    private Long usdOfInvoice;
+    @Column(name = "usd")
+    private Long usd;
 
     @Column(name = "ISSUED_AT")
     private Date issuedAt;
@@ -35,6 +35,9 @@ public class InvoiceEntity extends BaseUpdateEntity {
 
     @Column(name = "SELLER_ID")
     private Long sellerId;
+
+    @Column(name = "EXP_PAY_AT")
+    private Date expectedPaymentAt;
 
     public OrderEntity getOrder() {
         return order;
@@ -52,20 +55,20 @@ public class InvoiceEntity extends BaseUpdateEntity {
         this.invoiceNo = invoiceNo;
     }
 
-    public Long getCnyOfInvoice() {
-        return cnyOfInvoice;
+    public Long getCny() {
+        return cny;
     }
 
-    public void setCnyOfInvoice(Long cnyOfInvoice) {
-        this.cnyOfInvoice = cnyOfInvoice;
+    public void setCny(Long cny) {
+        this.cny = cny;
     }
 
-    public Long getUsdOfInvoice() {
-        return usdOfInvoice;
+    public Long getUsd() {
+        return usd;
     }
 
-    public void setUsdOfInvoice(Long usdOfInvoice) {
-        this.usdOfInvoice = usdOfInvoice;
+    public void setUsd(Long usd) {
+        this.usd = usd;
     }
 
     public Date getIssuedAt() {
@@ -90,5 +93,13 @@ public class InvoiceEntity extends BaseUpdateEntity {
 
     public void setSellerId(Long sellerId) {
         this.sellerId = sellerId;
+    }
+
+    public Date getExpectedPaymentAt() {
+        return expectedPaymentAt;
+    }
+
+    public void setExpectedPaymentAt(Date expectedPaymentAt) {
+        this.expectedPaymentAt = expectedPaymentAt;
     }
 }

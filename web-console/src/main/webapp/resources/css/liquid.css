@@ -96,7 +96,7 @@ td div.form-group {
 td input.input-sm {
   display: block; 
   padding: 0; 
-  border: 1px; 
+  border: 1px;
   width: 100%;
 }
 
@@ -110,6 +110,10 @@ td span.input-group-addon:last-child {
   border-left: 1px solid #ccc;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
+}
+
+td span.tt-dropdown-menu {
+    margin-top: 10px;
 }
 
 /* f - form */

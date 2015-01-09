@@ -34,7 +34,8 @@ import java.util.Locale;
         "liquid.controller",
         "liquid.api.controller",
         "liquid.order.api.controller",
-        "liquid.transport.web.controller"})
+        "liquid.transport.web.controller",
+        "liquid.accounting.web.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

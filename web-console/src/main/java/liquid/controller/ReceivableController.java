@@ -1,5 +1,10 @@
 package liquid.controller;
 
+import liquid.accounting.facade.InvoiceFacade;
+import liquid.accounting.facade.ReceiptFacade;
+import liquid.accounting.web.domain.Invoice;
+import liquid.accounting.web.domain.Receipt;
+import liquid.accounting.web.domain.Statement;
 import liquid.order.domain.ReceivableSettlement;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.ReceivableSettlementEntity;
@@ -38,6 +43,12 @@ public class ReceivableController {
     @Autowired
     private ReceivableSettlementService receivableSettlementService;
 
+    @Autowired
+    private InvoiceFacade invoiceFacade;
+
+    @Autowired
+    private ReceiptFacade receiptFacade;
+
     @RequestMapping(method = RequestMethod.GET)
     public String initPanel(@PathVariable Long orderId, Model model) {
         OrderEntity order = orderService.find(orderId);
@@ -65,6 +76,24 @@ public class ReceivableController {
         model.addAttribute("orderId", orderId);
         model.addAttribute("formBean", formBean);
         model.addAttribute("records", records);
+
+        Statement<Invoice> statement = invoiceFacade.findByOrderId(orderId);
+        model.addAttribute("statement", statement);
+        Invoice invoice = new Invoice();
+        invoice.setOrderId(orderId);
+        invoice.setIssuedAt(DateUtil.dayStrOf());
+        invoice.setBuyerId(order.getCustomerId());
+        invoice.setBuyerName(customerService.find(order.getCustomerId()).getName());
+        invoice.setExpectedPaymentAt(DateUtil.dayStrOf());
+        model.addAttribute("invoice", invoice);
+
+        Statement<Receipt> receiptStatement = receiptFacade.findByOrderId(orderId);
+        model.addAttribute("receiptStatement", receiptStatement);
+        Receipt receipt = new Receipt();
+        receipt.setOrderId(orderId);
+        receipt.setIssuedAt(DateUtil.dayStrOf());
+        model.addAttribute("receipt", receipt);
+
         return "receivable/panel";
     }
 
