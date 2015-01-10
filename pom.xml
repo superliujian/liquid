@@ -77,6 +77,11 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
+                <artifactId>order-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
                 <artifactId>order</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -264,6 +269,7 @@
         <module>excel</module>
         <module>user</module>
         <module>container</module>
+        <module>order-api</module>
         <module>order</module>
         <module>transport</module>
         <module>accounting-api</module>

@@ -1,4 +1,4 @@
-package liquid.finance.service;
+package liquid.accounting.service;
 
 import org.springframework.stereotype.Service;
 

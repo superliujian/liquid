@@ -8,21 +8,27 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>accounting-api</artifactId>
+    <artifactId>order-api</artifactId>
     <packaging>jar</packaging>
-    <name>Accounting API</name>
+    <name>Order API</name>
 
     <dependencies>
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>order-api</artifactId>
+            <artifactId>common</artifactId>
         </dependency>
 
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!-- testing -->
@@ -32,3 +38,4 @@
         </dependency>
     </dependencies>
 </project>
+

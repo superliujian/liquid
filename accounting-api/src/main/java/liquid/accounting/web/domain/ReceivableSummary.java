@@ -1,4 +1,6 @@
-package liquid.order.domain;
+package liquid.accounting.web.domain;
+
+import liquid.order.domain.Order;
 
 /**
  * Created by Tao Ma on 12/9/14.
@@ -6,23 +8,23 @@ package liquid.order.domain;
 public class ReceivableSummary {
     private Long id;
 
-    private Long cny;
+    private Long cny = 0L;;
 
-    private Long usd;
+    private Long usd = 0L;;
 
     private String prepaidTime;
 
-    private Long remainingBalanceCny;
+    private Long remainingBalanceCny = 0L;
 
-    private Long remainingBalanceUsd;
+    private Long remainingBalanceUsd = 0L;
 
-    private Long paidCny;
+    private Long paidCny = 0L;
 
-    private Long paidUsd;
+    private Long paidUsd = 0L;
 
-    private Long invoicedCny;
+    private Long invoicedCny = 0L;
 
-    private Long invoicedUsd;
+    private Long invoicedUsd = 0L;
 
     private Order order;
 

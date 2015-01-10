@@ -1,6 +1,6 @@
 package liquid.transport.service;
 
-import liquid.finance.service.PurchaseService;
+import liquid.accounting.service.PurchaseService;
 import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;

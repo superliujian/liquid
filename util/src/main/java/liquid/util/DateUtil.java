@@ -32,6 +32,8 @@ public class DateUtil {
     }
 
     public static Date dateOf(String dateStr) {
+        if (null == dateStr || dateStr.trim().length() == 0) return null;
+
         try {
             SimpleDateFormat format = new SimpleDateFormat(DatePattern.UNTIL_MINUTE.getPattern());
             format.setTimeZone(TimeZone.getTimeZone(ZoneId.of("CTT", ZoneId.SHORT_IDS)));

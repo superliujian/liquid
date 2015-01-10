@@ -1,5 +1,7 @@
 package liquid.order.facade;
 
+import liquid.accounting.facade.ReceivableFacade;
+import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.Currency;
@@ -67,6 +69,9 @@ public class OrderFacade {
     @Autowired
     private RailwayPlanTypeService railwayPlanTypeService;
 
+    @Autowired
+    private ReceivableFacade receivableFacade;
+
     public Order initOrder() {
         Order order = new Order();
         order.setOriginId(Long.valueOf(env.getProperty("default.origin.id")));
@@ -104,6 +109,14 @@ public class OrderFacade {
         railwayEntity.setOrder(orderEntity);
         orderEntity.setRailway(railwayEntity);
         orderEntity = orderService.save(orderEntity);
+
+        ReceivableSummary receivableSummary = new ReceivableSummary();
+        receivableSummary.setCny(order.getCnyTotal());
+        receivableSummary.setUsd(order.getUsdTotal());
+        order.setId(orderEntity.getId());
+        receivableSummary.setOrder(order);
+        receivableFacade.save(receivableSummary);
+
         return orderEntity;
     }
 

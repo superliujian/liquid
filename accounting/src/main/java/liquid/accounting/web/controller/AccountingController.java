@@ -1,10 +1,8 @@
 package liquid.accounting.web.controller;
 
-import liquid.accounting.facade.ReceivableFacade;
+import liquid.accounting.facade.ReceivableFacadeImpl;
 import liquid.domain.TradeType;
-import liquid.order.domain.Order;
-import liquid.order.domain.OrderStatus;
-import liquid.order.domain.ReceivableSummary;
+import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.persistence.domain.ExchangeRate;
 import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.web.domain.SearchBarForm;
@@ -27,7 +25,7 @@ public class AccountingController {
     private static final int size = 20;
 
     @Autowired
-    private ReceivableFacade receivableFacade;
+    private ReceivableFacadeImpl receivableFacade;
 
     @Autowired
     private ExchangeRateRepository exchangeRateRepository;
