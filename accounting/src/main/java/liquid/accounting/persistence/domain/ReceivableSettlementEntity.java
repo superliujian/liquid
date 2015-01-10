@@ -1,5 +1,6 @@
-package liquid.order.persistence.domain;
+package liquid.accounting.persistence.domain;
 
+import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.persistence.domain.CustomerEntity;
 
@@ -38,10 +39,10 @@ public class ReceivableSettlementEntity extends BaseUpdateEntity {
     private Date expectedDateOfReceivable;
 
     @Column(name = "CNY")
-    private Long cny;
+    private Long cny = 0L;
 
     @Column(name = "USD")
-    private Long usd;
+    private Long usd = 0L;
 
     @Column(name = "DATE_OF_RECEIVABLE")
     private Date dateOfReceivable;

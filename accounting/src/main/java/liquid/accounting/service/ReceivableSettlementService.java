@@ -1,9 +1,10 @@
-package liquid.order.service;
+package liquid.accounting.service;
 
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.persistence.domain.ReceivableSettlementEntity;
-import liquid.order.persistence.domain.ReceivableSummaryEntity;
-import liquid.order.persistence.repository.ReceivableSettlementRepository;
+import liquid.accounting.persistence.domain.ReceivableSettlementEntity;
+import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
+import liquid.accounting.persistence.repository.ReceivableSettlementRepository;
+import liquid.order.service.OrderService;
 import liquid.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class ReceivableSettlementService extends AbstractService<ReceivableSettl
 
     @Autowired
     private ReceivableSettlementRepository receivableSettlementRepository;
+
+    @Autowired
+    private ReceivableSummaryService receivableSummaryService;
 
     @Autowired
     private OrderService orderService;
@@ -33,7 +37,7 @@ public class ReceivableSettlementService extends AbstractService<ReceivableSettl
         // db
         OrderEntity order = orderService.find(orderId);
         // db
-        ReceivableSummaryEntity summary = order.getReceivableSummary();
+        ReceivableSummaryEntity summary = receivableSummaryService.findByOrderId(orderId);
         Long remainingCny = summary.getCny();
         Long remainingUsd = summary.getUsd();
         // db
@@ -44,9 +48,6 @@ public class ReceivableSettlementService extends AbstractService<ReceivableSettl
         }
         summary.setRemainingBalanceCny(remainingCny - settlement.getCny());
         summary.setRemainingBalanceUsd(remainingUsd - settlement.getUsd());
-        order.setReceivableSummary(summary);
-        // db
-        orderService.save(order);
 
         // db
         save(settlement);

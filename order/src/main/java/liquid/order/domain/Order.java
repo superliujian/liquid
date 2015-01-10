@@ -83,9 +83,6 @@ public class Order extends BaseIdObject {
     @Valid
     private List<ServiceItem> serviceItems;
 
-    private Long receivableSummaryId;
-    private ReceivableSummary receivableSummary;
-
     @Min(1)
     private Long cnyTotal;
     private Long usdTotal;
@@ -455,20 +452,36 @@ public class Order extends BaseIdObject {
         this.serviceItems = serviceItems;
     }
 
-    public Long getReceivableSummaryId() {
-        return receivableSummaryId;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setReceivableSummaryId(Long receivableSummaryId) {
-        this.receivableSummaryId = receivableSummaryId;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public ReceivableSummary getReceivableSummary() {
-        return receivableSummary;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setReceivableSummary(ReceivableSummary receivableSummary) {
-        this.receivableSummary = receivableSummary;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Long getCnyTotal() {
@@ -509,38 +522,6 @@ public class Order extends BaseIdObject {
 
     public void setGrandTotal(Long grandTotal) {
         this.grandTotal = grandTotal;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     @Override
@@ -590,8 +571,6 @@ public class Order extends BaseIdObject {
         sb.append(", comment='").append(comment).append('\'');
         sb.append(", sameDay=").append(sameDay);
         sb.append(", serviceItems=").append(serviceItems);
-        sb.append(", receivableSummaryId=").append(receivableSummaryId);
-        sb.append(", receivableSummary=").append(receivableSummary);
         sb.append(", cnyTotal=").append(cnyTotal);
         sb.append(", usdTotal=").append(usdTotal);
         sb.append(", distyPrice=").append(distyPrice);

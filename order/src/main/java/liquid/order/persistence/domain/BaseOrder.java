@@ -71,6 +71,12 @@ public class BaseOrder extends BaseUpdateEntity {
     @JoinColumn(name = "RAILWAY_ID")
     private OrderRailEntity railway;
 
+    @Column(name = "TOTAL_CNY")
+    private Long totalCny = 0L;
+
+    @Column(name = "TOTAL_USD")
+    private Long totalUsd = 0L;
+
     @Column(name = "DISTY_PRICE")
     private Long distyPrice = 0L;
 
@@ -221,6 +227,22 @@ public class BaseOrder extends BaseUpdateEntity {
 
     public void setRailway(OrderRailEntity railway) {
         this.railway = railway;
+    }
+
+    public Long getTotalCny() {
+        return totalCny;
+    }
+
+    public void setTotalCny(Long totalCny) {
+        this.totalCny = totalCny;
+    }
+
+    public Long getTotalUsd() {
+        return totalUsd;
+    }
+
+    public void setTotalUsd(Long totalUsd) {
+        this.totalUsd = totalUsd;
     }
 
     public Long getDistyPrice() {

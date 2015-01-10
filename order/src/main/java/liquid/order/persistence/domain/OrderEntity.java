@@ -49,9 +49,6 @@ public class OrderEntity extends BaseOrder {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     private List<ServiceItemEntity> serviceItems = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
-    private ReceivableSummaryEntity receivableSummary;
-
     public int getTradeType() {
         return tradeType;
     }
@@ -122,13 +119,5 @@ public class OrderEntity extends BaseOrder {
 
     public void setServiceItems(List<ServiceItemEntity> serviceItems) {
         this.serviceItems = serviceItems;
-    }
-
-    public ReceivableSummaryEntity getReceivableSummary() {
-        return receivableSummary;
-    }
-
-    public void setReceivableSummary(ReceivableSummaryEntity receivableSummary) {
-        this.receivableSummary = receivableSummary;
     }
 }

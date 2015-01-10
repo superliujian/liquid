@@ -1,6 +1,7 @@
-package liquid.order.persistence.domain;
+package liquid.accounting.persistence.domain;
 
-import liquid.persistence.domain.BaseIdEntity;
+import liquid.order.persistence.domain.OrderEntity;
+import liquid.persistence.domain.BaseUpdateEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import java.util.Date;
  * Created by redbrick9 on 8/28/14.
  */
 @Entity(name = "ACT_RECEIVABLE_SUMMARY")
-public class ReceivableSummaryEntity extends BaseIdEntity {
+public class ReceivableSummaryEntity extends BaseUpdateEntity {
     @OneToOne
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;
@@ -26,11 +27,25 @@ public class ReceivableSummaryEntity extends BaseIdEntity {
     @Column(name = "PREPAID_TIME")
     private Date prepaidTime;
 
+    @Deprecated
     @Column(name = "REM_BAL_CNY")
     private Long remainingBalanceCny;
 
+    @Deprecated
     @Column(name = "REM_BAL_USD")
     private Long remainingBalanceUsd;
+
+    @Column(name = "PAID_CNY")
+    private Long paidCny = 0L;
+
+    @Column(name = "PAID_USD")
+    private Long paidUsd = 0L;
+
+    @Column(name = "INVOICED_CNY")
+    private Long invoicedCny = 0L;
+
+    @Column(name = "INVOICED_USD")
+    private Long invoicedUsd = 0L;
 
     public OrderEntity getOrder() {
         return order;
@@ -78,5 +93,37 @@ public class ReceivableSummaryEntity extends BaseIdEntity {
 
     public void setRemainingBalanceUsd(Long remainingBalanceUsd) {
         this.remainingBalanceUsd = remainingBalanceUsd;
+    }
+
+    public Long getPaidCny() {
+        return paidCny;
+    }
+
+    public void setPaidCny(Long paidCny) {
+        this.paidCny = paidCny;
+    }
+
+    public Long getPaidUsd() {
+        return paidUsd;
+    }
+
+    public void setPaidUsd(Long paidUsd) {
+        this.paidUsd = paidUsd;
+    }
+
+    public Long getInvoicedCny() {
+        return invoicedCny;
+    }
+
+    public void setInvoicedCny(Long invoicedCny) {
+        this.invoicedCny = invoicedCny;
+    }
+
+    public Long getInvoicedUsd() {
+        return invoicedUsd;
+    }
+
+    public void setInvoicedUsd(Long invoicedUsd) {
+        this.invoicedUsd = invoicedUsd;
     }
 }

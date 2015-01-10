@@ -4,6 +4,8 @@ import liquid.accounting.persistence.domain.IncomeEntity;
 import liquid.accounting.persistence.repository.IncomeRepository;
 import liquid.metadata.IncomeType;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
+import liquid.accounting.service.ReceivableSummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class IncomeService {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private ReceivableSummaryService receivableSummaryService;
+
     public List<IncomeEntity> findByTaskId(String taskId) {
         return incomeRepository.findByTaskId(taskId);
     }
@@ -38,10 +43,12 @@ public class IncomeService {
     }
 
     public IncomeEntity addIncome(OrderEntity order, String uid) {
+        ReceivableSummaryEntity receivableSummaryEntity = receivableSummaryService.findByOrderId(order.getId());
+
         IncomeEntity income = new IncomeEntity();
         income.setOrder(order);
         income.setType(IncomeType.ORDER.getType());
-        income.setAmount(order.getReceivableSummary().getCny());
+        income.setAmount(receivableSummaryEntity.getCny());
         income.setComment("Order");
         return addIncome(income, uid);
     }

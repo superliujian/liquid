@@ -16,6 +16,16 @@ public class ReceivableSummary {
 
     private Long remainingBalanceUsd;
 
+    private Long paidCny;
+
+    private Long paidUsd;
+
+    private Long invoicedCny;
+
+    private Long invoicedUsd;
+
+    private Order order;
+
     public Long getId() {
         return id;
     }
@@ -64,6 +74,46 @@ public class ReceivableSummary {
         this.remainingBalanceUsd = remainingBalanceUsd;
     }
 
+    public Long getPaidCny() {
+        return paidCny;
+    }
+
+    public void setPaidCny(Long paidCny) {
+        this.paidCny = paidCny;
+    }
+
+    public Long getPaidUsd() {
+        return paidUsd;
+    }
+
+    public void setPaidUsd(Long paidUsd) {
+        this.paidUsd = paidUsd;
+    }
+
+    public Long getInvoicedCny() {
+        return invoicedCny;
+    }
+
+    public void setInvoicedCny(Long invoicedCny) {
+        this.invoicedCny = invoicedCny;
+    }
+
+    public Long getInvoicedUsd() {
+        return invoicedUsd;
+    }
+
+    public void setInvoicedUsd(Long invoicedUsd) {
+        this.invoicedUsd = invoicedUsd;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{Class=ReceivableSummary");
@@ -73,6 +123,11 @@ public class ReceivableSummary {
         sb.append(", prepaidTime='").append(prepaidTime).append('\'');
         sb.append(", remainingBalanceCny=").append(remainingBalanceCny);
         sb.append(", remainingBalanceUsd=").append(remainingBalanceUsd);
+        sb.append(", paidCny=").append(paidCny);
+        sb.append(", paidUsd=").append(paidUsd);
+        sb.append(", invoicedCny=").append(invoicedCny);
+        sb.append(", invoicedUsd=").append(invoicedUsd);
+        sb.append(", order=").append(order);
         sb.append('}');
         return sb.toString();
     }

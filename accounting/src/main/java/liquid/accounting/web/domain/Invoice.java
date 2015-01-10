@@ -1,15 +1,29 @@
 package liquid.accounting.web.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by Tao Ma on 1/8/15.
  */
 public class Invoice {
     private Long id;
+
+    @NotNull
+    @NotEmpty
     private String invoiceNo;
     private Long orderId;
     private String orderNo;
-    private Long cny;
-    private Long usd;
+
+    @NotNull
+    private Long cny = 0L;
+
+    @NotNull
+    private Long usd = 0L;
+
+    @NotNull
+    @NotEmpty
     private String issuedAt;
     private Long buyerId;
     private String buyerName;

@@ -7,10 +7,8 @@ import liquid.domain.LoadingType;
 import liquid.domain.ServiceItem;
 import liquid.domain.TradeType;
 import liquid.order.domain.Order;
-import liquid.order.domain.ReceivableSummary;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderRailEntity;
-import liquid.order.persistence.domain.ReceivableSummaryEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
@@ -197,8 +195,6 @@ public class OrderFacade {
             serviceItem.setId(null);
         }
 
-        order.setReceivableSummaryId(null);
-
         return order;
     }
 
@@ -241,15 +237,16 @@ public class OrderFacade {
             serviceItemEntity.setQuotation(serviceItem.getQuotation());
             orderEntity.getServiceItems().add(serviceItemEntity);
         }
-        ReceivableSummaryEntity receivableSummaryEntity = new ReceivableSummaryEntity();
-        receivableSummaryEntity.setId(order.getReceivableSummaryId());
-        receivableSummaryEntity.setOrder(orderEntity);
-        receivableSummaryEntity.setCny(order.getCnyTotal());
-        receivableSummaryEntity.setUsd(order.getUsdTotal());
-        receivableSummaryEntity.setRemainingBalanceCny(order.getCnyTotal());
-        receivableSummaryEntity.setRemainingBalanceUsd(order.getUsdTotal());
-        orderEntity.setReceivableSummary(receivableSummaryEntity);
+//        ReceivableSummaryEntity receivableSummaryEntity = new ReceivableSummaryEntity();
+//        receivableSummaryEntity.setId(order.getReceivableSummaryId());
+//        receivableSummaryEntity.setOrder(orderEntity);
+//        receivableSummaryEntity.setCny(order.getCnyTotal());
+//        receivableSummaryEntity.setUsd(order.getUsdTotal());
+//        receivableSummaryEntity.setRemainingBalanceCny(order.getCnyTotal());
+//        receivableSummaryEntity.setRemainingBalanceUsd(order.getUsdTotal());
 
+        orderEntity.setTotalCny(order.getCnyTotal());
+        orderEntity.setTotalUsd(order.getUsdTotal());
         orderEntity.setCreateRole(SecurityContext.getInstance().getRole());
         orderEntity.setStatus(order.getStatus());
 
@@ -334,13 +331,12 @@ public class OrderFacade {
             order.setPlanReportTime(DateUtil.stringOf(new Date()));
         }
 
-        order.setReceivableSummaryId(orderEntity.getReceivableSummary().getId());
-        order.setUsdTotal(orderEntity.getReceivableSummary().getUsd());
-        order.setCnyTotal(orderEntity.getReceivableSummary().getCny());
+
         order.setGrandTotal(orderEntity.getGrandTotal());
+        order.setCnyTotal(orderEntity.getTotalCny());
+        order.setUsdTotal(orderEntity.getTotalUsd());
         order.setDistyPrice(orderEntity.getDistyPrice());
         order.setDistyUsd(orderEntity.getDistyUsd());
-        order.setReceivableSummary(convert(orderEntity.getReceivableSummary()));
 
         order.setCreatedAt(DateUtil.stringOf(orderEntity.getCreatedAt()));
         order.setUpdatedAt(DateUtil.stringOf(orderEntity.getUpdatedAt()));
@@ -360,17 +356,6 @@ public class OrderFacade {
         railwayEntity.setComment(order.getComment());
         railwayEntity.setSameDay(order.getSameDay());
         return railwayEntity;
-    }
-
-    private ReceivableSummary convert(ReceivableSummaryEntity entity) {
-        ReceivableSummary receivableSummary = new ReceivableSummary();
-        receivableSummary.setId(entity.getId());
-        receivableSummary.setCny(entity.getCny());
-        receivableSummary.setUsd(entity.getUsd());
-        receivableSummary.setPrepaidTime(DateUtil.stringOf(entity.getPrepaidTime()));
-        receivableSummary.setRemainingBalanceCny(entity.getRemainingBalanceCny());
-        receivableSummary.setRemainingBalanceUsd(entity.getRemainingBalanceUsd());
-        return receivableSummary;
     }
 
     /**

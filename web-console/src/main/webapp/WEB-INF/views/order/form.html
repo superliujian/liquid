@@ -395,7 +395,6 @@
 <ul class="list-group">
     <li class="list-group-item">
         <div class="row">
-            <input type="hidden" th:field="*{receivableSummaryId}" />
             <div class="col-lg-3">
                 <div class="form-group" th:classappend="${#fields.hasErrors('usdTotal')} ? 'has-error'">
                     <label th:text="#{usd.total} + ' *'">USD Total</label>

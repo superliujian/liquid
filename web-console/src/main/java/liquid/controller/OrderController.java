@@ -1,6 +1,13 @@
 package liquid.controller;
 
+import liquid.accounting.facade.InvoiceFacade;
+import liquid.accounting.facade.ReceiptFacade;
+import liquid.accounting.facade.SettlementFacade;
 import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.accounting.web.domain.Invoice;
+import liquid.accounting.web.domain.Receipt;
+import liquid.accounting.web.domain.Settlement;
+import liquid.accounting.web.domain.Statement;
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
@@ -20,6 +27,7 @@ import liquid.security.SecurityContext;
 import liquid.service.*;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
+import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
 import liquid.web.domain.SearchBarForm;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -88,6 +96,15 @@ public class OrderController extends BaseController {
 
     @Autowired
     private RailwayPlanTypeService railwayPlanTypeService;
+
+    @Autowired
+    private InvoiceFacade invoiceFacade;
+
+    @Autowired
+    private ReceiptFacade receiptFacade;
+
+    @Autowired
+    private SettlementFacade settlementFacade;
 
     @ModelAttribute("serviceTypes")
     public Iterable<ServiceTypeEntity> populateServiceTypes() {
@@ -436,5 +453,82 @@ public class OrderController extends BaseController {
         model.addAttribute("order", order);
         model.addAttribute("tab", tab);
         return "order/" + tab;
+    }
+
+    @RequestMapping(value = "/{orderId}/receivable", method = RequestMethod.GET)
+    public String initPanel(@PathVariable Long orderId, Model model) {
+        OrderEntity order = orderService.find(orderId);
+
+        Statement<Invoice> statement = invoiceFacade.findByOrderId(orderId);
+        model.addAttribute("statement", statement);
+
+        Statement<Receipt> receiptStatement = receiptFacade.findByOrderId(orderId);
+        model.addAttribute("receiptStatement", receiptStatement);
+
+        Statement<Settlement> settlementStatement = settlementFacade.findByOrderId(orderId);
+        model.addAttribute("settlementStatement", settlementStatement);
+
+        return "receivable/panel";
+    }
+
+    @RequestMapping(value = "/{orderId}/invoice", method = RequestMethod.GET)
+    public String initInvoice(@PathVariable Long orderId, Model model) {
+        Order order = orderFacade.find(orderId);
+        Invoice invoice = new Invoice();
+        invoice.setOrderId(orderId);
+        invoice.setIssuedAt(DateUtil.dayStrOf());
+        invoice.setBuyerId(order.getCustomerId());
+        invoice.setBuyerName(customerService.find(order.getCustomerId()).getName());
+        invoice.setExpectedPaymentAt(DateUtil.dayStrOf());
+        model.addAttribute("invoice", invoice);
+        return "invoice/form";
+    }
+
+    @RequestMapping(value = "/{orderId}/invoice", method = RequestMethod.POST)
+    public String addInvoice(@PathVariable Long orderId, @Valid @ModelAttribute Invoice invoice,
+                             BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "invoice/form";
+        }
+        invoiceFacade.update(invoice);
+        return "redirect:/order/" + orderId + "/receivable";
+    }
+
+    @RequestMapping(value = "/{orderId}/receipt", method = RequestMethod.GET)
+    public String initReceipt(@PathVariable Long orderId, Model model) {
+        Receipt receipt = new Receipt();
+        receipt.setOrderId(orderId);
+        receipt.setIssuedAt(DateUtil.dayStrOf());
+        model.addAttribute("receipt", receipt);
+        return "receipt/form";
+    }
+
+    @RequestMapping(value = "/{orderId}/receipt", method = RequestMethod.POST)
+    public String addReceipt(@PathVariable Long orderId, @Valid @ModelAttribute Receipt receipt,
+                             BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "receipt/form";
+        }
+        receiptFacade.update(receipt);
+        return "redirect:/order/" + orderId + "/receivable";
+    }
+
+    @RequestMapping(value = "/{orderId}/settlement", method = RequestMethod.GET)
+    public String initSettlement(@PathVariable Long orderId, Model model) {
+        Settlement settlement = new Settlement();
+        settlement.setOrderId(orderId);
+        settlement.setSettledAt(DateUtil.dayStrOf());
+        model.addAttribute("settlement", settlement);
+        return "settlement/form";
+    }
+
+    @RequestMapping(value = "/{orderId}/settlement", method = RequestMethod.POST)
+    public String addSettlement(@PathVariable Long orderId, @Valid @ModelAttribute Settlement settlement,
+                                BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "settlement/form";
+        }
+        settlementFacade.save(settlement);
+        return "redirect:/order/" + orderId + "/receivable";
     }
 }

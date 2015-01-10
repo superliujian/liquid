@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div id="f" class="container">
+    <h3><span th:text="#{receipt}"></span></h3>
+    
+    <hr />
+    
+    <form method="POST" th:action="'/order/' + ${receipt.orderId} + '/receipt'" th:object="${receipt}">
+        <input type="hidden" th:field="*{id}"></input>
+        <input type="hidden" th:field="*{orderId}"></input>
+
+        <div class="form-group form-group-sm" th:classappend="${#fields.hasErrors('cny')} ? 'has-error'">
+            <label for="cny" th:text="#{actual.cny}">Invoice CNY</label>
+            <input type="text" class="form-control input-sm" th:field="*{cny}"></input>
+            <span class="text-danger" th:errors="*{cny}">error</span>
+        </div>
+        
+        <div class="form-group form-group-sm" th:classappend="${#fields.hasErrors('usd')} ? 'has-error'">
+            <label for="usd" th:text="#{actual.usd}">Invoice USD</label>
+            <input type="text" class="form-control input-sm" th:field="*{usd}"></input>
+            <span class="text-danger" th:errors="*{usd}">error</span>
+        </div>
+            
+        <div class="form-group form-group-sm" th:classappend="${#fields.hasErrors('issuedAt')} ? 'has-error'">
+            <label for="issuedAt" th:text="#{date.of.receivable}">Issued At</label>
+            <div class="input-group input-group-sm date" id="receiptIssuedAtPicker">
+                <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{issuedAt}" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+            <span class="text-danger" th:errors="*{issuedAt}">error</span>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-sm btn-block"><i class="glyphicon glyphicon-plus"/></button>
+    </form>
+</div><!-- form -->
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        $('#receiptIssuedAtPicker').dtPicker();
+    }); // ready end
+/*]]>*/
+</script>
+</body>
+
+</html>

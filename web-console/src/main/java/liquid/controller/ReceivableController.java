@@ -2,14 +2,16 @@ package liquid.controller;
 
 import liquid.accounting.facade.InvoiceFacade;
 import liquid.accounting.facade.ReceiptFacade;
+import liquid.accounting.facade.SettlementFacade;
 import liquid.accounting.web.domain.Invoice;
 import liquid.accounting.web.domain.Receipt;
+import liquid.accounting.web.domain.Settlement;
 import liquid.accounting.web.domain.Statement;
 import liquid.order.domain.ReceivableSettlement;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.persistence.domain.ReceivableSettlementEntity;
+import liquid.accounting.persistence.domain.ReceivableSettlementEntity;
 import liquid.order.service.OrderService;
-import liquid.order.service.ReceivableSettlementService;
+import liquid.accounting.service.ReceivableSettlementService;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.service.CustomerService;
 import liquid.util.DateUtil;
@@ -49,50 +51,21 @@ public class ReceivableController {
     @Autowired
     private ReceiptFacade receiptFacade;
 
+    @Autowired
+    private SettlementFacade settlementFacade;
+
     @RequestMapping(method = RequestMethod.GET)
     public String initPanel(@PathVariable Long orderId, Model model) {
-        OrderEntity order = orderService.find(orderId);
-
-        ReceivableSettlement formBean = new ReceivableSettlement();
-
-        Long cnyOfInvoice = order.getReceivableSummary().getCny();
-        Long usdOfInvoice = order.getReceivableSummary().getUsd();
-        Iterable<ReceivableSettlementEntity> records = receivableSettlementService.findByOrderId(orderId);
-        for (ReceivableSettlementEntity record : records) {
-            cnyOfInvoice -= record.getCny();
-            usdOfInvoice -= record.getUsd();
-        }
-
-        formBean.setCnyOfInvoice(cnyOfInvoice);
-        formBean.setUsdOfInvoice(usdOfInvoice);
-        formBean.setPayerId(order.getCustomerId());
-        formBean.setPayerName(customerService.find(order.getCustomerId()).getName());
-        formBean.setDateOfInvoice(DateUtil.dayStrOf());
-        formBean.setExpectedDateOfReceivable(DateUtil.dayStrOf());
-        formBean.setCny(cnyOfInvoice);
-        formBean.setUsd(usdOfInvoice);
-        formBean.setDateOfReceivable(DateUtil.dayStrOf());
-
         model.addAttribute("orderId", orderId);
-        model.addAttribute("formBean", formBean);
-        model.addAttribute("records", records);
 
         Statement<Invoice> statement = invoiceFacade.findByOrderId(orderId);
         model.addAttribute("statement", statement);
-        Invoice invoice = new Invoice();
-        invoice.setOrderId(orderId);
-        invoice.setIssuedAt(DateUtil.dayStrOf());
-        invoice.setBuyerId(order.getCustomerId());
-        invoice.setBuyerName(customerService.find(order.getCustomerId()).getName());
-        invoice.setExpectedPaymentAt(DateUtil.dayStrOf());
-        model.addAttribute("invoice", invoice);
 
         Statement<Receipt> receiptStatement = receiptFacade.findByOrderId(orderId);
         model.addAttribute("receiptStatement", receiptStatement);
-        Receipt receipt = new Receipt();
-        receipt.setOrderId(orderId);
-        receipt.setIssuedAt(DateUtil.dayStrOf());
-        model.addAttribute("receipt", receipt);
+
+        Statement<Settlement> settlementStatement = settlementFacade.findByOrderId(orderId);
+        model.addAttribute("settlementStatement", settlementStatement);
 
         return "receivable/panel";
     }

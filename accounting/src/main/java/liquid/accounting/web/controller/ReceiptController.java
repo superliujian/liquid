@@ -4,6 +4,7 @@ import liquid.accounting.facade.ReceiptFacade;
 import liquid.accounting.web.domain.Receipt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,8 @@ public class ReceiptController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String add(@ModelAttribute(value = "receipt") Receipt receipt,
-                      @RequestHeader(value = "referer", required = false) final String referer) {
+                      @RequestHeader(value = "referer", required = false) final String referer,
+                      BindingResult bindingResult) {
         receiptFacade.save(receipt);
         return "redirect:" + referer;
     }

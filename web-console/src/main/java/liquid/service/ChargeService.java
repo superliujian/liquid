@@ -7,7 +7,9 @@ import liquid.dto.EarningDto;
 import liquid.metadata.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
+import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.order.service.OrderService;
+import liquid.accounting.service.ReceivableSummaryService;
 import liquid.persistence.domain.ExchangeRate;
 import liquid.persistence.domain.ServiceProviderEntity_;
 import liquid.persistence.repository.ExchangeRateRepository;
@@ -66,6 +68,9 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
     @Autowired
     private ShipmentService shipmentService;
+
+    @Autowired
+    private ReceivableSummaryService receivableSummaryService;
 
     // TODO: have to enhance this function.
     @Override
@@ -226,12 +231,14 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
         double exchangeRate = getExchangeRate();
 
-        earning.setSalesPriceCny(order.getReceivableSummary().getCny());
-        earning.setSalesPriceUsd(order.getReceivableSummary().getUsd());
+        ReceivableSummaryEntity receivableSummaryEntity = receivableSummaryService.findByOrderId(order.getId());
+
+        earning.setSalesPriceCny(receivableSummaryEntity.getCny());
+        earning.setSalesPriceUsd(receivableSummaryEntity.getUsd());
         earning.setDistyPrice(order.getDistyPrice());
         earning.setGrandTotal(order.getGrandTotal());
         earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getGrandTotal());
-        earning.setSalesProfit(order.getReceivableSummary().getCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
+        earning.setSalesProfit(receivableSummaryEntity.getCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
         earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
         return earning;
     }

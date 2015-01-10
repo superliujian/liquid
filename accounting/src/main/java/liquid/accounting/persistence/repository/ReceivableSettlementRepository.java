@@ -1,6 +1,6 @@
-package liquid.order.persistence.repository;
+package liquid.accounting.persistence.repository;
 
-import liquid.order.persistence.domain.ReceivableSettlementEntity;
+import liquid.accounting.persistence.domain.ReceivableSettlementEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

@@ -216,14 +216,6 @@ public class ChargeController extends BaseController {
         return "charge/summary";
     }
 
-    @RequestMapping(value = "/receivable", method = RequestMethod.GET)
-    public String receivable(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
-        list(number, model, "/charge/receivable");
-
-        model.addAttribute("contextPath", "/charge/receivable?");
-        return "charge/receivable";
-    }
-
     @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = {"type", "text"})
     public String receivableSearch(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
         searchBarForm.setAction("/charge/receivable");
