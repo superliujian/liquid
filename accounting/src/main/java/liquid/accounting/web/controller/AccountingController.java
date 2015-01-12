@@ -8,13 +8,18 @@ import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
 
 /**
  * Created by Tao Ma on 1/10/15.
@@ -60,23 +65,28 @@ public class AccountingController {
     }
 
     @RequestMapping(value = "/receivable", method = RequestMethod.GET)
-    public String listReceivables(SearchBarForm searchBarForm,
-                                  @RequestParam(defaultValue = "0", required = false) int number, Model model) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+    public String listReceivables(@Valid SearchBarForm searchBarForm,
+                                  BindingResult bindingResult, Model model) {
+        model.addAttribute("tradeTypes", TradeType.values());
+        model.addAttribute("exchangeRate", getExchangeRate());
+
+        model.addAttribute("contextPath", "/accounting/receivable?");
+
+        if (bindingResult.hasErrors()) {
+            Page<ReceivableSummary> page = new PageImpl<ReceivableSummary>(new ArrayList<>());
+            model.addAttribute("page", page);
+            return "charge/receivable";
+        }
 
         searchBarForm.setAction("/accounting/receivable");
         model.addAttribute("searchBarForm", searchBarForm);
 
+        PageRequest pageRequest = new PageRequest(0, size, new Sort(Sort.Direction.DESC, "id"));
         Page<ReceivableSummary> page = receivableFacade.findAll(searchBarForm, pageRequest);
         model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/accounting/receivable?");
-
-        model.addAttribute("tradeTypes", TradeType.values());
-        model.addAttribute("exchangeRate", getExchangeRate());
 
         return "charge/receivable";
     }
-
 
     public double getExchangeRate() {
         ExchangeRate exchangeRate = exchangeRateRepository.findOne(1L);

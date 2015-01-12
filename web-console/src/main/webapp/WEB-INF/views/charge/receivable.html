@@ -20,7 +20,7 @@
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{type}"/>            
                 <div class="input-group input-group-sm date" id="startPicker">
-                    <span class="input-group-addon">From</span>
+                    <span class="input-group-addon" th:text="#{start.date}">Start Date</span>
                     <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{startDate}" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -28,7 +28,7 @@
                 </div>
                 
                 <div class="input-group input-group-sm date" id="endPicker">
-                    <span class="input-group-addon">To</span>
+                    <span class="input-group-addon" th:text="#{end.date}">End Date</span>
                     <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{endDate}" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -42,7 +42,7 @@
                         <button type="submit" name="search" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
                     </span>
                 </div>             
-            </form>
+            </form>          
         </div>
     </div><!-- row -->
 </div><!-- /.container -->
