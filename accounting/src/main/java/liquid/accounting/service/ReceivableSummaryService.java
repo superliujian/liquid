@@ -3,12 +3,22 @@ package liquid.accounting.service;
 import liquid.accounting.persistence.domain.AccountingOperator;
 import liquid.accounting.persistence.domain.AccountingType;
 import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
+import liquid.accounting.persistence.domain.ReceivableSummaryEntity_;
 import liquid.accounting.persistence.repository.ReceivableSummaryRepository;
+import liquid.order.persistence.domain.OrderEntity_;
 import liquid.service.AbstractService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.Date;
 
 /**
  * Created by Tao Ma on 1/10/15.
@@ -80,5 +90,36 @@ public class ReceivableSummaryService extends AbstractService<ReceivableSummaryE
 
     public Page<ReceivableSummaryEntity> findAll(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    public Page<ReceivableSummaryEntity> findAll(final Date start, final Date end, final Long orderId, final Long customerId, final Pageable pageable) {
+        Specification<ReceivableSummaryEntity> dateRangeSpec = new Specification<ReceivableSummaryEntity>() {
+            @Override
+            public Predicate toPredicate(Root<ReceivableSummaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.between(root.get(ReceivableSummaryEntity_.createdAt), start, end);
+            }
+        };
+        Specifications<ReceivableSummaryEntity> specifications = Specifications.where(dateRangeSpec);
+
+        if (null != orderId) {
+            Specification<ReceivableSummaryEntity> orderIdSpec = new Specification<ReceivableSummaryEntity>() {
+                @Override
+                public Predicate toPredicate(Root<ReceivableSummaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get(ReceivableSummaryEntity_.order).get(OrderEntity_.id), orderId);
+                }
+            };
+            specifications = specifications.and(orderIdSpec);
+        }
+
+        if (null != customerId) {
+            Specification<ReceivableSummaryEntity> customerIdSpec = new Specification<ReceivableSummaryEntity>() {
+                @Override
+                public Predicate toPredicate(Root<ReceivableSummaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get(ReceivableSummaryEntity_.order).get(OrderEntity_.customerId), customerId);
+                }
+            };
+            specifications = specifications.and(customerIdSpec);
+        }
+        return repository.findAll(specifications, pageable);
     }
 }

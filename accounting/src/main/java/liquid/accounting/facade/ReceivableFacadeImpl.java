@@ -6,6 +6,7 @@ import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.util.DateUtil;
+import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +31,25 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
     public Page<ReceivableSummary> findAll(Pageable pageable) {
         List<ReceivableSummary> receivableList = new ArrayList<>();
         Page<ReceivableSummaryEntity> entityPage = receivableSummaryService.findAll(pageable);
+        for (ReceivableSummaryEntity entity : entityPage) {
+            ReceivableSummary receivable = convert(entity);
+            receivable.setOrder(orderFacade.convertBasic(entity.getOrder()));
+            receivableList.add(receivable);
+        }
+        return new PageImpl<ReceivableSummary>(receivableList, pageable, entityPage.getTotalElements());
+    }
+
+    public Page<ReceivableSummary> findAll(SearchBarForm searchBar, Pageable pageable) {
+        List<ReceivableSummary> receivableList = new ArrayList<>();
+        Page<ReceivableSummaryEntity> entityPage = null;
+        if ("customer".equals(searchBar.getType())) {
+            entityPage = receivableSummaryService.findAll(DateUtil.dayOf(searchBar.getStartDate()), DateUtil.dayOf(searchBar.getEndDate()), null, searchBar.getId(), pageable);
+        } else if ("order".equals(searchBar.getType())) {
+            entityPage = receivableSummaryService.findAll(DateUtil.dayOf(searchBar.getStartDate()), DateUtil.dayOf(searchBar.getEndDate()), searchBar.getId(), null, pageable);
+        } else {
+            entityPage = receivableSummaryService.findAll(DateUtil.dayOf(searchBar.getStartDate()), DateUtil.dayOf(searchBar.getEndDate()), null, null, pageable);
+        }
+
         for (ReceivableSummaryEntity entity : entityPage) {
             ReceivableSummary receivable = convert(entity);
             receivable.setOrder(orderFacade.convertBasic(entity.getOrder()));
