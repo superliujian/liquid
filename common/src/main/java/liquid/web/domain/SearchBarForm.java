@@ -10,7 +10,7 @@ import java.util.Calendar;
 /**
  * Created by mat on 10/18/14.
  */
-public class SearchBarForm extends PageForm {
+public class SearchBarForm {
     @Deprecated
     private String action;
     @Deprecated
@@ -38,6 +38,11 @@ public class SearchBarForm extends PageForm {
     @NotNull
     @NotEmpty
     private String endDate;
+
+    /**
+     * The number of page.
+     */
+    private int number;
 
     public SearchBarForm() {
         Calendar calendar = Calendar.getInstance();
@@ -107,6 +112,23 @@ public class SearchBarForm extends PageForm {
         this.endDate = endDate;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public static String toQueryStrings(SearchBarForm searchBarForm) {
+        StringBuilder sb = new StringBuilder("?");
+        sb.append("startDate=").append(searchBarForm.getStartDate()).append("&");
+        sb.append("endDate=").append(searchBarForm.getEndDate()).append("&");
+        sb.append("type=").append(null == searchBarForm.getType() ? "" : searchBarForm.getType()).append("&");
+        sb.append("id=").append(null == searchBarForm.getId() ? "" : searchBarForm.getId()).append("&");
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{Class=SearchBarForm");
@@ -117,6 +139,7 @@ public class SearchBarForm extends PageForm {
         sb.append(", text='").append(text).append('\'');
         sb.append(", startDate='").append(startDate).append('\'');
         sb.append(", endDate='").append(endDate).append('\'');
+        sb.append(", number=").append(number);
         sb.append('}');
         return sb.toString();
     }

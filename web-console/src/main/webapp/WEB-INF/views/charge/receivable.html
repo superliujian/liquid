@@ -18,7 +18,8 @@
             <br />
             <form method="GET" class="form-inline pull-right" role="form" th:action="${searchBarForm.action}" th:object="${searchBarForm}">
                 <input type="hidden" th:field="*{id}"/>
-                <input type="hidden" th:field="*{type}"/>            
+                <input type="hidden" th:field="*{type}"/>
+                <input type="hidden" th:field="*{number}"/>
                 <div class="input-group input-group-sm date" id="startPicker">
                     <span class="input-group-addon" th:text="#{start.date}">Start Date</span>
                     <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{startDate}" />
@@ -146,6 +147,15 @@
         });    
         
         $(".tt-hint").addClass("form-control");
+        
+        $('#text').blur(function() {
+            var text = $('#text').val();
+            if(text.trim() == '') {
+                $('#id').val('');
+                $('#type').val('');
+            }
+        });
+        
         $('#startPicker').dtPicker();
         $('#endPicker').dtPicker();        
     }); // ready end

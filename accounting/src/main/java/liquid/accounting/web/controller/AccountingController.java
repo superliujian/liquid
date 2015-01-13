@@ -70,7 +70,7 @@ public class AccountingController {
         model.addAttribute("tradeTypes", TradeType.values());
         model.addAttribute("exchangeRate", getExchangeRate());
 
-        model.addAttribute("contextPath", "/accounting/receivable?");
+        model.addAttribute("contextPath", "/accounting/receivable" + SearchBarForm.toQueryStrings(searchBarForm));
 
         if (bindingResult.hasErrors()) {
             Page<ReceivableSummary> page = new PageImpl<ReceivableSummary>(new ArrayList<>());
@@ -81,7 +81,7 @@ public class AccountingController {
         searchBarForm.setAction("/accounting/receivable");
         model.addAttribute("searchBarForm", searchBarForm);
 
-        PageRequest pageRequest = new PageRequest(0, size, new Sort(Sort.Direction.DESC, "id"));
+        PageRequest pageRequest = new PageRequest(searchBarForm.getNumber(), size, new Sort(Sort.Direction.DESC, "id"));
         Page<ReceivableSummary> page = receivableFacade.findAll(searchBarForm, pageRequest);
         model.addAttribute("page", page);
 
