@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="settlement, row : ${settlementStatement.content}">
+                    <tr th:each="settlement, row : ${settlementStatement}">
                         <td><span th:text="${row.count}" /></td>
                         <td><span th:text="${settlement.orderNo}" /></td>
                         <td class="text-right" th:text="${settlement.cny}">></td>
@@ -50,18 +50,18 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td></td>
                         <td><strong><span th:text="#{total}">Sum</span></strong></td>
-                        <td class="text-right"><span th:text="${settlementStatement.cnyTotal}" /></td>
-                        <td class="text-right"><span th:text="${settlementStatement.usdTotal}" /></td>
+                        <td></td>
+                        <td class="text-right"><span th:text="${settlementStatement.total.cny}" /></td>
+                        <td class="text-right"><span th:text="${settlementStatement.total.usd}" /></td>
                         <td></td>
                         <td></td>
                     </tr> 
                     <tr>
                         <td></td>
                         <td><strong><span th:text="#{settted.unpaid}">Sellted and Unpaid</span></strong></td>
-                        <td class="text-right"><span th:text="${statement.cnyTotal} - ${receiptStatement.cnyTotal}" /></td>
-                        <td class="text-right"><span th:text="${statement.usdTotal} - ${receiptStatement.usdTotal}" /></td>
+                        <td class="text-right"><span th:text="${statement.total.cny} - ${receiptStatement.total.cny}" /></td>
+                        <td class="text-right"><span th:text="${statement.total.usd} - ${receiptStatement.total.usd}" /></td>
                         <td></td>
                         <td></td>
                     </tr>                    
@@ -100,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="invoice, row : ${statement.content}">
+                    <tr th:each="invoice, row : ${statement}">
                         <td><span th:text="${row.count}" /></td>
                         <td th:text="${invoice.invoiceNo}"></td>
                         <td class="text-right" th:text="${invoice.cny}"></td>
@@ -111,10 +111,10 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td></td>
                         <td><strong><span th:text="#{total}">Sum</span></strong></td>
-                        <td class="text-right"><span th:text="${statement.cnyTotal}" /></td>
-                        <td class="text-right"><span th:text="${statement.usdTotal}" /></td>
+                        <td></td>
+                        <td class="text-right"><span th:text="${statement.total.cny}" /></td>
+                        <td class="text-right"><span th:text="${statement.total.usd}" /></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -123,8 +123,8 @@
                     <tr>
                         <td></td>
                         <td><strong><span th:text="#{uninvoiced}">Uninvoiced</span></strong></td>
-                        <td class="text-right"><span th:text="${settlementStatement.cnyTotal} - ${statement.cnyTotal}" /></td>
-                        <td class="text-right"><span th:text="${settlementStatement.usdTotal} - ${statement.usdTotal}" /></td>
+                        <td class="text-right"><span th:text="${settlementStatement.total.cny} - ${statement.total.cny}" /></td>
+                        <td class="text-right"><span th:text="${settlementStatement.total.usd} - ${statement.total.usd}" /></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -162,7 +162,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="receipt, row : ${receiptStatement.content}">
+                    <tr th:each="receipt, row : ${receiptStatement}">
                         <td><span th:text="${row.count}" /></td>
                         <td class="text-right" th:text="${receipt.cny}">></td>
                         <td class="text-right" th:text="${receipt.usd}">></td>
@@ -171,15 +171,15 @@
                     </tr>
                     <tr>
                         <td><strong><span th:text="#{total}">Sum</span></strong></td>
-                        <td class="text-right"><span th:text="${receiptStatement.cnyTotal}" /></td>
-                        <td class="text-right"><span th:text="${receiptStatement.usdTotal}" /></td>
+                        <td class="text-right"><span th:text="${receiptStatement.total.cny}" /></td>
+                        <td class="text-right"><span th:text="${receiptStatement.total.usd}" /></td>
                         <td></td>
                         <td></td>
                     </tr> 
                     <tr>
                         <td><strong><span th:text="#{unpaid}">Unpaid</span></strong></td>
-                        <td class="text-right"><span th:text="${statement.cnyTotal} - ${receiptStatement.cnyTotal}" /></td>
-                        <td class="text-right"><span th:text="${statement.usdTotal} - ${receiptStatement.usdTotal}" /></td>
+                        <td class="text-right"><span th:text="${statement.total.cny} - ${receiptStatement.total.cny}" /></td>
+                        <td class="text-right"><span th:text="${statement.total.usd} - ${receiptStatement.total.usd}" /></td>
                         <td></td>
                         <td></td>
                     </tr>                     

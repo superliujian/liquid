@@ -2,8 +2,8 @@ package liquid.accounting.facade;
 
 import liquid.accounting.persistence.domain.SettlementEntity;
 import liquid.accounting.service.SettlementService;
-import liquid.accounting.web.domain.Settlement;
 import liquid.accounting.web.domain.Statement;
+import liquid.accounting.web.domain.Settlement;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.util.DateUtil;
@@ -28,7 +28,7 @@ public class SettlementFacade {
     public Statement<Settlement> findByOrderId(Long orderId) {
         Statement<Settlement> statement = new Statement<>();
         List<Settlement> settlementList = new ArrayList<>();
-        Long cnyTotal = 0L, usdTotal = 0L;
+        Settlement total = new Settlement();
 
         Iterable<SettlementEntity> settlementEntities = settlementService.findByOrderId(orderId);
         for (SettlementEntity settlementEntity : settlementEntities) {
@@ -40,12 +40,11 @@ public class SettlementFacade {
             settlement.setUsd(settlementEntity.getUsd());
             settlement.setSettledAt(DateUtil.dayStrOf(settlementEntity.getSettledAt()));
             settlementList.add(settlement);
-            cnyTotal += settlement.getCny();
-            usdTotal += settlement.getUsd();
+            total.setCny(total.getCny() + settlement.getCny());
+            total.setUsd(total.getUsd() + settlement.getUsd());
         }
         statement.setContent(settlementList);
-        statement.setCnyTotal(cnyTotal);
-        statement.setUsdTotal(usdTotal);
+        statement.setTotal(total);
 
         return statement;
     }

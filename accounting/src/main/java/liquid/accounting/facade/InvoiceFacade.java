@@ -5,8 +5,8 @@ import liquid.accounting.persistence.domain.AccountingType;
 import liquid.accounting.persistence.domain.InvoiceEntity;
 import liquid.accounting.service.InvoiceService;
 import liquid.accounting.service.ReceivableSummaryService;
-import liquid.accounting.web.domain.Invoice;
 import liquid.accounting.web.domain.Statement;
+import liquid.accounting.web.domain.Invoice;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.service.CustomerService;
 import liquid.util.DateUtil;
@@ -35,7 +35,7 @@ public class InvoiceFacade {
     public Statement<Invoice> findByOrderId(Long orderId) {
         Statement<Invoice> statement = new Statement<>();
         List<Invoice> invoiceList = new ArrayList<>();
-        Long cnyTotal = 0L, usdTotal = 0L;
+        Invoice total = new Invoice();
 
         Iterable<InvoiceEntity> invoiceEntities = invoiceService.findByOrderId(orderId);
         for (InvoiceEntity invoiceEntity : invoiceEntities) {
@@ -51,13 +51,12 @@ public class InvoiceFacade {
             invoice.setIssuedAt(DateUtil.dayStrOf(invoiceEntity.getIssuedAt()));
             invoice.setExpectedPaymentAt(DateUtil.dayStrOf(invoiceEntity.getExpectedPaymentAt()));
             invoiceList.add(invoice);
-            cnyTotal += invoice.getCny();
-            usdTotal += invoice.getUsd();
+            total.setCny(total.getCny() + invoice.getCny());
+            total.setUsd(total.getUsd() + invoice.getUsd());
         }
 
         statement.setContent(invoiceList);
-        statement.setCnyTotal(cnyTotal);
-        statement.setUsdTotal(usdTotal);
+        statement.setTotal(total);
 
         return statement;
     }
@@ -92,7 +91,7 @@ public class InvoiceFacade {
         invoiceService.save(invoiceEntity);
 
         Statement<Invoice> statement = findByOrderId(invoice.getOrderId());
-        receivableSummaryService.update(invoice.getOrderId(), AccountingType.INVOICE, statement.getCnyTotal(), statement.getUsdTotal());
+        receivableSummaryService.update(invoice.getOrderId(), AccountingType.INVOICE, statement.getTotal().getCny(), statement.getTotal().getUsd());
         return invoice;
     }
 }

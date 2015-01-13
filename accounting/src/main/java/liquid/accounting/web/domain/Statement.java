@@ -1,44 +1,34 @@
 package liquid.accounting.web.domain;
 
-/**
- * Created by Tao Ma on 1/8/15.
- */
-public class Statement<A> {
-    private Iterable<A> content;
-    private Long cnyTotal;
-    private Long usdTotal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-    public Iterable<A> getContent() {
+/**
+ * Created by Tao Ma on 1/13/15.
+ */
+public class Statement<T> implements Iterable<T> {
+    private List<T> content = new ArrayList<>();
+    private T total;
+
+    public List<T> getContent() {
         return content;
     }
 
-    public void setContent(Iterable<A> content) {
+    public void setContent(List<T> content) {
         this.content = content;
     }
 
-    public Long getCnyTotal() {
-        return cnyTotal;
+    public T getTotal() {
+        return total;
     }
 
-    public void setCnyTotal(Long cnyTotal) {
-        this.cnyTotal = cnyTotal;
-    }
-
-    public Long getUsdTotal() {
-        return usdTotal;
-    }
-
-    public void setUsdTotal(Long usdTotal) {
-        this.usdTotal = usdTotal;
+    public void setTotal(T total) {
+        this.total = total;
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("{Class=Statement");
-        sb.append(", content=").append(content);
-        sb.append(", cnyTotal=").append(cnyTotal);
-        sb.append(", usdTotal=").append(usdTotal);
-        sb.append('}');
-        return sb.toString();
+    public Iterator<T> iterator() {
+        return content.iterator();
     }
 }

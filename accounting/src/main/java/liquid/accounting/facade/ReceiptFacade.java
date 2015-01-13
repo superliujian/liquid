@@ -5,8 +5,8 @@ import liquid.accounting.persistence.domain.AccountingType;
 import liquid.accounting.persistence.domain.ReceiptEntity;
 import liquid.accounting.service.ReceiptService;
 import liquid.accounting.service.ReceivableSummaryService;
-import liquid.accounting.web.domain.Receipt;
 import liquid.accounting.web.domain.Statement;
+import liquid.accounting.web.domain.Receipt;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.service.CustomerService;
@@ -38,7 +38,7 @@ public class ReceiptFacade {
     public Statement<Receipt> findByOrderId(Long orderId) {
         Statement<Receipt> statement = new Statement<>();
         List<Receipt> receiptList = new ArrayList<>();
-        Long cnyTotal = 0L, usdTotal = 0L;
+        Receipt total = new Receipt();
 
         Iterable<ReceiptEntity> receiptEntities = receiptService.findByOrderId(orderId);
         for (ReceiptEntity receiptEntity : receiptEntities) {
@@ -50,12 +50,11 @@ public class ReceiptFacade {
             receipt.setUsd(receiptEntity.getUsd());
             receipt.setIssuedAt(DateUtil.dayStrOf(receiptEntity.getIssuedAt()));
             receiptList.add(receipt);
-            cnyTotal += receipt.getCny();
-            usdTotal += receipt.getUsd();
+            total.setCny(total.getCny() + receipt.getCny());
+            total.setUsd(total.getUsd() + receipt.getUsd());
         }
         statement.setContent(receiptList);
-        statement.setCnyTotal(cnyTotal);
-        statement.setUsdTotal(usdTotal);
+        statement.setTotal(total);
 
         return statement;
     }
@@ -90,7 +89,7 @@ public class ReceiptFacade {
         receiptService.save(receiptEntity);
 
         Statement<Receipt> statement = findByOrderId(receipt.getOrderId());
-        receivableSummaryService.update(receipt.getOrderId(), AccountingType.PAYMENT, statement.getCnyTotal(), statement.getUsdTotal());
+        receivableSummaryService.update(receipt.getOrderId(), AccountingType.PAYMENT, statement.getTotal().getCny(), statement.getTotal().getUsd());
         return receipt;
     }
 }
