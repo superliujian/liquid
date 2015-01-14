@@ -6,6 +6,7 @@ import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.util.DateUtil;
+import liquid.web.domain.EnhancedPageImpl;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,12 +51,22 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
             entityPage = receivableSummaryService.findAll(DateUtil.dayOf(searchBar.getStartDate()), DateUtil.dayOf(searchBar.getEndDate()), null, null, pageable);
         }
 
+        ReceivableSummary sum = new ReceivableSummary();
         for (ReceivableSummaryEntity entity : entityPage) {
             ReceivableSummary receivable = convert(entity);
             receivable.setOrder(orderFacade.convertBasic(entity.getOrder()));
             receivableList.add(receivable);
+
+            sum.setCny(sum.getCny() + receivable.getCny());
+            sum.setUsd(sum.getUsd() + receivable.getUsd());
+            sum.setRemainingBalanceCny(sum.getRemainingBalanceCny() + receivable.getRemainingBalanceCny());
+            sum.setRemainingBalanceUsd(sum.getRemainingBalanceUsd() + receivable.getRemainingBalanceUsd());
+            sum.setPaidCny(sum.getPaidCny() + receivable.getPaidCny());
+            sum.setPaidUsd(sum.getPaidUsd() + receivable.getPaidUsd());
+            sum.setInvoicedCny(sum.getInvoicedCny() + receivable.getInvoicedCny());
+            sum.setInvoicedUsd(sum.getInvoicedUsd() + receivable.getInvoicedUsd());
         }
-        return new PageImpl<ReceivableSummary>(receivableList, pageable, entityPage.getTotalElements());
+        return new EnhancedPageImpl<ReceivableSummary>(receivableList, pageable, entityPage.getTotalElements(), sum);
     }
 
     public ReceivableSummary save(ReceivableSummary receivableSummary) {

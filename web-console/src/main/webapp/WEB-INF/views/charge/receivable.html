@@ -80,7 +80,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="receivable : ${page.content}">
+            <tr th:each="receivable : ${page}">
                 <td>
                     <a th:href="'/order/' + ${receivable.order.id} + '/receivable'"><i class="glyphicon glyphicon-briefcase text-success"/></a>
                     &nbsp;
@@ -107,6 +107,26 @@
                 <td class="text-right" th:text="${receivable.cny + receivable.usd * exchangeRate - receivable.paidCny - receivable.paidUsd * exchangeRate}">Receivable Balance</td>
                 <td class="text-right" th:text="${receivable.cny - receivable.invoicedCny}">Invoice Balance CNY</td>
                 <td class="text-right" th:text="${receivable.usd - receivable.invoicedUsd}">Invoice Balance USD</td>
+            </tr>
+            <tr>
+                <td><strong><span th:text="#{total}">Sum</span></strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right" ><span th:text="${page.sum.cny}">Receivable CNY</span></td>
+                <td class="text-right" ><span th:text="${page.sum.usd}">Receivable USD</span></td>
+                <td class="text-right" ><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
+                <td></td>
+                <td class="text-right" ><span th:text="${page.sum.cny + page.sum.usd * exchangeRate - page.sum.paidCny - page.sum.paidUsd * exchangeRate}">Receivable Balance</span></td>
+                <td class="text-right" ><span th:text="${page.sum.cny - page.sum.invoicedCny}">Invoice Balance CNY</span></td>
+                <td class="text-right" ><span th:text="${page.sum.usd - page.sum.invoicedUsd}">Invoice Balance USD</span></td>
             </tr>
             </tbody>
         </table>
