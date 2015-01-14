@@ -1,6 +1,7 @@
 package liquid.accounting.web.controller;
 
 import liquid.accounting.facade.ReceivableFacadeImpl;
+import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.domain.TradeType;
 import liquid.persistence.domain.ExchangeRate;
@@ -36,31 +37,26 @@ public class AccountingController {
     private ExchangeRateRepository exchangeRateRepository;
 
     @RequestMapping(value = "/summary", method = RequestMethod.GET)
-    public String summary(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-
-        SearchBarForm searchBarForm = new SearchBarForm();
-        searchBarForm.setAction("/accounting/summary");
-        searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
-        model.addAttribute("searchBarForm", searchBarForm);
-
-//        Page<ReceivableSummary> page = receivableFacade.findAll(pageRequest);
-        Page<ReceivableSummary> page = receivableFacade.findAll(pageRequest);
-        model.addAttribute("page", page);
-        model.addAttribute("contextPath", "/accounting/summary?");
-
+    public String summary(@Valid SearchBarForm searchBarForm,
+                          BindingResult bindingResult, Model model) {
         model.addAttribute("tradeTypes", TradeType.values());
         model.addAttribute("exchangeRate", getExchangeRate());
 
-        return "charge/summary";
-    }
+        model.addAttribute("contextPath", "/accounting/summary" + SearchBarForm.toQueryStrings(searchBarForm));
 
-    @RequestMapping(value = "/summary", method = RequestMethod.GET, params = {"type", "text"})
-    public String summarySearch(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
-        searchBarForm.setAction("/charge/summary");
-//        search(number, searchBarForm, model);
+        if (bindingResult.hasErrors()) {
+            Page<ReceivableSummary> page = new PageImpl<ReceivableSummary>(new ArrayList<>());
+            model.addAttribute("page", page);
+            return "charge/summary";
+        }
 
-        model.addAttribute("contextPath", "/accounting/summary?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
+        searchBarForm.setAction("/accounting/summary");
+        model.addAttribute("searchBarForm", searchBarForm);
+
+        PageRequest pageRequest = new PageRequest(searchBarForm.getNumber(), size, new Sort(Sort.Direction.DESC, "id"));
+        Page<ReceivableSummary> page = receivableFacade.findAll(searchBarForm, pageRequest);
+        model.addAttribute("page", page);
+
         return "charge/summary";
     }
 

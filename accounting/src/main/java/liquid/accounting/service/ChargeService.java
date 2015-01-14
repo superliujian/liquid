@@ -1,20 +1,20 @@
-package liquid.service;
+package liquid.accounting.service;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.persistence.domain.ChargeEntity_;
+import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.accounting.persistence.repository.ChargeRepository;
-import liquid.dto.EarningDto;
-import liquid.metadata.ChargeWay;
+import liquid.accounting.web.domain.EarningDto;
+import liquid.accounting.web.domain.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
-import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.order.service.OrderService;
-import liquid.accounting.service.ReceivableSummaryService;
 import liquid.persistence.domain.ExchangeRate;
 import liquid.persistence.domain.ServiceProviderEntity_;
 import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
+import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.LegRepository;
@@ -64,9 +64,6 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     private OrderService orderService;
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
     private ShipmentService shipmentService;
 
     @Autowired
@@ -89,10 +86,10 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             shipment = leg.getShipment();
             entity.setOrder(shipment.getOrder());
         }
-        if (null == entity.getOrder()) {
-            OrderEntity order = taskService.findOrderByTaskId(entity.getTaskId());
-            entity.setOrder(order);
-        }
+//        if (null == entity.getOrder()) {
+//            OrderEntity order = taskService.findOrderByTaskId(entity.getTaskId());
+//            entity.setOrder(order);
+//        }
 
         if (ChargeWay.PER_ORDER.getValue() == entity.getWay()) {
             entity.setTotalPrice(entity.getUnitPrice());

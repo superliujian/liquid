@@ -254,6 +254,47 @@
 
 <!--
 - Variables
+- searchBarForm
+-   id:
+-   type:
+-   number:
+-   startDate:
+-   endDate:
+-   text: 
+-->
+<div th:fragment="enhanced-search-bar">
+    <br />
+            <form method="GET" class="form-inline pull-right" role="form" th:action="${searchBarForm.action}" th:object="${searchBarForm}">
+                <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{type}"/>
+                <input type="hidden" th:field="*{number}"/>
+                <div class="input-group input-group-sm date" id="startPicker">
+                    <span class="input-group-addon" th:text="#{start.date}">Start Date</span>
+                    <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{startDate}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                
+                <div class="input-group input-group-sm date" id="endPicker">
+                    <span class="input-group-addon" th:text="#{end.date}">End Date</span>
+                    <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{endDate}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>                
+                                    
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" th:field="*{text}" />
+                    
+                    <span class="input-group-btn">                    
+                        <button type="submit" name="search" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
+                    </span>
+                </div>             
+            </form> 
+</div>
+<!--
+- Variables
 - contextPath: The context path except number, e.g. /order? or /order?type=abc&.
 - page:
 -->

@@ -15,35 +15,7 @@
         </div>  
             
         <div class="col-xs-6 pull-right">     
-            <br />
-            <form method="GET" class="form-inline pull-right" role="form" th:action="${searchBarForm.action}" th:object="${searchBarForm}">
-                <input type="hidden" th:field="*{id}"/>
-                <input type="hidden" th:field="*{type}"/>
-                <input type="hidden" th:field="*{number}"/>
-                <div class="input-group input-group-sm date" id="startPicker">
-                    <span class="input-group-addon" th:text="#{start.date}">Start Date</span>
-                    <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{startDate}" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-                
-                <div class="input-group input-group-sm date" id="endPicker">
-                    <span class="input-group-addon" th:text="#{end.date}">End Date</span>
-                    <input type="text" data-date-format="YYYY-MM-DD" class="form-control input-sm" th:field="*{endDate}" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>                
-                                    
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" th:field="*{text}" />
-                    
-                    <span class="input-group-btn">                    
-                        <button type="submit" name="search" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
-                    </span>
-                </div>             
-            </form>          
+            <div th:include="layout :: enhanced-search-bar"></div>
         </div>
     </div><!-- row -->
 </div><!-- /.container -->
@@ -82,25 +54,25 @@
             <tbody>
             <tr th:each="receivable : ${page}">
                 <td>
-                    <a th:href="'/order/' + ${receivable.order.id} + '/receivable'"><i class="glyphicon glyphicon-briefcase text-success"/></a>
+                    <a th:href="'/order/' + ${receivable.orderId} + '/receivable'"><i class="glyphicon glyphicon-briefcase text-success"/></a>
                     &nbsp;
-                    <a th:href="'/charge/order/' + ${receivable.order.id}" th:text="${receivable.order.orderNo}"/>
+                    <a th:href="'/charge/order/' + ${receivable.id}" th:text="${receivable.orderNo}"/>
                 </td>
-                <td th:text="${receivable.order.createdAt}"></td>
+                <td th:text="${receivable.createdAt}"></td>
                 <td>
-                    <a th:href="'/order/' + ${receivable.order.id} + '/receivable'"><i class="glyphicon glyphicon-briefcase text-success"/></a>
+                    <a th:href="'/order/' + ${receivable.orderId} + '/receivable'"><i class="glyphicon glyphicon-briefcase text-success"/></a>
                     &nbsp;
-                    <span th:text="${receivable.order.customerName}" />
+                    <span th:text="${receivable.customerName}" />
                 </td>
-                <td th:text="${receivable.order.origination}">Origin</td>
-                <td th:text="${receivable.order.destination}">Destination</td>
-                <td th:text="${receivable.order.railDestination}">Rail Destination</td>
-                <td th:text="${receivable.order.goodsName}"></td>
-                <td th:text="#{${tradeTypes[__${receivable.order.tradeType}__].i18nKey}}">Trade Type</td>
+                <td th:text="${receivable.origination}">Origin</td>
+                <td th:text="${receivable.destination}">Destination</td>
+                <td th:text="${receivable.railDestination}">Rail Destination</td>
+                <td th:text="${receivable.goodsName}"></td>
+                <td th:text="#{${tradeTypes[__${receivable.tradeType}__].i18nKey}}">Trade Type</td>
                 <td></td>
-                <td th:text="${receivable.order.containerQuantity}">Container Quantity</td>
+                <td class="text-right"><span th:text="${receivable.containerQuantity}">Container Quantity</span></td>
                 <td></td>
-                <td class="text-right" th:text="${receivable.cny}">Receivable CNY</td>
+                <td class="text-right"><span th:text="${receivable.cny}">Receivable CNY</span></td>
                 <td class="text-right" th:text="${receivable.usd}">Receivable USD</td>
                 <td class="text-right" th:text="${receivable.cny + receivable.usd * exchangeRate}">Receivable SUM</td>
                 <td></td>
@@ -118,7 +90,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td class="text-right"><span th:text="${page.sum.containerQuantity}">Container Quantity</span></td>
                 <td></td>
                 <td class="text-right" ><span th:text="${page.sum.cny}">Receivable CNY</span></td>
                 <td class="text-right" ><span th:text="${page.sum.usd}">Receivable USD</span></td>

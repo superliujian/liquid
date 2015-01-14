@@ -59,7 +59,7 @@ public class Order extends BaseIdObject {
 
     @NotNull
     @Min(1)
-    private Integer containerQuantity;
+    private Integer containerQuantity = 0;
     private String containerAttribute;
 
     private Long railwayId;

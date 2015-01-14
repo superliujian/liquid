@@ -1,4 +1,4 @@
-package liquid.dto;
+package liquid.accounting.web.domain;
 
 import java.io.Serializable;
 

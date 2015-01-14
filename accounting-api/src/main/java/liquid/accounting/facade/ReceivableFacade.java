@@ -1,8 +1,6 @@
 package liquid.accounting.facade;
 
 import liquid.accounting.web.domain.ReceivableSummary;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,7 +8,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface ReceivableFacade {
-    Page<ReceivableSummary> findAll(Pageable pageable);
-
     ReceivableSummary save(ReceivableSummary receivableSummary);
 }

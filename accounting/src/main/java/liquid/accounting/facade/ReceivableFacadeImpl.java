@@ -10,7 +10,6 @@ import liquid.web.domain.EnhancedPageImpl;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +28,6 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
     @Autowired
     private OrderFacade orderFacade;
 
-    public Page<ReceivableSummary> findAll(Pageable pageable) {
-        List<ReceivableSummary> receivableList = new ArrayList<>();
-        Page<ReceivableSummaryEntity> entityPage = receivableSummaryService.findAll(pageable);
-        for (ReceivableSummaryEntity entity : entityPage) {
-            ReceivableSummary receivable = convert(entity);
-            receivable.setOrder(orderFacade.convertBasic(entity.getOrder()));
-            receivableList.add(receivable);
-        }
-        return new PageImpl<ReceivableSummary>(receivableList, pageable, entityPage.getTotalElements());
-    }
-
     public Page<ReceivableSummary> findAll(SearchBarForm searchBar, Pageable pageable) {
         List<ReceivableSummary> receivableList = new ArrayList<>();
         Page<ReceivableSummaryEntity> entityPage = null;
@@ -54,9 +42,10 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
         ReceivableSummary sum = new ReceivableSummary();
         for (ReceivableSummaryEntity entity : entityPage) {
             ReceivableSummary receivable = convert(entity);
-            receivable.setOrder(orderFacade.convertBasic(entity.getOrder()));
+            orderFacade.convert(entity.getOrder(), receivable);
             receivableList.add(receivable);
 
+            sum.setContainerQuantity(sum.getContainerQuantity() + receivable.getContainerQuantity());
             sum.setCny(sum.getCny() + receivable.getCny());
             sum.setUsd(sum.getUsd() + receivable.getUsd());
             sum.setRemainingBalanceCny(sum.getRemainingBalanceCny() + receivable.getRemainingBalanceCny());
@@ -65,6 +54,11 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
             sum.setPaidUsd(sum.getPaidUsd() + receivable.getPaidUsd());
             sum.setInvoicedCny(sum.getInvoicedCny() + receivable.getInvoicedCny());
             sum.setInvoicedUsd(sum.getInvoicedUsd() + receivable.getInvoicedUsd());
+
+            sum.setDistyPrice(sum.getDistyPrice() + receivable.getDistyPrice());
+            sum.setDistyUsd(sum.getDistyUsd() + receivable.getDistyUsd());
+            sum.setDistyUsd(sum.getDistyUsd() + receivable.getDistyUsd());
+            sum.setGrandTotal(sum.getGrandTotal() + receivable.getGrandTotal());
         }
         return new EnhancedPageImpl<ReceivableSummary>(receivableList, pageable, entityPage.getTotalElements(), sum);
     }
@@ -87,6 +81,7 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
         receivableSummary.setPaidUsd(entity.getPaidUsd());
         receivableSummary.setInvoicedCny(entity.getInvoicedCny());
         receivableSummary.setInvoicedUsd(entity.getInvoicedUsd());
+        receivableSummary.setOrderId(entity.getOrder().getId());
         return receivableSummary;
     }
 
@@ -102,7 +97,7 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
         entity.setPaidUsd(receivable.getPaidUsd());
         entity.setInvoicedCny(receivable.getInvoicedCny());
         entity.setInvoicedUsd(receivable.getInvoicedUsd());
-        entity.setOrder(OrderEntity.newInstance(OrderEntity.class, receivable.getOrder().getId()));
+        entity.setOrder(OrderEntity.newInstance(OrderEntity.class, receivable.getOrderId()));
         return entity;
     }
 }

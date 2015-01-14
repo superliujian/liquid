@@ -113,8 +113,9 @@ public class OrderFacade {
         ReceivableSummary receivableSummary = new ReceivableSummary();
         receivableSummary.setCny(order.getCnyTotal());
         receivableSummary.setUsd(order.getUsdTotal());
+        receivableSummary.setOrderId(order.getId());
         order.setId(orderEntity.getId());
-        receivableSummary.setOrder(order);
+        convert(orderEntity, receivableSummary);
         receivableFacade.save(receivableSummary);
 
         return orderEntity;
@@ -287,6 +288,11 @@ public class OrderFacade {
 
     public Order convertBasic(OrderEntity orderEntity) {
         Order order = new Order();
+        convert(orderEntity, order);
+        return order;
+    }
+
+    public void convert(OrderEntity orderEntity, Order order) {
         order.setId(orderEntity.getId());
         order.setOrderNo(orderEntity.getOrderNo());
         order.setServiceTypeId(orderEntity.getServiceTypeId());
@@ -355,7 +361,6 @@ public class OrderFacade {
         order.setUpdatedAt(DateUtil.stringOf(orderEntity.getUpdatedAt()));
         order.setRole(orderEntity.getCreateRole());
         order.setStatus(orderEntity.getStatus());
-        return order;
     }
 
     private OrderRailEntity convertRailway(Order order) {

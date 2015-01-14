@@ -4,7 +4,7 @@ import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.domain.Charge;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.service.ChargeService;
+import liquid.accounting.service.ChargeService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import org.springframework.beans.factory.annotation.Autowired;

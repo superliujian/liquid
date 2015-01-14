@@ -6,20 +6,19 @@ import liquid.domain.Charge;
 import liquid.domain.LoadingType;
 import liquid.domain.ServiceProvider;
 import liquid.domain.TradeType;
-import liquid.dto.EarningDto;
+import liquid.accounting.web.domain.EarningDto;
 import liquid.dto.ExchangeRateDto;
 import liquid.facade.ChargeFacade;
 import liquid.facade.ServiceProviderFacade;
 import liquid.metadata.ChargeStatus;
-import liquid.metadata.ChargeWay;
+import liquid.accounting.web.domain.ChargeWay;
 import liquid.metadata.ContainerCap;
-import liquid.order.domain.Order;
 import liquid.order.domain.OrderStatus;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.service.ChargeService;
+import liquid.accounting.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
 import liquid.service.TaskService;
 import liquid.transport.persistence.domain.LegEntity;
@@ -197,56 +196,6 @@ public class ChargeController extends BaseController {
         model.addAttribute("charges", charges);
         model.addAttribute("backToTask", taskService.computeTaskMainPath(taskId));
         return "charge/console";
-    }
-
-    @RequestMapping(value = "/summary", method = RequestMethod.GET)
-    public String summary(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
-        list(number, model, "/charge/summary");
-
-        model.addAttribute("contextPath", "/charge/summary?");
-        return "charge/summary";
-    }
-
-    @RequestMapping(value = "/summary", method = RequestMethod.GET, params = {"type", "text"})
-    public String summarySearch(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
-        searchBarForm.setAction("/charge/summary");
-        search(number, searchBarForm, model);
-
-        model.addAttribute("contextPath", "/charge/summary?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
-        return "charge/summary";
-    }
-
-    @RequestMapping(value = "/receivable", method = RequestMethod.GET, params = {"type", "text"})
-    public String receivableSearch(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
-        searchBarForm.setAction("/charge/receivable");
-        search(number, searchBarForm, model);
-
-        model.addAttribute("contextPath", "/charge/receivable?type=" + searchBarForm.getType() + "&content=" + searchBarForm.getText() + "&");
-        return "charge/receivable";
-    }
-
-    private void list(int number, Model model, String action) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<Order> page = orderFacade.findByStatus(OrderStatus.SUBMITTED.getValue(), pageRequest);
-
-        SearchBarForm searchBarForm = new SearchBarForm();
-        searchBarForm.setAction(action);
-        searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
-        model.addAttribute("searchBarForm", searchBarForm);
-        model.addAttribute("page", page);
-    }
-
-    private void search(int number, SearchBarForm searchBarForm, Model model) {
-        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-
-        String orderNo = "orderNo".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
-        String customerName = "customerName".equals(searchBarForm.getType()) ? searchBarForm.getText() : null;
-
-        Page<Order> page = orderFacade.findAll(orderNo, customerName, null, pageRequest);
-
-        searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
-        model.addAttribute("searchBarForm", searchBarForm);
-        model.addAttribute("page", page);
     }
 
     @RequestMapping(value = "/payable", method = RequestMethod.GET)

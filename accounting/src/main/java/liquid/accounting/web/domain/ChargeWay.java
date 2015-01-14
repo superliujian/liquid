@@ -1,4 +1,4 @@
-package liquid.metadata;
+package liquid.accounting.web.domain;
 
 /**
  * TODO: Comments.

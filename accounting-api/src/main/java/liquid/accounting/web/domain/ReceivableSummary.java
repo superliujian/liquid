@@ -5,12 +5,12 @@ import liquid.order.domain.Order;
 /**
  * Created by Tao Ma on 12/9/14.
  */
-public class ReceivableSummary {
+public class ReceivableSummary extends Order {
     private Long id;
 
-    private Long cny = 0L;;
+    private Long cny = 0L;
 
-    private Long usd = 0L;;
+    private Long usd = 0L;
 
     private String prepaidTime;
 
@@ -26,7 +26,7 @@ public class ReceivableSummary {
 
     private Long invoicedUsd = 0L;
 
-    private Order order;
+    private Long orderId;
 
     public Long getId() {
         return id;
@@ -108,12 +108,12 @@ public class ReceivableSummary {
         this.invoicedUsd = invoicedUsd;
     }
 
-    public Order getOrder() {
-        return order;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     @Override
@@ -129,7 +129,8 @@ public class ReceivableSummary {
         sb.append(", paidUsd=").append(paidUsd);
         sb.append(", invoicedCny=").append(invoicedCny);
         sb.append(", invoicedUsd=").append(invoicedUsd);
-        sb.append(", order=").append(order);
+        sb.append(", orderId=").append(orderId);
+        sb.append(", ").append(super.toString());
         sb.append('}');
         return sb.toString();
     }
