@@ -1,4 +1,4 @@
-package liquid.accounting.web.domain;
+package liquid.purchase.web.domain;
 
 /**
  * TODO: Comments.

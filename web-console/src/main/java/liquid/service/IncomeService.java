@@ -25,7 +25,7 @@ public class IncomeService {
     private IncomeRepository incomeRepository;
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Autowired
     private ReceivableSummaryService receivableSummaryService;

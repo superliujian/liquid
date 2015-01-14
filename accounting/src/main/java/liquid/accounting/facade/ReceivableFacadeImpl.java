@@ -2,9 +2,11 @@ package liquid.accounting.facade;
 
 import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.accounting.service.ReceivableSummaryService;
+import liquid.accounting.web.domain.Earning;
 import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
+import liquid.service.ExchangeRateService;
 import liquid.util.DateUtil;
 import liquid.web.domain.EnhancedPageImpl;
 import liquid.web.domain.SearchBarForm;
@@ -24,6 +26,9 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
 
     @Autowired
     private ReceivableSummaryService receivableSummaryService;
+
+    @Autowired
+    private ExchangeRateService exchangeRateService;
 
     @Autowired
     private OrderFacade orderFacade;
@@ -67,6 +72,24 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
         ReceivableSummaryEntity entity = convert(receivableSummary);
         receivableSummaryService.save(entity);
         return receivableSummary;
+    }
+
+    @Override
+    public Earning calculateEarning(Long orderId) {
+        Earning earning = new Earning();
+
+        double exchangeRate = exchangeRateService.getExchangeRate();
+
+        ReceivableSummaryEntity receivableSummaryEntity = receivableSummaryService.findByOrderId(orderId);
+
+        earning.setSalesPriceCny(receivableSummaryEntity.getCny());
+        earning.setSalesPriceUsd(receivableSummaryEntity.getUsd());
+        earning.setDistyPrice(receivableSummaryEntity.getOrder().getDistyPrice());
+        earning.setGrandTotal(receivableSummaryEntity.getOrder().getGrandTotal());
+        earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - receivableSummaryEntity.getOrder().getGrandTotal());
+        earning.setSalesProfit(receivableSummaryEntity.getCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - receivableSummaryEntity.getOrder().getDistyPrice());
+        earning.setDistyProfit(earning.getDistyPrice() - receivableSummaryEntity.getOrder().getGrandTotal());
+        return earning;
     }
 
     private ReceivableSummary convert(ReceivableSummaryEntity entity) {

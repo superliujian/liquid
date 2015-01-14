@@ -1,7 +1,7 @@
 package liquid.controller;
 
 import liquid.security.SecurityContext;
-import liquid.service.TaskService;
+import liquid.service.TaskServiceImpl;
 import liquid.task.NotCompletedException;
 import liquid.task.domain.Task;
 import liquid.task.domain.TaskBar;
@@ -29,7 +29,7 @@ public class TasksController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(TasksController.class);
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Deprecated
     @Autowired

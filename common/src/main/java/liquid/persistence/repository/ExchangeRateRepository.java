@@ -1,6 +1,6 @@
 package liquid.persistence.repository;
 
-import liquid.persistence.domain.ExchangeRate;
+import liquid.persistence.domain.ExchangeRateEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.data.repository.CrudRepository;
  * Date: 11/16/13
  * Time: 1:44 PM
  */
-public interface ExchangeRateRepository extends CrudRepository<ExchangeRate, Long> {
+public interface ExchangeRateRepository extends CrudRepository<ExchangeRateEntity, Long> {
 
 }

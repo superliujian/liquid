@@ -9,27 +9,23 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>accounting</artifactId>
+    <artifactId>purchase</artifactId>
     <packaging>jar</packaging>
-    <name>Accounting</name>
+    <name>Purchase</name>
 
     <dependencies>
         <!-- liquid -->
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>audit</artifactId>
-        </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>accounting-api</artifactId>
+            <artifactId>audit</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
+            <artifactId>order-api</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
@@ -37,11 +33,31 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>purchase</artifactId>
+            <artifactId>container</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>transport</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>task</artifactId>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 </project>

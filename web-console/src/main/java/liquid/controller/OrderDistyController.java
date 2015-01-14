@@ -3,7 +3,7 @@ package liquid.controller;
 import liquid.domain.Disty;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.service.TaskService;
+import liquid.service.TaskServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class OrderDistyController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderDistyController.class);
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Autowired
     private OrderService orderService;

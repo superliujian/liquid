@@ -1,4 +1,4 @@
-package liquid.dto;
+package liquid.web.domain;
 
 /**
  * TODO: Comments.

@@ -1,6 +1,6 @@
-package liquid.accounting.persistence.repository;
+package liquid.purchase.persistence.repository;
 
-import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.purchase.persistence.domain.ChargeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

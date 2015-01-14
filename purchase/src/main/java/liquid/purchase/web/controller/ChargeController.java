@@ -1,29 +1,31 @@
-package liquid.controller;
+package liquid.purchase.web.controller;
 
-import liquid.accounting.persistence.domain.ChargeEntity;
+
+import liquid.accounting.facade.ReceivableFacade;
+import liquid.accounting.web.domain.Earning;
 import liquid.container.domain.ContainerType;
-import liquid.domain.Charge;
+import liquid.container.domain.ContainerCap;
 import liquid.domain.LoadingType;
 import liquid.domain.ServiceProvider;
 import liquid.domain.TradeType;
-import liquid.accounting.web.domain.EarningDto;
-import liquid.dto.ExchangeRateDto;
-import liquid.facade.ChargeFacade;
 import liquid.facade.ServiceProviderFacade;
-import liquid.metadata.ChargeStatus;
-import liquid.accounting.web.domain.ChargeWay;
-import liquid.metadata.ContainerCap;
 import liquid.order.domain.OrderStatus;
 import liquid.order.facade.OrderFacade;
-import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.accounting.service.ChargeService;
+import liquid.purchase.facade.ChargeFacade;
+import liquid.purchase.persistence.domain.ChargeEntity;
+import liquid.purchase.service.ChargeService;
+import liquid.purchase.web.domain.Charge;
+import liquid.purchase.web.domain.ChargeStatus;
+import liquid.purchase.web.domain.ChargeWay;
+import liquid.service.ExchangeRateService;
 import liquid.service.ServiceSubtypeService;
-import liquid.service.TaskService;
+import liquid.task.service.TaskService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.service.LegService;
 import liquid.transport.web.domain.TransMode;
+import liquid.web.domain.ExchangeRateDto;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +51,9 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/charge")
-public class ChargeController extends BaseController {
+public class ChargeController {
+    private static final int size = 20;
+
     private static final Logger logger = LoggerFactory.getLogger(ChargeController.class);
 
     @Autowired
@@ -75,6 +79,12 @@ public class ChargeController extends BaseController {
 
     @Autowired
     private ServiceProviderFacade serviceProviderFacade;
+
+    @Autowired
+    private ExchangeRateService exchangeRateService;
+
+    @Autowired
+    private ReceivableFacade receivableFacade;
 
     @ModelAttribute("transModes")
     public Map<Integer, String> populateTransModes() {
@@ -113,7 +123,7 @@ public class ChargeController extends BaseController {
 
     @ModelAttribute("exchangeRate")
     public Double populateExchangeRate() {
-        return chargeService.getExchangeRate();
+        return exchangeRateService.getExchangeRate();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -249,19 +259,17 @@ public class ChargeController extends BaseController {
     }
 
     @RequestMapping(value = "/order/{orderId}", method = RequestMethod.GET)
-    public String order(@PathVariable long orderId,
-                        Model model, Principal principal) {
+    public String order(@PathVariable long orderId, Model model) {
         logger.debug("orderId: {}", orderId);
 
-        OrderEntity order = orderService.find(orderId);
         Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
-        Iterable<ChargeEntity> charges = chargeService.findByOrderId(order.getId());
+        Iterable<ChargeEntity> charges = chargeService.findByOrderId(orderId);
         model.addAttribute("charges", charges);
 
         model.addAttribute("chargeWays", ChargeWay.values());
         model.addAttribute("serviceSubtypes", serviceSubtypes);
 
-        EarningDto earning = chargeService.calculateEarning(order, charges);
+        Earning earning = receivableFacade.calculateEarning(orderId);
         model.addAttribute("earning", earning);
         return "charge/order_detail";
     }
@@ -302,7 +310,7 @@ public class ChargeController extends BaseController {
                                   Model model, Principal principal) {
         logger.debug("done: {}", done);
 
-        double value = chargeService.getExchangeRate();
+        double value = exchangeRateService.getExchangeRate();
         ExchangeRateDto exchangeRate = new ExchangeRateDto();
         exchangeRate.setValue(value);
 

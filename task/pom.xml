@@ -30,6 +30,10 @@
             <groupId>liquid</groupId>
             <artifactId>user</artifactId>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>task-api</artifactId>
+        </dependency>
 
         <!-- spring -->
         <dependency>

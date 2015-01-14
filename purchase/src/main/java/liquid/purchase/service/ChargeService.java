@@ -1,20 +1,18 @@
-package liquid.accounting.service;
+package liquid.purchase.service;
 
-import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.accounting.persistence.domain.ChargeEntity_;
-import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
-import liquid.accounting.persistence.repository.ChargeRepository;
-import liquid.accounting.web.domain.EarningDto;
-import liquid.accounting.web.domain.ChargeWay;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.ExchangeRate;
+import liquid.persistence.domain.ExchangeRateEntity;
 import liquid.persistence.domain.ServiceProviderEntity_;
-import liquid.persistence.repository.ExchangeRateRepository;
 import liquid.persistence.repository.ServiceProviderRepository;
+import liquid.purchase.persistence.domain.ChargeEntity;
+import liquid.purchase.persistence.domain.ChargeEntity_;
+import liquid.purchase.persistence.repository.ChargeRepository;
+import liquid.purchase.web.domain.ChargeWay;
 import liquid.security.SecurityContext;
 import liquid.service.AbstractService;
+import liquid.service.ExchangeRateService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.LegRepository;
@@ -52,7 +50,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     private ChargeRepository chargeRepository;
 
     @Autowired
-    private ExchangeRateRepository exchangeRateRepository;
+    private ExchangeRateService exchangeRateService;
 
     @Autowired
     private LegRepository legRepository;
@@ -65,9 +63,6 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
     @Autowired
     private ShipmentService shipmentService;
-
-    @Autowired
-    private ReceivableSummaryService receivableSummaryService;
 
     // TODO: have to enhance this function.
     @Override
@@ -106,7 +101,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         if (entity.getCurrency() == 0) {
             order.setGrandTotal(order.getGrandTotal() + entity.getTotalPrice());
         } else {
-            order.setGrandTotal(order.getGrandTotal() + Math.round(entity.getTotalPrice() * getExchangeRate()));
+            order.setGrandTotal(order.getGrandTotal() + Math.round(entity.getTotalPrice() * exchangeRateService.getExchangeRate()));
         }
         orderService.save(order);
 
@@ -124,7 +119,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         if (charge.getCurrency() == 0) {
             order.setGrandTotal(order.getGrandTotal() - charge.getTotalPrice());
         } else {
-            order.setGrandTotal(order.getGrandTotal() - Math.round(charge.getTotalPrice() * getExchangeRate()));
+            order.setGrandTotal(order.getGrandTotal() - Math.round(charge.getTotalPrice() * exchangeRateService.getExchangeRate()));
         }
 
         orderService.save(order);
@@ -150,7 +145,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             if (charge.getCurrency() == 0) {
                 total += charge.getTotalPrice();
             } else {
-                total += Math.round(charge.getTotalPrice() * getExchangeRate());
+                total += Math.round(charge.getTotalPrice() * exchangeRateService.getExchangeRate());
             }
         }
         return total;
@@ -223,32 +218,10 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         return chargeRepository.findByOrderIdAndCreateRole(orderId, createRole);
     }
 
-    public EarningDto calculateEarning(OrderEntity order, Iterable<ChargeEntity> charges) {
-        EarningDto earning = new EarningDto();
-
-        double exchangeRate = getExchangeRate();
-
-        ReceivableSummaryEntity receivableSummaryEntity = receivableSummaryService.findByOrderId(order.getId());
-
-        earning.setSalesPriceCny(receivableSummaryEntity.getCny());
-        earning.setSalesPriceUsd(receivableSummaryEntity.getUsd());
-        earning.setDistyPrice(order.getDistyPrice());
-        earning.setGrandTotal(order.getGrandTotal());
-        earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getGrandTotal());
-        earning.setSalesProfit(receivableSummaryEntity.getCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - order.getDistyPrice());
-        earning.setDistyProfit(earning.getDistyPrice() - order.getGrandTotal());
-        return earning;
-    }
-
-    public double getExchangeRate() {
-        ExchangeRate exchangeRate = exchangeRateRepository.findOne(1L);
-        return null == exchangeRate ? 0.00 : exchangeRate.getValue();
-    }
-
     public void setExchangeRate(double value) {
-        ExchangeRate exchangeRate = new ExchangeRate();
+        ExchangeRateEntity exchangeRate = new ExchangeRateEntity();
         exchangeRate.setId(1L);
         exchangeRate.setValue(value);
-        exchangeRateRepository.save(exchangeRate);
+        exchangeRateService.save(exchangeRate);
     }
 }

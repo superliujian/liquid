@@ -7,7 +7,7 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerService;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LocationType;
-import liquid.metadata.ContainerCap;
+import liquid.container.domain.ContainerCap;
 import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceProviderEntity;

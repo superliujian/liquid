@@ -6,7 +6,10 @@ import liquid.user.persistence.domain.Account;
 import liquid.user.service.AccountService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
-import org.activiti.engine.*;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLinkType;
@@ -58,7 +61,7 @@ public class ActivitiEngineService {
     }
 
     public void claimTask(String taskId, String uid) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         taskService.claim(taskId, uid);
 
         Account account = accountService.find(uid);
@@ -70,7 +73,7 @@ public class ActivitiEngineService {
     public void complete(String taskId, String uid, Map<String, Object> variableMap) {
         variableMap.put("employeeName", uid);
         variableMap.put("endTime", DateUtil.stringOf(Calendar.getInstance().getTime(), DatePattern.UNTIL_SECOND));
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         taskService.complete(taskId, variableMap);
 
         Account account = accountService.find(uid);
@@ -80,7 +83,7 @@ public class ActivitiEngineService {
     }
 
     public List<Task> listTasks(String candidateGid) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskCandidateGroup(candidateGid).list();
         if (logger.isDebugEnabled()) {
             for (Task task : taskList) {
@@ -92,7 +95,7 @@ public class ActivitiEngineService {
     }
 
     public List<Task> listWarningTasks() {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         List<Task> taskList = taskService.createTaskQuery().taskDefinitionKey("recordTod").list();
         Iterator<Task> iterator = taskList.iterator();
         while (iterator.hasNext()) {
@@ -105,7 +108,7 @@ public class ActivitiEngineService {
     }
 
     public List<Task> listMyTasks(String uid) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         List<Task> taskList = taskService.createTaskQuery().orderByTaskCreateTime().asc().taskAssignee(uid).list();
         if (logger.isDebugEnabled()) {
             for (Task task : taskList) {
@@ -122,12 +125,12 @@ public class ActivitiEngineService {
     }
 
     public Task getTask(String taskId) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         return taskService.createTaskQuery().taskId(taskId).singleResult();
     }
 
     public String getBusinessKeyByTaskId(String taskId) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         return getBusinessKeyByProcessInstanceId(task.getProcessInstanceId());
     }
@@ -139,18 +142,18 @@ public class ActivitiEngineService {
     }
 
     public List<Task> listTasksByOrderId(long orderId) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         return taskService.createTaskQuery().processInstanceBusinessKey(String.valueOf(orderId)).list();
     }
 
     public Object getVariable(String taskId, String variableName) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         return processEngine.getRuntimeService().getVariable(task.getProcessInstanceId(), variableName);
     }
 
     public void setVariable(String taskId, String variableName, Object value) {
-        TaskService taskService = processEngine.getTaskService();
+        org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         processEngine.getRuntimeService().setVariable(task.getProcessInstanceId(), variableName, value);
     }

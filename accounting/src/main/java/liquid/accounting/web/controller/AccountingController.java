@@ -1,11 +1,9 @@
 package liquid.accounting.web.controller;
 
 import liquid.accounting.facade.ReceivableFacadeImpl;
-import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.domain.TradeType;
-import liquid.persistence.domain.ExchangeRate;
-import liquid.persistence.repository.ExchangeRateRepository;
+import liquid.service.ExchangeRateService;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -34,13 +31,13 @@ public class AccountingController {
     private ReceivableFacadeImpl receivableFacade;
 
     @Autowired
-    private ExchangeRateRepository exchangeRateRepository;
+    private ExchangeRateService exchangeRateService;
 
     @RequestMapping(value = "/summary", method = RequestMethod.GET)
     public String summary(@Valid SearchBarForm searchBarForm,
                           BindingResult bindingResult, Model model) {
         model.addAttribute("tradeTypes", TradeType.values());
-        model.addAttribute("exchangeRate", getExchangeRate());
+        model.addAttribute("exchangeRate", exchangeRateService.getExchangeRate());
 
         model.addAttribute("contextPath", "/accounting/summary" + SearchBarForm.toQueryStrings(searchBarForm));
 
@@ -64,7 +61,7 @@ public class AccountingController {
     public String listReceivables(@Valid SearchBarForm searchBarForm,
                                   BindingResult bindingResult, Model model) {
         model.addAttribute("tradeTypes", TradeType.values());
-        model.addAttribute("exchangeRate", getExchangeRate());
+        model.addAttribute("exchangeRate", exchangeRateService.getExchangeRate());
 
         model.addAttribute("contextPath", "/accounting/receivable" + SearchBarForm.toQueryStrings(searchBarForm));
 
@@ -82,10 +79,5 @@ public class AccountingController {
         model.addAttribute("page", page);
 
         return "charge/receivable";
-    }
-
-    public double getExchangeRate() {
-        ExchangeRate exchangeRate = exchangeRateRepository.findOne(1L);
-        return null == exchangeRate ? 0.00 : exchangeRate.getValue();
     }
 }

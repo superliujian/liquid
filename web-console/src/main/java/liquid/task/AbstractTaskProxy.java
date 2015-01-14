@@ -2,7 +2,7 @@ package liquid.task;
 
 import liquid.order.service.OrderService;
 import liquid.security.SecurityContext;
-import liquid.service.TaskService;
+import liquid.service.TaskServiceImpl;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
 import liquid.task.service.ActivitiEngineService;
@@ -21,7 +21,7 @@ public abstract class AbstractTaskProxy {
     protected ActivitiEngineService activitiEngineService;
 
     @Autowired
-    protected TaskService taskService;
+    protected TaskServiceImpl taskService;
 
     @Autowired
     protected OrderService orderService;

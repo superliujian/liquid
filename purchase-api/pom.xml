@@ -9,31 +9,23 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>order</artifactId>
+    <artifactId>purchase-api</artifactId>
     <packaging>jar</packaging>
-    <name>Order</name>
+    <name>Purchase API</name>
 
     <dependencies>
         <!-- liquid -->
+
+        <!-- spring -->
         <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
+
+        <!-- testing -->
         <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>task</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>order-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>accounting-api</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 </project>

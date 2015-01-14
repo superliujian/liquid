@@ -93,7 +93,7 @@
             <td class="text-right"><span th:text="${page.sum.usd}">Receivable USD</span></td>
             <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
             <td class="text-right"><span th:text="${page.sum.distyPrice}">Disty Price</span></td>
-            <td class="text-right"><span th:text="${page.sum.distyUsd}">Disty Usd</span></td>
+            <td class="text-right"><span th:text="${page.sum.distyUsd}">Disty USD</span></td>
             <td class="text-right"><span th:text="${page.sum.grandTotal}">Grand Total</span></td>
             <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate - page.sum.grandTotal}">Gross Margin</span></td>
             <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate - page.sum.distyPrice - page.sum.distyUsd * exchangeRate}">Sales Profit</span></td>

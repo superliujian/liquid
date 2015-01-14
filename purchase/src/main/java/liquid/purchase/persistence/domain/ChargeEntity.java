@@ -1,4 +1,4 @@
-package liquid.accounting.persistence.domain;
+package liquid.purchase.persistence.domain;
 
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;

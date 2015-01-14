@@ -7,6 +7,8 @@ import liquid.accounting.persistence.domain.ReceivableSummaryEntity_;
 import liquid.accounting.persistence.repository.ReceivableSummaryRepository;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.service.AbstractService;
+import liquid.service.ExchangeRateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +27,9 @@ import java.util.Date;
  */
 @Service
 public class ReceivableSummaryService extends AbstractService<ReceivableSummaryEntity, ReceivableSummaryRepository> {
+    @Autowired
+    private ExchangeRateService exchangeRateService;
+
     @Override
     public void doSaveBefore(ReceivableSummaryEntity entity) {}
 

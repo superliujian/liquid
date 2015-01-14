@@ -3,8 +3,8 @@ package liquid.controller;
 import liquid.accounting.facade.InvoiceFacade;
 import liquid.accounting.facade.ReceiptFacade;
 import liquid.accounting.facade.SettlementFacade;
-import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.accounting.service.ChargeService;
+import liquid.purchase.persistence.domain.ChargeEntity;
+import liquid.purchase.service.ChargeService;
 import liquid.accounting.web.domain.Statement;
 import liquid.accounting.web.domain.Invoice;
 import liquid.accounting.web.domain.Receipt;
@@ -16,8 +16,8 @@ import liquid.domain.LoadingType;
 import liquid.domain.LocationType;
 import liquid.domain.ServiceItem;
 import liquid.domain.TradeType;
-import liquid.accounting.web.domain.ChargeWay;
-import liquid.metadata.ContainerCap;
+import liquid.purchase.web.domain.ChargeWay;
+import liquid.container.domain.ContainerCap;
 import liquid.order.domain.Order;
 import liquid.order.domain.OrderStatus;
 import liquid.order.facade.OrderFacade;
@@ -75,7 +75,7 @@ public class OrderController extends BaseController {
     private GoodsService goodsService;
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Autowired
     private ShipmentService shipmentService;

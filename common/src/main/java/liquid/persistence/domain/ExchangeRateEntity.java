@@ -10,7 +10,7 @@ import javax.persistence.Entity;
  * Time: 1:32 PM
  */
 @Entity(name = "OPS_EXCHANGE_RATE")
-public class ExchangeRate extends BaseUpdateEntity {
+public class ExchangeRateEntity extends BaseUpdateEntity {
     /**
      * 1 usd = ? cny
      */

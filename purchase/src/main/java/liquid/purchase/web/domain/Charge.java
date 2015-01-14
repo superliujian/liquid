@@ -1,4 +1,6 @@
-package liquid.domain;
+package liquid.purchase.web.domain;
+
+import liquid.domain.BaseIdObject;
 
 import javax.validation.constraints.NotNull;
 

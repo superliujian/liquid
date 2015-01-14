@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Date: 10/25/13
  * Time: 11:39 PM
  */
-public class EarningDto implements Serializable {
+public class Earning implements Serializable {
     private long salesPriceCny;
 
     private long salesPriceUsd;
@@ -23,7 +23,7 @@ public class EarningDto implements Serializable {
 
     private long distyProfit;
 
-    public EarningDto() {
+    public Earning() {
     }
 
     public long getSalesPriceCny() {

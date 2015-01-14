@@ -1,10 +1,11 @@
-package liquid.facade;
+package liquid.purchase.facade;
 
-import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.domain.Charge;
+import liquid.facade.Facade;
+import liquid.purchase.persistence.domain.ChargeEntity;
+import liquid.purchase.web.domain.Charge;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.accounting.service.ChargeService;
+import liquid.purchase.service.ChargeService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import org.springframework.beans.factory.annotation.Autowired;

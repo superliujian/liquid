@@ -1,20 +1,21 @@
 package liquid.controller;
 
-import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.accounting.facade.ReceivableFacade;
+import liquid.accounting.web.domain.Earning;
 import liquid.domain.SendingTruckForm;
-import liquid.accounting.web.domain.EarningDto;
 import liquid.facade.ServiceProviderFacade;
-import liquid.accounting.web.domain.ChargeWay;
 import liquid.order.domain.Order;
 import liquid.order.domain.VerificationSheetForm;
 import liquid.order.facade.OrderFacade;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.purchase.persistence.domain.ChargeEntity;
+import liquid.purchase.service.ChargeService;
+import liquid.purchase.web.domain.ChargeWay;
 import liquid.security.SecurityContext;
-import liquid.accounting.service.ChargeService;
 import liquid.service.ServiceSubtypeService;
-import liquid.service.TaskService;
+import liquid.service.TaskServiceImpl;
 import liquid.task.domain.Task;
 import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.LegEntity;
@@ -56,7 +57,7 @@ public class TaskController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @Autowired
-    private TaskService taskService;
+    private TaskServiceImpl taskService;
 
     @Autowired
     private OrderService orderService;
@@ -72,6 +73,9 @@ public class TaskController extends BaseTaskController {
 
     @Autowired
     private ChargeService chargeService;
+
+    @Autowired
+    private ReceivableFacade receivableFacade;
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;
@@ -229,7 +233,7 @@ public class TaskController extends BaseTaskController {
         Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
 
-        EarningDto earning = chargeService.calculateEarning(order, charges);
+        Earning earning = receivableFacade.calculateEarning(order.getId());
         model.addAttribute("earning", earning);
         return "charge/settlement";
     }

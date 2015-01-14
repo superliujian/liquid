@@ -8,6 +8,7 @@ import liquid.task.TaskFactory;
 import liquid.task.domain.BusinessKey;
 import liquid.task.domain.TaskBar;
 import liquid.task.service.ActivitiEngineService;
+import liquid.task.service.TaskService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import liquid.util.StringUtil;
@@ -29,8 +30,8 @@ import java.util.Locale;
  * Time: 11:12 PM
  */
 @Service
-public class TaskService {
-    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
+public class TaskServiceImpl implements TaskService {
+    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
 
     @Autowired
     private ActivitiEngineService bpmService;

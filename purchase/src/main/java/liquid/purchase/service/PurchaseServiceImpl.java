@@ -1,6 +1,6 @@
-package liquid.accounting.service;
+package liquid.purchase.service;
 
-import liquid.accounting.persistence.repository.ChargeRepository;
+import liquid.purchase.persistence.repository.ChargeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
