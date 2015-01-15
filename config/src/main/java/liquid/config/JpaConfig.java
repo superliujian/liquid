@@ -30,10 +30,10 @@ import java.util.Properties;
 @EnableJpaRepositories({"liquid.persistence.repository",
         "liquid.container.persistence.repository",
         "liquid.accounting.persistence.repository",
+        "liquid.purchase.persistence.repository",
         "liquid.order.persistence.repository",
         "liquid.transport.persistence.repository",
-        "liquid.charge.persistence.repository",
-        "liquid.purchasing.persistence.repository"})
+        "liquid.purchase.persistence.repository"})
 @Import(PropertyPlaceholderConfig.class)
 public class JpaConfig {
     @Value("${jdbc.url}")
@@ -70,7 +70,7 @@ public class JpaConfig {
                 "liquid.transport.persistence.domain",
                 "liquid.charge.persistence.domain",
                 "liquid.accounting.persistence.domain",
-                "liquid.purchasing.persistence.domain");
+                "liquid.purchase.persistence.domain");
         factory.setDataSource(dataSource());
         factory.setJpaProperties(jpaProperties);
         factory.afterPropertiesSet();

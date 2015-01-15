@@ -14,6 +14,7 @@ import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.service.RailContainerService;
+import liquid.web.controller.BaseController;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

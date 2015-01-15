@@ -117,7 +117,7 @@ public class TaskServiceImpl implements TaskService {
         task.complete(taskId);
     }
 
-    public List<Task> listTasksByOrderId(long orderId) {
+    public List<Task> listTasksByOrderId(Long orderId) {
         return bpmService.listTasksByOrderId(orderId);
     }
 

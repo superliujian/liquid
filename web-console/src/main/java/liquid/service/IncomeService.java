@@ -1,11 +1,13 @@
 package liquid.service;
 
 import liquid.accounting.persistence.domain.IncomeEntity;
+import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.accounting.persistence.repository.IncomeRepository;
+import liquid.accounting.service.ReceivableSummaryService;
 import liquid.metadata.IncomeType;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
-import liquid.accounting.service.ReceivableSummaryService;
+import liquid.order.service.OrderService;
+import liquid.task.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +27,13 @@ public class IncomeService {
     private IncomeRepository incomeRepository;
 
     @Autowired
-    private TaskServiceImpl taskService;
+    private TaskService taskService;
 
     @Autowired
     private ReceivableSummaryService receivableSummaryService;
+
+    @Autowired
+    private OrderService orderService;
 
     public List<IncomeEntity> findByTaskId(String taskId) {
         return incomeRepository.findByTaskId(taskId);
@@ -54,7 +59,8 @@ public class IncomeService {
     }
 
     public IncomeEntity addIncome(String taskId, IncomeEntity income, String uid) {
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
+        OrderEntity order = orderService.find(orderId);
 
         income.setOrder(order);
         income.setTaskId(taskId);

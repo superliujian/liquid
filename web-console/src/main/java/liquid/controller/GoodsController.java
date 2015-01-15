@@ -2,6 +2,7 @@ package liquid.controller;
 
 import liquid.persistence.domain.GoodsEntity;
 import liquid.service.GoodsService;
+import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

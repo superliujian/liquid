@@ -1,11 +1,12 @@
 package liquid.controller;
 
 import liquid.security.SecurityContext;
-import liquid.service.TaskServiceImpl;
 import liquid.task.NotCompletedException;
 import liquid.task.domain.Task;
 import liquid.task.domain.TaskBar;
 import liquid.task.service.ActivitiEngineService;
+import liquid.task.service.TaskService;
+import liquid.web.controller.BaseController;
 import org.activiti.engine.ActivitiTaskAlreadyClaimedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class TasksController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(TasksController.class);
 
     @Autowired
-    private TaskServiceImpl taskService;
+    private TaskService taskService;
 
     @Deprecated
     @Autowired

@@ -3,6 +3,7 @@ package liquid.controller;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.pinyin4j.PinyinHelper;
 import liquid.service.CustomerService;
+import liquid.web.controller.BaseController;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

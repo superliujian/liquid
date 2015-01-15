@@ -11,5 +11,5 @@ import org.springframework.stereotype.Service;
 public interface ReceivableFacade {
     ReceivableSummary save(ReceivableSummary receivableSummary);
 
-    public Earning calculateEarning(Long orderId);
+    Earning calculateEarning(Long orderId);
 }

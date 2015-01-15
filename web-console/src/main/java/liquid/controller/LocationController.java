@@ -5,6 +5,7 @@ import liquid.domain.LocationType;
 import liquid.facade.LocationFacade;
 import liquid.persistence.domain.LocationEntity;
 import liquid.service.LocationService;
+import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

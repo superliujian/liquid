@@ -4,6 +4,7 @@ import liquid.user.persistence.domain.Account;
 import liquid.user.persistence.domain.GroupType;
 import liquid.user.persistence.domain.PasswordChange;
 import liquid.user.service.AccountService;
+import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

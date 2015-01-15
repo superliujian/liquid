@@ -13,6 +13,10 @@
     <packaging>jar</packaging>
     <name>Task API</name>
 
+    <properties>
+        <activiti-version>5.16.3</activiti-version>
+    </properties>
+
     <dependencies>
         <!-- liquid -->
 
@@ -22,6 +26,13 @@
             <artifactId>spring-context</artifactId>
         </dependency>
 
+        <!-- activiti -->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-engine</artifactId>
+            <version>${activiti-version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- testing -->
         <dependency>
             <groupId>junit</groupId>

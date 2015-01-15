@@ -15,8 +15,8 @@ import liquid.purchase.service.ChargeService;
 import liquid.purchase.web.domain.ChargeWay;
 import liquid.security.SecurityContext;
 import liquid.service.ServiceSubtypeService;
-import liquid.service.TaskServiceImpl;
 import liquid.task.domain.Task;
+import liquid.task.service.TaskService;
 import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.PathEntity;
@@ -57,7 +57,7 @@ public class TaskController extends BaseTaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @Autowired
-    private TaskServiceImpl taskService;
+    private TaskService taskService;
 
     @Autowired
     private OrderService orderService;
@@ -225,7 +225,8 @@ public class TaskController extends BaseTaskController {
         Task task = taskService.getTask(taskId);
         model.addAttribute("task", task);
 
-        OrderEntity order = taskService.findOrderByTaskId(taskId);
+        Long orderId = taskService.getOrderIdByTaskId(taskId);
+        OrderEntity order = orderService.find(orderId);
         Iterable<ChargeEntity> charges = chargeService.findByOrderId(order.getId());
         model.addAttribute("charges", charges);
 

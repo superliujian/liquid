@@ -1,6 +1,5 @@
 package liquid.service;
 
-import liquid.controller.BaseController;
 import org.springframework.stereotype.Service;
 
 /**
