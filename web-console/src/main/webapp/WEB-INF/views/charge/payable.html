@@ -41,7 +41,9 @@
             <th th:text="#{charge.way}">Way</th>
             <th th:text="#{charge.unit.price} + '(CNY)'">Unit Price</th>
             <th th:text="#{charge.unit.price} + '(USD)'">Unit Price</th>
-            <th th:text="#{finance.payable.sum}">Payable SUM</th>
+            <th><span th:text="#{total}">Payable SUM</span>(CNY)</th>
+            <th><span th:text="#{total}">Payable SUM</span>(USD)</th>
+            <th><span th:text="#{finance.payable.sum}">Payable SUM</span>(CNY)</th>
             <th th:text="#{finance.payable.balance}">Payable Balance</th>
             <th></th>
         </tr>
@@ -52,14 +54,16 @@
             <td th:text="${charge.orderNo}">Order No.</td>
             <td th:text="${charge.createdAt}"></td>
             <td></td>
-            <td class="text-right"><span th:text="${charge.unitPrice}">Container Quantity</span></td>
+            <td class="text-right"><span th:text="${charge.containerQuantity}">Container Quantity</span></td>
             <td></td>
             <td th:text="${charge.serviceSubtypeId}">Type</td>
             <td th:text="${charge.serviceProviderName}">SP Name</td>
             <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
-            <td class="text-right"><span th:text="${charge.unitPrice}">Unit Price</span></td>
-            <td></td>
-            <td class="text-right"><span th:text="${charge.totalPrice}">Total Price</span></td>
+            <td class="text-right"><span th:if="${charge.currency} == 0" th:text="${charge.unitPrice}">Unit Price</span></td>
+            <td class="text-right"><span th:if="${charge.currency} == 1" th:text="${charge.unitPrice}">Unit Price</span></td>
+            <td class="text-right"><span th:if="${charge.currency} == 0" th:text="${charge.totalPrice}">Total Price</span></td>
+            <td class="text-right"><span th:if="${charge.currency} == 1" th:text="${charge.totalPrice}">Total Price</span></td>
+            <td class="text-right"><span th:text="${charge.currency} == 1 ? ${#numbers.formatDecimal(charge.totalPrice * exchangeRate, 0, 'COMMA', 2, 'POINT')} : ${#numbers.formatDecimal(charge.totalPrice, 0, 'COMMA', 2, 'POINT')}">Total Price</span></td>
             <td></td>
             <td>
                 <a th:if="${charge.status} == 0" th:href="'/payable/' + ${charge.order.id}"><i class="glyphicon glyphicon-credit-card text-success"/></a>
@@ -78,8 +82,9 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right"><span th:text="${page.sum.totalPrice}">Total Price</span></td>
-            <td></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.totalCny, 0, 'COMMA', 2, 'POINT')}">Total Price</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.totalUsd, 0, 'COMMA', 2, 'POINT')}">Total Price</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.totalCny + page.sum.totalUsd * exchangeRate, 0, 'COMMA', 2, 'POINT')}">Total Price</span></td>
             <td></td>
         </tr>        
         </tbody>

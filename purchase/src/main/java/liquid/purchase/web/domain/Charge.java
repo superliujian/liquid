@@ -22,6 +22,8 @@ public class Charge extends Order {
     @NotNull
     private Long unitPrice;
     private Long totalPrice = 0L;
+    private Long totalCny = 0L;
+    private Long totalUsd = 0L;
     private String taskId;
     private String comment;
 
@@ -103,6 +105,22 @@ public class Charge extends Order {
 
     public void setTotalPrice(Long totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Long getTotalCny() {
+        return totalCny;
+    }
+
+    public void setTotalCny(Long totalCny) {
+        this.totalCny = totalCny;
+    }
+
+    public Long getTotalUsd() {
+        return totalUsd;
+    }
+
+    public void setTotalUsd(Long totalUsd) {
+        this.totalUsd = totalUsd;
     }
 
     public String getTaskId() {

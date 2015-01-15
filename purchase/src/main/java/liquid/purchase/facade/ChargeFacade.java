@@ -73,7 +73,14 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
             chargeList.add(charge);
 
             sum.setContainerQuantity(sum.getContainerQuantity() + charge.getContainerQuantity());
-            sum.setTotalPrice(sum.getTotalPrice() + charge.getTotalPrice());
+
+            if (charge.getCurrency() == 0) {
+                sum.setTotalCny(sum.getTotalCny() + charge.getTotalPrice());
+            } else if (charge.getCurrency() == 1) {
+                sum.setTotalUsd(sum.getTotalUsd() + charge.getTotalPrice());
+            } else {
+
+            }
         }
         return new EnhancedPageImpl<Charge>(chargeList, pageable, entityPage.getTotalElements(), sum);
     }

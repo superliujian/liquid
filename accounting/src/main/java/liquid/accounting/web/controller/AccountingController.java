@@ -91,6 +91,7 @@ public class AccountingController {
     public String payable(@Valid SearchBarForm searchBarForm,
                           BindingResult bindingResult, Model model) {
         model.addAttribute("chargeWays", ChargeWay.values());
+        model.addAttribute("exchangeRate", exchangeRateService.getExchangeRate());
 
         model.addAttribute("contextPath", "/accounting/payable" + SearchBarForm.toQueryStrings(searchBarForm));
 
