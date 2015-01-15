@@ -14,8 +14,11 @@
             <h3><span th:text="#{charge.payable}"></span></h3>
         </div>  
             
-        <div class="col-xs-3 pull-right">     
+        <div class="col-xs-6 pull-right">
+            <!--     
             <div th:include="layout :: search-bar" />
+            -->
+            <div th:include="layout :: enhanced-search-bar"></div>
         </div>
     </div><!-- row -->
 </div><!-- /.container -->
@@ -46,23 +49,39 @@
         <tbody>
         <tr th:each="charge : ${page.content}">
             <td th:text="${charge.id}">ID</td>
-            <td th:text="${charge.order.orderNo}">Order No.</td>
-            <td th:text="${charge.order.createdAt}"></td>
+            <td th:text="${charge.orderNo}">Order No.</td>
+            <td th:text="${charge.createdAt}"></td>
             <td></td>
-            <td th:text="${charge.order.containerQty}">Container Quantity</td>
+            <td class="text-right"><span th:text="${charge.unitPrice}">Container Quantity</span></td>
             <td></td>
-            <td th:text="${charge.serviceSubtype.name}">Type</td>
-            <td th:text="${charge.sp} ? ${charge.sp.name}">SP Name</td>
+            <td th:text="${charge.serviceSubtypeId}">Type</td>
+            <td th:text="${charge.serviceProviderName}">SP Name</td>
             <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
-            <td th:text="${charge.unitPrice}">Unit Price</td>
+            <td class="text-right"><span th:text="${charge.unitPrice}">Unit Price</span></td>
             <td></td>
-            <td th:text="${charge.totalPrice}">Total Price</td>
+            <td class="text-right"><span th:text="${charge.totalPrice}">Total Price</span></td>
             <td></td>
             <td>
                 <a th:if="${charge.status} == 0" th:href="'/payable/' + ${charge.order.id}"><i class="glyphicon glyphicon-credit-card text-success"/></a>
                 <span th:if="${charge.status} == 1"><i class="glyphicon glyphicon-check"/></span>
             </td>
         </tr>
+        <tr>
+            <td><strong><span th:text="#{total}">Sum</span></strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><span th:text="${page.sum.totalPrice}">Total Price</span></td>
+            <td></td>
+            <td></td>
+        </tr>        
         </tbody>
     </table>
     
@@ -76,6 +95,46 @@
 <!-- {!begin layout} -->
 <div th:replace="layout :: js" />
 <!-- {!end layout} -->
+<script>
+/*<![CDATA[*/
+    $(document).ready(function() {
+        var dataset = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,  
+            limit: 10,
+            remote: {
+                url: '/api/purchase?text=%QUERY'
+            }
+        });
+        
+        dataset.initialize();
+
+        $('#text').typeahead(null, {
+          displayKey: 'text',
+          source: dataset.ttAdapter(),
+          templates: {
+            suggestion: Handlebars.compile('<p><strong>{{text}}</strong></p>')
+          }
+        }).on('typeahead:selected', function (obj, datum) {
+            $('#id').val(datum.id);
+            $('#type').val(datum.type);
+        });    
+        
+        $(".tt-hint").addClass("form-control");
+        
+        $('#text').blur(function() {
+            var text = $('#text').val();
+            if(text.trim() == '') {
+                $('#id').val('');
+                $('#type').val('');
+            }
+        });
+        
+        $('#startPicker').dtPicker();
+        $('#endPicker').dtPicker();        
+    }); // ready end
+/*]]>*/
+</script>
 </body>
 
 </html>

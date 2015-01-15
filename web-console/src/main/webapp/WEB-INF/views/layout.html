@@ -89,7 +89,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="/accounting/summary" th:text="#{charge.summary}">Financial Summary</a></li>
                             <li><a href="/accounting/receivable" th:text="#{charge.receivable}">Account Receivable</a></li>
-                            <li><a href="/charge/payable" th:text="#{charge.payable}">Account Payable</a></li>                            
+                            <li><a href="/accounting/payable" th:text="#{charge.payable}">Account Payable</a></li>                            
                         </ul>                        
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')">

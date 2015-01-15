@@ -324,7 +324,7 @@ public class ChargeController {
                                   Model model, Principal principal) {
         logger.debug("exchangeRate: {}", exchangeRate);
 
-        chargeService.setExchangeRate(exchangeRate.getValue());
+        exchangeRateService.setExchangeRate(exchangeRate.getValue());
         model.addAttribute("done", true);
 
         return "redirect:/charge/exchange_rate";

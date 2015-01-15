@@ -16,4 +16,11 @@ public class ExchangeRateService extends AbstractCachedService<ExchangeRateEntit
         ExchangeRateEntity exchangeRate = find(1L);
         return null == exchangeRate ? 0.00 : exchangeRate.getValue();
     }
+
+    public void setExchangeRate(double value) {
+        ExchangeRateEntity exchangeRate = new ExchangeRateEntity();
+        exchangeRate.setId(1L);
+        exchangeRate.setValue(value);
+        save(exchangeRate);
+    }
 }

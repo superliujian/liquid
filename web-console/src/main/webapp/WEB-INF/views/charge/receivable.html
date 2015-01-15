@@ -92,13 +92,13 @@
                 <td></td>
                 <td class="text-right"><span th:text="${page.sum.containerQuantity}">Container Quantity</span></td>
                 <td></td>
-                <td class="text-right" ><span th:text="${page.sum.cny}">Receivable CNY</span></td>
-                <td class="text-right" ><span th:text="${page.sum.usd}">Receivable USD</span></td>
-                <td class="text-right" ><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
+                <td class="text-right"><span th:text="${page.sum.cny}">Receivable CNY</span></td>
+                <td class="text-right"><span th:text="${page.sum.usd}">Receivable USD</span></td>
+                <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
                 <td></td>
-                <td class="text-right" ><span th:text="${page.sum.cny + page.sum.usd * exchangeRate - page.sum.paidCny - page.sum.paidUsd * exchangeRate}">Receivable Balance</span></td>
-                <td class="text-right" ><span th:text="${page.sum.cny - page.sum.invoicedCny}">Invoice Balance CNY</span></td>
-                <td class="text-right" ><span th:text="${page.sum.usd - page.sum.invoicedUsd}">Invoice Balance USD</span></td>
+                <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate - page.sum.paidCny - page.sum.paidUsd * exchangeRate}">Receivable Balance</span></td>
+                <td class="text-right"><span th:text="${page.sum.cny - page.sum.invoicedCny}">Invoice Balance CNY</span></td>
+                <td class="text-right"><span th:text="${page.sum.usd - page.sum.invoicedUsd}">Invoice Balance USD</span></td>
             </tr>
             </tbody>
         </table>

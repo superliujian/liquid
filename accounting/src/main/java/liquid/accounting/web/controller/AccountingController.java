@@ -3,6 +3,9 @@ package liquid.accounting.web.controller;
 import liquid.accounting.facade.ReceivableFacadeImpl;
 import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.domain.TradeType;
+import liquid.purchase.facade.ChargeFacade;
+import liquid.purchase.web.domain.Charge;
+import liquid.purchase.web.domain.ChargeWay;
 import liquid.service.ExchangeRateService;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class AccountingController {
 
     @Autowired
     private ExchangeRateService exchangeRateService;
+
+    @Autowired
+    private ChargeFacade chargeFacade;
 
     @RequestMapping(value = "/summary", method = RequestMethod.GET)
     public String summary(@Valid SearchBarForm searchBarForm,
@@ -79,5 +85,27 @@ public class AccountingController {
         model.addAttribute("page", page);
 
         return "charge/receivable";
+    }
+
+    @RequestMapping(value = "/payable", method = RequestMethod.GET)
+    public String payable(@Valid SearchBarForm searchBarForm,
+                          BindingResult bindingResult, Model model) {
+        model.addAttribute("chargeWays", ChargeWay.values());
+
+        model.addAttribute("contextPath", "/accounting/payable" + SearchBarForm.toQueryStrings(searchBarForm));
+
+        if (bindingResult.hasErrors()) {
+            Page<Charge> page = new PageImpl<Charge>(new ArrayList<>());
+            model.addAttribute("page", page);
+            return "charge/payable";
+        }
+
+        searchBarForm.setAction("/accounting/payable");
+        model.addAttribute("searchBarForm", searchBarForm);
+
+        PageRequest pageRequest = new PageRequest(searchBarForm.getNumber(), size, new Sort(Sort.Direction.DESC, "id"));
+        Page<Charge> page = chargeFacade.findAll(searchBarForm, pageRequest);
+        model.addAttribute("page", page);
+        return "charge/payable";
     }
 }

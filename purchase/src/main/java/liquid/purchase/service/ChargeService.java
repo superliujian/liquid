@@ -3,7 +3,6 @@ package liquid.purchase.service;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.ExchangeRateEntity;
 import liquid.persistence.domain.ServiceProviderEntity_;
 import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.purchase.persistence.domain.ChargeEntity;
@@ -32,6 +31,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -214,14 +214,41 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         return repository.findAll(pageable);
     }
 
-    public Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole) {
-        return chargeRepository.findByOrderIdAndCreateRole(orderId, createRole);
+    public Page<ChargeEntity> findAll(final Date start, final Date end, final Long orderId, final Long spId, final Pageable pageable) {
+        // date range
+        Specification<ChargeEntity> dateRangeSpec = new Specification<ChargeEntity>() {
+            @Override
+            public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.between(root.get(ChargeEntity_.createdAt), start, end);
+            }
+        };
+        Specifications<ChargeEntity> specifications = Specifications.where(dateRangeSpec);
+
+        // order id
+        if (null != orderId) {
+            Specification<ChargeEntity> orderIdSpec = new Specification<ChargeEntity>() {
+                @Override
+                public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get(ChargeEntity_.order).get(OrderEntity_.id), orderId);
+                }
+            };
+            specifications = specifications.and(orderIdSpec);
+        }
+
+        // sp id
+        if (null != spId) {
+            Specification<ChargeEntity> spIdSpec = new Specification<ChargeEntity>() {
+                @Override
+                public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                    return cb.equal(root.get(ChargeEntity_.sp).get(ServiceProviderEntity_.id), spId);
+                }
+            };
+            specifications = specifications.and(spIdSpec);
+        }
+        return repository.findAll(specifications, pageable);
     }
 
-    public void setExchangeRate(double value) {
-        ExchangeRateEntity exchangeRate = new ExchangeRateEntity();
-        exchangeRate.setId(1L);
-        exchangeRate.setValue(value);
-        exchangeRateService.save(exchangeRate);
+    public Iterable<ChargeEntity> findByOrderIdAndCreateRole(long orderId, String createRole) {
+        return chargeRepository.findByOrderIdAndCreateRole(orderId, createRole);
     }
 }
