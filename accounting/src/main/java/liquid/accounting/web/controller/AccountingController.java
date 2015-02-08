@@ -39,6 +39,29 @@ public class AccountingController {
     @Autowired
     private ChargeFacade chargeFacade;
 
+    @RequestMapping(value = "/gross_profit", method = RequestMethod.GET)
+    public String grossProfit(@Valid SearchBarForm searchBarForm,
+                              BindingResult bindingResult, Model model) {
+        model.addAttribute("tradeTypes", TradeType.values());
+        model.addAttribute("exchangeRate", exchangeRateService.getExchangeRate());
+
+        model.addAttribute("contextPath", "/accounting/gross_profit" + SearchBarForm.toQueryStrings(searchBarForm));
+
+        if (bindingResult.hasErrors()) {
+            Page<ReceivableSummary> page = new PageImpl<ReceivableSummary>(new ArrayList<>());
+            model.addAttribute("page", page);
+            return "accounting/gross_profit";
+        }
+
+        searchBarForm.setAction("/accounting/gross_profit");
+        model.addAttribute("searchBarForm", searchBarForm);
+
+        PageRequest pageRequest = new PageRequest(searchBarForm.getNumber(), size, new Sort(Sort.Direction.DESC, "id"));
+        Page<ReceivableSummary> page = receivableFacade.findAll(searchBarForm, pageRequest);
+        model.addAttribute("page", page);
+        return "accounting/gross_profit";
+    }
+
     @RequestMapping(value = "/summary", method = RequestMethod.GET)
     public String summary(@Valid SearchBarForm searchBarForm,
                           BindingResult bindingResult, Model model) {

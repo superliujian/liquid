@@ -357,6 +357,7 @@ public class OrderFacade {
         order.setDistyPrice(orderEntity.getDistyPrice());
         order.setDistyUsd(orderEntity.getDistyUsd());
 
+        order.setCreatedBy(orderEntity.getCreatedBy());
         order.setCreatedAt(DateUtil.stringOf(orderEntity.getCreatedAt()));
         order.setUpdatedAt(DateUtil.stringOf(orderEntity.getUpdatedAt()));
         order.setRole(orderEntity.getCreateRole());

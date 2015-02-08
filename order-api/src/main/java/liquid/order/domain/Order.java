@@ -90,6 +90,7 @@ public class Order extends BaseIdObject {
     private Long distyUsd = 0L;
     private Long grandTotal = 0L;
 
+    private String createdBy;
     private String createdAt;
     private String updatedAt;
 
@@ -452,6 +453,14 @@ public class Order extends BaseIdObject {
         this.serviceItems = serviceItems;
     }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -576,6 +585,7 @@ public class Order extends BaseIdObject {
         sb.append(", distyPrice=").append(distyPrice);
         sb.append(", distyUsd=").append(distyUsd);
         sb.append(", grandTotal=").append(grandTotal);
+        sb.append(", createdBy='").append(createdBy).append('\'');
         sb.append(", createdAt='").append(createdAt).append('\'');
         sb.append(", updatedAt='").append(updatedAt).append('\'');
         sb.append(", role='").append(role).append('\'');

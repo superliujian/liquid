@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="layout :: head" />
+
+<body>
+<!-- {!begin layout} -->
+<div th:include="layout :: header"></div>
+<!-- {!end layout} -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-1">
+            <h3><span th:text="#{gross.profit}"></span></h3>
+        </div>  
+            
+        <div class="col-xs-6 pull-right">     
+            <div th:include="layout :: enhanced-search-bar"></div>
+        </div>
+    </div><!-- row -->
+</div><!-- /.container -->
+
+<hr />
+
+<div class="container-fluid">
+    <table class="table table-striped table-hover table-condensed table-bordered table-16">
+        <thead>
+        <tr>
+            <th th:text="#{order.no}">Order No.</th>
+            <th th:text="#{create.time}">Create Time</th>
+            <th th:text="#{customer.name}">Customer Name</th>
+            <th>Sales</th>
+            <th th:text="#{goods.name}">Cargo Name</th>
+            <th th:text="#{trade.type}">Trade Type</th>
+            <th th:text="#{container.quantity}">Container Quantity</th>
+            <th th:text="#{container.no}">Container Quantity</th>
+            <th th:text="#{tax.cost}">Tax Cost</th>
+            <th th:text="#{finance.receivable.sum} + '(' + ${exchangeRate} + ')'">Receivable SUM</th>
+            <th th:text="#{grand.total}">Grand Total</th>
+            <th><span th:text="#{adjusted.gross.income}">AGI</span></th>
+            <th th:text="#{company.gross.profit}">Gross Profit</th>
+            <th th:text="#{marketing.gross.profit}">Marketing Gross Profit</th>
+            <th th:text="#{sales.gross.profit}">Sales Gross Profit</th>
+            <th><span th:text="#{cost.of.funds}">Cost of Funds</span></th>
+            <th><span th:text="#{tax}">Tax</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="receivable : ${page}">
+            <td>
+                <a th:href="'/charge/order/' + ${receivable.orderId}"
+                   th:text="${receivable.orderNo}"/>
+            </td>
+            <td th:text="${receivable.createdAt}"></td>
+            <td>
+                <a th:href="'/order/' + ${receivable.orderId} + '/receivable'"><i class="glyphicon glyphicon-briefcase text-success"/></a>
+                    &nbsp;
+                <span th:text="${receivable.customerName}">Customer Name</span>
+            </td>
+            <td><span th:text="${receivable.createdBy}">Sales</span></td>
+            <td th:text="${receivable.goodsName}"></td>
+            <td th:text="#{${tradeTypes[__${receivable.tradeType}__].i18nKey}}">Trade Type</td>
+            <td class="text-right"><span th:text="${receivable.containerQuantity}">Container Quantity</span></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><span th:text="${receivable.cny + receivable.usd * exchangeRate}">Receivable SUM</span></td>
+            <td class="text-right"><span th:text="${receivable.grandTotal}">Grand Total</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((receivable.cny + receivable.usd * exchangeRate) * 0.985, 0, 'COMMA', 2, 'POINT')}">AGI</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((receivable.cny + receivable.usd * exchangeRate) * 0.985 - receivable.grandTotal, 0, 'COMMA', 2, 'POINT')}">Gross Profit</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(((receivable.cny + receivable.usd * exchangeRate) * 0.985 - receivable.grandTotal) * 0.2, 0, 'COMMA', 2, 'POINT')}">Marketing Gross Profit</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(((receivable.cny + receivable.usd * exchangeRate) * 0.985 - receivable.grandTotal) * 0.8, 0, 'COMMA', 2, 'POINT')}">Sales Gross Profit</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((receivable.cny + receivable.usd * exchangeRate) * 0.009, 0, 'COMMA', 2, 'POINT')}">Cost of Funds</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((receivable.cny + receivable.usd * exchangeRate) * 0.006, 0, 'COMMA', 2, 'POINT')}">Tax</span></td>
+        </tr>
+        <tr>
+            <td><strong><span th:text="#{total}">Sum</span></strong></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><span th:text="${page.sum.containerQuantity}">Container Quantity</span></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
+            <td class="text-right"><span th:text="${page.sum.grandTotal}">Grand Total</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((page.sum.cny + page.sum.usd * exchangeRate) * 0.985, 0, 'COMMA', 2, 'POINT')}">AGI</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((page.sum.cny + page.sum.usd * exchangeRate) * 0.985 - page.sum.grandTotal, 0, 'COMMA', 2, 'POINT')}">Gross Profit</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(((page.sum.cny + page.sum.usd * exchangeRate) * 0.985 - page.sum.grandTotal) * 0.2, 0, 'COMMA', 2, 'POINT')}">Marketing Gross Profit</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal(((page.sum.cny + page.sum.usd * exchangeRate) * 0.985 - page.sum.grandTotal) * 0.8, 0, 'COMMA', 2, 'POINT')}">Sales Gross Profit</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((page.sum.cny + page.sum.usd * exchangeRate) * 0.009, 0, 'COMMA', 2, 'POINT')}">Cost of Funds</span></td>
+            <td class="text-right"><span th:text="${#numbers.formatDecimal((page.sum.cny + page.sum.usd * exchangeRate) * 0.006, 0, 'COMMA', 2, 'POINT')}">Tax</span></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="layout :: pagination_bar"></div>
+</div>
+
+<!-- {!begin layout} -->
+<div th:include="layout :: footer"></div>
+<!-- {!end layout} -->
+
+<!-- {!begin layout} -->
+<div th:replace="layout :: js" />
+<!-- {!end layout} -->
+</body>
+
+</html>
