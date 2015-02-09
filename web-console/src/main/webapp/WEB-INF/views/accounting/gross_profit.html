@@ -33,8 +33,6 @@
             <th th:text="#{goods.name}">Cargo Name</th>
             <th th:text="#{trade.type}">Trade Type</th>
             <th th:text="#{container.quantity}">Container Quantity</th>
-            <th th:text="#{container.no}">Container Quantity</th>
-            <th th:text="#{tax.cost}">Tax Cost</th>
             <th th:text="#{finance.receivable.sum} + '(' + ${exchangeRate} + ')'">Receivable SUM</th>
             <th th:text="#{grand.total}">Grand Total</th>
             <th><span th:text="#{adjusted.gross.income}">AGI</span></th>
@@ -61,8 +59,6 @@
             <td th:text="${receivable.goodsName}"></td>
             <td th:text="#{${tradeTypes[__${receivable.tradeType}__].i18nKey}}">Trade Type</td>
             <td class="text-right"><span th:text="${receivable.containerQuantity}">Container Quantity</span></td>
-            <td></td>
-            <td></td>
             <td class="text-right"><span th:text="${receivable.cny + receivable.usd * exchangeRate}">Receivable SUM</span></td>
             <td class="text-right"><span th:text="${receivable.grandTotal}">Grand Total</span></td>
             <td class="text-right"><span th:text="${#numbers.formatDecimal((receivable.cny + receivable.usd * exchangeRate) * 0.985, 0, 'COMMA', 2, 'POINT')}">AGI</span></td>
@@ -80,8 +76,6 @@
             <td></td>
             <td></td>
             <td class="text-right"><span th:text="${page.sum.containerQuantity}">Container Quantity</span></td>
-            <td></td>
-            <td></td>
             <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
             <td class="text-right"><span th:text="${page.sum.grandTotal}">Grand Total</span></td>
             <td class="text-right"><span th:text="${#numbers.formatDecimal((page.sum.cny + page.sum.usd * exchangeRate) * 0.985, 0, 'COMMA', 2, 'POINT')}">AGI</span></td>
