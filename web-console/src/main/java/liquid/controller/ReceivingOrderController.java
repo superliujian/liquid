@@ -1,9 +1,10 @@
 package liquid.controller;
 
+import liquid.container.domain.ContainerCap;
 import liquid.container.domain.ContainerType;
 import liquid.domain.LocationType;
-import liquid.container.domain.ContainerCap;
 import liquid.order.domain.OrderStatus;
+import liquid.order.domain.ValueAddedOrder;
 import liquid.order.persistence.domain.ReceivingOrder;
 import liquid.order.service.ReceivingOrderService;
 import liquid.persistence.domain.CustomerEntity;
@@ -101,8 +102,9 @@ public class ReceivingOrderController {
     public String initCreationForm(Model model) {
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
 
-        ReceivingOrder order = recvOrderService.newOrder(locationEntities);
+//        ReceivingOrder order = recvOrderService.newOrder(locationEntities);
 
+        ValueAddedOrder order = new ValueAddedOrder();
         model.addAttribute("order", order);
         return "recv_order/form";
     }
