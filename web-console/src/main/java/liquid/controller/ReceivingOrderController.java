@@ -110,7 +110,7 @@ public class ReceivingOrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "addContainer")
-    public String addContainer(@ModelAttribute("order") ReceivingOrder order,
+    public String addContainer(@ModelAttribute("order") ValueAddedOrder order,
                                String bicCode) {
         logger.debug("order: {}", order);
         logger.debug("order: {}", bicCode);
@@ -121,7 +121,7 @@ public class ReceivingOrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "removeContainer")
-    public String removeContainer(@ModelAttribute("order") ReceivingOrder order,
+    public String removeContainer(@ModelAttribute("order") ValueAddedOrder order,
                                   String bicCode,
                                   final HttpServletRequest request) {
         logger.debug("order: {}", order);
@@ -134,7 +134,7 @@ public class ReceivingOrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "save")
-    public String save(@Valid @ModelAttribute("order") ReceivingOrder order,
+    public String save(@Valid @ModelAttribute("order") ValueAddedOrder order,
                        BindingResult bindingResult) {
         logger.debug("order: {}", order);
         order.setStatus(OrderStatus.SAVED.getValue());
@@ -142,7 +142,20 @@ public class ReceivingOrderController {
         if (bindingResult.hasErrors()) {
             return "recv_order/form";
         } else {
-            recvOrderService.save(order);
+//            recvOrderService.save(order);
+            return "redirect:/recv_order";
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "submit")
+    public String submit(@Valid @ModelAttribute("order") ValueAddedOrder order,
+                         BindingResult bindingResult) {
+        logger.debug("order: {}", order);
+        order.setStatus(OrderStatus.SUBMITTED.getValue());
+        if (bindingResult.hasErrors()) {
+            return "recv_order/form";
+        } else {
+//            recvOrderService.save(order);
             return "redirect:/recv_order";
         }
     }
@@ -172,18 +185,5 @@ public class ReceivingOrderController {
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());
         model.addAttribute("order", order);
         return "recv_order/form";
-    }
-
-    @RequestMapping(method = RequestMethod.POST, params = "submit")
-    public String submit(@Valid @ModelAttribute("order") ReceivingOrder order,
-                         BindingResult bindingResult) {
-        logger.debug("order: {}", order);
-        order.setStatus(OrderStatus.SUBMITTED.getValue());
-        if (bindingResult.hasErrors()) {
-            return "recv_order/form";
-        } else {
-            recvOrderService.save(order);
-            return "redirect:/recv_order";
-        }
     }
 }
