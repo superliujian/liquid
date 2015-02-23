@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 4:08 PM
  */
 @Entity(name = "ORD_RECV")
-public class ReceivingOrder extends BaseOrder {
+public class ReceivingOrderEntity extends BaseOrder {
     @Transient
     private List<String> bicCodes = new ArrayList<String>();
 

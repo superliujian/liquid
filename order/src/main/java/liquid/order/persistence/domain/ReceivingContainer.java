@@ -19,18 +19,18 @@ import javax.validation.constraints.NotNull;
 public class ReceivingContainer extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "RECV_ORDER_ID")
-    private ReceivingOrder receivingOrder;
+    private ReceivingOrderEntity receivingOrder;
 
     @NotNull
     @NotEmpty
     @Column(name = "BIC_CODE")
     private String bicCode;
 
-    public ReceivingOrder getReceivingOrder() {
+    public ReceivingOrderEntity getReceivingOrder() {
         return receivingOrder;
     }
 
-    public void setReceivingOrder(ReceivingOrder receivingOrder) {
+    public void setReceivingOrder(ReceivingOrderEntity receivingOrder) {
         this.receivingOrder = receivingOrder;
     }
 

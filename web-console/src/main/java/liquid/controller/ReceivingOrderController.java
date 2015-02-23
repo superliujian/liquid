@@ -5,7 +5,7 @@ import liquid.container.domain.ContainerType;
 import liquid.domain.LocationType;
 import liquid.order.domain.OrderStatus;
 import liquid.order.domain.ValueAddedOrder;
-import liquid.order.persistence.domain.ReceivingOrder;
+import liquid.order.persistence.domain.ReceivingOrderEntity;
 import liquid.order.service.ReceivingOrderService;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.GoodsEntity;
@@ -155,7 +155,20 @@ public class ReceivingOrderController {
         if (bindingResult.hasErrors()) {
             return "recv_order/form";
         } else {
-//            recvOrderService.save(order);
+            ReceivingOrderEntity orderEntity = new ReceivingOrderEntity();
+            orderEntity.setServiceTypeId(order.getServiceTypeId());
+            orderEntity.setCustomerId(order.getCustomerId());
+            orderEntity.setConsignee(order.getConsignee());
+            orderEntity.setConsigneePhone(order.getConsigneePhone());
+            orderEntity.setConsigneeAddress(order.getConsigneeAddress());
+            orderEntity.setSrcLocId(order.getOriginId());
+            orderEntity.setDstLocId(order.getDestinationId());
+            orderEntity.setGoodsId(order.getGoodsId());
+            orderEntity.setGoodsWeight(order.getGoodsWeight());
+            orderEntity.setTotalCny(order.getCnyTotal());
+            orderEntity.setContainerType(order.getContainerType());
+            orderEntity.setBicCodes(order.getBicCodes());
+            recvOrderService.save(orderEntity);
             return "redirect:/recv_order";
         }
     }
@@ -165,7 +178,7 @@ public class ReceivingOrderController {
                          Model model, Principal principal) {
         logger.debug("id: {}", id);
 
-        ReceivingOrder order = recvOrderService.find(id);
+        ReceivingOrderEntity order = recvOrderService.find(id);
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
@@ -179,7 +192,7 @@ public class ReceivingOrderController {
         logger.debug("id: {}", id);
         logger.debug("action: {}", action);
 
-        ReceivingOrder order = recvOrderService.find(id);
+        ReceivingOrderEntity order = recvOrderService.find(id);
         logger.debug("order: {}", order);
 
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());

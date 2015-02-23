@@ -1,7 +1,7 @@
 package liquid.order.persistence.repository;
 
 import liquid.order.persistence.domain.ReceivingContainer;
-import liquid.order.persistence.domain.ReceivingOrder;
+import liquid.order.persistence.domain.ReceivingOrderEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
@@ -13,5 +13,5 @@ import java.util.Collection;
  * Time: 6:34 PM
  */
 public interface ReceivingContainerRepository extends CrudRepository<ReceivingContainer, Long> {
-    Collection<ReceivingContainer> findByReceivingOrder(ReceivingOrder recvOrder);
+    Collection<ReceivingContainer> findByReceivingOrder(ReceivingOrderEntity recvOrder);
 }
