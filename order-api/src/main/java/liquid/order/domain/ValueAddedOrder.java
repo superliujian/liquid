@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Tao Ma on 2/11/15.
  */
-public class ValueAddedOrder extends Order {
+public class ValueAddedOrder extends BaseOrder {
     private List<String> bicCodes = new ArrayList<String>();
 
     public List<String> getBicCodes() {

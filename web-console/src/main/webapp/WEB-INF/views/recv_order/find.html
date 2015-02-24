@@ -65,15 +65,15 @@
                         <a href="/recv_order/id?action=edit" th:href="'/recv_order/' + ${order.id}"
                            th:text="${order.orderNo}"/>
                     </td>
-                    <td th:text="${order.customer.name}">Customer Name</td>
-                    <td th:text="${order.srcLoc.name}">Origin</td>
-                    <td th:text="${order.dstLoc.name}">Destination</td>
-                    <td th:text="${order.goods.name}"></td>
+                    <td th:text="${order.customerName}">Customer Name</td>
+                    <td th:text="${order.origination}">Origin</td>
+                    <td th:text="${order.destination}">Destination</td>
+                    <td th:text="${order.goodsName}"></td>
                     <td th:text="${order.goodsWeight}">Cargo Weight</td>
-                    <td th:text="#{${containerTypes[__${order.containerType}__].i18nKey}}">Container Type</td>
-                    <td th:text="${containerCaps[__${order.containerCap}__].name}">Container Capacity</td>
-                    <td th:text="${order.containerQty}">Container Quantity</td>
-                    <td th:text="${order.salesPriceCny}">Price</td>
+                    <td th:text="#{${containerTypeMap[order.containerType]}}">Container Type</td>
+                    <td th:text="${order.containerSubtype}">Container Capacity</td>
+                    <td th:text="${order.containerQuantity}">Container Quantity</td>
+                    <td th:text="${order.cnyTotal}">Price</td>
                     <td>
                         <a href="/recv_order/id?action=edit" class="btn btn-default btn-xs"
                            th:href="'/recv_order/' + ${order.id + '?action=edit'}" th:if="${order.status} != 2">

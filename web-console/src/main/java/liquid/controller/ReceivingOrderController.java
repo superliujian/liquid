@@ -2,9 +2,12 @@ package liquid.controller;
 
 import liquid.container.domain.ContainerCap;
 import liquid.container.domain.ContainerType;
+import liquid.container.persistence.domain.ContainerSubtypeEntity;
+import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LocationType;
 import liquid.order.domain.OrderStatus;
 import liquid.order.domain.ValueAddedOrder;
+import liquid.order.facade.ValueAddedOrderFacade;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
 import liquid.order.service.ReceivingOrderService;
 import liquid.persistence.domain.CustomerEntity;
@@ -15,9 +18,12 @@ import liquid.service.CustomerService;
 import liquid.service.GoodsService;
 import liquid.service.LocationService;
 import liquid.service.ServiceTypeService;
+import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Comments.
@@ -36,11 +43,14 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/recv_order")
-public class ReceivingOrderController {
+public class ReceivingOrderController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(ReceivingOrderController.class);
 
     @Autowired
     private ReceivingOrderService recvOrderService;
+
+    @Autowired
+    private ValueAddedOrderFacade valueAddedOrderFacade;
 
     @Autowired
     private LocationService locationService;
@@ -53,6 +63,9 @@ public class ReceivingOrderController {
 
     @Autowired
     private ServiceTypeService serviceTypeService;
+
+    @Autowired
+    private ContainerSubtypeService containerSubtypeService;
 
     @ModelAttribute("serviceTypes")
     public Iterable<ServiceTypeEntity> populateServiceTypes() {
@@ -74,9 +87,9 @@ public class ReceivingOrderController {
         return locationService.findByType(LocationType.CITY.getType());
     }
 
-    @ModelAttribute("containerTypes")
-    public ContainerType[] populateContainerTypes() {
-        return ContainerType.values();
+    @ModelAttribute("containerTypeMap")
+    public Map<Integer, String> populateContainerTypes() {
+        return ContainerType.toMap();
     }
 
     @ModelAttribute("containerCaps")
@@ -84,9 +97,21 @@ public class ReceivingOrderController {
         return ContainerCap.values();
     }
 
+    @ModelAttribute("railContainerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateRailContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.RAIL);
+    }
+
+    @ModelAttribute("selfContainerSubtypes")
+    public Iterable<ContainerSubtypeEntity> populateOwnContainerSubtypes() {
+        return containerSubtypeService.findByContainerType(ContainerType.SELF);
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public String initFind(Model model) {
-        model.addAttribute("orders", recvOrderService.findAllOrderByDesc());
+    public String initFind(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
+        PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+
+        model.addAttribute("orders", valueAddedOrderFacade.findAll(pageRequest));
         return "recv_order/find";
     }
 
@@ -142,7 +167,7 @@ public class ReceivingOrderController {
         if (bindingResult.hasErrors()) {
             return "recv_order/form";
         } else {
-//            recvOrderService.save(order);
+            valueAddedOrderFacade.save(order);
             return "redirect:/recv_order";
         }
     }
@@ -155,20 +180,7 @@ public class ReceivingOrderController {
         if (bindingResult.hasErrors()) {
             return "recv_order/form";
         } else {
-            ReceivingOrderEntity orderEntity = new ReceivingOrderEntity();
-            orderEntity.setServiceTypeId(order.getServiceTypeId());
-            orderEntity.setCustomerId(order.getCustomerId());
-            orderEntity.setConsignee(order.getConsignee());
-            orderEntity.setConsigneePhone(order.getConsigneePhone());
-            orderEntity.setConsigneeAddress(order.getConsigneeAddress());
-            orderEntity.setSrcLocId(order.getOriginId());
-            orderEntity.setDstLocId(order.getDestinationId());
-            orderEntity.setGoodsId(order.getGoodsId());
-            orderEntity.setGoodsWeight(order.getGoodsWeight());
-            orderEntity.setTotalCny(order.getCnyTotal());
-            orderEntity.setContainerType(order.getContainerType());
-            orderEntity.setBicCodes(order.getBicCodes());
-            recvOrderService.save(orderEntity);
+            valueAddedOrderFacade.save(order);
             return "redirect:/recv_order";
         }
     }
