@@ -142,6 +142,12 @@ public class ReceivingOrderController extends BaseController {
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
 
         ValueAddedOrder order = new ValueAddedOrder();
+        order.setServiceTypeId(7L);
+        List<String> bicCodes = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            bicCodes.add("");
+        }
+        order.setBicCodes(bicCodes);
         model.addAttribute("order", order);
         return "recv_order/form";
     }
