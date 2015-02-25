@@ -5,6 +5,7 @@ import liquid.order.domain.OrderStatus;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.persistence.repository.OrderHistoryRepository;
+import liquid.order.persistence.repository.OrderRepository;
 import liquid.persistence.repository.LocationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
  * Time: 8:03 PM
  */
 @Service
-public class OrderService extends AbstractBaseOrderService {
+public class OrderService extends AbstractBaseOrderService<OrderEntity, OrderRepository> {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired

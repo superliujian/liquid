@@ -19,9 +19,12 @@ import liquid.service.GoodsService;
 import liquid.service.LocationService;
 import liquid.service.ServiceTypeService;
 import liquid.web.controller.BaseController;
+import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +96,7 @@ public class ReceivingOrderController extends BaseController {
         return ContainerType.toMap();
     }
 
+    @Deprecated
     @ModelAttribute("containerCaps")
     public ContainerCap[] populateContainerCaps() {
         return ContainerCap.values();
@@ -108,26 +113,33 @@ public class ReceivingOrderController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String initFind(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
+    public String initFind(@RequestParam(defaultValue = "0", required = false) int number, SearchBarForm searchBarForm, Model model) {
+        Page<ValueAddedOrder> page = new PageImpl<ValueAddedOrder>(new ArrayList<>());
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
+        if ("customer".equals(searchBarForm.getType())) {
+            page = valueAddedOrderFacade.findByCustomerId(searchBarForm.getId(), pageRequest);
+        } else if ("order".equals(searchBarForm.getType())) {
+            ValueAddedOrder order = valueAddedOrderFacade.find(searchBarForm.getId());
+            List<ValueAddedOrder> orders = new ArrayList<>();
+            orders.add(order);
+            page = new PageImpl<ValueAddedOrder>(orders);
+        } else {
+            page = valueAddedOrderFacade.findAll(pageRequest);
+        }
 
-        model.addAttribute("orders", valueAddedOrderFacade.findAll(pageRequest));
+        model.addAttribute("page", page);
+        model.addAttribute("contextPath", "/recv_order?");
+
+        searchBarForm.setAction("/recv_order");
+        searchBarForm.setTypes(new String[][]{{"orderNo", "order.no"}, {"customerName", "customer.name"}});
+        model.addAttribute("searchBarForm", searchBarForm);
+
         return "recv_order/find";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "findByOrderNo")
-    public String findById(@RequestParam String param, Model model, Principal principal) {
-        logger.debug("param: {}", param);
-
-        model.addAttribute("orders", recvOrderService.findByOrderNo(param));
-        return "recv_order/find";
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "add")
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
-
-//        ReceivingOrder order = recvOrderService.newOrder(locationEntities);
 
         ValueAddedOrder order = new ValueAddedOrder();
         model.addAttribute("order", order);

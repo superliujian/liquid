@@ -1,11 +1,11 @@
 package liquid.order.service;
 
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.persistence.repository.OrderRepository;
+import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.service.AbstractService;
 import liquid.service.SequenceService;
 import liquid.service.ServiceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -14,7 +14,7 @@ import java.util.Calendar;
  * Created by redbrick9 on 4/26/14.
  */
 @Service
-public abstract class AbstractBaseOrderService extends AbstractService<OrderEntity, OrderRepository> {
+public abstract class AbstractBaseOrderService<E extends BaseUpdateEntity, R extends CrudRepository<E, Long>> extends AbstractService<E, R> {
 
     @Autowired
     protected ServiceTypeService serviceTypeService;

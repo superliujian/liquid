@@ -1,11 +1,9 @@
 package liquid.order.service;
 
-import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.ReceivingContainer;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.persistence.repository.ReceivingOrderRepository;
-import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.service.CustomerService;
 import liquid.service.GoodsService;
@@ -18,9 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,7 +26,7 @@ import java.util.List;
  * Time: 4:57 PM
  */
 @Service
-public class ReceivingOrderService extends AbstractBaseOrderService {
+public class ReceivingOrderService extends AbstractBaseOrderService<ReceivingOrderEntity, ReceivingOrderRepository> {
     private static Logger logger = LoggerFactory.getLogger(ReceivingOrderService.class);
 
     // Repositories
@@ -58,35 +54,7 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
     }
 
     @Override
-    public void doSaveBefore(OrderEntity entity) { }
-
-    @Transactional(value = "transactionManager")
-    public ReceivingOrderEntity save(ReceivingOrderEntity order) {
-//        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
-        CustomerEntity customer = customerService.find(order.getCustomerId());
-//        if (null != serviceType) order.setServiceType(serviceType);
-        order.setOrderNo(computeOrderNo(order.getCreateRole(), serviceTypeService.find(order.getServiceTypeId()).getCode()));
-        logger.debug("receivingOrder: {}", order);
-        ReceivingOrderEntity newOne = recvOrderRepository.save(order);
-
-        Collection<ReceivingContainer> containers = recvContainerRepository.findByReceivingOrder(order);
-        recvContainerRepository.delete(containers);
-
-        containers.clear();
-        for (String bicCode : order.getBicCodes()) {
-            ReceivingContainer container = new ReceivingContainer();
-            container.setReceivingOrder(newOne);
-            container.setBicCode(bicCode);
-            containers.add(container);
-        }
-        recvContainerRepository.save(containers);
-
-        return newOne;
-    }
-
-//    public Iterable<ReceivingOrder> findAll() {
-//        return recvOrderRepository.findAll();
-//    }
+    public void doSaveBefore(ReceivingOrderEntity entity) {}
 
     public List<ReceivingOrderEntity> findAllOrderByDesc() {
         return recvOrderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
@@ -110,7 +78,15 @@ public class ReceivingOrderService extends AbstractBaseOrderService {
         return recvOrderRepository.findByOrderNoLike("%" + orderNo + "%");
     }
 
+    public Page<ReceivingOrderEntity> findByOrderNoLike(String orderNo, Pageable pageable) {
+        return recvOrderRepository.findByOrderNoLike("%" + orderNo + "%", pageable);
+    }
+
     public Page<ReceivingOrderEntity> findAll(Pageable pageable) {
         return recvOrderRepository.findAll(pageable);
+    }
+
+    public Page<ReceivingOrderEntity> findByCustomerId(Long customerId, String createdBy, Pageable pageable) {
+        return recvOrderRepository.findByCustomerIdAndCreatedBy(customerId, createdBy, pageable);
     }
 }

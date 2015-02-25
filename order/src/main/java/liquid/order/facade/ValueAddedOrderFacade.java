@@ -3,18 +3,25 @@ package liquid.order.facade;
 import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.order.domain.ValueAddedOrder;
+import liquid.order.persistence.domain.ReceivingContainer;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
+import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.service.ReceivingOrderService;
+import liquid.persistence.domain.ServiceTypeEntity;
+import liquid.security.SecurityContext;
 import liquid.service.CustomerService;
 import liquid.service.GoodsService;
 import liquid.service.LocationService;
+import liquid.service.ServiceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,6 +44,12 @@ public class ValueAddedOrderFacade {
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
+
+    @Autowired
+    private ServiceTypeService serviceTypeService;
+
+    @Autowired
+    private ReceivingContainerRepository receivingContainerRepository;
 
     public Page<ValueAddedOrder> findAll(Pageable pageable) {
         Page<ReceivingOrderEntity> page = receivingOrderService.findAll(pageable);
@@ -73,9 +86,11 @@ public class ValueAddedOrderFacade {
         order.setContainerQuantity(orderEntity.getContainerQty());
         order.setContainerAttribute(orderEntity.getContainerAttribute());
         order.setCnyTotal(orderEntity.getTotalCny());
+        order.setStatus(orderEntity.getStatus());
         return order;
     }
 
+    @Transactional(value = "transactionManager")
     public ReceivingOrderEntity save(ValueAddedOrder order) {
         ReceivingOrderEntity orderEntity = new ReceivingOrderEntity();
         orderEntity.setServiceTypeId(order.getServiceTypeId());
@@ -96,9 +111,41 @@ public class ValueAddedOrderFacade {
             orderEntity.setContainerSubtypeId(order.getRailContainerSubtypeId());
         else
             orderEntity.setContainerSubtypeId(order.getSelfContainerSubtypeId());
+        orderEntity.setStatus(order.getStatus());
 
+        //
+        orderEntity.setCreateRole(SecurityContext.getInstance().getRole());
+        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
+        orderEntity.setOrderNo(receivingOrderService.computeOrderNo(order.getRole(), serviceType.getCode()));
         ReceivingOrderEntity entity = receivingOrderService.save(orderEntity);
 
+        Collection<ReceivingContainer> containers = receivingContainerRepository.findByReceivingOrder(entity);
+        receivingContainerRepository.delete(containers);
+
+        containers.clear();
+        for (String bicCode : order.getBicCodes()) {
+            ReceivingContainer container = new ReceivingContainer();
+            container.setReceivingOrder(entity);
+            container.setBicCode(bicCode);
+            containers.add(container);
+        }
+        receivingContainerRepository.save(containers);
+
         return entity;
+    }
+
+    public Page<ValueAddedOrder> findByCustomerId(Long customerId, Pageable pageable) {
+        Page<ReceivingOrderEntity> page = receivingOrderService.findByCustomerId(customerId, SecurityContext.getInstance().getUsername(), pageable);
+
+        List<ReceivingOrderEntity> entities = page.getContent();
+        List<ValueAddedOrder> orders = convert(entities);
+
+        return new PageImpl<ValueAddedOrder>(orders, pageable, page.getTotalElements());
+    }
+
+    public ValueAddedOrder find(long id) {
+        ReceivingOrderEntity orderEntity = receivingOrderService.find(id);
+        ValueAddedOrder order = convert(orderEntity);
+        return order;
     }
 }

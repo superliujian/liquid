@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-1">
-            <h3><span th:text="#{order}"></span></h3>
+            <h3><span th:text="#{order.shipping}"></span></h3>
         </div>
     
         <div class="col-xs-3 pull-right">
@@ -20,7 +20,7 @@
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{type}"/>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control input-sm" th:field="*{text}" th:placeholder="#{customer.name} + ' ' + #{order.no}" />
+                    <input type="text" class="form-control input-sm" th:field="*{text}" th:placeholder="#{customer.name} + #{or} + #{order.no}" />
                     
                     <span class="input-group-btn">                    
                         <button type="submit" name="search" class="btn btn-primary"><i class="glyphicon glyphicon-search" /></button>
