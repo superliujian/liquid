@@ -71,11 +71,13 @@
             <td th:text="${order.containerQuantity}">Container Quantity</td>
             <td th:text="${order.cnyTotal}">Price</td>
             <td>
+                <!--
                 <a sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
                    th:if="${order.status} != 1"
                    th:href="'/recv_order/' + ${order.id} + '/duplicate'">
                     <i class="glyphicon glyphicon-file text-success"/>
                 </a>
+                -->
                 <a sec:authorize="hasAnyRole('ROLE_SALES', 'ROLE_MARKETING')"
                    th:if="${order.status} == 1"
                    th:href="'/recv_order/' + ${order.id} + '/edit'">

@@ -7,13 +7,13 @@ import java.util.List;
  * Created by Tao Ma on 2/11/15.
  */
 public class ValueAddedOrder extends BaseOrder {
-    private List<String> bicCodes = new ArrayList<String>();
+    private List<TransportedContainer> containers = new ArrayList<TransportedContainer>();
 
-    public List<String> getBicCodes() {
-        return bicCodes;
+    public List<TransportedContainer> getContainers() {
+        return containers;
     }
 
-    public void setBicCodes(List<String> bicCodes) {
-        this.bicCodes = bicCodes;
+    public void setContainers(List<TransportedContainer> containers) {
+        this.containers = containers;
     }
 }

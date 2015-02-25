@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * Time: 5:48 PM
  */
 @Entity(name = "TSP_RECV_CONTAINER")
-public class ReceivingContainer extends BaseUpdateEntity {
+public class ReceivingContainerEntity extends BaseUpdateEntity {
     @ManyToOne
     @JoinColumn(name = "RECV_ORDER_ID")
     private ReceivingOrderEntity receivingOrder;

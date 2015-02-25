@@ -1,5 +1,6 @@
-package liquid.domain;
+package liquid.order.domain;
 
+import liquid.domain.BaseIdObject;
 import org.springframework.format.annotation.NumberFormat;
 
 /**

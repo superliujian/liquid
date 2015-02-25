@@ -6,6 +6,7 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LocationType;
 import liquid.order.domain.OrderStatus;
+import liquid.order.domain.TransportedContainer;
 import liquid.order.domain.ValueAddedOrder;
 import liquid.order.facade.ValueAddedOrderFacade;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
@@ -34,7 +35,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -143,22 +143,22 @@ public class ReceivingOrderController extends BaseController {
 
         ValueAddedOrder order = new ValueAddedOrder();
         order.setServiceTypeId(7L);
-        List<String> bicCodes = new ArrayList<>();
+        List<TransportedContainer> containers = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            bicCodes.add("");
+            containers.add(new TransportedContainer());
         }
-        order.setBicCodes(bicCodes);
+        order.setContainers(containers);
         model.addAttribute("order", order);
         return "recv_order/form";
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "addContainer")
     public String addContainer(@ModelAttribute("order") ValueAddedOrder order,
-                               String bicCode) {
+                               @ModelAttribute("container") TransportedContainer container) {
         logger.debug("order: {}", order);
-        logger.debug("order: {}", bicCode);
+        logger.debug("container: {}", container);
 
-        order.getBicCodes().add(bicCode);
+        order.getContainers().add(container);
 
         return "recv_order/form";
     }
@@ -171,7 +171,7 @@ public class ReceivingOrderController extends BaseController {
         logger.debug("order: {}", bicCode);
 
         final int index = Integer.valueOf(request.getParameter("removeContainer"));
-        order.getBicCodes().remove(index);
+        order.getContainers().remove(index);
 
         return "recv_order/form";
     }
@@ -204,8 +204,7 @@ public class ReceivingOrderController extends BaseController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String detail(@PathVariable long id,
-                         Model model, Principal principal) {
+    public String detail(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);
 
         ReceivingOrderEntity order = recvOrderService.find(id);
@@ -216,13 +215,11 @@ public class ReceivingOrderController extends BaseController {
         return "recv_order/detail";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, params = "action")
-    public String getOrder(@PathVariable long id, @RequestParam String action,
-                           Model model, Principal principal) {
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String getOrder(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);
-        logger.debug("action: {}", action);
 
-        ReceivingOrderEntity order = recvOrderService.find(id);
+        ValueAddedOrder order = valueAddedOrderFacade.find(id);
         logger.debug("order: {}", order);
 
         List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());

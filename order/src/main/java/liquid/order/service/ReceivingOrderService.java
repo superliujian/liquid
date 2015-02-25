@@ -1,6 +1,5 @@
 package liquid.order.service;
 
-import liquid.order.persistence.domain.ReceivingContainer;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.persistence.repository.ReceivingOrderRepository;
@@ -58,20 +57,6 @@ public class ReceivingOrderService extends AbstractBaseOrderService<ReceivingOrd
 
     public List<ReceivingOrderEntity> findAllOrderByDesc() {
         return recvOrderRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
-    }
-
-    public ReceivingOrderEntity find(long id) {
-        ReceivingOrderEntity order = recvOrderRepository.findOne(id);
-
-        order.setCustomerId(order.getCustomerId());
-        order.setGoodsId(order.getGoodsId());
-
-        Iterable<ReceivingContainer> containers = recvContainerRepository.findByReceivingOrder(order);
-        for (ReceivingContainer container : containers) {
-            order.getBicCodes().add(container.getBicCode());
-        }
-
-        return order;
     }
 
     public Iterable<ReceivingOrderEntity> findByOrderNo(String orderNo) {

@@ -2,8 +2,9 @@ package liquid.order.facade;
 
 import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
+import liquid.order.domain.TransportedContainer;
 import liquid.order.domain.ValueAddedOrder;
-import liquid.order.persistence.domain.ReceivingContainer;
+import liquid.order.persistence.domain.ReceivingContainerEntity;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.service.ReceivingOrderService;
@@ -72,6 +73,9 @@ public class ValueAddedOrderFacade {
         order.setOrderNo(orderEntity.getOrderNo());
         order.setCustomerId(orderEntity.getCustomerId());
         order.setCustomerName(customerService.find(orderEntity.getCustomerId()).getName());
+        order.setConsignee(orderEntity.getConsignee());
+        order.setConsigneePhone(orderEntity.getConsigneePhone());
+        order.setConsigneeAddress(orderEntity.getConsigneeAddress());
         order.setOriginId(orderEntity.getSrcLocId());
         order.setOrigination(locationService.find(orderEntity.getSrcLocId()).getName());
         order.setDestinationId(orderEntity.getDstLocId());
@@ -87,12 +91,46 @@ public class ValueAddedOrderFacade {
         order.setContainerAttribute(orderEntity.getContainerAttribute());
         order.setCnyTotal(orderEntity.getTotalCny());
         order.setStatus(orderEntity.getStatus());
+
         return order;
     }
 
     @Transactional(value = "transactionManager")
     public ReceivingOrderEntity save(ValueAddedOrder order) {
+        ReceivingOrderEntity orderEntity = convert(order);
+
+        ReceivingOrderEntity entity = receivingOrderService.save(orderEntity);
+
+        Collection<ReceivingContainerEntity> containers = receivingContainerRepository.findByReceivingOrder(entity);
+        receivingContainerRepository.delete(containers);
+
+        containers.clear();
+        for (TransportedContainer container : order.getContainers()) {
+            if (null != container && null != container.getBicCode() && container.getBicCode().trim().length() > 0) {
+                ReceivingContainerEntity containerEntity = new ReceivingContainerEntity();
+                containerEntity.setId(container.getId());
+                containerEntity.setReceivingOrder(entity);
+                containerEntity.setBicCode(container.getBicCode());
+                containers.add(containerEntity);
+            }
+        }
+        receivingContainerRepository.save(containers);
+
+        return entity;
+    }
+
+    public ReceivingOrderEntity submit(ValueAddedOrder order) {
+        order.setRole(SecurityContext.getInstance().getRole());
+        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
+        order.setOrderNo(receivingOrderService.computeOrderNo(order.getRole(), serviceType.getCode()));
+        ReceivingOrderEntity entity = save(order);
+        return entity;
+    }
+
+    private ReceivingOrderEntity convert(ValueAddedOrder order) {
         ReceivingOrderEntity orderEntity = new ReceivingOrderEntity();
+        orderEntity.setId(order.getId());
+        orderEntity.setOrderNo(order.getOrderNo());
         orderEntity.setServiceTypeId(order.getServiceTypeId());
         orderEntity.setCustomerId(order.getCustomerId());
         orderEntity.setConsignee(order.getConsignee());
@@ -105,33 +143,14 @@ public class ValueAddedOrderFacade {
         orderEntity.setTotalCny(order.getCnyTotal());
         orderEntity.setContainerType(order.getContainerType());
         orderEntity.setContainerQty(order.getContainerQuantity());
-        orderEntity.setBicCodes(order.getBicCodes());
         orderEntity.setContainerType(order.getContainerType());
         if (order.getContainerType() == ContainerType.RAIL.getType())
             orderEntity.setContainerSubtypeId(order.getRailContainerSubtypeId());
         else
             orderEntity.setContainerSubtypeId(order.getSelfContainerSubtypeId());
+        orderEntity.setCreateRole(order.getRole());
         orderEntity.setStatus(order.getStatus());
-
-        //
-        orderEntity.setCreateRole(SecurityContext.getInstance().getRole());
-        ServiceTypeEntity serviceType = serviceTypeService.find(order.getServiceTypeId());
-        orderEntity.setOrderNo(receivingOrderService.computeOrderNo(order.getRole(), serviceType.getCode()));
-        ReceivingOrderEntity entity = receivingOrderService.save(orderEntity);
-
-        Collection<ReceivingContainer> containers = receivingContainerRepository.findByReceivingOrder(entity);
-        receivingContainerRepository.delete(containers);
-
-        containers.clear();
-        for (String bicCode : order.getBicCodes()) {
-            ReceivingContainer container = new ReceivingContainer();
-            container.setReceivingOrder(entity);
-            container.setBicCode(bicCode);
-            containers.add(container);
-        }
-        receivingContainerRepository.save(containers);
-
-        return entity;
+        return orderEntity;
     }
 
     public Page<ValueAddedOrder> findByCustomerId(Long customerId, Pageable pageable) {
@@ -143,9 +162,20 @@ public class ValueAddedOrderFacade {
         return new PageImpl<ValueAddedOrder>(orders, pageable, page.getTotalElements());
     }
 
-    public ValueAddedOrder find(long id) {
+    public ValueAddedOrder find(Long id) {
         ReceivingOrderEntity orderEntity = receivingOrderService.find(id);
         ValueAddedOrder order = convert(orderEntity);
+
+        List<TransportedContainer> containers = new ArrayList<>();
+        Collection<ReceivingContainerEntity> receivingContainers = receivingContainerRepository.findByReceivingOrder(orderEntity);
+        for (ReceivingContainerEntity receivingContainer : receivingContainers) {
+            TransportedContainer container = new TransportedContainer();
+            container.setId(receivingContainer.getId());
+            container.setBicCode(receivingContainer.getBicCode());
+            containers.add(container);
+        }
+        order.setContainers(containers);
+
         return order;
     }
 }

@@ -18,7 +18,7 @@
         <div class="panel-heading" th:text="#{order.basic.info}">Order Basic Info</div>    
         <div class="panel-body">
             <div class="row">
-                <input type="hidden" th:field="*{id}" class="form-control" readonly="readonly"/>
+                <input type="hidden" th:field="*{id}" class="form-control"/>
                 
                 <div class="col-xs-3">
                     <div class="form-group">
@@ -192,11 +192,12 @@
 
         <table id="f" class="table table-bordered table-16">
             <tbody>
-            <tr th:each="bicCode,rowStat : *{bicCodes}">
+            <tr th:each="bicCode,rowStat : *{containers}">
                 <td>
+                    <input type="hidden" th:field="*{containers[__${rowStat.index}__].id}" class="form-control"/>
                     <input type="text" class="form-control input-sm"
-                           th:field="*{bicCodes[__${rowStat.index}__]}"
-                           th:classappend="${#fields.hasErrors('bicCodes[__${rowStat.index}__]')}? 'fieldError'"/>
+                           th:field="*{containers[__${rowStat.index}__].bicCode}"
+                           th:classappend="${#fields.hasErrors('containers[__${rowStat.index}__].bicCode')}? 'fieldError'"/>
                 </td>
                 <td>
                     <button type="submit" name="removeContainer" class="btn btn-default btn-block btn-sm"

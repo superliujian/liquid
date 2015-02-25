@@ -13,7 +13,7 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LoadingType;
 import liquid.domain.LocationType;
-import liquid.domain.ServiceItem;
+import liquid.order.domain.ServiceItem;
 import liquid.domain.TradeType;
 import liquid.order.domain.Order;
 import liquid.order.domain.OrderStatus;
