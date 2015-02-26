@@ -6,9 +6,9 @@ import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.Currency;
 import liquid.domain.LoadingType;
-import liquid.order.domain.ServiceItem;
 import liquid.domain.TradeType;
 import liquid.order.domain.Order;
+import liquid.order.domain.ServiceItem;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderRailEntity;
 import liquid.order.persistence.domain.ServiceItemEntity;
@@ -116,6 +116,9 @@ public class OrderFacade {
         receivableSummary.setOrderId(order.getId());
         order.setId(orderEntity.getId());
         convert(orderEntity, receivableSummary);
+        // TODO: workaround
+        receivableSummary.setId(null);
+        receivableSummary.setOrderId(orderEntity.getId());
         receivableFacade.save(receivableSummary);
 
         return orderEntity;
