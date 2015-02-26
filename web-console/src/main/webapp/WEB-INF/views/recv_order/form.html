@@ -74,27 +74,21 @@
             </div>
 
             <div class="row">
+                <input type="hidden" th:field="*{originId}"/>
                 <div class="col-xs-3">
-                    <div class="form-group">
+                    <div class="form-group form-group-sm" th:classappend="${#fields.hasErrors('origination')} ? 'has-error'">
                         <label th:text="#{origination} + ' *'">Origin</label>
-                        <select th:field="*{origination}" class="form-control input-sm">
-                            <option th:each="location : ${locations}"
-                                    th:value="${location.id}"
-                                    th:text="${location.name}">Location Name
-                            </option>
-                        </select>
+                        <input type="text" th:field="*{origination}" class="form-control input-sm" th:placeholder="#{origination}"/>
+                        <span class="text-danger" th:errors="*{origination}">error</span>            
                     </div>
                 </div>
 
+                <input type="hidden" th:field="*{destinationId}"/>
                 <div class="col-xs-3">
-                    <div class="form-group">
+                    <div class="form-group form-group-sm" th:classappend="${#fields.hasErrors('destination')} ? 'has-error'">
                         <label th:text="#{destination} + ' *'">Destination</label>
-                        <select th:field="*{destination}" class="form-control input-sm">
-                            <option th:each="location : ${locations}"
-                                    th:value="${location.id}"
-                                    th:text="${location.name}">Location Name
-                            </option>
-                        </select>
+                        <input type="text" th:field="*{destination}" class="form-control input-sm" th:placeholder="#{destination}"/>
+                        <span class="text-danger" th:errors="*{destination}">error</span>      
                     </div>
                 </div>
 
@@ -264,7 +258,12 @@
         });
         
         var customers = initCustomerAc();
-        $('#customerName').acWithTemplate(customers, 'name', 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>'); 
+        $('#customerName').acWithTemplate(customers, 'name', 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
+
+        var locations = initAllLocationsAc();
+        $('#origination').acWithTemplate(locations, 'name', 'originId', '<p><strong>{{name}}</strong>[{{typeText}}]</p>');
+        $('#destination').acWithTemplate(locations, 'name', 'destinationId', '<p><strong>{{name}}</strong>[{{typeText}}]</p>');
+
         
         if($('input[name=containerType]:checked', '#orderForm').val() == 0) {
             $("#ownContainerSubtypeSec").hide();

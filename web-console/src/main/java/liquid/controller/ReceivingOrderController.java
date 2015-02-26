@@ -198,7 +198,7 @@ public class ReceivingOrderController extends BaseController {
         if (bindingResult.hasErrors()) {
             return "recv_order/form";
         } else {
-            valueAddedOrderFacade.save(order);
+            valueAddedOrderFacade.submit(order);
             return "redirect:/recv_order";
         }
     }

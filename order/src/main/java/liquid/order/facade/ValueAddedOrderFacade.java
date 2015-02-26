@@ -136,8 +136,8 @@ public class ValueAddedOrderFacade {
         orderEntity.setConsignee(order.getConsignee());
         orderEntity.setConsigneePhone(order.getConsigneePhone());
         orderEntity.setConsigneeAddress(order.getConsigneeAddress());
-        orderEntity.setSrcLocId(Long.valueOf(order.getOrigination()));
-        orderEntity.setDstLocId(Long.valueOf(order.getDestination()));
+        orderEntity.setSrcLocId(order.getOriginId());
+        orderEntity.setDstLocId(order.getDestinationId());
         orderEntity.setGoodsId(order.getGoodsId());
         orderEntity.setGoodsWeight(order.getGoodsWeight());
         orderEntity.setTotalCny(order.getCnyTotal());
