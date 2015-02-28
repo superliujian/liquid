@@ -2,15 +2,17 @@ package liquid.accounting.web.domain;
 
 import liquid.order.domain.Order;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Tao Ma on 12/9/14.
  */
 public class ReceivableSummary extends Order {
     private Long id;
 
-    private Long cny = 0L;
+    private BigDecimal cny = BigDecimal.ZERO;
 
-    private Long usd = 0L;
+    private BigDecimal usd = BigDecimal.ZERO;
 
     private String prepaidTime;
 
@@ -36,19 +38,19 @@ public class ReceivableSummary extends Order {
         this.id = id;
     }
 
-    public Long getCny() {
+    public BigDecimal getCny() {
         return cny;
     }
 
-    public void setCny(Long cny) {
+    public void setCny(BigDecimal cny) {
         this.cny = cny;
     }
 
-    public Long getUsd() {
+    public BigDecimal getUsd() {
         return usd;
     }
 
-    public void setUsd(Long usd) {
+    public void setUsd(BigDecimal usd) {
         this.usd = usd;
     }
 

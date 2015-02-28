@@ -1,6 +1,7 @@
 package liquid.accounting.web.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * TODO: Comments.
@@ -9,76 +10,75 @@ import java.io.Serializable;
  * Time: 11:39 PM
  */
 public class Earning implements Serializable {
-    private long salesPriceCny;
+    private BigDecimal salesPriceCny;
 
-    private long salesPriceUsd;
+    private BigDecimal salesPriceUsd;
 
-    private long distyPrice;
+    private BigDecimal distyPrice;
 
-    private long grandTotal;
+    private BigDecimal grandTotal;
 
-    private long grossMargin;
+    private BigDecimal grossMargin;
 
-    private long salesProfit;
+    private BigDecimal salesProfit;
 
-    private long distyProfit;
+    private BigDecimal distyProfit;
 
-    public Earning() {
-    }
+    public Earning() { }
 
-    public long getSalesPriceCny() {
+    public BigDecimal getSalesPriceCny() {
         return salesPriceCny;
     }
 
-    public void setSalesPriceCny(long salesPriceCny) {
+    public void setSalesPriceCny(BigDecimal salesPriceCny) {
         this.salesPriceCny = salesPriceCny;
     }
 
-    public long getSalesPriceUsd() {
+    public BigDecimal getSalesPriceUsd() {
         return salesPriceUsd;
     }
 
-    public void setSalesPriceUsd(long salesPriceUsd) {
+    public void setSalesPriceUsd(BigDecimal salesPriceUsd) {
         this.salesPriceUsd = salesPriceUsd;
     }
 
-    public long getDistyPrice() {
+    public BigDecimal getDistyPrice() {
         return distyPrice;
     }
 
-    public void setDistyPrice(long distyPrice) {
+    public void setDistyPrice(BigDecimal distyPrice) {
         this.distyPrice = distyPrice;
     }
 
-    public long getGrandTotal() {
+    public BigDecimal getGrandTotal() {
         return grandTotal;
     }
 
-    public void setGrandTotal(long grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
 
-    public long getGrossMargin() {
+    public BigDecimal getGrossMargin() {
         return grossMargin;
     }
 
-    public void setGrossMargin(long grossMargin) {
+    public void setGrossMargin(BigDecimal grossMargin) {
         this.grossMargin = grossMargin;
     }
 
-    public long getSalesProfit() {
+    public BigDecimal getSalesProfit() {
         return salesProfit;
     }
 
-    public void setSalesProfit(long salesProfit) {
+    public void setSalesProfit(BigDecimal salesProfit) {
         this.salesProfit = salesProfit;
     }
 
-    public long getDistyProfit() {
+    public BigDecimal getDistyProfit() {
         return distyProfit;
     }
 
-    public void setDistyProfit(long distyProfit) {
+    public void setDistyProfit(BigDecimal distyProfit) {
         this.distyProfit = distyProfit;
     }
 

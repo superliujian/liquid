@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +52,8 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
             receivableList.add(receivable);
 
             sum.setContainerQuantity(sum.getContainerQuantity() + receivable.getContainerQuantity());
-            sum.setCny(sum.getCny() + receivable.getCny());
-            sum.setUsd(sum.getUsd() + receivable.getUsd());
+            sum.setCny(sum.getCny().add(receivable.getCny()));
+            sum.setUsd(sum.getUsd().add(receivable.getUsd()));
             sum.setRemainingBalanceCny(sum.getRemainingBalanceCny() + receivable.getRemainingBalanceCny());
             sum.setRemainingBalanceUsd(sum.getRemainingBalanceUsd() + receivable.getRemainingBalanceUsd());
             sum.setPaidCny(sum.getPaidCny() + receivable.getPaidCny());
@@ -60,10 +61,10 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
             sum.setInvoicedCny(sum.getInvoicedCny() + receivable.getInvoicedCny());
             sum.setInvoicedUsd(sum.getInvoicedUsd() + receivable.getInvoicedUsd());
 
-            sum.setDistyPrice(sum.getDistyPrice() + receivable.getDistyPrice());
-            sum.setDistyUsd(sum.getDistyUsd() + receivable.getDistyUsd());
-            sum.setDistyUsd(sum.getDistyUsd() + receivable.getDistyUsd());
-            sum.setGrandTotal(sum.getGrandTotal() + receivable.getGrandTotal());
+            sum.setDistyCny(sum.getDistyCny().add(receivable.getDistyCny()));
+            sum.setDistyUsd(sum.getDistyUsd().add(receivable.getDistyUsd()));
+
+            sum.setGrandTotal(sum.getGrandTotal().add(receivable.getGrandTotal()));
         }
         return new EnhancedPageImpl<ReceivableSummary>(receivableList, pageable, entityPage.getTotalElements(), sum);
     }
@@ -78,17 +79,17 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
     public Earning calculateEarning(Long orderId) {
         Earning earning = new Earning();
 
-        double exchangeRate = exchangeRateService.getExchangeRate();
+        BigDecimal exchangeRate = exchangeRateService.getExchangeRate();
 
         ReceivableSummaryEntity receivableSummaryEntity = receivableSummaryService.findByOrderId(orderId);
 
         earning.setSalesPriceCny(receivableSummaryEntity.getCny());
         earning.setSalesPriceUsd(receivableSummaryEntity.getUsd());
-        earning.setDistyPrice(receivableSummaryEntity.getOrder().getDistyPrice());
+        earning.setDistyPrice(receivableSummaryEntity.getOrder().getDistyCny());
         earning.setGrandTotal(receivableSummaryEntity.getOrder().getGrandTotal());
-        earning.setGrossMargin(earning.getSalesPriceCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - receivableSummaryEntity.getOrder().getGrandTotal());
-        earning.setSalesProfit(receivableSummaryEntity.getCny() + Math.round(earning.getSalesPriceUsd() * exchangeRate) - receivableSummaryEntity.getOrder().getDistyPrice());
-        earning.setDistyProfit(earning.getDistyPrice() - receivableSummaryEntity.getOrder().getGrandTotal());
+        earning.setGrossMargin(earning.getSalesPriceCny().add(earning.getSalesPriceUsd().multiply(exchangeRate)).subtract(receivableSummaryEntity.getOrder().getGrandTotal()));
+        earning.setSalesProfit(receivableSummaryEntity.getCny().add(earning.getSalesPriceUsd().multiply(exchangeRate)).subtract(receivableSummaryEntity.getOrder().getDistyCny()));
+        earning.setDistyProfit(earning.getDistyPrice().subtract(receivableSummaryEntity.getOrder().getGrandTotal()));
         return earning;
     }
 

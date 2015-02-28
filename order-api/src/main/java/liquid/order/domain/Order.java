@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +44,9 @@ public class Order extends BaseOrder {
     @Valid
     private List<ServiceItem> serviceItems;
 
-    private Long distyPrice = 0L;
-    private Long distyUsd = 0L;
-    private Long grandTotal = 0L;
+    private BigDecimal distyCny = BigDecimal.ZERO;
+    private BigDecimal distyUsd = BigDecimal.ZERO;
+    private BigDecimal grandTotal = BigDecimal.ZERO;
 
     public Order() {
         serviceItems = new ArrayList<>();
@@ -219,27 +220,27 @@ public class Order extends BaseOrder {
         this.serviceItems = serviceItems;
     }
 
-    public Long getDistyPrice() {
-        return distyPrice;
+    public BigDecimal getDistyCny() {
+        return distyCny;
     }
 
-    public void setDistyPrice(Long distyPrice) {
-        this.distyPrice = distyPrice;
+    public void setDistyCny(BigDecimal distyCny) {
+        this.distyCny = distyCny;
     }
 
-    public Long getDistyUsd() {
+    public BigDecimal getDistyUsd() {
         return distyUsd;
     }
 
-    public void setDistyUsd(Long distyUsd) {
+    public void setDistyUsd(BigDecimal distyUsd) {
         this.distyUsd = distyUsd;
     }
 
-    public Long getGrandTotal() {
+    public BigDecimal getGrandTotal() {
         return grandTotal;
     }
 
-    public void setGrandTotal(Long grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
 
@@ -267,7 +268,7 @@ public class Order extends BaseOrder {
         sb.append(", comment='").append(comment).append('\'');
         sb.append(", sameDay=").append(sameDay);
         sb.append(", serviceItems=").append(serviceItems);
-        sb.append(", distyPrice=").append(distyPrice);
+        sb.append(", distyCny=").append(distyCny);
         sb.append(", distyUsd=").append(distyUsd);
         sb.append(", grandTotal=").append(grandTotal);
         sb.append(", ").append(super.toString());

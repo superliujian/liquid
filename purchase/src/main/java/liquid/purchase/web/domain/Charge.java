@@ -3,6 +3,7 @@ package liquid.purchase.web.domain;
 import liquid.order.domain.Order;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * Created by redbrick9 on 6/9/14.
@@ -20,10 +21,10 @@ public class Charge extends Order {
     private Integer currency;
 
     @NotNull
-    private Long unitPrice;
-    private Long totalPrice = 0L;
-    private Long totalCny = 0L;
-    private Long totalUsd = 0L;
+    private BigDecimal unitPrice;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+    private BigDecimal totalCny = BigDecimal.ZERO;
+    private BigDecimal totalUsd = BigDecimal.ZERO;
     private String taskId;
     private String comment;
 
@@ -91,35 +92,35 @@ public class Charge extends Order {
         this.currency = currency;
     }
 
-    public Long getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Long unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public Long getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public Long getTotalCny() {
+    public BigDecimal getTotalCny() {
         return totalCny;
     }
 
-    public void setTotalCny(Long totalCny) {
+    public void setTotalCny(BigDecimal totalCny) {
         this.totalCny = totalCny;
     }
 
-    public Long getTotalUsd() {
+    public BigDecimal getTotalUsd() {
         return totalUsd;
     }
 
-    public void setTotalUsd(Long totalUsd) {
+    public void setTotalUsd(BigDecimal totalUsd) {
         this.totalUsd = totalUsd;
     }
 

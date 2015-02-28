@@ -30,6 +30,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,9 +89,9 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
         if (ChargeWay.PER_ORDER.getValue() == entity.getWay()) {
             entity.setTotalPrice(entity.getUnitPrice());
-            entity.setUnitPrice(0L);
+            entity.setUnitPrice(new BigDecimal("0"));
         } else if (ChargeWay.PER_CONTAINER.getValue() == entity.getWay()) {
-            entity.setTotalPrice(entity.getUnitPrice() * shipment.getContainerQty());
+            entity.setTotalPrice(entity.getUnitPrice().multiply(new BigDecimal(shipment.getContainerQty())));
         } else {
             logger.warn("{} is out of charge way range.", entity.getWay());
         }
@@ -99,9 +100,9 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         // Compute grand total
         OrderEntity order = orderService.find(entity.getOrder().getId());
         if (entity.getCurrency() == 0) {
-            order.setGrandTotal(order.getGrandTotal() + entity.getTotalPrice());
+            order.setGrandTotal(order.getGrandTotal().add(entity.getTotalPrice()));
         } else {
-            order.setGrandTotal(order.getGrandTotal() + Math.round(entity.getTotalPrice() * exchangeRateService.getExchangeRate()));
+            order.setGrandTotal(order.getGrandTotal().add(entity.getTotalPrice().multiply(exchangeRateService.getExchangeRate())));
         }
         orderService.save(order);
 
@@ -117,9 +118,9 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         OrderEntity order = charge.getOrder();
 
         if (charge.getCurrency() == 0) {
-            order.setGrandTotal(order.getGrandTotal() - charge.getTotalPrice());
+            order.setGrandTotal(order.getGrandTotal().subtract(charge.getTotalPrice()));
         } else {
-            order.setGrandTotal(order.getGrandTotal() - Math.round(charge.getTotalPrice() * exchangeRateService.getExchangeRate()));
+            order.setGrandTotal(order.getGrandTotal().subtract(charge.getTotalPrice().multiply(exchangeRateService.getExchangeRate())));
         }
 
         orderService.save(order);
@@ -139,13 +140,13 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
         return chargeRepository.findByTaskId(taskId);
     }
 
-    public long total(Iterable<ChargeEntity> charges) {
-        long total = 0L;
+    public BigDecimal total(Iterable<ChargeEntity> charges) {
+        BigDecimal total = BigDecimal.ZERO;
         for (ChargeEntity charge : charges) {
             if (charge.getCurrency() == 0) {
-                total += charge.getTotalPrice();
+                total = total.add(charge.getTotalPrice());
             } else {
-                total += Math.round(charge.getTotalPrice() * exchangeRateService.getExchangeRate());
+                total = total.add(charge.getTotalPrice().multiply(exchangeRateService.getExchangeRate()));
             }
         }
         return total;

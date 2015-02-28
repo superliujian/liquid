@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * Created by Tao Ma on 2/24/15.
@@ -50,8 +51,8 @@ public class BaseOrder extends BaseIdObject {
     private String containerAttribute;
 
     @Min(1)
-    private Long cnyTotal;
-    private Long usdTotal;
+    private BigDecimal cnyTotal;
+    private BigDecimal usdTotal;
 
     private String createdBy;
     private String createdAt;
@@ -244,19 +245,19 @@ public class BaseOrder extends BaseIdObject {
         this.containerAttribute = containerAttribute;
     }
 
-    public Long getCnyTotal() {
+    public BigDecimal getCnyTotal() {
         return cnyTotal;
     }
 
-    public void setCnyTotal(Long cnyTotal) {
+    public void setCnyTotal(BigDecimal cnyTotal) {
         this.cnyTotal = cnyTotal;
     }
 
-    public Long getUsdTotal() {
+    public BigDecimal getUsdTotal() {
         return usdTotal;
     }
 
-    public void setUsdTotal(Long usdTotal) {
+    public void setUsdTotal(BigDecimal usdTotal) {
         this.usdTotal = usdTotal;
     }
 

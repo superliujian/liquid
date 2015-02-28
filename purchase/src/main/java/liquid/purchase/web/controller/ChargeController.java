@@ -3,8 +3,8 @@ package liquid.purchase.web.controller;
 
 import liquid.accounting.facade.ReceivableFacade;
 import liquid.accounting.web.domain.Earning;
-import liquid.container.domain.ContainerType;
 import liquid.container.domain.ContainerCap;
+import liquid.container.domain.ContainerType;
 import liquid.domain.LoadingType;
 import liquid.domain.ServiceProvider;
 import liquid.domain.TradeType;
@@ -39,6 +39,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +123,7 @@ public class ChargeController {
     }
 
     @ModelAttribute("exchangeRate")
-    public Double populateExchangeRate() {
+    public BigDecimal populateExchangeRate() {
         return exchangeRateService.getExchangeRate();
     }
 
@@ -310,7 +311,7 @@ public class ChargeController {
                                   Model model, Principal principal) {
         logger.debug("done: {}", done);
 
-        double value = exchangeRateService.getExchangeRate();
+        BigDecimal value = exchangeRateService.getExchangeRate();
         ExchangeRateDto exchangeRate = new ExchangeRateDto();
         exchangeRate.setValue(value);
 

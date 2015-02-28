@@ -2,6 +2,7 @@ package liquid.domain;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * TODO: Comments.
@@ -12,25 +13,25 @@ import javax.validation.constraints.NotNull;
 public class Disty {
     @NotNull
     @Min(0)
-    private Long distyCny;
+    private BigDecimal distyCny;
 
     @NotNull
     @Min(0)
-    private Long distyUsd;
+    private BigDecimal distyUsd;
 
-    public Long getDistyCny() {
+    public BigDecimal getDistyCny() {
         return distyCny;
     }
 
-    public void setDistyCny(Long distyCny) {
+    public void setDistyCny(BigDecimal distyCny) {
         this.distyCny = distyCny;
     }
 
-    public Long getDistyUsd() {
+    public BigDecimal getDistyUsd() {
         return distyUsd;
     }
 
-    public void setDistyUsd(Long distyUsd) {
+    public void setDistyUsd(BigDecimal distyUsd) {
         this.distyUsd = distyUsd;
     }
 

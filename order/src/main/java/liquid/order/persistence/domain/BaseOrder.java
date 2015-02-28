@@ -4,6 +4,7 @@ import liquid.persistence.domain.BaseUpdateEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.math.BigDecimal;
 
 /**
  * TODO: Comments.
@@ -71,20 +72,20 @@ public class BaseOrder extends BaseUpdateEntity {
     @JoinColumn(name = "RAILWAY_ID")
     private OrderRailEntity railway;
 
-    @Column(name = "TOTAL_CNY")
-    private Long totalCny = 0L;
+    @Column(precision = 19, scale = 4, name = "TOTAL_CNY")
+    private BigDecimal totalCny = BigDecimal.ZERO;
 
-    @Column(name = "TOTAL_USD")
-    private Long totalUsd = 0L;
+    @Column(precision = 19, scale = 4, name = "TOTAL_USD")
+    private BigDecimal totalUsd = BigDecimal.ZERO;
 
-    @Column(name = "DISTY_PRICE")
-    private Long distyPrice = 0L;
+    @Column(precision = 19, scale = 4, name = "DISTY_CNY")
+    private BigDecimal distyCny = BigDecimal.ZERO;
 
-    @Column(name = "DISTY_USD")
-    private Long distyUsd = 0L;
+    @Column(precision = 19, scale = 4, name = "DISTY_USD")
+    private BigDecimal distyUsd = BigDecimal.ZERO;
 
-    @Column(name = "GRAND_TOTAL")
-    private Long grandTotal = 0L;
+    @Column(precision = 19, scale = 4, name = "GRAND_TOTAL")
+    private BigDecimal grandTotal = new BigDecimal("0");
 
     @Column(name = "CREATE_ROLE")
     private String createRole;
@@ -229,43 +230,43 @@ public class BaseOrder extends BaseUpdateEntity {
         this.railway = railway;
     }
 
-    public Long getTotalCny() {
+    public BigDecimal getTotalCny() {
         return totalCny;
     }
 
-    public void setTotalCny(Long totalCny) {
+    public void setTotalCny(BigDecimal totalCny) {
         this.totalCny = totalCny;
     }
 
-    public Long getTotalUsd() {
+    public BigDecimal getTotalUsd() {
         return totalUsd;
     }
 
-    public void setTotalUsd(Long totalUsd) {
+    public void setTotalUsd(BigDecimal totalUsd) {
         this.totalUsd = totalUsd;
     }
 
-    public Long getDistyPrice() {
-        return distyPrice;
+    public BigDecimal getDistyCny() {
+        return distyCny;
     }
 
-    public void setDistyPrice(Long distyPrice) {
-        this.distyPrice = distyPrice;
+    public void setDistyCny(BigDecimal distyCny) {
+        this.distyCny = distyCny;
     }
 
-    public Long getDistyUsd() {
+    public BigDecimal getDistyUsd() {
         return distyUsd;
     }
 
-    public void setDistyUsd(Long distyUsd) {
+    public void setDistyUsd(BigDecimal distyUsd) {
         this.distyUsd = distyUsd;
     }
 
-    public Long getGrandTotal() {
+    public BigDecimal getGrandTotal() {
         return grandTotal;
     }
 
-    public void setGrandTotal(Long grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
 

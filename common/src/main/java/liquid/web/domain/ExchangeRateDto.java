@@ -1,5 +1,7 @@
 package liquid.web.domain;
 
+import java.math.BigDecimal;
+
 /**
  * TODO: Comments.
  * User: tao
@@ -7,13 +9,13 @@ package liquid.web.domain;
  * Time: 5:04 PM
  */
 public class ExchangeRateDto {
-    private double value;
+    private BigDecimal value;
 
-    public double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

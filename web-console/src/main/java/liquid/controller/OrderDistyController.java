@@ -45,7 +45,7 @@ public class OrderDistyController extends BaseController {
         long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
         Disty disty = new Disty();
-        disty.setDistyCny(order.getDistyPrice());
+        disty.setDistyCny(order.getDistyCny());
         disty.setDistyUsd(order.getDistyUsd());
         model.addAttribute("disty", disty);
         model.addAttribute("task", taskService.getTask(taskId));
@@ -65,7 +65,7 @@ public class OrderDistyController extends BaseController {
 
         long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
-        order.setDistyPrice(disty.getDistyCny());
+        order.setDistyCny(disty.getDistyCny());
         order.setDistyUsd(disty.getDistyUsd());
         order.setUpdatedBy(principal.getName());
         order.setUpdatedAt(new Date());

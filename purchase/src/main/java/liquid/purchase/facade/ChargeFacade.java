@@ -75,9 +75,9 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
             sum.setContainerQuantity(sum.getContainerQuantity() + charge.getContainerQuantity());
 
             if (charge.getCurrency() == 0) {
-                sum.setTotalCny(sum.getTotalCny() + charge.getTotalPrice());
+                sum.setTotalCny(sum.getTotalCny().add(charge.getTotalPrice()));
             } else if (charge.getCurrency() == 1) {
-                sum.setTotalUsd(sum.getTotalUsd() + charge.getTotalPrice());
+                sum.setTotalUsd(sum.getTotalUsd().add(charge.getTotalPrice()));
             } else {
 
             }

@@ -72,13 +72,13 @@
                 <td></td>
                 <td class="text-right"><span th:text="${receivable.containerQuantity}">Container Quantity</span></td>
                 <td></td>
-                <td class="text-right"><span th:text="${receivable.cny}">Receivable CNY</span></td>
-                <td class="text-right" th:text="${receivable.usd}">Receivable USD</td>
-                <td class="text-right" th:text="${receivable.cny + receivable.usd * exchangeRate}">Receivable SUM</td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(receivable.cny, 0, 'COMMA', 2,'POINT')}">Receivable CNY</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(receivable.usd, 0, 'COMMA', 2,'POINT')}">Receivable USD</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(receivable.cny + receivable.usd * exchangeRate, 0, 'COMMA', 2,'POINT')}">Receivable SUM</span></td>
                 <td></td>
-                <td class="text-right" th:text="${receivable.cny + receivable.usd * exchangeRate - receivable.paidCny - receivable.paidUsd * exchangeRate}">Receivable Balance</td>
-                <td class="text-right" th:text="${receivable.cny - receivable.invoicedCny}">Invoice Balance CNY</td>
-                <td class="text-right" th:text="${receivable.usd - receivable.invoicedUsd}">Invoice Balance USD</td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(receivable.cny + receivable.usd * exchangeRate - receivable.paidCny - receivable.paidUsd * exchangeRate, 0, 'COMMA', 2,'POINT')}">Receivable Balance</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(receivable.cny - receivable.invoicedCny, 0, 'COMMA', 2,'POINT')}">Invoice Balance CNY</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(receivable.usd - receivable.invoicedUsd, 0, 'COMMA', 2,'POINT')}">Invoice Balance USD</span></td>
             </tr>
             <tr>
                 <td><strong><span th:text="#{total}">Sum</span></strong></td>
@@ -92,13 +92,13 @@
                 <td></td>
                 <td class="text-right"><span th:text="${page.sum.containerQuantity}">Container Quantity</span></td>
                 <td></td>
-                <td class="text-right"><span th:text="${page.sum.cny}">Receivable CNY</span></td>
-                <td class="text-right"><span th:text="${page.sum.usd}">Receivable USD</span></td>
-                <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate}">Receivable SUM</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.cny, 0, 'COMMA', 2, 'POINT')}">Receivable CNY</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.usd, 0, 'COMMA', 2, 'POINT')}">Receivable USD</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.cny + page.sum.usd * exchangeRate, 0, 'COMMA', 2, 'POINT')}">Receivable SUM</span></td>
                 <td></td>
-                <td class="text-right"><span th:text="${page.sum.cny + page.sum.usd * exchangeRate - page.sum.paidCny - page.sum.paidUsd * exchangeRate}">Receivable Balance</span></td>
-                <td class="text-right"><span th:text="${page.sum.cny - page.sum.invoicedCny}">Invoice Balance CNY</span></td>
-                <td class="text-right"><span th:text="${page.sum.usd - page.sum.invoicedUsd}">Invoice Balance USD</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.cny + page.sum.usd * exchangeRate - page.sum.paidCny - page.sum.paidUsd * exchangeRate, 0, 'COMMA', 2, 'POINT')}">Receivable Balance</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.cny - page.sum.invoicedCny, 0, 'COMMA', 2, 'POINT')}">Invoice Balance CNY</span></td>
+                <td class="text-right"><span th:text="${#numbers.formatDecimal(page.sum.usd - page.sum.invoicedUsd, 0, 'COMMA', 2, 'POINT')}">Invoice Balance USD</span></td>
             </tr>
             </tbody>
         </table>

@@ -53,7 +53,7 @@ public class IncomeService {
         IncomeEntity income = new IncomeEntity();
         income.setOrder(order);
         income.setType(IncomeType.ORDER.getType());
-        income.setAmount(receivableSummaryEntity.getCny());
+        income.setAmount(receivableSummaryEntity.getCny().longValue());
         income.setComment("Order");
         return addIncome(income, uid);
     }

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,11 +19,11 @@ public class ReceivableSummaryEntity extends BaseUpdateEntity {
     @JoinColumn(name = "ORDER_ID")
     private OrderEntity order;
 
-    @Column(name = "CNY")
-    private Long cny;
+    @Column(precision = 19, scale = 4, name = "CNY")
+    private BigDecimal cny;
 
-    @Column(name = "USD")
-    private Long usd;
+    @Column(precision = 19, scale = 4, name = "USD")
+    private BigDecimal usd;
 
     @Column(name = "PREPAID_TIME")
     private Date prepaidTime;
@@ -55,19 +56,19 @@ public class ReceivableSummaryEntity extends BaseUpdateEntity {
         this.order = order;
     }
 
-    public Long getCny() {
+    public BigDecimal getCny() {
         return cny;
     }
 
-    public void setCny(Long cny) {
+    public void setCny(BigDecimal cny) {
         this.cny = cny;
     }
 
-    public Long getUsd() {
+    public BigDecimal getUsd() {
         return usd;
     }
 
-    public void setUsd(Long usd) {
+    public void setUsd(BigDecimal usd) {
         this.usd = usd;
     }
 

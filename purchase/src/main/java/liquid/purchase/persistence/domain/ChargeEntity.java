@@ -8,6 +8,7 @@ import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * TODO: Comments.
@@ -45,11 +46,11 @@ public class ChargeEntity extends BaseUpdateEntity {
     @Column(name = "WAY")
     private int way = 1;
 
-    @Column(name = "UNIT_PRICE")
-    private long unitPrice;
+    @Column(precision = 19, scale = 4, name = "UNIT_PRICE")
+    private BigDecimal unitPrice;
 
-    @Column(name = "TOTAL_PRICE")
-    private long totalPrice;
+    @Column(precision = 19, scale = 4, name = "TOTAL_PRICE")
+    private BigDecimal totalPrice;
 
     @Column(name = "CURRENCY")
     private int currency;
@@ -119,19 +120,19 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.way = way;
     }
 
-    public long getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(long unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public long getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(long totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

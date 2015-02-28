@@ -357,7 +357,7 @@ public class OrderFacade {
         order.setGrandTotal(orderEntity.getGrandTotal());
         order.setCnyTotal(orderEntity.getTotalCny());
         order.setUsdTotal(orderEntity.getTotalUsd());
-        order.setDistyPrice(orderEntity.getDistyPrice());
+        order.setDistyCny(orderEntity.getDistyCny());
         order.setDistyUsd(orderEntity.getDistyUsd());
 
         order.setCreatedBy(orderEntity.getCreatedBy());

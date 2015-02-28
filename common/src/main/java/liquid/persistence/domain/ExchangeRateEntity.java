@@ -2,6 +2,7 @@ package liquid.persistence.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.math.BigDecimal;
 
 /**
  * TODO: Comments.
@@ -11,26 +12,19 @@ import javax.persistence.Entity;
  */
 @Entity(name = "OPS_EXCHANGE_RATE")
 public class ExchangeRateEntity extends BaseUpdateEntity {
+    public static final BigDecimal DEFAULT_EXCHANGE_RATE = new BigDecimal("6.09");
+
     /**
      * 1 usd = ? cny
      */
-    @Column(name = "VALUE")
-    private double value = 6.09;
+    @Column(precision = 19, scale = 4, name = "VALUE")
+    private BigDecimal value = DEFAULT_EXCHANGE_RATE;
 
-    public double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("ExchangeRate{");
-        sb.append("value=").append(value);
-        sb.append('}');
-        return sb.toString();
     }
 }
