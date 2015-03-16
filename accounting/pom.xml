@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>accounting</artifactId>
+    <artifactId>liquid-accounting</artifactId>
     <packaging>jar</packaging>
     <name>Accounting</name>
 
@@ -17,31 +17,31 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>audit</artifactId>
+            <artifactId>liquid-audit</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>accounting-api</artifactId>
+            <artifactId>liquid-accounting-api</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
+            <artifactId>liquid-container</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>order</artifactId>
+            <artifactId>liquid-order</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>purchase</artifactId>
+            <artifactId>liquid-purchase</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>transport</artifactId>
+            <artifactId>liquid-transport</artifactId>
         </dependency>
     </dependencies>
 </project>

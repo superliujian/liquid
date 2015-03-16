@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>container</artifactId>
+    <artifactId>liquid-container</artifactId>
     <packaging>jar</packaging>
     <name>Container</name>
 
@@ -21,11 +21,11 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>excel</artifactId>
+            <artifactId>liquid-excel</artifactId>
         </dependency>
 
         <!-- spring -->

@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>task-api</artifactId>
+    <artifactId>liquid-task-api</artifactId>
     <packaging>jar</packaging>
     <name>Task API</name>
 

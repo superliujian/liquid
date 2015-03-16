@@ -7,7 +7,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>web-console</artifactId>
+    <artifactId>liquid-web-console</artifactId>
     <packaging>war</packaging>
     <name>Web Console</name>
 
@@ -31,47 +31,47 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>liquid-util</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>audit</artifactId>
+            <artifactId>liquid-audit</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>user</artifactId>
+            <artifactId>liquid-user</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
+            <artifactId>liquid-container</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>order</artifactId>
+            <artifactId>liquid-order</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>task</artifactId>
+            <artifactId>liquid-task</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>transport</artifactId>
+            <artifactId>liquid-transport</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>accounting</artifactId>
+            <artifactId>liquid-accounting</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>config</artifactId>
+            <artifactId>liquid-config</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>excel</artifactId>
+            <artifactId>liquid-excel</artifactId>
         </dependency>
 
         <!-- servlet -->

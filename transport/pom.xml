@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>transport</artifactId>
+    <artifactId>liquid-transport</artifactId>
     <packaging>jar</packaging>
     <name>Transport</name>
 
@@ -16,23 +16,23 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>liquid-util</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>purchase-api</artifactId>
+            <artifactId>liquid-purchase-api</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
+            <artifactId>liquid-container</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>order</artifactId>
+            <artifactId>liquid-order</artifactId>
         </dependency>
     </dependencies>
 </project>

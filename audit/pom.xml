@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>audit</artifactId>
+    <artifactId>liquid-audit</artifactId>
     <packaging>jar</packaging>
     <name>Audit</name>
 
@@ -17,7 +17,7 @@
         <!-- spring -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
 
         <!-- spring -->

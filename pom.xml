@@ -42,87 +42,87 @@
             <!-- liquid -->
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>util</artifactId>
+                <artifactId>liquid-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>pinyin4j</artifactId>
+                <artifactId>liquid-pinyin4j</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>audit</artifactId>
+                <artifactId>liquid-audit</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>accounting-api</artifactId>
+                <artifactId>liquid-accounting-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>liquid-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>user</artifactId>
+                <artifactId>liquid-user</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>container</artifactId>
+                <artifactId>liquid-container</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>order-api</artifactId>
+                <artifactId>liquid-order-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>purchase-api</artifactId>
+                <artifactId>liquid-purchase-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>purchase</artifactId>
+                <artifactId>liquid-purchase</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>order</artifactId>
+                <artifactId>liquid-order</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>task-api</artifactId>
+                <artifactId>liquid-task-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>task</artifactId>
+                <artifactId>liquid-task</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>transport</artifactId>
+                <artifactId>liquid-transport</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>accounting</artifactId>
+                <artifactId>liquid-accounting</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>config</artifactId>
+                <artifactId>liquid-config</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>excel</artifactId>
+                <artifactId>liquid-excel</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

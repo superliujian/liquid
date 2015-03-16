@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>order</artifactId>
+    <artifactId>liquid-order</artifactId>
     <packaging>jar</packaging>
     <name>Order</name>
 
@@ -17,23 +17,23 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>task</artifactId>
+            <artifactId>liquid-task</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>container</artifactId>
+            <artifactId>liquid-container</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>order-api</artifactId>
+            <artifactId>liquid-order-api</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>accounting-api</artifactId>
+            <artifactId>liquid-accounting-api</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>pinyin4j</artifactId>
+    <artifactId>liquid-pinyin4j</artifactId>
     <packaging>jar</packaging>
     <name>Pinyin4j</name>
 

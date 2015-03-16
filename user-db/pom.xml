@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>user-db</artifactId>
+    <artifactId>liquid-user-db</artifactId>
     <packaging>war</packaging>
     <name>User Database Backend</name>
 

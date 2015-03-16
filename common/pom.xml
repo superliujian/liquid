@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>common</artifactId>
+    <artifactId>liquid-common</artifactId>
     <packaging>jar</packaging>
     <name>Common</name>
 
@@ -22,12 +22,12 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>liquid-util</artifactId>
         </dependency>
 
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>pinyin4j</artifactId>
+            <artifactId>liquid-pinyin4j</artifactId>
         </dependency>
 
         <!-- spring -->

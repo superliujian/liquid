@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>task</artifactId>
+    <artifactId>liquid-task</artifactId>
     <packaging>jar</packaging>
     <name>Task</name>
 
@@ -20,19 +20,19 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>liquid-util</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>user</artifactId>
+            <artifactId>liquid-user</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>task-api</artifactId>
+            <artifactId>liquid-task-api</artifactId>
         </dependency>
 
         <!-- spring -->

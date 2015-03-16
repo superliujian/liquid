@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>excel</artifactId>
+    <artifactId>liquid-excel</artifactId>
     <packaging>jar</packaging>
     <name>Excel</name>
 
