@@ -2,9 +2,9 @@ package liquid.accounting.web.controller;
 
 import liquid.accounting.facade.InvoiceFacade;
 import liquid.accounting.facade.ReceiptFacade;
-import liquid.accounting.web.domain.Statement;
 import liquid.accounting.web.domain.Invoice;
 import liquid.accounting.web.domain.Receipt;
+import liquid.accounting.web.domain.Statement;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
