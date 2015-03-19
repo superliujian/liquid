@@ -1,6 +1,6 @@
 package liquid.controller;
 
-import liquid.user.persistence.domain.Account;
+import liquid.user.domain.User;
 import liquid.user.persistence.domain.GroupType;
 import liquid.user.persistence.domain.PasswordChange;
 import liquid.user.service.AccountService;
@@ -41,27 +41,26 @@ public class AccountController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list(Model model, Principal principal) {
+    public String list(Model model) {
         List list = accountService.findAll();
         model.addAttribute("accounts", list);
         return "account/list";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String initRegister(Model model, Principal principal) {
-        model.addAttribute("account", new Account());
+    public String initRegister(Model model) {
+        model.addAttribute("account", new User());
         return "register";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(@Valid Account account,
-                           BindingResult bindingResult, Model model, Principal principal) {
-        logger.debug("account: {}", account);
+    public String register(@Valid User user, BindingResult bindingResult) {
+        logger.debug("user: {}", user);
         if (bindingResult.hasErrors()) {
             return "register";
         } else {
-            if (account.getPassword().equals(account.getPassword2())) {
-                accountService.register(account);
+            if (user.getPassword().equals(user.getPassword2())) {
+                accountService.register(user);
                 return "account/success";
             } else {
                 ObjectError objectError = new ObjectError("password", "passwords are not same.");
@@ -91,20 +90,20 @@ public class AccountController extends BaseController {
     public String initEdit(@PathVariable String uid, Model model) {
         logger.debug("uid: {}", uid);
 
-        Account account = accountService.find(uid);
-        model.addAttribute("account", account);
+        User user = accountService.find(uid);
+        model.addAttribute("user", user);
 
         return "account/edit";
     }
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
-    public String edit(@PathVariable String uid, Account account, BindingResult bindingResult) {
+    public String edit(@PathVariable String uid, User user, BindingResult bindingResult) {
         logger.debug("uid: {}", uid);
-        logger.debug("account: {}", account);
+        logger.debug("user: {}", user);
         if (bindingResult.hasErrors()) {
             return "account/edit";
         } else {
-            accountService.edit(account);
+            accountService.edit(user);
         }
 
         return "redirect:/account";

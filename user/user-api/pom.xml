@@ -7,16 +7,14 @@
         <version>2.1.53-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>liquid.user</groupId>
+    <groupId>liquid</groupId>
     <artifactId>liquid-user-api</artifactId>
     <name>User API</name>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
     </dependencies>
 </project>

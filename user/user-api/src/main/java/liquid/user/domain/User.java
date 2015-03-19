@@ -1,4 +1,4 @@
-package liquid.user.persistence.domain;
+package liquid.user.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * Date: 10/6/13
  * Time: 11:36 AM
  */
-public class Account {
+public class User {
     @NotNull
     @NotEmpty
     private String uid;

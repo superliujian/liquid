@@ -1,6 +1,10 @@
 package liquid.user.service;
 
-import liquid.user.persistence.domain.*;
+import liquid.user.domain.Group;
+import liquid.user.domain.User;
+import liquid.user.persistence.domain.GroupType;
+import liquid.user.persistence.domain.PasswordChange;
+import liquid.user.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +48,20 @@ public class AccountService {
 //    @Autowired
 //    private MessageSource messageSource;
 
-    public void register(Account account) {
+    public void register(User user) {
         // throw NameAlreadyBoundException
-        createPerson(account);
+        createPerson(user);
 
         // add the person to group in ldap.
-        Group group = findGroupByName(account.getGroup());
-        group.getUniqueMembers().add(buildAccountDn(account).toString() + ",dc=suncapital-logistics,dc=com");
+        Group group = findGroupByName(user.getGroup());
+        group.getUniqueMembers().add(buildAccountDn(user).toString() + ",dc=suncapital-logistics,dc=com");
         updateGroup(group);
 
         // Send mail notification
-        List<Account> accounts = findAll(GroupType.ADMIN.getType());
-        String[] mailTo = new String[accounts.size()];
+        List<User> users = findAll(GroupType.ADMIN.getType());
+        String[] mailTo = new String[users.size()];
         for (int i = 0; i < mailTo.length; i++) {
-            mailTo[i] = accounts.get(i).getEmail();
+            mailTo[i] = users.get(i).getEmail();
         }
         logger.debug("The mail list of the administrator role is {}.", mailTo);
 
@@ -71,15 +75,15 @@ public class AccountService {
 //                account.getEmail());
     }
 
-    public void createPerson(Account account) {
-        ldapOperations.bind(buildAccountDn(account), setAccountAttributes(new DirContextAdapter(), account), null);
+    public void createPerson(User user) {
+        ldapOperations.bind(buildAccountDn(user), setAccountAttributes(new DirContextAdapter(), user), null);
     }
 
-    private LdapName buildAccountDn(Account account) {
+    private LdapName buildAccountDn(User user) {
         try {
             List<Rdn> rdns = new ArrayList<>();
             rdns.add(new Rdn("ou", "people"));
-            rdns.add(new Rdn("uid", account.getUid()));
+            rdns.add(new Rdn("uid", user.getUid()));
             LdapName dn = new LdapName(rdns);
             return dn;
         } catch (InvalidNameException e) {
@@ -87,34 +91,34 @@ public class AccountService {
         }
     }
 
-    public List<Account> findAll() {
+    public List<User> findAll() {
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         searchControls.setDerefLinkFlag(true);
         searchControls.setReturningAttributes(new String[]{"uid", "ou", "mail", "pwdAccountLockedTime"});
 
-        List<Account> accounts = ldapOperations.search(
+        List<User> users = ldapOperations.search(
                 "", "(objectclass=person)", searchControls,
-                new AttributesMapper<Account>() {
-                    public Account mapFromAttributes(Attributes attrs)
+                new AttributesMapper<User>() {
+                    public User mapFromAttributes(Attributes attrs)
                             throws NamingException {
-                        Account account = new Account();
-                        account.setUid(attr2Str(attrs.get("uid")));
-                        account.setGroup(attr2Str(attrs.get("ou")));
-                        account.setEmail(attr2Str(attrs.get("mail")));
+                        User user = new User();
+                        user.setUid(attr2Str(attrs.get("uid")));
+                        user.setGroup(attr2Str(attrs.get("ou")));
+                        user.setEmail(attr2Str(attrs.get("mail")));
 
                         Attribute pwdAccountLockedTime = attrs.get("pwdAccountLockedTime");
                         if (null != pwdAccountLockedTime)
-                            account.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
-                        return account;
+                            user.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
+                        return user;
                     }
                 }
         );
 
-        return accounts;
+        return users;
     }
 
-    public Account find(String uid) {
+    public User find(String uid) {
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         searchControls.setDerefLinkFlag(true);
@@ -124,28 +128,28 @@ public class AccountService {
         filter.and(new EqualsFilter("objectclass", "person"));
         filter.and(new EqualsFilter("uid", uid));
 
-        List<Account> accounts = ldapOperations.search(
+        List<User> users = ldapOperations.search(
                 "", filter.encode(), searchControls,
-                new AttributesMapper<Account>() {
-                    public Account mapFromAttributes(Attributes attrs)
+                new AttributesMapper<User>() {
+                    public User mapFromAttributes(Attributes attrs)
                             throws NamingException {
-                        Account account = new Account();
-                        account.setUid(attr2Str(attrs.get("uid")));
-                        account.setGivenName(attr2Str(attrs.get("givenName")));
-                        account.setSurname(attr2Str(attrs.get("sn")));
-                        account.setGroup(attr2Str(attrs.get("ou")));
-                        account.setEmail(attr2Str(attrs.get("mail")));
+                        User user = new User();
+                        user.setUid(attr2Str(attrs.get("uid")));
+                        user.setGivenName(attr2Str(attrs.get("givenName")));
+                        user.setSurname(attr2Str(attrs.get("sn")));
+                        user.setGroup(attr2Str(attrs.get("ou")));
+                        user.setEmail(attr2Str(attrs.get("mail")));
 
                         Attribute pwdAccountLockedTime = attrs.get("pwdAccountLockedTime");
                         if (null != pwdAccountLockedTime)
-                            account.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
-                        return account;
+                            user.setPwdAccountLockedTime(pwdAccountLockedTime.get().toString());
+                        return user;
                     }
                 }
         );
 
-        if (null != accounts && accounts.size() > 0) {
-            return accounts.get(0);
+        if (null != users && users.size() > 0) {
+            return users.get(0);
         } else {
             throw new RuntimeException(String.format("Account %s not found.", uid));
         }
@@ -205,21 +209,21 @@ public class AccountService {
         return result;
     }
 
-    public List<Account> findAll(String groupName) {
+    public List<User> findAll(String groupName) {
         Group group = findGroup(groupName);
         Set<String> uniqueMembers = group.getUniqueMembers();
         if (null == uniqueMembers || uniqueMembers.size() < 1) {
             return Collections.emptyList();
         }
 
-        List<Account> accounts = new ArrayList<>(uniqueMembers.size());
+        List<User> users = new ArrayList<>(uniqueMembers.size());
         for (String uniqueMember : uniqueMembers) {
             String[] fields = uniqueMember.split(",");
             String[] uid = fields[0].split("=");
-            Account account = find(uid[1]);
-            accounts.add(account);
+            User user = find(uid[1]);
+            users.add(user);
         }
-        return accounts;
+        return users;
     }
 
     public List<Group> findAllGroups() {
@@ -285,8 +289,8 @@ public class AccountService {
     }
 
     public void unlock(String uid) {
-        Account account = find(uid);
-        Name dn = buildAccountDn(account);
+        User user = find(uid);
+        Name dn = buildAccountDn(user);
         Attribute attr = new BasicAttribute("pwdAccountLockedTime");
         ModificationItem item = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attr);
         ldapOperations.modifyAttributes(dn, new ModificationItem[]{item});
@@ -297,8 +301,8 @@ public class AccountService {
     }
 
     public void lock(String uid) {
-        Account account = find(uid);
-        Name dn = buildAccountDn(account);
+        User user = find(uid);
+        Name dn = buildAccountDn(user);
         Attribute attr = new BasicAttribute("pwdAccountLockedTime", date2string());
         ModificationItem item = new ModificationItem(DirContext.ADD_ATTRIBUTE, attr);
         ldapOperations.modifyAttributes(dn, new ModificationItem[]{item});
@@ -308,9 +312,9 @@ public class AccountService {
 //                account.getEmail());
     }
 
-    public void edit(Account newOne) {
-        Account account = find(newOne.getUid());
-        Name dn = buildAccountDn(account);
+    public void edit(User newOne) {
+        User user = find(newOne.getUid());
+        Name dn = buildAccountDn(user);
 
         DirContextOperations context = ldapOperations.lookupContext(dn);
         context.setAttributeValues("objectclass", new String[]{"top",
@@ -321,8 +325,8 @@ public class AccountService {
     }
 
     public void resetPassword(String uid, PasswordChange passwordChange) {
-        Account account = find(uid);
-        Name dn = buildAccountDn(account);
+        User user = find(uid);
+        Name dn = buildAccountDn(user);
 
         DirContextOperations context = ldapOperations.lookupContext(dn);
         context.setAttributeValues("objectclass", new String[]{"top",
@@ -348,17 +352,17 @@ public class AccountService {
         }
     }
 
-    private DirContextOperations setAccountAttributes(DirContextOperations adapter, Account account) {
+    private DirContextOperations setAccountAttributes(DirContextOperations adapter, User user) {
         adapter.setAttributeValues("objectclass", new String[]{"top",
                 "person", "organizationalPerson", "inetOrgPerson"});
-        adapter.setAttributeValue("sn", account.getSurname());
-        adapter.setAttributeValue("gn", account.getGivenName());
-        adapter.setAttributeValue("ou", account.getGroup());
-        adapter.setAttributeValue("userPassword", account.getPassword());
-        adapter.setAttributeValue("description", account.getDescription());
-        adapter.setAttributeValue("telephoneNumber", account.getCell());
-        adapter.setAttributeValue("cn", account.getSurname() + account.getGivenName());
-        adapter.setAttributeValue("mail", account.getEmail());
+        adapter.setAttributeValue("sn", user.getSurname());
+        adapter.setAttributeValue("gn", user.getGivenName());
+        adapter.setAttributeValue("ou", user.getGroup());
+        adapter.setAttributeValue("userPassword", user.getPassword());
+        adapter.setAttributeValue("description", user.getDescription());
+        adapter.setAttributeValue("telephoneNumber", user.getCell());
+        adapter.setAttributeValue("cn", user.getSurname() + user.getGivenName());
+        adapter.setAttributeValue("mail", user.getEmail());
 
         adapter.setAttributeValue("pwdAccountLockedTime", date2string());
         return adapter;
@@ -423,12 +427,12 @@ public class AccountService {
 
     private static class PersonContextMapper extends AbstractContextMapper {
         public Object doMapFromContext(DirContextOperations context) {
-            Account account = new Account();
-            account.setUid(context.getStringAttribute("cn"));
-            account.setSurname(context.getStringAttribute("sn"));
-            account.setDescription(context.getStringAttribute("description"));
-            account.setPwdAccountLockedTime(context.getStringAttribute("pwdAccountLockedTime"));
-            return account;
+            User user = new User();
+            user.setUid(context.getStringAttribute("cn"));
+            user.setSurname(context.getStringAttribute("sn"));
+            user.setDescription(context.getStringAttribute("description"));
+            user.setPwdAccountLockedTime(context.getStringAttribute("pwdAccountLockedTime"));
+            return user;
         }
     }
 

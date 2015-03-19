@@ -2,7 +2,7 @@ package liquid.task.service;
 
 import liquid.service.MailNotificationService;
 import liquid.task.domain.BusinessKey;
-import liquid.user.persistence.domain.Account;
+import liquid.user.domain.User;
 import liquid.user.service.AccountService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
@@ -64,10 +64,10 @@ public class ActivitiEngineService {
         org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         taskService.claim(taskId, uid);
 
-        Account account = accountService.find(uid);
+        User user = accountService.find(uid);
         mailNotificationService.send(messageSource.getMessage("claim.task", null, Locale.CHINA),
                 messageSource.getMessage("claim.task.content", new String[]{uid}, Locale.CHINA),
-                account.getEmail());
+                user.getEmail());
     }
 
     public void complete(String taskId, String uid, Map<String, Object> variableMap) {
@@ -76,10 +76,10 @@ public class ActivitiEngineService {
         org.activiti.engine.TaskService taskService = processEngine.getTaskService();
         taskService.complete(taskId, variableMap);
 
-        Account account = accountService.find(uid);
+        User user = accountService.find(uid);
         mailNotificationService.send(messageSource.getMessage("complete.task", null, Locale.CHINA),
                 messageSource.getMessage("complete.task.content", new String[]{uid}, Locale.CHINA),
-                account.getEmail());
+                user.getEmail());
     }
 
     public List<Task> listTasks(String candidateGid) {

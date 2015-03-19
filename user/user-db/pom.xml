@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>liquid.user</groupId>
+    <groupId>liquid</groupId>
     <artifactId>liquid-user-db</artifactId>
     <packaging>war</packaging>
     <name>User Database Backend</name>

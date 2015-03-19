@@ -1,4 +1,4 @@
-package liquid.user.persistence.domain;
+package liquid.user.domain;
 
 import java.util.Set;
 import java.util.TreeSet;

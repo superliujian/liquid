@@ -66,6 +66,11 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
+                <artifactId>liquid-user-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
                 <artifactId>liquid-user-ldap</artifactId>
                 <version>${project.version}</version>
             </dependency>
