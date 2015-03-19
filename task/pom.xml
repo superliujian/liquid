@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-user</artifactId>
+            <artifactId>liquid-user-ldap</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>

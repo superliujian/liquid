@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by Tao Ma on 3/18/15.
  */
 @Service
-public class GroupService {
+public class UserService {
 
     @Autowired
     private GroupRepository repository;
