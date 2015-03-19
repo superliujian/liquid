@@ -11,7 +11,7 @@
 <br/>
 
 <div id="f" class="container">
-    <form action="/account/register" method="POST" th:object="${account}">
+    <form action="/account/register" method="POST" th:object="${user}">
 
         <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">
             <label th:text="#{account.uid}">Account UID</label>

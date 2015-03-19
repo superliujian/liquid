@@ -1,6 +1,7 @@
 package liquid.user.service;
 
 import liquid.user.domain.Group;
+import liquid.user.domain.PasswordChange;
 import liquid.user.domain.User;
 
 import java.util.Collection;
@@ -15,7 +16,17 @@ public interface UserService {
 
     void register(User user);
 
+    boolean authenticate(String userDn, String credentials);
+
     User find(String uid);
 
     Collection<User> findAll();
+
+    void lock(String uid);
+
+    void unlock(String uid);
+
+    void edit(User user);
+
+    void resetPassword(String uid, PasswordChange passwordChange);
 }

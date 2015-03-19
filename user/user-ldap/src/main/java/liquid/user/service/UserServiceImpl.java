@@ -3,7 +3,7 @@ package liquid.user.service;
 import liquid.user.domain.Group;
 import liquid.user.domain.User;
 import liquid.user.persistence.domain.GroupType;
-import liquid.user.persistence.domain.PasswordChange;
+import liquid.user.domain.PasswordChange;
 import liquid.user.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +33,8 @@ import java.util.*;
  * Time: 12:22 PM
  */
 @Service
-public class AccountService {
-    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
+public class UserServiceImpl implements UserService {
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private LdapContextSource contextSource;
@@ -48,6 +48,17 @@ public class AccountService {
 //    @Autowired
 //    private MessageSource messageSource;
 
+    @Override
+    public Group addGroup(Group group) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Collection<Group> findGroups() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void register(User user) {
         // throw NameAlreadyBoundException
         createPerson(user);

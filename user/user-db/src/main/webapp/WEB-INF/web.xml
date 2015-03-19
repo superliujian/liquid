@@ -20,7 +20,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            liquid.user.config.SecurityConfig
+            liquid.user.db.config.SecurityConfig
         </param-value>
     </context-param>
 

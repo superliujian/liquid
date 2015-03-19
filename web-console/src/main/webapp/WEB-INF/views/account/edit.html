@@ -10,7 +10,7 @@
 
 <div class="container">
     <form action="/account/uid" method="POST" class="form-horizontal center"
-          th:object="${account}" th:action="'/account/' + *{uid}">
+          th:object="${user}" th:action="'/account/' + *{uid}">
 
         <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">
             <label class="col-lg-3 control-label" th:text="#{account.uid}">Account UID</label>

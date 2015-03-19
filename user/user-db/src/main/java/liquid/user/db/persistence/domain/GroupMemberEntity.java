@@ -1,4 +1,4 @@
-package liquid.user.persistence.domain;
+package liquid.user.db.persistence.domain;
 
 import javax.persistence.*;
 

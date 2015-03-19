@@ -1,4 +1,4 @@
-package liquid.user.facade;
+package liquid.user.db.facade;
 
 import org.springframework.stereotype.Service;
 

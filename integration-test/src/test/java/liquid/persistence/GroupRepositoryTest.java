@@ -1,10 +1,10 @@
 package liquid.persistence;
 
-import liquid.user.config.JpaConfig;
-import liquid.user.persistence.domain.GroupEntity;
-import liquid.user.persistence.domain.GroupMemberEntity;
-import liquid.user.persistence.repository.GroupMemberRepository;
-import liquid.user.persistence.repository.GroupRepository;
+import liquid.user.db.config.JpaConfig;
+import liquid.user.db.persistence.domain.GroupEntity;
+import liquid.user.db.persistence.domain.GroupMemberEntity;
+import liquid.user.db.persistence.repository.GroupMemberRepository;
+import liquid.user.db.persistence.repository.GroupRepository;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

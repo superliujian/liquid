@@ -1,7 +1,7 @@
 package liquid.service;
 
 import liquid.config.LdapConfig;
-import liquid.user.service.AccountService;
+import liquid.user.service.UserServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -15,10 +15,10 @@ public class AccountServiceItemTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(LdapConfig.class);
         context.register(MailNotificationService.class);
-        context.register(AccountService.class);
+        context.register(UserServiceImpl.class);
         context.refresh();
 
-        AccountService accountService = context.getBean(AccountService.class);
+        UserServiceImpl accountService = context.getBean(UserServiceImpl.class);
         Assert.assertEquals(3, accountService.fetchPasswordPolicy().getPwdMaxFailure());
     }
 }

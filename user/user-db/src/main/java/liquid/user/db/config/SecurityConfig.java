@@ -1,4 +1,4 @@
-package liquid.user.config;
+package liquid.user.db.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

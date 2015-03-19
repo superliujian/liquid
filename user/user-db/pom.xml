@@ -19,6 +19,12 @@
     </properties>
 
     <dependencies>
+        <!-- liquid -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-user-api</artifactId>
+        </dependency>
+
         <!-- servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>

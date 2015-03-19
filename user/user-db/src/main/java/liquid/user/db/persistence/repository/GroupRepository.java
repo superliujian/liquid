@@ -1,6 +1,6 @@
-package liquid.user.persistence.repository;
+package liquid.user.db.persistence.repository;
 
-import liquid.user.persistence.domain.GroupEntity;
+import liquid.user.db.persistence.domain.GroupEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

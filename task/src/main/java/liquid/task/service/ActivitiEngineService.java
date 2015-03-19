@@ -3,7 +3,7 @@ package liquid.task.service;
 import liquid.service.MailNotificationService;
 import liquid.task.domain.BusinessKey;
 import liquid.user.domain.User;
-import liquid.user.service.AccountService;
+import liquid.user.service.UserServiceImpl;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.HistoryService;
@@ -36,7 +36,7 @@ public class ActivitiEngineService {
     private ProcessEngine processEngine;
 
     @Autowired
-    private AccountService accountService;
+    private UserServiceImpl accountService;
 
     @Autowired
     private MailNotificationService mailNotificationService;

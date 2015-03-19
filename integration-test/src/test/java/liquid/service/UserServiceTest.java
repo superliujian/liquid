@@ -1,8 +1,8 @@
 package liquid.service;
 
 
-import liquid.user.config.JpaConfig;
-import liquid.user.persistence.domain.GroupEntity;
+import liquid.user.db.config.JpaConfig;
+import liquid.user.db.persistence.domain.GroupEntity;
 import liquid.user.service.UserService;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
