@@ -2,8 +2,8 @@ package liquid.user.db.service;
 
 import liquid.user.db.repository.GroupRepository;
 import liquid.user.domain.Group;
-import liquid.user.domain.PasswordChange;
-import liquid.user.domain.User;
+import liquid.user.model.PasswordChange;
+import liquid.user.model.User;
 import liquid.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private GroupRepository repository;
 
     @Transactional
-    public Group find(Long id) {
+    public Group find(Integer id) {
         Group group = repository.findOne(id);
         if (null != group) {
             group.getMembers().size();

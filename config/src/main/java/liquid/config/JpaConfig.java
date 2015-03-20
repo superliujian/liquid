@@ -64,7 +64,8 @@ public class JpaConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("liquid.persistence.domain",
+        factory.setPackagesToScan(
+                "liquid.persistence.domain",
                 "liquid.container.persistence.domain",
                 "liquid.order.persistence.domain",
                 "liquid.transport.persistence.domain",

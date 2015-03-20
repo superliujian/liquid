@@ -1,7 +1,7 @@
 package liquid.controller;
 
-import liquid.user.domain.PasswordChange;
-import liquid.user.domain.User;
+import liquid.user.model.PasswordChange;
+import liquid.user.model.User;
 import liquid.user.service.UserService;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;

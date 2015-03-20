@@ -1,8 +1,8 @@
 package liquid.user.service;
 
 import liquid.user.domain.Group;
-import liquid.user.domain.PasswordChange;
-import liquid.user.domain.User;
+import liquid.user.model.PasswordChange;
+import liquid.user.model.User;
 
 import java.util.Collection;
 

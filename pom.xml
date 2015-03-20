@@ -76,6 +76,11 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
+                <artifactId>liquid-user-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
                 <artifactId>liquid-container</artifactId>
                 <version>${project.version}</version>
             </dependency>

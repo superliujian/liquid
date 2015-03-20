@@ -2,8 +2,8 @@ package liquid.user.service;
 
 import liquid.user.domain.Group;
 import liquid.user.domain.GroupMember;
-import liquid.user.domain.PasswordChange;
-import liquid.user.domain.User;
+import liquid.user.model.PasswordChange;
+import liquid.user.model.User;
 import liquid.user.persistence.domain.GroupType;
 import liquid.user.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
@@ -67,27 +67,28 @@ public class UserServiceImpl implements UserService {
         GroupType[] values = GroupType.values();
         for (GroupType value : values) {
             Group group = null;
+            String name = messageSource.getMessage(value.getI18nKey(), null, locale);
             switch (value.getType()) {
                 case "sales":
-                    group = new Group(1L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(1, name);
                     break;
                 case "marketing":
-                    group = new Group(2L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(2, name);
                     break;
                 case "operating":
-                    group = new Group(3L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(3, name);
                     break;
                 case "container":
-                    group = new Group(4L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(4, name);
                     break;
                 case "field":
-                    group = new Group(5L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(5, name);
                     break;
                 case "commerce":
-                    group = new Group(6L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(6, name);
                     break;
                 case "admin":
-                    group = new Group(7L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    group = new Group(7, name);
                     break;
             }
             if (null != group) {
@@ -97,24 +98,24 @@ public class UserServiceImpl implements UserService {
         return groups;
     }
 
-    private Long groupTypeToId(String type) {
+    private Integer groupTypeToId(String type) {
         switch (type) {
             case "sales":
-                return 1L;
+                return 1;
             case "marketing":
-                return 2L;
+                return 2;
             case "operating":
-                return 3L;
+                return 3;
             case "container":
-                return 4L;
+                return 4;
             case "field":
-                return 5L;
+                return 5;
             case "commerce":
-                return 6L;
+                return 6;
             case "admin":
-                return 7L;
+                return 7;
             default:
-                return 0L;
+                return 0;
         }
     }
 
@@ -148,7 +149,10 @@ public class UserServiceImpl implements UserService {
 
         // add the person to group in ldap.
         Group group = findGroupByName(user.getGroup());
-        group.getMembers().add(new GroupMember(buildAccountDn(user).toString() + ",dc=suncapital-logistics,dc=com", group));
+        GroupMember member = new GroupMember();
+        member.setUsername(buildAccountDn(user).toString() + ",dc=suncapital-logistics,dc=com");
+        member.setGroup(group);
+        group.getMembers().add(member);
         updateGroup(group);
 
         // Send mail notification
@@ -370,7 +374,10 @@ public class UserServiceImpl implements UserService {
                                 while (values.hasMore()) {
                                     Object memberObj = values.next();
                                     if (null != memberObj) {
-                                        uniqueMembers.add(new GroupMember(memberObj.toString(), group));
+                                        GroupMember member = new GroupMember();
+                                        member.setUsername(memberObj.toString());
+                                        member.setGroup(group);
+                                        uniqueMembers.add(member);
                                     }
                                 }
                             }
@@ -485,7 +492,10 @@ public class UserServiceImpl implements UserService {
                     Collection<GroupMember> members = new ArrayList<GroupMember>();
                     List<String> list = Arrays.asList(membersArray);
                     for (String s : list) {
-                        members.add(new GroupMember(s, group));
+                        GroupMember member = new GroupMember();
+                        member.setUsername(s);
+                        member.setGroup(group);
+                        members.add(member);
                     }
                     group.setMembers(members);
                 }

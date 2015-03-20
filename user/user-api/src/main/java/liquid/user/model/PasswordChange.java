@@ -1,4 +1,4 @@
-package liquid.user.domain;
+package liquid.user.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

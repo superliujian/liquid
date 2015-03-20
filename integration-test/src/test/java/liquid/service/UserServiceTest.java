@@ -1,7 +1,7 @@
 package liquid.service;
 
 
-import liquid.user.db.config.JpaConfig;
+import liquid.user.db.config.UserJpaConfig;
 import liquid.user.domain.Group;
 import liquid.user.service.UserService;
 import org.junit.Test;
@@ -15,11 +15,11 @@ public class UserServiceTest {
     @Test
     public void testFind() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(JpaConfig.class);
+        context.register(UserJpaConfig.class);
         context.register(UserService.class);
         context.refresh();
 
         UserService userService = (UserService) context.getBean(UserService.class);
-        Group group = userService.find(2L);
+        Group group = userService.find(2);
     }
 }

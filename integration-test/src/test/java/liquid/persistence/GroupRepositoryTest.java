@@ -1,6 +1,6 @@
 package liquid.persistence;
 
-import liquid.user.db.config.JpaConfig;
+import liquid.user.db.config.UserJpaConfig;
 import liquid.user.domain.Group;
 import liquid.user.domain.GroupMember;
 import liquid.user.db.repository.GroupMemberRepository;
@@ -15,7 +15,7 @@ public class GroupRepositoryTest {
     @Test
     public void addGroup() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(JpaConfig.class);
+        context.register(UserJpaConfig.class);
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
@@ -26,7 +26,7 @@ public class GroupRepositoryTest {
     @Test
     public void addMemberToGroup() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(JpaConfig.class);
+        context.register(UserJpaConfig.class);
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
@@ -38,7 +38,7 @@ public class GroupRepositoryTest {
     @Test
     public void findGroup() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(JpaConfig.class);
+        context.register(UserJpaConfig.class);
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
@@ -49,7 +49,7 @@ public class GroupRepositoryTest {
     @Test
     public void findAllGroup() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(JpaConfig.class);
+        context.register(UserJpaConfig.class);
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);

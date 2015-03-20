@@ -2,7 +2,7 @@ package liquid.task.service;
 
 import liquid.service.MailNotificationService;
 import liquid.task.domain.BusinessKey;
-import liquid.user.domain.User;
+import liquid.user.model.User;
 import liquid.user.service.UserServiceImpl;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;

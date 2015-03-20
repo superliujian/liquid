@@ -21,9 +21,12 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories({"liquid.user.persistence.repository"})
-public class JpaConfig {
-    @Bean
+@EnableJpaRepositories(
+        entityManagerFactoryRef = "userEntityManagerFactory",
+        transactionManagerRef = "userTransactionManager",
+        basePackages = {"liquid.user.db.repository"})
+public class UserJpaConfig {
+    @Bean(name = "userDataSource")
     public DataSource dataSource() throws SQLException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
@@ -33,8 +36,8 @@ public class JpaConfig {
         return dataSource;
     }
 
-    @Bean
-    public EntityManagerFactory entityManagerFactory() throws SQLException {
+    @Bean(name = "userEntityManagerFactory")
+    public EntityManagerFactory userEntityManagerFactory() throws SQLException {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
@@ -44,7 +47,7 @@ public class JpaConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("liquid.user.persistence.domain");
+        factory.setPackagesToScan("liquid.user.domain");
         factory.setDataSource(dataSource());
         factory.setJpaProperties(jpaProperties);
         factory.afterPropertiesSet();
@@ -57,10 +60,10 @@ public class JpaConfig {
         return entityManagerFactory.createEntityManager();
     }
 
-    @Bean
+    @Bean(name = "userTransactionManager")
     public PlatformTransactionManager transactionManager() throws SQLException {
         JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(entityManagerFactory());
+        txManager.setEntityManagerFactory(userEntityManagerFactory());
         return txManager;
     }
 }

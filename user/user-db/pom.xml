@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
     <artifactId>liquid-user-db</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>User Database Backend</name>
 
     <properties>
