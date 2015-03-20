@@ -20,6 +20,9 @@ public class Group {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
     private Collection<GroupMember> members;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
+    private Collection<GroupAuthority> authorities;
+
     public Group() { }
 
     public Group(Integer id, String name) {
@@ -49,5 +52,13 @@ public class Group {
 
     public void setMembers(Collection<GroupMember> members) {
         this.members = members;
+    }
+
+    public Collection<GroupAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<GroupAuthority> authorities) {
+        this.authorities = authorities;
     }
 }

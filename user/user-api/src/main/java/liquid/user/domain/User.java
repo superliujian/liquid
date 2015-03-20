@@ -1,8 +1,7 @@
 package liquid.user.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created by Tao Ma on 3/20/15.
@@ -19,6 +18,9 @@ public class User {
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private Collection<Authority> authorities;
 
     public String getUsername() {
         return username;
@@ -42,5 +44,13 @@ public class User {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Collection<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<Authority> authorities) {
+        this.authorities = authorities;
     }
 }
