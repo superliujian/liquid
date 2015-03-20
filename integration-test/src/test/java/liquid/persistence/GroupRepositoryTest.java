@@ -1,10 +1,10 @@
 package liquid.persistence;
 
 import liquid.user.db.config.JpaConfig;
-import liquid.user.db.persistence.domain.GroupEntity;
-import liquid.user.db.persistence.domain.GroupMemberEntity;
-import liquid.user.db.persistence.repository.GroupMemberRepository;
-import liquid.user.db.persistence.repository.GroupRepository;
+import liquid.user.domain.Group;
+import liquid.user.domain.GroupMember;
+import liquid.user.db.repository.GroupMemberRepository;
+import liquid.user.db.repository.GroupRepository;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -19,7 +19,7 @@ public class GroupRepositoryTest {
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
-        GroupEntity group = new GroupEntity("MARKETING");
+        Group group = new Group("MARKETING");
         groupRepository.save(group);
     }
 
@@ -31,7 +31,7 @@ public class GroupRepositoryTest {
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
         GroupMemberRepository groupMemberRepository = (GroupMemberRepository) context.getBean(GroupMemberRepository.class);
-        GroupMemberEntity member = new GroupMemberEntity("redbrick9", new GroupEntity(1L));
+        GroupMember member = new GroupMember("redbrick9", new Group(1L));
         groupMemberRepository.save(member);
     }
 
@@ -42,7 +42,7 @@ public class GroupRepositoryTest {
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
-        GroupEntity group = groupRepository.findOne(1L);
+        Group group = groupRepository.findOne(1L);
         System.out.println(group.getMembers().size());
     }
 
@@ -53,8 +53,8 @@ public class GroupRepositoryTest {
         context.refresh();
 
         GroupRepository groupRepository = (GroupRepository) context.getBean(GroupRepository.class);
-        Iterable<GroupEntity> groups = groupRepository.findAll();
-        for (GroupEntity group : groups) {
+        Iterable<Group> groups = groupRepository.findAll();
+        for (Group group : groups) {
             System.out.println(group.getId());
         }
     }

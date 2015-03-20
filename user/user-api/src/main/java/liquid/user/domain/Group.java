@@ -1,18 +1,47 @@
 package liquid.user.domain;
 
-import java.util.Set;
-import java.util.TreeSet;
+
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
- * TODO: Comments.
- * User: tao
- * Date: 10/6/13
- * Time: 12:34 PM
+ * Created by Tao Ma on 3/17/15.
  */
+@Entity(name = "groups")
 public class Group {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "group_name")
     private String name;
 
-    private Set<String> uniqueMembers = new TreeSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
+    private Collection<GroupMember> members;
+
+    public Group() { }
+
+    public Group(Long id) {
+        this.id = id;
+    }
+
+    public Group(String name) {
+        this.name = name;
+    }
+
+    public Group(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -22,21 +51,11 @@ public class Group {
         this.name = name;
     }
 
-    public Set<String> getUniqueMembers() {
-        return uniqueMembers;
+    public Collection<GroupMember> getMembers() {
+        return members;
     }
 
-    public void setUniqueMembers(Set<String> uniqueMembers) {
-        this.uniqueMembers = uniqueMembers;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("Group{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", uniqueMembers=").append(uniqueMembers);
-        sb.append('}');
-        return sb.toString();
+    public void setMembers(Collection<GroupMember> members) {
+        this.members = members;
     }
 }

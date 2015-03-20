@@ -79,7 +79,7 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
-                liquid.user.web.config.WebConfig
+                liquid.user.db.config.WebConfig
             </param-value>
         </init-param>
     </servlet>

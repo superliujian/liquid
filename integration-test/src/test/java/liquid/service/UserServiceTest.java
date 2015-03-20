@@ -2,7 +2,7 @@ package liquid.service;
 
 
 import liquid.user.db.config.JpaConfig;
-import liquid.user.db.persistence.domain.GroupEntity;
+import liquid.user.domain.Group;
 import liquid.user.service.UserService;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,6 +20,6 @@ public class UserServiceTest {
         context.refresh();
 
         UserService userService = (UserService) context.getBean(UserService.class);
-        GroupEntity group = userService.find(2L);
+        Group group = userService.find(2L);
     }
 }

@@ -1,13 +1,15 @@
 package liquid.user.service;
 
 import liquid.user.domain.Group;
+import liquid.user.domain.GroupMember;
+import liquid.user.domain.PasswordChange;
 import liquid.user.domain.User;
 import liquid.user.persistence.domain.GroupType;
-import liquid.user.domain.PasswordChange;
 import liquid.user.persistence.domain.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ldap.core.*;
 import org.springframework.ldap.core.support.AbstractContextMapper;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -40,7 +42,13 @@ public class UserServiceImpl implements UserService {
     private LdapContextSource contextSource;
 
     @Autowired
+    private Locale locale;
+
+    @Autowired
     private LdapOperations ldapOperations;
+
+    @Autowired
+    protected MessageSource messageSource;
 
 //    @Autowired
 //    private MailNotificationService mailNotificationService;
@@ -55,17 +63,92 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<Group> findGroups() {
-        throw new UnsupportedOperationException();
+        Collection<Group> groups = new ArrayList<>();
+        GroupType[] values = GroupType.values();
+        for (GroupType value : values) {
+            Group group = null;
+            switch (value.getType()) {
+                case "sales":
+                    group = new Group(1L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+                case "marketing":
+                    group = new Group(2L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+                case "operating":
+                    group = new Group(3L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+                case "container":
+                    group = new Group(4L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+                case "field":
+                    group = new Group(5L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+                case "commerce":
+                    group = new Group(6L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+                case "admin":
+                    group = new Group(7L, messageSource.getMessage(value.getI18nKey(), null, locale));
+                    break;
+            }
+            if (null != group) {
+                groups.add(group);
+            }
+        }
+        return groups;
+    }
+
+    private Long groupTypeToId(String type) {
+        switch (type) {
+            case "sales":
+                return 1L;
+            case "marketing":
+                return 2L;
+            case "operating":
+                return 3L;
+            case "container":
+                return 4L;
+            case "field":
+                return 5L;
+            case "commerce":
+                return 6L;
+            case "admin":
+                return 7L;
+            default:
+                return 0L;
+        }
+    }
+
+    private String groupIdToType(Integer id) {
+        switch (id) {
+            case 1:
+                return "sales";
+            case 2:
+                return "marketing";
+            case 3:
+                return "operating";
+            case 4:
+                return "container";
+            case 5:
+                return "field";
+            case 6:
+                return "commerce";
+            case 7:
+                return "admin";
+            default:
+                return "";
+        }
     }
 
     @Override
     public void register(User user) {
+        // gid -> group name. TODO: temporary solution
+        user.setGroup(groupIdToType(Integer.valueOf(user.getGroup())));
         // throw NameAlreadyBoundException
         createPerson(user);
 
         // add the person to group in ldap.
         Group group = findGroupByName(user.getGroup());
-        group.getUniqueMembers().add(buildAccountDn(user).toString() + ",dc=suncapital-logistics,dc=com");
+        group.getMembers().add(new GroupMember(buildAccountDn(user).toString() + ",dc=suncapital-logistics,dc=com", group));
         updateGroup(group);
 
         // Send mail notification
@@ -222,14 +305,14 @@ public class UserServiceImpl implements UserService {
 
     public List<User> findAll(String groupName) {
         Group group = findGroup(groupName);
-        Set<String> uniqueMembers = group.getUniqueMembers();
+        Collection<GroupMember> uniqueMembers = group.getMembers();
         if (null == uniqueMembers || uniqueMembers.size() < 1) {
             return Collections.emptyList();
         }
 
         List<User> users = new ArrayList<>(uniqueMembers.size());
-        for (String uniqueMember : uniqueMembers) {
-            String[] fields = uniqueMember.split(",");
+        for (GroupMember uniqueMember : uniqueMembers) {
+            String[] fields = uniqueMember.getUsername().split(",");
             String[] uid = fields[0].split("=");
             User user = find(uid[1]);
             users.add(user);
@@ -279,7 +362,7 @@ public class UserServiceImpl implements UserService {
                         Group group = new Group();
                         group.setName((String) attrs.get("cn").get());
 
-                        Set<String> uniqueMembers = new HashSet<>();
+                        Collection<GroupMember> uniqueMembers = new HashSet<>();
                         Attribute attribute = attrs.get("uniqueMember");
                         if (null != attribute) {
                             NamingEnumeration<?> values = attribute.getAll();
@@ -287,12 +370,12 @@ public class UserServiceImpl implements UserService {
                                 while (values.hasMore()) {
                                     Object memberObj = values.next();
                                     if (null != memberObj) {
-                                        uniqueMembers.add(memberObj.toString());
+                                        uniqueMembers.add(new GroupMember(memberObj.toString(), group));
                                     }
                                 }
                             }
                         }
-                        group.setUniqueMembers(uniqueMembers);
+                        group.setMembers(uniqueMembers);
                         return group;
                     }
                 }
@@ -324,6 +407,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public void edit(User newOne) {
+        // gid -> group name. TODO: temporary solution
+        newOne.setGroup(groupIdToType(Integer.valueOf(newOne.getGroup())));
         User user = find(newOne.getUid());
         Name dn = buildAccountDn(user);
 
@@ -397,8 +482,12 @@ public class UserServiceImpl implements UserService {
                 group.setName(dirContext.getStringAttribute("cn"));
                 String[] membersArray = dirContext.getStringAttributes("uniqueMember");
                 if (membersArray != null) {
+                    Collection<GroupMember> members = new ArrayList<GroupMember>();
                     List<String> list = Arrays.asList(membersArray);
-                    group.setUniqueMembers(new TreeSet<String>(list));
+                    for (String s : list) {
+                        members.add(new GroupMember(s, group));
+                    }
+                    group.setMembers(members);
                 }
                 return group;
             }
@@ -429,9 +518,14 @@ public class UserServiceImpl implements UserService {
         adapter.setAttributeValues("objectclass", new String[]{"top",
                 "groupOfUniqueNames"});
         adapter.setAttributeValue("cn", group.getName());
-        if (group.getUniqueMembers() != null && group.getUniqueMembers().size() > 0) {
-            adapter.setAttributeValues("uniqueMember", group.getUniqueMembers()
-                    .toArray(new String[0]));
+        if (group.getMembers() != null && group.getMembers().size() > 0) {
+            String[] usernames = new String[group.getMembers().size()];
+            int i = 0;
+            for (GroupMember groupMember : group.getMembers()) {
+                usernames[i] = groupMember.getUsername();
+                i++;
+            }
+            adapter.setAttributeValues("uniqueMember", usernames);
         }
         return adapter;
     }

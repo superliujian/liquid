@@ -1,4 +1,4 @@
-package liquid.user.db.persistence.domain;
+package liquid.user.domain;
 
 import javax.persistence.*;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by Tao Ma on 3/18/15.
  */
 @Entity(name = "group_members")
-public class GroupMemberEntity {
+public class GroupMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,11 +17,11 @@ public class GroupMemberEntity {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private GroupEntity group;
+    private Group group;
 
-    public GroupMemberEntity() { }
+    public GroupMember() { }
 
-    public GroupMemberEntity(String username, GroupEntity group) {
+    public GroupMember(String username, Group group) {
         this.username = username;
         this.group = group;
     }
@@ -42,11 +42,11 @@ public class GroupMemberEntity {
         this.username = username;
     }
 
-    public GroupEntity getGroup() {
+    public Group getGroup() {
         return group;
     }
 
-    public void setGroup(GroupEntity group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 }

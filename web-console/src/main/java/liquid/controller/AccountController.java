@@ -1,8 +1,7 @@
 package liquid.controller;
 
-import liquid.user.domain.User;
-import liquid.user.persistence.domain.GroupType;
 import liquid.user.domain.PasswordChange;
+import liquid.user.domain.User;
 import liquid.user.service.UserService;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -14,7 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -35,11 +37,6 @@ public class AccountController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @ModelAttribute("groupTypes")
-    public GroupType[] populateGroups() {
-        return GroupType.values();
-    }
-
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
         Collection<User> list = userService.findAll();
@@ -50,6 +47,7 @@ public class AccountController extends BaseController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String initRegister(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("groups", userService.findGroups());
         return "register";
     }
 
@@ -92,7 +90,7 @@ public class AccountController extends BaseController {
 
         User user = userService.find(uid);
         model.addAttribute("user", user);
-
+        model.addAttribute("groups", userService.findGroups());
         return "account/edit";
     }
 

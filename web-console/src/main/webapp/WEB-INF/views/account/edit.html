@@ -65,9 +65,9 @@
 
             <div class="col-lg-9">
                 <select th:field="*{group}" class="form-control">
-                    <option th:each="groupType : ${groupTypes}"
-                            th:value="${groupType.type}"
-                            th:text="#{${groupType.i18nKey}}">Department Name
+                    <option th:each="g : ${groups}"
+                            th:value="${g.id}"
+                            th:text="${g.name}">Department Name
                     </option>
                 </select>
             </div>

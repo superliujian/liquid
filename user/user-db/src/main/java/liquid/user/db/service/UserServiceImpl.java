@@ -1,7 +1,6 @@
 package liquid.user.db.service;
 
-import liquid.user.db.persistence.domain.GroupEntity;
-import liquid.user.db.persistence.repository.GroupRepository;
+import liquid.user.db.repository.GroupRepository;
 import liquid.user.domain.Group;
 import liquid.user.domain.PasswordChange;
 import liquid.user.domain.User;
@@ -22,15 +21,16 @@ public class UserServiceImpl implements UserService {
     private GroupRepository repository;
 
     @Transactional
-    public GroupEntity find(Long id) {
-        GroupEntity group = repository.findOne(id);
+    public Group find(Long id) {
+        Group group = repository.findOne(id);
         if (null != group) {
             group.getMembers().size();
         }
         return group;
     }
 
-    public GroupEntity save(GroupEntity group) {
+    public Group save(Group group) {
+
         return repository.save(group);
     }
 

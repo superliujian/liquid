@@ -1,4 +1,4 @@
-package liquid.user.web.controller;
+package liquid.user.db.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
