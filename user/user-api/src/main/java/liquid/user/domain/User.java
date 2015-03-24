@@ -8,7 +8,6 @@ import java.util.Collection;
  */
 @Entity(name = "users")
 public class User {
-
     @Id
     @Column(name = "username")
     private String username;
@@ -18,6 +17,9 @@ public class User {
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private UserProfile profile;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Collection<Authority> authorities;
