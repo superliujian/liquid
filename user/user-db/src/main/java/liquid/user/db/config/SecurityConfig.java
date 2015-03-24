@@ -1,13 +1,26 @@
 package liquid.user.db.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Tao Ma on 3/16/15.
@@ -16,6 +29,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
+    @Qualifier("userDataSource")
     private DataSource dataSource;
 
     @Autowired
@@ -24,14 +38,59 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**");
+    }
+
+    @Bean
+    public ExceptionMappingAuthenticationFailureHandler authenticationFailureHandler() {
+        final ExceptionMappingAuthenticationFailureHandler authenticationFailureHandler =
+                new ExceptionMappingAuthenticationFailureHandler();
+        final Map<String, String> mappings = new HashMap<>();
+
+        mappings.put(BadCredentialsException.class.getCanonicalName(), "/login?error=login.failure.badcredentials");
+
+        authenticationFailureHandler.setExceptionMappings(mappings);
+        return authenticationFailureHandler;
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandler() {
+            @Override
+            public void handle(HttpServletRequest request, HttpServletResponse response,
+                               AccessDeniedException e) throws IOException, ServletException {
+                response.sendRedirect("error/403");
+                request.getSession().setAttribute("message",
+                        "You do not have permission to access this page!");
+            }
+        };
+        return accessDeniedHandler;
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/account/register", "/login", "/about", "/error/**", "/test/**").permitAll() // #4
+                .antMatchers("/admin/**").hasRole("ADMIN") // #6
+                .antMatchers("/container/**").hasRole("CONTAINER")
+                .antMatchers("/task/*/planning/**").hasRole("MARKETING")
+                .antMatchers("/favicon.ico").hasRole("ANONYMOUS")
+                .anyRequest().authenticated() // 7
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll();
+                .formLogin()  // #8
+                .loginPage("/login") // #9
+                .failureHandler(authenticationFailureHandler())
+                .permitAll() // #5
+                .and()
+                .logout()
+                .permitAll()
+                .logoutSuccessUrl("/login")
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 }

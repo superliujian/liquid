@@ -25,7 +25,8 @@
             liquid.config.LdapConfig,
             liquid.config.JpaConfig,
             liquid.config.RootConfig,
-            liquid.config.SecurityConfig,
+            liquid.user.db.config.SecurityConfig,
+            liquid.user.db.config.UserJpaConfig,
             liquid.config.MailConfig
         </param-value>
     </context-param>

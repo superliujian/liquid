@@ -48,6 +48,14 @@ public class User {
         this.enabled = enabled;
     }
 
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(UserProfile profile) {
+        this.profile = profile;
+    }
+
     public Collection<Authority> getAuthorities() {
         return authorities;
     }
