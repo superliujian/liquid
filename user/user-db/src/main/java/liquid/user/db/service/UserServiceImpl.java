@@ -11,6 +11,9 @@ import liquid.user.model.PasswordChange;
 import liquid.user.model.User;
 import liquid.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,9 @@ import java.util.List;
  */
 @Service("db")
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -41,6 +47,8 @@ public class UserServiceImpl implements UserService {
         if (null != group) {
             group.getMembers().size();
         }
+
+        authenticationManagerBuilder.getDefaultUserDetailsService();
         return group;
     }
 
@@ -79,6 +87,8 @@ public class UserServiceImpl implements UserService {
         groupMember.setGroup(new Group(Integer.valueOf(user.getGroup())));
         groupMember.setUsername(user.getUid());
         groupMemberRepository.save(groupMember);
+
+
     }
 
     @Override
@@ -137,5 +147,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetPassword(String uid, PasswordChange passwordChange) {
 
+    }
+
+    public String encodePassword(String plain) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(plain);
     }
 }

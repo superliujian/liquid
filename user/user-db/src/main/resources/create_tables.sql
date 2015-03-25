@@ -17,14 +17,14 @@ CREATE TABLE authorities (
 
 DROP TABLE IF EXISTS `groups`;
 create table groups (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `group_name` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `group_authorities`;
 create table group_authorities (
-    `group_id` bigint(20) NOT NULL,
+    `group_id` int(11) NOT NULL,
     `authority` varchar(255) NOT NULL,
     KEY `fk_group_authorities_group` (`group_id`),
     CONSTRAINT `fk_group_authorities_group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
@@ -32,9 +32,9 @@ create table group_authorities (
 
 DROP TABLE IF EXISTS `group_members`;
 create table group_members (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `username` varchar(255) NOT NULL,
-    `group_id` bigint(20) NOT NULL,
+    `group_id` int(11) NOT NULL,
     PRIMARY KEY (`id`),
     KEY `fk_group_members_group` (`group_id`),
     CONSTRAINT `fk_group_members_group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
