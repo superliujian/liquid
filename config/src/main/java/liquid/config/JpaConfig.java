@@ -27,7 +27,8 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories({"liquid.persistence.repository",
+@EnableJpaRepositories({
+        "liquid.persistence.repository",
         "liquid.container.persistence.repository",
         "liquid.accounting.persistence.repository",
         "liquid.purchase.persistence.repository",

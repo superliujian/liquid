@@ -4,19 +4,19 @@ import liquid.user.db.repository.GroupMemberRepository;
 import liquid.user.db.repository.GroupRepository;
 import liquid.user.db.repository.UserProfileRepository;
 import liquid.user.db.repository.UserRepository;
-import liquid.user.domain.Group;
-import liquid.user.domain.GroupMember;
-import liquid.user.domain.UserProfile;
+import liquid.user.domain.*;
 import liquid.user.model.PasswordChange;
 import liquid.user.model.User;
 import liquid.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -102,6 +102,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<User> findAll() {
         List<User> users = new ArrayList<User>();
+        Iterable<liquid.user.domain.User> userEntities = findAll_();
+        for (liquid.user.domain.User userEntity : userEntities) {
+            User user = new User();
+            user.setUid(userEntity.getUsername());
+            user.setEnabled(userEntity.getEnabled());
+            user.setGivenName(userEntity.getProfile().getFirstName());
+            user.setSurname(userEntity.getProfile().getLastName());
+            user.setEmail(userEntity.getProfile().getEmail());
+            user.setCell(userEntity.getProfile().getCell());
+            user.setPhone(userEntity.getProfile().getPhone());
+
+            users.add(user);
+        }
+        return users;
+    }
+
+    public Collection<User> findAll0() {
+        List<User> users = new ArrayList<User>();
         Iterable<UserProfile> profiles = userProfileRepository.findAll();
         for (UserProfile profile : profiles) {
             User user = new User();
@@ -140,5 +158,16 @@ public class UserServiceImpl implements UserService {
     public String encodePassword(String plain) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plain);
+    }
+
+    private List<liquid.user.domain.User> findAll_() {
+        Specification<liquid.user.domain.User> specification = new Specification<liquid.user.domain.User>() {
+            @Override
+            public Predicate toPredicate(Root<liquid.user.domain.User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                root.fetch("profile", JoinType.LEFT);
+                return cb.equal(root.get(User_.username), root.get(User_.profile).get(UserProfile_.username));
+            }
+        };
+        return userRepository.findAll(specification);
     }
 }

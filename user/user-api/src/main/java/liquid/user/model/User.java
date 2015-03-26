@@ -2,7 +2,6 @@ package liquid.user.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -15,6 +14,8 @@ public class User {
     @NotNull
     @NotEmpty
     private String uid;
+
+    private Boolean enabled;
 
     @NotNull
     @NotEmpty
@@ -52,6 +53,14 @@ public class User {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getSurname() {
