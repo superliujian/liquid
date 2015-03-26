@@ -15,6 +15,21 @@
         </encoder>
     </appender>
 
+    <appender name="SPRING-DATA" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/spring-data.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/spring-data.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="SECURITY" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/security.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -143,6 +158,18 @@
 
     <logger name="org.springframework" level="DEBUG" additivity="false">
         <appender-ref ref="SPRING"/>
+    </logger>
+
+    <logger name="org.springframework.data" level="DEBUG" additivity="false">
+        <appender-ref ref="SPRING-DATA"/>
+    </logger>
+
+    <logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
+        <appender-ref ref="SPRING-DATA"/>
+    </logger>
+
+    <logger name="org.springframework.orm" level="DEBUG" additivity="false">
+        <appender-ref ref="SPRING-DATA"/>
     </logger>
 
     <logger name="org.springframework.security" level="DEBUG" additivity="false">

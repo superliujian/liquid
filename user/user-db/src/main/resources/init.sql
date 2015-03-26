@@ -7,11 +7,6 @@ insert group_authorities(group_id, authority) values(2, 'ROLE_SALES');
 insert group_authorities(group_id, authority) values(3, 'ROLE_MARKETING');
 insert group_authorities(group_id, authority) values(4, 'ROLE_COMMERCE');
 
-insert into users(username, password, enabled) values('管理员', '$2a$10$t77KuUV.wZ56qj4LGk68iu6PzVupH4olLsErkni81v87HgXsPOIES', 1);
 insert into user_profile(username, email) values('管理员', 'taoma9@163.com');
+insert into users(username, password, enabled) values('管理员', '$2a$10$t77KuUV.wZ56qj4LGk68iu6PzVupH4olLsErkni81v87HgXsPOIES', 1);
 insert into group_members(username, group_id) values('管理员', 1);
-
-
-$2a$10$t77KuUV.wZ56qj4LGk68iu6PzVupH4olLsErkni81v87HgXsPOIES
-$2a$10$M7benlZ1q5dRShLhXmERxeMN.UGoHuxmtbX3TWx40eaA1pdTMKPmC
-$2a$10$YdDoNUHNFFibQDk7vW0xe.vANNhbBItN68LOOWBV.j1CMdrHVU2jS

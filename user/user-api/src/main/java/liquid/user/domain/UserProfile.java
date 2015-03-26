@@ -8,13 +8,7 @@ import javax.persistence.*;
 @Entity(name = "user_profile")
 public class UserProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
-    @OneToOne
-    @JoinColumn(name = "username")
-    private User user;
+    private String username;
 
     @Column(name = "first_name")
     private String firstName;
@@ -31,20 +25,12 @@ public class UserProfile {
     @Column(name = "phone")
     private String phone;
 
-    public Integer getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {

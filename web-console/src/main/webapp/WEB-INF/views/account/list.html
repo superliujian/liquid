@@ -15,7 +15,7 @@
         <thead>
         <tr>
             <th th:text="#{account.uid}">Account ID</th>
-            <th th:text="#{group}">Account Group</th>
+            <th th:text="#{name}">Name</th>
             <th th:text="#{email}">Email</th>
             <th th:text="#{account.locked}">Locked</th>
             <th th:text="#{edit}">Edit</th>
@@ -26,7 +26,7 @@
         <tbody>
         <tr th:each="account : ${accounts}">
             <td th:text="${account.uid}">Account ID</td>
-            <td th:text="#{'role.' + ${account.group}}">Account Group</td>
+            <td><span th:text="${account.surname} + ${account.givenName}">Account Group</span></td>
             <td th:text="${account.email}">Email</td>
             <td>
                 <a th:if="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=unlock'"

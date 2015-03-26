@@ -47,7 +47,6 @@ public class UserServiceImpl implements UserService {
         if (null != group) {
             group.getMembers().size();
         }
-
         authenticationManagerBuilder.getDefaultUserDetailsService();
         return group;
     }
@@ -72,9 +71,10 @@ public class UserServiceImpl implements UserService {
         liquid.user.domain.User userEntity = new liquid.user.domain.User();
         UserProfile profile = new UserProfile();
         userEntity.setUsername(user.getUid());
-        userEntity.setPassword(user.getPassword());
+        userEntity.setPassword(encodePassword(user.getPassword()));
         userEntity.setEnabled(false);
-        profile.setUser(userEntity);
+
+        profile.setUsername(user.getUid());
         profile.setFirstName(user.getGivenName());
         profile.setLastName(user.getSurname());
         profile.setEmail(user.getEmail());
@@ -87,8 +87,6 @@ public class UserServiceImpl implements UserService {
         groupMember.setGroup(new Group(Integer.valueOf(user.getGroup())));
         groupMember.setUsername(user.getUid());
         groupMemberRepository.save(groupMember);
-
-
     }
 
     @Override
@@ -104,27 +102,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<User> findAll() {
         List<User> users = new ArrayList<User>();
-        Iterable<liquid.user.domain.User> userEntities = findAll0();
-        for (liquid.user.domain.User userEntity : userEntities) {
+        Iterable<UserProfile> profiles = userProfileRepository.findAll();
+        for (UserProfile profile : profiles) {
             User user = new User();
-            user.setUid(userEntity.getUsername());
-            user.setGivenName(userEntity.getProfile().getFirstName());
-            user.setSurname(userEntity.getProfile().getLastName());
-            user.setEmail(userEntity.getProfile().getEmail());
-            user.setCell(userEntity.getProfile().getCell());
-            user.setPhone(userEntity.getProfile().getPhone());
+            user.setUid(profile.getUsername());
+            user.setGivenName(profile.getFirstName());
+            user.setSurname(profile.getLastName());
+            user.setEmail(profile.getEmail());
+            user.setCell(profile.getCell());
+            user.setPhone(profile.getPhone());
 
             users.add(user);
-        }
-
-        return users;
-    }
-
-    @Transactional("userTransactionManager")
-    private Iterable<liquid.user.domain.User> findAll0() {
-        Iterable<liquid.user.domain.User> users = userRepository.findAll();
-        for (liquid.user.domain.User user : users) {
-            user.getProfile();
         }
         return users;
     }
