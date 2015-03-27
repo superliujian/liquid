@@ -1,13 +1,13 @@
 package liquid.user.domain;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * Created by Tao Ma on 3/20/15.
  */
 @Entity(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
     private String username;
@@ -21,10 +21,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Collection<Authority> authorities;
 
-    @MapsId
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "username")
-    private UserProfile profile;
+//    @MapsId
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "username")
+//    private UserProfile profile;
 
     public String getUsername() {
         return username;
@@ -48,14 +48,6 @@ public class User {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public UserProfile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(UserProfile profile) {
-        this.profile = profile;
     }
 
     public Collection<Authority> getAuthorities() {

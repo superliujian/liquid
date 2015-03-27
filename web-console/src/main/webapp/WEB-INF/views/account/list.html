@@ -17,9 +17,14 @@
             <th th:text="#{account.uid}">Account ID</th>
             <th th:text="#{user.name}">Name</th>
             <th th:text="#{email}">Email</th>
-            <th th:text="#{account.locked}">Locked</th>
-            <th th:text="#{edit}">Edit</th>
+            <th><span th:text="#{cell}">Cell</span></th>
+            <th><span th:text="#{phone}">Phone</span></th>                        
+            <th><span th:text="#{enabled}">Enabled</span></th>
+            <th th:text="#{apply}">Apply</th>
+            <!--
+            <th th:text="#{account.locked}">Locked</th>            
             <th th:text="#{password.reset}">Edit</th>
+            -->
         </tr>
         </thead>
 
@@ -28,28 +33,26 @@
             <td th:text="${account.uid}">Account ID</td>
             <td><span th:text="${account.surname} + ${account.givenName}">Account Group</span></td>
             <td th:text="${account.email}">Email</td>
+            <td th:text="${account.cell}">Email</td>
+            <td th:text="${account.phone}">Email</td>
+            <td><i class="glyphicon glyphicon-flag" th:classappend="${account.enabled} ? 'text-success' : 'text-danger'"/></td>
+            <td><a th:href="'/account/' + ${account.uid}"><i class="glyphicon glyphicon-cog text-muted"/></a></td>
+            <!--
             <td>
                 <a th:if="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=unlock'"
                    class="btn btn-default btn-xs">
                     <i class="glyphicon glyphicon-lock"/>
                 </a>
-                <a th:unless="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=lock'"
-                   class="btn btn-default btn-xs">
+                <a th:unless="${account.pwdAccountLockedTime}" th:href="'/account/' + ${account.uid} + '?action=lock'">
                     <i class="glyphicon glyphicon-ok"/>
                 </a>
             </td>
             <td>
-                <a th:href="'/account/' + ${account.uid}"
-                   class="btn btn-default btn-xs">
-                    <i class="glyphicon glyphicon-pencil"/>
-                </a>
-            </td>
-            <td>
-                <a th:href="'/account/password/' + ${account.uid}"
-                   class="btn btn-default btn-xs">
+                <a th:href="'/account/password/' + ${account.uid}">
                     <i class="glyphicon glyphicon-cog"/>
                 </a>
             </td>
+            -->
         </tr>
         </tbody>
     </table>

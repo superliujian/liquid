@@ -65,23 +65,19 @@ public class UserServiceImpl implements UserService {
         return groupRepository.findAll();
     }
 
+    @Override
+    public GroupMember findByUsername(String username) {
+        return groupMemberRepository.findByUsername(username);
+    }
+
     @Transactional("userTransactionManager")
     @Override
     public void register(User user) {
-        liquid.user.domain.User userEntity = new liquid.user.domain.User();
-        UserProfile profile = new UserProfile();
-        userEntity.setUsername(user.getUid());
-        userEntity.setPassword(encodePassword(user.getPassword()));
-        userEntity.setEnabled(false);
+        UserProfile profile = convertTo(user);
 
-        profile.setUsername(user.getUid());
-        profile.setFirstName(user.getGivenName());
-        profile.setLastName(user.getSurname());
-        profile.setEmail(user.getEmail());
-        profile.setCell(user.getCell());
-        profile.setPhone(user.getPhone());
-        userEntity.setProfile(profile);
-        userRepository.save(userEntity);
+        profile.setPassword(encodePassword(user.getPassword()));
+        profile.setEnabled(false);
+        userProfileRepository.save(profile);
 
         GroupMember groupMember = new GroupMember();
         groupMember.setGroup(new Group(Integer.valueOf(user.getGroup())));
@@ -96,40 +92,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User find(String uid) {
-        return null;
+        UserProfile profile = userProfileRepository.findOne(uid);
+        User user = convertTo(profile);
+        return user;
     }
 
     @Override
     public Collection<User> findAll() {
         List<User> users = new ArrayList<User>();
-        Iterable<liquid.user.domain.User> userEntities = findAll_();
-        for (liquid.user.domain.User userEntity : userEntities) {
-            User user = new User();
-            user.setUid(userEntity.getUsername());
-            user.setEnabled(userEntity.getEnabled());
-            user.setGivenName(userEntity.getProfile().getFirstName());
-            user.setSurname(userEntity.getProfile().getLastName());
-            user.setEmail(userEntity.getProfile().getEmail());
-            user.setCell(userEntity.getProfile().getCell());
-            user.setPhone(userEntity.getProfile().getPhone());
-
-            users.add(user);
-        }
-        return users;
-    }
-
-    public Collection<User> findAll0() {
-        List<User> users = new ArrayList<User>();
         Iterable<UserProfile> profiles = userProfileRepository.findAll();
         for (UserProfile profile : profiles) {
-            User user = new User();
-            user.setUid(profile.getUsername());
-            user.setGivenName(profile.getFirstName());
-            user.setSurname(profile.getLastName());
-            user.setEmail(profile.getEmail());
-            user.setCell(profile.getCell());
-            user.setPhone(profile.getPhone());
-
+            User user = convertTo(profile);
             users.add(user);
         }
         return users;
@@ -137,17 +110,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void lock(String uid) {
-
+        liquid.user.domain.User entity = userRepository.findOne(uid);
+        entity.setEnabled(false);
+        userRepository.save(entity);
     }
 
     @Override
     public void unlock(String uid) {
-
+        liquid.user.domain.User entity = userRepository.findOne(uid);
+        entity.setEnabled(true);
+        userRepository.save(entity);
     }
 
     @Override
     public void edit(User user) {
-
+        UserProfile profile = userProfileRepository.findOne(user.getUid());
+        assignTo(profile, user);
+        userProfileRepository.save(profile);
     }
 
     @Override
@@ -155,19 +134,35 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public String encodePassword(String plain) {
+    private String encodePassword(String plain) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plain);
     }
 
-    private List<liquid.user.domain.User> findAll_() {
-        Specification<liquid.user.domain.User> specification = new Specification<liquid.user.domain.User>() {
-            @Override
-            public Predicate toPredicate(Root<liquid.user.domain.User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                root.fetch("profile", JoinType.LEFT);
-                return cb.equal(root.get(User_.username), root.get(User_.profile).get(UserProfile_.username));
-            }
-        };
-        return userRepository.findAll(specification);
+    private UserProfile convertTo(User user) {
+        UserProfile profile = new UserProfile();
+        assignTo(profile, user);
+        return profile;
+    }
+
+    private void assignTo(UserProfile profile, User user) {
+        profile.setUsername(user.getUid());
+        profile.setFirstName(user.getGivenName());
+        profile.setLastName(user.getSurname());
+        profile.setEmail(user.getEmail());
+        profile.setCell(user.getCell());
+        profile.setPhone(user.getPhone());
+    }
+
+    private User convertTo(UserProfile profile) {
+        User user = new User();
+        user.setUid(profile.getUsername());
+        user.setEnabled(profile.getEnabled());
+        user.setGivenName(profile.getFirstName());
+        user.setSurname(profile.getLastName());
+        user.setEmail(profile.getEmail());
+        user.setCell(profile.getCell());
+        user.setPhone(profile.getPhone());
+        return user;
     }
 }

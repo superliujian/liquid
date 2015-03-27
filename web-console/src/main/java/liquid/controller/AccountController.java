@@ -1,8 +1,10 @@
 package liquid.controller;
 
+import liquid.user.domain.GroupMember;
 import liquid.user.model.PasswordChange;
 import liquid.user.model.User;
 import liquid.user.service.UserService;
+import liquid.util.StringUtil;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Locale;
@@ -70,8 +74,21 @@ public class AccountController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/{uid}", method = RequestMethod.GET, params = "action")
-    public String lock(@PathVariable String uid, @RequestParam String action) {
+    @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
+    public String initApply(@PathVariable String uid, Model model) {
+        logger.debug("uid: {}", uid);
+
+        User user = userService.find(uid);
+        GroupMember member = userService.findByUsername(uid);
+        user.setGroup(String.valueOf(member.getGroup().getId()));
+        model.addAttribute("user", user);
+        model.addAttribute("groups", userService.findGroups());
+        model.addAttribute("passwordChange", new PasswordChange());
+        return "account/edit";
+    }
+
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action")
+    public String doAction(@PathVariable String uid, @RequestParam String action) throws UnsupportedEncodingException {
         logger.debug("uid: {}", uid);
         logger.debug("action: {}", action);
 
@@ -83,21 +100,11 @@ public class AccountController extends BaseController {
             logger.warn("No matched action handler.");
         }
 
-        return "redirect:/account";
-    }
-
-    @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
-    public String initEdit(@PathVariable String uid, Model model) {
-        logger.debug("uid: {}", uid);
-
-        User user = userService.find(uid);
-        model.addAttribute("user", user);
-        model.addAttribute("groups", userService.findGroups());
-        return "account/edit";
+        return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
-    public String edit(@PathVariable String uid, User user, BindingResult bindingResult) {
+    public String apply(@PathVariable String uid, User user, BindingResult bindingResult) {
         logger.debug("uid: {}", uid);
         logger.debug("user: {}", user);
         if (bindingResult.hasErrors()) {
@@ -106,7 +113,7 @@ public class AccountController extends BaseController {
             userService.edit(user);
         }
 
-        return "redirect:/account";
+        return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.GET)

@@ -98,6 +98,11 @@ public class UserServiceImpl implements UserService {
         return groups;
     }
 
+    @Override
+    public GroupMember findByUsername(String username) {
+        throw new UnsupportedOperationException();
+    }
+
     private Integer groupTypeToId(String type) {
         switch (type) {
             case "sales":

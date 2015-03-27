@@ -1,5 +1,8 @@
 package liquid.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * TODO: Comments.
  * User: tao
@@ -29,5 +32,13 @@ public class StringUtil {
 
     public static boolean valid(String value) {
         return (null == value || 0 == value.trim().length()) ? false : true;
+    }
+
+    public static String utf8encode(String value) {
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

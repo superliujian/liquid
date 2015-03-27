@@ -6,10 +6,8 @@ import javax.persistence.*;
  * Created by Tao Ma on 3/24/15.
  */
 @Entity(name = "user_profile")
-public class UserProfile {
-    @Id
-    private String username;
-
+@PrimaryKeyJoinColumn(name="username")
+public class UserProfile extends User {
     @Column(name = "first_name")
     private String firstName;
 
@@ -24,14 +22,6 @@ public class UserProfile {
 
     @Column(name = "phone")
     private String phone;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getFirstName() {
         return firstName;
