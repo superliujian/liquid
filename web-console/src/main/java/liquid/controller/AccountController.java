@@ -83,7 +83,10 @@ public class AccountController extends BaseController {
         user.setGroup(String.valueOf(member.getGroup().getId()));
         model.addAttribute("user", user);
         model.addAttribute("groups", userService.findGroups());
-        model.addAttribute("passwordChange", new PasswordChange());
+
+        PasswordChange passwordChange = new PasswordChange();
+        passwordChange.setUid(uid);
+        model.addAttribute("passwordChange", passwordChange);
         return "account/edit";
     }
 
@@ -99,7 +102,7 @@ public class AccountController extends BaseController {
         } else {
             logger.warn("No matched action handler.");
         }
-
+        // TODO: The following way is workaround. There must be a best way to solve encoding issue.
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
@@ -146,16 +149,16 @@ public class AccountController extends BaseController {
         logger.debug("uid: {}", uid);
         logger.debug("account: {}", passwordChange);
         if (bindingResult.hasErrors()) {
-            return "account/password_change";
+            return "account/edit";
         } else {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
                 userService.resetPassword(uid, passwordChange);
                 model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
-                return "account/password_change";
+                return "redirect:/account/" + StringUtil.utf8encode(uid);
             } else {
                 ObjectError objectError = new ObjectError("newPassword", "passwords are not same.");
                 bindingResult.addError(objectError);
-                return "account/password_change";
+                return "redirect:/account/" + StringUtil.utf8encode(uid);
             }
         }
     }

@@ -4,19 +4,19 @@ import liquid.user.db.repository.GroupMemberRepository;
 import liquid.user.db.repository.GroupRepository;
 import liquid.user.db.repository.UserProfileRepository;
 import liquid.user.db.repository.UserRepository;
-import liquid.user.domain.*;
+import liquid.user.domain.Group;
+import liquid.user.domain.GroupMember;
+import liquid.user.domain.UserProfile;
 import liquid.user.model.PasswordChange;
 import liquid.user.model.User;
 import liquid.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -131,7 +131,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void resetPassword(String uid, PasswordChange passwordChange) {
-
+        UserProfile profile = userProfileRepository.findOne(uid);
+        profile.setPassword(encodePassword(passwordChange.getNewPassword()));
+        userProfileRepository.save(profile);
     }
 
     private String encodePassword(String plain) {

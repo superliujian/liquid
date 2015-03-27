@@ -80,13 +80,29 @@
 
 <div id="m" class="container">
     <hr/>
-    <form method="POST" th:action="'/account/' + *{uid}" th:object="${user}">
+    <form method="POST" th:object="${passwordChange}" th:action="'/account/password' + (${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? '/' + *{uid} : '')">
         <div class="row">
             <div class="form-group col-xs-6">
-                <input type="text" th:field="*{password}" class="form-control input-sm"/>
+                <div th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="form-group" th:classappend="${#fields.hasErrors('oldPassword')} ? 'has-error'">
+                    <label th:text="#{old.password}">Account Password</label>
+                    <input type="password" th:field="*{oldPassword}" class="form-control input-sm"/>
+                    <span th:errors="*{oldPassword}">error</span>
+                </div>          
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('newPassword')} ? 'has-error'">
+                    <label th:text="#{new.password}">Account Password</label>
+                    <input type="password" th:field="*{newPassword}" class="form-control input-sm"/>
+                    <span th:errors="*{newPassword}">error</span>
+                </div>
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('newPassword2')} ? 'has-error'">
+                    <label th:text="#{new.password2}">Account Password 2</label>
+                    <input type="password" th:field="*{newPassword2}" class="form-control input-sm"/>
+                    <span th:errors="*{newPassword2}">error</span>
+                </div>
+                <button type="submit" name="apply" class="btn btn-success btn-sm"><span th:text="#{password.reset}"></span></button>      
             </div>
-        </div>
-        <button type="submit" name="apply" class="btn btn-success btn-sm"><span th:text="#{password.reset}"></span></button>        
+        </div>  
     </form>        
 </div><!-- /.container -->
 
