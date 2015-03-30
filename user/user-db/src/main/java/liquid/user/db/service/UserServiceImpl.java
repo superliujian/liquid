@@ -66,6 +66,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void assignToGroup(String username, Integer groupId) {
+        GroupMember member = findByUsername(username);
+        if (null == member) {
+            synchronized (UserService.class) {
+                member = findByUsername(username);
+                if (null == member) {
+                    member = new GroupMember(username, new Group(groupId));
+                } else {
+                    member.setGroup(new Group(groupId));
+                }
+            }
+        } else {
+            member.setGroup(new Group(groupId));
+        }
+        groupMemberRepository.save(member);
+    }
+
+    @Override
     public GroupMember findByUsername(String username) {
         return groupMemberRepository.findByUsername(username);
     }

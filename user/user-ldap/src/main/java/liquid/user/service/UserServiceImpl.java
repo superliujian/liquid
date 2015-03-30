@@ -99,6 +99,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void assignToGroup(String username, Integer groupId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public GroupMember findByUsername(String username) {
         throw new UnsupportedOperationException();
     }

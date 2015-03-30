@@ -15,6 +15,8 @@ public interface UserService {
 
     Collection<Group> findGroups();
 
+    void assignToGroup(String username, Integer groupId);
+
     GroupMember findByUsername(String username);
 
     void register(User user);

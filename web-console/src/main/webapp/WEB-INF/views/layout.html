@@ -139,8 +139,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="/account/password/uid" th:href="'/account/password/' + ${#authentication.name}">
-                                    <i class="glyphicon glyphicon-cog" />&nbsp;<span th:text="#{password.change}">Change Password</span>
+                                <a th:href="'/account/' + ${#authentication.name}">
+                                    <i class="glyphicon glyphicon-cog" />&nbsp;<span th:text="#{apply}">Apply Change</span>
                                 </a>
                             </li>
                         </ul>

@@ -21,6 +21,11 @@ public class GroupMember {
 
     public GroupMember() { }
 
+    public GroupMember(String username, Group group) {
+        this.username = username;
+        this.group = group;
+    }
+
     public Integer getId() {
         return id;
     }

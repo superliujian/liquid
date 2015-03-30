@@ -8,10 +8,15 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
+<div id="m" class="container" >
+    <div th:include="layout :: alert"/>
+</div><!-- /.container -->
+
 <div id="m" class="container">
     <h3><span th:text="#{account}"></span></h3>    
-    <hr />
-    <form method="POST" th:action="'/account/' + *{uid}" th:object="${user}">
+
+    <form method="POST" th:action="'/account/' + *{uid}" th:object="${user}" sec:authorize="hasRole('ROLE_ADMIN')">
+        <hr />
         <button th:if="*{enabled}" type="submit" name="action" value="lock" class="btn btn-danger btn-sm"><span th:text="#{disable}"></span></button>
         <button th:unless="*{enabled}" type="submit" name="action" value="unlock" class="btn btn-success btn-sm"><span th:text="#{enable}"></span></button>
     </form>        
@@ -61,7 +66,7 @@
     </form>
 </div><!-- /.container -->
 
-<div id="m" class="container">
+<div id="m" class="container" sec:authorize="hasRole('ROLE_ADMIN')">
     <hr/>
     <form method="POST" th:action="'/account/' + *{uid}" th:object="${user}">
         <div class="row">
@@ -74,7 +79,7 @@
                 </select>
             </div>
         </div>
-        <button type="submit" name="apply" class="btn btn-success btn-sm"><span th:text="#{save}"></span></button>        
+        <button type="submit" name="action" value="assignToGroup" class="btn btn-success btn-sm"><span th:text="#{save}"></span></button>        
     </form>        
 </div><!-- /.container -->
 

@@ -116,6 +116,11 @@ td span.tt-dropdown-menu {
     margin-top: 10px;
 }
 
+.alert {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 /* f - form */
 div#f.container {
   max-width: 300px;

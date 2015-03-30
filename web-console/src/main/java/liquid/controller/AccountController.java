@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -90,8 +92,8 @@ public class AccountController extends BaseController {
         return "account/edit";
     }
 
-    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action")
-    public String doAction(@PathVariable String uid, @RequestParam String action) throws UnsupportedEncodingException {
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = {"action", "action!=assignToGroup"})
+    public String doAction(@PathVariable String uid, @RequestParam String action) {
         logger.debug("uid: {}", uid);
         logger.debug("action: {}", action);
 
@@ -107,14 +109,24 @@ public class AccountController extends BaseController {
     }
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
-    public String apply(@PathVariable String uid, User user, BindingResult bindingResult) {
+    public String apply(@PathVariable String uid, User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         logger.debug("uid: {}", uid);
         logger.debug("user: {}", user);
         if (bindingResult.hasErrors()) {
             return "account/edit";
         } else {
             userService.edit(user);
+            redirectAttributes.addFlashAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
         }
+
+        return "redirect:/account/" + StringUtil.utf8encode(uid);
+    }
+
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=assignToGroup")
+    public String assignToGroup(@PathVariable String uid, String group) {
+        logger.debug("uid: {}", uid);
+        logger.debug("group: {}", group);
+        userService.assignToGroup(uid, Integer.valueOf(group));
 
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
