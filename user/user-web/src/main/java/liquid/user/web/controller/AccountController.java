@@ -1,4 +1,4 @@
-package liquid.controller;
+package liquid.user.web.controller;
 
 import liquid.user.domain.GroupMember;
 import liquid.user.model.PasswordChange;
@@ -25,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -140,7 +139,7 @@ public class AccountController extends BaseController {
         if (!bindingResult.hasErrors()) {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
                 userService.changePassword(uid, passwordChange.getNewPassword());
-                model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+                model.addAttribute("alert", getMessage("save.success"));
                 redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
                 return "redirect:/account/" + StringUtil.utf8encode(uid);
             } else {

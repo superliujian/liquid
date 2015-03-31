@@ -57,6 +57,10 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>liquid-user-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>liquid-container</artifactId>
         </dependency>
         <dependency>

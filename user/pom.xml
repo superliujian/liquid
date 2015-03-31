@@ -16,5 +16,6 @@
         <module>user-api</module>
         <module>user-ldap</module>
         <module>user-db</module>
+        <module>user-web</module>
     </modules>
 </project>

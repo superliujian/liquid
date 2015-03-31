@@ -111,11 +111,11 @@ td span.input-group-addon:last-child {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-
+/*
 td span.tt-dropdown-menu {
     margin-top: 10px;
 }
-
+*/
 .alert {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -146,10 +146,6 @@ div#tc.container {
   padding-top: 10px;
   padding-right: 30px;
   padding-left: 30px;
-  font-size: 12px;
-}
-
-.dropdown-menu {
   font-size: 12px;
 }
 
