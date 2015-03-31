@@ -62,7 +62,7 @@
         </div>       
 
         <input type="hidden" th:field="*{enabled}"/>
-        <button type="submit" name="apply" class="btn btn-success btn-sm"><span th:text="#{save}"></span></button>
+        <button type="submit" name="action" value="changeProfile" class="btn btn-success btn-sm"><span th:text="#{save}"></span></button>
     </form>
 </div><!-- /.container -->
 
@@ -85,7 +85,7 @@
 
 <div id="m" class="container">
     <hr/>
-    <form method="POST" th:object="${passwordChange}" th:action="'/account/password' + (${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? '/' + *{uid} : '')">
+    <form method="POST" th:object="${passwordChange}" th:action="'/account/' + *{uid}">
         <div class="row">
             <div class="form-group col-xs-6">
                 <div th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="form-group" th:classappend="${#fields.hasErrors('oldPassword')} ? 'has-error'">
@@ -105,7 +105,12 @@
                     <input type="password" th:field="*{newPassword2}" class="form-control input-sm"/>
                     <span th:errors="*{newPassword2}">error</span>
                 </div>
-                <button type="submit" name="apply" class="btn btn-success btn-sm"><span th:text="#{password.reset}"></span></button>      
+                <button th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" type="submit" name="action" value="changePassword" class="btn btn-success btn-sm">
+                    <span th:text="#{password.change}"></span>
+                </button>
+                <button th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" type="submit" name="action" value="resetPassword" class="btn btn-success btn-sm">
+                    <span th:text="#{password.reset}"></span>
+                </button>                 
             </div>
         </div>  
     </form>        

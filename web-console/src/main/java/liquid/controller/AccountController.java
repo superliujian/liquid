@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.ldap.userdetails.LdapUserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,14 +21,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -44,6 +41,9 @@ public class AccountController extends BaseController {
     @Autowired
     @Qualifier("db")
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
@@ -77,14 +77,10 @@ public class AccountController extends BaseController {
     }
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
-    public String initApply(@PathVariable String uid, Model model) {
+    public String initSettings(@PathVariable String uid, Model model) {
         logger.debug("uid: {}", uid);
 
-        User user = userService.find(uid);
-        GroupMember member = userService.findByUsername(uid);
-        user.setGroup(String.valueOf(member.getGroup().getId()));
-        model.addAttribute("user", user);
-        model.addAttribute("groups", userService.findGroups());
+        prepareApplyView(model, uid);
 
         PasswordChange passwordChange = new PasswordChange();
         passwordChange.setUid(uid);
@@ -92,23 +88,26 @@ public class AccountController extends BaseController {
         return "account/edit";
     }
 
-    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = {"action", "action!=assignToGroup"})
-    public String doAction(@PathVariable String uid, @RequestParam String action) {
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=unlock")
+    public String unlock(@PathVariable String uid, RedirectAttributes redirectAttributes) {
         logger.debug("uid: {}", uid);
-        logger.debug("action: {}", action);
 
-        if ("unlock".equals(action)) {
-            userService.unlock(uid);
-        } else if ("lock".equals(action)) {
-            userService.lock(uid);
-        } else {
-            logger.warn("No matched action handler.");
-        }
+        userService.unlock(uid);
+        redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+        return "redirect:/account/" + StringUtil.utf8encode(uid);
+    }
+
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=lock")
+    public String lock(@PathVariable String uid, RedirectAttributes redirectAttributes) {
+        logger.debug("uid: {}", uid);
+
+        userService.lock(uid);
+        redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
         // TODO: The following way is workaround. There must be a best way to solve encoding issue.
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
-    @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=changeProfile")
     public String apply(@PathVariable String uid, User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         logger.debug("uid: {}", uid);
         logger.debug("user: {}", user);
@@ -116,91 +115,73 @@ public class AccountController extends BaseController {
             return "account/edit";
         } else {
             userService.edit(user);
-            redirectAttributes.addFlashAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+            redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
         }
 
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=assignToGroup")
-    public String assignToGroup(@PathVariable String uid, String group) {
+    public String assignToGroup(@PathVariable String uid, String group, RedirectAttributes redirectAttributes) {
         logger.debug("uid: {}", uid);
         logger.debug("group: {}", group);
         userService.assignToGroup(uid, Integer.valueOf(group));
-
+        redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
-    @RequestMapping(value = "/password", method = RequestMethod.GET)
-    public String initPassword0(Model model, Principal principal) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
-        LdapUserDetails userDetails = (LdapUserDetails) token.getPrincipal();
-        String uid = userDetails.getUsername();
-
-        PasswordChange passwordChange = new PasswordChange();
-        passwordChange.setUid(uid);
-        model.addAttribute("passwordChange", passwordChange);
-
-        return "account/password_change";
-    }
-
-    @RequestMapping(value = "/password/{uid}", method = RequestMethod.GET)
-    public String initPassword(@PathVariable String uid, Model model) {
-        logger.debug("uid: {}", uid);
-
-        PasswordChange passwordChange = new PasswordChange();
-        passwordChange.setUid(uid);
-        model.addAttribute("passwordChange", passwordChange);
-
-        return "account/password_change";
-    }
-
-    @RequestMapping(value = "/password/{uid}", method = RequestMethod.POST)
-    public String resetPassword(@PathVariable String uid, PasswordChange passwordChange,
-                                BindingResult bindingResult, Model model) {
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=resetPassword")
+    public String resetPassword(@PathVariable String uid,
+                                PasswordChange passwordChange, BindingResult bindingResult,
+                                Model model, RedirectAttributes redirectAttributes) {
         logger.debug("uid: {}", uid);
         logger.debug("account: {}", passwordChange);
-        if (bindingResult.hasErrors()) {
-            return "account/edit";
-        } else {
+
+        if (!bindingResult.hasErrors()) {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
-                userService.resetPassword(uid, passwordChange);
+                userService.changePassword(uid, passwordChange.getNewPassword());
                 model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+                redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
                 return "redirect:/account/" + StringUtil.utf8encode(uid);
             } else {
-                ObjectError objectError = new ObjectError("newPassword", "passwords are not same.");
-                bindingResult.addError(objectError);
-                return "redirect:/account/" + StringUtil.utf8encode(uid);
+                addFieldError(bindingResult, "passwordChange", "newPassword2", passwordChange.getOldPassword(), passwordChange.getOldPassword());
             }
         }
+        prepareApplyView(model, uid);
+        return "account/edit";
     }
 
-    @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public String updatePassword(PasswordChange passwordChange,
-                                 BindingResult bindingResult, Principal principal) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
-        LdapUserDetails userDetails = (LdapUserDetails) token.getPrincipal();
-        String uid = userDetails.getUsername();
-        String userDn = userDetails.getDn();
-
+    @RequestMapping(value = "/{uid}", method = RequestMethod.POST, params = "action=changePassword")
+    public String changePassword(@PathVariable String uid,
+                                 // BindingResult must be next to the validating object
+                                 @Valid PasswordChange passwordChange, BindingResult bindingResult,
+                                 Model model, RedirectAttributes redirectAttributes) {
         logger.debug("account: {}", passwordChange);
-        if (bindingResult.hasErrors()) {
-            return "account/password_change";
-        } else {
+
+        if (!bindingResult.hasErrors()) {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
-                if (userService.authenticate(userDn, passwordChange.getOldPassword())) {
-                    userService.resetPassword(uid, passwordChange);
-                    return "account/password_change";
-                } else {
-                    ObjectError objectError = new ObjectError("oldPassword", "old passwords are not correct.");
-                    bindingResult.addError(objectError);
-                    return "account/password_change";
+                try {
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(uid, passwordChange.getOldPassword());
+                    authenticationManager.authenticate(authentication);
+                    userService.changePassword(uid, passwordChange.getNewPassword());
+                    redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+                    return "redirect:/account/" + StringUtil.utf8encode(uid);
+                } catch (AuthenticationException e) {
+                    addFieldError(bindingResult, "passwordChange", "oldPassword", passwordChange.getOldPassword(), passwordChange.getOldPassword());
                 }
             } else {
-                ObjectError objectError = new ObjectError("newPassword", "passwords are not same.");
-                bindingResult.addError(objectError);
-                return "account/password_change";
+                addFieldError(bindingResult, "passwordChange", "newPassword2", passwordChange.getOldPassword(), passwordChange.getOldPassword());
             }
         }
+        prepareApplyView(model, uid);
+        return "account/edit";
+    }
+
+    private void prepareApplyView(Model model, String uid) {
+        User user = userService.find(uid);
+        GroupMember member = userService.findByUsername(uid);
+        user.setGroup(String.valueOf(member.getGroup().getId()));
+        model.addAttribute("user", user);
+        model.addAttribute("groups", userService.findGroups());
     }
 }

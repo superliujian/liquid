@@ -15,23 +15,21 @@ public interface UserService {
 
     Collection<Group> findGroups();
 
-    void assignToGroup(String username, Integer groupId);
+    void assignToGroup(String userId, Integer groupId);
 
-    GroupMember findByUsername(String username);
+    GroupMember findByUsername(String userId);
 
     void register(User user);
 
-    boolean authenticate(String userDn, String credentials);
-
-    User find(String uid);
+    User find(String userId);
 
     Collection<User> findAll();
 
-    void lock(String uid);
+    void lock(String userId);
 
-    void unlock(String uid);
+    void unlock(String userId);
 
     void edit(User user);
 
-    void resetPassword(String uid, PasswordChange passwordChange);
+    void changePassword(String userId, String password);
 }

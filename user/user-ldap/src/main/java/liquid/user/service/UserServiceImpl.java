@@ -437,32 +437,17 @@ public class UserServiceImpl implements UserService {
         ldapOperations.modifyAttributes(context);
     }
 
-    public void resetPassword(String uid, PasswordChange passwordChange) {
-        User user = find(uid);
+    public void changePassword(String userId, String password) {
+        User user = find(userId);
         Name dn = buildAccountDn(user);
 
         DirContextOperations context = ldapOperations.lookupContext(dn);
         context.setAttributeValues("objectclass", new String[]{"top",
                 "person", "organizationalPerson", "inetOrgPerson"});
 
-        context.setAttributeValue("userPassword", passwordChange.getNewPassword());
+        context.setAttributeValue("userPassword", password);
 
         ldapOperations.modifyAttributes(context);
-    }
-
-    public boolean authenticate(String userDn, String credentials) {
-        DirContext ctx = null;
-        try {
-            ctx = contextSource.getContext(userDn, credentials);
-            return true;
-        } catch (Exception e) {
-            // Context creation failed - authentication did not succeed
-            logger.error("Login failed", e);
-            return false;
-        } finally {
-            // It is imperative that the created DirContext instance is always closed
-            LdapUtils.closeContext(ctx);
-        }
     }
 
     private DirContextOperations setAccountAttributes(DirContextOperations adapter, User user) {

@@ -7,7 +7,6 @@ import liquid.user.db.repository.UserRepository;
 import liquid.user.domain.Group;
 import liquid.user.domain.GroupMember;
 import liquid.user.domain.UserProfile;
-import liquid.user.model.PasswordChange;
 import liquid.user.model.User;
 import liquid.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,11 +103,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authenticate(String userDn, String credentials) {
-        return false;
-    }
-
-    @Override
     public User find(String uid) {
         UserProfile profile = userProfileRepository.findOne(uid);
         User user = convertTo(profile);
@@ -148,9 +142,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPassword(String uid, PasswordChange passwordChange) {
-        UserProfile profile = userProfileRepository.findOne(uid);
-        profile.setPassword(encodePassword(passwordChange.getNewPassword()));
+    public void changePassword(String userId, String password) {
+        UserProfile profile = userProfileRepository.findOne(userId);
+        profile.setPassword(encodePassword(password));
         userProfileRepository.save(profile);
     }
 
