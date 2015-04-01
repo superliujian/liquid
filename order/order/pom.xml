@@ -1,26 +1,27 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>liquid</groupId>
-        <artifactId>liquid</artifactId>
+        <artifactId>order</artifactId>
         <version>2.1.53-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>liquid-transport</artifactId>
+    <artifactId>liquid-order</artifactId>
     <packaging>jar</packaging>
-    <name>Transport</name>
+    <name>Order Implementation</name>
 
     <dependencies>
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-util</artifactId>
+            <artifactId>liquid-common</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-common</artifactId>
+            <artifactId>liquid-task-activiti</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
@@ -28,7 +29,11 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-order</artifactId>
+            <artifactId>liquid-order-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-accounting-api</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -99,16 +99,6 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>liquid-purchase-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>liquid</groupId>
-                <artifactId>liquid-purchase</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>liquid</groupId>
                 <artifactId>liquid-order</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -337,15 +327,11 @@
         <module>excel</module>
         <module>user</module>
         <module>container</module>
-        <module>order-api</module>
         <module>order</module>
         <module>transport</module>
-        <module>accounting-api</module>
         <module>accounting</module>
         <module>task</module>
         <module>config</module>
         <module>web-console</module>
-        <module>purchase</module>
-    	<module>purchase-api</module>
     </modules>
 </project>

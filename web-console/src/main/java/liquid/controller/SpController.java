@@ -4,7 +4,7 @@ import liquid.domain.ServiceProvider;
 import liquid.facade.ServiceProviderFacade;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.purchase.service.ChargeService;
+import liquid.accounting.service.ChargeService;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;
 import liquid.web.controller.BaseController;

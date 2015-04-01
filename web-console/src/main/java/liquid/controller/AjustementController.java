@@ -1,14 +1,14 @@
 package liquid.controller;
 
-import liquid.purchase.persistence.domain.ChargeEntity;
+import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.persistence.domain.IncomeEntity;
-import liquid.purchase.web.domain.Charge;
-import liquid.purchase.facade.ChargeFacade;
-import liquid.purchase.web.domain.ChargeWay;
+import liquid.accounting.web.domain.Charge;
+import liquid.accounting.facade.ChargeFacade;
+import liquid.accounting.web.domain.ChargeWay;
 import liquid.metadata.IncomeType;
 import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.purchase.service.ChargeService;
+import liquid.accounting.service.ChargeService;
 import liquid.service.IncomeService;
 import liquid.service.ServiceProviderService;
 import liquid.service.ServiceSubtypeService;

@@ -1,9 +1,9 @@
 package liquid.controller;
 
-import liquid.purchase.persistence.domain.ChargeEntity;
-import liquid.purchase.web.domain.ChargeWay;
+import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.accounting.web.domain.ChargeWay;
 import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.purchase.service.ChargeService;
+import liquid.accounting.service.ChargeService;
 import liquid.transport.service.DeliveryContainerService;
 import liquid.service.ServiceSubtypeService;
 import liquid.transport.web.domain.TransMode;
