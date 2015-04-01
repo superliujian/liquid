@@ -29,10 +29,6 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-user-ldap</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
             <artifactId>liquid-task-api</artifactId>
         </dependency>
 

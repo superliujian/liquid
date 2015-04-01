@@ -1,9 +1,8 @@
 package liquid.task.service;
 
-import liquid.service.MailNotificationService;
 import liquid.task.domain.BusinessKey;
 import liquid.user.model.User;
-import liquid.user.service.UserServiceImpl;
+import liquid.user.service.UserService;
 import liquid.util.DatePattern;
 import liquid.util.DateUtil;
 import org.activiti.engine.HistoryService;
@@ -17,6 +16,7 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,8 @@ public class ActivitiEngineService {
     private ProcessEngine processEngine;
 
     @Autowired
-    private UserServiceImpl accountService;
+    @Qualifier("db")
+    private UserService accountService;
 
 //    @Autowired
 //    private MailNotificationService mailNotificationService;

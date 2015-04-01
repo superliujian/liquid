@@ -75,6 +75,7 @@ public class TasksController extends BaseController {
         try {
             bpmService.claimTask(taskId, SecurityContext.getInstance().getUsername());
         } catch (ActivitiTaskAlreadyClaimedException e) {
+            // Fixme
             model.addAttribute("message", "task.claimed.by.someone.else");
             return "error/error";
         }
