@@ -4,6 +4,7 @@ import liquid.accounting.facade.ReceivableFacade;
 import liquid.accounting.web.domain.Earning;
 import liquid.domain.SendingTruckForm;
 import liquid.facade.ServiceProviderFacade;
+import liquid.model.Alert;
 import liquid.order.domain.Order;
 import liquid.order.domain.VerificationSheetForm;
 import liquid.order.facade.OrderFacade;
@@ -38,12 +39,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -136,8 +137,9 @@ public class TaskController extends BaseTaskController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "definitionKey=CDCI")
-    public String fillIn(@PathVariable String taskId, @Valid @ModelAttribute VerificationSheetForm verificationSheetForm,
-                         BindingResult bindingResult, Model model) {
+    public String fillIn(@PathVariable String taskId,
+                         @Valid @ModelAttribute VerificationSheetForm verificationSheetForm, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes) {
         logger.debug("taskId: {}", taskId);
         Task task = taskService.getTask(taskId);
         logger.debug("task: {}", task);
@@ -152,15 +154,14 @@ public class TaskController extends BaseTaskController {
         order.setVerificationSheetSn(verificationSheetForm.getSn());
         orderFacade.save(order);
 
-        model.addAttribute("verificationSheetForm", verificationSheetForm);
-        model.addAttribute("task", task);
-        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
-        return "order/verification_sheet_sn";
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
+        return "redirect:/truck/" + taskId;
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "definitionKey=sendTruck")
-    public String fillIn(@PathVariable String taskId, @Valid @ModelAttribute SendingTruckForm sendingTruckForm,
-                         BindingResult bindingResult, Model model) {
+    public String fillIn(@PathVariable String taskId,
+                         @Valid @ModelAttribute SendingTruckForm sendingTruckForm, BindingResult bindingResult,
+                         Model model, RedirectAttributes redirectAttributes) {
         logger.debug("taskId: {}", taskId);
         Task task = taskService.getTask(taskId);
         logger.debug("task: {}", task);
@@ -174,14 +175,9 @@ public class TaskController extends BaseTaskController {
         }
 
         List<TruckForm> truckFormList = truckFacade.save(sendingTruckForm.getTruckList());
-        sendingTruckForm.setTruckList(truckFormList);
 
-        model.addAttribute("sendingTruckForm", sendingTruckForm);
-        model.addAttribute("sps", serviceProviderFacade.findByType(4L));
-
-        model.addAttribute("task", task);
-        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
-        return "truck/sending_truck_task";
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
+        return "redirect:/truck/" + taskId;
     }
 
     /**

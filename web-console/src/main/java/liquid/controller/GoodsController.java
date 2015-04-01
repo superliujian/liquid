@@ -1,5 +1,7 @@
 package liquid.controller;
 
+import liquid.model.Alert;
+import liquid.model.AlertType;
 import liquid.persistence.domain.GoodsEntity;
 import liquid.service.GoodsService;
 import liquid.web.controller.BaseController;
@@ -15,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -70,7 +71,7 @@ public class GoodsController extends BaseController {
                 return "redirect:/goods";
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
-                model.addAttribute("alert", messageSource.getMessage("duplicated.key", new String[]{}, Locale.CHINA));
+                model.addAttribute("alert", new Alert(AlertType.DANGER, "duplicated.key"));
                 return "goods/form";
             }
         }

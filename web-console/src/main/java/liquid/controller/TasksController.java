@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
@@ -69,13 +70,12 @@ public class TasksController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "claim")
-    public String claim(@RequestParam String taskId, HttpServletRequest request) {
+    public String claim(@RequestParam String taskId, Model model, RedirectAttributes redirectAttributes) {
         logger.debug("taskId: {}", taskId);
         try {
             bpmService.claimTask(taskId, SecurityContext.getInstance().getUsername());
         } catch (ActivitiTaskAlreadyClaimedException e) {
-            request.getSession().setAttribute("message",
-                    messageSource.getMessage("task.claimed.by.someone.else", new String[]{}, Locale.CHINA));
+            model.addAttribute("message", "task.claimed.by.someone.else");
             return "error/error";
         }
         return "redirect:/task/" + taskId;
@@ -90,7 +90,6 @@ public class TasksController extends BaseController {
         try {
             taskService.complete(taskId);
         } catch (NotCompletedException e) {
-            model.addAttribute("task_error", getMessage(e.getCode()));
             return "redirect:" + referer;
         } catch (Exception e) {
             logger.error(String.format("Complete taskId '%s' and referer '%s'.", taskId, referer), e);

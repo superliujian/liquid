@@ -1,6 +1,7 @@
 package liquid.controller;
 
 import liquid.domain.Disty;
+import liquid.model.Alert;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.security.SecurityContext;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -72,7 +71,7 @@ public class OrderDistyController extends BaseController {
         order.setUpdatedAt(new Date());
         orderService.save(order);
 
-        redirectAttributes.addFlashAttribute("alert", "save.success");
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         return "redirect:/dp?t=" + taskId;
     }
 }

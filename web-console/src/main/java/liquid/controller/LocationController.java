@@ -3,6 +3,8 @@ package liquid.controller;
 import liquid.domain.LocationForm;
 import liquid.domain.LocationType;
 import liquid.facade.LocationFacade;
+import liquid.model.Alert;
+import liquid.model.AlertType;
 import liquid.persistence.domain.LocationEntity;
 import liquid.service.LocationService;
 import liquid.web.controller.BaseController;
@@ -18,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Locale;
 
 /**
  * TODO: Comments.
@@ -80,7 +81,7 @@ public class LocationController extends BaseController {
                 return "redirect:/location";
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
-                model.addAttribute("alert", messageSource.getMessage("duplicated.key", new String[]{}, Locale.CHINA));
+                model.addAttribute("alert", new Alert("duplicated.key"));
                 return "location/form";
             }
         }
@@ -107,7 +108,7 @@ public class LocationController extends BaseController {
                 return "redirect:/location";
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
-                model.addAttribute("alert", messageSource.getMessage("duplicated.key", new String[]{}, Locale.CHINA));
+                model.addAttribute("alert", new Alert(AlertType.DANGER, "duplicated.key"));
                 return "location/edit";
             }
         }

@@ -316,9 +316,11 @@
 - @alert
 -->
 <div th:fragment="alert">
-    <div th:if="${alert}" class="alert alert-success" role="alert">
+    <div th:if="${alert}" class="alert" role="alert" th:classappend="${alert.css}">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <span th:text="#{${alert}}">Alert</span>
+        <span     th:if="${#arrays.isEmpty(alert.arguments)}" th:utext="#{${alert.code}}">Alert</span>
+        <!-- HACK -->
+        <span th:unless="${#arrays.isEmpty(alert.arguments)}" th:utext="#{${alert.code}(__${#strings.listJoin(alert.arguments, ',')}__)}">Alert</span>
     </div>
 </div>
 

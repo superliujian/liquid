@@ -9,6 +9,7 @@ import liquid.container.service.ContainerService;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.*;
 import liquid.facade.ContainerAllocationFacade;
+import liquid.model.Alert;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.ServiceItemService;
@@ -33,6 +34,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
@@ -144,7 +146,9 @@ public class AllocationController extends BaseTaskController {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String allocate(@PathVariable String taskId, ShipmentContainerAllocation shipmentContainerAllocation, Model model) {
+    public String allocate(@PathVariable String taskId,
+                           ShipmentContainerAllocation shipmentContainerAllocation, Model model,
+                           RedirectAttributes redirectAttributes) {
         logger.debug("taskId: {}", taskId);
         logger.debug("shipmentContainerAllocations: {}", shipmentContainerAllocation);
 
@@ -153,7 +157,7 @@ public class AllocationController extends BaseTaskController {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         model.addAttribute("shipmentContainerAllocations", containerAllocationFacade.computeContainerAllocation(orderId));
 
-        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         return "redirect:/task/" + taskId + "/allocation";
     }
 

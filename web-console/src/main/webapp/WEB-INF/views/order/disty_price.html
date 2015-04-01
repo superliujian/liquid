@@ -20,13 +20,13 @@
         
         <div class="form-group" th:classappend="${#fields.hasErrors('distyCny')} ? 'has-error'">
             <label>CNY</label>
-            <input type="text" th:field="*{distyCny}" class="form-control"/>
+            <input type="text" id="distyCny" name="distyCny" th:value="${#numbers.formatDecimal(disty.distyCny, 1, 2)}" class="form-control"/>
             <span th:errors="*{distyCny}">error</span>
         </div>
         
         <div class="form-group" th:classappend="${#fields.hasErrors('distyUsd')} ? 'has-error'">
             <label>USD</label>
-            <input type="text" th:field="*{distyUsd}" class="form-control"/>
+            <input type="text" id="distyUsd" name="distyUsd" th:value="${#numbers.formatDecimal(disty.distyUsd, 1, 2)}" class="form-control"/>
             <span th:errors="*{distyUsd}">error</span>
         </div>        
 

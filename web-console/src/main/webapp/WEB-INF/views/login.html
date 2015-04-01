@@ -8,21 +8,18 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<div id="f" class="container">
-    <div th:include="layout :: alert"/>
-    <div th:if="${session.alert}" class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <span th:text="${session.alert}">Alert</span>
+<div id="f" class="container">   
+    <div th:if="${param.error}">
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <div th:each="error : ${param.error}">
+                <span th:text="#{${error}}">Alert</span>
+            </div>
+        </div>
     </div>
 
     <form action="/login" method='POST'>
         <h3 class="form-heading" th:text="#{login}">Login</h3>
-
-        <div th:if="${param.error}">
-            <div th:each="error : ${param.error}">
-                <p class="alert" th:text="#{${error}}"/>
-            </div>
-        </div>
 
         <div class="form-group">
             <label th:text="#{username}">Username</label>

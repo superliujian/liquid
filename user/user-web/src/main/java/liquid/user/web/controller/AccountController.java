@@ -1,5 +1,6 @@
 package liquid.user.web.controller;
 
+import liquid.model.Alert;
 import liquid.user.domain.GroupMember;
 import liquid.user.model.PasswordChange;
 import liquid.user.model.User;
@@ -17,7 +18,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -65,7 +65,7 @@ public class AccountController extends BaseController {
         if (!bindingResult.hasErrors()) {
             if (user.getPassword().equals(user.getPassword2())) {
                 userService.register(user);
-                redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+                redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
                 return "redirect:/account/register";
             } else {
                 addFieldError(bindingResult, "user", "password2", user.getPassword2(), user.getPassword2());
@@ -92,7 +92,7 @@ public class AccountController extends BaseController {
         logger.debug("uid: {}", uid);
 
         userService.unlock(uid);
-        redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
@@ -101,7 +101,7 @@ public class AccountController extends BaseController {
         logger.debug("uid: {}", uid);
 
         userService.lock(uid);
-        redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         // TODO: The following way is workaround. There must be a best way to solve encoding issue.
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
@@ -114,7 +114,7 @@ public class AccountController extends BaseController {
             return "account/edit";
         } else {
             userService.edit(user);
-            redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+            redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         }
 
         return "redirect:/account/" + StringUtil.utf8encode(uid);
@@ -125,7 +125,7 @@ public class AccountController extends BaseController {
         logger.debug("uid: {}", uid);
         logger.debug("group: {}", group);
         userService.assignToGroup(uid, Integer.valueOf(group));
-        redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         return "redirect:/account/" + StringUtil.utf8encode(uid);
     }
 
@@ -139,8 +139,8 @@ public class AccountController extends BaseController {
         if (!bindingResult.hasErrors()) {
             if (passwordChange.getNewPassword().equals(passwordChange.getNewPassword2())) {
                 userService.changePassword(uid, passwordChange.getNewPassword());
-                model.addAttribute("alert", getMessage("save.success"));
-                redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+                model.addAttribute("alert", new Alert("save.success"));
+                redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
                 return "redirect:/account/" + StringUtil.utf8encode(uid);
             } else {
                 addFieldError(bindingResult, "passwordChange", "newPassword2", passwordChange.getOldPassword(), passwordChange.getOldPassword());
@@ -163,7 +163,7 @@ public class AccountController extends BaseController {
                     Authentication authentication = new UsernamePasswordAuthenticationToken(uid, passwordChange.getOldPassword());
                     authenticationManager.authenticate(authentication);
                     userService.changePassword(uid, passwordChange.getNewPassword());
-                    redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+                    redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
                     return "redirect:/account/" + StringUtil.utf8encode(uid);
                 } catch (AuthenticationException e) {
                     addFieldError(bindingResult, "passwordChange", "oldPassword", passwordChange.getOldPassword(), passwordChange.getOldPassword());

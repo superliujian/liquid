@@ -1,6 +1,7 @@
 package liquid.controller;
 
 import liquid.facade.BookingFacade;
+import liquid.model.Alert;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.ServiceProviderEntity;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Locale;
 
@@ -48,18 +50,12 @@ public class BookingController extends BaseTaskController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String booking(@PathVariable String taskId, Booking booking, Model model) {
+    public String booking(@PathVariable String taskId, Booking booking, Model model, RedirectAttributes redirectAttributes) {
         Long orderId = taskService.getOrderIdByTaskId(taskId);
         OrderEntity order = orderService.find(orderId);
         bookingFacade.save(order.getId(), booking);
 
-        Task task = taskService.getTask(taskId);
-        model.addAttribute("task", task);
-        booking = bookingFacade.computeBooking(order.getId());
-        model.addAttribute("booking", booking);
-        Iterable<ServiceProviderEntity> shipowners = serviceProviderService.findByType(3);
-        model.addAttribute("shipowners", shipowners);
-        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
-        return "booking/form";
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
+        return "redirect:/task/" + taskId + "booking";
     }
 }
