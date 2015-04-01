@@ -1,7 +1,0 @@
-#!/bin/sh
-
-for testfile in tests/*.js
-do 
-  casperjs test $testfile
-  echo ""
-done
