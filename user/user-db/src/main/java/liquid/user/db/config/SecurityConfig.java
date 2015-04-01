@@ -1,7 +1,12 @@
 package liquid.user.db.config;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,10 +17,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.support.SessionFlashMapManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +41,13 @@ import java.util.Map;
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter  {
     @Autowired
     @Qualifier("userDataSource")
     private DataSource dataSource;
+
+    @Autowired
+    private ApplicationContext context;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -67,6 +81,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationFailureHandler.setExceptionMappings(mappings);
         return authenticationFailureHandler;
     }
+
+//    @Bean
+//    public AuthenticationFailureHandler authenticationFailureHandler() {
+//        return new AuthenticationFailureHandler() {
+//            @Override
+//            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+////                FlashMapManager flashMapManager = new SessionFlashMapManager();
+//                FlashMapManager flashMapManager =
+//                        context.getBean("flashMapManager", FlashMapManager.class);
+//                FlashMap flashMap = new FlashMap();
+//                flashMap.put("alert", "login.failure.badcredentials");
+//                flashMapManager.saveOutputFlashMap(flashMap, request, response);
+//                response.sendRedirect("/login");
+//            }
+//        };
+//    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {

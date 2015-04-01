@@ -20,7 +20,8 @@ import java.util.Map;
  * Time: 11:24 PM
  */
 @Configuration
-@ComponentScan({"liquid.aop",
+@ComponentScan({
+        "liquid.aop",
         "liquid.audit",
         "liquid.facade", "liquid.service",
         "liquid.excel",

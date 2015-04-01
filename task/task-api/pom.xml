@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>liquid</groupId>
-        <artifactId>liquid</artifactId>
+        <artifactId>task</artifactId>
         <version>2.1.53-SNAPSHOT</version>
     </parent>
 
@@ -12,10 +12,6 @@
     <artifactId>liquid-task-api</artifactId>
     <packaging>jar</packaging>
     <name>Task API</name>
-
-    <properties>
-        <activiti-version>5.16.3</activiti-version>
-    </properties>
 
     <dependencies>
         <!-- liquid -->

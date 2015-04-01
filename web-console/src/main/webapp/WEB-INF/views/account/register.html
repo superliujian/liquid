@@ -8,9 +8,10 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-<br/>
-
 <div id="f" class="container">
+    <div th:include="layout :: alert"/>
+    <h3><span th:text="#{register}"></span></h3>
+    <hr />
     <form action="/account/register" method="POST" th:object="${user}">
 
         <div class="form-group" th:classappend="${#fields.hasErrors('uid')} ? 'has-error'">

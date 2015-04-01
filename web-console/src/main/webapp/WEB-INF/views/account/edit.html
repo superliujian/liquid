@@ -13,7 +13,7 @@
 </div><!-- /.container -->
 
 <div id="m" class="container">
-    <h3><span th:text="#{account}"></span></h3>    
+    <h3><span th:text="#{account}"></span></h3>
 
     <form method="POST" th:action="'/account/' + *{uid}" th:object="${user}" sec:authorize="hasRole('ROLE_ADMIN')">
         <hr />

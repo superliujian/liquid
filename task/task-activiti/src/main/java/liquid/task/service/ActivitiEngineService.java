@@ -38,8 +38,8 @@ public class ActivitiEngineService {
     @Autowired
     private UserServiceImpl accountService;
 
-    @Autowired
-    private MailNotificationService mailNotificationService;
+//    @Autowired
+//    private MailNotificationService mailNotificationService;
 
     @Autowired
     private MessageSource messageSource;
@@ -65,9 +65,9 @@ public class ActivitiEngineService {
         taskService.claim(taskId, uid);
 
         User user = accountService.find(uid);
-        mailNotificationService.send(messageSource.getMessage("claim.task", null, Locale.CHINA),
-                messageSource.getMessage("claim.task.content", new String[]{uid}, Locale.CHINA),
-                user.getEmail());
+//        mailNotificationService.send(messageSource.getMessage("claim.task", null, Locale.CHINA),
+//                messageSource.getMessage("claim.task.content", new String[]{uid}, Locale.CHINA),
+//                user.getEmail());
     }
 
     public void complete(String taskId, String uid, Map<String, Object> variableMap) {
@@ -77,9 +77,9 @@ public class ActivitiEngineService {
         taskService.complete(taskId, variableMap);
 
         User user = accountService.find(uid);
-        mailNotificationService.send(messageSource.getMessage("complete.task", null, Locale.CHINA),
-                messageSource.getMessage("complete.task.content", new String[]{uid}, Locale.CHINA),
-                user.getEmail());
+//        mailNotificationService.send(messageSource.getMessage("complete.task", null, Locale.CHINA),
+//                messageSource.getMessage("complete.task.content", new String[]{uid}, Locale.CHINA),
+//                user.getEmail());
     }
 
     public List<Task> listTasks(String candidateGid) {

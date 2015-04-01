@@ -9,6 +9,11 @@
 <!-- {!end layout} -->
 
 <div id="f" class="container">
+    <div th:include="layout :: alert"/>
+    <div th:if="${session.alert}" class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <span th:text="${session.alert}">Alert</span>
+    </div>
 
     <form action="/login" method='POST'>
         <h3 class="form-heading" th:text="#{login}">Login</h3>

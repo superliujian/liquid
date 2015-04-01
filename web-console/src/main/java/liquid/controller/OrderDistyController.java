@@ -3,6 +3,7 @@ package liquid.controller;
 import liquid.domain.Disty;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
+import liquid.security.SecurityContext;
 import liquid.task.service.TaskService;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -54,9 +56,8 @@ public class OrderDistyController extends BaseController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String feed(@RequestParam(value = "t") String taskId,
-                       @Valid @ModelAttribute("disty") Disty disty,
-                       BindingResult bindingResult,
-                       Model model, Principal principal) {
+                       @Valid @ModelAttribute("disty") Disty disty, BindingResult bindingResult,
+                       Model model, RedirectAttributes redirectAttributes) {
         logger.debug("taskId: {}", taskId);
 
         if (bindingResult.hasErrors()) {
@@ -67,13 +68,11 @@ public class OrderDistyController extends BaseController {
         OrderEntity order = orderService.find(orderId);
         order.setDistyCny(disty.getDistyCny());
         order.setDistyUsd(disty.getDistyUsd());
-        order.setUpdatedBy(principal.getName());
+        order.setUpdatedBy(SecurityContext.getInstance().getUsername());
         order.setUpdatedAt(new Date());
         orderService.save(order);
 
-        model.addAttribute("disty", disty);
-        model.addAttribute("task", taskService.getTask(taskId));
-        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
-        return "order/disty_price";
+        redirectAttributes.addFlashAttribute("alert", "save.success");
+        return "redirect:/dp?t=" + taskId;
     }
 }

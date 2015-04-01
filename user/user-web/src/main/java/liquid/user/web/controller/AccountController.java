@@ -55,24 +55,24 @@ public class AccountController extends BaseController {
     public String initRegister(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("groups", userService.findGroups());
-        return "register";
+        return "account/register";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String register(@Valid User user, BindingResult bindingResult) {
+    public String register(@Valid User user, BindingResult bindingResult,
+                           Model model, RedirectAttributes redirectAttributes) {
         logger.debug("user: {}", user);
-        if (bindingResult.hasErrors()) {
-            return "register";
-        } else {
+        if (!bindingResult.hasErrors()) {
             if (user.getPassword().equals(user.getPassword2())) {
                 userService.register(user);
-                return "account/success";
+                redirectAttributes.addFlashAttribute("alert", getMessage("save.success"));
+                return "redirect:/account/register";
             } else {
-                ObjectError objectError = new ObjectError("password", "passwords are not same.");
-                bindingResult.addError(objectError);
-                return "register";
+                addFieldError(bindingResult, "user", "password2", user.getPassword2(), user.getPassword2());
             }
         }
+        model.addAttribute("groups", userService.findGroups());
+        return "account/register";
     }
 
     @RequestMapping(value = "/{uid}", method = RequestMethod.GET)

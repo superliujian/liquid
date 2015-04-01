@@ -69,7 +69,7 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-task</artifactId>
+            <artifactId>liquid-task-activiti</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>

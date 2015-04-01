@@ -117,7 +117,7 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
-                <artifactId>liquid-task</artifactId>
+                <artifactId>liquid-task-activiti</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -328,6 +328,5 @@
         <module>web-console</module>
         <module>purchase</module>
     	<module>purchase-api</module>
-        <module>task-api</module>
     </modules>
 </project>
