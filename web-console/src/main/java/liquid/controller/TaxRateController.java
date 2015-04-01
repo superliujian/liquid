@@ -1,21 +1,21 @@
 package liquid.controller;
 
 import liquid.domain.TaxRates;
+import liquid.model.Alert;
 import liquid.persistence.domain.TaxRateEntity;
 import liquid.service.TaxRateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
-import java.util.Locale;
 
 /**
  * Created by redbrick9 on 8/29/14.
@@ -27,9 +27,6 @@ public class TaxRateController {
 
     @Autowired
     private TaxRateService taxRateService;
-
-    @Autowired
-    protected MessageSource messageSource;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
@@ -54,13 +51,11 @@ public class TaxRateController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String add(@ModelAttribute TaxRates taxRates, Model model) {
+    public String add(@ModelAttribute TaxRates taxRates,
+                      RedirectAttributes redirectAttributes) {
         taxRateService.save(taxRates.getList());
 
-        Collection<TaxRateEntity> list = taxRateService.findAll();
-        taxRates.setList(list);
-        model.addAttribute("taxRates", taxRates);
-        model.addAttribute("alert", messageSource.getMessage("save.success", new String[]{}, Locale.CHINA));
-        return "charge/tax_rate";
+        redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
+        return "redirect:/tax_rate";
     }
 }

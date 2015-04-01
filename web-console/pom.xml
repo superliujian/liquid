@@ -18,8 +18,6 @@
         <thymeleaf-version>2.1.4.RELEASE</thymeleaf-version>
         <thymeleaf-extras-springsecurity3-version>2.1.1.RELEASE</thymeleaf-extras-springsecurity3-version>
 
-        <jackson-version>2.5.0</jackson-version>
-
         <native2ascii-version>1.0-beta-1</native2ascii-version>
 
         <tomcat7-version>2.2</tomcat7-version>
@@ -154,7 +152,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson-version}</version>
         </dependency>
 
         <!-- logging -->

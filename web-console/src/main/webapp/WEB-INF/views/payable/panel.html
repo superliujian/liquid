@@ -8,76 +8,68 @@
 <div th:include="layout :: header"></div>
 <!-- {!end layout} -->
 
-
-
 <hr />
 
 <div class="container-fluid">
 
-        <table class="table table-striped table-hover table-condensed table-16">
-            <thead>
-            <tr>
-                <th th:text="#{applied.at}">Applied At</th>
-                <th th:text="#{invoice.no}">Invoice No.</th>
-                <th th:text="#{cny.of.invoice}">CNY of Invoice</th>
-                <th th:text="#{usd.of.invoice}">USD of Invoice</th>
-                <th th:text="#{paid.to}">Paid To</th>
-                <th th:text="#{actual.payable.cny}">Actual CNY</th>
-                <th th:text="#{actual.payable.usd}">Actual USD</th>
-                <th th:text="#{paid.at}">Paid At</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="record : ${records}">
-                <td th:text="${#calendars.format(record.appliedAt,'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${record.invoiceNo}"></td>
-                <td th:text="${record.cnyOfInvoice}">></td>
-                <td th:text="${record.usdOfInvoice}">></td>
-                <td th:text="${record.payee.name}">></td>
-                <td th:text="${record.cny}">></td>
-                <td th:text="${record.usd}">></td>
-                <td th:text="${#calendars.format(record.paidAt,'yyyy-MM-dd HH:mm')}"></td>
-                <td></td>
-            </tr>
-            <tr>
-            <form method="POST" th:action="'/payable/' + ${orderId}" th:object="${formBean}">
-                <div class="row">
-                <td class="col-xs-2">
-                    <div class="input-group input-group-sm date" id="appliedAtPicker">
-                        <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{appliedAt}" />
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    </div>
-                </td>
-                <td><input type="text" class="form-control input-sm" th:field="*{invoiceNo}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{cnyOfInvoice}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{usdOfInvoice}"></input></td>
-                <td>
-                    <input type="hidden" class="form-control input-sm" th:field="*{payeeId}"></input>
-                    <input type="text" class="form-control input-sm" th:field="*{payeeName}"></input>
-                </td>
-                <td><input type="text" class="form-control input-sm" th:field="*{cny}"></input></td>
-                <td><input type="text" class="form-control input-sm" th:field="*{usd}"></input></td>
-                <td class="col-xs-2">
-                    <div class="input-group input-group-sm date" id="paidAtPicker">
-                        <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{paidAt}"></input>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    </div>
-                </td>                
-                <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus text-success"/></button></td>
+    <table class="table table-striped table-hover table-condensed table-16">
+        <thead>
+        <tr>
+            <th th:text="#{applied.at}">Applied At</th>
+            <th th:text="#{invoice.no}">Invoice No.</th>
+            <th th:text="#{cny.of.invoice}">CNY of Invoice</th>
+            <th th:text="#{usd.of.invoice}">USD of Invoice</th>
+            <th th:text="#{paid.to}">Paid To</th>
+            <th th:text="#{actual.payable.cny}">Actual CNY</th>
+            <th th:text="#{actual.payable.usd}">Actual USD</th>
+            <th th:text="#{paid.at}">Paid At</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record : ${records}">
+            <td th:text="${#calendars.format(record.appliedAt,'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${record.invoiceNo}"></td>
+            <td th:text="${record.cnyOfInvoice}">></td>
+            <td th:text="${record.usdOfInvoice}">></td>
+            <td th:text="${record.payee.name}">></td>
+            <td th:text="${record.cny}">></td>
+            <td th:text="${record.usd}">></td>
+            <td th:text="${#calendars.format(record.paidAt,'yyyy-MM-dd HH:mm')}"></td>
+            <td></td>
+        </tr>
+        <tr>
+        <form method="POST" th:action="'/payable/' + ${orderId}" th:object="${formBean}">
+            <div class="row">
+            <td class="col-xs-2">
+                <div class="input-group input-group-sm date" id="appliedAtPicker">
+                    <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{appliedAt}" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
-            </form>
-            </tr>
-            </tbody>
-        </table>
+            </td>
+            <td><input type="text" class="form-control input-sm" th:field="*{invoiceNo}"></input></td>
+            <td><input type="text" class="form-control input-sm" th:field="*{cnyOfInvoice}"></input></td>
+            <td><input type="text" class="form-control input-sm" th:field="*{usdOfInvoice}"></input></td>
+            <td>
+                <input type="hidden" class="form-control input-sm" th:field="*{payeeId}"></input>
+                <input type="text" class="form-control input-sm" th:field="*{payeeName}"></input>
+            </td>
+            <td><input type="text" class="form-control input-sm" th:field="*{cny}"></input></td>
+            <td><input type="text" class="form-control input-sm" th:field="*{usd}"></input></td>
+            <td class="col-xs-2">
+                <div class="input-group input-group-sm date" id="paidAtPicker">
+                    <input type="text" data-date-format="YYYY-MM-DD HH:mm" class="form-control input-sm" th:field="*{paidAt}"></input>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </td>                
+            <td><button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus text-success"/></button></td>
+            </div>
+        </form>
+        </tr>
+        </tbody>
+    </table>
 </div>        
 
-    <div class="container">
-        <div th:if="${alert}" class="alert alert-danger" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <span th:text="${alert}">Alert</span>
-        </div>
-    </div>
 <hr />
 
 <div class="container text-center">

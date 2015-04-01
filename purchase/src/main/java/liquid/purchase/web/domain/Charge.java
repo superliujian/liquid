@@ -8,11 +8,12 @@ import java.math.BigDecimal;
 /**
  * Created by redbrick9 on 6/9/14.
  */
-public class Charge extends Order {
+public class Charge {
     private Long id;
     private Long shipmentId;
     private Long legId;
     private Long serviceSubtypeId;
+    private Integer containerQuantity;
 
     @NotNull
     private Long serviceProviderId;
@@ -58,6 +59,14 @@ public class Charge extends Order {
 
     public void setServiceSubtypeId(Long serviceSubtypeId) {
         this.serviceSubtypeId = serviceSubtypeId;
+    }
+
+    public Integer getContainerQuantity() {
+        return containerQuantity;
+    }
+
+    public void setContainerQuantity(Integer containerQuantity) {
+        this.containerQuantity = containerQuantity;
     }
 
     public String getServiceProviderName() {
@@ -147,15 +156,17 @@ public class Charge extends Order {
         sb.append(", shipmentId=").append(shipmentId);
         sb.append(", legId=").append(legId);
         sb.append(", serviceSubtypeId=").append(serviceSubtypeId);
+        sb.append(", containerQuantity=").append(containerQuantity);
         sb.append(", serviceProviderId=").append(serviceProviderId);
         sb.append(", serviceProviderName='").append(serviceProviderName).append('\'');
         sb.append(", way=").append(way);
         sb.append(", currency=").append(currency);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", totalPrice=").append(totalPrice);
+        sb.append(", totalCny=").append(totalCny);
+        sb.append(", totalUsd=").append(totalUsd);
         sb.append(", taskId='").append(taskId).append('\'');
         sb.append(", comment='").append(comment).append('\'');
-        sb.append(", ").append(super.toString());
         sb.append('}');
         return sb.toString();
     }

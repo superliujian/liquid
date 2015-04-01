@@ -156,7 +156,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <span th:text="#{charge}"></span>
-            <span class="pull-right" th:text="#{total} + ':' + ${total}"></span>
+            <span class="pull-right" th:text="#{total} + ':' +${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT')}"></span>
         </div>
 
         <div class="panel-body">
@@ -184,9 +184,9 @@
                     <td th:text="#{${transModes[charge.leg.transMode]}}">Trans Mode</td>
                     <td th:text="${charge.serviceSubtype.name}">Type</td>
                     <td th:text="${charge.sp.name}">SP Name</td>
-                    <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>
-                    <td th:text="${charge.unitPrice}">Unit Price</td>
-                    <td th:text="${charge.totalPrice}">Total Price</td>
+                    <td th:text="#{${chargeWays[__${charge.way}__].i18nKey}}">Way</td>                    
+                    <td th:text="${#numbers.formatDecimal(charge.unitPrice, 0, 'COMMA', 2, 'POINT')}">Unit Price</td>
+                    <td th:text="${#numbers.formatDecimal(charge.totalPrice, 0, 'COMMA', 2, 'POINT')}">Total Price</td>
                     <td th:text="${charge.currency} ? 'USD' : 'CNY'">Total Price</td>
                     <td th:text="${charge.comment}">Comment</td>
                 </tr>

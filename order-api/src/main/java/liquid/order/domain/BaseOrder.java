@@ -1,6 +1,6 @@
 package liquid.order.domain;
 
-import liquid.domain.BaseIdObject;
+import liquid.model.IdObject;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 /**
  * Created by Tao Ma on 2/24/15.
  */
-public class BaseOrder extends BaseIdObject {
+public class BaseOrder extends IdObject {
     private String orderNo;
     private Long serviceTypeId;
     private String serviceType;

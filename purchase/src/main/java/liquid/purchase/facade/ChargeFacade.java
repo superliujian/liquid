@@ -69,7 +69,6 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
         }
         for (ChargeEntity entity : entityPage) {
             Charge charge = convert(entity);
-            orderFacade.convert(entity.getOrder(), charge);
             chargeList.add(charge);
 
             sum.setContainerQuantity(sum.getContainerQuantity() + charge.getContainerQuantity());

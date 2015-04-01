@@ -1,9 +1,9 @@
-package liquid.domain;
+package liquid.model;
 
 /**
  * Created by redbrick9 on 6/10/14.
  */
-public abstract class BaseIdObject {
+public abstract class IdObject {
     private Long id;
 
     public Long getId() {

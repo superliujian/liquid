@@ -53,7 +53,8 @@ public class LocationFacade {
         location.setId(entity.getId());
         location.setName(entity.getName());
         location.setType(entity.getType());
-        location.setTypeText(messageSource.getMessage(LocationType.valueOf(location.getType()).getI18nKey(), new Object[0], Locale.CHINA));
+//        location.setTypeText(messageSource.getMessage(LocationType.valueOf(location.getType()).getI18nKey(), new Object[0], Locale.CHINA));
+        location.setTypeText("location_");
         return location;
     }
 

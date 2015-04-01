@@ -1,12 +1,12 @@
 package liquid.order.domain;
 
-import liquid.domain.BaseIdObject;
+import liquid.model.IdObject;
 import org.springframework.format.annotation.NumberFormat;
 
 /**
  * Created by redbrick9 on 5/27/14.
  */
-public class ServiceItem extends BaseIdObject {
+public class ServiceItem extends IdObject {
     private Long serviceSubtypeId;
     private String serviceSubtype;
 

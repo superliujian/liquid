@@ -1,11 +1,13 @@
 package liquid.domain;
 
+import liquid.model.IdObject;
+
 import java.util.Arrays;
 
 /**
  * Created by redbrick9 on 6/9/14.
  */
-public class ServiceProvider extends BaseIdObject {
+public class ServiceProvider extends IdObject {
     private String code;
     private String name;
     private Long typeId;
