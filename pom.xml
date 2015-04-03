@@ -352,5 +352,6 @@
         <module>config</module>
         <module>web-console</module>
     <module>operation</module>
+    <module>poc</module>
   </modules>
 </project>

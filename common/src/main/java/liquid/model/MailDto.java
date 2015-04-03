@@ -1,4 +1,4 @@
-package liquid.dto;
+package liquid.model;
 
 /**
  * Created by redbrick9 on 2/18/14.
