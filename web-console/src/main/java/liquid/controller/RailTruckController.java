@@ -2,16 +2,17 @@ package liquid.controller;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.service.ChargeService;
-import liquid.transport.persistence.domain.ShipmentEntity;
-import liquid.transport.web.domain.Truck;
-import liquid.dto.TruckingDto;
 import liquid.accounting.web.domain.ChargeWay;
+import liquid.dto.TruckingDto;
 import liquid.metadata.Role;
-import liquid.transport.web.domain.TransMode;
-import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.service.*;
+import liquid.operation.service.ServiceProviderService;
+import liquid.operation.domain.ServiceSubtype;
+import liquid.operation.service.ServiceSubtypeService;
+import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;
+import liquid.transport.web.domain.TransMode;
+import liquid.transport.web.domain.Truck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class RailTruckController extends BaseTaskController {
         model.addAttribute("shipmentSet", shipmentSet);
 
         // for charges
-        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("chargeWays", ChargeWay.values());
         model.addAttribute("transModes", TransMode.toMap());

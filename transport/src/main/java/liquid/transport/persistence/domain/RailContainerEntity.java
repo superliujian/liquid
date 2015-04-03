@@ -1,6 +1,6 @@
 package liquid.transport.persistence.domain;
 
-import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.operation.domain.ServiceProvider;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class RailContainerEntity extends BaseLegContainer {
 
     @ManyToOne
     @JoinColumn(name = "FLEET_ID")
-    private ServiceProviderEntity fleet;
+    private ServiceProvider fleet;
 
     @Column(name = "TRUCKER")
     private String trucker;
@@ -79,11 +79,11 @@ public class RailContainerEntity extends BaseLegContainer {
         this.truck = truck;
     }
 
-    public ServiceProviderEntity getFleet() {
+    public ServiceProvider getFleet() {
         return fleet;
     }
 
-    public void setFleet(ServiceProviderEntity fleet) {
+    public void setFleet(ServiceProvider fleet) {
         this.fleet = fleet;
     }
 

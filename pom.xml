@@ -69,6 +69,18 @@
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
+                <artifactId>liquid-operation-api</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
+                <artifactId>liquid-operation</artifactId>
+                <version>${project.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>liquid</groupId>
                 <artifactId>liquid-user-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -165,6 +177,12 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
+                <version>${spring-version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
                 <version>${spring-version}</version>
                 <scope>compile</scope>
             </dependency>
@@ -333,5 +351,6 @@
         <module>task</module>
         <module>config</module>
         <module>web-console</module>
-    </modules>
+    <module>operation</module>
+  </modules>
 </project>

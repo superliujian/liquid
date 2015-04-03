@@ -7,6 +7,7 @@ import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.Currency;
 import liquid.domain.LoadingType;
 import liquid.domain.TradeType;
+import liquid.operation.domain.ServiceSubtype;
 import liquid.order.domain.Order;
 import liquid.order.domain.ServiceItem;
 import liquid.order.persistence.domain.OrderEntity;
@@ -16,7 +17,6 @@ import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.security.SecurityContext;
 import liquid.service.*;
@@ -49,7 +49,7 @@ public class OrderFacade {
     private LocationService locationService;
 
     @Autowired
-    private ServiceTypeService serviceTypeService;
+    private ServiceTypeServiceImpl serviceTypeService;
 
     @Autowired
     private ActivitiEngineService bpmService;
@@ -248,8 +248,8 @@ public class OrderFacade {
             ServiceItemEntity serviceItemEntity = new ServiceItemEntity();
             serviceItemEntity.setId(serviceItem.getId());
             serviceItemEntity.setOrder(orderEntity);
-            serviceItemEntity.setServiceSubtype(ServiceSubtypeEntity.
-                    newInstance(ServiceSubtypeEntity.class, serviceItem.getServiceSubtypeId()));
+            serviceItemEntity.setServiceSubtype(ServiceSubtype.
+                    newInstance(ServiceSubtype.class, serviceItem.getServiceSubtypeId()));
             serviceItemEntity.setCurrency(serviceItem.getCurrency());
             serviceItemEntity.setQuotation(serviceItem.getQuotation());
             orderEntity.getServiceItems().add(serviceItemEntity);

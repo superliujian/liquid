@@ -1,5 +1,7 @@
-package liquid.persistence.domain;
+package liquid.operation.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import liquid.persistence.domain.StatefulEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -14,7 +16,7 @@ import java.util.Set;
  * Time: 4:38 PM
  */
 @Entity(name = "OPS_SERVICE_PROVIDER")
-public class ServiceProviderEntity extends StatefulEntity {
+public class ServiceProvider extends StatefulEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -30,7 +32,7 @@ public class ServiceProviderEntity extends StatefulEntity {
 
     @ManyToOne
     @JoinColumn(name = "TYPE_ID")
-    private ServiceProviderTypeEnity type;
+    private ServiceProviderType type;
 
     @Column(name = "ADDRESS")
     private String address;
@@ -47,11 +49,12 @@ public class ServiceProviderEntity extends StatefulEntity {
     @Column(name = "CELL")
     private String cell;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "OPS_SERVICE_PROVIDER_SUBTYPE",
-            joinColumns = @JoinColumn(name = "SERVICE_PROVIDER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "SERVICE_SUBTYPE_ID"))
-    private Set<ServiceSubtypeEntity> serviceSubtypes = new HashSet<>();
+            joinColumns = @JoinColumn(name = "SERVICE_PROVIDER_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "SERVICE_SUBTYPE_ID", referencedColumnName = "ID"))
+    private Set<ServiceSubtype> subtypes = new HashSet<>();
 
     public String getCode() {
         return code;
@@ -77,11 +80,11 @@ public class ServiceProviderEntity extends StatefulEntity {
         this.queryName = queryName;
     }
 
-    public ServiceProviderTypeEnity getType() {
+    public ServiceProviderType getType() {
         return type;
     }
 
-    public void setType(ServiceProviderTypeEnity type) {
+    public void setType(ServiceProviderType type) {
         this.type = type;
     }
 
@@ -125,11 +128,11 @@ public class ServiceProviderEntity extends StatefulEntity {
         this.cell = cell;
     }
 
-    public Set<ServiceSubtypeEntity> getServiceSubtypes() {
-        return serviceSubtypes;
+    public Set<ServiceSubtype> getSubtypes() {
+        return subtypes;
     }
 
-    public void setServiceSubtypes(Set<ServiceSubtypeEntity> serviceSubtypes) {
-        this.serviceSubtypes = serviceSubtypes;
+    public void setSubtypes(Set<ServiceSubtype> subtypes) {
+        this.subtypes = subtypes;
     }
 }

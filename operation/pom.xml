@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>liquid</groupId>
+        <artifactId>liquid</artifactId>
+        <version>2.1.53-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>liquid</groupId>
+    <artifactId>operation</artifactId>
+    <packaging>pom</packaging>
+    <name>Operation</name>
+
+  	<modules>
+        <module>operation-api</module>
+        <module>operation</module>
+    </modules>
+</project>

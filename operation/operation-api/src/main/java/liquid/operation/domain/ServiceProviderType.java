@@ -1,5 +1,7 @@
-package liquid.persistence.domain;
+package liquid.operation.domain;
 
+import liquid.converter.Text;
+import liquid.persistence.domain.BaseUpdateEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -13,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * Time: 7:31 PM
  */
 @Entity(name = "OPS_SERVICE_PROVIDER_TYPE")
-public class ServiceProviderTypeEnity extends BaseUpdateEntity {
+public class ServiceProviderType extends BaseUpdateEntity implements Text {
     @NotNull
     @NotEmpty
     @Column(name = "NAME")
@@ -28,11 +30,7 @@ public class ServiceProviderTypeEnity extends BaseUpdateEntity {
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("SpType{");
-        sb.append("name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public String toText() {
+        return String.valueOf(id);
     }
 }

@@ -1,7 +1,7 @@
 package liquid.accounting.api.controller;
 
-import liquid.domain.ServiceProvider;
-import liquid.facade.ServiceProviderFacade;
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.ServiceProviderService;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.web.domain.SearchBarForm;
@@ -26,7 +26,7 @@ import java.util.List;
 public class PurchaseController {
 
     @Autowired
-    private ServiceProviderFacade serviceProviderFacade;
+    private ServiceProviderService serviceProviderService;
 
     @Autowired
     private OrderService orderService;
@@ -35,7 +35,7 @@ public class PurchaseController {
     @ResponseBody
     public List<SearchBarForm> listCharges(@RequestParam String text) {
         List<SearchBarForm> searchBarFormList = new ArrayList<>();
-        List<ServiceProvider> serviceProviderList = serviceProviderFacade.findByQueryNameLike(text);
+        Iterable<ServiceProvider> serviceProviderList = serviceProviderService.findByQueryNameLike(text);
         for (ServiceProvider serviceProvider : serviceProviderList) {
             SearchBarForm searchBarForm = new SearchBarForm();
             searchBarForm.setType("sp");

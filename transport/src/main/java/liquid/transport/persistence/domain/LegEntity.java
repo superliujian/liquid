@@ -1,8 +1,8 @@
 package liquid.transport.persistence.domain;
 
+import liquid.operation.domain.ServiceProvider;
 import liquid.persistence.domain.BaseIdEntity;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 
 import javax.persistence.*;
 
@@ -27,7 +27,7 @@ public class LegEntity extends BaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
-    private ServiceProviderEntity sp;
+    private ServiceProvider sp;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
@@ -65,11 +65,11 @@ public class LegEntity extends BaseIdEntity {
         this.transMode = transMode;
     }
 
-    public ServiceProviderEntity getSp() {
+    public ServiceProvider getSp() {
         return sp;
     }
 
-    public void setSp(ServiceProviderEntity sp) {
+    public void setSp(ServiceProvider sp) {
         this.sp = sp;
     }
 

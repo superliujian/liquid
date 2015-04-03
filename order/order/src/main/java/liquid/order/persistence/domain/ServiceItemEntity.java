@@ -1,7 +1,7 @@
 package liquid.order.persistence.domain;
 
+import liquid.operation.domain.ServiceSubtype;
 import liquid.persistence.domain.BaseIdEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +23,7 @@ public class ServiceItemEntity extends BaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name = "SERVICE_SUBTYPE_ID")
-    private ServiceSubtypeEntity serviceSubtype;
+    private ServiceSubtype serviceSubtype;
 
     @Column(name = "CURRENCY")
     private Integer currency;
@@ -71,11 +71,11 @@ public class ServiceItemEntity extends BaseIdEntity {
         this.order = order;
     }
 
-    public ServiceSubtypeEntity getServiceSubtype() {
+    public ServiceSubtype getServiceSubtype() {
         return serviceSubtype;
     }
 
-    public void setServiceSubtype(ServiceSubtypeEntity serviceSubtype) {
+    public void setServiceSubtype(ServiceSubtype serviceSubtype) {
         this.serviceSubtype = serviceSubtype;
     }
 

@@ -1,5 +1,7 @@
-package liquid.persistence.domain;
+package liquid.operation.domain;
 
+import liquid.converter.Text;
+import liquid.persistence.domain.BaseUpdateEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -10,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Created by redbrick9 on 5/9/14.
  */
 @Entity(name = "OPS_SERVICE_SUBTYPE")
-public class ServiceSubtypeEntity extends BaseUpdateEntity {
+public class ServiceSubtype extends BaseUpdateEntity implements Text {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")
@@ -46,5 +48,16 @@ public class ServiceSubtypeEntity extends BaseUpdateEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public String toText() {
+        return String.valueOf(id);
+    }
+
+    // FIXME - A workaround for rending checked value of multi-valued checkbox.
+    @Override
+    public String toString() {
+        return String.valueOf(id);
     }
 }

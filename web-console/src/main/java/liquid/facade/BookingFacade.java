@@ -1,15 +1,15 @@
 package liquid.facade;
 
+import liquid.operation.domain.ServiceProvider;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
+import liquid.transport.persistence.domain.SpaceBookingEntity;
+import liquid.transport.service.BookingService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.Booking;
 import liquid.transport.web.domain.BookingItem;
 import liquid.transport.web.domain.TransMode;
-import liquid.transport.persistence.domain.SpaceBookingEntity;
-import liquid.transport.persistence.domain.LegEntity;
-import liquid.transport.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +71,7 @@ public class BookingFacade {
             bookingEntity.setId(bookingItem.getId());
             bookingEntity.setOrder(OrderEntity.newInstance(OrderEntity.class, orderId));
             bookingEntity.setLeg(LegEntity.newInstance(LegEntity.class, bookingItem.getLegId()));
-            bookingEntity.setShipowner(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, bookingItem.getShipownerId()));
+            bookingEntity.setShipowner(ServiceProvider.newInstance(ServiceProvider.class, bookingItem.getShipownerId()));
             bookingEntity.setBookingNo(bookingItem.getBookingNo());
             bookingEntities.add(bookingEntity);
         }

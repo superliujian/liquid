@@ -2,10 +2,10 @@ package liquid.controller;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.web.domain.ChargeWay;
-import liquid.persistence.domain.ServiceSubtypeEntity;
+import liquid.operation.domain.ServiceSubtype;
 import liquid.accounting.service.ChargeService;
+import liquid.operation.service.ServiceSubtypeService;
 import liquid.transport.service.DeliveryContainerService;
-import liquid.service.ServiceSubtypeService;
 import liquid.transport.web.domain.TransMode;
 import liquid.transport.persistence.domain.DeliveryContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
@@ -56,7 +56,7 @@ public class DeliveryController extends BaseTaskController {
         model.addAttribute("containers", deliveryContainerService.initDeliveryContainers(orderId));
 
         // for charges
-        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("chargeWays", ChargeWay.values());
         model.addAttribute("transModes", TransMode.toMap());

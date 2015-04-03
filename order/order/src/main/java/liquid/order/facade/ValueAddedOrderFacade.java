@@ -13,7 +13,7 @@ import liquid.security.SecurityContext;
 import liquid.service.CustomerService;
 import liquid.service.GoodsService;
 import liquid.service.LocationService;
-import liquid.service.ServiceTypeService;
+import liquid.service.ServiceTypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,7 +47,7 @@ public class ValueAddedOrderFacade {
     private ContainerSubtypeService containerSubtypeService;
 
     @Autowired
-    private ServiceTypeService serviceTypeService;
+    private ServiceTypeServiceImpl serviceTypeService;
 
     @Autowired
     private ReceivingContainerRepository receivingContainerRepository;

@@ -3,11 +3,11 @@ package liquid.transport.service;
 import liquid.container.domain.ContainerStatus;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.service.ContainerService;
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.ServiceProviderService;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.AbstractService;
-import liquid.service.ServiceProviderService;
 import liquid.transport.persistence.domain.*;
 import liquid.transport.persistence.repository.*;
 import liquid.transport.web.domain.*;
@@ -250,7 +250,7 @@ public class ShippingContainerService extends AbstractService<ShippingContainerE
 
     public void saveTruck(Truck truck) {
         RailContainerEntity container = rcRepository.findOne(truck.getRailContainerId());
-        ServiceProviderEntity fleet = serviceProviderService.find(truck.getFleetId());
+        ServiceProvider fleet = serviceProviderService.find(truck.getFleetId());
 
         if (truck.isBatch()) {
             Collection<RailContainerEntity> containers = rcRepository.findByShipment(container.getShipment());

@@ -1,7 +1,6 @@
 package liquid.container.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import liquid.container.domain.Container;
 import liquid.container.domain.ContainerStatus;
 import liquid.container.domain.ExcelFileInfo;
 import liquid.container.persistence.domain.ContainerEntity;
@@ -10,8 +9,8 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.persistence.repository.ContainerRepository;
 import liquid.excel.AbstractExcelService;
 import liquid.excel.RowMapper;
+import liquid.operation.domain.ServiceProvider;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +91,7 @@ public class ContainerService {
         if (ownerId > 0L) specifications = specifications.and(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(ContainerEntity_.owner), ServiceProviderEntity.newInstance(ServiceProviderEntity.class, ownerId));
+                return builder.equal(root.get(ContainerEntity_.owner), ServiceProvider.newInstance(ServiceProvider.class, ownerId));
             }
         });
 
@@ -219,7 +218,7 @@ public class ContainerService {
                                     break;
                             }
                             if (null == serviceProviderId) break;
-                            entity.setOwner(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, serviceProviderId));
+                            entity.setOwner(ServiceProvider.newInstance(ServiceProvider.class, serviceProviderId));
                             break;
                         case "E": // yard
                             if (null == value) break;

@@ -43,6 +43,14 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>liquid-operation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-operation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>liquid-user-api</artifactId>
         </dependency>
         <dependency>
@@ -102,8 +110,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${spring-version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>

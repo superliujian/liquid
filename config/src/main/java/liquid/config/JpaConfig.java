@@ -29,6 +29,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories({
         "liquid.persistence.repository",
+        "liquid.operation.repository",
         "liquid.container.persistence.repository",
         "liquid.accounting.persistence.repository",
         "liquid.purchase.persistence.repository",
@@ -67,6 +68,7 @@ public class JpaConfig {
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(
                 "liquid.persistence.domain",
+                "liquid.operation.domain",
                 "liquid.container.persistence.domain",
                 "liquid.order.persistence.domain",
                 "liquid.transport.persistence.domain",

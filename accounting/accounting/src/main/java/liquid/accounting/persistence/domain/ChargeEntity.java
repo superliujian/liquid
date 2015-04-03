@@ -1,9 +1,9 @@
 package liquid.accounting.persistence.domain;
 
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.domain.ServiceSubtype;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 
@@ -37,11 +37,11 @@ public class ChargeEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "SERVICE_SUBTYPE_ID")
-    private ServiceSubtypeEntity serviceSubtype;
+    private ServiceSubtype serviceSubtype;
 
     @ManyToOne
     @JoinColumn(name = "SP_ID")
-    private ServiceProviderEntity sp;
+    private ServiceProvider sp;
 
     @Column(name = "WAY")
     private int way = 1;
@@ -96,19 +96,19 @@ public class ChargeEntity extends BaseUpdateEntity {
         this.shipment = shipment;
     }
 
-    public ServiceSubtypeEntity getServiceSubtype() {
+    public ServiceSubtype getServiceSubtype() {
         return serviceSubtype;
     }
 
-    public void setServiceSubtype(ServiceSubtypeEntity serviceSubtype) {
+    public void setServiceSubtype(ServiceSubtype serviceSubtype) {
         this.serviceSubtype = serviceSubtype;
     }
 
-    public ServiceProviderEntity getSp() {
+    public ServiceProvider getSp() {
         return sp;
     }
 
-    public void setSp(ServiceProviderEntity sp) {
+    public void setSp(ServiceProvider sp) {
         this.sp = sp;
     }
 

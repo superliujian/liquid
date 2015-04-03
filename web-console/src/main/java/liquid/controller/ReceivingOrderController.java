@@ -18,7 +18,7 @@ import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.service.CustomerService;
 import liquid.service.GoodsService;
 import liquid.service.LocationService;
-import liquid.service.ServiceTypeService;
+import liquid.service.ServiceTypeServiceImpl;
 import liquid.web.controller.BaseController;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class ReceivingOrderController extends BaseController {
     private GoodsService goodsService;
 
     @Autowired
-    private ServiceTypeService serviceTypeService;
+    private ServiceTypeServiceImpl serviceTypeService;
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;

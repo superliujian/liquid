@@ -1,8 +1,8 @@
 package liquid.accounting.persistence.domain;
 
+import liquid.operation.domain.ServiceProvider;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +33,7 @@ public class PayableSettlementEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "PAYEE_ID")
-    private ServiceProviderEntity payee;
+    private ServiceProvider payee;
 
     @Column(name = "CNY")
     private Long cny;
@@ -84,11 +84,11 @@ public class PayableSettlementEntity extends BaseUpdateEntity {
         this.usdOfInvoice = usdOfInvoice;
     }
 
-    public ServiceProviderEntity getPayee() {
+    public ServiceProvider getPayee() {
         return payee;
     }
 
-    public void setPayee(ServiceProviderEntity payee) {
+    public void setPayee(ServiceProvider payee) {
         this.payee = payee;
     }
 

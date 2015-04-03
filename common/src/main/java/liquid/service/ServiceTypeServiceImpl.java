@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * Created by redbrick9 on 4/26/14.
  */
 @Service
-public class ServiceTypeService extends AbstractCachedService<ServiceTypeEntity, ServiceTypeRepository> {
+public class ServiceTypeServiceImpl extends AbstractCachedService<ServiceTypeEntity, ServiceTypeRepository> {
     @Override
     public void doSaveBefore(ServiceTypeEntity entity) { }
 

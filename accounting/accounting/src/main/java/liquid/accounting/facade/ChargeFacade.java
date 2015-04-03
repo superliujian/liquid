@@ -1,12 +1,12 @@
 package liquid.accounting.facade;
 
 import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.facade.Facade;
-import liquid.order.facade.OrderFacade;
-import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.accounting.service.ChargeService;
 import liquid.accounting.web.domain.Charge;
+import liquid.facade.Facade;
+import liquid.operation.domain.ServiceProvider;
+import liquid.order.facade.OrderFacade;
+import liquid.operation.domain.ServiceSubtype;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.util.DateUtil;
@@ -45,8 +45,8 @@ public class ChargeFacade implements Facade<Charge, ChargeEntity> {
             entity.setShipment(ShipmentEntity.newInstance(ShipmentEntity.class, charge.getShipmentId()));
         if (null != charge.getLegId())
             entity.setLeg(LegEntity.newInstance(LegEntity.class, charge.getLegId()));
-        entity.setServiceSubtype(ServiceSubtypeEntity.newInstance(ServiceSubtypeEntity.class, charge.getServiceSubtypeId()));
-        entity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, charge.getServiceProviderId()));
+        entity.setServiceSubtype(ServiceSubtype.newInstance(ServiceSubtype.class, charge.getServiceSubtypeId()));
+        entity.setSp(ServiceProvider.newInstance(ServiceProvider.class, charge.getServiceProviderId()));
         entity.setWay(charge.getWay());
         entity.setCurrency(charge.getCurrency());
         entity.setUnitPrice(charge.getUnitPrice());

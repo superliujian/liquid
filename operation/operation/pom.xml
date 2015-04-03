@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>liquid</groupId>
+        <artifactId>operation</artifactId>
+        <version>2.1.53-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>liquid</groupId>
+    <artifactId>liquid-operation</artifactId>
+    <packaging>jar</packaging>
+    <name>Operation Implementation</name>
+
+    <dependencies>
+        <!-- liquid -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-operation-api</artifactId>
+        </dependency>
+        <!-- FIXME -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-transport</artifactId>
+        </dependency>
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+    </dependencies>
+</project>

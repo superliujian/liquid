@@ -14,10 +14,6 @@
     <packaging>jar</packaging>
     <name>User Database Backend</name>
 
-    <properties>
-
-    </properties>
-
     <dependencies>
         <!-- liquid -->
         <dependency>
@@ -45,8 +41,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${spring-version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- spring data -->

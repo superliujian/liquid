@@ -1,7 +1,7 @@
 package liquid.controller;
 
-import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.service.ServiceSubtypeService;
+import liquid.operation.domain.ServiceSubtype;
+import liquid.operation.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ public class ServiceSubtypeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listEnabled(Model model) {
-        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
-        model.addAttribute("serviceSubtype", new ServiceSubtypeEntity());
+        model.addAttribute("serviceSubtype", new ServiceSubtype());
         return "service/subtype";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String newServiceSubtype(@ModelAttribute("serviceSubtype") ServiceSubtypeEntity serviceSubtype) {
+    public String newServiceSubtype(@ModelAttribute("serviceSubtype") ServiceSubtype serviceSubtype) {
         serviceSubtypeService.add(serviceSubtype);
         return "redirect:/service_subtype";
     }

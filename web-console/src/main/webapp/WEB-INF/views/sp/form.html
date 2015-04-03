@@ -36,7 +36,7 @@
             <div class="col-xs-4">
                 <div class="form-group">
                     <label th:text="#{sp.type}" class="control-label">SP Type</label>
-                    <select th:field="*{typeId}" class="form-control input-sm">
+                    <select th:field="*{type}" class="form-control input-sm">
                         <option th:each="spType : ${spTypes}"
                                 th:value="${spType.key}"
                                 th:text="${spType.value}">SP Type
@@ -94,7 +94,7 @@
             <div class="form-group">
                 <div class="col-xs-3" th:each="serviceSubtype : ${serviceSubtypes}">
                     <label class="checkbox-inline">
-                        <input type="checkbox" th:field="*{subtypeIds}" th:value="${serviceSubtype.id}"/>
+                        <input type="checkbox" th:field="*{subtypes}" th:value="${serviceSubtype.id}"/>
                         <span th:text="${serviceSubtype.name}">Servie Subtype Name</span>
                     </label>
                 </div>

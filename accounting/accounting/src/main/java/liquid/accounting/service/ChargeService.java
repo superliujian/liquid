@@ -4,11 +4,10 @@ import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.persistence.domain.ChargeEntity_;
 import liquid.accounting.persistence.repository.ChargeRepository;
 import liquid.accounting.web.domain.ChargeWay;
+import liquid.operation.domain.ServiceProvider_;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.persistence.domain.OrderEntity_;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.ServiceProviderEntity_;
-import liquid.persistence.repository.ServiceProviderRepository;
 import liquid.security.SecurityContext;
 import liquid.service.AbstractService;
 import liquid.service.ExchangeRateService;
@@ -55,9 +54,6 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
 
     @Autowired
     private LegRepository legRepository;
-
-    @Autowired
-    private ServiceProviderRepository serviceProviderRepository;
 
     @Autowired
     private OrderService orderService;
@@ -198,7 +194,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             Specification<ChargeEntity> spNameSpec = new Specification<ChargeEntity>() {
                 @Override
                 public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {
-                    return builder.like(root.get(ChargeEntity_.sp).get(ServiceProviderEntity_.name), "%" + spName + "%");
+                    return builder.like(root.get(ChargeEntity_.sp).get(ServiceProvider_.name), "%" + spName + "%");
                 }
             };
             specList.add(spNameSpec);
@@ -241,7 +237,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
             Specification<ChargeEntity> spIdSpec = new Specification<ChargeEntity>() {
                 @Override
                 public Predicate toPredicate(Root<ChargeEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                    return cb.equal(root.get(ChargeEntity_.sp).get(ServiceProviderEntity_.id), spId);
+                    return cb.equal(root.get(ChargeEntity_.sp).get(ServiceProvider_.id), spId);
                 }
             };
             specifications = specifications.and(spIdSpec);

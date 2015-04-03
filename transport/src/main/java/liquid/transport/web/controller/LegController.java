@@ -1,8 +1,8 @@
 package liquid.transport.web.controller;
 
-import liquid.persistence.domain.ServiceProviderEntity;
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.ServiceProviderService;
 import liquid.service.LocationService;
-import liquid.service.ServiceProviderService;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.service.LegService;
 import liquid.transport.web.domain.Leg;
@@ -47,7 +47,7 @@ public class LegController {
             leg.setServiceProviderId(entity.getSp().getId());
 
         Long serviceType = TransMode.toServiceType(entity.getTransMode());
-        Iterable<ServiceProviderEntity> sps = Collections.emptyList();
+        Iterable<ServiceProvider> sps = Collections.emptyList();
         if (serviceType != null) {
             sps = serviceProviderService.findByType(serviceType);
         }

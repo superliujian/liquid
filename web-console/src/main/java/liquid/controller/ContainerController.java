@@ -7,10 +7,9 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerService;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LocationType;
-import liquid.container.domain.ContainerCap;
+import liquid.operation.domain.ServiceProvider;
 import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.service.RailContainerService;
@@ -99,7 +98,7 @@ public class ContainerController extends BaseController {
     }
 
     @ModelAttribute("owners")
-    public Iterable<ServiceProviderEntity> populateOwners() {
+    public Iterable<ServiceProvider> populateOwners() {
         return serviceItemService.findContainerOwners();
     }
 
@@ -115,7 +114,7 @@ public class ContainerController extends BaseController {
         Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.SELF);
 
         // Owner list
-        List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+        List<ServiceProvider> owners = serviceItemService.findContainerOwners();
 
         // Yard list
         List<LocationEntity> yards = locationService.findYards();
@@ -163,7 +162,7 @@ public class ContainerController extends BaseController {
         Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.SELF);
 
         // Owner list
-        List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+        List<ServiceProvider> owners = serviceItemService.findContainerOwners();
 
         // Yard list
         List<LocationEntity> yards = locationService.findYards();

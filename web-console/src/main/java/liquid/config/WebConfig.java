@@ -1,11 +1,16 @@
 package liquid.config;
 
+import liquid.converter.GenericFormatter;
 import liquid.interceptor.LoggingInterceptor;
+import liquid.operation.domain.ServiceProviderType;
+import liquid.operation.converter.ToServiceSubtypeConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
@@ -33,6 +38,8 @@ import java.util.Locale;
 @ComponentScan(basePackages = {
         "liquid.controller",
         "liquid.api.controller",
+        "liquid.operation.controller",
+        "liquid.operation.restfulapi",
         "liquid.user.web.controller",
         "liquid.order.api.controller",
         "liquid.transport.web.controller",
@@ -40,6 +47,12 @@ import java.util.Locale;
         "liquid.purchase.api.controller",
         "liquid.purchase.web.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter {
+    @Autowired
+    private GenericFormatter<ServiceProviderType> serviceProviderTypeFormatter;
+
+    @Autowired
+    private ToServiceSubtypeConverter toServiceSubtypeConverter;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
@@ -48,6 +61,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggingInterceptor());
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(serviceProviderTypeFormatter);
+        registry.addConverter(toServiceSubtypeConverter);
     }
 
     @Bean

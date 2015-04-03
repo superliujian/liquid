@@ -1,11 +1,14 @@
 package liquid.container.persistence.domain;
 
+import liquid.operation.domain.ServiceProvider;
 import liquid.persistence.domain.BaseUpdateEntity;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -24,7 +27,7 @@ public class ContainerEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "OWNER_ID")
-    private ServiceProviderEntity owner;
+    private ServiceProvider owner;
 
     @ManyToOne
     @JoinColumn(name = "SUBTYPE_ID")
@@ -74,11 +77,11 @@ public class ContainerEntity extends BaseUpdateEntity {
         this.bicCode = bicCode;
     }
 
-    public ServiceProviderEntity getOwner() {
+    public ServiceProvider getOwner() {
         return owner;
     }
 
-    public void setOwner(ServiceProviderEntity owner) {
+    public void setOwner(ServiceProvider owner) {
         this.owner = owner;
     }
 

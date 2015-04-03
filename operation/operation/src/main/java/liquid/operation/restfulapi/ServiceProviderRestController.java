@@ -1,7 +1,7 @@
-package liquid.api.controller;
+package liquid.operation.restfulapi;
 
-import liquid.domain.ServiceProvider;
-import liquid.facade.ServiceProviderFacade;
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.ServiceProviderService;
 import liquid.transport.web.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,32 +20,25 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/api/sp")
-public class ApiServiceProviderController {
-    private static final Logger logger = LoggerFactory.getLogger(ApiServiceProviderController.class);
+public class ServiceProviderRestController {
+    private static final Logger logger = LoggerFactory.getLogger(ServiceProviderRestController.class);
 
     @Autowired
-    private ServiceProviderFacade serviceProviderFacade;
+    private ServiceProviderService serviceProviderService;
 
     @RequestMapping(method = RequestMethod.GET, params = "subtypeId")
     @ResponseBody
-    public List<ServiceProvider> list(@RequestParam Long subtypeId) {
-        return serviceProviderFacade.findBySubtypeId(subtypeId);
+    public List<ServiceProvider> listBySubtypeId(@RequestParam Long subtypeId) {
+        return serviceProviderService.findByServiceSubtypeId(subtypeId);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "transportMode")
     @ResponseBody
-    public List<ServiceProvider> list(@RequestParam Integer transportMode) {
+    public Iterable<ServiceProvider> listByTransportMode(@RequestParam Integer transportMode) {
         Long serviceType = TransMode.toServiceType(transportMode);
         if (null == serviceType) {
             return Collections.emptyList();
         }
-        return serviceProviderFacade.findByType(serviceType);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "name")
-    @ResponseBody
-    public Iterable<ServiceProvider> listByName(@RequestParam String name) {
-        logger.debug("name: {}", name);
-        return serviceProviderFacade.findByQueryNameLike(name);
+        return serviceProviderService.findByType(serviceType);
     }
 }

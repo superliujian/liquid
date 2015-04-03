@@ -10,11 +10,11 @@ import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.*;
 import liquid.facade.ContainerAllocationFacade;
 import liquid.model.Alert;
+import liquid.operation.domain.ServiceProvider;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.service.LocationService;
 import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.RailContainerEntity;
@@ -36,7 +36,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Container allocation controller.
@@ -187,7 +190,7 @@ public class AllocationController extends BaseTaskController {
         Page<ContainerEntity> page = containerService.findAll(shipmentEntity.getOrder().getContainerSubtypeId(),
                 ownerId, yardId, pageRequest);
         // Owner list
-        List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+        List<ServiceProvider> owners = serviceItemService.findContainerOwners();
         // Yard list
         List<LocationEntity> yards = locationService.findYards();
         // For showing containers in stock.
@@ -229,7 +232,7 @@ public class AllocationController extends BaseTaskController {
                 if (railContainerEntity.getSc().getId().equals(containerAllocation.getAllocationId())) {
                     TruckEntity truckEntity = truckService.find(containerAllocation.getTruckId());
                     railContainerEntity.setTruck(truckEntity);
-                    railContainerEntity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, truckEntity.getServiceProviderId()));
+                    railContainerEntity.setFleet(ServiceProvider.newInstance(liquid.operation.domain.ServiceProvider.class, truckEntity.getServiceProviderId()));
                     railContainerEntity.setPlateNo(truckEntity.getLicensePlate());
                     railContainerEntity.setTrucker(truckEntity.getDriver());
                     railContainerEntity.setReleasedAt(new Date());
@@ -294,7 +297,7 @@ public class AllocationController extends BaseTaskController {
         model.addAttribute("shipmentContainerAllocation", shipmentContainerAllocation);
 
         // Owner list
-        List<ServiceProviderEntity> owners = serviceItemService.findContainerOwners();
+        List<ServiceProvider> owners = serviceItemService.findContainerOwners();
         // Yard list
         List<LocationEntity> yards = locationService.findYards();
         // container subtypes

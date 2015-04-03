@@ -1,9 +1,9 @@
 package liquid.controller;
 
+import liquid.operation.domain.ServiceSubtype;
 import liquid.order.persistence.domain.ServiceItemEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
 import liquid.order.service.ServiceItemService;
-import liquid.service.ServiceSubtypeService;
+import liquid.operation.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ServiceItemController {
     private ServiceSubtypeService serviceSubtypeService;
 
     @ModelAttribute("serviceSubtypes")
-    public Iterable<ServiceSubtypeEntity> populateServiceSubtypes() {
+    public Iterable<ServiceSubtype> populateServiceSubtypes() {
         return serviceSubtypeService.findEnabled();
     }
 

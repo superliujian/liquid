@@ -3,8 +3,8 @@ package liquid.accounting.facade;
 import liquid.accounting.persistence.domain.PayableSettlementEntity;
 import liquid.accounting.service.PayableSettlementService;
 import liquid.accounting.web.domain.PayableSettlement;
+import liquid.operation.domain.ServiceProvider;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class PayableSettlementFacade {
         entity.setInvoiceNo(payableSettlement.getInvoiceNo());
         entity.setCnyOfInvoice(payableSettlement.getCnyOfInvoice());
         entity.setUsdOfInvoice(payableSettlement.getUsdOfInvoice());
-        entity.setPayee(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, payableSettlement.getPayeeId()));
+        entity.setPayee(ServiceProvider.newInstance(ServiceProvider.class, payableSettlement.getPayeeId()));
         entity.setCny(payableSettlement.getCny());
         entity.setUsd(payableSettlement.getUsd());
         entity.setPaidAt(DateUtil.dateOf(payableSettlement.getPaidAt()));

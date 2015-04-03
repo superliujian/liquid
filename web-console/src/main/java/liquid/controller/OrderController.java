@@ -13,6 +13,8 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LoadingType;
 import liquid.domain.LocationType;
+import liquid.operation.domain.ServiceSubtype;
+import liquid.operation.service.ServiceSubtypeService;
 import liquid.order.domain.ServiceItem;
 import liquid.domain.TradeType;
 import liquid.order.domain.Order;
@@ -85,7 +87,7 @@ public class OrderController extends BaseController {
     private ChargeService chargeService;
 
     @Autowired
-    private ServiceTypeService serviceTypeService;
+    private ServiceTypeServiceImpl serviceTypeService;
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;
@@ -155,7 +157,7 @@ public class OrderController extends BaseController {
     }
 
     @ModelAttribute("serviceSubtypes")
-    public Iterable<ServiceSubtypeEntity> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
+    public Iterable<ServiceSubtype> populateServiceSubtyes() {return serviceSubtypeService.findEnabled(); }
 
     @ModelAttribute("railwayPlanTypes")
     public Iterable<RailPlanTypeEntity> populateRailwayPlanTypes() {
@@ -439,7 +441,7 @@ public class OrderController extends BaseController {
             case "charge":
                 Iterable<ChargeEntity> charges = chargeService.getChargesByOrderId(id);
 
-                Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+                Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
                 model.addAttribute("serviceSubtypes", serviceSubtypes);
                 model.addAttribute("chargeWays", ChargeWay.values());
                 model.addAttribute("charges", charges);

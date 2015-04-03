@@ -20,6 +20,10 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>liquid-operation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>liquid-excel</artifactId>
         </dependency>
 

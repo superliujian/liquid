@@ -2,10 +2,10 @@ package liquid.controller;
 
 import liquid.facade.BookingFacade;
 import liquid.model.Alert;
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.ServiceProviderService;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.service.ServiceProviderService;
 import liquid.task.domain.Task;
 import liquid.transport.web.domain.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Locale;
 
 /**
  * Created by redbrick9 on 8/16/14.
@@ -44,7 +42,7 @@ public class BookingController extends BaseTaskController {
         Booking booking = bookingFacade.computeBooking(order.getId());
         model.addAttribute("booking", booking);
 
-        Iterable<ServiceProviderEntity> shipowners = serviceProviderService.findByType(3);
+        Iterable<ServiceProvider> shipowners = serviceProviderService.findByType(3L);
         model.addAttribute("shipowners", shipowners);
         return "booking/form";
     }

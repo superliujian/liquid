@@ -1,10 +1,10 @@
 package liquid.transport.web.controller;
 
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.ServiceProviderService;
 import liquid.order.persistence.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.persistence.domain.LocationEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.service.ServiceProviderService;
 import liquid.transport.persistence.domain.*;
 import liquid.transport.persistence.repository.RailContainerRepository;
 import liquid.transport.service.LegService;
@@ -149,7 +149,7 @@ public class ShipmentController {
     public String post(@PathVariable Long id, Leg leg, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             Long serviceSubtype = TransMode.toServiceType(leg.getTransMode());
-            Iterable<ServiceProviderEntity> sps = Collections.emptyList();
+            Iterable<ServiceProvider> sps = Collections.emptyList();
             if (serviceSubtype != null) {
                 sps = serviceProviderService.findByType(serviceSubtype);
             }
@@ -171,7 +171,7 @@ public class ShipmentController {
         }
 
         if (leg.getServiceProviderId() != null)
-            legEntity.setSp(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, leg.getServiceProviderId()));
+            legEntity.setSp(ServiceProvider.newInstance(ServiceProvider.class, leg.getServiceProviderId()));
         legEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, leg.getSourceId()));
         legEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId()));
         legEntity.setShipment(shipmentEntity);

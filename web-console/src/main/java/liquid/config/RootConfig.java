@@ -25,6 +25,7 @@ import java.util.Map;
         "liquid.audit",
         "liquid.facade", "liquid.service",
         "liquid.excel",
+        "liquid.operation.service", "liquid.operation.converter",
         "liquid.purchase.service", "liquid.purchase.facade",
         "liquid.accounting.facade", "liquid.accounting.service",
         "liquid.user.service",

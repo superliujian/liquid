@@ -1,7 +1,7 @@
 package liquid.transport.web.domain;
 
+import liquid.operation.domain.ServiceProvider;
 import liquid.order.persistence.domain.OrderEntity;
-import liquid.persistence.domain.ServiceProviderEntity;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
@@ -45,7 +45,7 @@ public class RailTransport extends TransportBase {
         entity.setOrder(OrderEntity.newInstance(OrderEntity.class, transport.getOrderId()));
         entity.setShipment(ShipmentEntity.newInstance(ShipmentEntity.class, transport.getShipmentId()));
         entity.setLeg(LegEntity.newInstance(LegEntity.class, transport.getLegId()));
-        entity.setFleet(ServiceProviderEntity.newInstance(ServiceProviderEntity.class, transport.getFleetId()));
+        entity.setFleet(ServiceProvider.newInstance(ServiceProvider.class, transport.getFleetId()));
         entity.setTrucker(transport.getTrucker());
         entity.setPlateNo(transport.getPlateNo());
         entity.setLoadingToc(DateUtil.dateOf(transport.getLoadedAt()));

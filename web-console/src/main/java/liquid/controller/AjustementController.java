@@ -1,17 +1,17 @@
 package liquid.controller;
 
+import liquid.accounting.facade.ChargeFacade;
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.persistence.domain.IncomeEntity;
+import liquid.accounting.service.ChargeService;
 import liquid.accounting.web.domain.Charge;
-import liquid.accounting.facade.ChargeFacade;
 import liquid.accounting.web.domain.ChargeWay;
 import liquid.metadata.IncomeType;
-import liquid.persistence.domain.ServiceProviderEntity;
-import liquid.persistence.domain.ServiceSubtypeEntity;
-import liquid.accounting.service.ChargeService;
+import liquid.operation.domain.ServiceProvider;
+import liquid.operation.domain.ServiceSubtype;
+import liquid.operation.service.ServiceProviderService;
 import liquid.service.IncomeService;
-import liquid.service.ServiceProviderService;
-import liquid.service.ServiceSubtypeService;
+import liquid.operation.service.ServiceSubtypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class AjustementController extends BaseTaskController {
     }
 
     @ModelAttribute("sps")
-    public Iterable<ServiceProviderEntity> populateSps() {
+    public Iterable<ServiceProvider> populateSps() {
         return serviceProviderService.findAll();
     }
 
@@ -80,7 +80,7 @@ public class AjustementController extends BaseTaskController {
         model.addAttribute("incomesTotal", incomeService.total(incomes));
 
         // for charges
-        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("chargeWays", ChargeWay.values());
         Iterable<ChargeEntity> charges = chargeService.findByTaskId(taskId);
@@ -128,7 +128,7 @@ public class AjustementController extends BaseTaskController {
     public String initAddCharge(@PathVariable String taskId,
                                 Model model, Principal principal) {
         logger.debug("taskId: {}", taskId);
-        Iterable<ServiceSubtypeEntity> serviceSubtypes = serviceSubtypeService.findEnabled();
+        Iterable<ServiceSubtype> serviceSubtypes = serviceSubtypeService.findEnabled();
         model.addAttribute("serviceSubtypes", serviceSubtypes);
         model.addAttribute("charge", new Charge());
         return "order/add_charge";

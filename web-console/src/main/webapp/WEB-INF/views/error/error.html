@@ -12,7 +12,7 @@
 
 <div class="container">
     <h2 th:text="#{system.error}">System Error</h2>
-    <span th:text="#{${message}}" />
+    <span th:if="${message}" th:text="#{${message}}" />
 </div>
 <!-- /.container -->
 
