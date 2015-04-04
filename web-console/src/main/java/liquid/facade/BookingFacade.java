@@ -1,7 +1,7 @@
 package liquid.facade;
 
 import liquid.operation.domain.ServiceProvider;
-import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.domain.OrderEntity;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.SpaceBookingEntity;
@@ -9,7 +9,7 @@ import liquid.transport.service.BookingService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.Booking;
 import liquid.transport.web.domain.BookingItem;
-import liquid.transport.web.domain.TransMode;
+import liquid.transport.domain.TransMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

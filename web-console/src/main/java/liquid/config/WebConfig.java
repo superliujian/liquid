@@ -2,8 +2,8 @@ package liquid.config;
 
 import liquid.converter.GenericFormatter;
 import liquid.interceptor.LoggingInterceptor;
-import liquid.operation.domain.ServiceProviderType;
 import liquid.operation.converter.ToServiceSubtypeConverter;
+import liquid.operation.domain.ServiceProviderType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -38,9 +38,10 @@ import java.util.Locale;
 @ComponentScan(basePackages = {
         "liquid.controller",
         "liquid.api.controller",
+        "liquid.user.controller",
         "liquid.operation.controller",
         "liquid.operation.restfulapi",
-        "liquid.user.web.controller",
+        "liquid.process.controller",
         "liquid.order.api.controller",
         "liquid.transport.web.controller",
         "liquid.accounting.web.controller",

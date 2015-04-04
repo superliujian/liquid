@@ -12,13 +12,6 @@
     <packaging>jar</packaging>
     <name>Excel</name>
 
-    <properties>
-        <poi-version>3.10-FINAL</poi-version>
-        <!-- have to use this version otherwise throwing NoClassDefFoundError: org/w3c/dom/ElementTraversal -->
-        <xml-apis-version>1.4.01</xml-apis-version>
-        <xerces-version>2.11.0</xerces-version>
-    </properties>
-
     <dependencies>
         <!-- poi -->
         <dependency>

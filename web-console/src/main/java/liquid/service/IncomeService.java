@@ -5,9 +5,9 @@ import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.accounting.persistence.repository.IncomeRepository;
 import liquid.accounting.service.ReceivableSummaryService;
 import liquid.metadata.IncomeType;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.OrderService;
-import liquid.task.service.TaskService;
+import liquid.order.domain.OrderEntity;
+import liquid.order.service.OrderServiceImpl;
+import liquid.process.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class IncomeService {
     private ReceivableSummaryService receivableSummaryService;
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     public List<IncomeEntity> findByTaskId(String taskId) {
         return incomeRepository.findByTaskId(taskId);

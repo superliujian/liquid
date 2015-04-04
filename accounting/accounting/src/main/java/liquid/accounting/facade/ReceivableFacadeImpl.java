@@ -5,7 +5,7 @@ import liquid.accounting.service.ReceivableSummaryService;
 import liquid.accounting.web.domain.Earning;
 import liquid.accounting.web.domain.ReceivableSummary;
 import liquid.order.facade.OrderFacade;
-import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.domain.OrderEntity;
 import liquid.service.ExchangeRateService;
 import liquid.util.DateUtil;
 import liquid.web.domain.EnhancedPageImpl;

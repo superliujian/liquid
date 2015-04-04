@@ -4,7 +4,7 @@ import liquid.accounting.persistence.domain.PayableSettlementEntity;
 import liquid.accounting.service.PayableSettlementService;
 import liquid.accounting.web.domain.PayableSettlement;
 import liquid.operation.domain.ServiceProvider;
-import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.domain.OrderEntity;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

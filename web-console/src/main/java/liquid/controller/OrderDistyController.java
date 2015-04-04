@@ -2,10 +2,10 @@ package liquid.controller;
 
 import liquid.domain.Disty;
 import liquid.model.Alert;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.OrderService;
+import liquid.order.domain.OrderEntity;
+import liquid.order.service.OrderServiceImpl;
 import liquid.security.SecurityContext;
-import liquid.task.service.TaskService;
+import liquid.process.service.TaskService;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class OrderDistyController extends BaseController {
     private TaskService taskService;
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String init(@RequestParam(value = "t") String taskId, Model model) {

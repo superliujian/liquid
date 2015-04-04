@@ -1,5 +1,7 @@
 package liquid.order.persistence.domain;
 
+import liquid.order.domain.BaseOrder;
+
 import javax.persistence.Entity;
 
 /**

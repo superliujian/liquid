@@ -1,7 +1,5 @@
 package liquid.accounting.web.domain;
 
-import liquid.order.domain.Order;
-
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 

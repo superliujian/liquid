@@ -19,26 +19,6 @@
             <artifactId>liquid-common</artifactId>
         </dependency>
 
-        <!-- spring data -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-        </dependency>
-
-        <!-- hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-        </dependency>
-
         <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

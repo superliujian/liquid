@@ -15,27 +15,27 @@ import liquid.domain.LoadingType;
 import liquid.domain.LocationType;
 import liquid.operation.domain.ServiceSubtype;
 import liquid.operation.service.ServiceSubtypeService;
-import liquid.order.domain.ServiceItem;
+import liquid.order.model.ServiceItem;
 import liquid.domain.TradeType;
-import liquid.order.domain.Order;
+import liquid.order.model.Order;
 import liquid.order.domain.OrderStatus;
 import liquid.order.facade.OrderFacade;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.OrderService;
+import liquid.order.domain.OrderEntity;
+import liquid.order.service.OrderServiceImpl;
 import liquid.persistence.domain.*;
 import liquid.accounting.persistence.domain.ChargeEntity;
 import liquid.accounting.service.ChargeService;
 import liquid.accounting.web.domain.ChargeWay;
 import liquid.security.SecurityContext;
 import liquid.service.*;
-import liquid.task.service.TaskService;
+import liquid.process.domain.Task;
+import liquid.process.service.TaskService;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
 import liquid.web.controller.BaseController;
 import liquid.web.domain.SearchBarForm;
-import org.activiti.engine.history.HistoricTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class OrderController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @Autowired
     private LocationService locationService;
@@ -426,9 +426,7 @@ public class OrderController extends BaseController {
 
         switch (tab) {
             case "task":
-                List<org.activiti.engine.task.Task> tasks = taskService.listTasksByOrderId(id);
-                List<HistoricTaskInstance> completedTasks = taskService.listCompltedTasks(id + ":" + order.getOrderNo());
-                model.addAttribute("tasks", tasks);
+                List<Task> completedTasks = taskService.listCompltedTasks(id + ":" + order.getOrderNo());
                 model.addAttribute("completedTasks", completedTasks);
                 break;
             case "railway":

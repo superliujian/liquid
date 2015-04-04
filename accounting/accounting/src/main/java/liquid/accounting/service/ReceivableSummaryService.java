@@ -5,7 +5,7 @@ import liquid.accounting.persistence.domain.AccountingType;
 import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.accounting.persistence.domain.ReceivableSummaryEntity_;
 import liquid.accounting.persistence.repository.ReceivableSummaryRepository;
-import liquid.order.persistence.domain.OrderEntity_;
+import liquid.order.domain.OrderEntity_;
 import liquid.service.AbstractService;
 import liquid.service.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;

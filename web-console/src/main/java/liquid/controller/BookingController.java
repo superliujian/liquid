@@ -4,9 +4,10 @@ import liquid.facade.BookingFacade;
 import liquid.model.Alert;
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.OrderService;
-import liquid.task.domain.Task;
+import liquid.order.domain.OrderEntity;
+import liquid.order.service.OrderServiceImpl;
+import liquid.process.controller.BaseTaskController;
+import liquid.process.domain.Task;
 import liquid.transport.web.domain.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class BookingController extends BaseTaskController {
     private ServiceProviderService serviceProviderService;
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String booking(@PathVariable String taskId, Model model) {

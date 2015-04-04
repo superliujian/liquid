@@ -2,8 +2,8 @@ package liquid.accounting.api.controller;
 
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.OrderService;
+import liquid.order.domain.OrderEntity;
+import liquid.order.service.OrderServiceImpl;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class PurchaseController {
     private ServiceProviderService serviceProviderService;
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @RequestMapping(method = RequestMethod.GET, params = "text")
     @ResponseBody

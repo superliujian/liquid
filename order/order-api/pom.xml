@@ -18,6 +18,10 @@
             <groupId>liquid</groupId>
             <artifactId>liquid-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-operation-api</artifactId>
+        </dependency>
 
         <!-- spring -->
         <dependency>
@@ -28,7 +32,15 @@
         <!-- hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
         </dependency>
 
         <!-- testing -->

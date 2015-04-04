@@ -12,11 +12,6 @@
     <packaging>jar</packaging>
     <name>Config</name>
 
-    <properties>
-        <mysql-version>5.1.28</mysql-version>
-    </properties>
-
-
     <dependencies>
         <!-- liquid -->
         <dependency>

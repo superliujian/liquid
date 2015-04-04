@@ -12,11 +12,6 @@
     <packaging>jar</packaging>
     <name>Common</name>
 
-    <properties>
-        <mail-version>1.4.1</mail-version>
-        <mysql-version>5.1.28</mysql-version>
-    </properties>
-
     <dependencies>
         <!-- liquid -->
         <dependency>

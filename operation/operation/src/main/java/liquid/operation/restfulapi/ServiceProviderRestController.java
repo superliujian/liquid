@@ -2,7 +2,7 @@ package liquid.operation.restfulapi;
 
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
-import liquid.transport.web.domain.TransMode;
+import liquid.transport.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

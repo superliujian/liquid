@@ -1,7 +1,7 @@
 package liquid.config;
 
 
-import liquid.task.handler.ProcessEndHandler;
+import liquid.process.handler.ProcessEndHandler;
 import org.activiti.engine.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;
 import org.activiti.spring.ProcessEngineFactoryBean;

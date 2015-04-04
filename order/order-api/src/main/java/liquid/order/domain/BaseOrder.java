@@ -1,73 +1,99 @@
 package liquid.order.domain;
 
-import liquid.model.IdObject;
-import org.hibernate.validator.constraints.NotEmpty;
+import liquid.order.domain.OrderRailEntity;
+import liquid.persistence.domain.BaseUpdateEntity;
 
+import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
- * Created by Tao Ma on 2/24/15.
+ * TODO: Comments.
+ * User: tao
+ * Date: 10/14/13
+ * Time: 8:34 PM
  */
-public class BaseOrder extends IdObject {
-    private String orderNo;
+@MappedSuperclass
+public class BaseOrder extends BaseUpdateEntity {
+    @Column(name = "SERVICE_TYPE_ID")
     private Long serviceTypeId;
-    private String serviceType;
-    private Long customerId;
 
-    @NotNull
-    @NotEmpty
-    private String customerName;
+    @Column(name = "ORDER_NO")
+    private String orderNo;
 
-    private Long originId;
+    @Column(name = "CUSTOMER_ID")
+    private long customerId;
 
-    @NotNull
-    @NotEmpty
-    private String origination;
-    private Long destinationId;
+    @Column(name = "SRC_LOC_ID")
+    private Long srcLocId;
 
-    @NotNull
-    @NotEmpty
-    private String destination;
+    @Column(name = "DST_LOC_ID")
+    private Long dstLocId;
+
+    @Column(name = "CONSIGNEE")
     private String consignee;
+
+    @Column(name = "CONSIGNEE_PHONE")
     private String consigneePhone;
+
+    @Column(name = "CONSIGNEE_ADDR")
     private String consigneeAddress;
+
+    @Column(name = "GOODS_ID")
     private Long goodsId;
-    private String goodsName;
+
+    /**
+     * unit kilogram
+     */
     @Min(1)
-    @NotNull
-    private Integer goodsWeight;
+    @Column(name = "WEIGHT")
+    private int goodsWeight;
+
+    @Column(name = "DIMENSION")
     private String goodsDimension;
 
-    private Integer containerType = 0;
-    private String containerTypeName;
-    private Long railContainerSubtypeId;
-    private Long selfContainerSubtypeId;
-    private String containerSubtype;
-    @NotNull
+    @Column(name = "CONTAINER_TYPE")
+    private int containerType;
+
+    // The following three filed are used for list order
+    @Column(name = "CONTAINER_SUBTYPE_ID")
+    private Long containerSubtypeId;
+
+    @Column(name = "CONTAINER_CAP")
+    private int containerCap;
+
     @Min(1)
-    private Integer containerQuantity = 0;
+    @Column(name = "CONTAINER_QTY")
+    private int containerQty;
+
+    @Column(name = "CONTAINER_ATTR")
     private String containerAttribute;
 
-    @Min(1)
-    private BigDecimal cnyTotal;
-    private BigDecimal usdTotal;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
+    @JoinColumn(name = "RAILWAY_ID")
+    private OrderRailEntity railway;
 
-    private String createdBy;
-    private String createdAt;
-    private String updatedAt;
+    @Column(precision = 19, scale = 4, name = "TOTAL_CNY")
+    private BigDecimal totalCny = BigDecimal.ZERO;
 
-    private String role;
-    private Integer status;
+    @Column(precision = 19, scale = 4, name = "TOTAL_USD")
+    private BigDecimal totalUsd = BigDecimal.ZERO;
 
-    public String getOrderNo() {
-        return orderNo;
-    }
+    @Column(precision = 19, scale = 4, name = "DISTY_CNY")
+    private BigDecimal distyCny = BigDecimal.ZERO;
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
+    @Column(precision = 19, scale = 4, name = "DISTY_USD")
+    private BigDecimal distyUsd = BigDecimal.ZERO;
+
+    @Column(precision = 19, scale = 4, name = "GRAND_TOTAL")
+    private BigDecimal grandTotal = new BigDecimal("0");
+
+    @Column(name = "CREATE_ROLE")
+    private String createRole;
+
+    // 1 saved; 2: submitted
+    @Column(name = "STATUS")
+    private int status;
 
     public Long getServiceTypeId() {
         return serviceTypeId;
@@ -77,60 +103,36 @@ public class BaseOrder extends IdObject {
         this.serviceTypeId = serviceTypeId;
     }
 
-    public String getServiceType() {
-        return serviceType;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
-    public Long getCustomerId() {
+    public long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public Long getSrcLocId() {
+        return srcLocId;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setSrcLocId(Long srcLocId) {
+        this.srcLocId = srcLocId;
     }
 
-    public Long getOriginId() {
-        return originId;
+    public Long getDstLocId() {
+        return dstLocId;
     }
 
-    public void setOriginId(Long originId) {
-        this.originId = originId;
-    }
-
-    public String getOrigination() {
-        return origination;
-    }
-
-    public void setOrigination(String origination) {
-        this.origination = origination;
-    }
-
-    public Long getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(Long destinationId) {
-        this.destinationId = destinationId;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setDstLocId(Long dstLocId) {
+        this.dstLocId = dstLocId;
     }
 
     public String getConsignee() {
@@ -165,19 +167,11 @@ public class BaseOrder extends IdObject {
         this.goodsId = goodsId;
     }
 
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public Integer getGoodsWeight() {
+    public int getGoodsWeight() {
         return goodsWeight;
     }
 
-    public void setGoodsWeight(Integer goodsWeight) {
+    public void setGoodsWeight(int goodsWeight) {
         this.goodsWeight = goodsWeight;
     }
 
@@ -189,52 +183,36 @@ public class BaseOrder extends IdObject {
         this.goodsDimension = goodsDimension;
     }
 
-    public Integer getContainerType() {
+    public int getContainerType() {
         return containerType;
     }
 
-    public void setContainerType(Integer containerType) {
+    public void setContainerType(int containerType) {
         this.containerType = containerType;
     }
 
-    public String getContainerTypeName() {
-        return containerTypeName;
+    public Long getContainerSubtypeId() {
+        return containerSubtypeId;
     }
 
-    public void setContainerTypeName(String containerTypeName) {
-        this.containerTypeName = containerTypeName;
+    public void setContainerSubtypeId(Long containerSubtypeId) {
+        this.containerSubtypeId = containerSubtypeId;
     }
 
-    public Long getRailContainerSubtypeId() {
-        return railContainerSubtypeId;
+    public int getContainerCap() {
+        return containerCap;
     }
 
-    public void setRailContainerSubtypeId(Long railContainerSubtypeId) {
-        this.railContainerSubtypeId = railContainerSubtypeId;
+    public void setContainerCap(int containerCap) {
+        this.containerCap = containerCap;
     }
 
-    public Long getSelfContainerSubtypeId() {
-        return selfContainerSubtypeId;
+    public int getContainerQty() {
+        return containerQty;
     }
 
-    public void setSelfContainerSubtypeId(Long selfContainerSubtypeId) {
-        this.selfContainerSubtypeId = selfContainerSubtypeId;
-    }
-
-    public String getContainerSubtype() {
-        return containerSubtype;
-    }
-
-    public void setContainerSubtype(String containerSubtype) {
-        this.containerSubtype = containerSubtype;
-    }
-
-    public Integer getContainerQuantity() {
-        return containerQuantity;
-    }
-
-    public void setContainerQuantity(Integer containerQuantity) {
-        this.containerQuantity = containerQuantity;
+    public void setContainerQty(int containerQty) {
+        this.containerQty = containerQty;
     }
 
     public String getContainerAttribute() {
@@ -245,97 +223,67 @@ public class BaseOrder extends IdObject {
         this.containerAttribute = containerAttribute;
     }
 
-    public BigDecimal getCnyTotal() {
-        return cnyTotal;
+    public OrderRailEntity getRailway() {
+        return railway;
     }
 
-    public void setCnyTotal(BigDecimal cnyTotal) {
-        this.cnyTotal = cnyTotal;
+    public void setRailway(OrderRailEntity railway) {
+        this.railway = railway;
     }
 
-    public BigDecimal getUsdTotal() {
-        return usdTotal;
+    public BigDecimal getTotalCny() {
+        return totalCny;
     }
 
-    public void setUsdTotal(BigDecimal usdTotal) {
-        this.usdTotal = usdTotal;
+    public void setTotalCny(BigDecimal totalCny) {
+        this.totalCny = totalCny;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public BigDecimal getTotalUsd() {
+        return totalUsd;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setTotalUsd(BigDecimal totalUsd) {
+        this.totalUsd = totalUsd;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public BigDecimal getDistyCny() {
+        return distyCny;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setDistyCny(BigDecimal distyCny) {
+        this.distyCny = distyCny;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public BigDecimal getDistyUsd() {
+        return distyUsd;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setDistyUsd(BigDecimal distyUsd) {
+        this.distyUsd = distyUsd;
     }
 
-    public String getRole() {
-        return role;
+    public BigDecimal getGrandTotal() {
+        return grandTotal;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setGrandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
-    public Integer getStatus() {
+    public String getCreateRole() {
+        return createRole;
+    }
+
+    public void setCreateRole(String createRole) {
+        this.createRole = createRole;
+    }
+
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("{Class=BaseOrder");
-        sb.append(", orderNo='").append(orderNo).append('\'');
-        sb.append(", serviceTypeId=").append(serviceTypeId);
-        sb.append(", serviceType='").append(serviceType).append('\'');
-        sb.append(", customerId=").append(customerId);
-        sb.append(", customerName='").append(customerName).append('\'');
-        sb.append(", originId=").append(originId);
-        sb.append(", origination='").append(origination).append('\'');
-        sb.append(", destinationId=").append(destinationId);
-        sb.append(", destination='").append(destination).append('\'');
-        sb.append(", consignee='").append(consignee).append('\'');
-        sb.append(", consigneePhone='").append(consigneePhone).append('\'');
-        sb.append(", consigneeAddress='").append(consigneeAddress).append('\'');
-        sb.append(", goodsId=").append(goodsId);
-        sb.append(", goodsName='").append(goodsName).append('\'');
-        sb.append(", goodsWeight=").append(goodsWeight);
-        sb.append(", goodsDimension='").append(goodsDimension).append('\'');
-        sb.append(", containerType=").append(containerType);
-        sb.append(", containerTypeName='").append(containerTypeName).append('\'');
-        sb.append(", railContainerSubtypeId=").append(railContainerSubtypeId);
-        sb.append(", selfContainerSubtypeId=").append(selfContainerSubtypeId);
-        sb.append(", containerSubtype='").append(containerSubtype).append('\'');
-        sb.append(", containerQuantity=").append(containerQuantity);
-        sb.append(", containerAttribute='").append(containerAttribute).append('\'');
-        sb.append(", cnyTotal=").append(cnyTotal);
-        sb.append(", usdTotal=").append(usdTotal);
-        sb.append(", createdBy='").append(createdBy).append('\'');
-        sb.append(", createdAt='").append(createdAt).append('\'');
-        sb.append(", updatedAt='").append(updatedAt).append('\'');
-        sb.append(", role='").append(role).append('\'');
-        sb.append(", status=").append(status);
-        sb.append(", ").append(super.toString());
-        sb.append('}');
-        return sb.toString();
     }
 }

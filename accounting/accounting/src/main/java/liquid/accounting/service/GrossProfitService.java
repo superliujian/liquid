@@ -3,7 +3,7 @@ package liquid.accounting.service;
 import liquid.accounting.persistence.domain.GrossProfitEntity;
 import liquid.accounting.persistence.domain.GrossProfitEntity_;
 import liquid.accounting.persistence.repository.GrossProfitRepository;
-import liquid.order.persistence.domain.OrderEntity_;
+import liquid.order.domain.OrderEntity_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

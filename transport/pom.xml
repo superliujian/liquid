@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>liquid</groupId>
@@ -8,27 +8,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>liquid</groupId>
-    <artifactId>liquid-transport</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>transport</artifactId>
+    <packaging>pom</packaging>
     <name>Transport</name>
 
-    <dependencies>
-        <!-- liquid -->
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>liquid-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>liquid-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>liquid-container</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>liquid-order</artifactId>
-        </dependency>
-    </dependencies>
+  	<modules>
+        <module>transport-api</module>
+        <module>transport</module>
+    </modules>
 </project>

@@ -1,6 +1,6 @@
 package liquid.accounting.persistence.domain;
 
-import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.domain.OrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
 
 import javax.persistence.Column;

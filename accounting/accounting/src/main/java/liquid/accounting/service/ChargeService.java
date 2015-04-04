@@ -5,9 +5,9 @@ import liquid.accounting.persistence.domain.ChargeEntity_;
 import liquid.accounting.persistence.repository.ChargeRepository;
 import liquid.accounting.web.domain.ChargeWay;
 import liquid.operation.domain.ServiceProvider_;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.persistence.domain.OrderEntity_;
-import liquid.order.service.OrderService;
+import liquid.order.domain.OrderEntity;
+import liquid.order.domain.OrderEntity_;
+import liquid.order.service.OrderServiceImpl;
 import liquid.security.SecurityContext;
 import liquid.service.AbstractService;
 import liquid.service.ExchangeRateService;
@@ -56,7 +56,7 @@ public class ChargeService extends AbstractService<ChargeEntity, ChargeRepositor
     private LegRepository legRepository;
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @Autowired
     private ShipmentService shipmentService;

@@ -17,17 +17,13 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
             <artifactId>liquid-operation-api</artifactId>
         </dependency>
-        <!-- FIXME -->
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-transport</artifactId>
+            <artifactId>liquid-transport-api</artifactId>
         </dependency>
+
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>

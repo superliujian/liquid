@@ -7,7 +7,7 @@ import liquid.accounting.service.InvoiceService;
 import liquid.accounting.service.ReceivableSummaryService;
 import liquid.accounting.web.domain.Invoice;
 import liquid.accounting.web.domain.Statement;
-import liquid.order.persistence.domain.OrderEntity;
+import liquid.order.domain.OrderEntity;
 import liquid.service.CustomerService;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;

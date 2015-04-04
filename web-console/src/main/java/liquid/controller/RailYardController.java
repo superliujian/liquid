@@ -1,5 +1,6 @@
 package liquid.controller;
 
+import liquid.process.controller.BaseTaskController;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.service.ShippingContainerService;

@@ -2,8 +2,8 @@ package liquid.order.facade;
 
 import liquid.container.domain.ContainerType;
 import liquid.container.service.ContainerSubtypeService;
-import liquid.order.domain.TransportedContainer;
-import liquid.order.domain.ValueAddedOrder;
+import liquid.order.model.TransportedContainer;
+import liquid.order.model.ValueAddedOrder;
 import liquid.order.persistence.domain.ReceivingContainerEntity;
 import liquid.order.persistence.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;

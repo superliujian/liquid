@@ -2,7 +2,7 @@ package liquid.order.service;
 
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
-import liquid.order.persistence.domain.ServiceItemEntity;
+import liquid.order.domain.ServiceItemEntity;
 import liquid.order.persistence.repository.ServiceItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

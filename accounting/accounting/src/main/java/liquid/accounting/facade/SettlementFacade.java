@@ -4,8 +4,8 @@ import liquid.accounting.persistence.domain.SettlementEntity;
 import liquid.accounting.service.SettlementService;
 import liquid.accounting.web.domain.Settlement;
 import liquid.accounting.web.domain.Statement;
-import liquid.order.persistence.domain.OrderEntity;
-import liquid.order.service.OrderService;
+import liquid.order.domain.OrderEntity;
+import liquid.order.service.OrderServiceImpl;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class SettlementFacade {
     private SettlementService settlementService;
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     public Statement<Settlement> findByOrderId(Long orderId) {
         Statement<Settlement> statement = new Statement<>();

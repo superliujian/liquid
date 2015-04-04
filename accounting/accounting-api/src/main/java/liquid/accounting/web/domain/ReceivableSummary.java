@@ -1,6 +1,6 @@
 package liquid.accounting.web.domain;
 
-import liquid.order.domain.Order;
+import liquid.order.model.Order;
 
 import java.math.BigDecimal;
 
