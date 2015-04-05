@@ -261,8 +261,8 @@
         $('#customerName').acWithTemplate(customers, 'name', 'customerId', '<p><strong>{{name}}</strong> – {{code}}</p>');
 
         var locations = initAllLocationsAc();
-        $('#origination').acWithTemplate(locations, 'name', 'originId', '<p><strong>{{name}}</strong>[{{typeText}}]</p>');
-        $('#destination').acWithTemplate(locations, 'name', 'destinationId', '<p><strong>{{name}}</strong>[{{typeText}}]</p>');
+        $('#origination').acWithTemplate(locations, 'name', 'originId', '<p><strong>{{name}}</strong>[{{type.name}}]</p>');
+        $('#destination').acWithTemplate(locations, 'name', 'destinationId', '<p><strong>{{name}}</strong>[{{type.name}}]</p>');
 
         
         if($('input[name=containerType]:checked', '#orderForm').val() == 0) {

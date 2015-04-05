@@ -1,6 +1,6 @@
 package liquid.transport.web.controller;
 
-import liquid.persistence.domain.LocationEntity;
+import liquid.operation.domain.Location;
 import liquid.transport.persistence.domain.PathEntity;
 import liquid.transport.persistence.domain.RouteEntity;
 import liquid.transport.service.RouteService;
@@ -75,8 +75,8 @@ public class RouteController {
     public String postPath(@PathVariable Long id, Path path, Model model) {
         PathEntity entity = new PathEntity();
         entity.setTransportMode(path.getTransportMode());
-        entity.setFrom(LocationEntity.newInstance(LocationEntity.class, path.getFromId()));
-        entity.setTo(LocationEntity.newInstance(LocationEntity.class, path.getToId()));
+        entity.setFrom(Location.newInstance(Location.class, path.getFromId()));
+        entity.setTo(Location.newInstance(Location.class, path.getToId()));
 
         RouteEntity newRoute = routeService.addPath(id, entity);
         return "redirect:/route/" + newRoute.getId();

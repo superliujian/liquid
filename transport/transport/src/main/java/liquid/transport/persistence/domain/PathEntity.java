@@ -1,7 +1,7 @@
 package liquid.transport.persistence.domain;
 
+import liquid.operation.domain.Location;
 import liquid.persistence.domain.BaseIdEntity;
-import liquid.persistence.domain.LocationEntity;
 
 import javax.persistence.*;
 
@@ -16,11 +16,11 @@ public class PathEntity extends BaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name = "FROM_ID")
-    private LocationEntity from;
+    private Location from;
 
     @ManyToOne
     @JoinColumn(name = "TO_ID")
-    private LocationEntity to;
+    private Location to;
 
     @Column(name = "TSP_MODE")
     private Integer transportMode;
@@ -37,19 +37,19 @@ public class PathEntity extends BaseIdEntity {
         this.route = route;
     }
 
-    public LocationEntity getFrom() {
+    public Location getFrom() {
         return from;
     }
 
-    public void setFrom(LocationEntity from) {
+    public void setFrom(Location from) {
         this.from = from;
     }
 
-    public LocationEntity getTo() {
+    public Location getTo() {
         return to;
     }
 
-    public void setTo(LocationEntity to) {
+    public void setTo(Location to) {
         this.to = to;
     }
 

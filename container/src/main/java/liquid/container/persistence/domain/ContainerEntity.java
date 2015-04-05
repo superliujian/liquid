@@ -1,8 +1,8 @@
 package liquid.container.persistence.domain;
 
+import liquid.operation.domain.Location;
 import liquid.operation.domain.ServiceProvider;
 import liquid.persistence.domain.BaseUpdateEntity;
-import liquid.persistence.domain.LocationEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -35,7 +35,7 @@ public class ContainerEntity extends BaseUpdateEntity {
 
     @ManyToOne
     @JoinColumn(name = "YARD_ID")
-    private LocationEntity yard;
+    private Location yard;
 
     @Column(name = "MOVE_IN_TIME")
     private Date moveInTime;
@@ -101,11 +101,11 @@ public class ContainerEntity extends BaseUpdateEntity {
         this.subtype = subtype;
     }
 
-    public LocationEntity getYard() {
+    public Location getYard() {
         return yard;
     }
 
-    public void setYard(LocationEntity yard) {
+    public void setYard(Location yard) {
         this.yard = yard;
     }
 

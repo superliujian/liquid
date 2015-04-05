@@ -15,7 +15,7 @@ public class LocationForm {
     private String name;
 
     @Size(min = 1, max = 4)
-    private Integer[] types;
+    private Byte[] types;
 
     private String queryName;
 
@@ -27,11 +27,11 @@ public class LocationForm {
         this.name = name;
     }
 
-    public Integer[] getTypes() {
+    public Byte[] getTypes() {
         return types;
     }
 
-    public void setTypes(Integer[] types) {
+    public void setTypes(Byte[] types) {
         this.types = types;
     }
 

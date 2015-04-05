@@ -1,9 +1,9 @@
-package liquid.controller;
+package liquid.operation.controller;
 
 import liquid.model.Alert;
 import liquid.model.AlertType;
-import liquid.persistence.domain.GoodsEntity;
-import liquid.service.GoodsService;
+import liquid.operation.domain.Goods;
+import liquid.operation.service.InternalGoodsService;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,23 +30,23 @@ public class GoodsController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @Autowired
-    private GoodsService goodsService;
+    private InternalGoodsService goodsService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(required = false, defaultValue = "0") int number,
                        Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<GoodsEntity> page = goodsService.findAll(pageRequest);
+        Page<Goods> page = goodsService.findAll(pageRequest);
 
         model.addAttribute("page", page);
-        model.addAttribute("goods", new GoodsEntity());
+        model.addAttribute("goods", new Goods());
         model.addAttribute("contextPath", "/goods?");
         return "goods/list";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String initNew(Model model) {
-        model.addAttribute("goods", new GoodsEntity());
+        model.addAttribute("goods", new Goods());
         return "goods/form";
     }
 
@@ -59,7 +59,7 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute("goods") GoodsEntity goods,
+    public String create(@Valid @ModelAttribute("goods") Goods goods,
                          BindingResult bindingResult, Model model) {
         logger.debug("Goods: {}", goods);
 

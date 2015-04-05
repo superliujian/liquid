@@ -1,8 +1,8 @@
-package liquid.controller;
+package liquid.operation.controller;
 
-import liquid.persistence.domain.CustomerEntity;
+import liquid.operation.domain.Customer;
+import liquid.operation.service.InternalCustomerService;
 import liquid.pinyin4j.PinyinHelper;
-import liquid.service.CustomerService;
 import liquid.web.controller.BaseController;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
@@ -30,12 +30,12 @@ public class CustomerController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
-    private CustomerService customerService;
+    private InternalCustomerService customerService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(defaultValue = "0", required = false) int number, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<CustomerEntity> page = customerService.findAll(pageRequest);
+        Page<Customer> page = customerService.findAll(pageRequest);
         model.addAttribute("page", page);
         model.addAttribute("contextPath", "/customer?");
 
@@ -49,7 +49,7 @@ public class CustomerController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, params = {"search"})
     public String search(@RequestParam(defaultValue = "0", required = false) int number, @ModelAttribute SearchBarForm searchBarForm, Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
-        Page<CustomerEntity> page = customerService.findByQueryNameLike(searchBarForm.getText(), pageRequest);
+        Page<Customer> page = customerService.findByQueryNameLike(searchBarForm.getText(), pageRequest);
         model.addAttribute("page", page);
         model.addAttribute("contextPath", "/customer?");
 
@@ -61,12 +61,12 @@ public class CustomerController extends BaseController {
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String initForm(Model model) {
-        model.addAttribute("customer", new CustomerEntity());
+        model.addAttribute("customer", new Customer());
         return "customer/form";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute CustomerEntity customer, BindingResult bindingResult) {
+    public String create(@Valid @ModelAttribute Customer customer, BindingResult bindingResult) {
         logger.debug("Customer: {}", customer);
 
         if (bindingResult.hasErrors()) {
@@ -84,7 +84,7 @@ public class CustomerController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String initEdit(@PathVariable Long id, Model model) {
         logger.debug("id: {}", id);
-        CustomerEntity customer = customerService.find(id);
+        Customer customer = customerService.find(id);
         model.addAttribute("customer", customer);
         return "customer/form";
     }

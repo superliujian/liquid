@@ -4,20 +4,20 @@ import liquid.container.domain.ContainerCap;
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
-import liquid.domain.LocationType;
+import liquid.operation.domain.Customer;
+import liquid.operation.domain.Goods;
+import liquid.operation.domain.Location;
+import liquid.operation.domain.LocationType;
+import liquid.operation.service.CustomerService;
+import liquid.operation.service.GoodsService;
+import liquid.operation.service.LocationService;
 import liquid.order.domain.OrderStatus;
 import liquid.order.domain.ReceivingOrderEntity;
 import liquid.order.facade.ValueAddedOrderFacade;
 import liquid.order.model.TransportedContainer;
 import liquid.order.model.ValueAddedOrder;
 import liquid.order.service.ReceivingOrderServiceImpl;
-import liquid.persistence.domain.CustomerEntity;
-import liquid.persistence.domain.GoodsEntity;
-import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
-import liquid.service.CustomerService;
-import liquid.service.GoodsService;
-import liquid.service.LocationService;
 import liquid.service.ServiceTypeServiceImpl;
 import liquid.web.controller.BaseController;
 import liquid.web.domain.SearchBarForm;
@@ -77,18 +77,18 @@ public class ReceivingOrderController extends BaseController {
     }
 
     @ModelAttribute("customers")
-    public Iterable<CustomerEntity> populateCustomers() {
+    public Iterable<Customer> populateCustomers() {
         return customerService.findAll();
     }
 
     @ModelAttribute("cargos")
-    public Iterable<GoodsEntity> populateCargoTypes() {
+    public Iterable<Goods> populateCargoTypes() {
         return goodsService.findAll();
     }
 
     @ModelAttribute("locations")
-    public Iterable<LocationEntity> populateLocations() {
-        return locationService.findByType(LocationType.CITY.getType());
+    public Iterable<Location> populateLocations() {
+        return locationService.findByTypeId(LocationType.CITY);
     }
 
     @ModelAttribute("containerTypeMap")
@@ -139,7 +139,7 @@ public class ReceivingOrderController extends BaseController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String initCreationForm(Model model) {
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+        List<Location> locationEntities = locationService.findByTypeId(LocationType.CITY);
 
         ValueAddedOrder order = new ValueAddedOrder();
         order.setServiceTypeId(7L);
@@ -208,7 +208,7 @@ public class ReceivingOrderController extends BaseController {
         logger.debug("id: {}", id);
 
         ReceivingOrderEntity order = recvOrderService.find(id);
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());
+        List<Location> locationEntities = locationService.findByTypeId(LocationType.STATION);
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");
@@ -222,7 +222,7 @@ public class ReceivingOrderController extends BaseController {
         ValueAddedOrder order = valueAddedOrderFacade.find(id);
         logger.debug("order: {}", order);
 
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.STATION.getType());
+        List<Location> locationEntities = locationService.findByTypeId(LocationType.STATION);
         model.addAttribute("order", order);
         return "recv_order/form";
     }

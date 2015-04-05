@@ -1,7 +1,7 @@
-package liquid.api.controller;
+package liquid.operation.restfulapi;
 
-import liquid.persistence.domain.CustomerEntity;
-import liquid.service.CustomerService;
+import liquid.operation.domain.Customer;
+import liquid.operation.service.InternalCustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/api/customer")
-public class ApiCustomerController {
-    private static final Logger logger = LoggerFactory.getLogger(ApiCustomerController.class);
+public class CustomerRestController {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerRestController.class);
 
     @Autowired
-    private CustomerService customerService;
+    private InternalCustomerService customerService;
 
     @RequestMapping(method = RequestMethod.GET, params = "name")
     @ResponseBody
-    public Iterable<CustomerEntity> listByName(@RequestParam String name) {
+    public Iterable<Customer> listByName(@RequestParam String name) {
         logger.debug("name: {}", name);
         return customerService.findByNameLike(name);
     }

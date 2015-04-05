@@ -4,9 +4,7 @@ import liquid.container.service.ContainerSubtypeService;
 import liquid.order.domain.OrderEntity;
 import liquid.order.domain.OrderEntity_;
 import liquid.order.domain.OrderStatus;
-import liquid.order.persistence.repository.OrderHistoryRepository;
 import liquid.order.persistence.repository.OrderRepository;
-import liquid.persistence.repository.LocationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +33,6 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @Service
 public class OrderServiceImpl extends AbstractBaseOrderService<OrderEntity, OrderRepository> implements OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
-
-    @Autowired
-    private OrderHistoryRepository orderHistoryRepository;
-
-    @Autowired
-    private LocationRepository locationRepository;
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;

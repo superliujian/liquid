@@ -6,11 +6,11 @@ import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerService;
 import liquid.container.service.ContainerSubtypeService;
-import liquid.domain.LocationType;
+import liquid.operation.domain.Location;
+import liquid.operation.domain.LocationType;
 import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.LocationService;
 import liquid.order.service.ServiceItemService;
-import liquid.persistence.domain.LocationEntity;
-import liquid.service.LocationService;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.service.RailContainerService;
 import liquid.web.controller.BaseController;
@@ -88,8 +88,8 @@ public class ContainerController extends BaseController {
     }
 
     @ModelAttribute("locations")
-    public List<LocationEntity> populateLocations() {
-        return locationService.findByType(LocationType.YARD.getType());
+    public List<Location> populateLocations() {
+        return locationService.findByTypeId(LocationType.YARD);
     }
 
     @ModelAttribute("containerSubtypes")
@@ -117,7 +117,7 @@ public class ContainerController extends BaseController {
         List<ServiceProvider> owners = serviceItemService.findContainerOwners();
 
         // Yard list
-        List<LocationEntity> yards = locationService.findYards();
+        List<Location> yards = locationService.findYards();
 
         if (null != bicCode && bicCode.trim().length() > 0) {
             List<ContainerEntity> containers = containerService.findBicCode(bicCode);
@@ -165,7 +165,7 @@ public class ContainerController extends BaseController {
         List<ServiceProvider> owners = serviceItemService.findContainerOwners();
 
         // Yard list
-        List<LocationEntity> yards = locationService.findYards();
+        List<Location> yards = locationService.findYards();
 
         model.addAttribute("subtypeId", subtypeId);
         model.addAttribute("subtypes", subtypes);

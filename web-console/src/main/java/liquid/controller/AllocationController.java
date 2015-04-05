@@ -10,13 +10,13 @@ import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.*;
 import liquid.facade.ContainerAllocationFacade;
 import liquid.model.Alert;
+import liquid.operation.domain.Location;
 import liquid.operation.domain.ServiceProvider;
+import liquid.operation.service.LocationService;
 import liquid.order.domain.OrderEntity;
 import liquid.order.service.OrderService;
 import liquid.order.service.ServiceItemService;
-import liquid.persistence.domain.LocationEntity;
 import liquid.process.controller.BaseTaskController;
-import liquid.service.LocationService;
 import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
@@ -193,7 +193,7 @@ public class AllocationController extends BaseTaskController {
         // Owner list
         List<ServiceProvider> owners = serviceItemService.findContainerOwners();
         // Yard list
-        List<LocationEntity> yards = locationService.findYards();
+        List<Location> yards = locationService.findYards();
         // For showing containers in stock.
         model.addAttribute("owners", owners);
         model.addAttribute("yards", yards);
@@ -300,7 +300,7 @@ public class AllocationController extends BaseTaskController {
         // Owner list
         List<ServiceProvider> owners = serviceItemService.findContainerOwners();
         // Yard list
-        List<LocationEntity> yards = locationService.findYards();
+        List<Location> yards = locationService.findYards();
         // container subtypes
         Iterable<ContainerSubtypeEntity> subtypes = containerSubtypeService.findByContainerType(ContainerType.SELF);
         EnterContainerAllocForm containers = new EnterContainerAllocForm();

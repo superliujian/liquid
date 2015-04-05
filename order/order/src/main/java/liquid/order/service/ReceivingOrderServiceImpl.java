@@ -3,10 +3,7 @@ package liquid.order.service;
 import liquid.order.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.persistence.repository.ReceivingOrderRepository;
-import liquid.persistence.domain.LocationEntity;
-import liquid.service.CustomerService;
-import liquid.service.GoodsService;
-import liquid.service.LocationService;
+import liquid.operation.domain.Location;
 import liquid.util.CollectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,19 +32,9 @@ public class ReceivingOrderServiceImpl extends AbstractBaseOrderService<Receivin
     @Autowired
     private ReceivingContainerRepository recvContainerRepository;
 
-    // Services
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    private GoodsService goodsService;
-
-    @Autowired
-    private LocationService locationService;
-
-    public ReceivingOrderEntity newOrder(List<LocationEntity> locationEntities) {
+    public ReceivingOrderEntity newOrder(List<Location> locationEntities) {
         ReceivingOrderEntity order = new ReceivingOrderEntity();
-        LocationEntity second = CollectionUtil.tryToGet2ndElement(locationEntities);
+        Location second = CollectionUtil.tryToGet2ndElement(locationEntities);
         order.setSrcLocId(second.getId());
         return order;
     }

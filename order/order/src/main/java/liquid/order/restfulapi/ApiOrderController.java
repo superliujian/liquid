@@ -1,9 +1,9 @@
-package liquid.order.api.controller;
+package liquid.order.restfulapi;
 
+import liquid.operation.domain.Customer;
+import liquid.operation.service.CustomerService;
 import liquid.order.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.CustomerEntity;
-import liquid.service.CustomerService;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +38,9 @@ public class ApiOrderController {
     @ResponseBody
     public Iterable<SearchBarForm> listByName(@RequestParam String text) {
         logger.debug("text: {}", text);
-        Iterable<CustomerEntity> customers = customerService.findByQueryNameLike(text);
+        Iterable<Customer> customers = customerService.findByQueryNameLike(text);
         List<SearchBarForm> searchBarForms = new ArrayList<>();
-        for (CustomerEntity customer : customers) {
+        for (Customer customer : customers) {
             SearchBarForm searchBarForm = new SearchBarForm();
             searchBarForm.setType("customer");
             searchBarForm.setId(customer.getId());

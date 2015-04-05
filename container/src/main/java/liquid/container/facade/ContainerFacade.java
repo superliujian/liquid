@@ -5,8 +5,8 @@ import liquid.container.domain.Containers;
 import liquid.container.persistence.domain.ContainerEntity;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerService;
+import liquid.operation.domain.Location;
 import liquid.operation.domain.ServiceProvider;
-import liquid.persistence.domain.LocationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class ContainerFacade {
             containerEntity.setId(container.getId());
             containerEntity.setBicCode(container.getBicCode());
             containerEntity.setOwner(ServiceProvider.newInstance(ServiceProvider.class, container.getOwnerId()));
-            containerEntity.setYard(LocationEntity.newInstance(LocationEntity.class, container.getYardId()));
+            containerEntity.setYard(Location.newInstance(Location.class, container.getYardId()));
             containerEntity.setSubtype(ContainerSubtypeEntity.newInstance(ContainerSubtypeEntity.class, container.getSubtypeId()));
             containerEntity.setStatus(0);
             entities.add(containerEntity);

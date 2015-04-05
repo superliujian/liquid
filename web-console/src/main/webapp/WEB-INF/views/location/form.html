@@ -29,8 +29,8 @@
         <div class="form-group" th:classappend="${#fields.hasErrors('types')} ? 'has-error'">
             <div class="col-xs-6" th:each="locationType : ${locationTypes}">
                 <label class="checkbox-inline">
-                    <input type="checkbox" th:field="*{types}" th:value="${locationType.type}"/>
-                    <span th:text="#{${locationType.i18nKey}}">Location Type</span>
+                    <input type="checkbox" th:field="*{types}" th:value="${locationType.id}"/>
+                    <span th:text="${locationType.name}">Location Type</span>
                 </label>
             </div>
             

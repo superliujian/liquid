@@ -1,8 +1,8 @@
 package liquid.order.persistence.domain;
 
-import liquid.persistence.domain.CustomerEntity;
-import liquid.persistence.domain.GoodsEntity;
-import liquid.persistence.domain.LocationEntity;
+import liquid.operation.domain.Customer;
+import liquid.operation.domain.Goods;
+import liquid.operation.domain.Location;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -28,15 +28,15 @@ public class OrderHistory {
 
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
-    private CustomerEntity customer;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
-    private LocationEntity srcLoc;
+    private Location srcLoc;
 
     @ManyToOne
     @JoinColumn(name = "DST_LOC_ID")
-    private LocationEntity dstLoc;
+    private Location dstLoc;
 
     @NotNull
     @NotEmpty
@@ -55,7 +55,7 @@ public class OrderHistory {
 
     @ManyToOne
     @JoinColumn(name = "GOODS_ID")
-    private GoodsEntity goods;
+    private Goods goods;
 
     /**
      * unit kilogram
@@ -150,27 +150,27 @@ public class OrderHistory {
         this.orderId = orderId;
     }
 
-    public CustomerEntity getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(CustomerEntity customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public LocationEntity getSrcLoc() {
+    public Location getSrcLoc() {
         return srcLoc;
     }
 
-    public void setSrcLoc(LocationEntity srcLoc) {
+    public void setSrcLoc(Location srcLoc) {
         this.srcLoc = srcLoc;
     }
 
-    public LocationEntity getDstLoc() {
+    public Location getDstLoc() {
         return dstLoc;
     }
 
-    public void setDstLoc(LocationEntity dstLoc) {
+    public void setDstLoc(Location dstLoc) {
         this.dstLoc = dstLoc;
     }
 
@@ -198,11 +198,11 @@ public class OrderHistory {
         this.consigneeAddress = consigneeAddress;
     }
 
-    public GoodsEntity getGoods() {
+    public Goods getGoods() {
         return goods;
     }
 
-    public void setGoods(GoodsEntity goods) {
+    public void setGoods(Goods goods) {
         this.goods = goods;
     }
 

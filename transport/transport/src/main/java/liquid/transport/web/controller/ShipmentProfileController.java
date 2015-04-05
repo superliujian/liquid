@@ -1,6 +1,6 @@
 package liquid.transport.web.controller;
 
-import liquid.persistence.domain.LocationEntity;
+import liquid.operation.domain.Location;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.repository.ShipmentRepository;
@@ -71,8 +71,8 @@ public class ShipmentProfileController {
         entity.setShipment(shipment);
         entity.setHead(leg.getHead());
         entity.setTransMode(leg.getTransMode());
-        entity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, leg.getSourceId()));
-        entity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId()));
+        entity.setSrcLoc(Location.newInstance(Location.class, leg.getSourceId()));
+        entity.setDstLoc(Location.newInstance(Location.class, leg.getDestinationId()));
         if (null != leg.getPrevId())
             entity.setPrev(LegEntity.newInstance(LegEntity.class, leg.getPrevId()));
 

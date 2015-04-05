@@ -1,7 +1,7 @@
 package liquid.operation.controller;
 
 import liquid.operation.domain.ServiceProvider;
-import liquid.operation.service.ServiceProviderService;
+import liquid.operation.service.InternalServiceProviderService;
 import liquid.operation.service.ServiceSubtypeService;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class ServiceProviderController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ServiceProviderController.class);
 
     @Autowired
-    private ServiceProviderService serviceProviderService;
+    private InternalServiceProviderService serviceProviderService;
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;

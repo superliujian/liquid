@@ -11,9 +11,14 @@ import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LoadingType;
-import liquid.domain.LocationType;
 import liquid.domain.TradeType;
+import liquid.operation.domain.Goods;
+import liquid.operation.domain.Location;
+import liquid.operation.domain.LocationType;
 import liquid.operation.domain.ServiceSubtype;
+import liquid.operation.service.CustomerService;
+import liquid.operation.service.GoodsService;
+import liquid.operation.service.LocationService;
 import liquid.operation.service.ServiceSubtypeService;
 import liquid.order.domain.OrderEntity;
 import liquid.order.domain.OrderStatus;
@@ -21,14 +26,13 @@ import liquid.order.facade.OrderFacade;
 import liquid.order.model.Order;
 import liquid.order.model.ServiceItem;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.GoodsEntity;
-import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.RailPlanTypeEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.process.domain.Task;
 import liquid.process.service.TaskService;
 import liquid.security.SecurityContext;
-import liquid.service.*;
+import liquid.service.RailwayPlanTypeService;
+import liquid.service.ServiceTypeServiceImpl;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
 import liquid.util.DateUtil;
@@ -115,7 +119,7 @@ public class OrderController extends BaseController {
     }
 
     @ModelAttribute("cargos")
-    public Iterable<GoodsEntity> populateCargos() {
+    public Iterable<Goods> populateCargos() {
         return goodsService.findAll();
     }
 
@@ -290,7 +294,7 @@ public class OrderController extends BaseController {
             order.setDestination(result.getName());
         }
 
-        result = orderFacade.validateLocation(order.getRailSourceId(), order.getRailSource(), LocationType.STATION.getType());
+        result = orderFacade.validateLocation(order.getRailSourceId(), order.getRailSource(), LocationType.STATION);
         if (!result.isSuccessful()) {
             addFieldError(bindingResult, "order", "railSource", order.getRailSource(), order.getRailSource());
         } else {
@@ -298,7 +302,7 @@ public class OrderController extends BaseController {
             order.setRailSource(result.getName());
         }
 
-        result = orderFacade.validateLocation(order.getRailDestinationId(), order.getRailDestination(), LocationType.STATION.getType());
+        result = orderFacade.validateLocation(order.getRailDestinationId(), order.getRailDestination(), LocationType.STATION);
         if (!result.isSuccessful()) {
             addFieldError(bindingResult, "order", "railDestination", order.getRailDestination(), order.getRailDestination());
         } else {
@@ -347,7 +351,7 @@ public class OrderController extends BaseController {
             order.setDestination(result.getName());
         }
 
-        result = orderFacade.validateLocation(order.getRailSourceId(), order.getRailSource(), LocationType.STATION.getType());
+        result = orderFacade.validateLocation(order.getRailSourceId(), order.getRailSource(), LocationType.STATION);
         if (!result.isSuccessful()) {
             addFieldError(bindingResult, "order", "railSource", order.getRailSource(), order.getRailSource());
         } else {
@@ -355,7 +359,7 @@ public class OrderController extends BaseController {
             order.setRailSource(result.getName());
         }
 
-        result = orderFacade.validateLocation(order.getRailDestinationId(), order.getRailDestination(), LocationType.STATION.getType());
+        result = orderFacade.validateLocation(order.getRailDestinationId(), order.getRailDestination(), LocationType.STATION);
         if (!result.isSuccessful()) {
             addFieldError(bindingResult, "order", "railDestination", order.getRailDestination(), order.getRailDestination());
         } else {
@@ -409,7 +413,7 @@ public class OrderController extends BaseController {
         logger.debug("id: {}", id);
 
         Order order = orderFacade.find(id);
-        List<LocationEntity> locationEntities = locationService.findByType(LocationType.CITY.getType());
+        List<Location> locationEntities = locationService.findByTypeId(LocationType.CITY);
         model.addAttribute("locations", locationEntities);
         model.addAttribute("order", order);
         model.addAttribute("tab", "detail");

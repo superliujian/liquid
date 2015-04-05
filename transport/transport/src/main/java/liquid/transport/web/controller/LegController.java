@@ -2,11 +2,10 @@ package liquid.transport.web.controller;
 
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
-import liquid.service.LocationService;
+import liquid.transport.domain.TransMode;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.service.LegService;
 import liquid.transport.web.domain.Leg;
-import liquid.transport.domain.TransMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +24,6 @@ public class LegController {
 
     @Autowired
     private ServiceProviderService serviceProviderService;
-
-    @Autowired
-    private LocationService locationService;
 
     @Autowired
     private LegService legService;

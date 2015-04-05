@@ -1,7 +1,7 @@
 package liquid.transport.persistence.domain;
 
 import liquid.persistence.domain.BaseStatusEntity;
-import liquid.persistence.domain.LocationEntity;
+import liquid.operation.domain.Location;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,11 +30,11 @@ public class RouteEntity extends BaseStatusEntity {
 
     @ManyToOne
     @JoinColumn(name = "FROM_ID")
-    private LocationEntity from;
+    private Location from;
 
     @ManyToOne
     @JoinColumn(name = "TO_ID")
-    private LocationEntity to;
+    private Location to;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "route")
     private List<PathEntity> paths;
@@ -55,7 +55,7 @@ public class RouteEntity extends BaseStatusEntity {
         this.comment = comment;
     }
 
-    public LocationEntity getFrom() {
+    public Location getFrom() {
         return from;
     }
 
@@ -67,15 +67,15 @@ public class RouteEntity extends BaseStatusEntity {
         this.head = head;
     }
 
-    public void setFrom(LocationEntity from) {
+    public void setFrom(Location from) {
         this.from = from;
     }
 
-    public LocationEntity getTo() {
+    public Location getTo() {
         return to;
     }
 
-    public void setTo(LocationEntity to) {
+    public void setTo(Location to) {
         this.to = to;
     }
 

@@ -36,7 +36,7 @@
 
             <select th:field="*{type}" class="form-control input-sm">
                 <option th:each="locationType : ${locationTypes}"
-                    th:value="${locationType.type}" th:text="#{${locationType.i18nKey}}">Location Type
+                    th:value="${locationType.id}" th:text="${locationType.name}">Location Type
                 </option>
             </select>
         </div>

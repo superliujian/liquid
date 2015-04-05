@@ -1,9 +1,9 @@
-package liquid.order.api.controller;
+package liquid.order.restfulapi;
 
+import liquid.operation.domain.Customer;
+import liquid.operation.service.CustomerService;
 import liquid.order.domain.ReceivingOrderEntity;
 import liquid.order.service.ReceivingOrderServiceImpl;
-import liquid.persistence.domain.CustomerEntity;
-import liquid.service.CustomerService;
 import liquid.web.domain.SearchBarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,9 +33,9 @@ public class ApiValueAddedOrderController {
     @RequestMapping(method = RequestMethod.GET, params = "text")
     @ResponseBody
     public Iterable<SearchBarForm> listByName(@RequestParam String text) {
-        Iterable<CustomerEntity> customers = customerService.findByQueryNameLike(text);
+        Iterable<Customer> customers = customerService.findByQueryNameLike(text);
         List<SearchBarForm> searchBarForms = new ArrayList<>();
-        for (CustomerEntity customer : customers) {
+        for (Customer customer : customers) {
             SearchBarForm searchBarForm = new SearchBarForm();
             searchBarForm.setType("customer");
             searchBarForm.setId(customer.getId());

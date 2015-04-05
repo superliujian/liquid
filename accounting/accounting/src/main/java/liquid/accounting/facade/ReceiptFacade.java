@@ -9,7 +9,6 @@ import liquid.accounting.web.domain.Receipt;
 import liquid.accounting.web.domain.Statement;
 import liquid.order.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.service.CustomerService;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,6 @@ import java.util.List;
 public class ReceiptFacade {
     @Autowired
     private ReceiptService receiptService;
-
-    @Autowired
-    private CustomerService customerService;
 
     @Autowired
     private OrderService orderService;

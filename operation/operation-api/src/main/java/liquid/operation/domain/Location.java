@@ -1,9 +1,8 @@
-package liquid.persistence.domain;
+package liquid.operation.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import liquid.persistence.domain.BaseUpdateEntity;
+
+import javax.persistence.*;
 
 /**
  * TODO: Comments.
@@ -12,24 +11,19 @@ import javax.persistence.UniqueConstraint;
  * Time: 10:33 AM
  */
 @Entity(name = "OPS_LOCATION")
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME", "TYPE"})})
-public class LocationEntity extends BaseUpdateEntity {
+public class Location extends BaseUpdateEntity {
 
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "TYPE")
-    private int type;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "TYPE_ID")
+    private LocationType type;
 
     @Column(name = "Q_NAME")
     private String queryName;
 
-    public LocationEntity() { }
-
-    public LocationEntity(String name, int type) {
-        this.name = name;
-        this.type = type;
-    }
+    public Location() { }
 
     public String getName() {
         return name;
@@ -39,11 +33,11 @@ public class LocationEntity extends BaseUpdateEntity {
         this.name = name;
     }
 
-    public int getType() {
+    public LocationType getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(LocationType type) {
         this.type = type;
     }
 

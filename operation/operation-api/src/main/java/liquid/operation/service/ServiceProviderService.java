@@ -1,17 +1,12 @@
 package liquid.operation.service;
 
 import liquid.operation.domain.ServiceProvider;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Tao Ma on 4/2/15.
  */
-@Service
 public interface ServiceProviderService {
     ServiceProvider find(Long id);
 
@@ -23,10 +18,4 @@ public interface ServiceProviderService {
 
     @Deprecated
     Iterable<ServiceProvider> findAll();
-
-    Page<ServiceProvider> findAll(Pageable pageable);
-
-    Map<Long, String> getSpTypes();
-
-    ServiceProvider save(ServiceProvider serviceProvider);
 }

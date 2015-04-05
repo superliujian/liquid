@@ -7,7 +7,11 @@ import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.Currency;
 import liquid.domain.LoadingType;
 import liquid.domain.TradeType;
+import liquid.operation.domain.Customer;
 import liquid.operation.domain.ServiceSubtype;
+import liquid.operation.service.CustomerService;
+import liquid.operation.service.GoodsService;
+import liquid.operation.service.LocationService;
 import liquid.order.domain.OrderEntity;
 import liquid.order.domain.OrderRailEntity;
 import liquid.order.domain.ServiceItemEntity;
@@ -15,13 +19,13 @@ import liquid.order.model.Order;
 import liquid.order.model.ServiceItem;
 import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
-import liquid.persistence.domain.CustomerEntity;
-import liquid.persistence.domain.LocationEntity;
+import liquid.operation.domain.Location;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.process.service.BusinessKey;
 import liquid.process.service.ProcessService;
 import liquid.security.SecurityContext;
-import liquid.service.*;
+import liquid.service.RailwayPlanTypeService;
+import liquid.service.ServiceTypeServiceImpl;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -390,7 +394,7 @@ public class OrderFacade {
     public FormValidationResult validateCustomer(Long id, String name) {
         if (null == id) {
             if (null != name && name.trim().length() > 0) {
-                CustomerEntity customer = customerService.findByName(name);
+                Customer customer = customerService.findByName(name);
                 if (null != customer) {
                     return FormValidationResult.newSuccess(customer.getId(), name);
                 }
@@ -398,7 +402,7 @@ public class OrderFacade {
             return FormValidationResult.newFailure();
         }
 
-        CustomerEntity customer = customerService.find(id);
+        Customer customer = customerService.find(id);
         if (name == null) return FormValidationResult.newFailure();
         if (null == customer) return FormValidationResult.newFailure();
 
@@ -410,7 +414,7 @@ public class OrderFacade {
     public FormValidationResult validateLocation(Long id, String name) {
         if (null == id) {
             if (null != name && name.trim().length() > 0) {
-                LocationEntity location = locationService.findByName(name);
+                Location location = locationService.findByName(name);
                 if (null != location) {
                     return FormValidationResult.newSuccess(location.getId(), location.getName());
                 }
@@ -418,7 +422,7 @@ public class OrderFacade {
             return FormValidationResult.newFailure();
         }
 
-        LocationEntity location = locationService.find(id);
+        Location location = locationService.find(id);
         if (name == null) return FormValidationResult.newFailure();
         if (null == location) return FormValidationResult.newFailure();
         if (name.equals(location.getName()))
@@ -429,7 +433,7 @@ public class OrderFacade {
     public FormValidationResult validateLocation(Long id, String name, int type) {
         if (null == id) {
             if (null != name && name.trim().length() > 0) {
-                LocationEntity location = locationService.findByTypeAndName(type, name);
+                Location location = locationService.findByTypeAndName(type, name);
                 if (null != location) {
                     return FormValidationResult.newSuccess(location.getId(), location.getName());
                 }
@@ -437,7 +441,7 @@ public class OrderFacade {
             return FormValidationResult.newFailure();
         }
 
-        LocationEntity location = locationService.find(id);
+        Location location = locationService.find(id);
         if (name == null) return FormValidationResult.newFailure();
         if (null == location) return FormValidationResult.newFailure();
         if (name.equals(location.getName()))

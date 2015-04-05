@@ -1,7 +1,7 @@
-package liquid.persistence.repository;
+package liquid.operation.repository;
 
 import liquid.persistence.PageRepository;
-import liquid.persistence.domain.GoodsEntity;
+import liquid.operation.domain.Goods;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +12,6 @@ import org.springframework.data.domain.Pageable;
  * Time: 3:31 PM
  */
 
-public interface GoodsRepository extends PageRepository<GoodsEntity> {
-    Page<GoodsEntity> findAll(Pageable pageable);
+public interface GoodsRepository extends PageRepository<Goods> {
+    Page<Goods> findAll(Pageable pageable);
 }

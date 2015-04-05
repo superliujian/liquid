@@ -29,7 +29,7 @@
                             <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=-1'" th:text="#{location.type.all}">All Owners</a>
                         </li>        
                         <li th:each="locationType : ${locationTypes}">
-                            <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=' + ${locationType.type}" th:text="#{${locationTypes[__${locationType.type}__].i18nKey}}">Location Type</a>
+                            <a href="#" th:href="'/location?number=' + ${page.number} + '&amp;type=' + ${locationType.id}" th:text="${locationType.name}">Location Type</a>
                         </li>
                     </ul>
                 </div>
@@ -42,7 +42,7 @@
         <tr th:each="location : ${page.content}">
             <td th:text="${location.id}">ID</td>
             <td th:text="${location.name}">Name</td>
-            <td th:text="#{${locationTypes[__${location.type}__].i18nKey}}">Type</td>
+            <td th:text="${location.type.name}">Type</td>
             <td><span th:text="${#strings.length(location.queryName) > 64} ? ${#strings.substring(location.queryName, 0, 64)} : ${location.queryName}" /></td>
             <td><a th:href="'/location/' + ${location.id}"><button class="btn btn-default btn-xs"><i class="glyphicon glyphicon-pencil"/></button></a></td>
         </tr>

@@ -1,12 +1,13 @@
-package liquid.controller;
+package liquid.operation.controller;
 
 import liquid.domain.LocationForm;
-import liquid.domain.LocationType;
-import liquid.facade.LocationFacade;
 import liquid.model.Alert;
 import liquid.model.AlertType;
-import liquid.persistence.domain.LocationEntity;
-import liquid.service.LocationService;
+import liquid.operation.domain.Location;
+import liquid.operation.domain.LocationType;
+import liquid.operation.service.InternalLocationService;
+import liquid.operation.service.LocationTypeService;
+import liquid.pinyin4j.PinyinHelper;
 import liquid.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Comments.
@@ -33,23 +36,23 @@ public class LocationController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 
     @Autowired
-    private LocationService locationService;
+    private InternalLocationService locationService;
 
     @Autowired
-    private LocationFacade locationFacade;
+    private LocationTypeService locationTypeService;
 
     @ModelAttribute("locationTypes")
-    public LocationType[] populateLocationTypes() {
-        return LocationType.values();
+    public Iterable<LocationType> populateLocationTypes() {
+        return locationTypeService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(required = false, defaultValue = "0") int number,
-                       @RequestParam(required = false, defaultValue = "-1") int type,
+                       @RequestParam(required = false, defaultValue = "-1") Byte type,
                        Model model) {
         PageRequest pageRequest = new PageRequest(number, size, new Sort(Sort.Direction.DESC, "id"));
 
-        Page<LocationEntity> page;
+        Page<Location> page;
         if (type == -1) {
             page = locationService.findAll(pageRequest);
         } else {
@@ -57,7 +60,7 @@ public class LocationController extends BaseController {
         }
         model.addAttribute("page", page);
         model.addAttribute("type", type);
-        model.addAttribute("location", new LocationEntity());
+        model.addAttribute("location", new Location());
         model.addAttribute("contextPath", "/location?");
         return "location/list";
     }
@@ -77,7 +80,16 @@ public class LocationController extends BaseController {
             return "location/form";
         } else {
             try {
-                locationFacade.save(location);
+                List<Location> entities = new ArrayList<>();
+                for (Byte type : location.getTypes()) {
+                    Location entity = new Location();
+                    entity.setName(location.getName());
+                    entity.setType(new LocationType(type));
+                    String queryName = PinyinHelper.converterToFirstSpell(location.getName()) + ";" + location.getName();
+                    entity.setQueryName(queryName);
+                    entities.add(entity);
+                }
+                locationService.save(entities);
                 return "redirect:/location";
             } catch (Exception e) {
                 logger.warn(e.getMessage(), e);
@@ -96,7 +108,7 @@ public class LocationController extends BaseController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String edit(@Valid @ModelAttribute("location") LocationEntity location,
+    public String edit(@Valid @ModelAttribute("location") Location location,
                        BindingResult bindingResult, Model model) {
         logger.debug("location: {}", location);
 

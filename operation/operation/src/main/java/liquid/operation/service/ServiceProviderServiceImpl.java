@@ -21,7 +21,8 @@ import java.util.*;
  * Time: 12:56 AM
  */
 @Service
-public class ServiceProviderServiceImpl extends AbstractService<ServiceProvider, ServiceProviderRepository> implements ServiceProviderService {
+public class ServiceProviderServiceImpl extends AbstractService<ServiceProvider, ServiceProviderRepository>
+        implements InternalServiceProviderService {
 
     @Autowired
     private ServiceSubtypeService serviceSubtypeService;

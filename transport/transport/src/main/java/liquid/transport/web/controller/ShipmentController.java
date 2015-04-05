@@ -1,10 +1,10 @@
 package liquid.transport.web.controller;
 
+import liquid.operation.domain.Location;
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
 import liquid.order.domain.OrderEntity;
 import liquid.order.service.OrderService;
-import liquid.persistence.domain.LocationEntity;
 import liquid.transport.domain.TransMode;
 import liquid.transport.persistence.domain.*;
 import liquid.transport.persistence.repository.RailContainerRepository;
@@ -176,15 +176,15 @@ public class ShipmentController {
 
         if (leg.getServiceProviderId() != null)
             legEntity.setSp(ServiceProvider.newInstance(ServiceProvider.class, leg.getServiceProviderId()));
-        legEntity.setSrcLoc(LocationEntity.newInstance(LocationEntity.class, leg.getSourceId()));
-        legEntity.setDstLoc(LocationEntity.newInstance(LocationEntity.class, leg.getDestinationId()));
+        legEntity.setSrcLoc(Location.newInstance(Location.class, leg.getSourceId()));
+        legEntity.setDstLoc(Location.newInstance(Location.class, leg.getDestinationId()));
         legEntity.setShipment(shipmentEntity);
         legService.save(legEntity);
 
         return "redirect:/task/" + shipmentEntity.getTaskId() + "/planning";
     }
 
-    private Long computeDefaultDstLocId(List<LocationEntity> locationEntities) {
+    private Long computeDefaultDstLocId(List<Location> locationEntities) {
         int size = locationEntities.size();
         long id = 0;
         if (size < 2) {

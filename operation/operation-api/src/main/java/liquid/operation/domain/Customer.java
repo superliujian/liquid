@@ -1,8 +1,10 @@
-package liquid.persistence.domain;
+package liquid.operation.domain;
 
+import liquid.persistence.domain.BaseUpdateEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -12,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * Time: 10:10 PM
  */
 @Entity(name = "OPS_CUSTOMER")
-public class CustomerEntity extends BaseUpdateEntity {
+public class Customer extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "CODE")

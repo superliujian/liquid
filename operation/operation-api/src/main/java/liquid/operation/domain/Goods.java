@@ -1,5 +1,6 @@
-package liquid.persistence.domain;
+package liquid.operation.domain;
 
+import liquid.persistence.domain.BaseUpdateEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * Time: 3:27 PM
  */
 @Entity(name = "OPS_GOODS")
-public class GoodsEntity extends BaseUpdateEntity {
+public class Goods extends BaseUpdateEntity {
     @NotNull
     @NotEmpty
     @Column(name = "NAME", nullable = true, unique = true)
@@ -22,9 +23,9 @@ public class GoodsEntity extends BaseUpdateEntity {
     @Column(name = "STATUS")
     private int status;
 
-    public GoodsEntity() { }
+    public Goods() { }
 
-    public GoodsEntity(long id) {
+    public Goods(long id) {
         this.id = id;
     }
 
@@ -42,16 +43,6 @@ public class GoodsEntity extends BaseUpdateEntity {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("{Class=GoodsEntity");
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", status=").append(status);
-        sb.append(", ").append(super.toString());
-        sb.append('}');
-        return sb.toString();
     }
 }
 

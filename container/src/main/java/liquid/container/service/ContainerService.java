@@ -10,8 +10,7 @@ import liquid.container.persistence.repository.ContainerRepository;
 import liquid.excel.AbstractExcelService;
 import liquid.excel.RowMapper;
 import liquid.operation.domain.ServiceProvider;
-import liquid.persistence.domain.LocationEntity;
-import liquid.service.LocationService;
+import liquid.operation.domain.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +48,6 @@ public class ContainerService {
 
     @Autowired
     private ContainerRepository containerRepository;
-
-    @Autowired
-    private LocationService locationService;
 
     @Autowired
     private AbstractExcelService<ContainerEntity> abstractExcelService;
@@ -99,7 +95,7 @@ public class ContainerService {
         if (yardId > 0L) specifications = specifications.and(new Specification<ContainerEntity>() {
             @Override
             public Predicate toPredicate(Root<ContainerEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-                return builder.equal(root.get(ContainerEntity_.yard), LocationEntity.newInstance(LocationEntity.class, yardId));
+                return builder.equal(root.get(ContainerEntity_.yard), Location.newInstance(Location.class, yardId));
             }
         });
 
@@ -251,7 +247,7 @@ public class ContainerService {
                                     break;
                             }
                             if (null == locationId) break;
-                            entity.setYard(LocationEntity.newInstance(LocationEntity.class, locationId));
+                            entity.setYard(Location.newInstance(Location.class, locationId));
                             break;
                         case "F": // move in date
                             if (null == value) break;

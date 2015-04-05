@@ -2,7 +2,7 @@ package liquid.transport.persistence.domain;
 
 import liquid.operation.domain.ServiceProvider;
 import liquid.persistence.domain.BaseIdEntity;
-import liquid.persistence.domain.LocationEntity;
+import liquid.operation.domain.Location;
 
 import javax.persistence.*;
 
@@ -31,11 +31,11 @@ public class LegEntity extends BaseIdEntity {
 
     @ManyToOne
     @JoinColumn(name = "SRC_LOC_ID")
-    private LocationEntity srcLoc;
+    private Location srcLoc;
 
     @ManyToOne
     @JoinColumn(name = "DST_LOC_ID")
-    private LocationEntity dstLoc;
+    private Location dstLoc;
 
     @OneToOne
     @JoinColumn(name = "PREV")
@@ -73,19 +73,19 @@ public class LegEntity extends BaseIdEntity {
         this.sp = sp;
     }
 
-    public LocationEntity getSrcLoc() {
+    public Location getSrcLoc() {
         return srcLoc;
     }
 
-    public void setSrcLoc(LocationEntity srcLoc) {
+    public void setSrcLoc(Location srcLoc) {
         this.srcLoc = srcLoc;
     }
 
-    public LocationEntity getDstLoc() {
+    public Location getDstLoc() {
         return dstLoc;
     }
 
-    public void setDstLoc(LocationEntity dstLoc) {
+    public void setDstLoc(Location dstLoc) {
         this.dstLoc = dstLoc;
     }
 

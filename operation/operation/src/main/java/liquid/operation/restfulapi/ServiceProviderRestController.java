@@ -1,7 +1,7 @@
 package liquid.operation.restfulapi;
 
 import liquid.operation.domain.ServiceProvider;
-import liquid.operation.service.ServiceProviderService;
+import liquid.operation.service.InternalServiceProviderService;
 import liquid.transport.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class ServiceProviderRestController {
     private static final Logger logger = LoggerFactory.getLogger(ServiceProviderRestController.class);
 
     @Autowired
-    private ServiceProviderService serviceProviderService;
+    private InternalServiceProviderService serviceProviderService;
 
     @RequestMapping(method = RequestMethod.GET, params = "subtypeId")
     @ResponseBody
