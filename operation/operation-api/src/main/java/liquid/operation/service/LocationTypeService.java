@@ -7,4 +7,6 @@ import liquid.operation.domain.LocationType;
  */
 public interface LocationTypeService {
     Iterable<LocationType> findAll();
+
+    LocationType find(Byte id);
 }

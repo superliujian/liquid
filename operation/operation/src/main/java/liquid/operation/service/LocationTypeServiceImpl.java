@@ -18,4 +18,8 @@ public class LocationTypeServiceImpl implements LocationTypeService {
     public Iterable<LocationType> findAll() {
         return locationTypeRepository.findAll();
     }
+
+    public LocationType find(Byte id) {
+        return locationTypeRepository.findOne(id);
+    }
 }

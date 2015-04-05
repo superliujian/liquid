@@ -32,6 +32,7 @@ public class LocationServiceImpl extends AbstractCachedService<Location, Locatio
         return repository.findByTypeId(typeId, pageable);
     }
 
+
     @Override
     public List<Location> findYards() {
         return findByTypeId(LocationType.YARD);

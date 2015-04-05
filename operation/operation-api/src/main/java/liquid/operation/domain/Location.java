@@ -16,7 +16,7 @@ public class Location extends BaseUpdateEntity {
     @Column(name = "NAME")
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "TYPE_ID")
     private LocationType type;
 
