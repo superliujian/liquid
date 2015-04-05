@@ -1,7 +1,7 @@
 package liquid.transport.service;
 
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.service.AbstractService;
 import liquid.transport.persistence.domain.DeliveryContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
@@ -26,7 +26,7 @@ public class DeliveryContainerService extends AbstractService<DeliveryContainerE
     private DeliveryContainerRepository deliveryContainerRepository;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ShipmentService shipmentService;

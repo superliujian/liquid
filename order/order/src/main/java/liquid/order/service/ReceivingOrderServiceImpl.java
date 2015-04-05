@@ -1,6 +1,6 @@
 package liquid.order.service;
 
-import liquid.order.persistence.domain.ReceivingOrderEntity;
+import liquid.order.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
 import liquid.order.persistence.repository.ReceivingOrderRepository;
 import liquid.persistence.domain.LocationEntity;
@@ -25,8 +25,8 @@ import java.util.List;
  * Time: 4:57 PM
  */
 @Service
-public class ReceivingOrderService extends AbstractBaseOrderService<ReceivingOrderEntity, ReceivingOrderRepository> {
-    private static Logger logger = LoggerFactory.getLogger(ReceivingOrderService.class);
+public class ReceivingOrderServiceImpl extends AbstractBaseOrderService<ReceivingOrderEntity, ReceivingOrderRepository> {
+    private static Logger logger = LoggerFactory.getLogger(ReceivingOrderServiceImpl.class);
 
     // Repositories
     @Autowired

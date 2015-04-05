@@ -3,7 +3,7 @@ package liquid.transport.web.controller;
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.transport.domain.TransMode;
 import liquid.transport.persistence.domain.*;
@@ -11,7 +11,10 @@ import liquid.transport.persistence.repository.RailContainerRepository;
 import liquid.transport.service.LegService;
 import liquid.transport.service.RouteService;
 import liquid.transport.service.ShipmentService;
-import liquid.transport.web.domain.*;
+import liquid.transport.web.domain.Leg;
+import liquid.transport.web.domain.RailTransport;
+import liquid.transport.web.domain.Shipment;
+import liquid.transport.web.domain.ShipmentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +38,7 @@ public class ShipmentController {
     private static final int size = 20;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ShipmentService shipmentService;

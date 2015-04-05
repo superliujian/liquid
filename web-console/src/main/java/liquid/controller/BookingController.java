@@ -5,7 +5,7 @@ import liquid.model.Alert;
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.process.controller.BaseTaskController;
 import liquid.process.domain.Task;
 import liquid.transport.web.domain.Booking;
@@ -30,7 +30,7 @@ public class BookingController extends BaseTaskController {
     private ServiceProviderService serviceProviderService;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String booking(@PathVariable String taskId, Model model) {

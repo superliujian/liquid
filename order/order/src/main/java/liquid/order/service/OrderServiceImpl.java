@@ -33,7 +33,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
  * Time: 8:03 PM
  */
 @Service
-public class OrderServiceImpl extends AbstractBaseOrderService<OrderEntity, OrderRepository> {
+public class OrderServiceImpl extends AbstractBaseOrderService<OrderEntity, OrderRepository> implements OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
@@ -46,7 +46,7 @@ public class OrderServiceImpl extends AbstractBaseOrderService<OrderEntity, Orde
     private ContainerSubtypeService containerSubtypeService;
 
     @Autowired
-    private ServiceItemService serviceItemService;
+    private ServiceItemServiceImpl serviceItemService;
 
     @Transactional("transactionManager")
     public void doSaveBefore(OrderEntity order) {
@@ -78,6 +78,7 @@ public class OrderServiceImpl extends AbstractBaseOrderService<OrderEntity, Orde
         return repository.findByStatus(status, pageable);
     }
 
+    @Override
     @Transactional(value = "transactionManager")
     public OrderEntity find(Long id) {
         OrderEntity order = repository.findOne(id);

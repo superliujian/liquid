@@ -35,5 +35,25 @@
             <groupId>liquid</groupId>
             <artifactId>liquid-container</artifactId>
         </dependency>
+
+        <!-- FIXME - -->
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-accounting</artifactId>
+        </dependency>
+
+        <!-- servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
     </dependencies>
 </project>

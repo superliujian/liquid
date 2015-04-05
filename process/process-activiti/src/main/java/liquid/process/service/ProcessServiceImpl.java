@@ -7,6 +7,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.IdentityLinkType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +52,13 @@ public class ProcessServiceImpl implements ProcessService {
 
     }
 
-    private void getDeployment() {
+    @Override
+    public void listProcessDefinitions(String key) {
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        repositoryService.createProcessDefinitionQuery().processDefinitionKey("").list();
-    }
-
-    private void startProcess() {
-        RuntimeService runtimeService = processEngine.getRuntimeService();
-
-
+        List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().
+                processDefinitionKey(key).orderByProcessDefinitionVersion().asc().list();
+        for (ProcessDefinition processDefinition : processDefinitions) {
+            System.out.println(processDefinition);
+        }
     }
 }

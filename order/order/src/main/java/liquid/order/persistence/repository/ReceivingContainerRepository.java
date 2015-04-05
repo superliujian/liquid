@@ -1,7 +1,7 @@
 package liquid.order.persistence.repository;
 
 import liquid.order.persistence.domain.ReceivingContainerEntity;
-import liquid.order.persistence.domain.ReceivingOrderEntity;
+import liquid.order.domain.ReceivingOrderEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;

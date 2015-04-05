@@ -7,4 +7,6 @@ import java.util.Map;
  */
 public interface ProcessService {
     void startProcess(String uid, BusinessKey businessKey, Map<String, Object> variableMap);
+
+    void listProcessDefinitions(String key);
 }

@@ -1,7 +1,7 @@
 package liquid.order.api.controller;
 
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.service.CustomerService;
 import liquid.web.domain.SearchBarForm;
@@ -32,7 +32,7 @@ public class ApiOrderController {
     private CustomerService customerService;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET, params = "text")
     @ResponseBody

@@ -1,35 +1,34 @@
-package liquid.controller;
+package liquid.order.controller;
 
 import liquid.accounting.facade.InvoiceFacade;
 import liquid.accounting.facade.ReceiptFacade;
 import liquid.accounting.facade.SettlementFacade;
-import liquid.accounting.web.domain.Invoice;
-import liquid.accounting.web.domain.Receipt;
-import liquid.accounting.web.domain.Settlement;
-import liquid.accounting.web.domain.Statement;
+import liquid.accounting.persistence.domain.ChargeEntity;
+import liquid.accounting.service.ChargeService;
+import liquid.accounting.web.domain.*;
 import liquid.container.domain.ContainerCap;
 import liquid.container.domain.ContainerType;
 import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LoadingType;
 import liquid.domain.LocationType;
+import liquid.domain.TradeType;
 import liquid.operation.domain.ServiceSubtype;
 import liquid.operation.service.ServiceSubtypeService;
-import liquid.order.model.ServiceItem;
-import liquid.domain.TradeType;
-import liquid.order.model.Order;
+import liquid.order.domain.OrderEntity;
 import liquid.order.domain.OrderStatus;
 import liquid.order.facade.OrderFacade;
-import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
-import liquid.persistence.domain.*;
-import liquid.accounting.persistence.domain.ChargeEntity;
-import liquid.accounting.service.ChargeService;
-import liquid.accounting.web.domain.ChargeWay;
-import liquid.security.SecurityContext;
-import liquid.service.*;
+import liquid.order.model.Order;
+import liquid.order.model.ServiceItem;
+import liquid.order.service.OrderService;
+import liquid.persistence.domain.GoodsEntity;
+import liquid.persistence.domain.LocationEntity;
+import liquid.persistence.domain.RailPlanTypeEntity;
+import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.process.domain.Task;
 import liquid.process.service.TaskService;
+import liquid.security.SecurityContext;
+import liquid.service.*;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
 import liquid.util.DateUtil;
@@ -66,7 +65,7 @@ public class OrderController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private LocationService locationService;

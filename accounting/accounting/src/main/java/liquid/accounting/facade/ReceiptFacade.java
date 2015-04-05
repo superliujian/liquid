@@ -8,7 +8,7 @@ import liquid.accounting.service.ReceivableSummaryService;
 import liquid.accounting.web.domain.Receipt;
 import liquid.accounting.web.domain.Statement;
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.service.CustomerService;
 import liquid.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ReceiptFacade {
     private CustomerService customerService;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ReceivableSummaryService receivableSummaryService;

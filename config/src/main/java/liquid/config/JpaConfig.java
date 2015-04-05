@@ -70,6 +70,7 @@ public class JpaConfig {
                 "liquid.persistence.domain",
                 "liquid.operation.domain",
                 "liquid.container.persistence.domain",
+                "liquid.order.domain",
                 "liquid.order.persistence.domain",
                 "liquid.transport.persistence.domain",
                 "liquid.charge.persistence.domain",

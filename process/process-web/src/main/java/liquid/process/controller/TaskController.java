@@ -10,14 +10,13 @@ import liquid.operation.domain.ServiceSubtype;
 import liquid.operation.service.ServiceProviderService;
 import liquid.operation.service.ServiceSubtypeService;
 import liquid.order.domain.OrderEntity;
-import liquid.order.facade.OrderFacade;
-import liquid.order.model.Order;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.process.domain.Task;
 import liquid.process.domain.VerificationSheetForm;
 import liquid.process.model.SendingTruckForm;
 import liquid.process.service.TaskService;
 import liquid.security.SecurityContext;
+import liquid.transport.domain.TransMode;
 import liquid.transport.facade.TruckFacade;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.PathEntity;
@@ -26,7 +25,6 @@ import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.RouteService;
 import liquid.transport.service.ShipmentService;
 import liquid.transport.web.domain.Shipment;
-import liquid.transport.domain.TransMode;
 import liquid.transport.web.domain.TruckForm;
 import liquid.util.DateUtil;
 import org.slf4j.Logger;
@@ -61,10 +59,7 @@ public class TaskController extends BaseTaskController {
     private TaskService taskService;
 
     @Autowired
-    private OrderServiceImpl orderService;
-
-    @Autowired
-    private OrderFacade orderFacade;
+    private OrderService orderService;
 
     @Autowired
     private ShipmentService shipmentService;
@@ -94,7 +89,7 @@ public class TaskController extends BaseTaskController {
         logger.debug("task: {}", task);
         model.addAttribute("task", task);
 
-        Order order = orderFacade.find(task.getOrderId());
+        OrderEntity order = orderService.find(task.getOrderId());
 
         switch (task.getDefinitionKey()) {
             case "CDCI":
@@ -150,9 +145,9 @@ public class TaskController extends BaseTaskController {
             return "order/verification_sheet_sn";
         }
 
-        Order order = orderFacade.find(verificationSheetForm.getOrderId());
+        OrderEntity order = orderService.find(verificationSheetForm.getOrderId());
         order.setVerificationSheetSn(verificationSheetForm.getSn());
-        orderFacade.save(order);
+        orderService.save(order);
 
         redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
         return "redirect:/truck/" + taskId;

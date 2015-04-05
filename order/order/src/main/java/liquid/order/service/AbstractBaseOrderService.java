@@ -6,14 +6,12 @@ import liquid.service.SequenceService;
 import liquid.service.ServiceTypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
 /**
  * Created by redbrick9 on 4/26/14.
  */
-@Service
 public abstract class AbstractBaseOrderService<E extends BaseUpdateEntity, R extends CrudRepository<E, Long>> extends AbstractService<E, R> {
 
     @Autowired

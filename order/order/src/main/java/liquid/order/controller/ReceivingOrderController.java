@@ -1,4 +1,4 @@
-package liquid.controller;
+package liquid.order.controller;
 
 import liquid.container.domain.ContainerCap;
 import liquid.container.domain.ContainerType;
@@ -6,11 +6,11 @@ import liquid.container.persistence.domain.ContainerSubtypeEntity;
 import liquid.container.service.ContainerSubtypeService;
 import liquid.domain.LocationType;
 import liquid.order.domain.OrderStatus;
+import liquid.order.domain.ReceivingOrderEntity;
+import liquid.order.facade.ValueAddedOrderFacade;
 import liquid.order.model.TransportedContainer;
 import liquid.order.model.ValueAddedOrder;
-import liquid.order.facade.ValueAddedOrderFacade;
-import liquid.order.persistence.domain.ReceivingOrderEntity;
-import liquid.order.service.ReceivingOrderService;
+import liquid.order.service.ReceivingOrderServiceImpl;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.GoodsEntity;
 import liquid.persistence.domain.LocationEntity;
@@ -51,7 +51,7 @@ public class ReceivingOrderController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(ReceivingOrderController.class);
 
     @Autowired
-    private ReceivingOrderService recvOrderService;
+    private ReceivingOrderServiceImpl recvOrderService;
 
     @Autowired
     private ValueAddedOrderFacade valueAddedOrderFacade;

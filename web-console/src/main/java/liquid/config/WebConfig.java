@@ -43,6 +43,7 @@ import java.util.Locale;
         "liquid.operation.restfulapi",
         "liquid.process.controller",
         "liquid.order.api.controller",
+        "liquid.order.controller",
         "liquid.transport.web.controller",
         "liquid.accounting.web.controller",
         "liquid.purchase.api.controller",

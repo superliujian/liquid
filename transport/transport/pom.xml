@@ -29,15 +29,19 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-container</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>liquid</groupId>
-            <artifactId>liquid-order</artifactId>
+            <artifactId>liquid-order-api</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>liquid-process-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-accounting-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-container</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -5,9 +5,9 @@ import liquid.container.service.ContainerSubtypeService;
 import liquid.order.model.TransportedContainer;
 import liquid.order.model.ValueAddedOrder;
 import liquid.order.persistence.domain.ReceivingContainerEntity;
-import liquid.order.persistence.domain.ReceivingOrderEntity;
+import liquid.order.domain.ReceivingOrderEntity;
 import liquid.order.persistence.repository.ReceivingContainerRepository;
-import liquid.order.service.ReceivingOrderService;
+import liquid.order.service.ReceivingOrderServiceImpl;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.security.SecurityContext;
 import liquid.service.CustomerService;
@@ -32,7 +32,7 @@ import java.util.List;
 public class ValueAddedOrderFacade {
 
     @Autowired
-    private ReceivingOrderService receivingOrderService;
+    private ReceivingOrderServiceImpl receivingOrderService;
 
     @Autowired
     private CustomerService customerService;

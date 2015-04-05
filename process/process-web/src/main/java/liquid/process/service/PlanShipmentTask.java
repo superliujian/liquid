@@ -1,9 +1,9 @@
 package liquid.process.service;
 
+import liquid.transport.domain.TransMode;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.service.ShipmentService;
-import liquid.transport.domain.TransMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

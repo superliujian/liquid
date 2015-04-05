@@ -1,5 +1,6 @@
 package liquid.order.persistence.domain;
 
+import liquid.order.domain.ReceivingOrderEntity;
 import liquid.persistence.domain.BaseUpdateEntity;
 import org.hibernate.validator.constraints.NotEmpty;
 

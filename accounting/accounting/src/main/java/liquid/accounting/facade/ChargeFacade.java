@@ -5,7 +5,6 @@ import liquid.accounting.service.ChargeService;
 import liquid.accounting.web.domain.Charge;
 import liquid.facade.Facade;
 import liquid.operation.domain.ServiceProvider;
-import liquid.order.facade.OrderFacade;
 import liquid.operation.domain.ServiceSubtype;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
@@ -25,12 +24,8 @@ import java.util.List;
  */
 @Service
 public class ChargeFacade implements Facade<Charge, ChargeEntity> {
-
     @Autowired
     private ChargeService chargeService;
-
-    @Autowired
-    private OrderFacade orderFacade;
 
     public ChargeEntity save(Charge charge) {
         ChargeEntity entity = convert(charge);

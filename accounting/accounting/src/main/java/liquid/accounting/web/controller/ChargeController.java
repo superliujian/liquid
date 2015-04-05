@@ -16,15 +16,14 @@ import liquid.domain.TradeType;
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.domain.ServiceSubtype;
 import liquid.operation.service.ServiceProviderService;
-import liquid.order.domain.OrderStatus;
-import liquid.order.facade.OrderFacade;
-import liquid.order.service.OrderServiceImpl;
-import liquid.service.ExchangeRateService;
 import liquid.operation.service.ServiceSubtypeService;
+import liquid.order.domain.OrderStatus;
+import liquid.order.service.OrderService;
 import liquid.process.service.TaskService;
+import liquid.service.ExchangeRateService;
+import liquid.transport.domain.TransMode;
 import liquid.transport.persistence.domain.LegEntity;
 import liquid.transport.service.LegService;
-import liquid.transport.domain.TransMode;
 import liquid.web.domain.ExchangeRateDto;
 import liquid.web.domain.SearchBarForm;
 import org.slf4j.Logger;
@@ -61,10 +60,7 @@ public class ChargeController {
     private TaskService taskService;
 
     @Autowired
-    private OrderFacade orderFacade;
-
-    @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ChargeService chargeService;

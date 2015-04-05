@@ -8,20 +8,20 @@ import liquid.domain.Currency;
 import liquid.domain.LoadingType;
 import liquid.domain.TradeType;
 import liquid.operation.domain.ServiceSubtype;
-import liquid.order.model.Order;
-import liquid.order.model.ServiceItem;
 import liquid.order.domain.OrderEntity;
 import liquid.order.domain.OrderRailEntity;
 import liquid.order.domain.ServiceItemEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.model.Order;
+import liquid.order.model.ServiceItem;
+import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
 import liquid.persistence.domain.CustomerEntity;
 import liquid.persistence.domain.LocationEntity;
 import liquid.persistence.domain.ServiceTypeEntity;
-import liquid.security.SecurityContext;
-import liquid.service.*;
 import liquid.process.service.BusinessKey;
 import liquid.process.service.ProcessService;
+import liquid.security.SecurityContext;
+import liquid.service.*;
 import liquid.util.DateUtil;
 import liquid.validation.FormValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class OrderFacade {
     private ProcessService processService;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private RailwayService railwayService;

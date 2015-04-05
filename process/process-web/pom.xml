@@ -24,18 +24,18 @@
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-operation-api</artifactId>
-        </dependency>
-
-        <!-- FIXME - Replace the following packages using api. -->
-        <dependency>
-            <groupId>liquid</groupId>
             <artifactId>liquid-process-activiti</artifactId>
         </dependency>
         <dependency>
             <groupId>liquid</groupId>
-            <artifactId>liquid-order</artifactId>
+            <artifactId>liquid-operation-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
+            <artifactId>liquid-order-api</artifactId>
+        </dependency>
+
+        <!-- FIXME - Replace the following packages using api. -->
         <dependency>
             <groupId>liquid</groupId>
             <artifactId>liquid-transport</artifactId>

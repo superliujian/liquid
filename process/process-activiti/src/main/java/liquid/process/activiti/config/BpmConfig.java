@@ -1,6 +1,7 @@
-package liquid.config;
+package liquid.process.activiti.config;
 
 
+import liquid.config.PropertyPlaceholderConfig;
 import liquid.process.handler.ProcessEndHandler;
 import org.activiti.engine.cfg.ProcessEngineConfigurator;
 import org.activiti.ldap.LDAPConfigurator;
@@ -69,28 +70,29 @@ public class BpmConfig {
         processEngineConfiguration.setHistory("audit");
         processEngineConfiguration.setJobExecutorActivate(false);
 
-        LDAPConfigurator configurator = new LDAPConfigurator();
-
-        // Server connection params
-        configurator.setServer("ldap://localhost");
-        configurator.setPort(389);
-        configurator.setUser("cn=admin,dc=suncapital-logistics,dc=com");
-        configurator.setPassword("liquid");
-        // Query params
-        configurator.setBaseDn("dc=suncapital-logistics,dc=com");
-        configurator.setQueryUserByUserId("(&(objectClass=inetOrgPerson)(uid={0}))");
-        configurator.setQueryUserByFullNameLike("(&(objectClass=inetOrgPerson)(|({0}=*{1}*)({2}=*{3}*)))");
-        configurator.setQueryGroupsForUser("(&(objectClass=groupOfNames)(member={0}))");
-        // Attribute config
-        configurator.setUserIdAttribute("uid");
-        configurator.setUserFirstNameAttribute("cn");
-        configurator.setUserLastNameAttribute("sn");
-        configurator.setGroupIdAttribute("cn");
-        configurator.setGroupNameAttribute("cn");
-
-        List<ProcessEngineConfigurator> configurators = new ArrayList<>();
-        configurators.add(configurator);
-        processEngineConfiguration.setConfigurators(configurators);
+//        List<ProcessEngineConfigurator> configurators = new ArrayList<>();
+//
+//        LDAPConfigurator configurator = new LDAPConfigurator();
+//
+//        // Server connection params
+//        configurator.setServer("ldap://localhost");
+//        configurator.setPort(389);
+//        configurator.setUser("cn=admin,dc=suncapital-logistics,dc=com");
+//        configurator.setPassword("liquid");
+//        // Query params
+//        configurator.setBaseDn("dc=suncapital-logistics,dc=com");
+//        configurator.setQueryUserByUserId("(&(objectClass=inetOrgPerson)(uid={0}))");
+//        configurator.setQueryUserByFullNameLike("(&(objectClass=inetOrgPerson)(|({0}=*{1}*)({2}=*{3}*)))");
+//        configurator.setQueryGroupsForUser("(&(objectClass=groupOfNames)(member={0}))");
+//        // Attribute config
+//        configurator.setUserIdAttribute("uid");
+//        configurator.setUserFirstNameAttribute("cn");
+//        configurator.setUserLastNameAttribute("sn");
+//        configurator.setGroupIdAttribute("cn");
+//        configurator.setGroupNameAttribute("cn");
+//        configurators.add(configurator);
+//
+//        processEngineConfiguration.setConfigurators(configurators);
 
         Map<Object, Object> beans = new HashMap<>();
         beans.put("processEndHandler", processEndHandler());

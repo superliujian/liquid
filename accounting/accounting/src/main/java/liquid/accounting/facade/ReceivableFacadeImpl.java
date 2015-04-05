@@ -4,7 +4,6 @@ import liquid.accounting.persistence.domain.ReceivableSummaryEntity;
 import liquid.accounting.service.ReceivableSummaryService;
 import liquid.accounting.web.domain.Earning;
 import liquid.accounting.web.domain.ReceivableSummary;
-import liquid.order.facade.OrderFacade;
 import liquid.order.domain.OrderEntity;
 import liquid.service.ExchangeRateService;
 import liquid.util.DateUtil;
@@ -31,9 +30,6 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
-    @Autowired
-    private OrderFacade orderFacade;
-
     public Page<ReceivableSummary> findAll(SearchBarForm searchBar, Pageable pageable) {
         List<ReceivableSummary> receivableList = new ArrayList<>();
         Page<ReceivableSummaryEntity> entityPage = null;
@@ -48,7 +44,8 @@ public class ReceivableFacadeImpl implements ReceivableFacade {
         ReceivableSummary sum = new ReceivableSummary();
         for (ReceivableSummaryEntity entity : entityPage) {
             ReceivableSummary receivable = convert(entity);
-            orderFacade.convert(entity.getOrder(), receivable);
+            // FIXME - convert receivable according to order fields.
+//            orderFacade.convert(entity.getOrder(), receivable);
             receivableList.add(receivable);
 
             sum.setContainerQuantity(sum.getContainerQuantity() + receivable.getContainerQuantity());

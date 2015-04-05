@@ -13,7 +13,7 @@ import java.util.List;
  * Created by redbrick9 on 5/24/14.
  */
 @Service
-public class ServiceItemService {
+public class ServiceItemServiceImpl implements ServiceItemService {
     private static final Long CONTAINER_PROVIDER_TYPE_ID = 1L;
 
     @Autowired
@@ -22,6 +22,7 @@ public class ServiceItemService {
     @Autowired
     private ServiceProviderService serviceProviderService;
 
+    @Override
     public List<ServiceProvider> findContainerOwners() {
         return serviceProviderService.findByServiceSubtypeId(CONTAINER_PROVIDER_TYPE_ID);
     }

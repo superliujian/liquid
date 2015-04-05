@@ -1,6 +1,6 @@
 package liquid.order.persistence.repository;
 
-import liquid.order.persistence.domain.ReceivingOrderEntity;
+import liquid.order.domain.ReceivingOrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

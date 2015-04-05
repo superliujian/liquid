@@ -6,7 +6,7 @@ import liquid.container.service.ContainerService;
 import liquid.operation.domain.ServiceProvider;
 import liquid.operation.service.ServiceProviderService;
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.service.AbstractService;
 import liquid.transport.domain.TransMode;
 import liquid.transport.persistence.domain.*;
@@ -31,7 +31,7 @@ import java.util.List;
 @Service
 public class ShippingContainerService extends AbstractService<ShippingContainerEntity, ShippingContainerRepository> {
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ShipmentService shipmentService;

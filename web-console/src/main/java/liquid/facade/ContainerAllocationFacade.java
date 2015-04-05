@@ -7,7 +7,7 @@ import liquid.domain.ContainerAllocation;
 import liquid.domain.SelfContainerAllocation;
 import liquid.domain.ShipmentContainerAllocation;
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.transport.persistence.domain.RailContainerEntity;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.ShippingContainerEntity;
@@ -34,7 +34,7 @@ public class ContainerAllocationFacade {
     private ShippingContainerService shippingContainerService;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ShipmentService shipmentService;

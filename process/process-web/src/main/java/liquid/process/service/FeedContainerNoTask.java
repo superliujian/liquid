@@ -1,7 +1,7 @@
 package liquid.process.service;
 
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.process.NotCompletedException;
 import liquid.transport.persistence.domain.ShipmentEntity;
 import liquid.transport.persistence.domain.ShippingContainerEntity;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Service("feedContainerNo")
 public class FeedContainerNoTask extends AbstractTaskProxy {
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ShipmentService shipmentService;

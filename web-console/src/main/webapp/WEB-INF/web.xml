@@ -21,7 +21,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             liquid.user.db.config.UserJpaConfig,
-            liquid.config.BpmConfig,
+            liquid.process.activiti.config.BpmConfig,
             liquid.config.LdapConfig,
             liquid.config.JpaConfig,
             liquid.config.RootConfig,

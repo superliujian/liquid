@@ -12,7 +12,7 @@ import liquid.facade.ContainerAllocationFacade;
 import liquid.model.Alert;
 import liquid.operation.domain.ServiceProvider;
 import liquid.order.domain.OrderEntity;
-import liquid.order.service.OrderServiceImpl;
+import liquid.order.service.OrderService;
 import liquid.order.service.ServiceItemService;
 import liquid.persistence.domain.LocationEntity;
 import liquid.process.controller.BaseTaskController;
@@ -72,7 +72,7 @@ public class AllocationController extends BaseTaskController {
     private LocationService locationService;
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @Autowired
     private ContainerSubtypeService containerSubtypeService;

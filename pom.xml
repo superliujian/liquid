@@ -110,11 +110,13 @@
                 <groupId>liquid</groupId>
                 <artifactId>liquid-order-api</artifactId>
                 <version>${project.version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
                 <artifactId>liquid-order</artifactId>
                 <version>${project.version}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>liquid</groupId>
