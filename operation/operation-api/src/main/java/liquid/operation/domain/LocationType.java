@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
  * Created by Tao Ma on 4/5/15.
  */
 @Entity(name = "OPS_LOCATION_TYPE")
+@Cacheable
 public class LocationType {
     public static final Byte CITY = 1;
     public static final Byte STATION = 2;
