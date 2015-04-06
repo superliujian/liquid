@@ -1,8 +1,8 @@
-insert into groups(group_name) values('管理员组');
-insert into groups(group_name) values('销售部');
-insert into groups(group_name) values('市场部');
-insert into groups(group_name) values('财务部');
-insert into groups(group_name) values('操作部');
+insert into groups(id, group_name) values(1, '管理员组');
+insert into groups(id, group_name) values(2, '销售部');
+insert into groups(id, group_name) values(3, '市场部');
+insert into groups(id, group_name) values(4, '财务部');
+insert into groups(id, group_name) values(5, '操作部');
 insert group_authorities(group_id, authority) values(1, 'ROLE_ADMIN');
 insert group_authorities(group_id, authority) values(2, 'ROLE_SALES');
 insert group_authorities(group_id, authority) values(3, 'ROLE_MARKETING');
