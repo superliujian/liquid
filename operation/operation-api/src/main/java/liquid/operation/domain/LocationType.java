@@ -1,5 +1,7 @@
 package liquid.operation.domain;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -9,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Tao Ma on 4/5/15.
  */
 @Entity(name = "OPS_LOCATION_TYPE")
-@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class LocationType {
     public static final Byte CITY = 1;
     public static final Byte STATION = 2;

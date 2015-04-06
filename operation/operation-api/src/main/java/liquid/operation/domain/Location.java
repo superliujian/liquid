@@ -1,6 +1,8 @@
 package liquid.operation.domain;
 
 import liquid.persistence.domain.BaseUpdateEntity;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
  * Time: 10:33 AM
  */
 @Entity(name = "OPS_LOCATION")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Location extends BaseUpdateEntity {
 
     @Column(name = "NAME")

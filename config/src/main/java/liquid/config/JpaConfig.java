@@ -13,6 +13,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -63,6 +64,9 @@ public class JpaConfig {
 
         Properties jpaProperties = new Properties();
         jpaProperties.setProperty("javax.persistence.validation.mode", "none");
+        jpaProperties.setProperty("hibernate.cache.use_second_level_cache", "true");
+        jpaProperties.setProperty("hibernate.cache.use_query_cache", "true");
+        jpaProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
@@ -85,7 +89,9 @@ public class JpaConfig {
 
     @Bean
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-        return entityManagerFactory.createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.setProperty("javax.persistence.cache.retrieveMode", CacheRetrieveMode.USE);
+        return entityManager;
     }
 
     @Bean
