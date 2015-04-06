@@ -1,7 +1,10 @@
 package liquid.user.db.config;
 
+import liquid.config.PropertyPlaceholderConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -25,14 +28,22 @@ import java.util.Properties;
         entityManagerFactoryRef = "userEntityManagerFactory",
         transactionManagerRef = "userTransactionManager",
         basePackages = {"liquid.user.db.repository"})
+@Import(PropertyPlaceholderConfig.class)
 public class UserJpaConfig {
+    @Value("${user.jdbc.url}")
+    private String jdbcUrl;
+    @Value("${user.jdbc.username}")
+    private String jdbcUsername;
+    @Value("${user.jdbc.password}")
+    private String jdbcPassword;
+
     @Bean(name = "userDataSource")
     public DataSource dataSource() throws SQLException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-        dataSource.setUrl("jdbc:mysql://localhost:3306/liquid_user_dev");
-        dataSource.setUsername("liquid");
-        dataSource.setPassword("liquid");
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUsername(jdbcUsername);
+        dataSource.setPassword(jdbcPassword);
         return dataSource;
     }
 

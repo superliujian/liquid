@@ -18,6 +18,10 @@
         <!-- liquid -->
         <dependency>
             <groupId>liquid</groupId>
+            <artifactId>liquid-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>liquid</groupId>
             <artifactId>liquid-user-api</artifactId>
         </dependency>
 
