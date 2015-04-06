@@ -150,7 +150,7 @@ public class TaskController extends BaseTaskController {
         orderService.save(order);
 
         redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
-        return "redirect:/truck/" + taskId;
+        return "redirect:/task/" + taskId;
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "definitionKey=sendTruck")
@@ -172,7 +172,7 @@ public class TaskController extends BaseTaskController {
         List<TruckForm> truckFormList = truckFacade.save(sendingTruckForm.getTruckList());
 
         redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
-        return "redirect:/truck/" + taskId;
+        return "redirect:/task/" + taskId;
     }
 
     /**
