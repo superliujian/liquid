@@ -16,5 +16,5 @@ public interface LocationService {
 
     Location findByName(String name);
 
-    Location findByTypeAndName(Integer type, String name);
+    Location findByTypeAndName(Byte typeId, String name);
 }

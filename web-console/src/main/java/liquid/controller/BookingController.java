@@ -55,6 +55,6 @@ public class BookingController extends BaseTaskController {
         bookingFacade.save(order.getId(), booking);
 
         redirectAttributes.addFlashAttribute("alert", new Alert("save.success"));
-        return "redirect:/task/" + taskId + "booking";
+        return "redirect:/task/" + taskId + "/booking";
     }
 }

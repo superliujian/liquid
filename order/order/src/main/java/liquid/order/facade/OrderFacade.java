@@ -8,6 +8,7 @@ import liquid.domain.Currency;
 import liquid.domain.LoadingType;
 import liquid.domain.TradeType;
 import liquid.operation.domain.Customer;
+import liquid.operation.domain.Location;
 import liquid.operation.domain.ServiceSubtype;
 import liquid.operation.service.CustomerService;
 import liquid.operation.service.GoodsService;
@@ -19,7 +20,6 @@ import liquid.order.model.Order;
 import liquid.order.model.ServiceItem;
 import liquid.order.service.OrderService;
 import liquid.order.service.RailwayService;
-import liquid.operation.domain.Location;
 import liquid.persistence.domain.ServiceTypeEntity;
 import liquid.process.service.BusinessKey;
 import liquid.process.service.ProcessService;
@@ -430,10 +430,10 @@ public class OrderFacade {
         else return FormValidationResult.newFailure();
     }
 
-    public FormValidationResult validateLocation(Long id, String name, int type) {
+    public FormValidationResult validateLocation(Long id, String name, Byte typeId) {
         if (null == id) {
             if (null != name && name.trim().length() > 0) {
-                Location location = locationService.findByTypeAndName(type, name);
+                Location location = locationService.findByTypeAndName(typeId, name);
                 if (null != location) {
                     return FormValidationResult.newSuccess(location.getId(), location.getName());
                 }

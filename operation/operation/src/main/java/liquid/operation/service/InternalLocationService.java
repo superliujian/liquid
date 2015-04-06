@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 public interface InternalLocationService extends LocationService {
     Iterable<Location> findByNameLike(String name);
 
-    Iterable<Location> findByTypeAndNameLike(Integer type, String name);
+    Iterable<Location> findByTypeAndNameLike(Byte typeId, String name);
 
     Page<Location> findAll(Pageable pageable);
 

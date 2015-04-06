@@ -20,9 +20,9 @@ public interface LocationRepository extends PageRepository<Location> {
 
     Iterable<Location> findByQueryNameLike(String queryName);
 
-    Iterable<Location> findByTypeAndQueryNameLike(Integer type, String queryName);
+    Iterable<Location> findByTypeIdAndQueryNameLike(Byte typeId, String queryName);
 
     Location findByName(String name);
 
-    Location findByTypeAndName(Integer type, String name);
+    Location findByTypeIdAndName(Byte typeId, String name);
 }

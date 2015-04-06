@@ -50,8 +50,8 @@ public class LocationServiceImpl extends AbstractCachedService<Location, Locatio
     }
 
     @Override
-    public Iterable<Location> findByTypeAndNameLike(Integer type, String name) {
-        Iterable<Location> locations = repository.findByTypeAndQueryNameLike(type, "%" + name + "%");
+    public Iterable<Location> findByTypeAndNameLike(Byte typeId, String name) {
+        Iterable<Location> locations = repository.findByTypeIdAndQueryNameLike(typeId, "%" + name + "%");
         return locations;
     }
 
@@ -61,7 +61,7 @@ public class LocationServiceImpl extends AbstractCachedService<Location, Locatio
     }
 
     @Override
-    public Location findByTypeAndName(Integer type, String name) {
-        return repository.findByTypeAndName(type, name);
+    public Location findByTypeAndName(Byte typeId, String name) {
+        return repository.findByTypeIdAndName(typeId, name);
     }
 }

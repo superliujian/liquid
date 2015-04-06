@@ -99,10 +99,10 @@
                     // TODO: Make $('#transportMode').val() as an input argument.
                     switch($('#transMode').val()) {
                         case '0': 
-                            return url + '?type=1&name=' + encodeURIComponent(query);
+                            return url + '?type=2&name=' + encodeURIComponent(query);
                         case '1':
                         case '2':
-                            return url + '?type=2&name=' + encodeURIComponent(query);
+                            return url + '?type=3&name=' + encodeURIComponent(query);
                         default:
                             return url + '?name=' + encodeURIComponent(query);                        
                     }

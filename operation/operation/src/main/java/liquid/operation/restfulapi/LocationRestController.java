@@ -24,20 +24,12 @@ public class LocationRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<Location> listByName(@RequestParam(required = false) Integer type, @RequestParam String name) {
+    public Iterable<Location> listByName(@RequestParam(required = false) Byte type, @RequestParam String name) {
         logger.debug("name: {}", name);
-        if (null == type)
-            return findByNameLike(name);
-        return findByTypeAndNameLike(type, name);
-    }
 
-    public Iterable<Location> findByNameLike(String name) {
-        Iterable<Location> locations = locationService.findByNameLike(name);
-        return locations;
-    }
-
-    public Iterable<Location> findByTypeAndNameLike(Integer type, String name) {
-        Iterable<Location> locations = locationService.findByTypeAndNameLike(type, name);
+        Iterable<Location> locations = null == type ?
+                locationService.findByNameLike(name) :
+                locationService.findByTypeAndNameLike(type, name);
         return locations;
     }
 }
