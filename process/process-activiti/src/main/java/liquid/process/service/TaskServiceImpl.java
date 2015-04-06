@@ -177,6 +177,7 @@ public class TaskServiceImpl implements TaskService {
         switch (task.getDefinitionKey()) {
             case "feedDistyPrice":
                 return "/dp?t=" + task.getId();
+            case "planRoute": // FIXME - Should remove this after the old processes are finished.
             case "planShipment":
                 return "/task/" + task.getId() + "/planning";
             case "allocateContainers":
