@@ -75,6 +75,21 @@
         </encoder>
     </appender>
 
+    <appender name="EHCACHE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/ehcache.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/ehcache.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/sql.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -182,6 +197,10 @@
 
     <logger name="org.hibernate" level="DEBUG" additivity="false">
         <appender-ref ref="HIBERNATE"/>
+    </logger>
+
+    <logger name="net.sf.ehcache" level="DEBUG" additivity="false">
+        <appender-ref ref="EHCACHE"/>
     </logger>
 
     <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
