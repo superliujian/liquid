@@ -173,20 +173,11 @@
                 </exclusions>
                 -->
             </dependency>
-
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
+                <artifactId>spring-context-support</artifactId>
                 <version>${spring-version}</version>
-                <exclusions>
-                    <!-- Exclude Commons Logging in favor of SLF4j -->
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
@@ -297,6 +288,12 @@
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-ehcache</artifactId>
+                <version>${hibernate-version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-jpamodelgen</artifactId>
                 <version>${hibernate-version}</version>
                 <optional>true</optional>
@@ -307,6 +304,7 @@
                 <version>${hibernate-validator-version}</version>
             </dependency>
 
+            <!-- ehcache -->
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache-core</artifactId>
